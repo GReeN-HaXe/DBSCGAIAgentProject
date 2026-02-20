@@ -156,6 +156,7 @@ class EffectRegistration:
     source_zone: str
     trigger: str
     handler_id: str
+    handler_params: dict[str, int | str | bool] = field(default_factory=dict)
     once_per_turn: bool = False
     triggers_this_turn: int = 0
 

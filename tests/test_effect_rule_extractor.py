@@ -1,0 +1,349 @@
+from __future__ import annotations
+
+from dataclasses import replace
+
+from src.domain.models import CardData
+from src.game.effect_rule_extractor import (
+    build_effect_rules_with_diagnostics_and_report,
+    build_effect_rules_for_cards,
+    build_effect_rules_with_diagnostics,
+    diagnose_unresolved_patterns,
+    extract_effect_rules_from_card,
+)
+
+
+def _card(skill: str) -> CardData:
+    return CardData(
+        id=1,
+        card_number="TEST-001",
+        card_name="Test Card",
+        source_table="cards",
+        card_type="BATTLE",
+        card_skill_unstyled=skill,
+        has_auto=True,
+        has_draw=True,
+    )
+
+
+def test_extract_draw_rules_on_play_and_attack() -> None:
+    card = _card("[Auto][Once per turn] When this card is played, draw 1 card. [Auto] When this card attacks, draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    by_handler = {r.handler_id: r for r in rules}
+    assert by_handler["auto_draw_n"].trigger in {"self_played", "self_attacks"}
+    assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params["amount"] == 1 for r in rules)
+    assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" and r.handler_params["amount"] == 1 for r in rules)
+    assert all(r.once_per_turn for r in rules if r.handler_id == "auto_draw_n")
+
+
+def test_extract_ko_and_power_reduce_rules_from_play_text() -> None:
+    card = _card(
+        "[Auto] When this card is played, choose up to 2 of your opponent's Battle Cards with an energy cost of 5 or less and KO them. "
+        "Then choose up to 1 of your opponent's Battle Cards and it gets -15000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(
+        r.handler_id == "auto_ko_up_to_n_opponent_battle_on_play"
+        and r.handler_params.get("max_targets") == 2
+        and r.handler_params.get("max_cost") == 5
+        for r in rules
+    )
+    assert any(
+        r.handler_id == "auto_power_reduce_up_to_n_on_play"
+        and r.handler_params.get("power_delta") == -15000
+        for r in rules
+    )
+
+
+def test_build_effect_rules_for_cards_maps_only_cards_with_matches() -> None:
+    class Repo:
+        def list_by_ids(self, ids, source_table: str = "cards"):
+            c1 = replace(_card("[Auto] When this card attacks, draw 1 card."), id=100)
+            c2 = replace(_card("No matching effect text"), id=200, has_auto=False, has_draw=False)
+            source = {100: c1, 200: c2}
+            return [source[i] for i in ids if i in source]
+
+    mapped = build_effect_rules_for_cards(Repo(), [100, 200])
+    assert 100 in mapped
+    assert 200 not in mapped
+    assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in mapped[100])
+
+
+def test_extract_trigger_variants_played_from_hand_and_if_leader_prefix() -> None:
+    card = _card(
+        "[Auto] If your Leader is a blue card: When this card is played from your hand, draw 2 cards. "
+        "[Auto] If your Leader is blue: When this card attacks, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 2 for r in rules)
+    assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
+
+
+def test_extract_choose_one_branches_parses_branch_effects() -> None:
+    card = _card(
+        "[Auto] When this card attacks, choose one— ・Draw 1 card. ・Choose up to 1 of your opponent's Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in rules)
+    assert any(r.trigger == "self_played" and r.handler_id.startswith("auto_ko") for r in rules) is False
+
+
+def test_extract_conditions_capture_leader_barrier_rest_mode() -> None:
+    card = _card(
+        "[Auto] If your Leader is a green card: When this card is played, choose up to 1 of your opponent's Battle Cards in Rest Mode, ignoring [Barrier], and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    ko = next(r for r in rules if r.handler_id == "auto_ko_opponent_battle_on_play")
+    assert ko.handler_params["ignores_barrier"] is True
+    assert ko.handler_params["rest_mode_only"] is True
+    assert "if your leader is a green card" in str(ko.handler_params["requires_leader"]).lower()
+
+
+def test_diagnostics_flags_missed_patterns() -> None:
+    card = _card("[Auto] When this card attacks, draw 1 card.")
+    notes = diagnose_unresolved_patterns(card, [])
+    assert "missed_attack_draw" in notes
+
+
+def test_build_effect_rules_with_diagnostics_returns_both() -> None:
+    class Repo:
+        def list_by_ids(self, ids, source_table: str = "cards"):
+            c1 = replace(_card("[Auto] When this card attacks, draw 1 card."), id=300)
+            c2 = replace(_card("[Auto] When this card attacks, draw 2 cards."), id=301)
+            return [c1, c2]
+
+    mapped, diagnostics = build_effect_rules_with_diagnostics(Repo(), [300, 301])
+    assert 300 in mapped and 301 in mapped
+    assert diagnostics == {}
+
+
+def test_extract_dynamic_x_for_ko_sets_max_targets_expression() -> None:
+    card = _card(
+        "[Auto] When this card is played, choose up to X of your opponent's Battle Cards and KO them, "
+        "where X is equal to the number of your energy."
+    )
+    rules = extract_effect_rules_from_card(card)
+    ko = next(r for r in rules if r.handler_id == "auto_ko_up_to_n_opponent_battle_on_play")
+    assert ko.handler_params["max_targets"] == "expr:owner_energy_count"
+
+
+def test_extract_dynamic_x_for_power_reduce_sets_max_targets_expression() -> None:
+    card = _card(
+        "[Auto] When this card is played, choose up to X of your opponent's Battle Cards and they get -5000 power for the turn, "
+        "where X is equal to the number of your opponent's Battle Cards."
+    )
+    rules = extract_effect_rules_from_card(card)
+    reduce_rule = next(r for r in rules if r.handler_id == "auto_power_reduce_up_to_n_on_play")
+    assert reduce_rule.handler_params["max_targets"] == "expr:opponent_battle_count"
+
+
+def test_extract_combo_draw_rule_with_leader_condition() -> None:
+    card = _card("[Auto] If your Leader is green and your life is at 4 or less: When this card is used in a combo, draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    combo_draw = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_draw_n")
+    assert combo_draw.handler_params["amount"] == 1
+    assert "green" in str(combo_draw.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_combo_battle_end_play_self_from_drop_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a yellow card: At the end of a battle in which this card was used in a combo from your hand, "
+        "play this card from your Drop Area in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_comboed_battle_end")
+    assert rule.handler_id == "auto_play_self_from_combo_on_battle_end"
+    assert rule.handler_params["resting"] is True
+    assert "if your leader card is a yellow card" in str(rule.handler_params["requires_leader"]).lower()
+
+
+def test_extract_turn_end_switch_self_active_rule() -> None:
+    card = _card("[Auto] At the end of your turn, switch this card to Active Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "turn_end")
+    assert rule.handler_id == "auto_switch_self_active_on_turn_end"
+
+
+def test_extract_play_top_if_color_add_hand_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a Shadow Dragon card: When this card is played from your hand or discarded by a skill, "
+        "you may look at the top card of your deck; if it's a black card you may add it to your hand, otherwise place it at the bottom of your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_top_deck_add_if_color_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["required_color"] == "black"
+    assert rule.handler_params["move_to_bottom_on_fail"] is True
+
+
+def test_extract_activate_main_draw_rule() -> None:
+    card = _card("[Activate: Main] Switch this card to Rest Mode: Draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main")
+    assert rule.handler_id == "auto_draw_n"
+    assert rule.handler_params["amount"] == 1
+
+
+def test_extract_owner_black_battle_played_from_warp_wormhole_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a black Trunks card: When a black Battle Card is played from your Warp, "
+        "this card gains [Wormhole] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "owner_battle_played_from_warp")
+    assert rule.handler_id == "auto_gain_wormhole_on_owner_black_battle_played_from_warp"
+
+
+def test_extract_play_add_top_deck_to_energy_rest_on_play_rule() -> None:
+    card = _card("[Auto] If all of your energy is mono-blue: When this card is played, add the top card of your deck to your energy in Rest Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_top_deck_to_energy_rest_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["requires_mono_energy"] == "blue"
+
+
+def test_extract_play_look_top_add_to_hand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, look at up to 5 cards from the top of your deck, "
+        "add up to 1 green or yellow Namekian card with an energy cost of 4 or less among them to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["look_count"] == 5
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["max_cost"] == 4
+    assert rule.handler_params["allowed_colors"] == "green,yellow"
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_play_look_top_add_two_to_hand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, look at up to 7 cards from the top of your deck, "
+        "add up to 2 green or yellow Battle Cards with an energy cost of 6 or less among them to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.handler_params["look_count"] == 7
+    assert rule.handler_params["max_add"] == 2
+    assert rule.handler_params["max_cost"] == 6
+
+
+def test_extract_play_look_top_add_to_hand_allows_dash_before_to_your_hand() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, look at up to 7 cards from the top of your deck, "
+        "add up to 1 Son Goku card among them―both green and with an energy cost of 6 or less―to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.handler_params["look_count"] == 7
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["max_cost"] == 6
+
+
+def test_extract_self_ko_unison_power_reduce_rule() -> None:
+    card = _card("[Auto] When this card is KO'd, choose up to 1 of your opponent's Unison Cards and it gets -10000 power for the turn.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_koed")
+    assert rule.handler_id == "auto_power_reduce_opponent_unison_on_self_ko"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == -10000
+
+
+def test_extract_turn_end_switch_up_to_n_energy_active_rule() -> None:
+    card = _card("[Auto] At the end of your turn, switch up to 1 of your energy to Active Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_turn_end")
+    assert rule.trigger == "turn_end"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_turn_end_switch_up_to_n_multicolor_energy_active_rule() -> None:
+    card = _card("[Auto] At the end of your turn, switch up to 2 of your blue/yellow multicolor energy to Active Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_turn_end")
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["allowed_colors"] == "blue,yellow"
+    assert rule.handler_params["requires_multicolor"] is True
+
+
+def test_extract_play_from_hand_play_from_deck_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 1 red Battle Card with 10000 power or less from your deck, play it, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_deck_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_power"] == 10000
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_combo_from_hand_play_from_hand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is used in a combo from your hand, choose up to 1 mono-blue Bardock card "
+        "with an energy cost of 5 or less in your hand and play it in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_on_self_combo")
+    assert rule.trigger == "self_comboed"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 5
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["rest_mode"] is True
+
+
+def test_extract_play_gain_control_opponent_unison_rule() -> None:
+    card = _card("[Auto] When this card is played from your hand, choose 1 of your opponent's Unison Cards and gain control of it.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_unison_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_build_effect_rules_with_diagnostics_and_report_counts_coverage() -> None:
+    class Repo:
+        def list_by_ids(self, ids, source_table: str = "cards"):
+            c1 = replace(_card("[Auto] When this card attacks, draw 1 card."), id=400)
+            c2 = replace(_card("[Auto] When this card is played, draw 2 cards."), id=401)
+            c3 = replace(_card("Activate: Main once per turn: choose 1 card in your hand and discard it."), id=402)
+            return [c1, c2, c3]
+
+    mapped, diagnostics, report = build_effect_rules_with_diagnostics_and_report(Repo(), [400, 401, 402], top_unmatched=5)
+    assert set(mapped) == {400, 401}
+    assert diagnostics == {}
+    assert report["candidates_scanned"] == 3
+    assert report["cards_with_rules"] == 2
+    assert report["cards_without_rules"] == 1
+    assert report["total_extracted_rules"] == 2
+    coverage = report["coverage"]
+    assert isinstance(coverage, dict)
+    assert coverage["by_trigger"]["self_attacks"] == 1
+    assert coverage["by_trigger"]["self_played"] == 1
+    assert coverage["by_handler"]["auto_draw_n"] == 2
+
+
+def test_build_effect_rules_with_diagnostics_and_report_groups_unmatched_templates() -> None:
+    class Repo:
+        def list_by_ids(self, ids, source_table: str = "cards"):
+            c1 = replace(_card("Activate: Main: Draw 1 card, then discard 1 card."), id=500)
+            c2 = replace(_card("Activate: Main: Draw 2 cards, then discard 2 cards."), id=501)
+            c3 = replace(_card("[Auto] When this card attacks, draw 1 card."), id=502)
+            return [c1, c2, c3]
+
+    _, _, report = build_effect_rules_with_diagnostics_and_report(Repo(), [500, 501, 502], top_unmatched=3)
+    unmatched = report["unmatched_top_templates"]
+    assert isinstance(unmatched, list)
+    first = unmatched[0]
+    assert first["count"] == 2
+    assert "draw <n> card" in first["template"]
+
+
+def test_diagnostics_does_not_flag_combo_draw_when_draw_is_only_on_play() -> None:
+    card = _card(
+        "[Auto] When this card is played, draw 1 card. "
+        "[Auto] When this card is used in a combo from your Battle Area, it gets +5000 combo power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    notes = diagnose_unresolved_patterns(card, rules)
+    assert "missed_combo_draw" not in notes
