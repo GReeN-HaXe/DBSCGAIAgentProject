@@ -1,0 +1,140 @@
+{
+  "candidates_scanned": 776,
+  "cards_with_diagnostics": 0,
+  "cards_with_rules": 414,
+  "cards_without_rules": 362,
+  "coverage": {
+    "by_handler": {
+      "auto_add_top_deck_to_energy_rest_on_play": 3,
+      "auto_draw_n": 279,
+      "auto_gain_control_opponent_unison_on_play": 1,
+      "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
+      "auto_ko_opponent_battle_on_play": 53,
+      "auto_ko_up_to_n_opponent_battle_on_play": 2,
+      "auto_look_top_add_up_to_one_to_hand_on_play": 53,
+      "auto_play_self_from_combo_on_battle_end": 20,
+      "auto_play_up_to_n_from_owner_deck_on_play": 1,
+      "auto_play_up_to_n_from_owner_hand_on_self_combo": 1,
+      "auto_power_reduce_opponent_unison_on_self_ko": 1,
+      "auto_power_reduce_up_to_n_on_play": 21,
+      "auto_switch_self_active_on_turn_end": 15,
+      "auto_switch_up_to_n_owner_energy_active_on_turn_end": 3,
+      "auto_top_deck_add_if_color_on_play": 8
+    },
+    "by_trigger": {
+      "owner_battle_played_from_warp": 2,
+      "self_activate_main": 34,
+      "self_attacks": 67,
+      "self_comboed": 29,
+      "self_comboed_battle_end": 20,
+      "self_koed": 1,
+      "self_played": 292,
+      "turn_end": 18
+    }
+  },
+  "diagnostic_counts": {},
+  "diagnostics": {},
+  "total_extracted_rules": 463,
+  "unmatched_top_templates": [
+    {
+      "count": 1,
+      "example_card_id": 16,
+      "template": "[unique][barrier]. [auto][limit <n>] if your leader card is a red \u226aearthling\u226b-only card with <n> power or less: when a card in your life is flipped face up by one of your red card skills, you may play this card from your..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 18,
+      "template": "[auto] if your leader card is a blue \u226asaiyan\u226b card: when this card in your hand is placed in your drop area by a [union-fusion] skill, activate this skill. at the end of the turn, switch up to <n> of your energy to activ..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 20,
+      "template": "[super combo]. [permanent] if this card would leave your combo area, remove it from the game instead.. [auto][limit <n>] if your leader card is a red &lt;frieza: br&gt; card, your life is at <n> or less, and it's your op..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 21,
+      "template": "[blocker]. [counter: attack][spirit boost <n>] blue unison card: negate the attack, then play this card with <n> markers on it.. [activate: main](blue)(blue), if there's a &lt;goku black&gt; card under this card and you..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 23,
+      "template": "[permanent] when choosing card in your life using the [activate: main] skill on your blue &lt;goku black&gt;-only card, you may choose this card in your battle area instead.. [auto][limit <n>] choose <n> card in your han..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 24,
+      "template": "[blocker]. [union-fusion]\u2461, draw <n> card: &lt;son goku: br&gt; and &lt;vegeta: br&gt;.. [auto] if your leader card is a blue \u226asaiyan\u226b card: when this card is removed from your battle area by a skill or ko'd, you may add..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 28,
+      "template": "[activate: main/battle][limit <n>] if your leader card is a green &lt;cheelai: br&gt; card or yellow &lt;broly: br&gt; card, choose one?-. \u30fbchoose up to <n> of your opponent's skill-less battle card in rest mode, ko it,..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 29,
+      "template": "[auto][once per turn] when you play a battle card using [arrival green/yellow], add a marker to this card.. [+<n>][activate: main] look at up to <n> card from the top of your deck, add up to <n> green/yellow multicolor \u226a..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 31,
+      "template": "[auto] if your leader card is a &lt;meta-cooler&gt; or &lt;meta-cooler core&gt; card, you have <n> or more energy, and you don't have a unison card in play: when this card is played from your hand, choose up to <n> {meta..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 33,
+      "template": "[deflect][critical][blocker]. [auto] if your leader card is a yellow \u226auniverse <n>\u226b card: when this card is played from your hand, choose one-. \u30fbif you don't have a unison card in play, choose up to <n> {vegeta, unison o..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 34,
+      "template": "[unique]. [auto][limit <n>] discard <n> card from your hand: when this card is played, play up to <n> yellow \u226auniverse <n>\u226b card with an energy cost of <n> or less from your drop area in rest mode with its skills negated..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 36,
+      "template": "[permanent] for each marker on this card, it gets +<n> power during your turn.. [auto][limit <n>] if this card has <n> marker: when this card is played, add a marker to it for every <n> multicolor card in your energy.. [..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 41,
+      "template": "[energy-exhaust][unique][barrier]. [permanent] if your leader card is a &lt;bardock: xeno&gt; card, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is a &lt;bardock: xeno&gt; card and..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 47,
+      "template": "[super combo][energy-exhaust]. [auto] if your leader card is green, yellow, or a \u226aheroine\u226b card: when this card is used in a combo from your hand, choose one-. \u30fbchoose up to <n> of your opponent's leader card or unison c..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 49,
+      "template": "[energy-exhaust][double strike]. [auto] if your leader card is a &lt;bardock: xeno&gt; card and you have a black multicolor card in your energy other than this card: when this card in your hand is played or placed in you..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 54,
+      "template": "[activate: main](red)(red), if your leader card is a red &lt;son goten&gt; card and your opponent has <n> or more energy: play this card from your hand with <n> markers on it.. [+<n>][activate: main] draw <n> card.. [-<n..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 55,
+      "template": "[permanent] if there are <n> or more red extra card in your drop area, this card gains [double strike].. [+<n>][activate: main] look at up to <n> card from the top of your deck, add up to <n> red extra card with an [acti..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 56,
+      "template": "[blocker]. [auto] switch this card to rest mode: when your opponent uses a skill to play a battle card with an energy cost greater than their current energy, you may choose that battle card and have it get -<n> power for..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 61,
+      "template": "[auto] when this card attacks, choose up to <n> of your opponent's battle card and it gets -<n> power for the turn."
+    },
+    {
+      "count": 1,
+      "example_card_id": 64,
+      "template": "[auto] add <n> card from your life to your hand: when this card attacks, it gets +<n> power and [double strike] for the turn."
+    }
+  ]
+}
