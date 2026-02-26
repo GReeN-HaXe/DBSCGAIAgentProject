@@ -78,6 +78,17 @@ def test_extract_trigger_variants_played_from_hand_and_if_leader_prefix() -> Non
     assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
 
 
+def test_extract_play_or_combo_draw_emits_both_triggers_once() -> None:
+    card = _card(
+        "[Auto] If your leader card is yellow: When this card in your hand is played or used in a combo, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draws = [r for r in rules if r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1]
+    assert any(r.trigger == "self_played" for r in draws)
+    assert any(r.trigger == "self_comboed" for r in draws)
+    assert sum(1 for r in draws if r.trigger in {"self_played", "self_comboed"}) == 2
+
+
 def test_extract_choose_one_branches_parses_branch_effects() -> None:
     card = _card(
         "[Auto] When this card attacks, choose one— ・Draw 1 card. ・Choose up to 1 of your opponent's Battle Cards and KO it."
@@ -144,6 +155,43 @@ def test_extract_combo_draw_rule_with_leader_condition() -> None:
     assert "green" in str(combo_draw.handler_params.get("requires_leader", "")).lower()
 
 
+def test_extract_attack_pay_life_gain_power_and_keyword_rule() -> None:
+    card = _card(
+        "[Auto] Add 1 card from your life to your hand: When this card attacks, it gets +15000 power and [Double Strike] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_pay_life_on_attack_gain_power_and_keyword_for_turn")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["life_to_hand"] == 1
+    assert rule.handler_params["power_delta"] == 15000
+    assert rule.handler_params["grant_keyword"] == "Double Strike"
+
+
+def test_extract_owner_leader_attack_add_from_hand_to_life_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a yellow Turles Crusher Corps card: "
+        "When your Leader Card attacks, you may choose 1 yellow Turles Crusher Corps card in your hand and add it to your life."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack")
+    assert rule.trigger == "owner_leader_attacks"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["allowed_colors"] == "yellow"
+
+
+def test_extract_play_from_hand_add_from_hand_to_life_rule() -> None:
+    card = _card(
+        "[Auto] If your leader card is a yellow Turles Crusher Corps card: "
+        "When this card is played from your hand, you may choose 1 yellow Turles Crusher Corps card in your hand and add it to your life."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_up_to_n_from_owner_hand_to_life_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["allowed_colors"] == "yellow"
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
 def test_extract_combo_battle_end_play_self_from_drop_rule() -> None:
     card = _card(
         "[Auto] If your Leader Card is a yellow card: At the end of a battle in which this card was used in a combo from your hand, "
@@ -161,6 +209,39 @@ def test_extract_turn_end_switch_self_active_rule() -> None:
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.trigger == "turn_end")
     assert rule.handler_id == "auto_switch_self_active_on_turn_end"
+
+
+def test_extract_field_extra_placed_switch_energy_active_rule() -> None:
+    card = _card(
+        "[Auto] If you have 5 or more energy: When a player places a [Field] Extra card in a Battle Area, "
+        "you may flip this card over. If you do, switch up to 2 of your yellow energy to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed")
+    assert rule.trigger == "owner_field_extra_placed"
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["allowed_colors"] == "yellow"
+
+
+def test_extract_owner_opponent_skill_plays_overcost_battle_reduce_rule() -> None:
+    card = _card(
+        "[Auto] Switch this card to Rest Mode: When your opponent uses a skill to play a Battle Card with an energy cost greater than their current energy, "
+        "you may choose that Battle Card and have it get -30000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power")
+    assert rule.trigger == "owner_opponent_skill_plays_overcost_battle"
+    assert rule.handler_params["power_delta"] == -30000
+
+
+def test_extract_owner_opponent_skill_plays_overcost_battle_switch_rest_rule() -> None:
+    card = _card(
+        "[Auto] Switch this card to Rest Mode: When your opponent uses a skill to play a Battle Card with an energy cost greater than their current energy, "
+        "you may choose it and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_switch_target_rest")
+    assert rule.trigger == "owner_opponent_skill_plays_overcost_battle"
 
 
 def test_extract_play_top_if_color_add_hand_rule() -> None:
@@ -181,6 +262,20 @@ def test_extract_activate_main_draw_rule() -> None:
     rule = next(r for r in rules if r.trigger == "self_activate_main")
     assert rule.handler_id == "auto_draw_n"
     assert rule.handler_params["amount"] == 1
+
+
+def test_extract_activate_battle_draw_rule() -> None:
+    card = _card("[Activate: Battle] If your leader is red: Draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_battle" and r.handler_id == "auto_draw_n")
+    assert rule.handler_params["amount"] == 1
+
+
+def test_extract_activate_main_battle_draw_rule_emits_both_triggers() -> None:
+    card = _card("[Activate: Main/Battle] Draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.trigger == "self_activate_main" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
+    assert any(r.trigger == "self_activate_battle" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
 
 
 def test_extract_owner_black_battle_played_from_warp_wormhole_rule() -> None:
@@ -249,6 +344,16 @@ def test_extract_self_ko_unison_power_reduce_rule() -> None:
     assert rule.handler_params["power_delta"] == -10000
 
 
+def test_extract_self_removed_or_ko_add_life_rule() -> None:
+    card = _card(
+        "[Auto] When this card is removed from your Battle Area by a skill or KO'd, you may add 1 card from your life to your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_n_life_to_hand_on_self_ko")
+    assert rule.trigger == "self_koed"
+    assert rule.handler_params["amount"] == 1
+
+
 def test_extract_turn_end_switch_up_to_n_energy_active_rule() -> None:
     card = _card("[Auto] At the end of your turn, switch up to 1 of your energy to Active Mode.")
     rules = extract_effect_rules_from_card(card)
@@ -264,6 +369,14 @@ def test_extract_turn_end_switch_up_to_n_multicolor_energy_active_rule() -> None
     assert rule.handler_params["max_targets"] == 2
     assert rule.handler_params["allowed_colors"] == "blue,yellow"
     assert rule.handler_params["requires_multicolor"] is True
+
+
+def test_extract_end_of_the_turn_switch_up_to_n_energy_active_rule() -> None:
+    card = _card("[Auto] At the end of the turn, switch up to 1 of your energy to Active Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_turn_end")
+    assert rule.trigger == "turn_end"
+    assert rule.handler_params["max_targets"] == 1
 
 
 def test_extract_play_from_hand_play_from_deck_rule() -> None:
@@ -293,12 +406,168 @@ def test_extract_combo_from_hand_play_from_hand_rule() -> None:
     assert rule.handler_params["rest_mode"] is True
 
 
+def test_extract_activate_main_look_top_add_to_hand_with_discard_rule() -> None:
+    card = _card(
+        "[+1][Activate: Main] Look at up to 5 cards from the top of your deck, "
+        "add up to 1 green/yellow multicolor card among them to your hand, then shuffle your deck. "
+        "If you added a card to your hand, choose 1 card in your hand and discard it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.handler_params["look_count"] == 5
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["allowed_colors"] == "green,yellow"
+    assert rule.handler_params["discard_after_add"] == 1
+
+
 def test_extract_play_gain_control_opponent_unison_rule() -> None:
     card = _card("[Auto] When this card is played from your hand, choose 1 of your opponent's Unison Cards and gain control of it.")
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_unison_on_play")
     assert rule.trigger == "self_played"
     assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_attack_power_reduce_rule() -> None:
+    card = _card("[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the turn.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_power_reduce_up_to_n_on_attack")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == -10000
+
+
+def test_extract_play_from_hand_play_with_marker_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 1 {Meta-Cooler Core, Giant Force} in your hand and play it with a marker on it in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["markers"] == 1
+    assert rule.handler_params["source_pool"] == "hand"
+    assert rule.handler_params["rest_mode"] is True
+
+
+def test_extract_choose_one_with_unicode_bullet_splits_into_branches() -> None:
+    card = _card(
+        "[Auto] When this card is played, choose one-. "
+        "・Draw 1 card. "
+        "・At the end of your turn, switch this card to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
+    assert any(r.trigger == "turn_end" and r.handler_id == "auto_switch_self_active_on_turn_end" for r in rules)
+
+
+def test_extract_play_from_hand_play_with_markers_from_hand_or_deck_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 1 {Meta-Cooler Core, Big Gete Star} "
+        "from your hand or deck, play it with 2 markers on it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["markers"] == 2
+    assert rule.handler_params["source_pool"] == "hand_or_deck"
+
+
+def test_extract_play_from_hand_play_with_markers_includes_filters() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 2 mono-blue Battle Cards with an energy cost of 3 or less "
+        "in your hand and play it with 2 markers on it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play")
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["markers"] == 2
+    assert rule.handler_params["source_pool"] == "hand"
+    assert rule.handler_params["max_cost"] == 3
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["required_card_type"] == "BATTLE"
+
+
+def test_extract_play_from_hand_or_deck_markers_includes_unison_filters() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 1 yellow Unison Card with an energy cost of 4 or less "
+        "from your hand or deck, play it with 3 markers on it in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play")
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["markers"] == 3
+    assert rule.handler_params["source_pool"] == "hand_or_deck"
+    assert rule.handler_params["max_cost"] == 4
+    assert rule.handler_params["allowed_colors"] == "yellow"
+    assert rule.handler_params["required_card_type"] == "UNISON"
+
+
+def test_extract_play_add_up_to_n_from_deck_to_hand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played, add up to 1 {Natade Village Ritual} from your deck to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == -1
+
+
+def test_extract_play_add_up_to_n_from_deck_to_hand_with_filters_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, add up to 2 skill-less green Battle Cards with energy costs of 3 or less "
+        "from your deck to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["max_cost"] == 3
+    assert rule.handler_params["allowed_colors"] == "green"
+    assert rule.handler_params["required_card_type"] == "BATTLE"
+    assert rule.handler_params["requires_skill_less"] is True
+
+
+def test_extract_placed_in_battle_area_add_up_to_n_from_deck_to_hand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is placed in a Battle Area, add up to 1 skill-less Monster card with energy costs of 2 or less from your deck to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 2
+    assert rule.handler_params["required_card_type"] == "BATTLE"
+    assert rule.handler_params["requires_skill_less"] is True
+
+
+def test_extract_play_add_markers_per_multicolor_energy_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If this card has 1 marker: When this card is played, add a marker to it for every 1 multicolor card in your energy."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_markers_per_n_multicolor_energy_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["per_n_energy"] == 1
+    assert rule.handler_params["min_source_markers"] == 1
+
+
+def test_extract_play_up_to_n_from_drop_with_negate_and_discard_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] Discard 1 card from your hand: When this card is played, "
+        "play up to 1 yellow Universe 7 card with an energy cost of 2 or less from your drop area in Rest Mode with its skills negated."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_drop_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 2
+    assert rule.handler_params["allowed_colors"] == "yellow"
+    assert rule.handler_params["rest_mode"] is True
+    assert rule.handler_params["negate_skills"] is True
+    assert rule.handler_params["discard_from_hand_before"] == 1
 
 
 def test_build_effect_rules_with_diagnostics_and_report_counts_coverage() -> None:
