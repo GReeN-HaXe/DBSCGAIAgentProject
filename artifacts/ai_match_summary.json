@@ -1,0 +1,108 @@
+{
+  "total_decisions": 10,
+  "actions_by_player": {
+    "1": {
+      "end_charge": 1,
+      "play_card_from_hand": 2,
+      "end_turn": 1,
+      "pass_counter_window": 1
+    },
+    "2": {
+      "pass_counter_window": 2,
+      "end_charge": 1,
+      "declare_attack": 1,
+      "end_offense_step": 1
+    }
+  },
+  "top_reasons_by_player": {
+    "1": {
+      "end_charge_phase": 1,
+      "play_card_from_hand": 2,
+      "end_turn": 1,
+      "pass_counter_window": 1
+    },
+    "2": {
+      "pass_counter_window": 2,
+      "end_charge_phase": 1,
+      "declare_attack": 1,
+      "advance_battle_step": 1
+    }
+  },
+  "winner_id": null,
+  "turn_number": 2,
+  "total_actions": 10,
+  "kpis": {
+    "decision_count": 10,
+    "avg_top1_score": 142.70005999999998,
+    "avg_candidate_count": 2.1,
+    "attack_rate": 0.1,
+    "play_rate": 0.2,
+    "end_turn_rate": 0.1,
+    "action_counts": {
+      "end_charge": 2,
+      "play_card_from_hand": 2,
+      "pass_counter_window": 3,
+      "end_turn": 1,
+      "declare_attack": 1,
+      "end_offense_step": 1
+    },
+    "by_player": {
+      "1": {
+        "decisions": 5,
+        "avg_top1_score": 117.59982
+      },
+      "2": {
+        "decisions": 5,
+        "avg_top1_score": 167.8003
+      }
+    }
+  },
+  "per_turn_kpis": [
+    {
+      "turn": "1",
+      "decisions": "6",
+      "declare_attack": "0",
+      "play_card_from_hand": "2",
+      "end_turn": "1",
+      "attack_rate": "0.0",
+      "play_rate": "0.3333333333333333",
+      "end_turn_rate": "0.16666666666666666"
+    },
+    {
+      "turn": "2",
+      "decisions": "4",
+      "declare_attack": "1",
+      "play_card_from_hand": "0",
+      "end_turn": "0",
+      "attack_rate": "0.25",
+      "play_rate": "0.0",
+      "end_turn_rate": "0.0"
+    }
+  ],
+  "per_phase_kpis": [
+    {
+      "phase": "charge",
+      "decisions": "2",
+      "declare_attack": "0",
+      "play_card_from_hand": "0",
+      "end_turn": "0",
+      "pass_counter_window": "0",
+      "attack_rate": "0.0",
+      "play_rate": "0.0",
+      "end_turn_rate": "0.0",
+      "counter_pass_rate": "0.0"
+    },
+    {
+      "phase": "main",
+      "decisions": "8",
+      "declare_attack": "1",
+      "play_card_from_hand": "2",
+      "end_turn": "1",
+      "pass_counter_window": "3",
+      "attack_rate": "0.125",
+      "play_rate": "0.25",
+      "end_turn_rate": "0.125",
+      "counter_pass_rate": "0.375"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+p1_profile,p2_profile,games,p1_win_rate,p2_win_rate,draw_rate
+aggressive,aggressive,2,0.0,0.0,1.0
+aggressive,balanced,2,0.0,0.0,1.0
+balanced,aggressive,2,0.0,0.0,1.0
+balanced,balanced,2,0.0,0.0,1.0

@@ -1,0 +1,3 @@
+phase,decisions,declare_attack,play_card_from_hand,end_turn,pass_counter_window,attack_rate,play_rate,end_turn_rate,counter_pass_rate
+charge,2,0,0,0,0,0.0,0.0,0.0,0.0
+main,8,1,2,1,3,0.125,0.25,0.125,0.375

@@ -1,0 +1,131 @@
+{
+  "profiles": [
+    "balanced",
+    "aggressive"
+  ],
+  "games_per_matchup": 1,
+  "max_actions": 20,
+  "shuffle_decks": false,
+  "seat_balanced": true,
+  "seed": null,
+  "min_games_for_recommendation": 6,
+  "decisive_rate_alert_threshold": 0.4,
+  "rows": [
+    {
+      "p1_profile": "aggressive",
+      "p2_profile": "aggressive",
+      "games": 2,
+      "p1_wins": 0,
+      "p2_wins": 0,
+      "draws": 2,
+      "avg_actions": 8.0,
+      "avg_turn": 2.0,
+      "p1_win_rate": 0.0
+    },
+    {
+      "p1_profile": "aggressive",
+      "p2_profile": "balanced",
+      "games": 2,
+      "p1_wins": 0,
+      "p2_wins": 0,
+      "draws": 2,
+      "avg_actions": 8.0,
+      "avg_turn": 2.0,
+      "p1_win_rate": 0.0
+    },
+    {
+      "p1_profile": "balanced",
+      "p2_profile": "aggressive",
+      "games": 2,
+      "p1_wins": 0,
+      "p2_wins": 0,
+      "draws": 2,
+      "avg_actions": 10.0,
+      "avg_turn": 2.0,
+      "p1_win_rate": 0.0
+    },
+    {
+      "p1_profile": "balanced",
+      "p2_profile": "balanced",
+      "games": 2,
+      "p1_wins": 0,
+      "p2_wins": 0,
+      "draws": 2,
+      "avg_actions": 10.0,
+      "avg_turn": 2.0,
+      "p1_win_rate": 0.0
+    }
+  ],
+  "profile_summary": {
+    "aggressive": {
+      "games": 8,
+      "wins": 0,
+      "losses": 0,
+      "draws": 8,
+      "points": 4.0,
+      "win_rate": 0.0,
+      "points_per_game": 0.5
+    },
+    "balanced": {
+      "games": 8,
+      "wins": 0,
+      "losses": 0,
+      "draws": 8,
+      "points": 4.0,
+      "win_rate": 0.0,
+      "points_per_game": 0.5
+    }
+  },
+  "seat_bias": {
+    "games": 8,
+    "p1_win_rate": 0.0,
+    "p2_win_rate": 0.0,
+    "draw_rate": 1.0,
+    "p1_minus_p2": 0.0,
+    "by_matchup": {
+      "aggressive__vs__aggressive": {
+        "games": 2,
+        "p1_win_rate": 0.0,
+        "p2_win_rate": 0.0,
+        "draw_rate": 1.0
+      },
+      "aggressive__vs__balanced": {
+        "games": 2,
+        "p1_win_rate": 0.0,
+        "p2_win_rate": 0.0,
+        "draw_rate": 1.0
+      },
+      "balanced__vs__aggressive": {
+        "games": 2,
+        "p1_win_rate": 0.0,
+        "p2_win_rate": 0.0,
+        "draw_rate": 1.0
+      },
+      "balanced__vs__balanced": {
+        "games": 2,
+        "p1_win_rate": 0.0,
+        "p2_win_rate": 0.0,
+        "draw_rate": 1.0
+      }
+    }
+  },
+  "match_quality": {
+    "games": 8,
+    "draws": 8,
+    "decisive_games": 0,
+    "draw_rate": 1.0,
+    "decisive_rate": 0.0,
+    "decisive_rate_alert_threshold": 0.4,
+    "low_decisive_rate_alert": true
+  },
+  "recommendation": {
+    "recommended_profile": "aggressive",
+    "reason": "tied_or_inconclusive",
+    "clear_edge": false,
+    "reliable": true,
+    "ranking": [
+      "aggressive",
+      "balanced"
+    ]
+  }
+}
