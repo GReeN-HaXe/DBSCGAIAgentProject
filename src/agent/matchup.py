@@ -499,6 +499,25 @@ def summarize_history_rows(
             "estimated_ready_timestamp_utc": "",
             "is_ready_for_next_phase": False,
             "readiness_reason": "insufficient_runs",
+            "readiness_score": 0.0,
+            "readiness_label": "blocked",
+            "readiness_blockers": ["insufficient_runs"],
+            "readiness_blocker_count": 1,
+            "next_command_hint": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 3 --history-csv artifacts/profile_matchups_history.csv",
+            "followup_command_hint": "python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+            "next_steps_plan": [
+                "Run additional profile matchups to gather baseline data.",
+                "Regenerate history summary and recent-run exports.",
+            ],
+            "prioritized_next_step": "Run additional profile matchups to gather baseline data.",
+            "next_command_sequence": [
+                "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 3 --history-csv artifacts/profile_matchups_history.csv",
+                "python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+            ],
+            "next_command_sequence_shell": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 3 --history-csv artifacts/profile_matchups_history.csv ; python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+            "next_command_sequence_powershell": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 3 --history-csv artifacts/profile_matchups_history.csv ; python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+            "next_command_sequence_bash": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 3 --history-csv artifacts/profile_matchups_history.csv && python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+            "next_command_sequence_multiline": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 3 --history-csv artifacts/profile_matchups_history.csv\npython scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
             "latest": None,
         }
 
@@ -692,6 +711,69 @@ def summarize_history_rows(
     else:
         is_ready_for_next_phase = True
         readiness_reason = "ready"
+    readiness_score = max(
+        0.0,
+        min(
+            1.0,
+            0.5 * ready_progress + 0.3 * stability_index + 0.2 * (float(recent_reliable) / float(len(recent))),
+        ),
+    )
+    if is_ready_for_next_phase:
+        readiness_label = "ready"
+    elif readiness_score >= 0.7:
+        readiness_label = "near_ready"
+    else:
+        readiness_label = "blocked"
+    readiness_blockers: list[str] = []
+    if len(rows) < min_runs:
+        readiness_blockers.append("insufficient_runs")
+    if overall_status != "healthy":
+        readiness_blockers.append("status_not_healthy")
+    if recommended_action != "continue":
+        readiness_blockers.append("action_not_continue")
+    if "insufficient_runs" in readiness_blockers:
+        suggested_games = max(1, runs_needed_for_ready)
+        next_command_hint = (
+            "python scripts/run_profile_matchups.py "
+            "--seat-balanced --shuffle-decks --seed 42 "
+            f"--games-per-matchup {suggested_games} "
+            f"--min-games-for-recommendation {min_runs} "
+            f"--decisive-rate-alert-threshold {float(decisive_rate_alert_threshold):.2f} "
+            "--history-csv artifacts/profile_matchups_history.csv"
+        )
+    elif "status_not_healthy" in readiness_blockers or "action_not_continue" in readiness_blockers:
+        next_command_hint = (
+            "python scripts/run_profile_matchups.py "
+            "--seat-balanced --shuffle-decks --seed 42 "
+            "--games-per-matchup 5 "
+            f"--min-games-for-recommendation {min_runs} "
+            f"--decisive-rate-alert-threshold {float(decisive_rate_alert_threshold):.2f} "
+            "--history-csv artifacts/profile_matchups_history.csv"
+        )
+    else:
+        next_command_hint = "Proceed to next phase tasks."
+    followup_command_hint = (
+        "python scripts/summarize_profile_history.py "
+        "--input artifacts/profile_matchups_history.csv "
+        "--recent-window 10 "
+        "--csv-output artifacts/profile_matchups_history_summary.csv "
+        "--recent-runs-csv artifacts/profile_matchups_history_recent.csv "
+        "--recent-runs-window 10"
+    )
+    next_steps_plan = [
+        f"Execute: {next_command_hint}",
+        f"Execute: {followup_command_hint}",
+    ]
+    if is_ready_for_next_phase:
+        next_steps_plan.append("Proceed to next phase implementation tasks.")
+    else:
+        next_steps_plan.append(f"Address readiness blocker(s): {', '.join(readiness_blockers) if readiness_blockers else 'none'}")
+    prioritized_next_step = next_steps_plan[0] if next_steps_plan else ""
+    next_command_sequence = [next_command_hint, followup_command_hint]
+    next_command_sequence_shell = " ; ".join(next_command_sequence)
+    next_command_sequence_powershell = " ; ".join(next_command_sequence)
+    next_command_sequence_bash = " && ".join(next_command_sequence)
+    next_command_sequence_multiline = "\n".join(next_command_sequence)
 
     latest = rows[-1]
     prev = rows[-2] if len(rows) >= 2 else None
@@ -827,6 +909,19 @@ def summarize_history_rows(
         "estimated_ready_timestamp_utc": estimated_ready_timestamp_utc,
         "is_ready_for_next_phase": is_ready_for_next_phase,
         "readiness_reason": readiness_reason,
+        "readiness_score": readiness_score,
+        "readiness_label": readiness_label,
+        "readiness_blockers": readiness_blockers,
+        "readiness_blocker_count": len(readiness_blockers),
+        "next_command_hint": next_command_hint,
+        "followup_command_hint": followup_command_hint,
+        "next_steps_plan": next_steps_plan,
+        "prioritized_next_step": prioritized_next_step,
+        "next_command_sequence": next_command_sequence,
+        "next_command_sequence_shell": next_command_sequence_shell,
+        "next_command_sequence_powershell": next_command_sequence_powershell,
+        "next_command_sequence_bash": next_command_sequence_bash,
+        "next_command_sequence_multiline": next_command_sequence_multiline,
         "latest": {
             "timestamp_utc": latest.get("timestamp_utc", ""),
             "recommended_profile": latest.get("recommended_profile", ""),
@@ -887,6 +982,25 @@ def format_history_summary(summary: dict[str, object]) -> str:
     estimated_ready_timestamp_utc = str(summary.get("estimated_ready_timestamp_utc", ""))
     is_ready_for_next_phase = bool(summary.get("is_ready_for_next_phase", False))
     readiness_reason = str(summary.get("readiness_reason", ""))
+    readiness_score = float(summary.get("readiness_score", 0.0))
+    readiness_label = str(summary.get("readiness_label", ""))
+    readiness_blockers = summary.get("readiness_blockers", [])
+    if not isinstance(readiness_blockers, list):
+        readiness_blockers = []
+    readiness_blocker_count = int(summary.get("readiness_blocker_count", 0))
+    next_command_hint = str(summary.get("next_command_hint", ""))
+    followup_command_hint = str(summary.get("followup_command_hint", ""))
+    next_steps_plan = summary.get("next_steps_plan", [])
+    if not isinstance(next_steps_plan, list):
+        next_steps_plan = []
+    prioritized_next_step = str(summary.get("prioritized_next_step", ""))
+    next_command_sequence = summary.get("next_command_sequence", [])
+    if not isinstance(next_command_sequence, list):
+        next_command_sequence = []
+    next_command_sequence_shell = str(summary.get("next_command_sequence_shell", ""))
+    next_command_sequence_powershell = str(summary.get("next_command_sequence_powershell", ""))
+    next_command_sequence_bash = str(summary.get("next_command_sequence_bash", ""))
+    next_command_sequence_multiline = str(summary.get("next_command_sequence_multiline", ""))
     counts = summary.get("recommendation_counts", {})
     if not isinstance(counts, dict):
         counts = {}
@@ -951,6 +1065,19 @@ def format_history_summary(summary: dict[str, object]) -> str:
         f"estimated_ready_timestamp_utc: {estimated_ready_timestamp_utc}",
         f"is_ready_for_next_phase: {is_ready_for_next_phase}",
         f"readiness_reason: {readiness_reason}",
+        f"readiness_score: {readiness_score:.6f}",
+        f"readiness_label: {readiness_label}",
+        f"readiness_blocker_count: {readiness_blocker_count}",
+        f"readiness_blockers: {readiness_blockers}",
+        f"next_command_hint: {next_command_hint}",
+        f"followup_command_hint: {followup_command_hint}",
+        f"next_steps_plan: {next_steps_plan}",
+        f"prioritized_next_step: {prioritized_next_step}",
+        f"next_command_sequence: {next_command_sequence}",
+        f"next_command_sequence_shell: {next_command_sequence_shell}",
+        f"next_command_sequence_powershell: {next_command_sequence_powershell}",
+        f"next_command_sequence_bash: {next_command_sequence_bash}",
+        f"next_command_sequence_multiline: {next_command_sequence_multiline}",
     ]
     if latest:
         lines.extend(
@@ -1036,6 +1163,19 @@ def history_summary_to_csv_row(summary: dict[str, object]) -> dict[str, str]:
         "estimated_ready_timestamp_utc": str(summary.get("estimated_ready_timestamp_utc", "")),
         "is_ready_for_next_phase": str(bool(summary.get("is_ready_for_next_phase", False))),
         "readiness_reason": str(summary.get("readiness_reason", "")),
+        "readiness_score": str(float(summary.get("readiness_score", 0.0))),
+        "readiness_label": str(summary.get("readiness_label", "")),
+        "readiness_blocker_count": str(int(summary.get("readiness_blocker_count", 0))),
+        "readiness_blockers_json": json.dumps(summary.get("readiness_blockers", []), sort_keys=True),
+        "next_command_hint": str(summary.get("next_command_hint", "")),
+        "followup_command_hint": str(summary.get("followup_command_hint", "")),
+        "next_steps_plan_json": json.dumps(summary.get("next_steps_plan", []), sort_keys=True),
+        "prioritized_next_step": str(summary.get("prioritized_next_step", "")),
+        "next_command_sequence_json": json.dumps(summary.get("next_command_sequence", []), sort_keys=True),
+        "next_command_sequence_shell": str(summary.get("next_command_sequence_shell", "")),
+        "next_command_sequence_powershell": str(summary.get("next_command_sequence_powershell", "")),
+        "next_command_sequence_bash": str(summary.get("next_command_sequence_bash", "")),
+        "next_command_sequence_multiline": str(summary.get("next_command_sequence_multiline", "")),
         "recommendation_counts_json": json.dumps(summary.get("recommendation_counts", {}), sort_keys=True),
         "recent_recommendation_counts_json": json.dumps(summary.get("recent_recommendation_counts", {}), sort_keys=True),
         "latest_timestamp_utc": str(latest.get("timestamp_utc", "")),
@@ -1076,6 +1216,46 @@ def history_recent_runs_to_csv_rows(rows: list[dict[str, str]], *, recent_window
             }
         )
     return out
+
+
+def command_hints_from_summary(summary: dict[str, object]) -> dict[str, str]:
+    return {
+        "prioritized_next_step": str(summary.get("prioritized_next_step", "")),
+        "next_command_hint": str(summary.get("next_command_hint", "")),
+        "followup_command_hint": str(summary.get("followup_command_hint", "")),
+        "next_command_sequence_shell": str(summary.get("next_command_sequence_shell", "")),
+        "next_command_sequence_powershell": str(summary.get("next_command_sequence_powershell", "")),
+        "next_command_sequence_bash": str(summary.get("next_command_sequence_bash", "")),
+        "next_command_sequence_multiline": str(summary.get("next_command_sequence_multiline", "")),
+    }
+
+
+def command_hints_to_csv_row(summary: dict[str, object]) -> dict[str, str]:
+    hints = command_hints_from_summary(summary)
+    return {
+        "prioritized_next_step": str(hints.get("prioritized_next_step", "")),
+        "next_command_hint": str(hints.get("next_command_hint", "")),
+        "followup_command_hint": str(hints.get("followup_command_hint", "")),
+        "next_command_sequence_shell": str(hints.get("next_command_sequence_shell", "")),
+        "next_command_sequence_powershell": str(hints.get("next_command_sequence_powershell", "")),
+        "next_command_sequence_bash": str(hints.get("next_command_sequence_bash", "")),
+        "next_command_sequence_multiline": str(hints.get("next_command_sequence_multiline", "")),
+    }
+
+
+def command_hints_to_json_payload(summary: dict[str, object]) -> dict[str, object]:
+    hints = command_hints_from_summary(summary)
+    return {
+        "prioritized_next_step": str(hints.get("prioritized_next_step", "")),
+        "next_command_hint": str(hints.get("next_command_hint", "")),
+        "followup_command_hint": str(hints.get("followup_command_hint", "")),
+        "next_command_sequence": {
+            "shell": str(hints.get("next_command_sequence_shell", "")),
+            "powershell": str(hints.get("next_command_sequence_powershell", "")),
+            "bash": str(hints.get("next_command_sequence_bash", "")),
+            "multiline": str(hints.get("next_command_sequence_multiline", "")),
+        },
+    }
 
 
 def rank_profiles(summary: dict[str, dict[str, float | int]]) -> list[str]:

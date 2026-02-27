@@ -15,6 +15,9 @@ from src.agent import (
     compute_match_quality,
     per_phase_kpi_rows,
     per_turn_kpi_rows,
+    command_hints_from_summary,
+    command_hints_to_csv_row,
+    command_hints_to_json_payload,
     evaluate_state,
     format_history_summary,
     history_recent_runs_to_csv_rows,
@@ -820,6 +823,28 @@ def test_phase5_summarize_history_rows_and_format() -> None:
     assert summary["estimated_ready_timestamp_utc"].startswith("2026-02-26T04:00:00")
     assert summary["is_ready_for_next_phase"] is False
     assert summary["readiness_reason"] == "insufficient_runs"
+    assert "--games-per-matchup 3" in summary["next_command_hint"]
+    assert "--min-games-for-recommendation 5" in summary["next_command_hint"]
+    assert "--decisive-rate-alert-threshold 0.30" in summary["next_command_hint"]
+    assert 0.0 <= float(summary["readiness_score"]) <= 1.0
+    assert summary["readiness_label"] in {"blocked", "near_ready", "ready"}
+    assert int(summary["readiness_blocker_count"]) >= 1
+    assert isinstance(summary["readiness_blockers"], list)
+    assert isinstance(summary["next_command_hint"], str)
+    assert summary["next_command_hint"]
+    assert isinstance(summary["followup_command_hint"], str)
+    assert summary["followup_command_hint"]
+    assert isinstance(summary["next_steps_plan"], list)
+    assert summary["next_steps_plan"]
+    assert isinstance(summary["prioritized_next_step"], str)
+    assert summary["prioritized_next_step"]
+    assert isinstance(summary["next_command_sequence"], list)
+    assert len(summary["next_command_sequence"]) == 2
+    assert isinstance(summary["next_command_sequence_shell"], str)
+    assert summary["next_command_sequence_shell"]
+    assert isinstance(summary["next_command_sequence_powershell"], str)
+    assert isinstance(summary["next_command_sequence_bash"], str)
+    assert isinstance(summary["next_command_sequence_multiline"], str)
     delta = summary["latest_delta"]
     assert delta["recommendation_changed"] is True
     assert delta["reliability_changed"] is True
@@ -847,6 +872,16 @@ def test_phase5_summarize_history_rows_and_format() -> None:
     assert "ready_progress:" in rendered
     assert "estimated_hours_to_ready:" in rendered
     assert "is_ready_for_next_phase:" in rendered
+    assert "readiness_score:" in rendered
+    assert "readiness_label:" in rendered
+    assert "readiness_blockers:" in rendered
+    assert "next_command_hint:" in rendered
+    assert "followup_command_hint:" in rendered
+    assert "next_steps_plan:" in rendered
+    assert "prioritized_next_step:" in rendered
+    assert "next_command_sequence_shell:" in rendered
+    assert "next_command_sequence_bash:" in rendered
+    assert "next_command_sequence_multiline:" in rendered
     assert "latest_delta_vs_previous:" in rendered
 
 
@@ -898,6 +933,19 @@ def test_phase5_history_summary_to_csv_row_shape() -> None:
         "estimated_ready_timestamp_utc": "2026-02-26T02:00:00+00:00",
         "is_ready_for_next_phase": False,
         "readiness_reason": "status_not_healthy",
+        "readiness_score": 0.7,
+        "readiness_label": "near_ready",
+        "readiness_blocker_count": 1,
+        "readiness_blockers": ["status_not_healthy"],
+        "next_command_hint": "python scripts/run_profile_matchups.py ...",
+        "followup_command_hint": "python scripts/summarize_profile_history.py ...",
+        "next_steps_plan": ["step1", "step2"],
+        "prioritized_next_step": "step1",
+        "next_command_sequence": ["cmd1", "cmd2"],
+        "next_command_sequence_shell": "cmd1 ; cmd2",
+        "next_command_sequence_powershell": "cmd1 ; cmd2",
+        "next_command_sequence_bash": "cmd1 && cmd2",
+        "next_command_sequence_multiline": "cmd1\ncmd2",
         "recommendation_counts": {"balanced": 1, "aggressive": 1},
         "recent_recommendation_counts": {"aggressive": 1},
         "latest": {
@@ -939,6 +987,18 @@ def test_phase5_history_summary_to_csv_row_shape() -> None:
     assert row["estimated_hours_to_ready"] == "1.0"
     assert row["is_ready_for_next_phase"] == "False"
     assert row["readiness_reason"] == "status_not_healthy"
+    assert row["readiness_score"] == "0.7"
+    assert row["readiness_label"] == "near_ready"
+    assert row["readiness_blocker_count"] == "1"
+    assert row["next_command_hint"] == "python scripts/run_profile_matchups.py ..."
+    assert row["followup_command_hint"] == "python scripts/summarize_profile_history.py ..."
+    assert row["next_steps_plan_json"] == "[\"step1\", \"step2\"]"
+    assert row["prioritized_next_step"] == "step1"
+    assert row["next_command_sequence_json"] == "[\"cmd1\", \"cmd2\"]"
+    assert row["next_command_sequence_shell"] == "cmd1 ; cmd2"
+    assert row["next_command_sequence_powershell"] == "cmd1 ; cmd2"
+    assert row["next_command_sequence_bash"] == "cmd1 && cmd2"
+    assert row["next_command_sequence_multiline"] == "cmd1\ncmd2"
     assert row["latest_recommended_profile"] == "aggressive"
     assert row["latest_delta_recommendation_changed"] == "True"
 
@@ -954,3 +1014,65 @@ def test_phase5_history_recent_runs_to_csv_rows_window() -> None:
     assert out[0]["timestamp_utc"] == "t2"
     assert out[1]["timestamp_utc"] == "t3"
     assert out[0]["match_quality_decisive_rate"] == "0.3"
+
+
+def test_phase5_command_hints_from_summary_shape() -> None:
+    summary = {
+        "prioritized_next_step": "run more games",
+        "next_command_hint": "python scripts/run_profile_matchups.py ...",
+        "followup_command_hint": "python scripts/summarize_profile_history.py ...",
+        "next_command_sequence_shell": "cmd1 ; cmd2",
+        "next_command_sequence_powershell": "cmd1 ; cmd2",
+        "next_command_sequence_bash": "cmd1 && cmd2",
+        "next_command_sequence_multiline": "cmd1\ncmd2",
+    }
+    hints = command_hints_from_summary(summary)
+    assert hints["prioritized_next_step"] == "run more games"
+    assert hints["next_command_hint"] == "python scripts/run_profile_matchups.py ..."
+    assert hints["followup_command_hint"] == "python scripts/summarize_profile_history.py ..."
+    assert hints["next_command_sequence_shell"] == "cmd1 ; cmd2"
+    assert hints["next_command_sequence_powershell"] == "cmd1 ; cmd2"
+    assert hints["next_command_sequence_bash"] == "cmd1 && cmd2"
+    assert hints["next_command_sequence_multiline"] == "cmd1\ncmd2"
+
+
+def test_phase5_command_hints_to_csv_row_shape() -> None:
+    summary = {
+        "prioritized_next_step": "run more games",
+        "next_command_hint": "python scripts/run_profile_matchups.py ...",
+        "followup_command_hint": "python scripts/summarize_profile_history.py ...",
+        "next_command_sequence_shell": "cmd1 ; cmd2",
+        "next_command_sequence_powershell": "cmd1 ; cmd2",
+        "next_command_sequence_bash": "cmd1 && cmd2",
+        "next_command_sequence_multiline": "cmd1\ncmd2",
+    }
+    row = command_hints_to_csv_row(summary)
+    assert row["prioritized_next_step"] == "run more games"
+    assert row["next_command_hint"] == "python scripts/run_profile_matchups.py ..."
+    assert row["followup_command_hint"] == "python scripts/summarize_profile_history.py ..."
+    assert row["next_command_sequence_shell"] == "cmd1 ; cmd2"
+    assert row["next_command_sequence_powershell"] == "cmd1 ; cmd2"
+    assert row["next_command_sequence_bash"] == "cmd1 && cmd2"
+    assert row["next_command_sequence_multiline"] == "cmd1\ncmd2"
+
+
+def test_phase5_command_hints_to_json_payload_shape() -> None:
+    summary = {
+        "prioritized_next_step": "run more games",
+        "next_command_hint": "python scripts/run_profile_matchups.py ...",
+        "followup_command_hint": "python scripts/summarize_profile_history.py ...",
+        "next_command_sequence_shell": "cmd1 ; cmd2",
+        "next_command_sequence_powershell": "cmd1 ; cmd2",
+        "next_command_sequence_bash": "cmd1 && cmd2",
+        "next_command_sequence_multiline": "cmd1\ncmd2",
+    }
+    payload = command_hints_to_json_payload(summary)
+    assert payload["prioritized_next_step"] == "run more games"
+    assert payload["next_command_hint"] == "python scripts/run_profile_matchups.py ..."
+    assert payload["followup_command_hint"] == "python scripts/summarize_profile_history.py ..."
+    assert isinstance(payload["next_command_sequence"], dict)
+    sequence = payload["next_command_sequence"]
+    assert sequence["shell"] == "cmd1 ; cmd2"
+    assert sequence["powershell"] == "cmd1 ; cmd2"
+    assert sequence["bash"] == "cmd1 && cmd2"
+    assert sequence["multiline"] == "cmd1\ncmd2"
