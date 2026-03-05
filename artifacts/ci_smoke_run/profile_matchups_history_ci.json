@@ -1,0 +1,28 @@
+{
+  "status": "fail",
+  "overall_status": "critical",
+  "is_ready_for_next_phase": false,
+  "readiness_score": 0.8518181818181818,
+  "readiness_blocker_count": 2,
+  "status_threshold": "warning",
+  "readiness_mode": "required",
+  "blockers_mode": "required",
+  "readiness_score_threshold": null,
+  "status_failed": true,
+  "not_ready_failed": true,
+  "blockers_failed": true,
+  "readiness_score_failed": false,
+  "policy": {
+    "status_threshold": "warning",
+    "readiness_mode": "required",
+    "blockers_mode": "required",
+    "unknown_mode": "fail",
+    "readiness_score_threshold": null
+  },
+  "reasons": [
+    "status_threshold_failed",
+    "not_ready_failed",
+    "blockers_failed"
+  ],
+  "source": "history_summary"
+}

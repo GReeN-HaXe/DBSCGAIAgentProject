@@ -1,0 +1,27 @@
+{
+  "status": "fail",
+  "failure_reason": "timing_regression_detected current_total=0.881912 baseline_total=0.000100 ratio=8819.121000 threshold=1.010000",
+  "pipeline_profile": "quick",
+  "play_ok": true,
+  "replay_ok": true,
+  "determinism_checked": false,
+  "trace_hash_1": "304347837bc38db4f7f80b319009027815f32d55554fe792646cdcb311cab49d",
+  "trace_hash_2": null,
+  "history_recent_window": 20,
+  "min_recent_pass_rate": 0.9,
+  "min_determinism_pass_rate": 1.0,
+  "artifacts": {
+    "trace": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\human_vs_ai_trace.json",
+    "state": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\human_vs_ai_state.json",
+    "summary": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\human_vs_ai_summary.json",
+    "play_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\human_vs_ai_result.json",
+    "replay_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\replay_result.json",
+    "replay_expect_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\replay_expect_result.json",
+    "report_md": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\phase6_report.md",
+    "integrity_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\phase6_integrity_result.json",
+    "history_csv": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\phase6_pipeline_history.csv",
+    "history_summary_json": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\phase6_pipeline_history_summary.json",
+    "stage_timings_json": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\phase6_stage_timings.json",
+    "timing_regression_json": "artifacts\\ci_smoke_run\\phase6_pipeline_v10_regfail\\phase6_timing_regression.json"
+  }
+}

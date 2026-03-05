@@ -1,0 +1,14 @@
+{
+  "total_runs": 1,
+  "recent_window": 1,
+  "pass_rate_total": 1.0,
+  "pass_rate_recent": 1.0,
+  "determinism_checks_recent": 1,
+  "determinism_pass_rate_recent": 1.0,
+  "latest_status": "pass",
+  "min_recent_pass_rate": 0.9,
+  "min_determinism_pass_rate": 1.0,
+  "overall_status": "healthy",
+  "recommended_action": "continue_phase6_or_move_next_phase",
+  "is_ready": true
+}

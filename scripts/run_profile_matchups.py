@@ -162,6 +162,121 @@ def _default_history_artifact_path(history_csv: Path, suffix: str, extension: st
     return history_csv.with_name(f"{base}_{suffix}.{extension}")
 
 
+def _compute_history_ci_out(
+    *,
+    history_summary_payload: dict[str, object] | None,
+    history_ci_status_threshold: str,
+    history_ci_readiness_mode: str,
+    history_ci_blockers_mode: str,
+    history_ci_unknown_mode: str,
+    history_ci_readiness_score_threshold: float | None,
+) -> dict[str, object]:
+    unknown_mode = str(history_ci_unknown_mode).strip().lower()
+    status_threshold = str(history_ci_status_threshold).strip().lower()
+    readiness_mode = str(history_ci_readiness_mode).strip().lower()
+    blockers_mode = str(history_ci_blockers_mode).strip().lower()
+    score_threshold = (
+        None
+        if history_ci_readiness_score_threshold is None
+        else max(0.0, min(1.0, float(history_ci_readiness_score_threshold)))
+    )
+    if isinstance(history_summary_payload, dict):
+        overall_status = str(history_summary_payload.get("overall_status", "healthy")).strip().lower()
+        is_ready = bool(history_summary_payload.get("is_ready_for_next_phase", False))
+        readiness_score = float(history_summary_payload.get("readiness_score", 0.0))
+        blocker_count = int(history_summary_payload.get("readiness_blocker_count", 0))
+        status_order = {"healthy": 0, "warning": 1, "critical": 2}
+        status_failed = status_order.get(overall_status, 0) >= status_order.get(status_threshold, 1)
+        blockers_failed = (blockers_mode == "required") and (blocker_count > 0)
+        not_ready_failed = (readiness_mode == "required") and (not is_ready)
+        readiness_score_failed = bool(score_threshold is not None and readiness_score < float(score_threshold))
+        ci_failed = bool(status_failed or blockers_failed or not_ready_failed or readiness_score_failed)
+        reasons: list[str] = []
+        if status_failed:
+            reasons.append("status_threshold_failed")
+        if not_ready_failed:
+            reasons.append("not_ready_failed")
+        if blockers_failed:
+            reasons.append("blockers_failed")
+        if readiness_score_failed:
+            reasons.append("readiness_score_failed")
+        return {
+            "status": "fail" if ci_failed else "pass",
+            "overall_status": overall_status,
+            "is_ready_for_next_phase": is_ready,
+            "readiness_score": readiness_score,
+            "readiness_blocker_count": blocker_count,
+            "status_threshold": status_threshold,
+            "readiness_mode": readiness_mode,
+            "blockers_mode": blockers_mode,
+            "readiness_score_threshold": score_threshold,
+            "status_failed": status_failed,
+            "not_ready_failed": not_ready_failed,
+            "blockers_failed": blockers_failed,
+            "readiness_score_failed": readiness_score_failed,
+            "policy": {
+                "status_threshold": status_threshold,
+                "readiness_mode": readiness_mode,
+                "blockers_mode": blockers_mode,
+                "unknown_mode": unknown_mode,
+                "readiness_score_threshold": score_threshold,
+            },
+            "reasons": reasons,
+            "source": "history_summary",
+        }
+    return {
+        "status": "pass" if unknown_mode == "pass" else "unknown",
+        "unknown_mode": unknown_mode,
+        "policy": {
+            "status_threshold": status_threshold,
+            "readiness_mode": readiness_mode,
+            "blockers_mode": blockers_mode,
+            "unknown_mode": unknown_mode,
+            "readiness_score_threshold": score_threshold,
+        },
+        "reasons": [] if unknown_mode == "pass" else ["history_summary_unavailable"],
+        "source": "unavailable",
+    }
+
+
+def _compute_pipeline_ci_failed(*, core_ci_failed: bool, include_history_ci: bool, history_ci_status: str) -> bool:
+    history_failed = str(history_ci_status).strip().lower() != "pass"
+    return bool(core_ci_failed or (bool(include_history_ci) and history_failed))
+
+
+def _resolve_failure_exit_code(
+    *,
+    fail_on_ci_status_only: bool,
+    fail_on_ci_status: bool,
+    ci_status: str,
+    fail_on_alerts: bool,
+    low_decisive_rate_alert: bool,
+    seat_bias_alert: bool,
+    fail_on_unreliable_recommendation: bool,
+    recommendation_reliable: bool,
+    fail_on_history_ci: bool,
+    history_ci_status: str,
+) -> tuple[int | None, str | None]:
+    ci_status_norm = str(ci_status).strip().lower()
+    history_status_norm = str(history_ci_status).strip().lower()
+    alerts_triggered = bool(low_decisive_rate_alert or seat_bias_alert)
+
+    if fail_on_ci_status_only:
+        if ci_status_norm != "pass":
+            return 5, f"run_failed_on_ci_status: {ci_status_norm or 'fail'}"
+        return None, None
+
+    if fail_on_ci_status and ci_status_norm != "pass":
+        return 5, f"run_failed_on_ci_status: {ci_status_norm or 'fail'}"
+    if fail_on_alerts and alerts_triggered:
+        return 2, "run_failed_on_alerts: True"
+    if fail_on_unreliable_recommendation and not recommendation_reliable:
+        return 3, "run_failed_on_unreliable_recommendation: True"
+    if fail_on_history_ci and history_status_norm != "pass":
+        return 4, f"run_failed_on_history_ci: {history_status_norm or 'unknown'}"
+    return None, None
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run profile-vs-profile AI matchup matrix.")
     parser.add_argument(
@@ -321,6 +436,21 @@ def main() -> None:
         action="store_true",
         help="Exit with code 3 if recommendation is not reliable.",
     )
+    parser.add_argument(
+        "--ci-status-include-history-ci",
+        action="store_true",
+        help="When set, ci_summary.status and run_manifest ci.status also fail if history CI is not pass.",
+    )
+    parser.add_argument(
+        "--fail-on-ci-status",
+        action="store_true",
+        help="Exit with code 5 when final ci_summary.status is fail.",
+    )
+    parser.add_argument(
+        "--fail-on-ci-status-only",
+        action="store_true",
+        help="Use only unified ci_summary.status gate (exit 5) and ignore legacy fail gates for this run.",
+    )
     parser.add_argument("--rows-csv", type=Path, default=None, help="Optional rows CSV path. Defaults next to --output.")
     parser.add_argument("--summary-csv", type=Path, default=None, help="Optional profile summary CSV path. Defaults next to --output.")
     parser.add_argument("--h2h-csv", type=Path, default=None, help="Optional head-to-head CSV path. Defaults next to --output.")
@@ -356,6 +486,22 @@ def main() -> None:
         help="Write --history-bundle-output as compact single-line JSON instead of pretty JSON.",
     )
     parser.add_argument(
+        "--history-ci-output-json",
+        type=Path,
+        default=None,
+        help="Optional path to write history CI summary JSON.",
+    )
+    parser.add_argument(
+        "--print-history-ci-output-path",
+        action="store_true",
+        help="Print resolved history CI output path (if configured).",
+    )
+    parser.add_argument(
+        "--history-ci-output-compact",
+        action="store_true",
+        help="Write --history-ci-output-json as compact single-line JSON instead of pretty JSON.",
+    )
+    parser.add_argument(
         "--history-artifact-manifest",
         type=Path,
         default=None,
@@ -388,9 +534,49 @@ def main() -> None:
         help="Print one-line JSON CI-style history status summary when history summary is available.",
     )
     parser.add_argument(
+        "--print-history-ci-policy-json",
+        action="store_true",
+        help="Print one-line JSON history CI policy configuration.",
+    )
+    parser.add_argument(
+        "--print-history-bundle-json",
+        action="store_true",
+        help="Print one-line JSON history bundle (summary+commands+metrics) when available.",
+    )
+    parser.add_argument(
         "--fail-on-history-ci",
         action="store_true",
         help="Exit with code 4 when computed history CI status is fail or unknown.",
+    )
+    parser.add_argument(
+        "--history-ci-status-threshold",
+        choices=["warning", "critical"],
+        default="warning",
+        help="History CI status gate threshold used for pass/fail derivation.",
+    )
+    parser.add_argument(
+        "--history-ci-readiness-mode",
+        choices=["required", "ignore"],
+        default="required",
+        help="History CI readiness rule: require ready-for-next-phase or ignore readiness.",
+    )
+    parser.add_argument(
+        "--history-ci-blockers-mode",
+        choices=["required", "ignore"],
+        default="required",
+        help="History CI blocker rule: fail on readiness blockers or ignore blocker count.",
+    )
+    parser.add_argument(
+        "--history-ci-unknown-mode",
+        choices=["fail", "pass"],
+        default="fail",
+        help="History CI fallback when history summary is unavailable.",
+    )
+    parser.add_argument(
+        "--history-ci-readiness-score-threshold",
+        type=float,
+        default=None,
+        help="Optional history CI readiness_score floor (0.0-1.0); below threshold fails history CI.",
     )
     parser.add_argument(
         "--history-recent-window",
@@ -423,6 +609,8 @@ def main() -> None:
         help="Minimum runs required for history readiness check.",
     )
     args = parser.parse_args()
+    if args.fail_on_ci_status_only:
+        args.fail_on_ci_status = True
 
     def log(message: str) -> None:
         if not args.quiet:
@@ -442,6 +630,7 @@ def main() -> None:
         args.fail_on_alerts = True
         args.fail_on_unreliable_recommendation = True
         args.fail_on_history_ci = True
+        args.ci_status_include_history_ci = True
         args.auto_refresh_history_artifacts = True
         if ci_artifacts_dir is not None and args.ci_retain_latest is None:
             args.ci_retain_latest = 20
@@ -695,6 +884,19 @@ def main() -> None:
                     output_prefix=args.output_prefix,
                     timestamp_tag=timestamp_tag,
                 )
+        if args.history_ci_output_json is None:
+            if ci_artifacts_dir is not None:
+                args.history_ci_output_json = _decorate_generated_path(
+                    ci_artifacts_dir / "profile_matchups_history_ci.json",
+                    output_prefix=args.output_prefix,
+                    timestamp_tag=timestamp_tag,
+                )
+            else:
+                args.history_ci_output_json = _decorate_generated_path(
+                    _default_history_artifact_path(args.history_csv, "ci", "json"),
+                    output_prefix=args.output_prefix,
+                    timestamp_tag=timestamp_tag,
+                )
         if args.history_artifact_manifest is None:
             if ci_artifacts_dir is not None:
                 args.history_artifact_manifest = _decorate_generated_path(
@@ -720,6 +922,7 @@ def main() -> None:
             args.history_commands_json,
             args.history_metrics_output,
             args.history_bundle_output,
+            args.history_ci_output_json,
             args.history_artifact_manifest,
         )
     )
@@ -729,6 +932,7 @@ def main() -> None:
         or bool(args.print_history_summary_json)
         or bool(args.print_history_metrics_json)
         or bool(args.print_history_ci_summary)
+        or bool(args.print_history_bundle_json)
     )
     if history_summary_compute_requested and args.history_csv is None:
         parser.error("--history-csv is required when using history summary/commands output flags.")
@@ -808,6 +1012,7 @@ def main() -> None:
                 "history_commands_json": "" if args.history_commands_json is None else str(args.history_commands_json),
                 "history_metrics_output": "" if args.history_metrics_output is None else str(args.history_metrics_output),
                 "history_bundle_output": "" if args.history_bundle_output is None else str(args.history_bundle_output),
+                "history_ci_output_json": "" if args.history_ci_output_json is None else str(args.history_ci_output_json),
                 "history_artifact_manifest": "" if args.history_artifact_manifest is None else str(args.history_artifact_manifest),
             },
         }
@@ -1086,6 +1291,7 @@ def main() -> None:
         }
 
     history_summary_payload: dict[str, object] | None = None
+    history_bundle_payload: dict[str, object] | None = None
     if history_summary_compute_requested and args.history_csv is not None and args.history_csv.exists():
         history_rows: list[dict[str, str]] = []
         with args.history_csv.open("r", encoding="utf-8", newline="") as fh:
@@ -1209,12 +1415,12 @@ def main() -> None:
                 "seat_bias_alert_count": int(history_summary.get("seat_bias_alert_count", 0)),
                 "low_decisive_rate_alert_count": int(history_summary.get("low_decisive_rate_alert_count", 0)),
             }
+        history_bundle_payload = {
+            "summary": history_summary,
+            "commands": history_commands_payload,
+            "metrics": history_metrics_payload,
+        }
         if args.history_bundle_output is not None:
-            history_bundle_payload = {
-                "summary": history_summary,
-                "commands": history_commands_payload,
-                "metrics": history_metrics_payload,
-            }
             args.history_bundle_output.parent.mkdir(parents=True, exist_ok=True)
             if args.history_bundle_output_compact:
                 args.history_bundle_output.write_text(
@@ -1243,6 +1449,7 @@ def main() -> None:
                     "history_commands_json": "" if args.history_commands_json is None else str(args.history_commands_json),
                     "history_metrics_output": "" if args.history_metrics_output is None else str(args.history_metrics_output),
                     "history_bundle_output": "" if args.history_bundle_output is None else str(args.history_bundle_output),
+                    "history_ci_output_json": "" if args.history_ci_output_json is None else str(args.history_ci_output_json),
                 },
             }
             args.history_artifact_manifest.parent.mkdir(parents=True, exist_ok=True)
@@ -1250,6 +1457,19 @@ def main() -> None:
             log(f"wrote: {args.history_artifact_manifest}")
             if isinstance(run_manifest_payload.get("history"), dict):
                 run_manifest_payload["history"]["history_artifact_manifest"] = str(args.history_artifact_manifest)
+
+    history_ci_out = _compute_history_ci_out(
+        history_summary_payload=history_summary_payload,
+        history_ci_status_threshold=str(args.history_ci_status_threshold),
+        history_ci_readiness_mode=str(args.history_ci_readiness_mode),
+        history_ci_blockers_mode=str(args.history_ci_blockers_mode),
+        history_ci_unknown_mode=str(args.history_ci_unknown_mode),
+        history_ci_readiness_score_threshold=(
+            None
+            if args.history_ci_readiness_score_threshold is None
+            else float(args.history_ci_readiness_score_threshold)
+        ),
+    )
 
     if args.recommendation_output is not None:
         args.recommendation_output.parent.mkdir(parents=True, exist_ok=True)
@@ -1274,11 +1494,19 @@ def main() -> None:
         "status": "fail" if ci_failed else "pass",
         "alert_failed": ci_alert_failed,
         "recommendation_failed": ci_recommendation_failed,
+        "core_status": "fail" if ci_failed else "pass",
+        "ci_status_include_history_ci": bool(args.ci_status_include_history_ci),
         "low_decisive_rate_alert": low_decisive_rate_alert,
         "seat_bias_alert": seat_bias_alert,
         "recommendation_reliable": recommendation_reliable,
         "recommended_profile": recommendation.get("recommended_profile"),
         "recommendation_reason": recommendation.get("reason"),
+        "history_ci_policy": {
+            "status_threshold": str(args.history_ci_status_threshold),
+            "readiness_mode": str(args.history_ci_readiness_mode),
+            "blockers_mode": str(args.history_ci_blockers_mode),
+            "unknown_mode": str(args.history_ci_unknown_mode),
+        },
     }
     if isinstance(history_summary_payload, dict):
         commands_payload = command_hints_to_json_payload(history_summary_payload)
@@ -1305,6 +1533,7 @@ def main() -> None:
         "recommendation": recommendation_payload,
         "metrics": metrics_payload,
         "ci_summary": ci_summary_payload,
+        "history_ci": history_ci_out,
         "commands": commands_payload,
         "run_manifest": run_manifest_payload,
     }
@@ -1358,56 +1587,63 @@ def main() -> None:
         else:
             history_metrics_out = {"source": "unavailable"}
         print(f"history_metrics_json: {json.dumps(history_metrics_out, separators=(',', ':'))}")
+    if args.print_history_bundle_json:
+        if isinstance(history_bundle_payload, dict):
+            history_bundle_out = history_bundle_payload
+        else:
+            history_bundle_out = {"source": "unavailable"}
+        print(f"history_bundle_json: {json.dumps(history_bundle_out, separators=(',', ':'))}")
     if args.print_history_ci_summary:
-        if isinstance(history_summary_payload, dict):
-            overall_status = str(history_summary_payload.get("overall_status", "healthy")).strip().lower()
-            is_ready = bool(history_summary_payload.get("is_ready_for_next_phase", False))
-            readiness_score = float(history_summary_payload.get("readiness_score", 0.0))
-            blocker_count = int(history_summary_payload.get("readiness_blocker_count", 0))
-            status_order = {"healthy": 0, "warning": 1, "critical": 2}
-            status_failed = status_order.get(overall_status, 0) >= 1
-            blockers_failed = blocker_count > 0
-            not_ready_failed = not is_ready
-            ci_failed = bool(status_failed or blockers_failed or not_ready_failed)
-            history_ci_out = {
-                "status": "fail" if ci_failed else "pass",
-                "overall_status": overall_status,
-                "is_ready_for_next_phase": is_ready,
-                "readiness_score": readiness_score,
-                "readiness_blocker_count": blocker_count,
-                "status_failed": status_failed,
-                "not_ready_failed": not_ready_failed,
-                "blockers_failed": blockers_failed,
-                "source": "history_summary",
-            }
-        else:
-            history_ci_out = {"status": "unknown", "source": "unavailable"}
         print(f"history_ci_summary_json: {json.dumps(history_ci_out, separators=(',', ':'))}")
-    else:
-        if isinstance(history_summary_payload, dict):
-            overall_status = str(history_summary_payload.get("overall_status", "healthy")).strip().lower()
-            is_ready = bool(history_summary_payload.get("is_ready_for_next_phase", False))
-            blocker_count = int(history_summary_payload.get("readiness_blocker_count", 0))
-            status_order = {"healthy": 0, "warning": 1, "critical": 2}
-            status_failed = status_order.get(overall_status, 0) >= 1
-            blockers_failed = blocker_count > 0
-            not_ready_failed = not is_ready
-            ci_failed = bool(status_failed or blockers_failed or not_ready_failed)
-            history_ci_out = {
-                "status": "fail" if ci_failed else "pass",
-                "source": "history_summary",
-            }
-        else:
-            history_ci_out = {"status": "unknown", "source": "unavailable"}
     if args.print_bundle_json:
         print(f"bundle_json: {json.dumps(bundle_payload, separators=(',', ':'))}")
-    ci_summary_payload["history_ci_status"] = str(history_ci_out.get("status", "unknown"))
+    history_ci_policy_payload = {
+        "status_threshold": str(args.history_ci_status_threshold),
+        "readiness_mode": str(args.history_ci_readiness_mode),
+        "blockers_mode": str(args.history_ci_blockers_mode),
+        "unknown_mode": str(args.history_ci_unknown_mode),
+        "readiness_score_threshold": (
+            None
+            if args.history_ci_readiness_score_threshold is None
+            else max(0.0, min(1.0, float(args.history_ci_readiness_score_threshold)))
+        ),
+    }
+    if args.print_history_ci_policy_json:
+        print(f"history_ci_policy_json: {json.dumps(history_ci_policy_payload, separators=(',', ':'))}")
+    history_ci_status = str(history_ci_out.get("status", "unknown"))
+    history_ci_failed = history_ci_status != "pass"
+    pipeline_ci_failed = _compute_pipeline_ci_failed(
+        core_ci_failed=ci_failed,
+        include_history_ci=bool(args.ci_status_include_history_ci),
+        history_ci_status=history_ci_status,
+    )
+    ci_summary_payload["history_ci_failed"] = history_ci_failed
+    ci_summary_payload["status"] = "fail" if pipeline_ci_failed else "pass"
+    ci_summary_payload["history_ci_status"] = history_ci_status
     ci_summary_payload["history_ci_source"] = str(history_ci_out.get("source", ""))
+    ci_summary_payload["history_ci_reasons"] = history_ci_out.get("reasons", [])
+    if args.history_ci_output_json is not None:
+        args.history_ci_output_json.parent.mkdir(parents=True, exist_ok=True)
+        if args.history_ci_output_compact:
+            args.history_ci_output_json.write_text(
+                json.dumps(history_ci_out, separators=(",", ":")),
+                encoding="utf-8",
+            )
+        else:
+            args.history_ci_output_json.write_text(json.dumps(history_ci_out, indent=2), encoding="utf-8")
+        log(f"wrote: {args.history_ci_output_json}")
     run_manifest_payload.setdefault("ci", {})
     if isinstance(run_manifest_payload["ci"], dict):
-        run_manifest_payload["ci"]["history_ci_status"] = str(history_ci_out.get("status", "unknown"))
+        run_manifest_payload["ci"]["core_status"] = "fail" if ci_failed else "pass"
+        run_manifest_payload["ci"]["ci_status_include_history_ci"] = bool(args.ci_status_include_history_ci)
+        run_manifest_payload["ci"]["history_ci_failed"] = history_ci_failed
+        run_manifest_payload["ci"]["status"] = "fail" if pipeline_ci_failed else "pass"
+        run_manifest_payload["ci"]["history_ci_status"] = history_ci_status
         run_manifest_payload["ci"]["history_ci_source"] = str(history_ci_out.get("source", ""))
+        run_manifest_payload["ci"]["history_ci_reasons"] = history_ci_out.get("reasons", [])
+        run_manifest_payload["ci"]["history_ci_policy"] = history_ci_policy_payload
     bundle_payload["ci_summary"] = ci_summary_payload
+    bundle_payload["history_ci"] = history_ci_out
     bundle_payload["run_manifest"] = run_manifest_payload
     if args.run_manifest is not None:
         args.run_manifest.parent.mkdir(parents=True, exist_ok=True)
@@ -1425,17 +1661,27 @@ def main() -> None:
         print(json.dumps(run_manifest_payload, indent=2))
     if args.print_ci_summary:
         print(f"ci_summary_json: {json.dumps(ci_summary_payload, separators=(',', ':'))}")
+    if args.print_history_ci_output_path:
+        path_out = "" if args.history_ci_output_json is None else str(args.history_ci_output_json)
+        print(f"history_ci_output_path: {path_out}")
     if args.print_recommendation_only:
         print(str(recommendation.get("recommended_profile", "")))
-    if args.fail_on_alerts and (low_decisive_rate_alert or seat_bias_alert):
-        print("run_failed_on_alerts: True")
-        sys.exit(2)
-    if args.fail_on_unreliable_recommendation and not recommendation_reliable:
-        print("run_failed_on_unreliable_recommendation: True")
-        sys.exit(3)
-    if args.fail_on_history_ci and str(history_ci_out.get("status", "unknown")) != "pass":
-        print(f"run_failed_on_history_ci: {history_ci_out.get('status', 'unknown')}")
-        sys.exit(4)
+    exit_code, exit_message = _resolve_failure_exit_code(
+        fail_on_ci_status_only=bool(args.fail_on_ci_status_only),
+        fail_on_ci_status=bool(args.fail_on_ci_status),
+        ci_status=str(ci_summary_payload.get("status", "pass")),
+        fail_on_alerts=bool(args.fail_on_alerts),
+        low_decisive_rate_alert=bool(low_decisive_rate_alert),
+        seat_bias_alert=bool(seat_bias_alert),
+        fail_on_unreliable_recommendation=bool(args.fail_on_unreliable_recommendation),
+        recommendation_reliable=bool(recommendation_reliable),
+        fail_on_history_ci=bool(args.fail_on_history_ci),
+        history_ci_status=str(history_ci_out.get("status", "unknown")),
+    )
+    if exit_code is not None:
+        if exit_message:
+            print(exit_message)
+        sys.exit(exit_code)
 
 
 if __name__ == "__main__":

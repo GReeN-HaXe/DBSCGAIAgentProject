@@ -1,0 +1,26 @@
+{
+  "status": "pass",
+  "failure_reason": "",
+  "pipeline_profile": "standard",
+  "play_ok": true,
+  "replay_ok": true,
+  "determinism_checked": true,
+  "trace_hash_1": "4510fe94c3554d493de231b0b9025cc2c0f5153414a083946f58d085ddfaef09",
+  "trace_hash_2": "4510fe94c3554d493de231b0b9025cc2c0f5153414a083946f58d085ddfaef09",
+  "history_recent_window": 20,
+  "min_recent_pass_rate": 0.9,
+  "min_determinism_pass_rate": 1.0,
+  "artifacts": {
+    "trace": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\human_vs_ai_trace.json",
+    "state": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\human_vs_ai_state.json",
+    "summary": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\human_vs_ai_summary.json",
+    "play_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\human_vs_ai_result.json",
+    "replay_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\replay_result.json",
+    "replay_expect_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\replay_expect_result.json",
+    "report_md": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\phase6_report.md",
+    "integrity_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\phase6_integrity_result.json",
+    "history_csv": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\phase6_pipeline_history.csv",
+    "history_summary_json": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\phase6_pipeline_history_summary.json",
+    "stage_timings_json": "artifacts\\ci_smoke_run\\phase6_pipeline_v9\\phase6_stage_timings.json"
+  }
+}

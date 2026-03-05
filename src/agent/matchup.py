@@ -668,7 +668,9 @@ def summarize_history_rows(
         status_reasons.append("recent_quality_alerts_high")
     elif recent_quality_alert_count >= 1:
         status_reasons.append("recent_quality_alerts_present")
-    if float(recent_unreliable_rate := (1.0 - (float(recent_reliable) / float(len(recent))))) > 0.25:
+    recent_reliable_rate = float(recent_reliable) / float(len(recent))
+    recent_unreliable_rate = 1.0 - recent_reliable_rate
+    if recent_unreliable_rate > 0.25:
         status_reasons.append("recent_unreliable_rate_high")
     if stability_label == "unstable" or recent_quality_alert_count >= 2:
         overall_status = "critical"

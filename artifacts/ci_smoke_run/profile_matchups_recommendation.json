@@ -1,0 +1,16 @@
+{
+  "generated_at_utc": "2026-03-05T14:17:57.977892+00:00",
+  "pipeline_profile": "standard",
+  "history_profile": "standard",
+  "recommended_profile": "balanced",
+  "recommendation_reason": "insufficient_sample",
+  "recommendation_reliable": false,
+  "recommendation_clear_edge": false,
+  "min_games_for_recommendation": 6,
+  "decisive_rate_alert_threshold": 0.3,
+  "seat_bias_alert_threshold": 0.15,
+  "alerts": {
+    "low_decisive_rate_alert": true,
+    "seat_bias_alert": false
+  }
+}

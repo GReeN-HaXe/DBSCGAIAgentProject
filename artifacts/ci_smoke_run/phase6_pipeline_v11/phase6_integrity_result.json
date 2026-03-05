@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "failures": [],
+  "checks": {
+    "play_trace_hash": "d1732a9d07e813cf7b06c84d59a1d5b290d72b712f431d9aed3d19b3640009c3",
+    "play_trace_hash_recomputed": "d1732a9d07e813cf7b06c84d59a1d5b290d72b712f431d9aed3d19b3640009c3",
+    "summary_trace_hash": "d1732a9d07e813cf7b06c84d59a1d5b290d72b712f431d9aed3d19b3640009c3",
+    "replay_trace_hash": "c3d49ac5485a25706c717aca540b5d021ffea7609df53ec3b4e93cba6be81823",
+    "replay_trace_hash_recomputed": "c3d49ac5485a25706c717aca540b5d021ffea7609df53ec3b4e93cba6be81823",
+    "play_result_ok": true,
+    "replay_result_ok": true
+  }
+}

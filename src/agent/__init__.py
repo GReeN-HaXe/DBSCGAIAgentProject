@@ -1,4 +1,12 @@
 from src.agent.config import build_heuristic_policy_from_config, load_policy_config
+from src.agent.artifact_checks import check_phase6_artifact_consistency, extract_trace_payload_and_hash
+from src.agent.deck_legality import validate_deck_legality
+from src.agent.deck_setup import (
+    load_sample_game_setup_from_db,
+    parse_card_id_text,
+    read_card_ids_file,
+    validate_leader_and_deck,
+)
 from src.agent.evaluator import StateWeights, evaluate_state
 from src.agent.heuristic import (
     ActionWeights,
@@ -34,6 +42,21 @@ from src.agent.matchup import (
     run_profile_matchup_matrix,
     summarize_profile_strength,
 )
+from src.agent.match_result import build_compact_match_summary, evaluate_match_expectations
+from src.agent.pipeline_history import (
+    PipelineHistoryRow,
+    build_pipeline_history_row,
+    pipeline_history_row_to_dict,
+    summarize_pipeline_history,
+)
+from src.agent.pipeline_metrics import (
+    TimingHistoryRow,
+    build_timing_history_row,
+    summarize_stage_timings,
+    summarize_timing_history,
+    timing_history_row_to_dict,
+)
+from src.agent.pipeline_regression import evaluate_timing_regression
 from src.agent.policy import AgentPolicy, PolicyContext
 from src.agent.simulator import (
     DecisionTraceEntry,
@@ -42,6 +65,8 @@ from src.agent.simulator import (
     run_ai_vs_ai,
     simulation_result_to_dict,
 )
+from src.agent.session import HumanVsAiSession, describe_action, summarize_state_for_cli
+from src.agent.replay import ReplayResult, compute_trace_hash, run_scripted_replay
 from src.agent.trace_summary import (
     compute_trace_kpis,
     decision_trace_to_csv_rows,
@@ -53,6 +78,13 @@ from src.agent.trace_summary import (
 __all__ = [
     "load_policy_config",
     "build_heuristic_policy_from_config",
+    "extract_trace_payload_and_hash",
+    "check_phase6_artifact_consistency",
+    "parse_card_id_text",
+    "read_card_ids_file",
+    "validate_leader_and_deck",
+    "load_sample_game_setup_from_db",
+    "validate_deck_legality",
     "evaluate_state",
     "StateWeights",
     "ActionWeights",
@@ -84,6 +116,18 @@ __all__ = [
     "seat_bias_to_csv_rows",
     "rank_profiles",
     "recommend_profile",
+    "build_compact_match_summary",
+    "evaluate_match_expectations",
+    "PipelineHistoryRow",
+    "build_pipeline_history_row",
+    "pipeline_history_row_to_dict",
+    "summarize_pipeline_history",
+    "summarize_stage_timings",
+    "TimingHistoryRow",
+    "build_timing_history_row",
+    "timing_history_row_to_dict",
+    "summarize_timing_history",
+    "evaluate_timing_regression",
     "AgentPolicy",
     "PolicyContext",
     "HeuristicPolicy",
@@ -92,6 +136,12 @@ __all__ = [
     "SimulationResult",
     "run_ai_vs_ai",
     "simulation_result_to_dict",
+    "HumanVsAiSession",
+    "describe_action",
+    "summarize_state_for_cli",
+    "ReplayResult",
+    "compute_trace_hash",
+    "run_scripted_replay",
     "summarize_trace",
     "compute_trace_kpis",
     "per_turn_kpi_rows",

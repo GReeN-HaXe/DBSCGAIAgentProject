@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "play_ok": true,
+  "replay_ok": true,
+  "determinism_checked": true,
+  "trace_hash_1": "497d40c41b5602ca69c90d41c0daecddb015df2551fe93b440456b35d20a86dd",
+  "trace_hash_2": "497d40c41b5602ca69c90d41c0daecddb015df2551fe93b440456b35d20a86dd",
+  "artifacts": {
+    "trace": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\human_vs_ai_trace.json",
+    "state": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\human_vs_ai_state.json",
+    "summary": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\human_vs_ai_summary.json",
+    "play_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\human_vs_ai_result.json",
+    "replay_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\replay_result.json",
+    "replay_expect_result": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\replay_expect_result.json",
+    "report_md": "artifacts\\ci_smoke_run\\phase6_pipeline_v4\\phase6_report.md"
+  }
+}

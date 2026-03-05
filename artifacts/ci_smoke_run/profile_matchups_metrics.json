@@ -1,0 +1,10 @@
+{
+  "rows": 4,
+  "seat_bias_p1_minus_p2": 0.0,
+  "seat_bias_alert": false,
+  "decisive_rate": 0.0,
+  "low_decisive_rate_alert": true,
+  "recommended_profile": "balanced",
+  "recommendation_reason": "insufficient_sample",
+  "recommendation_reliable": false
+}

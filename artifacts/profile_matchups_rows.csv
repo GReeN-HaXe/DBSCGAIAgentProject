@@ -1,5 +1,5 @@
 p1_profile,p2_profile,games,p1_wins,p2_wins,draws,avg_actions,avg_turn
-aggressive,aggressive,2,0,0,2,8.0,2.0
-aggressive,balanced,2,0,0,2,8.0,2.0
-balanced,aggressive,2,0,0,2,10.0,2.0
-balanced,balanced,2,0,0,2,10.0,2.0
+balanced,balanced,1,0,0,1,10.0,2.0
+balanced,aggressive,1,0,0,1,10.0,2.0
+aggressive,balanced,1,0,0,1,10.0,2.0
+aggressive,aggressive,1,0,0,1,10.0,2.0

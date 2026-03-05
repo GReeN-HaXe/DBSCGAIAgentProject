@@ -1,0 +1,9 @@
+{
+  "total_runs": 1,
+  "recent_window": 1,
+  "pass_rate_total": 1.0,
+  "pass_rate_recent": 1.0,
+  "determinism_checks_recent": 1,
+  "determinism_pass_rate_recent": 1.0,
+  "latest_status": "pass"
+}

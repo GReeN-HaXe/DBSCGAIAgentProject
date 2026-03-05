@@ -1,0 +1,12 @@
+timestamp_utc,source_json,profiles,games_per_matchup,max_actions,shuffle_decks,seat_balanced,seed,min_games_for_recommendation,recommended_profile,recommendation_reason,recommendation_reliable,recommendation_clear_edge,seat_bias_games,seat_bias_p1_win_rate,seat_bias_p2_win_rate,seat_bias_draw_rate,seat_bias_p1_minus_p2,match_quality_draw_rate,match_quality_decisive_rate,match_quality_low_decisive_rate_alert
+2026-03-05T14:05:35.006569+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,10,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True
+2026-03-05T14:06:48.910489+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,10,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True
+2026-03-05T14:17:57.977897+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,10,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True
+2026-03-05T14:30:39.868854+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,10,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True
+2026-03-05T14:30:41.838881+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,10,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True
+2026-03-05T14:31:06.318419+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,30,False,False,,1,balanced,tied_or_inconclusive,True,False,4,0.0,0.0,1.0,0.0,1.0,0.0,False
+2026-03-05T14:31:23.261202+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,30,False,False,,1,balanced,tied_or_inconclusive,True,False,4,0.0,0.0,1.0,0.0,1.0,0.0,False
+2026-03-05T14:37:27.439511+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,30,False,False,,1,balanced,tied_or_inconclusive,True,False,4,0.0,0.0,1.0,0.0,1.0,0.0,False
+2026-03-05T14:37:28.760439+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,30,False,False,,1,balanced,tied_or_inconclusive,True,False,4,0.0,0.0,1.0,0.0,1.0,0.0,False
+2026-03-05T14:43:04.106842+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,30,False,False,,1,balanced,tied_or_inconclusive,True,False,4,0.0,0.0,1.0,0.0,1.0,0.0,False
+2026-03-05T14:43:05.611797+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,30,False,False,,1,balanced,tied_or_inconclusive,True,False,4,0.0,0.0,1.0,0.0,1.0,0.0,False

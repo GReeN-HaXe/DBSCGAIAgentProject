@@ -23,6 +23,7 @@ from src.game.state import (
     PlayerState,
     TurnPhase,
 )
+from src.game.state_io import game_state_from_dict, game_state_to_dict, load_game_state_json, save_game_state_json
 
 __all__ = [
     "Action",
@@ -47,5 +48,9 @@ __all__ = [
     "PlayerState",
     "RulesEngine",
     "RulesViolation",
+    "game_state_to_dict",
+    "game_state_from_dict",
+    "save_game_state_json",
+    "load_game_state_json",
     "TurnPhase",
 ]

@@ -1,0 +1,11 @@
+timestamp_utc,recommended_profile,recommendation_reason,recommendation_reliable,seat_bias_p1_minus_p2,match_quality_decisive_rate,match_quality_draw_rate,match_quality_low_decisive_rate_alert,profiles,games_per_matchup,max_actions,shuffle_decks,seat_balanced,seed,source_json
+2026-03-05T14:06:48.910489+00:00,balanced,insufficient_sample,False,0.0,0.0,1.0,True,"balanced,aggressive",1,10,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:17:57.977897+00:00,balanced,insufficient_sample,False,0.0,0.0,1.0,True,"balanced,aggressive",1,10,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:30:39.868854+00:00,balanced,insufficient_sample,False,0.0,0.0,1.0,True,"balanced,aggressive",1,10,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:30:41.838881+00:00,balanced,insufficient_sample,False,0.0,0.0,1.0,True,"balanced,aggressive",1,10,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:31:06.318419+00:00,balanced,tied_or_inconclusive,True,0.0,0.0,1.0,False,"balanced,aggressive",1,30,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:31:23.261202+00:00,balanced,tied_or_inconclusive,True,0.0,0.0,1.0,False,"balanced,aggressive",1,30,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:37:27.439511+00:00,balanced,tied_or_inconclusive,True,0.0,0.0,1.0,False,"balanced,aggressive",1,30,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:37:28.760439+00:00,balanced,tied_or_inconclusive,True,0.0,0.0,1.0,False,"balanced,aggressive",1,30,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:43:04.106842+00:00,balanced,tied_or_inconclusive,True,0.0,0.0,1.0,False,"balanced,aggressive",1,30,False,False,,artifacts\profile_matchups.json
+2026-03-05T14:43:05.611797+00:00,balanced,tied_or_inconclusive,True,0.0,0.0,1.0,False,"balanced,aggressive",1,30,False,False,,artifacts\profile_matchups.json

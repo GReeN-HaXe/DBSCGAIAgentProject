@@ -1,0 +1,2 @@
+timestamp_utc,pipeline_profile,play_ok,replay_ok,determinism_checked,determinism_ok,trace_hash_1,trace_hash_2,status
+2026-03-05T17:01:05.496606+00:00,quick,1,1,0,1,99a6ae0ea845706c2aa39e70c1cf7df6efb4a7d2b2ed4f9d553e1f75dcda68cd,,pass

@@ -1,0 +1,67 @@
+{
+  "generated_at_utc": "2026-03-05T14:17:57.977870+00:00",
+  "pipeline_profile": "standard",
+  "pipeline_effective": {
+    "profiles": [
+      "balanced",
+      "aggressive"
+    ],
+    "games_per_matchup": 1,
+    "max_actions": 10,
+    "shuffle_decks": false,
+    "seat_balanced": false,
+    "seed": null,
+    "min_games_for_recommendation": 6,
+    "decisive_rate_alert_threshold": 0.3,
+    "seat_bias_alert_threshold": 0.15
+  },
+  "artifacts": {
+    "output_json": "artifacts\\profile_matchups.json",
+    "rows_csv": "artifacts\\profile_matchups_rows.csv",
+    "summary_csv": "artifacts\\profile_matchups_summary.csv",
+    "h2h_csv": "artifacts\\profile_matchups_h2h.csv",
+    "seat_bias_csv": "artifacts\\profile_matchups_seat_bias.csv",
+    "overview_csv": "artifacts\\profile_matchups_overview.csv"
+  },
+  "result_snapshot": {
+    "rows": 4,
+    "seat_bias_p1_minus_p2": 0.0,
+    "seat_bias_alert": false,
+    "decisive_rate": 0.0,
+    "low_decisive_rate_alert": true,
+    "recommended_profile": "balanced",
+    "recommendation_reason": "insufficient_sample"
+  },
+  "ci": {
+    "ci_mode": false,
+    "alert_failed": true,
+    "recommendation_failed": true,
+    "status": "fail",
+    "history_ci_status": "fail",
+    "history_ci_source": "history_summary",
+    "history_ci_reasons": [
+      "status_threshold_failed",
+      "not_ready_failed",
+      "blockers_failed"
+    ],
+    "history_ci_policy": {
+      "status_threshold": "warning",
+      "readiness_mode": "required",
+      "blockers_mode": "required",
+      "unknown_mode": "fail",
+      "readiness_score_threshold": null
+    }
+  },
+  "history": {
+    "history_csv": "artifacts\\ci_smoke_run\\profile_matchups_history.csv",
+    "history_profile": "standard",
+    "history_effective": {
+      "recent_window": 10,
+      "recent_runs_window": 10,
+      "seat_bias_alert_threshold": 0.15,
+      "decisive_rate_alert_threshold": 0.3,
+      "min_runs_for_ready": 5
+    },
+    "history_artifact_manifest": "artifacts\\ci_smoke_run\\profile_matchups_history_artifacts_manifest.json"
+  }
+}

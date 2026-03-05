@@ -1,0 +1,33 @@
+{
+  "winner_id": null,
+  "total_actions": 1,
+  "human_player_id": 1,
+  "ai_profile": "balanced",
+  "final_turn_number": 1,
+  "final_phase": "main",
+  "checkpoint_count": 8,
+  "checkpoint_tail": [
+    "pregame_leaders_placed",
+    "pregame_starting_player_decided",
+    "pregame_setup_complete",
+    "charge_phase_begin",
+    "charge_phase_after_untap",
+    "charge_phase_after_draw_skipped",
+    "charge_phase_charge_window",
+    "charge_phase_end"
+  ],
+  "effect_resolution_count": 0,
+  "effect_unresolved_count": 0,
+  "setup": {
+    "mode": "fresh",
+    "first_player": 1,
+    "shuffle_decks": false,
+    "seed": 29,
+    "p1_leader_id": 1,
+    "p2_leader_id": 2,
+    "p1_deck_size": 60,
+    "p2_deck_size": 60,
+    "deck_source": "synthetic"
+  },
+  "trace_hash": "e81880fa658942d4693f1201821c71afadf01a8e4654212b80186fa29b0bddb3"
+}
