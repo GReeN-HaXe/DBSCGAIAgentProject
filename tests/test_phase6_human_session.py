@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from src.agent import HeuristicPolicy
-from src.agent.session import HumanVsAiSession, describe_action, summarize_state_for_cli
+from src.agent.session import HumanVsAiSession, describe_action, snapshot_state_for_trace, summarize_state_for_cli
 from src.game import RulesEngine
 
 
@@ -92,3 +92,24 @@ def test_phase6_session_trace_payload_collects_actions() -> None:
     assert len(payload["actions"]) == 1
     assert isinstance(payload["setup"], dict)
     assert payload["setup"]["seed"] == 123
+    row = payload["actions"][0]
+    assert isinstance(row["state_snapshot"], dict)
+    assert row["state_snapshot"]["active_player"] == 1
+
+
+def test_phase6_snapshot_state_for_trace_has_compact_zone_counts() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    snapshot = snapshot_state_for_trace(state)
+    assert snapshot["phase"] == state.phase.value
+    players = snapshot["players"]
+    assert isinstance(players, dict)
+    assert players["1"]["hand_size"] == 6
+    assert players["1"]["life_size"] == 8
+    assert players["1"]["deck_size"] == 46

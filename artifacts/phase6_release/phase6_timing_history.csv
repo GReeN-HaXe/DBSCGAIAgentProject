@@ -1,0 +1,2 @@
+timestamp_utc,pipeline_profile,total_seconds,slowest_stage,slowest_seconds,regressed
+2026-03-06T21:06:45.949923+00:00,strict,1.224876,play_vs_ai,0.347807,0

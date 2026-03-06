@@ -9,6 +9,36 @@ from src.game import Action, GameState, RulesEngine
 from src.game.state_io import load_game_state_json, save_game_state_json
 
 
+def snapshot_state_for_trace(state: GameState) -> dict[str, object]:
+    players: dict[str, object] = {}
+    for player_id, player in state.players.items():
+        players[str(player_id)] = {
+            "hand_size": len(player.hand),
+            "life_size": len(player.life),
+            "energy_size": len(player.energy),
+            "energy_resting_count": sum(1 for card in player.energy if card.resting),
+            "z_energy_size": len(player.z_energy),
+            "battle_size": len(player.battle_area),
+            "battle_resting_count": sum(1 for card in player.battle_area if card.resting),
+            "unison_size": len(player.unison_area),
+            "combo_size": len(player.combo_area),
+            "drop_size": len(player.drop),
+            "warp_size": len(player.warp),
+            "removed_size": len(player.removed_from_game),
+            "deck_size": len(player.deck),
+            "has_charged_this_turn": bool(player.has_charged_this_turn),
+        }
+    return {
+        "active_player": int(state.active_player),
+        "turn_number": int(state.turn_number),
+        "phase": state.phase.value,
+        "battle_step": None if state.battle_step is None else state.battle_step.value,
+        "winner_id": state.winner_id,
+        "counter_window_kind": None if state.counter_window is None else state.counter_window.kind,
+        "players": players,
+    }
+
+
 def describe_action(action: Action) -> str:
     parts = [action.action_type.value]
     if action.hand_index is not None:
@@ -122,6 +152,7 @@ class HumanVsAiSession:
                 "phase": self.state.phase.value,
                 "action": describe_action(action),
                 "action_type": action.action_type.value,
+                "state_snapshot": snapshot_state_for_trace(self.state),
             }
         )
 

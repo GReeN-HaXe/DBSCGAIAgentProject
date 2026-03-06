@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from src.agent.policy import AgentPolicy
+from src.agent.session import describe_action, snapshot_state_for_trace
 from src.game import RulesEngine
 from src.game.state import GameState, TurnPhase
 
@@ -21,6 +22,8 @@ class DecisionTraceEntry:
     turn_number: int
     phase: TurnPhase
     chosen_action_type: str
+    chosen_action_text: str
+    state_snapshot: dict[str, object]
     candidates: tuple[ScoredDecision, ...]
 
 
@@ -45,6 +48,8 @@ def simulation_result_to_dict(result: SimulationResult) -> dict[str, object]:
                 "turn_number": entry.turn_number,
                 "phase": entry.phase.value,
                 "chosen_action_type": entry.chosen_action_type,
+                "chosen_action_text": entry.chosen_action_text,
+                "state_snapshot": entry.state_snapshot,
                 "candidates": [
                     {
                         "action_type": c.action_type,
@@ -116,6 +121,8 @@ def run_ai_vs_ai(
                     turn_number=state.turn_number,
                     phase=state.phase,
                     chosen_action_type=str(choice.action_type.value),
+                    chosen_action_text=describe_action(choice),
+                    state_snapshot=snapshot_state_for_trace(state),
                     candidates=candidates,
                 )
             )

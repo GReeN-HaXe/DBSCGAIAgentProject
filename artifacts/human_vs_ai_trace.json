@@ -1,0 +1,41 @@
+{
+  "trace": {
+    "total_actions": 2,
+    "winner_id": null,
+    "final_turn_number": 1,
+    "final_phase": "main",
+    "human_player_id": 1,
+    "setup": {
+      "mode": "fresh",
+      "first_player": 1,
+      "shuffle_decks": false,
+      "seed": null,
+      "p1_leader_id": 1,
+      "p2_leader_id": 2,
+      "p1_deck_size": 60,
+      "p2_deck_size": 60,
+      "deck_source": "synthetic"
+    },
+    "actions": [
+      {
+        "timestamp_utc": "2026-03-05T17:09:21.867666+00:00",
+        "actor_kind": "human",
+        "player_id": 1,
+        "turn_number": 1,
+        "phase": "charge",
+        "action": "charge_from_hand hand_index=0",
+        "action_type": "charge_from_hand"
+      },
+      {
+        "timestamp_utc": "2026-03-05T17:09:39.789825+00:00",
+        "actor_kind": "human",
+        "player_id": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "action": "play_card_from_hand hand_index=2",
+        "action_type": "play_card_from_hand"
+      }
+    ]
+  },
+  "trace_hash": "2d1f9a678cf2ae33dd1484e6f680aabcbfdc9114d209d2a7e06a908af4aa909e"
+}
