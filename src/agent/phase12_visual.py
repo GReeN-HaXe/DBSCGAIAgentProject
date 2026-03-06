@@ -14,6 +14,7 @@ PHASE12_CROP_DATASET_SCHEMA_VERSION = "phase12.crop_dataset.v1"
 PHASE12_MODEL_SCHEMA_VERSION = "phase12.visual_centroid_model.v1"
 PHASE12_EVAL_SCHEMA_VERSION = "phase12.visual_eval.v1"
 PHASE12_SUPPORTED_IMAGE_SUFFIXES = (".ppm", ".png", ".jpg", ".jpeg")
+PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION = "phase13.real_crop_dataset.v1"
 
 
 def _parse_ppm_tokens(text: str) -> list[str]:
@@ -143,6 +144,22 @@ def _crop_pixels(image: dict[str, Any], bbox: dict[str, Any]) -> list[tuple[int,
     return out
 
 
+def _crop_pixel_grid(image: dict[str, Any], bbox: dict[str, Any]) -> tuple[list[list[tuple[int, int, int]]], tuple[int, int]]:
+    pixels = image.get("pixels", [])
+    if not isinstance(pixels, list):
+        return [], (0, 0)
+    x0, y0, x1, y1 = _bbox_to_pixel_bounds(image, bbox)
+    out: list[list[tuple[int, int, int]]] = []
+    for y in range(y0, y1):
+        row = pixels[y]
+        if not isinstance(row, list):
+            continue
+        out.append([row[x] for x in range(x0, x1)])
+    width = max(0, x1 - x0)
+    height = max(0, y1 - y0)
+    return out, (width, height)
+
+
 def _mean_rgb(pixels: list[tuple[int, int, int]]) -> dict[str, float]:
     if not pixels:
         return {"mean_r": 0.0, "mean_g": 0.0, "mean_b": 0.0}
@@ -244,6 +261,80 @@ def build_phase12_crop_dataset(
         "frame_count": len({int(row["frame_index"]) for row in examples}),
         "example_count": len(examples),
         "validation_ratio": float(validation_ratio),
+        "examples": examples,
+    }
+
+
+def export_phase13_real_crop_dataset(
+    *,
+    frame_manifest: dict[str, Any],
+    labeled_manifest: dict[str, Any],
+    crops_output_dir: Path,
+    crop_image_format: str = "ppm",
+    frame_root: Path | None = None,
+    validation_ratio: float = 0.2,
+) -> dict[str, Any]:
+    normalized_format = str(crop_image_format).strip().lower().lstrip(".")
+    if normalized_format not in {"ppm", "png", "jpg", "jpeg"}:
+        raise ValueError(f"unsupported crop_image_format: {crop_image_format}")
+    frame_paths = _resolve_frame_image_paths(frame_manifest, frame_root=frame_root)
+    detections = labeled_manifest.get("detections", [])
+    if not isinstance(detections, list):
+        detections = []
+    examples: list[dict[str, Any]] = []
+    crops_output_dir.mkdir(parents=True, exist_ok=True)
+    extension = ".jpg" if normalized_format == "jpeg" else f".{normalized_format}"
+    split_mod = max(2, int(round(1.0 / max(0.01, validation_ratio))))
+
+    for frame in detections:
+        if not isinstance(frame, dict):
+            continue
+        frame_index = int(frame.get("frame_index", 0) or 0)
+        image_path = frame_paths.get(frame_index)
+        if image_path is None or not image_path.exists():
+            continue
+        image = read_image(image_path)
+        objects = frame.get("objects", [])
+        if not isinstance(objects, list):
+            objects = []
+        for object_index, obj in enumerate(objects):
+            if not isinstance(obj, dict):
+                continue
+            bbox = obj.get("bbox", {})
+            if not isinstance(bbox, dict):
+                continue
+            crop_grid, (crop_width, crop_height) = _crop_pixel_grid(image, bbox)
+            if crop_width <= 0 or crop_height <= 0 or not crop_grid:
+                continue
+            crop_name = f"frame_{frame_index:05d}_obj_{object_index:03d}{extension}"
+            crop_path = crops_output_dir / crop_name
+            write_image(crop_path, width=crop_width, height=crop_height, pixels=crop_grid)
+            features = _mean_rgb([pixel for row in crop_grid for pixel in row])
+            split = "validation" if (frame_index % split_mod) == 0 else "train"
+            examples.append(
+                {
+                    "frame_index": frame_index,
+                    "object_index": object_index,
+                    "source_image_path": str(image_path),
+                    "crop_image_path": str(crop_path),
+                    "crop_width": crop_width,
+                    "crop_height": crop_height,
+                    "bbox": dict(bbox),
+                    "label": str(obj.get("label", "")),
+                    "seat": obj.get("seat"),
+                    "phase": obj.get("phase"),
+                    "signature": _object_signature(obj),
+                    "features": features,
+                    "split": split,
+                }
+            )
+    return {
+        "schema_version": PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION,
+        "frame_count": len({int(row["frame_index"]) for row in examples}),
+        "example_count": len(examples),
+        "validation_ratio": float(validation_ratio),
+        "crop_image_format": normalized_format,
+        "crops_output_dir": str(crops_output_dir),
         "examples": examples,
     }
 

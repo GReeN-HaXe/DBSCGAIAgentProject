@@ -7,6 +7,7 @@ import sys
 
 from src.agent.phase10_vision import MockFrameRecognizer, build_detection_manifest
 from src.agent.phase12_visual import (
+    PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION,
     PHASE12_CROP_DATASET_SCHEMA_VERSION,
     PHASE12_EVAL_SCHEMA_VERSION,
     PHASE12_MODEL_SCHEMA_VERSION,
@@ -14,6 +15,7 @@ from src.agent.phase12_visual import (
     build_phase12_crop_dataset,
     compare_phase12_visual_models,
     evaluate_phase12_visual_model,
+    export_phase13_real_crop_dataset,
     has_pillow_support,
     read_image,
     read_ppm_image,
@@ -148,6 +150,30 @@ def test_phase13_step1_real_image_support_api(tmp_path: Path) -> None:
         png_image = read_image(png_path)
         assert png_image["width"] == 2
         assert png_image["pixels"][0][0] == (10, 20, 30)
+
+
+def test_phase13_step2_real_crop_export(tmp_path: Path) -> None:
+    frame_manifest = _frame_manifest(tmp_path)
+    labeled = _labeled_manifest(tmp_path)
+    rendered = render_synthetic_phase12_frames(
+        frame_manifest=frame_manifest,
+        labeled_manifest=labeled,
+        output_dir=tmp_path / "rendered",
+    )
+    crop_dataset = export_phase13_real_crop_dataset(
+        frame_manifest=rendered,
+        labeled_manifest=labeled,
+        crops_output_dir=tmp_path / "crops",
+        crop_image_format="ppm",
+        validation_ratio=0.25,
+    )
+    assert crop_dataset["schema_version"] == PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION
+    assert crop_dataset["example_count"] == 12
+    first_crop = Path(crop_dataset["examples"][0]["crop_image_path"])
+    assert first_crop.exists()
+    crop_image = read_image(first_crop)
+    assert crop_image["width"] > 0
+    assert crop_image["height"] > 0
 
 
 def test_phase12_history_summary() -> None:
@@ -308,3 +334,29 @@ def test_phase12_scripts_and_pipeline(tmp_path: Path) -> None:
     rendered_manifest = json.loads(rendered_manifest_path.read_text(encoding="utf-8"))
     baseline = MockFrameRecognizer().detect(rendered_manifest)
     assert baseline["schema_version"] == "phase10.detections.v1"
+
+    phase13_crop_dataset_path = tmp_path / "phase13_real_crop_dataset.json"
+    phase13_crop_dir = tmp_path / "phase13_crops"
+    crop_export_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/export_phase13_real_crop_dataset.py",
+            "--frame-manifest",
+            str(rendered_manifest_path),
+            "--labeled",
+            str(labeled_path),
+            "--crops-output-dir",
+            str(phase13_crop_dir),
+            "--crop-image-format",
+            "ppm",
+            "--output",
+            str(phase13_crop_dataset_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert crop_export_result.returncode == 0, crop_export_result.stderr
+    phase13_crop_dataset = json.loads(phase13_crop_dataset_path.read_text(encoding="utf-8"))
+    assert phase13_crop_dataset["schema_version"] == PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION
+    assert Path(phase13_crop_dataset["examples"][0]["crop_image_path"]).exists()
