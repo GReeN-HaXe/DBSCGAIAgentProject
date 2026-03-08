@@ -1,0 +1,427 @@
+{
+  "schema_version": "phase13.visual_eval.v1",
+  "model_name": "phase13_visual_histogram_knn",
+  "target_type": "card_identity",
+  "split": "validation",
+  "example_count": 52,
+  "top1_accuracy": 0.0,
+  "correct_count": 0,
+  "rows": [
+    {
+      "index": 0,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-001.webp",
+      "expected_signature": "BT1-001",
+      "predicted_signature": "BT10-004",
+      "confidence": 0.9644389217019278,
+      "correct": false
+    },
+    {
+      "index": 1,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-006.webp",
+      "expected_signature": "BT1-006",
+      "predicted_signature": "BT10-034",
+      "confidence": 0.9737675942520105,
+      "correct": false
+    },
+    {
+      "index": 2,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-011.webp",
+      "expected_signature": "BT1-011",
+      "predicted_signature": "BT10-083",
+      "confidence": 0.957326407398609,
+      "correct": false
+    },
+    {
+      "index": 3,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-016.webp",
+      "expected_signature": "BT1-016",
+      "predicted_signature": "BT1-047",
+      "confidence": 0.9782421616798463,
+      "correct": false
+    },
+    {
+      "index": 4,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-021.webp",
+      "expected_signature": "BT1-021",
+      "predicted_signature": "BT10-043",
+      "confidence": 0.968871601254052,
+      "correct": false
+    },
+    {
+      "index": 5,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-026.webp",
+      "expected_signature": "BT1-026",
+      "predicted_signature": "BT1-020",
+      "confidence": 0.9546701285172048,
+      "correct": false
+    },
+    {
+      "index": 6,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-031.webp",
+      "expected_signature": "BT1-031",
+      "predicted_signature": "BT1-072",
+      "confidence": 0.9706501183408814,
+      "correct": false
+    },
+    {
+      "index": 7,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-036.webp",
+      "expected_signature": "BT1-036",
+      "predicted_signature": "BT1-047",
+      "confidence": 0.971040730455606,
+      "correct": false
+    },
+    {
+      "index": 8,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-041.webp",
+      "expected_signature": "BT1-041",
+      "predicted_signature": "BT10-101",
+      "confidence": 0.9564284025984365,
+      "correct": false
+    },
+    {
+      "index": 9,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-046.webp",
+      "expected_signature": "BT1-046",
+      "predicted_signature": "BT1-050",
+      "confidence": 0.9707629627390526,
+      "correct": false
+    },
+    {
+      "index": 10,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-051.webp",
+      "expected_signature": "BT1-051",
+      "predicted_signature": "BT1-008",
+      "confidence": 0.9576005912990713,
+      "correct": false
+    },
+    {
+      "index": 11,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-056.webp",
+      "expected_signature": "BT1-056",
+      "predicted_signature": "BT10-112",
+      "confidence": 0.971404748544966,
+      "correct": false
+    },
+    {
+      "index": 12,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-061.webp",
+      "expected_signature": "BT1-061",
+      "predicted_signature": "BT10-072",
+      "confidence": 0.9635839062193213,
+      "correct": false
+    },
+    {
+      "index": 13,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-066.webp",
+      "expected_signature": "BT1-066",
+      "predicted_signature": "BT1-063",
+      "confidence": 0.9516521774946978,
+      "correct": false
+    },
+    {
+      "index": 14,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-071.webp",
+      "expected_signature": "BT1-071",
+      "predicted_signature": "BT1-040",
+      "confidence": 0.9439922776533632,
+      "correct": false
+    },
+    {
+      "index": 15,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-076.webp",
+      "expected_signature": "BT1-076",
+      "predicted_signature": "BT1-008",
+      "confidence": 0.9768191126927316,
+      "correct": false
+    },
+    {
+      "index": 16,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-081.webp",
+      "expected_signature": "BT1-081",
+      "predicted_signature": "BT10-126",
+      "confidence": 0.968944668825781,
+      "correct": false
+    },
+    {
+      "index": 17,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-086.webp",
+      "expected_signature": "BT1-086",
+      "predicted_signature": "BT1-077",
+      "confidence": 0.9701469672204608,
+      "correct": false
+    },
+    {
+      "index": 18,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-091.webp",
+      "expected_signature": "BT1-091",
+      "predicted_signature": "BT1-092",
+      "confidence": 0.9815805331453339,
+      "correct": false
+    },
+    {
+      "index": 19,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-096.webp",
+      "expected_signature": "BT1-096",
+      "predicted_signature": "BT10-107",
+      "confidence": 0.9605191937034199,
+      "correct": false
+    },
+    {
+      "index": 20,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-101.webp",
+      "expected_signature": "BT1-101",
+      "predicted_signature": "BT1-072",
+      "confidence": 0.966830918892809,
+      "correct": false
+    },
+    {
+      "index": 21,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-106.webp",
+      "expected_signature": "BT1-106",
+      "predicted_signature": "BT1-019",
+      "confidence": 0.9752808807259669,
+      "correct": false
+    },
+    {
+      "index": 22,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-111.webp",
+      "expected_signature": "BT1-111",
+      "predicted_signature": "BT10-014",
+      "confidence": 0.9773103960513937,
+      "correct": false
+    },
+    {
+      "index": 23,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-005.webp",
+      "expected_signature": "BT10-005",
+      "predicted_signature": "BT10-068",
+      "confidence": 0.9457223729397752,
+      "correct": false
+    },
+    {
+      "index": 24,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-010.webp",
+      "expected_signature": "BT10-010",
+      "predicted_signature": "BT1-028",
+      "confidence": 0.9708193582553113,
+      "correct": false
+    },
+    {
+      "index": 25,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-015.webp",
+      "expected_signature": "BT10-015",
+      "predicted_signature": "BT10-138",
+      "confidence": 0.9817135739462959,
+      "correct": false
+    },
+    {
+      "index": 26,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-020.webp",
+      "expected_signature": "BT10-020",
+      "predicted_signature": "BT10-073",
+      "confidence": 0.9737413764511196,
+      "correct": false
+    },
+    {
+      "index": 27,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-025.webp",
+      "expected_signature": "BT10-025",
+      "predicted_signature": "BT10-093",
+      "confidence": 0.974603566138611,
+      "correct": false
+    },
+    {
+      "index": 28,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-030.webp",
+      "expected_signature": "BT10-030",
+      "predicted_signature": "BT10-107",
+      "confidence": 0.9723837148620194,
+      "correct": false
+    },
+    {
+      "index": 29,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-035.webp",
+      "expected_signature": "BT10-035",
+      "predicted_signature": "BT1-089",
+      "confidence": 0.9723806477816493,
+      "correct": false
+    },
+    {
+      "index": 30,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-040.webp",
+      "expected_signature": "BT10-040",
+      "predicted_signature": "BT10-036",
+      "confidence": 0.9629554546369146,
+      "correct": false
+    },
+    {
+      "index": 31,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-045.webp",
+      "expected_signature": "BT10-045",
+      "predicted_signature": "BT1-089",
+      "confidence": 0.9783308966716813,
+      "correct": false
+    },
+    {
+      "index": 32,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-050.webp",
+      "expected_signature": "BT10-050",
+      "predicted_signature": "BT10-073",
+      "confidence": 0.9783005098155286,
+      "correct": false
+    },
+    {
+      "index": 33,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-055.webp",
+      "expected_signature": "BT10-055",
+      "predicted_signature": "BT10-032",
+      "confidence": 0.9740278270541098,
+      "correct": false
+    },
+    {
+      "index": 34,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-060.webp",
+      "expected_signature": "BT10-060",
+      "predicted_signature": "BT1-017",
+      "confidence": 0.9677802097254924,
+      "correct": false
+    },
+    {
+      "index": 35,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-065.webp",
+      "expected_signature": "BT10-065",
+      "predicted_signature": "BT1-068",
+      "confidence": 0.964477591280166,
+      "correct": false
+    },
+    {
+      "index": 36,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-070.webp",
+      "expected_signature": "BT10-070",
+      "predicted_signature": "BT1-089",
+      "confidence": 0.9652250556758792,
+      "correct": false
+    },
+    {
+      "index": 37,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-075.webp",
+      "expected_signature": "BT10-075",
+      "predicted_signature": "BT10-009",
+      "confidence": 0.9774822677173172,
+      "correct": false
+    },
+    {
+      "index": 38,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-080.webp",
+      "expected_signature": "BT10-080",
+      "predicted_signature": "BT1-034",
+      "confidence": 0.9668787206621395,
+      "correct": false
+    },
+    {
+      "index": 39,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-085.webp",
+      "expected_signature": "BT10-085",
+      "predicted_signature": "BT10-043",
+      "confidence": 0.9759374628045733,
+      "correct": false
+    },
+    {
+      "index": 40,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-090.webp",
+      "expected_signature": "BT10-090",
+      "predicted_signature": "BT1-047",
+      "confidence": 0.9655767425220918,
+      "correct": false
+    },
+    {
+      "index": 41,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-095.webp",
+      "expected_signature": "BT10-095",
+      "predicted_signature": "BT1-059",
+      "confidence": 0.9717143183421095,
+      "correct": false
+    },
+    {
+      "index": 42,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-100.webp",
+      "expected_signature": "BT10-100",
+      "predicted_signature": "BT10-143",
+      "confidence": 0.9666512738975886,
+      "correct": false
+    },
+    {
+      "index": 43,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-105.webp",
+      "expected_signature": "BT10-105",
+      "predicted_signature": "BT1-010",
+      "confidence": 0.9708666150867115,
+      "correct": false
+    },
+    {
+      "index": 44,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-110.webp",
+      "expected_signature": "BT10-110",
+      "predicted_signature": "BT1-072",
+      "confidence": 0.9719721636135745,
+      "correct": false
+    },
+    {
+      "index": 45,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-115.webp",
+      "expected_signature": "BT10-115",
+      "predicted_signature": "BT10-043",
+      "confidence": 0.9789750934538723,
+      "correct": false
+    },
+    {
+      "index": 46,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-120.webp",
+      "expected_signature": "BT10-120",
+      "predicted_signature": "BT10-119",
+      "confidence": 0.9846979199852217,
+      "correct": false
+    },
+    {
+      "index": 47,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-125.webp",
+      "expected_signature": "BT10-125",
+      "predicted_signature": "BT1-065",
+      "confidence": 0.9725557237586346,
+      "correct": false
+    },
+    {
+      "index": 48,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-130.webp",
+      "expected_signature": "BT10-130",
+      "predicted_signature": "BT10-048",
+      "confidence": 0.9735357489789018,
+      "correct": false
+    },
+    {
+      "index": 49,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-135.webp",
+      "expected_signature": "BT10-135",
+      "predicted_signature": "BT10-054",
+      "confidence": 0.9814257869416655,
+      "correct": false
+    },
+    {
+      "index": 50,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-140.webp",
+      "expected_signature": "BT10-140",
+      "predicted_signature": "BT10-138",
+      "confidence": 0.9761322160477365,
+      "correct": false
+    },
+    {
+      "index": 51,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-145.webp",
+      "expected_signature": "BT10-145",
+      "predicted_signature": "BT1-095",
+      "confidence": 0.9809573286567901,
+      "correct": false
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "phase13.reference_identity_manifest.v1",
+  "status": "pass",
+  "run_name": "phase13_reference_identity_demo",
+  "artifacts": {
+    "reference_dataset": "artifacts\\phase13_reference_image_dataset.json",
+    "reference_dataset_limited": "artifacts\\phase13_reference_identity_demo\\phase13_reference_identity_dataset_limited.json",
+    "model": "artifacts\\phase13_reference_identity_demo\\phase13_reference_identity_model.json",
+    "evaluation": "artifacts\\phase13_reference_identity_demo\\phase13_reference_identity_eval.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "split": "validation",
+    "top1_accuracy": 0.0,
+    "example_count": 52,
+    "reference_example_count": 256,
+    "reference_example_count_total": 6213
+  },
+  "stage_timings": [
+    {
+      "stage": "train_identity_model",
+      "duration_seconds": 35.09975940000004
+    },
+    {
+      "stage": "evaluate_identity_model",
+      "duration_seconds": 41.92845429999579
+    }
+  ]
+}

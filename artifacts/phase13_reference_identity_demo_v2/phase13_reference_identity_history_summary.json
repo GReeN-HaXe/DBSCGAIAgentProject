@@ -1,0 +1,13 @@
+{
+  "total_runs": 1,
+  "recent_window": 1,
+  "recent_avg_top1_accuracy": 0.0,
+  "latest_run_name": "phase13_reference_identity_demo_v2",
+  "latest_top1_accuracy": 0.0,
+  "latest_top5_accuracy": 0.0,
+  "latest_top10_accuracy": 0.0,
+  "best_run_name": "phase13_reference_identity_demo_v2",
+  "best_top1_accuracy": 0.0,
+  "best_top5_accuracy": 0.0,
+  "best_top10_accuracy": 0.0
+}

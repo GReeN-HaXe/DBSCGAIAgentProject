@@ -129,6 +129,7 @@ def test_phase12_render_dataset_train_eval_shape(tmp_path: Path) -> None:
 
 def test_phase13_step1_real_image_support_api(tmp_path: Path) -> None:
     assert ".png" in PHASE12_SUPPORTED_IMAGE_SUFFIXES
+    assert ".webp" in PHASE12_SUPPORTED_IMAGE_SUFFIXES
     ppm_path = tmp_path / "sample.ppm"
     write_image(
         ppm_path,
@@ -150,6 +151,16 @@ def test_phase13_step1_real_image_support_api(tmp_path: Path) -> None:
         png_image = read_image(png_path)
         assert png_image["width"] == 2
         assert png_image["pixels"][0][0] == (10, 20, 30)
+
+        webp_path = tmp_path / "sample.webp"
+        write_image(
+            webp_path,
+            width=2,
+            height=1,
+            pixels=[[(70, 80, 90), (100, 110, 120)]],
+        )
+        webp_image = read_image(webp_path)
+        assert webp_image["width"] == 2
 
 
 def test_phase13_step2_real_crop_export(tmp_path: Path) -> None:

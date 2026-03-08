@@ -1,0 +1,9 @@
+{
+  "run_count": 1,
+  "best_top1_accuracy": 0.2548828125,
+  "best_top5_accuracy": 0.5732421875,
+  "best_top10_accuracy": 0.7294921875,
+  "recent_top1_accuracy": 0.2548828125,
+  "recent_top5_accuracy": 0.5732421875,
+  "recent_top10_accuracy": 0.7294921875
+}

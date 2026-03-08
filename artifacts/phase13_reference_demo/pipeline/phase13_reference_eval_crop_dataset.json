@@ -1,0 +1,298 @@
+{
+  "schema_version": "phase13.real_crop_dataset.v1",
+  "frame_count": 4,
+  "example_count": 12,
+  "validation_ratio": 0.2,
+  "crop_image_format": "ppm",
+  "crops_output_dir": "artifacts\\phase13_reference_demo\\pipeline\\crops",
+  "examples": [
+    {
+      "frame_index": 0,
+      "object_index": 0,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00000.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00000_obj_000.ppm",
+      "crop_width": 11,
+      "crop_height": 14,
+      "bbox": {
+        "x": 0.08,
+        "y": 0.68,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "leader_card",
+      "seat": 1,
+      "phase": null,
+      "signature": "leader_card|1|",
+      "features": {
+        "mean_r": 220.0,
+        "mean_g": 60.0,
+        "mean_b": 60.0
+      },
+      "split": "validation"
+    },
+    {
+      "frame_index": 0,
+      "object_index": 1,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00000.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00000_obj_001.ppm",
+      "crop_width": 11,
+      "crop_height": 13,
+      "bbox": {
+        "x": 0.72,
+        "y": 0.08,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "battle_card",
+      "seat": 2,
+      "phase": null,
+      "signature": "battle_card|2|",
+      "features": {
+        "mean_r": 60.0,
+        "mean_g": 60.0,
+        "mean_b": 220.0
+      },
+      "split": "validation"
+    },
+    {
+      "frame_index": 0,
+      "object_index": 2,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00000.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00000_obj_002.ppm",
+      "crop_width": 10,
+      "crop_height": 6,
+      "bbox": {
+        "x": 0.42,
+        "y": 0.02,
+        "w": 0.14,
+        "h": 0.08
+      },
+      "label": "phase_marker",
+      "seat": null,
+      "phase": "draw",
+      "signature": "phase_marker||draw",
+      "features": {
+        "mean_r": 60.0,
+        "mean_g": 220.0,
+        "mean_b": 60.0
+      },
+      "split": "validation"
+    },
+    {
+      "frame_index": 1,
+      "object_index": 0,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00001.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00001_obj_000.ppm",
+      "crop_width": 11,
+      "crop_height": 14,
+      "bbox": {
+        "x": 0.08,
+        "y": 0.68,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "leader_card",
+      "seat": 1,
+      "phase": null,
+      "signature": "leader_card|1|",
+      "features": {
+        "mean_r": 220.0,
+        "mean_g": 60.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 1,
+      "object_index": 1,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00001.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00001_obj_001.ppm",
+      "crop_width": 11,
+      "crop_height": 13,
+      "bbox": {
+        "x": 0.72,
+        "y": 0.08,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "unison_card",
+      "seat": 2,
+      "phase": null,
+      "signature": "unison_card|2|",
+      "features": {
+        "mean_r": 220.0,
+        "mean_g": 220.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 1,
+      "object_index": 2,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00001.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00001_obj_002.ppm",
+      "crop_width": 10,
+      "crop_height": 6,
+      "bbox": {
+        "x": 0.42,
+        "y": 0.02,
+        "w": 0.14,
+        "h": 0.08
+      },
+      "label": "phase_marker",
+      "seat": null,
+      "phase": "charge",
+      "signature": "phase_marker||charge",
+      "features": {
+        "mean_r": 60.0,
+        "mean_g": 220.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 2,
+      "object_index": 0,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00002.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00002_obj_000.ppm",
+      "crop_width": 11,
+      "crop_height": 14,
+      "bbox": {
+        "x": 0.08,
+        "y": 0.68,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "leader_card",
+      "seat": 1,
+      "phase": null,
+      "signature": "leader_card|1|",
+      "features": {
+        "mean_r": 220.0,
+        "mean_g": 60.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 2,
+      "object_index": 1,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00002.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00002_obj_001.ppm",
+      "crop_width": 11,
+      "crop_height": 13,
+      "bbox": {
+        "x": 0.72,
+        "y": 0.08,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "battle_card",
+      "seat": 2,
+      "phase": null,
+      "signature": "battle_card|2|",
+      "features": {
+        "mean_r": 60.0,
+        "mean_g": 60.0,
+        "mean_b": 220.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 2,
+      "object_index": 2,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00002.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00002_obj_002.ppm",
+      "crop_width": 10,
+      "crop_height": 6,
+      "bbox": {
+        "x": 0.42,
+        "y": 0.02,
+        "w": 0.14,
+        "h": 0.08
+      },
+      "label": "phase_marker",
+      "seat": null,
+      "phase": "draw",
+      "signature": "phase_marker||draw",
+      "features": {
+        "mean_r": 60.0,
+        "mean_g": 220.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 3,
+      "object_index": 0,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00003.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00003_obj_000.ppm",
+      "crop_width": 11,
+      "crop_height": 14,
+      "bbox": {
+        "x": 0.08,
+        "y": 0.68,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "leader_card",
+      "seat": 1,
+      "phase": null,
+      "signature": "leader_card|1|",
+      "features": {
+        "mean_r": 220.0,
+        "mean_g": 60.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 3,
+      "object_index": 1,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00003.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00003_obj_001.ppm",
+      "crop_width": 11,
+      "crop_height": 13,
+      "bbox": {
+        "x": 0.72,
+        "y": 0.08,
+        "w": 0.16,
+        "h": 0.2
+      },
+      "label": "unison_card",
+      "seat": 2,
+      "phase": null,
+      "signature": "unison_card|2|",
+      "features": {
+        "mean_r": 220.0,
+        "mean_g": 220.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    },
+    {
+      "frame_index": 3,
+      "object_index": 2,
+      "source_image_path": "artifacts\\phase13_reference_demo\\pipeline\\frames\\frames\\frame_00003.ppm",
+      "crop_image_path": "artifacts\\phase13_reference_demo\\pipeline\\crops\\frame_00003_obj_002.ppm",
+      "crop_width": 10,
+      "crop_height": 6,
+      "bbox": {
+        "x": 0.42,
+        "y": 0.02,
+        "w": 0.14,
+        "h": 0.08
+      },
+      "label": "phase_marker",
+      "seat": null,
+      "phase": "charge",
+      "signature": "phase_marker||charge",
+      "features": {
+        "mean_r": 60.0,
+        "mean_g": 220.0,
+        "mean_b": 60.0
+      },
+      "split": "train"
+    }
+  ]
+}

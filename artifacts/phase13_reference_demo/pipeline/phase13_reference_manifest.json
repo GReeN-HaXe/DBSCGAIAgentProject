@@ -1,0 +1,56 @@
+{
+  "schema_version": "phase13.reference_manifest.v1",
+  "status": "pass",
+  "run_name": "phase13_reference_demo",
+  "artifacts": {
+    "reference_dataset": "artifacts\\phase13_reference_image_dataset.json",
+    "reference_dataset_limited": "artifacts\\phase13_reference_demo\\pipeline\\phase13_reference_dataset_limited.json",
+    "rendered_frame_manifest": "artifacts\\phase13_reference_demo\\pipeline\\phase13_reference_rendered_frames.json",
+    "gameplay_crop_dataset": "artifacts\\phase13_reference_demo\\pipeline\\phase13_reference_eval_crop_dataset.json",
+    "reference_model": "artifacts\\phase13_reference_demo\\pipeline\\phase13_reference_model.json",
+    "reference_eval": "artifacts\\phase13_reference_demo\\pipeline\\phase13_reference_eval.json",
+    "gameplay_model": "artifacts\\phase13_reference_demo\\pipeline\\phase13_gameplay_model.json",
+    "gameplay_eval": "artifacts\\phase13_reference_demo\\pipeline\\phase13_gameplay_eval.json",
+    "comparison": "artifacts\\phase13_reference_demo\\pipeline\\phase13_reference_compare.json"
+  },
+  "metrics": {
+    "schema_version": "phase13.reference_compare.v1",
+    "run_name": "phase13_reference_demo",
+    "reference_model_name": "phase13_visual_histogram_knn",
+    "gameplay_model_name": "phase13_visual_histogram_knn",
+    "reference_frame_exact_match_rate": 0.0,
+    "gameplay_frame_exact_match_rate": 1.0,
+    "reference_object_precision": 0.0,
+    "gameplay_object_precision": 1.0,
+    "reference_minus_gameplay_exact_match": -1.0,
+    "reference_minus_gameplay_precision": -1.0,
+    "reference_example_count": 6213,
+    "reference_example_count_total": 6213
+  },
+  "stage_timings": [
+    {
+      "stage": "render_frames",
+      "duration_seconds": 0.35953199999858043
+    },
+    {
+      "stage": "export_gameplay_crops",
+      "duration_seconds": 0.35515079999822774
+    },
+    {
+      "stage": "train_reference_model",
+      "duration_seconds": 3593.758373200002
+    },
+    {
+      "stage": "evaluate_reference_model",
+      "duration_seconds": 1.3343050000039511
+    },
+    {
+      "stage": "train_gameplay_model",
+      "duration_seconds": 0.3155765000046813
+    },
+    {
+      "stage": "evaluate_gameplay_model",
+      "duration_seconds": 0.33199900000181515
+    }
+  ]
+}

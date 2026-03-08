@@ -24,7 +24,7 @@ def main() -> None:
     parser.add_argument("--frame-manifest", type=Path, required=True, help="Frame manifest JSON path.")
     parser.add_argument("--labeled", type=Path, required=True, help="Labeled detection manifest JSON path.")
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/phase12_frames"), help="Output frame directory.")
-    parser.add_argument("--image-format", choices=["ppm", "png", "jpg"], default="ppm", help="Rendered frame image format.")
+    parser.add_argument("--image-format", choices=["ppm", "png", "jpg", "webp"], default="ppm", help="Rendered frame image format.")
     parser.add_argument("--manifest-output", type=Path, default=None, help="Optional rendered frame-manifest output path.")
     args = parser.parse_args()
 

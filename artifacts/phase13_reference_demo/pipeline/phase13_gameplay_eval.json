@@ -1,0 +1,49 @@
+{
+  "schema_version": "phase13.visual_eval.v1",
+  "model_name": "phase13_visual_histogram_knn",
+  "frame_count": 4,
+  "object_precision": 1.0,
+  "object_recall": 1.0,
+  "frame_exact_match_rate": 1.0,
+  "benchmark": {
+    "schema_version": "phase10.benchmark.v1",
+    "recognizer_name": "phase13_visual_histogram_knn",
+    "frame_count": 4,
+    "object_precision": 1.0,
+    "object_recall": 1.0,
+    "label_match_count": 12,
+    "predicted_object_count": 12,
+    "labeled_object_count": 12,
+    "frame_exact_match_rate": 1.0,
+    "frames": [
+      {
+        "frame_index": -1,
+        "predicted_object_count": 3,
+        "labeled_object_count": 3,
+        "matched_label_count": 3,
+        "exact_match": true
+      },
+      {
+        "frame_index": 1,
+        "predicted_object_count": 3,
+        "labeled_object_count": 3,
+        "matched_label_count": 3,
+        "exact_match": true
+      },
+      {
+        "frame_index": 2,
+        "predicted_object_count": 3,
+        "labeled_object_count": 3,
+        "matched_label_count": 3,
+        "exact_match": true
+      },
+      {
+        "frame_index": 3,
+        "predicted_object_count": 3,
+        "labeled_object_count": 3,
+        "matched_label_count": 3,
+        "exact_match": true
+      }
+    ]
+  }
+}

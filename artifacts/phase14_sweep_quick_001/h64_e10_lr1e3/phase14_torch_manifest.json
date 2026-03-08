@@ -1,0 +1,43 @@
+{
+  "schema_version": "phase14.identity_manifest.v1",
+  "status": "pass",
+  "run_name": "h64_e10_lr1e3",
+  "artifacts": {
+    "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+    "model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h64_e10_lr1e3\\phase14_torch_model.json",
+    "evaluation": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h64_e10_lr1e3\\phase14_torch_eval.json",
+    "history_csv": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h64_e10_lr1e3\\phase14_identity_history.csv",
+    "history_summary": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h64_e10_lr1e3\\phase14_identity_history_summary.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "split": "validation",
+    "top1_accuracy": 0.0693359375,
+    "top5_accuracy": 0.19921875,
+    "top10_accuracy": 0.2744140625,
+    "example_count": 1024,
+    "model_label_count": 1024,
+    "dataset_label_count": 1024,
+    "unseen_expected_label_count": 0,
+    "unseen_example_count": 0
+  },
+  "stage_timings": [
+    {
+      "stage": "train_torch_model",
+      "duration_seconds": 5.7928030999974
+    },
+    {
+      "stage": "evaluate_torch_model",
+      "duration_seconds": 3.4251518999953987
+    }
+  ],
+  "history": {
+    "run_count": 1,
+    "best_top1_accuracy": 0.0693359375,
+    "best_top5_accuracy": 0.19921875,
+    "best_top10_accuracy": 0.2744140625,
+    "recent_top1_accuracy": 0.0693359375,
+    "recent_top5_accuracy": 0.19921875,
+    "recent_top10_accuracy": 0.2744140625
+  }
+}

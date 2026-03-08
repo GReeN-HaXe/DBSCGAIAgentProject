@@ -24,7 +24,7 @@ def main() -> None:
     parser.add_argument("--frame-manifest", type=Path, required=True, help="Frame manifest JSON path.")
     parser.add_argument("--labeled", type=Path, required=True, help="Labeled detection manifest JSON path.")
     parser.add_argument("--crops-output-dir", type=Path, default=Path("artifacts/phase13_real_crops"), help="Directory where crop images will be written.")
-    parser.add_argument("--crop-image-format", choices=["ppm", "png", "jpg"], default="ppm", help="Crop image format.")
+    parser.add_argument("--crop-image-format", choices=["ppm", "png", "jpg", "webp"], default="ppm", help="Crop image format.")
     parser.add_argument("--validation-ratio", type=float, default=0.2, help="Validation split ratio.")
     parser.add_argument("--output", type=Path, default=Path("artifacts/phase13_real_crop_dataset.json"), help="Dataset manifest output path.")
     args = parser.parse_args()

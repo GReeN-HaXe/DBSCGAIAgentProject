@@ -10,11 +10,19 @@ from src.agent.phase12_visual import export_phase13_real_crop_dataset, render_sy
 from src.agent.phase13_visual_learning import (
     PHASE13_CROP_ANNOTATION_SCHEMA_VERSION,
     PHASE13_EVAL_SCHEMA_VERSION,
+    PHASE13_FEATURE_CACHE_SCHEMA_VERSION,
     PHASE13_MODEL_SCHEMA_VERSION,
+    PHASE13_REFERENCE_DATASET_SCHEMA_VERSION,
+    PHASE13_TARGET_CARD_IDENTITY,
+    PHASE13_TARGET_OBJECT_ROLE,
     apply_phase13_crop_annotation_review,
+    build_phase13_feature_cache,
     build_phase13_crop_annotation_manifest,
+    build_phase13_reference_image_dataset,
     compare_phase13_visual_models,
+    evaluate_phase13_identity_model,
     evaluate_phase13_visual_model,
+    rank_phase13_visual_signatures,
     summarize_phase13_experiment_history,
     train_phase13_visual_model,
 )
@@ -123,6 +131,10 @@ def test_phase13_visual_model_shape(tmp_path: Path) -> None:
     }
     comparison = compare_phase13_visual_models(trained_eval=trained_eval, baseline_eval=baseline_eval)
     assert comparison["promoted"] is True
+    assert trained_eval["target_type"] == PHASE13_TARGET_OBJECT_ROLE
+    limited_model = train_phase13_visual_model(reviewed, split="all", k_neighbors=1, max_examples=2)
+    assert limited_model["source_example_count"] == 2
+    assert limited_model["example_count"] == 2
 
 
 def test_phase13_history_summary() -> None:
@@ -134,6 +146,64 @@ def test_phase13_history_summary() -> None:
     )
     assert summary["best_run_name"] == "r2"
     assert summary["promoted_rate"] == 0.5
+
+
+def test_phase13_reference_dataset_builder(tmp_path: Path) -> None:
+    image_path = tmp_path / "BT1-001.ppm"
+    image_path.write_text("P3\n1 1\n255\n255 0 0\n", encoding="utf-8")
+    reference_manifest = {
+        "schema_version": "card_image_reference_manifest.v1",
+        "cards": [
+            {
+                "card_number": "BT1-001",
+                "primary_image_path": str(image_path),
+                "card_name": "Card A",
+                "table_name": "cards",
+                "record_id": 1,
+                "image_count": 1,
+                "match_type": "exact_stem",
+            }
+        ],
+    }
+    dataset = build_phase13_reference_image_dataset(reference_manifest, validation_ratio=0.25, split_mode="paired_views")
+    assert dataset["schema_version"] == PHASE13_REFERENCE_DATASET_SCHEMA_VERSION
+    assert dataset["target_type"] == PHASE13_TARGET_CARD_IDENTITY
+    assert dataset["card_count"] == 1
+    assert dataset["split_mode"] == "paired_views"
+    assert dataset["examples"][0]["signature"] == "BT1-001"
+    assert dataset["examples"][0]["crop_image_path"] == str(image_path)
+
+    model = train_phase13_visual_model(dataset, split="all", k_neighbors=1)
+    identity_eval = evaluate_phase13_identity_model(model=model, crop_dataset=dataset, split="all")
+    assert identity_eval["target_type"] == PHASE13_TARGET_CARD_IDENTITY
+    assert identity_eval["top1_accuracy"] == 1.0
+    assert identity_eval["top_k_accuracy"]["1"] == 1.0
+    rankings = rank_phase13_visual_signatures(model, image_path, top_k=3)
+    assert rankings[0]["signature"] == "BT1-001"
+
+    legacy_dataset = dict(dataset)
+    legacy_dataset.pop("target_type", None)
+    legacy_model = train_phase13_visual_model(legacy_dataset, split="all", k_neighbors=1)
+    legacy_identity_eval = evaluate_phase13_identity_model(model=legacy_model, crop_dataset=legacy_dataset, split="all")
+    assert legacy_identity_eval["target_type"] == PHASE13_TARGET_CARD_IDENTITY
+    assert legacy_identity_eval["top1_accuracy"] == 1.0
+    cached = build_phase13_feature_cache(
+        dataset,
+        max_examples=1,
+        feature_config={
+            "patch_grid_size": 2,
+            "hist_bins": 4,
+            "gray_hist_bins": 8,
+            "edge_grid_size": 2,
+            "enable_rgb_patch": 1,
+            "enable_rgb_hist": 1,
+            "enable_gray_hist": 1,
+            "enable_edge_grid": 1,
+        },
+    )
+    assert cached["schema_version"] == PHASE13_FEATURE_CACHE_SCHEMA_VERSION
+    assert cached["examples"][0]["visual_features"]
+    assert cached["feature_config"]["gray_hist_bins"] == 8
 
 
 def test_phase13_scripts_and_pipeline(tmp_path: Path) -> None:
@@ -258,3 +328,97 @@ def test_phase13_scripts_and_pipeline(tmp_path: Path) -> None:
     )
     assert report_result.returncode == 0, report_result.stderr
     assert "# Phase 13 Closeout" in (phase13_dir / "phase13_report.md").read_text(encoding="utf-8")
+
+    reference_manifest_path = tmp_path / "reference_manifest.json"
+    reference_manifest_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "card_image_reference_manifest.v1",
+                "cards": [
+                    {
+                        "card_number": "BT1-001",
+                        "primary_image_path": str(phase13_dir / "phase13_real_crops" / "frame_00000_obj_000.ppm"),
+                        "card_name": "Card A",
+                        "table_name": "cards",
+                        "record_id": 1,
+                        "image_count": 1,
+                        "match_type": "exact_stem",
+                    }
+                ],
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    reference_dataset_path = tmp_path / "reference_dataset.json"
+    reference_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/build_phase13_reference_image_dataset.py",
+            "--reference-manifest",
+            str(reference_manifest_path),
+            "--output",
+            str(reference_dataset_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert reference_result.returncode == 0, reference_result.stderr
+    reference_dataset = json.loads(reference_dataset_path.read_text(encoding="utf-8"))
+    assert reference_dataset["schema_version"] == PHASE13_REFERENCE_DATASET_SCHEMA_VERSION
+
+    reference_pipeline_dir = tmp_path / "phase13_reference_pipeline"
+    reference_pipeline_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/run_phase13_reference_identity_pipeline.py",
+            "--reference-dataset",
+            str(reference_dataset_path),
+            "--run-name",
+            "phase13_reference_test_run",
+            "--artifacts-dir",
+            str(reference_pipeline_dir),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert reference_pipeline_result.returncode == 0, reference_pipeline_result.stderr
+    reference_manifest = json.loads((reference_pipeline_dir / "phase13_reference_identity_manifest.json").read_text(encoding="utf-8"))
+    assert reference_manifest["status"] == "pass"
+    assert "top1_accuracy" in reference_manifest["metrics"]
+    assert (reference_pipeline_dir / "phase13_reference_identity_feature_cache.json").exists()
+    assert (reference_pipeline_dir / "phase13_reference_identity_history.csv").exists()
+    assert (reference_pipeline_dir / "phase13_reference_identity_history_summary.json").exists()
+
+    identity_report_path = tmp_path / "phase13_identity_report.md"
+    identity_report_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/render_phase13_identity_report.py",
+            "--manifest",
+            str(reference_pipeline_dir / "phase13_reference_identity_manifest.json"),
+            "--evaluation",
+            str(reference_pipeline_dir / "phase13_reference_identity_eval.json"),
+            "--output",
+            str(identity_report_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert identity_report_result.returncode == 0, identity_report_result.stderr
+    assert "# Phase 13 Identity Report" in identity_report_path.read_text(encoding="utf-8")
+
+
+def test_phase13_compare_rejects_mismatched_target_types() -> None:
+    try:
+        compare_phase13_visual_models(
+            trained_eval={"target_type": PHASE13_TARGET_CARD_IDENTITY, "frame_exact_match_rate": 0.0, "object_precision": 0.0},
+            baseline_eval={"target_type": PHASE13_TARGET_OBJECT_ROLE, "frame_exact_match_rate": 0.0, "object_precision": 0.0},
+        )
+    except ValueError as exc:
+        assert "different target types" in str(exc)
+    else:
+        raise AssertionError("expected mismatched target types to be rejected")

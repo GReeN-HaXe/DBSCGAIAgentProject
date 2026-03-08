@@ -13,7 +13,7 @@ from src.agent.phase10_vision import benchmark_detection_manifest, build_detecti
 PHASE12_CROP_DATASET_SCHEMA_VERSION = "phase12.crop_dataset.v1"
 PHASE12_MODEL_SCHEMA_VERSION = "phase12.visual_centroid_model.v1"
 PHASE12_EVAL_SCHEMA_VERSION = "phase12.visual_eval.v1"
-PHASE12_SUPPORTED_IMAGE_SUFFIXES = (".ppm", ".png", ".jpg", ".jpeg")
+PHASE12_SUPPORTED_IMAGE_SUFFIXES = (".ppm", ".png", ".jpg", ".jpeg", ".webp")
 PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION = "phase13.real_crop_dataset.v1"
 
 
@@ -258,6 +258,7 @@ def build_phase12_crop_dataset(
             )
     return {
         "schema_version": PHASE12_CROP_DATASET_SCHEMA_VERSION,
+        "target_type": "object_role",
         "frame_count": len({int(row["frame_index"]) for row in examples}),
         "example_count": len(examples),
         "validation_ratio": float(validation_ratio),
@@ -330,6 +331,7 @@ def export_phase13_real_crop_dataset(
             )
     return {
         "schema_version": PHASE13_REAL_CROP_DATASET_SCHEMA_VERSION,
+        "target_type": "object_role",
         "frame_count": len({int(row["frame_index"]) for row in examples}),
         "example_count": len(examples),
         "validation_ratio": float(validation_ratio),
@@ -593,7 +595,7 @@ def render_synthetic_phase12_frames(
         "unison_card": (220, 220, 60),
     }
     normalized_format = str(image_format).strip().lower().lstrip(".")
-    if normalized_format not in {"ppm", "png", "jpg", "jpeg"}:
+    if normalized_format not in {"ppm", "png", "jpg", "jpeg", "webp"}:
         raise ValueError(f"unsupported image_format: {image_format}")
     detections = labeled_manifest.get("detections", [])
     if not isinstance(detections, list):
