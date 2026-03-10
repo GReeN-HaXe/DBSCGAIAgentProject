@@ -1,0 +1,20 @@
+{
+  "schema_version": "phase15.compare.v1",
+  "target_type": "card_identity",
+  "example_count": 1024,
+  "phase15_model_name": "phase15_triplet_mlp",
+  "phase14_model_name": "phase14_torch_mlp",
+  "phase15_mean_reciprocal_rank": 1.0,
+  "phase14_mean_reciprocal_rank": 0.996337890625,
+  "phase15_recall_at_1": 1.0,
+  "phase14_recall_at_1": 0.9931640625,
+  "phase15_recall_at_5": 1.0,
+  "phase14_recall_at_5": 1.0,
+  "phase15_recall_at_10": 1.0,
+  "phase14_recall_at_10": 1.0,
+  "mrr_lift": 0.003662109375,
+  "recall_at_1_lift": 0.0068359375,
+  "recall_at_5_lift": 0.0,
+  "recall_at_10_lift": 0.0,
+  "phase15_wins": true
+}

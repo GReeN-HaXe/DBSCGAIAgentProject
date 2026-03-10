@@ -1,0 +1,20 @@
+{
+  "schema_version": "phase14.best_embedding_config.v1",
+  "source_summary": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_standard_001\\phase14_embedding_sweep_summary.json",
+  "profile": "standard",
+  "gallery_split": "train",
+  "query_split": "validation",
+  "best": {
+    "config_name": "h256_e20_lr5e4",
+    "hidden_dim": 256,
+    "epochs": 20,
+    "learning_rate": 0.0005,
+    "mean_reciprocal_rank": 0.996337890625,
+    "recall_at_1": 0.9931640625,
+    "recall_at_5": 1.0,
+    "recall_at_10": 1.0,
+    "example_count": 1024,
+    "duration_seconds": 10.518795700001647,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_standard_001\\h256_e20_lr5e4\\embedding\\phase14_embedding_manifest.json"
+  }
+}

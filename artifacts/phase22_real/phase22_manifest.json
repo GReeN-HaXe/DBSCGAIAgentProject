@@ -1,0 +1,31 @@
+{
+  "schema_version": "phase22.pipeline.v1",
+  "status": "skipped",
+  "run_name": "phase22_real",
+  "dataset_path": "artifacts\\phase10_with_identity\\phase10_phase7_dataset.json",
+  "target_field": "action_type",
+  "train_split": "train",
+  "eval_split": "validation",
+  "reason": "insufficient_target_classes",
+  "target_distribution": {
+    "schema_version": "phase22.target_distribution.v1",
+    "target_field": "action_type",
+    "split": "train",
+    "example_count": 3037,
+    "label_count": 1,
+    "labels": [
+      {
+        "label": "detected_frame_state",
+        "count": 3037
+      }
+    ]
+  },
+  "artifacts": {
+    "phase22_model": "",
+    "phase22_eval": "",
+    "baseline_model": "",
+    "baseline_eval": "",
+    "compare": ""
+  },
+  "metrics": {}
+}

@@ -29,8 +29,8 @@ def _trace_artifact() -> dict[str, object]:
                 "turn_number": 1,
                 "phase": "main",
                 "action": "play_card_from_hand hand_index=0",
-                "action_type": "play_card_from_hand",
-                "state_snapshot": {
+            "action_type": "play_card_from_hand",
+            "state_snapshot": {
                     "active_player": 1,
                     "turn_number": 1,
                     "phase": "main",
@@ -48,14 +48,16 @@ def _trace_artifact() -> dict[str, object]:
                 "player_id": 2,
                 "turn_number": 1,
                 "phase": "battle",
-                "action": "declare_attack attacker_zone=leader",
+                "action": "declare_attack attacker_zone=leader target_zone=leader target_player=1",
                 "action_type": "declare_attack",
+                "resolved_signatures_by_seat": {"1": ["BT1-001"], "2": ["BT1-002"]},
                 "state_snapshot": {
                     "active_player": 2,
                     "turn_number": 1,
                     "phase": "battle",
                     "battle_step": "offense",
                     "counter_window_kind": None,
+                    "resolved_signatures_by_seat": {"1": ["BT1-001"], "2": ["BT1-002"]},
                     "players": {
                         "1": {"hand_size": 5, "life_size": 8, "energy_size": 1, "energy_resting_count": 1, "battle_size": 1, "unison_size": 0, "drop_size": 0, "warp_size": 0},
                         "2": {"hand_size": 6, "life_size": 8, "energy_size": 1, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0},
@@ -81,6 +83,11 @@ def test_phase7_build_examples_from_trace_artifact_shape() -> None:
     assert examples[0]["setup"]["seed"] == 11
     assert examples[0]["state_features"]["self_hand_size"] == 6
     assert examples[0]["state_features"]["opponent_life_size"] == 8
+    assert examples[0]["decision_class"] == "play_development"
+    assert examples[0]["action_features"]["attacker_zone"] == ""
+    assert examples[0]["action_features"]["is_leader_attack"] is False
+    assert examples[0]["action_features"]["self_board_state"] == "empty"
+    assert examples[0]["action_features"]["is_empty_board_setup"] is True
     assert examples[0]["terminal_reward"] == 1.0
     assert examples[0]["value_target"] == 1.0
     assert examples[0]["turns_to_end"] == 2
@@ -91,8 +98,17 @@ def test_phase7_build_examples_from_trace_artifact_shape() -> None:
     assert examples[1]["did_player_win"] is False
     assert examples[1]["state_features"]["battle_step"] == "offense"
     assert examples[1]["state_features"]["self_energy_size"] == 1
+    assert examples[1]["decision_class"] == "attack_leader_with_leader"
+    assert examples[1]["action_features"]["attacker_zone"] == "leader"
+    assert examples[1]["action_features"]["is_leader_attack"] is True
+    assert examples[1]["action_features"]["is_battle_attack"] is False
+    assert examples[1]["action_features"]["opponent_life_bucket"] == "7+"
+    assert examples[1]["action_features"]["has_other_attackers"] is False
     assert examples[1]["terminal_reward"] == -1.0
     assert examples[1]["value_target"] == 0.0
+    assert examples[1]["has_identity_resolution"] is True
+    assert examples[1]["resolved_signatures_by_seat"]["1"] == ["BT1-001"]
+    assert examples[1]["resolved_signatures_by_seat"]["2"] == ["BT1-002"]
 
 
 def test_phase7_build_dataset_aggregates_sources() -> None:
@@ -215,6 +231,9 @@ def test_phase7_evaluate_dataset_script_writes_metrics(tmp_path) -> None:
     assert payload["example_count"] == 2
     assert "top1_accuracy" in payload
     assert "family_accuracy" in payload
+    assert payload["identity_resolved_example_count"] == 1
+    assert payload["identity_resolution_slices"]["with_identity"]["example_count"] == 1
+    assert payload["identity_resolution_slices"]["without_identity"]["example_count"] == 1
 
 
 def test_phase7_compare_profiles_script_writes_ranking(tmp_path) -> None:
@@ -258,3 +277,6 @@ def test_phase7_compare_profiles_script_writes_ranking(tmp_path) -> None:
     assert payload["split"] == "all"
     assert len(payload["ranking"]) == 3
     assert payload["ranking"][0]["rank"] == 1
+    assert "identity_resolution_rankings" in payload
+    assert "with_identity" in payload["identity_resolution_rankings"]
+    assert "without_identity" in payload["identity_resolution_rankings"]

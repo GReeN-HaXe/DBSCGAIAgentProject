@@ -54,12 +54,47 @@ def _init_state(
     )
 
 
-def _print_human_actions(session: HumanVsAiSession) -> list[object]:
+def _card_name_resolver(repo: SQLiteCardRepository | None):
+    def _resolve(card_id: int) -> str:
+        if repo is None:
+            return f"card_id={card_id}"
+        try:
+            card = repo.get_by_id(int(card_id))
+            tags: list[str] = []
+            if card.has_counter:
+                tags.append("Counter")
+            if card.has_activate_main:
+                tags.append("ActMain")
+            if card.has_activate_battle:
+                tags.append("ActBattle")
+            if card.has_draw:
+                tags.append("Draw")
+            cost = card.energy_cost_int if card.energy_cost_int is not None else card.card_energy_cost or "-"
+            power = card.power_int if card.power_int is not None else card.card_power or "-"
+            combo = card.combo_power_int if card.combo_power_int is not None else card.card_combo_power or "-"
+            tag_suffix = f" tags={','.join(tags)}" if tags else ""
+            return f"{card.card_number} {card.card_name} cost={cost} power={power} combo={combo}{tag_suffix}"
+        except Exception:
+            return f"card_id={card_id}"
+
+    return _resolve
+
+
+def _print_human_actions(session: HumanVsAiSession, *, card_name_resolver) -> list[object]:
     legal = session.legal_actions_for_human()
     print("\nLegal actions:")
     for i, action in enumerate(legal):
-        print(f"  [{i}] {describe_action(action)}")
+        print(f"  [{i}] {describe_action(action, state=session.state, card_name_resolver=card_name_resolver)}")
     return legal
+
+
+def _revealed_hand_players(*, human_player: int, reveal_ai_hand: bool, reveal_all_hands: bool) -> tuple[int, ...]:
+    if reveal_all_hands:
+        return (1, 2)
+    if reveal_ai_hand:
+        ai_player = 1 if int(human_player) == 2 else 2
+        return (int(human_player), ai_player)
+    return (int(human_player),)
 
 
 def main() -> None:
@@ -130,6 +165,16 @@ def main() -> None:
         type=int,
         default=None,
         help="Optional upper bound for unresolved effect resolutions.",
+    )
+    parser.add_argument(
+        "--reveal-ai-hand",
+        action="store_true",
+        help="Debug mode: reveal the AI player's hand in terminal summaries.",
+    )
+    parser.add_argument(
+        "--reveal-all-hands",
+        action="store_true",
+        help="Debug mode: reveal both players' hands in terminal summaries.",
     )
     args = parser.parse_args()
 
@@ -206,6 +251,12 @@ def main() -> None:
         ai_policy=HeuristicPolicy(profile=args.ai_profile),
         setup_metadata=setup_meta,
     )
+    card_name_resolver = _card_name_resolver(repo)
+    revealed_hand_players = _revealed_hand_players(
+        human_player=int(args.human_player),
+        reveal_ai_hand=bool(args.reveal_ai_hand),
+        reveal_all_hands=bool(args.reveal_all_hands),
+    )
 
     scripted_inputs: list[str] = []
     if args.scripted_actions_file is not None and args.scripted_actions_file.exists():
@@ -278,13 +329,29 @@ def main() -> None:
             sys.exit(6)
 
     while not session.is_over() and session.total_actions < max(1, int(args.max_actions)):
-        ai_actions = session.step_ai_until_human_turn()
-        for action in ai_actions:
-            print(f"AI played: {describe_action(action)}")
+        ai_actions = session.step_ai_until_human_turn_with_context()
+        for entry in ai_actions:
+            action = entry["action"]
+            state_before = entry["state_before"]
+            print(
+                "AI played: "
+                + describe_action(
+                    action,
+                    state=state_before,
+                    card_name_resolver=card_name_resolver,
+                )
+            )
         if session.is_over():
             break
-        print("\n" + summarize_state_for_cli(session.state))
-        legal = _print_human_actions(session)
+        print(
+            "\n"
+            + summarize_state_for_cli(
+                session.state,
+                card_name_resolver=card_name_resolver,
+                reveal_hand_player_ids=revealed_hand_players,
+            )
+        )
+        legal = _print_human_actions(session, card_name_resolver=card_name_resolver)
         if not legal:
             print("No legal actions available for human. Ending session.")
             break
@@ -301,7 +368,14 @@ def main() -> None:
                 _evaluate_expectations_and_exit_if_needed()
                 return
             if raw == "s":
-                print("\n" + summarize_state_for_cli(session.state))
+                print(
+                    "\n"
+                    + summarize_state_for_cli(
+                        session.state,
+                        card_name_resolver=card_name_resolver,
+                        reveal_hand_player_ids=revealed_hand_players,
+                    )
+                )
                 continue
             try:
                 idx = int(raw)
@@ -311,12 +385,20 @@ def main() -> None:
             if idx < 0 or idx >= len(legal):
                 print(f"Index out of range. Valid range: 0..{len(legal)-1}")
                 continue
-            chosen = session.apply_human_action_by_index(idx)
-            print(f"You played: {describe_action(chosen)}")
+            chosen = legal[idx]
+            chosen_text = describe_action(chosen, state=session.state, card_name_resolver=card_name_resolver)
+            session.apply_human_action_by_index(idx)
+            print(f"You played: {chosen_text}")
             break
 
     print("\nMatch finished.")
-    print(summarize_state_for_cli(session.state))
+    print(
+        summarize_state_for_cli(
+            session.state,
+            card_name_resolver=card_name_resolver,
+            reveal_hand_player_ids=revealed_hand_players,
+        )
+    )
     print(f"winner={session.state.winner_id} total_actions={session.total_actions}")
     _write_outputs_and_exit_banner()
     _evaluate_expectations_and_exit_if_needed()

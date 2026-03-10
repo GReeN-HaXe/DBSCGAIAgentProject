@@ -412,6 +412,67 @@ def test_phase13_scripts_and_pipeline(tmp_path: Path) -> None:
     assert "# Phase 13 Identity Report" in identity_report_path.read_text(encoding="utf-8")
 
 
+def test_phase13_feature_cache_resume_script(tmp_path: Path) -> None:
+    image_a = tmp_path / "BT1-001.ppm"
+    image_b = tmp_path / "BT1-002.ppm"
+    image_a.write_text("P3\n1 1\n255\n255 0 0\n", encoding="utf-8")
+    image_b.write_text("P3\n1 1\n255\n0 255 0\n", encoding="utf-8")
+    dataset_path = tmp_path / "reference_dataset.json"
+    output_path = tmp_path / "feature_cache.json"
+    dataset = {
+        "schema_version": PHASE13_REFERENCE_DATASET_SCHEMA_VERSION,
+        "target_type": PHASE13_TARGET_CARD_IDENTITY,
+        "card_count": 2,
+        "example_count": 2,
+        "examples": [
+            {"crop_image_path": str(image_a), "source_image_path": str(image_a), "signature": "BT1-001", "label": "BT1-001", "split": "train"},
+            {"crop_image_path": str(image_b), "source_image_path": str(image_b), "signature": "BT1-002", "label": "BT1-002", "split": "validation"},
+        ],
+    }
+    dataset_path.write_text(json.dumps(dataset, indent=2), encoding="utf-8")
+
+    first = subprocess.run(
+        [
+            sys.executable,
+            "scripts/build_phase13_feature_cache.py",
+            "--dataset",
+            str(dataset_path),
+            "--checkpoint-every",
+            "1",
+            "--max-examples",
+            "1",
+            "--output",
+            str(output_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert first.returncode == 0, first.stderr
+    partial = json.loads(output_path.read_text(encoding="utf-8"))
+    assert partial["example_count"] == 1
+
+    second = subprocess.run(
+        [
+            sys.executable,
+            "scripts/build_phase13_feature_cache.py",
+            "--dataset",
+            str(dataset_path),
+            "--checkpoint-every",
+            "1",
+            "--resume-if-exists",
+            "--output",
+            str(output_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert second.returncode == 0, second.stderr
+    resumed = json.loads(output_path.read_text(encoding="utf-8"))
+    assert resumed["example_count"] == 2
+
+
 def test_phase13_compare_rejects_mismatched_target_types() -> None:
     try:
         compare_phase13_visual_models(

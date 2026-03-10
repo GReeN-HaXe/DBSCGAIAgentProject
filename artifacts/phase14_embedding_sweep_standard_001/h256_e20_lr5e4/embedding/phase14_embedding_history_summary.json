@@ -1,0 +1,7 @@
+{
+  "run_count": 1,
+  "best_mrr": 0.996337890625,
+  "best_recall_at_1": 0.9931640625,
+  "best_run_name": "h256_e20_lr5e4",
+  "recent_mrr": 0.996337890625
+}

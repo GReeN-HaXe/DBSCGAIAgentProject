@@ -28,7 +28,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Train a minimal Phase 7 frequency-based policy model from dataset examples.")
     parser.add_argument("--dataset", type=Path, required=True, help="Phase 7 dataset JSON path.")
     parser.add_argument("--model-type", choices=["frequency", "backoff"], default="frequency", help="Model family to train.")
-    parser.add_argument("--target-field", choices=["action_type", "action_family"], default="action_type", help="Target label to train.")
+    parser.add_argument("--target-field", choices=["action_type", "action_family", "action_signature", "decision_class"], default="action_type", help="Target label to train.")
+    parser.add_argument("--context-mode", choices=["baseline", "identity"], default="baseline", help="Context feature preset for training.")
     parser.add_argument("--train-split", choices=["train", "validation", "all"], default="train", help="Dataset split used for fitting.")
     parser.add_argument("--eval-split", choices=["train", "validation", "all"], default="validation", help="Dataset split used for immediate evaluation.")
     parser.add_argument("--output", type=Path, default=Path("artifacts/phase7_frequency_model.json"), help="Model output path.")
@@ -41,12 +42,14 @@ def main() -> None:
             dataset,
             split=str(args.train_split),
             target_field=str(args.target_field),
+            context_mode=str(args.context_mode),
         )
     else:
         model = train_frequency_policy_model(
             dataset,
             split=str(args.train_split),
             target_field=str(args.target_field),
+            context_mode=str(args.context_mode),
         )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(model, indent=2), encoding="utf-8")

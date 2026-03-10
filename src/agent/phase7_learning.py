@@ -15,6 +15,15 @@ DEFAULT_CONTEXT_FIELDS = (
     "state_features.self_battle_size",
     "state_features.opponent_life_size",
 )
+IDENTITY_CONTEXT_FIELDS = (
+    *DEFAULT_CONTEXT_FIELDS,
+    "state_features.self_has_identity_resolution",
+    "state_features.self_identity_resolution_count",
+    "state_features.self_primary_resolved_signature",
+    "state_features.opponent_has_identity_resolution",
+    "state_features.opponent_identity_resolution_count",
+    "state_features.opponent_primary_resolved_signature",
+)
 
 
 def _extract_path(data: dict[str, Any], path: str) -> object:
@@ -24,6 +33,19 @@ def _extract_path(data: dict[str, Any], path: str) -> object:
             return None
         current = current.get(part)
     return current
+
+
+def resolve_context_fields(
+    *,
+    context_mode: str = "baseline",
+    context_fields: tuple[str, ...] | None = None,
+) -> tuple[str, ...]:
+    if context_fields:
+        return tuple(str(item) for item in context_fields if str(item))
+    normalized_mode = str(context_mode or "baseline").strip().lower()
+    if normalized_mode == "identity":
+        return IDENTITY_CONTEXT_FIELDS
+    return DEFAULT_CONTEXT_FIELDS
 
 
 def _filtered_examples(dataset: dict[str, object], split: str) -> list[dict[str, Any]]:
@@ -46,20 +68,59 @@ def _ranked_majority(counts: Counter[str]) -> str:
     return "" if not ranked else ranked[0][0]
 
 
+def _identity_resolution_slices(examples: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    with_identity = [row for row in examples if bool(row.get("has_identity_resolution"))]
+    without_identity = [row for row in examples if not bool(row.get("has_identity_resolution"))]
+    return {
+        "with_identity": with_identity,
+        "without_identity": without_identity,
+    }
+
+
+def _evaluate_policy_rows(
+    examples: list[dict[str, Any]],
+    *,
+    target_field: str,
+    predictor: Any,
+) -> dict[str, Any]:
+    total = len(examples)
+    correct = 0
+    by_target: dict[str, dict[str, int | float | str]] = {}
+    for row in examples:
+        actual = str(row.get(target_field, "unknown"))
+        predicted = str(predictor(row))
+        bucket = by_target.setdefault(actual, {"count": 0, "matched": 0})
+        bucket["count"] = int(bucket["count"]) + 1
+        if predicted == actual:
+            correct += 1
+            bucket["matched"] = int(bucket["matched"]) + 1
+    for actual, bucket in by_target.items():
+        count = int(bucket["count"])
+        bucket["accuracy"] = 0.0 if count == 0 else float(bucket["matched"]) / float(count)
+        bucket["target_label"] = actual
+    return {
+        "example_count": total,
+        "top1_accuracy": 0.0 if total == 0 else float(correct) / float(total),
+        "by_target_label": [by_target[key] for key in sorted(by_target.keys())],
+    }
+
+
 def train_frequency_policy_model(
     dataset: dict[str, object],
     *,
     split: str = "train",
     target_field: str = "action_type",
-    context_fields: tuple[str, ...] = DEFAULT_CONTEXT_FIELDS,
+    context_fields: tuple[str, ...] | None = None,
+    context_mode: str = "baseline",
 ) -> dict[str, Any]:
+    resolved_context_fields = resolve_context_fields(context_mode=context_mode, context_fields=context_fields)
     examples = _filtered_examples(dataset, split)
     global_counts: Counter[str] = Counter()
     context_counts: dict[str, Counter[str]] = defaultdict(Counter)
     for row in examples:
         target = str(row.get(target_field, "unknown"))
         global_counts[target] += 1
-        context_counts[build_frequency_context_key(row, context_fields)][target] += 1
+        context_counts[build_frequency_context_key(row, resolved_context_fields)][target] += 1
 
     global_majority = ""
     if global_counts:
@@ -76,8 +137,9 @@ def train_frequency_policy_model(
         "schema_version": FREQUENCY_MODEL_SCHEMA_VERSION,
         "model_name": "frequency_policy",
         "target_field": str(target_field),
+        "context_mode": str(context_mode),
         "train_split": str(split),
-        "context_fields": list(context_fields),
+        "context_fields": list(resolved_context_fields),
         "example_count": len(examples),
         "global_counts": dict(global_counts),
         "global_majority_label": global_majority,
@@ -90,21 +152,23 @@ def train_backoff_policy_model(
     *,
     split: str = "train",
     target_field: str = "action_type",
-    context_fields: tuple[str, ...] = DEFAULT_CONTEXT_FIELDS,
+    context_fields: tuple[str, ...] | None = None,
+    context_mode: str = "baseline",
 ) -> dict[str, Any]:
+    resolved_context_fields = resolve_context_fields(context_mode=context_mode, context_fields=context_fields)
     examples = _filtered_examples(dataset, split)
     global_counts: Counter[str] = Counter()
-    level_contexts: list[dict[str, Counter[str]]] = [defaultdict(Counter) for _ in range(len(context_fields))]
+    level_contexts: list[dict[str, Counter[str]]] = [defaultdict(Counter) for _ in range(len(resolved_context_fields))]
     for row in examples:
         target = str(row.get(target_field, "unknown"))
         global_counts[target] += 1
-        for level in range(len(context_fields)):
-            subset = context_fields[: len(context_fields) - level]
+        for level in range(len(resolved_context_fields)):
+            subset = resolved_context_fields[: len(resolved_context_fields) - level]
             key = build_frequency_context_key(row, subset)
             level_contexts[level][key][target] += 1
     levels_payload: list[dict[str, object]] = []
     for level, context_map in enumerate(level_contexts):
-        subset = context_fields[: len(context_fields) - level]
+        subset = resolved_context_fields[: len(resolved_context_fields) - level]
         payload_contexts: dict[str, dict[str, object]] = {}
         for key, counts in context_map.items():
             payload_contexts[key] = {
@@ -122,8 +186,9 @@ def train_backoff_policy_model(
         "schema_version": BACKOFF_MODEL_SCHEMA_VERSION,
         "model_name": "backoff_frequency_policy",
         "target_field": str(target_field),
+        "context_mode": str(context_mode),
         "train_split": str(split),
-        "context_fields": list(context_fields),
+        "context_fields": list(resolved_context_fields),
         "example_count": len(examples),
         "global_counts": dict(global_counts),
         "global_majority_label": _ranked_majority(global_counts),
@@ -134,7 +199,7 @@ def train_backoff_policy_model(
 def predict_frequency_policy(model: dict[str, Any], example: dict[str, Any]) -> str:
     context_fields = tuple(str(item) for item in model.get("context_fields", []) if item)
     if not context_fields:
-        context_fields = DEFAULT_CONTEXT_FIELDS
+        context_fields = resolve_context_fields(context_mode=str(model.get("context_mode", "baseline")))
     key = build_frequency_context_key(example, context_fields)
     contexts = model.get("contexts", {})
     if isinstance(contexts, dict):
@@ -177,28 +242,21 @@ def evaluate_frequency_policy_model(
 ) -> dict[str, Any]:
     target_field = str(model.get("target_field", "action_type"))
     examples = _filtered_examples(dataset, split)
-    total = len(examples)
-    correct = 0
-    by_target: dict[str, dict[str, int | float | str]] = {}
-    for row in examples:
-        actual = str(row.get(target_field, "unknown"))
-        predicted = predict_frequency_policy(model, row)
-        bucket = by_target.setdefault(actual, {"count": 0, "matched": 0})
-        bucket["count"] = int(bucket["count"]) + 1
-        if predicted == actual:
-            correct += 1
-            bucket["matched"] = int(bucket["matched"]) + 1
-    for actual, bucket in by_target.items():
-        count = int(bucket["count"])
-        bucket["accuracy"] = 0.0 if count == 0 else float(bucket["matched"]) / float(count)
-        bucket["target_label"] = actual
+    overall = _evaluate_policy_rows(examples, target_field=target_field, predictor=lambda row: predict_frequency_policy(model, row))
+    slices = _identity_resolution_slices(examples)
     return {
         "model_name": str(model.get("model_name", "frequency_policy")),
         "target_field": target_field,
         "split": str(split),
-        "example_count": total,
-        "top1_accuracy": 0.0 if total == 0 else float(correct) / float(total),
-        "by_target_label": [by_target[key] for key in sorted(by_target.keys())],
+        "example_count": int(overall["example_count"]),
+        "top1_accuracy": float(overall["top1_accuracy"]),
+        "identity_resolved_example_count": len(slices["with_identity"]),
+        "identity_resolved_example_rate": (float(len(slices["with_identity"])) / float(len(examples))) if examples else 0.0,
+        "by_target_label": overall["by_target_label"],
+        "identity_resolution_slices": {
+            "with_identity": _evaluate_policy_rows(slices["with_identity"], target_field=target_field, predictor=lambda row: predict_frequency_policy(model, row)),
+            "without_identity": _evaluate_policy_rows(slices["without_identity"], target_field=target_field, predictor=lambda row: predict_frequency_policy(model, row)),
+        },
     }
 
 
@@ -210,26 +268,19 @@ def evaluate_backoff_policy_model(
 ) -> dict[str, Any]:
     target_field = str(model.get("target_field", "action_type"))
     examples = _filtered_examples(dataset, split)
-    total = len(examples)
-    correct = 0
-    by_target: dict[str, dict[str, int | float | str]] = {}
-    for row in examples:
-        actual = str(row.get(target_field, "unknown"))
-        predicted = predict_backoff_policy(model, row)
-        bucket = by_target.setdefault(actual, {"count": 0, "matched": 0})
-        bucket["count"] = int(bucket["count"]) + 1
-        if predicted == actual:
-            correct += 1
-            bucket["matched"] = int(bucket["matched"]) + 1
-    for actual, bucket in by_target.items():
-        count = int(bucket["count"])
-        bucket["accuracy"] = 0.0 if count == 0 else float(bucket["matched"]) / float(count)
-        bucket["target_label"] = actual
+    overall = _evaluate_policy_rows(examples, target_field=target_field, predictor=lambda row: predict_backoff_policy(model, row))
+    slices = _identity_resolution_slices(examples)
     return {
         "model_name": str(model.get("model_name", "backoff_frequency_policy")),
         "target_field": target_field,
         "split": str(split),
-        "example_count": total,
-        "top1_accuracy": 0.0 if total == 0 else float(correct) / float(total),
-        "by_target_label": [by_target[key] for key in sorted(by_target.keys())],
+        "example_count": int(overall["example_count"]),
+        "top1_accuracy": float(overall["top1_accuracy"]),
+        "identity_resolved_example_count": len(slices["with_identity"]),
+        "identity_resolved_example_rate": (float(len(slices["with_identity"])) / float(len(examples))) if examples else 0.0,
+        "by_target_label": overall["by_target_label"],
+        "identity_resolution_slices": {
+            "with_identity": _evaluate_policy_rows(slices["with_identity"], target_field=target_field, predictor=lambda row: predict_backoff_policy(model, row)),
+            "without_identity": _evaluate_policy_rows(slices["without_identity"], target_field=target_field, predictor=lambda row: predict_backoff_policy(model, row)),
+        },
     }

@@ -26,6 +26,26 @@ def _coerce_float(value: object) -> float | None:
         return None
 
 
+def _resolved_signatures_by_seat(zone_snapshot: object) -> dict[str, list[str]]:
+    if not isinstance(zone_snapshot, dict):
+        return {}
+    out: dict[str, list[str]] = {}
+    for seat, payload in zone_snapshot.items():
+        if not isinstance(payload, dict):
+            continue
+        detected_objects = payload.get("detected_objects", [])
+        if not isinstance(detected_objects, list):
+            continue
+        signatures = [
+            str(item.get("resolved_signature", "")).strip()
+            for item in detected_objects
+            if isinstance(item, dict) and str(item.get("resolved_signature", "")).strip()
+        ]
+        if signatures:
+            out[str(seat)] = signatures
+    return out
+
+
 def normalize_external_match(
     payload: dict[str, Any],
     *,
@@ -219,6 +239,11 @@ def external_match_to_phase7_trace_artifact(match_payload: dict[str, Any]) -> di
         "match_id": str(match_payload.get("match_id", "")),
         "review_status": str(match_payload.get("review", {}).get("review_status", "")) if isinstance(match_payload.get("review"), dict) else "",
         "external_confidence_status": str(match_payload.get("review", {}).get("confidence_summary", {}).get("status", "")) if isinstance(match_payload.get("review"), dict) else "",
+        "contains_identity_resolutions": any(
+            bool(_resolved_signatures_by_seat(row.get("zone_snapshot", {})))
+            for row in annotations
+            if isinstance(row, dict)
+        ),
     }
     actions: list[dict[str, Any]] = []
     for row in annotations:
@@ -227,6 +252,7 @@ def external_match_to_phase7_trace_artifact(match_payload: dict[str, Any]) -> di
         actor = row.get("actor", {})
         actor_seat = _coerce_int(actor.get("seat")) if isinstance(actor, dict) else None
         zone_snapshot = row.get("zone_snapshot", {})
+        resolved_signatures = _resolved_signatures_by_seat(zone_snapshot)
         actions.append(
             {
                 "actor_kind": "external",
@@ -235,6 +261,8 @@ def external_match_to_phase7_trace_artifact(match_payload: dict[str, Any]) -> di
                 "phase": str(row.get("phase", "")),
                 "action": str(row.get("action_text", "")),
                 "action_type": str(row.get("action_type", "")),
+                "resolved_signatures_by_seat": resolved_signatures,
+                "has_identity_resolution": bool(resolved_signatures),
                 "state_snapshot": {
                     "active_player": actor_seat,
                     "turn_number": _coerce_int(row.get("turn_number")),
@@ -242,6 +270,7 @@ def external_match_to_phase7_trace_artifact(match_payload: dict[str, Any]) -> di
                     "battle_step": None,
                     "counter_window_kind": None,
                     "players": dict(zone_snapshot) if isinstance(zone_snapshot, dict) else {},
+                    "resolved_signatures_by_seat": resolved_signatures,
                 },
             }
         )

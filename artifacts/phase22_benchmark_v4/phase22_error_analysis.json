@@ -1,0 +1,228 @@
+{
+  "schema_version": "phase22.error_analysis.v1",
+  "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_dataset_v4.json",
+  "split": "validation",
+  "example_count": 106,
+  "top1_accuracy": 0.9905660377358491,
+  "top_k_accuracy": {
+    "1": 0.9905660377358491,
+    "3": 1.0,
+    "5": 1.0
+  },
+  "error_count": 1,
+  "top_confusions": [
+    {
+      "pair": "play_board_setup->play_board_extension",
+      "count": 1
+    }
+  ],
+  "per_source": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_029_review.json",
+      "example_count": 2,
+      "error_count": 1,
+      "top1_accuracy": 0.5
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_030_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_035_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    }
+  ],
+  "per_actual_label": [
+    {
+      "label": "attack_leader_with_battle",
+      "example_count": 32,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "attack_leader_with_leader",
+      "example_count": 7,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "charge_lategame",
+      "example_count": 16,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "charge_opening",
+      "example_count": 20,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "end_turn_after_development",
+      "example_count": 11,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "play_board_extension",
+      "example_count": 13,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "play_board_setup",
+      "example_count": 2,
+      "error_count": 1,
+      "top1_accuracy": 0.5
+    },
+    {
+      "label": "play_pressure",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    }
+  ],
+  "sample_errors": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_029_review.json",
+      "example_index": 30,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=6688",
+      "actual_label": "play_board_setup",
+      "predicted_label": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.03851318359375
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 1.5511435270309448
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -1.9136451482772827
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -2.687885284423828
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -3.249965190887451
+        }
+      ]
+    }
+  ]
+}

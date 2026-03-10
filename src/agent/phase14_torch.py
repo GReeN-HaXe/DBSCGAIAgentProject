@@ -18,6 +18,13 @@ PHASE14_EVAL_SCHEMA_VERSION = "phase14.torch_eval.v1"
 PHASE14_IDENTITY_HISTORY_SCHEMA_VERSION = "phase14.identity_history.v1"
 PHASE14_COMPARE_SCHEMA_VERSION = "phase14.compare.v1"
 PHASE14_COMPARE_HISTORY_SCHEMA_VERSION = "phase14.compare_history.v1"
+PHASE14_RETRIEVAL_SCHEMA_VERSION = "phase14.retrieval_eval.v1"
+PHASE14_EMBEDDING_RETRIEVAL_SCHEMA_VERSION = "phase14.embedding_retrieval.v1"
+PHASE14_ERROR_ANALYSIS_SCHEMA_VERSION = "phase14.error_analysis.v1"
+PHASE14_RETRIEVAL_COMPARISON_SCHEMA_VERSION = "phase14.retrieval_comparison.v1"
+PHASE14_EMBEDDING_HISTORY_SCHEMA_VERSION = "phase14.embedding_history.v1"
+PHASE14_EMBEDDING_COMPARE_SCHEMA_VERSION = "phase14.embedding_compare.v1"
+PHASE14_EMBEDDING_ANALYSIS_SCHEMA_VERSION = "phase14.embedding_analysis.v1"
 
 
 def has_torch_support() -> bool:
@@ -237,6 +244,22 @@ def _build_torch_model(torch_mods: Any, model_payload: dict[str, Any], *, device
     return model
 
 
+def _build_embedding_model(torch_mods: Any, model_payload: dict[str, Any], *, device: str) -> Any:
+    nn = torch_mods["nn"]
+    model = nn.Sequential(
+        nn.Linear(int(model_payload.get("input_dim", 0) or 0), int(model_payload.get("hidden_dim", 128) or 128)),
+        nn.ReLU(),
+    ).to(device)
+    full_state = _load_state_dict(torch_mods["torch"], dict(model_payload.get("state_dict", {})))
+    embedding_state = {
+        "0.weight": full_state["0.weight"],
+        "0.bias": full_state["0.bias"],
+    }
+    model.load_state_dict(embedding_state)
+    model.eval()
+    return model
+
+
 def evaluate_phase14_torch_model(
     model_payload: dict[str, Any],
     dataset: dict[str, Any],
@@ -322,6 +345,422 @@ def evaluate_phase14_torch_model(
         "top_k_accuracy": {str(k): ((hits / total_examples) if total_examples else 0.0) for k, hits in sorted(top_k_hits.items())},
         "correct_count": correct_top1,
         "rows": rows,
+    }
+
+
+def evaluate_phase14_retrieval(
+    eval_payload: dict[str, Any],
+    *,
+    top_k_values: Iterable[int] = (1, 5, 10, 20),
+) -> dict[str, Any]:
+    rows = eval_payload.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    ks = sorted({int(k) for k in top_k_values if int(k) > 0})
+    hit_counts = {k: 0 for k in ks}
+    reciprocal_rank_sum = 0.0
+    exact_rank_sum = 0.0
+    found_count = 0
+    rendered_rows: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            continue
+        expected = str(row.get("expected_signature", "")).strip()
+        predictions = row.get("top_predictions", [])
+        if not isinstance(predictions, list):
+            predictions = []
+        rank: int | None = None
+        for position, item in enumerate(predictions, start=1):
+            if not isinstance(item, dict):
+                continue
+            if str(item.get("signature", "")).strip() == expected:
+                rank = position
+                break
+        if rank is not None:
+            found_count += 1
+            reciprocal_rank_sum += 1.0 / rank
+            exact_rank_sum += float(rank)
+            for k in ks:
+                if rank <= k:
+                    hit_counts[k] += 1
+        rendered_rows.append(
+            {
+                "index": index,
+                "expected_signature": expected,
+                "predicted_signature": str(row.get("predicted_signature", "")),
+                "found_rank": rank,
+                "top_predictions": predictions,
+                "crop_image_path": str(row.get("crop_image_path", "")),
+            }
+        )
+    total = len(rendered_rows)
+    return {
+        "schema_version": PHASE14_RETRIEVAL_SCHEMA_VERSION,
+        "model_name": str(eval_payload.get("model_name", "")),
+        "target_type": str(eval_payload.get("target_type", "")),
+        "split": str(eval_payload.get("split", "")),
+        "example_count": total,
+        "found_count": found_count,
+        "mean_reciprocal_rank": (reciprocal_rank_sum / total) if total else 0.0,
+        "mean_found_rank": (exact_rank_sum / found_count) if found_count else 0.0,
+        "recall_at_k": {str(k): ((hit_counts[k] / total) if total else 0.0) for k in ks},
+        "rows": rendered_rows,
+    }
+
+
+def evaluate_phase14_embedding_retrieval(
+    model_payload: dict[str, Any],
+    dataset: dict[str, Any],
+    *,
+    gallery_split: str = "train",
+    query_split: str = "validation",
+    top_k_values: Iterable[int] = (1, 5, 10, 20),
+    batch_size: int = 256,
+) -> dict[str, Any]:
+    torch_mods = _require_torch()
+    torch = torch_mods["torch"]
+    F = torch_mods["F"]
+    gallery = _prepare_rows(dataset, split=gallery_split)
+    queries = _prepare_rows(dataset, split=query_split)
+    feature_keys = [str(key) for key in model_payload.get("feature_keys", [])]
+    if feature_keys != gallery.feature_keys or feature_keys != queries.feature_keys:
+        raise ValueError("feature-key mismatch between model and dataset")
+    selected_device = _select_device(torch, str(model_payload.get("device", "cpu")))
+    embedder = _build_embedding_model(torch_mods, model_payload, device=selected_device)
+    if not gallery.feature_rows:
+        raise ValueError(f"no gallery examples available for split={gallery_split!r}")
+    if not queries.feature_rows:
+        raise ValueError(f"no query examples available for split={query_split!r}")
+
+    with torch.no_grad():
+        gallery_x = torch.tensor(gallery.feature_rows, dtype=torch.float32).to(selected_device)
+        query_x = torch.tensor(queries.feature_rows, dtype=torch.float32).to(selected_device)
+        gallery_emb = F.normalize(embedder(gallery_x), dim=1).cpu()
+        query_emb = F.normalize(embedder(query_x), dim=1).cpu()
+
+    ks = sorted({int(k) for k in top_k_values if int(k) > 0})
+    hit_counts = {k: 0 for k in ks}
+    reciprocal_rank_sum = 0.0
+    exact_rank_sum = 0.0
+    rows: list[dict[str, Any]] = []
+    max_k = max(ks, default=1)
+    for start in range(0, len(queries.feature_rows), max(1, int(batch_size))):
+        end = min(len(queries.feature_rows), start + max(1, int(batch_size)))
+        scores = torch.matmul(query_emb[start:end], gallery_emb.T)
+        top_scores, top_indices = torch.topk(scores, k=min(max_k, scores.shape[1]), dim=1)
+        for offset in range(end - start):
+            query_row = queries.raw_rows[start + offset]
+            expected = str(query_row.get(queries.label_field, "")).strip()
+            ranked_indices = [int(value) for value in top_indices[offset].tolist()]
+            ranked_labels = [str(gallery.raw_rows[idx].get(gallery.label_field, "")).strip() for idx in ranked_indices]
+            rank: int | None = None
+            for position, signature in enumerate(ranked_labels, start=1):
+                if signature == expected:
+                    rank = position
+                    break
+            if rank is not None:
+                reciprocal_rank_sum += 1.0 / rank
+                exact_rank_sum += float(rank)
+                for k in hit_counts:
+                    if rank <= k:
+                        hit_counts[k] += 1
+            rows.append(
+                {
+                    "index": start + offset,
+                    "expected_signature": expected,
+                    "found_rank": rank,
+                    "top_predictions": [
+                        {
+                            "signature": ranked_labels[position],
+                            "score": float(top_scores[offset][position].item()),
+                        }
+                        for position in range(len(ranked_labels))
+                    ],
+                    "crop_image_path": str(query_row.get("crop_image_path", "")),
+                }
+            )
+
+    total = len(rows)
+    found_count = sum(1 for row in rows if row.get("found_rank") is not None)
+    return {
+        "schema_version": PHASE14_EMBEDDING_RETRIEVAL_SCHEMA_VERSION,
+        "model_name": str(model_payload.get("model_name", "")),
+        "target_type": queries.target_type,
+        "gallery_split": str(gallery_split),
+        "query_split": str(query_split),
+        "example_count": total,
+        "found_count": found_count,
+        "mean_reciprocal_rank": (reciprocal_rank_sum / total) if total else 0.0,
+        "mean_found_rank": (exact_rank_sum / found_count) if found_count else 0.0,
+        "recall_at_k": {str(k): ((hit_counts[k] / total) if total else 0.0) for k in ks},
+        "rows": rows,
+    }
+
+
+def analyze_phase14_errors(
+    eval_payload: dict[str, Any],
+    *,
+    top_confusions_limit: int = 20,
+    hardest_rows_limit: int = 20,
+) -> dict[str, Any]:
+    rows = eval_payload.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    confusion_counts: dict[tuple[str, str], int] = {}
+    hard_rows: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        expected = str(row.get("expected_signature", "")).strip()
+        predicted = str(row.get("predicted_signature", "")).strip()
+        correct = bool(row.get("correct", False))
+        if not expected or not predicted or correct:
+            continue
+        confusion_counts[(expected, predicted)] = confusion_counts.get((expected, predicted), 0) + 1
+        top_predictions = row.get("top_predictions", [])
+        top_confidence = 0.0
+        if isinstance(top_predictions, list) and top_predictions:
+            first = top_predictions[0]
+            if isinstance(first, dict):
+                top_confidence = float(first.get("confidence", first.get("score", 0.0)) or 0.0)
+        hard_rows.append(
+            {
+                "expected_signature": expected,
+                "predicted_signature": predicted,
+                "top_confidence": top_confidence,
+                "crop_image_path": str(row.get("crop_image_path", "")),
+                "top_predictions": top_predictions[:10] if isinstance(top_predictions, list) else [],
+            }
+        )
+    sorted_confusions = sorted(confusion_counts.items(), key=lambda item: (-item[1], item[0][0], item[0][1]))
+    hardest = sorted(hard_rows, key=lambda row: (-float(row.get("top_confidence", 0.0) or 0.0), str(row.get("expected_signature", ""))))
+    return {
+        "schema_version": PHASE14_ERROR_ANALYSIS_SCHEMA_VERSION,
+        "model_name": str(eval_payload.get("model_name", "")),
+        "target_type": str(eval_payload.get("target_type", "")),
+        "split": str(eval_payload.get("split", "")),
+        "example_count": int(eval_payload.get("example_count", 0) or 0),
+        "top_confusions": [
+            {
+                "expected_signature": expected,
+                "predicted_signature": predicted,
+                "count": count,
+            }
+            for (expected, predicted), count in sorted_confusions[: max(1, int(top_confusions_limit))]
+        ],
+        "hardest_errors": hardest[: max(1, int(hardest_rows_limit))],
+    }
+
+
+def compare_phase14_retrieval_runs(retrieval_payloads: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    runs: list[dict[str, Any]] = []
+    for payload in retrieval_payloads:
+        if not isinstance(payload, dict):
+            continue
+        recall = payload.get("recall_at_k", {})
+        if not isinstance(recall, dict):
+            recall = {}
+        run_name = str(payload.get("run_name", payload.get("model_name", "")))
+        runs.append(
+            {
+                "run_name": run_name,
+                "example_count": int(payload.get("example_count", 0) or 0),
+                "mean_reciprocal_rank": float(payload.get("mean_reciprocal_rank", 0.0) or 0.0),
+                "mean_found_rank": float(payload.get("mean_found_rank", 0.0) or 0.0),
+                "recall_at_1": float(recall.get("1", 0.0) or 0.0),
+                "recall_at_5": float(recall.get("5", 0.0) or 0.0),
+                "recall_at_10": float(recall.get("10", 0.0) or 0.0),
+                "recall_at_20": float(recall.get("20", 0.0) or 0.0),
+            }
+        )
+    ranking = sorted(runs, key=lambda row: (-row["mean_reciprocal_rank"], -row["recall_at_5"], str(row["run_name"])))
+    best = ranking[0] if ranking else {}
+    return {
+        "schema_version": PHASE14_RETRIEVAL_COMPARISON_SCHEMA_VERSION,
+        "run_count": len(runs),
+        "best": best,
+        "ranking": ranking,
+    }
+
+
+def build_phase14_embedding_history_row(
+    *,
+    run_name: str,
+    mean_reciprocal_rank: float,
+    recall_at_1: float,
+    recall_at_5: float,
+    recall_at_10: float,
+    example_count: int,
+    manifest_path: str,
+) -> dict[str, Any]:
+    return {
+        "schema_version": PHASE14_EMBEDDING_HISTORY_SCHEMA_VERSION,
+        "run_name": str(run_name),
+        "mean_reciprocal_rank": float(mean_reciprocal_rank),
+        "recall_at_1": float(recall_at_1),
+        "recall_at_5": float(recall_at_5),
+        "recall_at_10": float(recall_at_10),
+        "example_count": int(example_count),
+        "manifest_path": str(manifest_path),
+        "recorded_at_utc": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def phase14_embedding_history_row_to_dict(row: dict[str, Any]) -> dict[str, str]:
+    return {str(key): str(value) for key, value in row.items()}
+
+
+def summarize_phase14_embedding_history(rows: Iterable[dict[str, str]], *, recent_window: int = 20) -> dict[str, Any]:
+    parsed = list(rows)
+    if not parsed:
+        return {
+            "run_count": 0,
+            "best_mrr": 0.0,
+            "best_recall_at_1": 0.0,
+            "recent_mrr": 0.0,
+        }
+    recent = parsed[-max(1, int(recent_window)) :]
+
+    def _f(item: dict[str, str], key: str) -> float:
+        try:
+            return float(item.get(key, "0") or 0.0)
+        except (TypeError, ValueError):
+            return 0.0
+
+    best = max(parsed, key=lambda row: (_f(row, "mean_reciprocal_rank"), _f(row, "recall_at_1")))
+    return {
+        "run_count": len(parsed),
+        "best_mrr": _f(best, "mean_reciprocal_rank"),
+        "best_recall_at_1": _f(best, "recall_at_1"),
+        "best_run_name": str(best.get("run_name", "")),
+        "recent_mrr": sum(_f(row, "mean_reciprocal_rank") for row in recent) / len(recent),
+    }
+
+
+def compare_phase14_embedding_vs_classifier_retrieval(
+    *,
+    classifier_retrieval: dict[str, Any],
+    embedding_retrieval: dict[str, Any],
+) -> dict[str, Any]:
+    classifier_target = str(classifier_retrieval.get("target_type", "")).strip().lower()
+    embedding_target = str(embedding_retrieval.get("target_type", "")).strip().lower()
+    if classifier_target != embedding_target:
+        raise ValueError("target-type mismatch between classifier and embedding retrieval payloads")
+
+    classifier_count = int(classifier_retrieval.get("example_count", 0) or 0)
+    embedding_count = int(embedding_retrieval.get("example_count", 0) or 0)
+    if classifier_count != embedding_count:
+        raise ValueError("example-count mismatch between classifier and embedding retrieval payloads")
+
+    classifier_recall = classifier_retrieval.get("recall_at_k", {})
+    embedding_recall = embedding_retrieval.get("recall_at_k", {})
+    if not isinstance(classifier_recall, dict):
+        classifier_recall = {}
+    if not isinstance(embedding_recall, dict):
+        embedding_recall = {}
+
+    classifier_mrr = float(classifier_retrieval.get("mean_reciprocal_rank", 0.0) or 0.0)
+    embedding_mrr = float(embedding_retrieval.get("mean_reciprocal_rank", 0.0) or 0.0)
+    classifier_r1 = float(classifier_recall.get("1", 0.0) or 0.0)
+    embedding_r1 = float(embedding_recall.get("1", 0.0) or 0.0)
+    classifier_r5 = float(classifier_recall.get("5", 0.0) or 0.0)
+    embedding_r5 = float(embedding_recall.get("5", 0.0) or 0.0)
+    classifier_r10 = float(classifier_recall.get("10", 0.0) or 0.0)
+    embedding_r10 = float(embedding_recall.get("10", 0.0) or 0.0)
+
+    return {
+        "schema_version": PHASE14_EMBEDDING_COMPARE_SCHEMA_VERSION,
+        "target_type": classifier_target,
+        "example_count": classifier_count,
+        "classifier_model_name": str(classifier_retrieval.get("model_name", "")),
+        "embedding_model_name": str(embedding_retrieval.get("model_name", "")),
+        "classifier_mean_reciprocal_rank": classifier_mrr,
+        "embedding_mean_reciprocal_rank": embedding_mrr,
+        "classifier_recall_at_1": classifier_r1,
+        "embedding_recall_at_1": embedding_r1,
+        "classifier_recall_at_5": classifier_r5,
+        "embedding_recall_at_5": embedding_r5,
+        "classifier_recall_at_10": classifier_r10,
+        "embedding_recall_at_10": embedding_r10,
+        "mrr_lift": embedding_mrr - classifier_mrr,
+        "recall_at_1_lift": embedding_r1 - classifier_r1,
+        "recall_at_5_lift": embedding_r5 - classifier_r5,
+        "recall_at_10_lift": embedding_r10 - classifier_r10,
+        "embedding_wins": (
+            embedding_mrr > classifier_mrr
+            or embedding_r1 > classifier_r1
+            or embedding_r5 > classifier_r5
+            or embedding_r10 > classifier_r10
+        ),
+    }
+
+
+def analyze_phase14_embedding_retrieval(
+    retrieval_payload: dict[str, Any],
+    *,
+    hardest_rows_limit: int = 20,
+    top_confusions_limit: int = 20,
+) -> dict[str, Any]:
+    rows = retrieval_payload.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    confusion_counts: dict[tuple[str, str], int] = {}
+    hardest_rows: list[dict[str, Any]] = []
+    perfect_hits = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        expected = str(row.get("expected_signature", "")).strip()
+        rank_value = row.get("found_rank")
+        found_rank = int(rank_value) if isinstance(rank_value, int) else None
+        predictions = row.get("top_predictions", [])
+        if not isinstance(predictions, list):
+            predictions = []
+        first_prediction = predictions[0] if predictions and isinstance(predictions[0], dict) else {}
+        predicted = str(first_prediction.get("signature", "")).strip()
+        score = float(first_prediction.get("score", 0.0) or 0.0) if isinstance(first_prediction, dict) else 0.0
+        if found_rank == 1:
+            perfect_hits += 1
+        elif expected and predicted:
+            confusion_counts[(expected, predicted)] = confusion_counts.get((expected, predicted), 0) + 1
+        hardest_rows.append(
+            {
+                "expected_signature": expected,
+                "predicted_signature": predicted,
+                "found_rank": found_rank,
+                "top_score": score,
+                "crop_image_path": str(row.get("crop_image_path", "")),
+                "top_predictions": predictions[:10],
+            }
+        )
+    sorted_confusions = sorted(confusion_counts.items(), key=lambda item: (-item[1], item[0][0], item[0][1]))
+    sorted_hardest = sorted(
+        hardest_rows,
+        key=lambda item: (
+            -(int(item.get("found_rank", 10**9)) if item.get("found_rank") is not None else 10**9),
+            -float(item.get("top_score", 0.0) or 0.0),
+            str(item.get("expected_signature", "")),
+        ),
+    )
+    total = len(hardest_rows)
+    return {
+        "schema_version": PHASE14_EMBEDDING_ANALYSIS_SCHEMA_VERSION,
+        "model_name": str(retrieval_payload.get("model_name", "")),
+        "target_type": str(retrieval_payload.get("target_type", "")),
+        "gallery_split": str(retrieval_payload.get("gallery_split", "")),
+        "query_split": str(retrieval_payload.get("query_split", "")),
+        "example_count": total,
+        "perfect_hit_count": perfect_hits,
+        "perfect_hit_rate": (perfect_hits / total) if total else 0.0,
+        "top_confusions": [
+            {
+                "expected_signature": expected,
+                "predicted_signature": predicted,
+                "count": count,
+            }
+            for (expected, predicted), count in sorted_confusions[: max(1, int(top_confusions_limit))]
+        ],
+        "hardest_rows": sorted_hardest[: max(1, int(hardest_rows_limit))],
     }
 
 

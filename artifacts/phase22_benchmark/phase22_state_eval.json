@@ -1,0 +1,740 @@
+{
+  "schema_version": "phase22.state_eval.v1",
+  "model_name": "phase22_state_encoder",
+  "target_field": "action_type",
+  "split": "validation",
+  "example_count": 104,
+  "top1_accuracy": 1.0,
+  "rows": [
+    {
+      "example_index": 0,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 1,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 2,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 3,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 66,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 10,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 66,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 17,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 22,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 28,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 66,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 35,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 41,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 45,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 51,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 66,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 58,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 64,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 69,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 71,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 75,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 80,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 84,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 86,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 90,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 92,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 98,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 100,
+      "predicted_label": "charge_from_hand",
+      "actual_label": "charge_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack",
+      "actual_label": "declare_attack",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand",
+      "actual_label": "play_card_from_hand",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    }
+  ],
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0
+}

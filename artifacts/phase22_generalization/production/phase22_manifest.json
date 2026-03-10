@@ -1,0 +1,40 @@
+{
+  "schema_version": "phase22.manifest.v1",
+  "timestamp_utc": "2026-03-10T10:27:33.196802+00:00",
+  "run_name": "phase22_generalization_v1",
+  "status": "pass",
+  "model_name": "phase22_state_encoder",
+  "baseline_model_name": "backoff_frequency_policy",
+  "target_field": "decision_class",
+  "train_split": "train",
+  "eval_split": "validation",
+  "dataset_path": "artifacts\\phase22_generalization\\phase22_merged_train.json",
+  "artifacts": {
+    "phase22_model": "artifacts\\phase22_generalization\\pipeline\\phase22_state_model.json",
+    "phase22_eval": "artifacts\\phase22_generalization\\pipeline\\phase22_state_eval.json",
+    "baseline_model": "artifacts\\phase22_generalization\\pipeline\\phase22_baseline_model.json",
+    "baseline_eval": "artifacts\\phase22_generalization\\pipeline\\phase22_baseline_eval.json",
+    "compare": "artifacts\\phase22_generalization\\pipeline\\phase22_compare.json"
+  },
+  "metrics": {
+    "phase22_top1_accuracy": 0.9528301886792453,
+    "baseline_top1_accuracy": 0.9575471698113207,
+    "top1_lift": -0.004716981132075415,
+    "phase22_wins": false,
+    "example_count": 636,
+    "identity_resolved_example_rate": 0.0,
+    "top_k_accuracy": {
+      "1": 0.9528301886792453,
+      "3": 1.0,
+      "5": 1.0
+    }
+  },
+  "phase22_summary": {
+    "schema_version": "phase22.state_encoder.v1",
+    "example_count": 4942,
+    "hidden_dim": 128,
+    "embedding_dim": 16,
+    "epochs": 20,
+    "learning_rate": 0.001
+  }
+}

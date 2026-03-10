@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 
 from src.agent import (
     build_phase10_benchmark_history_row,
+    enrich_detections_with_phase15_identity,
     phase10_benchmark_history_row_to_dict,
     summarize_phase10_benchmark_history,
 )
@@ -61,11 +62,18 @@ def main() -> None:
     parser.add_argument("--artifacts-dir", type=Path, default=Path("artifacts/phase10_pipeline"), help="Output artifact directory.")
     parser.add_argument("--history-csv", type=Path, default=None, help="Optional benchmark history CSV path.")
     parser.add_argument("--history-summary-output", type=Path, default=None, help="Optional benchmark history summary JSON path.")
+    parser.add_argument("--enable-phase15-identity", action="store_true", help="Enrich card-like detections with Phase 15 production identity candidates.")
+    parser.add_argument("--identity-top-k", type=int, default=5, help="Top-k identity candidates to attach when Phase 15 enrichment is enabled.")
+    parser.add_argument("--identity-crops-dir", type=Path, default=None, help="Optional crop output directory for Phase 15 identity enrichment.")
+    parser.add_argument("--identity-model", type=Path, default=None, help="Optional override for the promoted Phase 15 production model path.")
+    parser.add_argument("--identity-summary", type=Path, default=None, help="Optional override for the promoted Phase 15 production summary path.")
+    parser.add_argument("--identity-feature-cache", type=Path, default=None, help="Optional override for the promoted Phase 15 production feature cache path.")
     args = parser.parse_args()
 
     args.artifacts_dir.mkdir(parents=True, exist_ok=True)
     detections_path = args.artifacts_dir / "phase10_detections.json"
     reviewed_path = args.artifacts_dir / "phase10_reviewed_detections.json"
+    identity_enriched_path = args.artifacts_dir / "phase10_identity_enriched_detections.json"
     external_match_path = args.artifacts_dir / "phase10_external_match.json"
     dataset_path = args.artifacts_dir / "phase10_phase7_dataset.json"
     benchmark_path = args.artifacts_dir / "phase10_benchmark.json"
@@ -95,12 +103,30 @@ def main() -> None:
             str(reviewed_path),
         ]
     )
+    conversion_input_path = reviewed_path
+    identity_payload: dict[str, object] = {}
+    if args.enable_phase15_identity:
+        reviewed_payload = _load_json(reviewed_path)
+        frame_manifest_payload = _load_json(args.frame_manifest)
+        enriched_payload = enrich_detections_with_phase15_identity(
+            reviewed_payload,
+            frame_manifest=frame_manifest_payload,
+            crops_output_dir=args.identity_crops_dir or (args.artifacts_dir / "identity_crops"),
+            crop_image_format="ppm",
+            top_k=int(args.identity_top_k),
+            model_path=args.identity_model,
+            summary_path=args.identity_summary,
+            feature_cache_path=args.identity_feature_cache,
+        )
+        identity_enriched_path.write_text(json.dumps(enriched_payload, indent=2), encoding="utf-8")
+        conversion_input_path = identity_enriched_path
+        identity_payload = dict(enriched_payload.get("identity_enrichment", {})) if isinstance(enriched_payload.get("identity_enrichment"), dict) else {}
     _run(
         [
             sys.executable,
             "scripts/convert_phase10_reviewed_to_external_match.py",
             "--input",
-            str(reviewed_path),
+            str(conversion_input_path),
             "--match-id",
             str(args.match_id),
             "--source-name",
@@ -132,7 +158,7 @@ def main() -> None:
                 sys.executable,
                 "scripts/benchmark_phase10_recognizer.py",
                 "--predicted",
-                str(reviewed_path),
+                str(conversion_input_path),
                 "--labeled",
                 str(args.labeled_detections),
                 "--output",
@@ -164,10 +190,12 @@ def main() -> None:
         "artifacts": {
             "detections": str(detections_path),
             "reviewed_detections": str(reviewed_path),
+            "identity_enriched_detections": str(identity_enriched_path) if identity_payload else "",
             "external_match": str(external_match_path),
             "phase7_dataset": str(dataset_path),
             "benchmark": str(benchmark_path) if benchmark_payload else "",
         },
+        "identity_summary": identity_payload,
         "benchmark_summary": benchmark_payload,
         "history_summary": history_summary,
     }

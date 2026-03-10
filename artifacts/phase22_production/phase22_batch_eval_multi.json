@@ -1,0 +1,112 @@
+{
+  "schema_version": "phase22.batch_eval.v1",
+  "production_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_production",
+  "split": "validation",
+  "dataset_count": 4,
+  "overall_example_count": 264,
+  "overall_top1_accuracy": 0.8484848484848485,
+  "datasets": [
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\mechikabura_vs_krillin.json",
+      "example_count": 88,
+      "top1_accuracy": 0.8522727272727273,
+      "top_k_accuracy": {
+        "1": 0.8522727272727273,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_015_review.json",
+          "example_count": 18,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_019_review.json",
+          "example_count": 37,
+          "top1_accuracy": 0.8378378378378378
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_020_review.json",
+          "example_count": 28,
+          "top1_accuracy": 0.75
+        }
+      ]
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\gogeta_vs_krillin.json",
+      "example_count": 78,
+      "top1_accuracy": 0.8076923076923077,
+      "top_k_accuracy": {
+        "1": 0.8076923076923077,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_015_review.json",
+          "example_count": 4,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_017_review.json",
+          "example_count": 8,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_020_review.json",
+          "example_count": 31,
+          "top1_accuracy": 0.8387096774193549
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_018_review.json",
+          "example_count": 20,
+          "top1_accuracy": 0.7
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_019_review.json",
+          "example_count": 13,
+          "top1_accuracy": 0.6923076923076923
+        }
+      ]
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\red_pan_vs_krillin.json",
+      "example_count": 19,
+      "top1_accuracy": 1.0,
+      "top_k_accuracy": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_020_review.json",
+          "example_count": 19,
+          "top1_accuracy": 1.0
+        }
+      ]
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\mechikabura_vs_gogeta.json",
+      "example_count": 79,
+      "top1_accuracy": 0.8481012658227848,
+      "top_k_accuracy": {
+        "1": 0.8481012658227848,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+          "example_count": 74,
+          "top1_accuracy": 0.8378378378378378
+        }
+      ]
+    }
+  ]
+}

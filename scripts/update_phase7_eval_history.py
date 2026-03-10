@@ -38,6 +38,8 @@ def _rows_from_payload(payload: dict[str, object]) -> list[dict[str, str]]:
                 example_count=int(item.get("example_count", 0) or 0),
                 top1_accuracy=float(item.get("top1_accuracy", 0.0) or 0.0),
                 family_accuracy=float(item.get("family_accuracy", 0.0) or 0.0),
+                identity_resolved_example_count=int(item.get("identity_resolved_example_count", 0) or 0),
+                identity_resolved_example_rate=float(item.get("identity_resolved_example_rate", 0.0) or 0.0),
             )
             rows.append(phase7_eval_history_row_to_dict(row))
         return rows
@@ -48,6 +50,8 @@ def _rows_from_payload(payload: dict[str, object]) -> list[dict[str, str]]:
         example_count=int(payload.get("example_count", 0) or 0),
         top1_accuracy=float(payload.get("top1_accuracy", 0.0) or 0.0),
         family_accuracy=float(payload.get("family_accuracy", 0.0) or 0.0),
+        identity_resolved_example_count=int(payload.get("identity_resolved_example_count", 0) or 0),
+        identity_resolved_example_rate=float(payload.get("identity_resolved_example_rate", 0.0) or 0.0),
     )
     return [phase7_eval_history_row_to_dict(row)]
 

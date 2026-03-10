@@ -18,12 +18,24 @@ class ScoredAction:
 class ActionWeights:
     pass_counter: float = 200.0
     end_charge: float = 180.0
+    charge_base: float = 205.0
+    charge_skip_penalty: float = 140.0
+    charge_duplicate_bonus: float = 15.0
+    charge_high_cost_bonus: float = 12.0
+    charge_low_cost_penalty: float = 18.0
+    charge_combo_keep_penalty: float = 85.0
+    charge_counter_keep_penalty: float = 70.0
+    charge_skill_keep_penalty: float = 30.0
+    charge_draw_keep_penalty: float = 25.0
     resolve_battle: float = 170.0
     end_step: float = 160.0
     play_base: float = 95.0
     play_energy_scale: float = 1.25
     play_unison_bonus: float = 4.0
     play_battle_bonus: float = 2.0
+    play_curve_bonus: float = 16.0
+    play_draw_bonus: float = 22.0
+    play_zero_energy_penalty: float = 6.0
     attack_base: float = 90.0
     attack_leader_bonus: float = 8.0
     attack_leader_attacker_bonus: float = 1.0
@@ -104,23 +116,63 @@ class HeuristicPolicy(AgentPolicy):
         if action.action_type == ActionType.PASS_COUNTER_WINDOW:
             return w.pass_counter, "pass_counter_window"
         if action.action_type == ActionType.END_CHARGE:
+            player = state.players[action.player_id]
+            if not player.has_charged_this_turn and len(player.hand) > 0:
+                return max(0.0, w.end_charge - w.charge_skip_penalty), "end_charge_without_charge_penalty"
             return w.end_charge, "end_charge_phase"
         if action.action_type == ActionType.RESOLVE_BATTLE:
             return w.resolve_battle, "resolve_battle_step"
         if action.action_type in {ActionType.END_OFFENSE_STEP, ActionType.END_DEFENSE_STEP}:
             return w.end_step, "advance_battle_step"
+        if action.action_type == ActionType.CHARGE_FROM_HAND:
+            player = state.players[action.player_id]
+            if action.hand_index is None or not (0 <= action.hand_index < len(player.hand)):
+                return 0.0, "charge_invalid"
+            card = player.hand[action.hand_index]
+            score = w.charge_base
+            if not player.has_charged_this_turn:
+                score += 20.0
+            duplicate_count = sum(1 for candidate in player.hand if candidate.card_id == card.card_id)
+            if duplicate_count > 1:
+                score += w.charge_duplicate_bonus
+            energy_cost = int(card.energy_cost or 0)
+            if energy_cost >= 4:
+                score += w.charge_high_cost_bonus
+            elif energy_cost <= 1:
+                score -= w.charge_low_cost_penalty
+            if int(card.combo_power or 0) >= 10000:
+                score -= w.charge_combo_keep_penalty
+            elif int(card.combo_power or 0) >= 5000:
+                score -= (w.charge_combo_keep_penalty * 0.35)
+            if card.has_counter:
+                score -= w.charge_counter_keep_penalty
+            if card.has_activate_main or card.has_activate_battle:
+                score -= w.charge_skill_keep_penalty
+            if card.has_draw or card.auto_draw_on_play or card.auto_draw_on_attack:
+                score -= w.charge_draw_keep_penalty
+            if energy_cost <= max(1, len(player.energy) + 1):
+                score -= 8.0
+            return score, "charge_from_hand"
 
         if action.action_type == ActionType.PLAY_CARD_FROM_HAND:
             score = w.play_base if self.prefer_play else (w.play_base - 30.0)
             player = state.players[action.player_id]
             if action.hand_index is not None and 0 <= action.hand_index < len(player.hand):
                 card = player.hand[action.hand_index]
-                score += float(card.energy_cost or 0) * w.play_energy_scale
+                energy_cost = float(card.energy_cost or 0)
+                active_energy = sum(1 for energy in player.energy if not energy.resting) + int(player.energy_markers)
+                score += energy_cost * w.play_energy_scale
                 ctype = (card.card_type or "").upper()
                 if "UNISON" in ctype:
                     score += w.play_unison_bonus
                 elif "BATTLE" in ctype:
                     score += w.play_battle_bonus
+                if energy_cost > 0 and active_energy == int(energy_cost):
+                    score += w.play_curve_bonus
+                if energy_cost == 0:
+                    score -= w.play_zero_energy_penalty
+                if card.has_draw or card.auto_draw_on_play:
+                    score += w.play_draw_bonus
             return score, "play_card_from_hand"
 
         if action.action_type == ActionType.DECLARE_ATTACK:

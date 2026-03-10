@@ -41,6 +41,9 @@ def main() -> None:
         "example_count": int(model_eval.get("example_count", 0) or 0),
         "top1_accuracy": float(model_eval.get("top1_accuracy", 0.0) or 0.0),
         "family_accuracy": float(model_eval.get("top1_accuracy", 0.0) or 0.0),
+        "identity_resolved_example_count": int(model_eval.get("identity_resolved_example_count", 0) or 0),
+        "identity_resolved_example_rate": float(model_eval.get("identity_resolved_example_rate", 0.0) or 0.0),
+        "identity_resolution_slices": dict(model_eval.get("identity_resolution_slices", {})) if isinstance(model_eval.get("identity_resolution_slices"), dict) else {},
         "model_name": str(model_eval.get("model_name", "frequency_policy")),
     }
     results = [model_result, *[dict(item) for item in heuristic_payload.get("results", []) if isinstance(item, dict)]]
@@ -52,6 +55,8 @@ def main() -> None:
                 "top1_accuracy": float(item.get("top1_accuracy", 0.0) or 0.0),
                 "family_accuracy": float(item.get("family_accuracy", 0.0) or 0.0),
                 "example_count": int(item.get("example_count", 0) or 0),
+                "identity_resolved_example_count": int(item.get("identity_resolved_example_count", 0) or 0),
+                "identity_resolved_example_rate": float(item.get("identity_resolved_example_rate", 0.0) or 0.0),
             }
             for item in results
         ),
@@ -80,6 +85,7 @@ def main() -> None:
         "split": str(args.split),
         "profiles": [str(p) for p in args.profiles],
         "model_name": str(model_eval.get("model_name", "frequency_policy")),
+        "identity_resolution_rankings": dict(heuristic_payload.get("identity_resolution_rankings", {})) if isinstance(heuristic_payload.get("identity_resolution_rankings"), dict) else {},
         "promotion": promotion,
         "ranking": [{**row, "rank": idx + 1} for idx, row in enumerate(ranking)],
         "results": results,

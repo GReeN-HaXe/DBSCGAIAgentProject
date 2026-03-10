@@ -43,6 +43,8 @@ def _write_trace(path) -> None:
                     "phase": "end",
                     "action": "end_turn",
                     "action_type": "end_turn",
+                    "resolved_signatures_by_seat": {"1": ["BT1-001"], "2": ["BT1-002"]},
+                    "has_identity_resolution": True,
                     "state_snapshot": {
                         "active_player": 2,
                         "turn_number": 1,
@@ -125,6 +127,8 @@ def test_phase8_training_pipeline_writes_manifest_and_history(tmp_path) -> None:
             "phase8_test",
             "--model-type",
             "backoff",
+            "--context-mode",
+            "identity",
             "--artifacts-dir",
             str(artifacts_dir),
         ],
@@ -140,6 +144,63 @@ def test_phase8_training_pipeline_writes_manifest_and_history(tmp_path) -> None:
     assert manifest["run_name"] == "phase8_test"
     assert manifest["status"] == "pass"
     assert manifest["model_name"] == "backoff_frequency_policy"
+    assert manifest["context_mode"] == "identity"
     assert "promotion_passed" in manifest["metrics"]
+    assert "identity_resolved_example_count" in manifest["metrics"]
+    assert "identity_resolved_example_rate" in manifest["metrics"]
     assert summary["total_runs"] == 1
     assert "best_top1_accuracy" in summary
+    assert "recent_avg_identity_resolved_example_rate" in summary
+    assert summary["latest_context_mode"] == "identity"
+
+
+def test_phase8_identity_context_compare_runner(tmp_path) -> None:
+    trace_path = tmp_path / "trace_compare.json"
+    dataset_path = tmp_path / "dataset_compare.json"
+    artifacts_dir = tmp_path / "phase8_identity_compare"
+    report_path = tmp_path / "phase8_identity_compare.md"
+    _write_trace(trace_path)
+
+    export_result = subprocess.run(
+        [sys.executable, "scripts/export_phase7_dataset.py", "--input", str(trace_path), "--output", str(dataset_path), "--validation-ratio", "0.25"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert export_result.returncode == 0, export_result.stderr
+
+    compare_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/run_phase8_identity_context_compare.py",
+            "--dataset",
+            str(dataset_path),
+            "--run-name",
+            "phase8_identity_compare_test",
+            "--artifacts-dir",
+            str(artifacts_dir),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert compare_result.returncode == 0, compare_result.stderr
+    payload = json.loads((artifacts_dir / "phase8_identity_context_compare.json").read_text(encoding="utf-8"))
+    assert payload["dataset_identity_coverage"]["identity_resolved_example_count"] >= 1
+    assert "top1_lift_identity_minus_baseline" in payload["comparison"]
+
+    report_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/render_phase8_identity_context_report.py",
+            "--input",
+            str(artifacts_dir / "phase8_identity_context_compare.json"),
+            "--output",
+            str(report_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert report_result.returncode == 0, report_result.stderr
+    assert "Phase 8 Identity Context Compare" in report_path.read_text(encoding="utf-8")

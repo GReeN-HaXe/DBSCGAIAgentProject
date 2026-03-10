@@ -3,8 +3,12 @@ from __future__ import annotations
 import json
 
 from src.agent import (
+    BOOKKEEPING_ACTION_TYPES,
     ActionWeights,
     HeuristicPolicy,
+    build_review_trace_payload,
+    build_training_trace_rows,
+    derive_action_signature,
     build_head_to_head_matrix,
     build_history_csv_row,
     build_overview_csv_row,
@@ -12,6 +16,7 @@ from src.agent import (
     build_heuristic_policy_from_config,
     decision_trace_to_csv_rows,
     compute_trace_kpis,
+    filter_decision_trace,
     compute_match_quality,
     per_phase_kpi_rows,
     per_turn_kpi_rows,
@@ -162,6 +167,82 @@ def test_phase5_profiles_choose_different_actions_in_same_state() -> None:
     assert control_choice.action_type == ActionType.PLAY_CARD_FROM_HAND
 
 
+def test_phase5_heuristic_policy_prefers_charging_over_skipping_opening_charge() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=991001, card_id=350001, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=2, combo_power=5000),
+    ]
+    legal = engine.get_legal_actions(state, 1)
+    choice = HeuristicPolicy(profile="balanced").choose_action(state, legal)
+    assert choice.action_type == ActionType.CHARGE_FROM_HAND
+
+
+def test_phase5_heuristic_policy_avoids_charging_super_combo_when_alternative_exists() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=991101, card_id=360001, owner_id=1, card_type="BATTLE", color="Red", energy_cost=2, combo_power=10000),
+        CardInstance(instance_id=991102, card_id=360002, owner_id=1, card_type="BATTLE", color="Red", energy_cost=5, combo_power=0),
+    ]
+    legal = engine.get_legal_actions(state, 1)
+    choice = HeuristicPolicy(profile="balanced").choose_action(state, legal)
+    assert choice.action_type == ActionType.CHARGE_FROM_HAND
+    assert choice.hand_index == 1
+
+
+def test_phase5_charge_places_energy_active_and_allows_turn_one_one_drop() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=991201, card_id=370001, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=1, has_draw=True, auto_draw_on_play=True),
+        CardInstance(instance_id=991202, card_id=370002, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=3),
+    ]
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.CHARGE_FROM_HAND and a.hand_index == 1))
+    assert len(state.players[1].energy) == 1
+    assert state.players[1].energy[0].resting is False
+    legal = engine.get_legal_actions(state, 1)
+    assert any(a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0 for a in legal)
+
+
+def test_phase5_heuristic_policy_prefers_turn_one_cantrip_play_after_charge() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=991301, card_id=380001, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=1, has_draw=True, auto_draw_on_play=True),
+        CardInstance(instance_id=991302, card_id=380002, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=3),
+    ]
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.CHARGE_FROM_HAND and a.hand_index == 1))
+    legal = engine.get_legal_actions(state, 1)
+    choice = HeuristicPolicy(profile="balanced").choose_action(state, legal)
+    assert choice.action_type == ActionType.PLAY_CARD_FROM_HAND
+    assert choice.hand_index == 0
+
+
 def test_phase5_custom_action_weights_can_override_profile_behavior() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(
@@ -222,6 +303,36 @@ def test_phase5_json_config_policy_changes_decision(tmp_path) -> None:
     policy = build_heuristic_policy_from_config(cfg_path)
     choice = policy.choose_action(state, legal)
     assert choice.action_type == ActionType.END_TURN
+
+
+def test_phase5_run_ai_vs_ai_continues_through_battle_step_owner_changes() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.END_CHARGE))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.END_TURN))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.END_CHARGE))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_ATTACK))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PASS_COUNTER_WINDOW))
+    result = run_ai_vs_ai(
+        engine=engine,
+        state=state,
+        p1_policy=HeuristicPolicy(profile="balanced"),
+        p2_policy=HeuristicPolicy(profile="balanced"),
+        max_actions=3,
+        capture_trace=True,
+        trace_top_k=2,
+    )
+    assert result.total_actions >= 2
+    assert result.decision_trace[0].actor_player_id == 2
+    assert result.decision_trace[0].chosen_action_type == "end_offense_step"
+    assert result.decision_trace[1].actor_player_id == 1
 
 
 def test_phase5_rank_actions_returns_sorted_explanations() -> None:
@@ -359,6 +470,37 @@ def test_phase5_decision_trace_to_csv_rows_shape() -> None:
     assert row["chosen"] == "play_card_from_hand"
     assert row["top1_reason"] == "play_card_from_hand"
     assert row["top1_score"] == "101.5"
+
+
+def test_phase5_trace_normalizer_filters_bookkeeping_by_default() -> None:
+    payload = {
+        "winner_id": 2,
+        "stop_reason": "winner_decided",
+        "turn_number": 3,
+        "decision_trace": [
+            {"step_index": 1, "actor_player_id": 1, "turn_number": 1, "phase": "main", "chosen_action_type": "play_card_from_hand", "chosen_action_text": "play", "state_snapshot": {}, "post_action_state_snapshot": {}, "candidates": [{"reason": "play_card_from_hand", "score": 99.0}]},
+            {"step_index": 2, "actor_player_id": 2, "turn_number": 1, "phase": "main", "chosen_action_type": "pass_counter_window", "chosen_action_text": "pass", "state_snapshot": {}, "post_action_state_snapshot": {}, "candidates": [{"reason": "pass_counter_window", "score": 200.0}]},
+            {"step_index": 3, "actor_player_id": 1, "turn_number": 1, "phase": "main", "chosen_action_type": "resolve_battle", "chosen_action_text": "resolve", "state_snapshot": {}, "post_action_state_snapshot": {}, "candidates": [{"reason": "resolve_battle", "score": 170.0}]},
+        ],
+    }
+    filtered = filter_decision_trace(payload)
+    assert len(filtered) == 1
+    assert filtered[0]["chosen_action_type"] == "play_card_from_hand"
+    review = build_review_trace_payload(payload)
+    assert review["decision_count"] == 1
+    assert sorted(review["filtered_action_types"]) == sorted(BOOKKEEPING_ACTION_TYPES)
+    training_rows = build_training_trace_rows(payload)
+    assert len(training_rows) == 1
+    assert training_rows[0]["chosen_action_type"] == "play_card_from_hand"
+    assert training_rows[0]["action_signature"].startswith("play_card_from_hand")
+
+
+def test_phase5_derive_action_signature_prefers_card_aware_tokens() -> None:
+    signature = derive_action_signature(
+        "play_card_from_hand",
+        "play_card_from_hand hand_index=4 card=BT1-001 source_zone=hand target_zone=leader",
+    )
+    assert signature == "play_card_from_hand|card=BT1-001|source_zone=hand|target_zone=leader"
 
 
 def test_phase5_compute_trace_kpis_shape_and_rates() -> None:

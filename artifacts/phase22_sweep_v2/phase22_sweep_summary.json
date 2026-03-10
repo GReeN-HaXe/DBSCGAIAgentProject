@@ -1,0 +1,57 @@
+{
+  "schema_version": "phase22.sweep.v1",
+  "dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_dataset_v4.json",
+  "profile": "standard",
+  "target_field": "decision_class",
+  "config_count": 3,
+  "best": {
+    "config_name": "h128_e20_lr1e3",
+    "hidden_dim": 128,
+    "epochs": 20,
+    "learning_rate": 0.001,
+    "top1_accuracy": 0.9905660377358491,
+    "baseline_top1_accuracy": 0.8962264150943396,
+    "top1_lift": 0.09433962264150941,
+    "phase22_wins": true,
+    "duration_seconds": 6.431651000000784,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v2\\h128_e20_lr1e3\\phase22_manifest.json"
+  },
+  "ranking": [
+    {
+      "config_name": "h128_e20_lr1e3",
+      "hidden_dim": 128,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "top1_accuracy": 0.9905660377358491,
+      "baseline_top1_accuracy": 0.8962264150943396,
+      "top1_lift": 0.09433962264150941,
+      "phase22_wins": true,
+      "duration_seconds": 6.431651000000784,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v2\\h128_e20_lr1e3\\phase22_manifest.json"
+    },
+    {
+      "config_name": "h64_e20_lr1e3",
+      "hidden_dim": 64,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "top1_accuracy": 0.9622641509433962,
+      "baseline_top1_accuracy": 0.8962264150943396,
+      "top1_lift": 0.06603773584905659,
+      "phase22_wins": true,
+      "duration_seconds": 6.695767799999885,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v2\\h64_e20_lr1e3\\phase22_manifest.json"
+    },
+    {
+      "config_name": "h256_e20_lr5e4",
+      "hidden_dim": 256,
+      "epochs": 20,
+      "learning_rate": 0.0005,
+      "top1_accuracy": 0.8018867924528302,
+      "baseline_top1_accuracy": 0.8962264150943396,
+      "top1_lift": -0.09433962264150941,
+      "phase22_wins": false,
+      "duration_seconds": 6.465452899999946,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v2\\h256_e20_lr5e4\\phase22_manifest.json"
+    }
+  ]
+}

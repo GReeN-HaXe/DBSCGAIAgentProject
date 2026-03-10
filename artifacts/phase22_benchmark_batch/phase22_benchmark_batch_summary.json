@@ -1,0 +1,49 @@
+{
+  "schema_version": "phase22.benchmark_batch.v1",
+  "dataset_count": 4,
+  "datasets": [
+    {
+      "group_name": "mechikabura_vs_krillin",
+      "pattern": "artifacts/phase22_normalized/mechikabura_vs_krillin/*_review.json",
+      "input_count": 20,
+      "included_count": 20,
+      "skipped_count": 0,
+      "dataset_path": "artifacts\\phase22_benchmark_batch\\mechikabura_vs_krillin.json",
+      "summary_path": "artifacts\\phase22_benchmark_batch\\mechikabura_vs_krillin_summary.json",
+      "dataset_example_count": 938
+    },
+    {
+      "group_name": "gogeta_vs_krillin",
+      "pattern": "artifacts/phase22_normalized/gogeta_vs_krillin/*_review.json",
+      "input_count": 20,
+      "included_count": 20,
+      "skipped_count": 0,
+      "dataset_path": "artifacts\\phase22_benchmark_batch\\gogeta_vs_krillin.json",
+      "summary_path": "artifacts\\phase22_benchmark_batch\\gogeta_vs_krillin_summary.json",
+      "dataset_example_count": 912
+    },
+    {
+      "group_name": "red_pan_vs_krillin",
+      "pattern": "artifacts/phase22_normalized/red_pan_vs_krillin/*_review.json",
+      "input_count": 20,
+      "included_count": 19,
+      "skipped_count": 1,
+      "dataset_path": "artifacts\\phase22_benchmark_batch\\red_pan_vs_krillin.json",
+      "summary_path": "artifacts\\phase22_benchmark_batch\\red_pan_vs_krillin_summary.json",
+      "dataset_example_count": 2843
+    },
+    {
+      "group_name": "mechikabura_vs_gogeta",
+      "pattern": "artifacts/phase22_normalized/mechikabura_vs_gogeta/*_review.json",
+      "input_count": 20,
+      "included_count": 20,
+      "skipped_count": 0,
+      "dataset_path": "artifacts\\phase22_benchmark_batch\\mechikabura_vs_gogeta.json",
+      "summary_path": "artifacts\\phase22_benchmark_batch\\mechikabura_vs_gogeta_summary.json",
+      "dataset_example_count": 885
+    }
+  ],
+  "min_actions": 4,
+  "min_unique_action_types": 3,
+  "validation_ratio": 0.2
+}

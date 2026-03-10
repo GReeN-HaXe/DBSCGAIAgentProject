@@ -1,0 +1,754 @@
+{
+  "schema_version": "phase22.state_eval.v1",
+  "model_name": "phase22_state_encoder",
+  "target_field": "decision_class",
+  "split": "validation",
+  "example_count": 106,
+  "top1_accuracy": 0.9339622641509434,
+  "rows": [
+    {
+      "example_index": 0,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 6,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 12,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 18,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_board_setup",
+      "actual_label": "play_board_setup",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 20,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 24,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 35,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_battle",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 41,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 46,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 50,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 56,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 62,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 67,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 72,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 78,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 83,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_setup",
+      "actual_label": "play_board_setup",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 88,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 94,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 100,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_battle",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "has_identity_resolution": false
+    }
+  ],
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0
+}

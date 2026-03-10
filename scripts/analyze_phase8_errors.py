@@ -46,6 +46,13 @@ def _evaluate(dataset: dict[str, object], model: dict[str, object], split: str) 
     return evaluate_frequency_policy_model(dataset, model, split=split)
 
 
+def _slice_examples(examples: list[dict[str, object]]) -> dict[str, list[dict[str, object]]]:
+    return {
+        "with_identity": [row for row in examples if bool(row.get("has_identity_resolution"))],
+        "without_identity": [row for row in examples if not bool(row.get("has_identity_resolution"))],
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analyze Phase 8 model errors and simple context ablations.")
     parser.add_argument("--dataset", type=Path, required=True, help="Phase 7 dataset JSON path.")
@@ -84,12 +91,18 @@ def main() -> None:
         ablations.append({"field": field, "missing_count": count})
 
     baseline_eval = _evaluate(dataset, model, str(args.split))
+    slices = _slice_examples(examples)
     payload = {
         "model_name": str(model.get("model_name", "")),
         "target_field": target_field,
         "split": str(args.split),
         "baseline_top1_accuracy": float(baseline_eval.get("top1_accuracy", 0.0) or 0.0),
+        "identity_resolved_example_count": int(baseline_eval.get("identity_resolved_example_count", 0) or 0),
+        "identity_resolved_example_rate": float(baseline_eval.get("identity_resolved_example_rate", 0.0) or 0.0),
+        "identity_resolution_slices": dict(baseline_eval.get("identity_resolution_slices", {})) if isinstance(baseline_eval.get("identity_resolution_slices"), dict) else {},
         "error_count": len(mismatches),
+        "error_count_with_identity": sum(1 for row in mismatches if any(ex.get("example_index") == row.get("example_index") for ex in slices["with_identity"])),
+        "error_count_without_identity": sum(1 for row in mismatches if any(ex.get("example_index") == row.get("example_index") for ex in slices["without_identity"])),
         "top_confusions": [{"pair": key, "count": value} for key, value in confusion.most_common(10)],
         "phase_mismatch_counts": dict(phase_mismatch),
         "ablations": ablations,

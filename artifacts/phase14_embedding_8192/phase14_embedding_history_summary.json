@@ -1,0 +1,7 @@
+{
+  "run_count": 3,
+  "best_mrr": 0.9869113498263888,
+  "best_recall_at_1": 0.97607421875,
+  "best_run_name": "phase14_embedding_8192",
+  "recent_mrr": 0.9869113498263888
+}

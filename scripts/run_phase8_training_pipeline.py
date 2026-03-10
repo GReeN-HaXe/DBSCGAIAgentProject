@@ -41,6 +41,7 @@ def main() -> None:
     parser.add_argument("--dataset", type=Path, required=True, help="Phase 7 dataset JSON path.")
     parser.add_argument("--run-name", type=str, default="phase8_run", help="Logical run name for manifests/history.")
     parser.add_argument("--target-field", choices=["action_type", "action_family"], default="action_type", help="Target field for training.")
+    parser.add_argument("--context-mode", choices=["baseline", "identity"], default="baseline", help="Context feature preset for training.")
     parser.add_argument("--train-split", choices=["train", "validation", "all"], default="train", help="Dataset split used for training.")
     parser.add_argument("--eval-split", choices=["train", "validation", "all"], default="validation", help="Dataset split used for evaluation.")
     parser.add_argument("--profiles", nargs="+", default=["balanced", "aggressive", "control"], help="Heuristic profiles to compare against.")
@@ -71,6 +72,8 @@ def main() -> None:
             str(args.model_type),
             "--target-field",
             str(args.target_field),
+            "--context-mode",
+            str(args.context_mode),
             "--train-split",
             str(args.train_split),
             "--eval-split",
@@ -110,6 +113,7 @@ def main() -> None:
         eval_path=str(eval_path),
         compare_path=str(compare_path),
         target_field=str(args.target_field),
+        context_mode=str(args.context_mode),
         train_split=str(args.train_split),
         eval_split=str(args.eval_split),
         model_payload=model_payload,
@@ -133,11 +137,14 @@ def main() -> None:
         run_name=str(args.run_name),
         model_name=str(manifest.get("model_name", "")),
         target_field=str(args.target_field),
+        context_mode=str(args.context_mode),
         train_split=str(args.train_split),
         eval_split=str(args.eval_split),
         example_count=int(eval_payload.get("example_count", 0) or 0),
         top1_accuracy=float(eval_payload.get("top1_accuracy", 0.0) or 0.0),
         family_accuracy=float(eval_payload.get("top1_accuracy", 0.0) or 0.0),
+        identity_resolved_example_count=int(eval_payload.get("identity_resolved_example_count", 0) or 0),
+        identity_resolved_example_rate=float(eval_payload.get("identity_resolved_example_rate", 0.0) or 0.0),
         status=str(manifest.get("status", "pass")),
         manifest_path=str(manifest_path),
     )

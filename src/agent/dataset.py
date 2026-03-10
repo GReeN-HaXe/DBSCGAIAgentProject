@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from typing import Any
 
 from src.agent.artifact_checks import extract_trace_payload_and_hash
 
 
 DATASET_SCHEMA_VERSION = "phase7.v1"
+_ACTION_FIELD_RE = re.compile(r"([A-Za-z_]+)=([^ ]+)")
 
 
 def _coerce_int(value: object) -> int | None:
@@ -64,6 +66,38 @@ def _extract_state_features(snapshot: object, player_id: int | None) -> dict[str
     }
 
 
+def _extract_resolved_signatures(value: object) -> dict[str, list[str]]:
+    if not isinstance(value, dict):
+        return {}
+    out: dict[str, list[str]] = {}
+    for seat, payload in value.items():
+        if isinstance(payload, list):
+            normalized = [str(item).strip() for item in payload if str(item).strip()]
+            if normalized:
+                out[str(seat)] = normalized
+    return out
+
+
+def _identity_state_features(resolved_signatures_by_seat: dict[str, list[str]], player_id: int | None) -> dict[str, Any]:
+    player_key = None if player_id is None else str(player_id)
+    opponent_key = None
+    if player_key is not None:
+        for key in resolved_signatures_by_seat.keys():
+            if key != player_key:
+                opponent_key = str(key)
+                break
+    self_signatures = resolved_signatures_by_seat.get(player_key, []) if player_key is not None else []
+    opponent_signatures = resolved_signatures_by_seat.get(opponent_key, []) if opponent_key is not None else []
+    return {
+        "self_identity_resolution_count": len(self_signatures),
+        "self_has_identity_resolution": bool(self_signatures),
+        "self_primary_resolved_signature": (self_signatures[0] if self_signatures else ""),
+        "opponent_identity_resolution_count": len(opponent_signatures),
+        "opponent_has_identity_resolution": bool(opponent_signatures),
+        "opponent_primary_resolved_signature": (opponent_signatures[0] if opponent_signatures else ""),
+    }
+
+
 def _stable_fraction(key: str) -> float:
     digest = hashlib.sha256(key.encode("utf-8")).hexdigest()
     return int(digest[:8], 16) / float(0xFFFFFFFF)
@@ -87,6 +121,137 @@ def _action_family(action_type: str) -> str:
     if action_type in {"end_charge", "end_offense_step", "end_defense_step", "end_turn"}:
         return "progression"
     return "other"
+
+
+def _action_signature(action_type: str, action_text: str) -> str:
+    from src.agent.trace_summary import derive_action_signature
+
+    return derive_action_signature(action_type, action_text)
+
+
+def _parse_action_fields(action_text: str) -> dict[str, str]:
+    return {str(key): str(value) for key, value in _ACTION_FIELD_RE.findall(str(action_text or ""))}
+
+
+def _size_bucket(value: object) -> str:
+    count = int(_coerce_int(value) or 0)
+    if count <= 0:
+        return "0"
+    if count == 1:
+        return "1"
+    if count == 2:
+        return "2"
+    return "3+"
+
+
+def _life_bucket(value: object) -> str:
+    life = int(_coerce_int(value) or 0)
+    if life <= 2:
+        return "0-2"
+    if life <= 4:
+        return "3-4"
+    if life <= 6:
+        return "5-6"
+    return "7+"
+
+
+def _turn_bucket(value: object) -> str:
+    turn = int(_coerce_int(value) or 0)
+    if turn <= 2:
+        return "opening"
+    if turn <= 5:
+        return "midgame"
+    return "lategame"
+
+
+def _decision_class(
+    action_type: str,
+    action_text: str,
+    *,
+    turn_number: int | None,
+    state_features: dict[str, Any],
+) -> str:
+    fields = _parse_action_fields(action_text)
+    turn = int(turn_number or 0)
+    self_battle_size = int(state_features.get("self_battle_size") or 0)
+    opponent_life_size = int(state_features.get("opponent_life_size") or 0)
+    attacker_zone = str(fields.get("attacker_zone", "")).strip()
+    target_zone = str(fields.get("target_zone", "")).strip()
+    if action_type == "charge_from_hand":
+        if turn <= 2:
+            return "charge_opening"
+        if turn <= 5:
+            return "charge_midgame"
+        return "charge_lategame"
+    if action_type == "play_card_from_hand":
+        if turn <= 2:
+            return "play_development"
+        if opponent_life_size <= 2:
+            return "play_pressure"
+        if self_battle_size == 0:
+            return "play_board_setup"
+        return "play_board_extension"
+    if action_type == "declare_attack":
+        if attacker_zone == "leader" and target_zone == "leader":
+            return "attack_leader_with_leader"
+        if attacker_zone == "battle" and target_zone == "leader":
+            return "attack_leader_with_battle"
+        if target_zone == "battle":
+            return "attack_battle_card"
+        return "attack_other"
+    if action_type == "end_turn":
+        if turn <= 2 and self_battle_size == 0:
+            return "end_turn_passive"
+        if self_battle_size > 0:
+            return "end_turn_after_development"
+        return "end_turn_reset"
+    return action_type or "unknown"
+
+
+def _action_context_features(action_type: str, action_text: str) -> dict[str, Any]:
+    return _action_context_features_with_state(action_type, action_text, state_features={})
+
+
+def _action_context_features_with_state(
+    action_type: str,
+    action_text: str,
+    *,
+    state_features: dict[str, Any],
+) -> dict[str, Any]:
+    fields = _parse_action_fields(action_text)
+    attacker_zone = str(fields.get("attacker_zone", "")).strip()
+    target_zone = str(fields.get("target_zone", "")).strip()
+    target_player = str(fields.get("target_player", "")).strip()
+    source_zone = str(fields.get("source_zone", "")).strip()
+    self_battle_size = int(state_features.get("self_battle_size") or 0)
+    opponent_battle_size = int(state_features.get("opponent_battle_size") or 0)
+    self_energy_size = int(state_features.get("self_energy_size") or 0)
+    opponent_life_size = int(state_features.get("opponent_life_size") or 0)
+    turn_number = int(state_features.get("turn_number") or 0)
+    self_board_state = "empty" if self_battle_size <= 0 else ("single" if self_battle_size == 1 else "wide")
+    opponent_board_state = "empty" if opponent_battle_size <= 0 else ("single" if opponent_battle_size == 1 else "wide")
+    return {
+        "attacker_zone": attacker_zone,
+        "target_zone": target_zone,
+        "target_player": target_player,
+        "source_zone": source_zone,
+        "is_leader_attack": action_type == "declare_attack" and attacker_zone == "leader",
+        "is_battle_attack": action_type == "declare_attack" and attacker_zone == "battle",
+        "is_leader_target": target_zone == "leader",
+        "is_battle_target": target_zone == "battle",
+        "turn_bucket": _turn_bucket(turn_number),
+        "self_energy_size_bucket": _size_bucket(self_energy_size),
+        "self_battle_size_bucket": _size_bucket(self_battle_size),
+        "opponent_battle_size_bucket": _size_bucket(opponent_battle_size),
+        "opponent_life_bucket": _life_bucket(opponent_life_size),
+        "self_board_state": self_board_state,
+        "opponent_board_state": opponent_board_state,
+        "is_pressure_window": opponent_life_size <= 3,
+        "is_curve_play": action_type == "play_card_from_hand" and self_energy_size <= max(turn_number, 1),
+        "is_existing_board_extension": action_type == "play_card_from_hand" and self_battle_size > 0,
+        "is_empty_board_setup": action_type == "play_card_from_hand" and self_battle_size <= 0,
+        "has_other_attackers": action_type == "declare_attack" and self_battle_size > 1,
+    }
 
 
 def _actor_role_bucket(actor_kind: str, human_player_id: int | None, player_id: int | None) -> str:
@@ -126,9 +291,23 @@ def build_phase7_examples_from_trace_artifact(
         player_id = _coerce_int(row.get("player_id"))
         actor_kind = str(row.get("actor_kind", "unknown"))
         action_type = str(row.get("action_type", "unknown"))
-        state_features = _extract_state_features(row.get("state_snapshot"), player_id)
-        did_player_win = (player_id == winner_id) if (player_id is not None and winner_id is not None) else None
+        resolved_signatures_by_seat = _extract_resolved_signatures(
+            row.get("resolved_signatures_by_seat", row.get("state_snapshot", {}).get("resolved_signatures_by_seat") if isinstance(row.get("state_snapshot"), dict) else {})
+        )
+        action_text = str(row.get("action", ""))
         turn_number = _coerce_int(row.get("turn_number"))
+        state_features = {
+            **_extract_state_features(row.get("state_snapshot"), player_id),
+            **_identity_state_features(resolved_signatures_by_seat, player_id),
+        }
+        if turn_number is not None:
+            state_features["turn_number"] = turn_number
+        action_features = _action_context_features_with_state(
+            action_type,
+            action_text,
+            state_features=state_features,
+        )
+        did_player_win = (player_id == winner_id) if (player_id is not None and winner_id is not None) else None
         turns_to_end = (
             max(0, int(final_turn_number) - int(turn_number))
             if final_turn_number is not None and turn_number is not None
@@ -147,7 +326,17 @@ def build_phase7_examples_from_trace_artifact(
             "phase": str(row.get("phase", "")),
             "action_type": action_type,
             "action_family": _action_family(action_type),
-            "action_text": str(row.get("action", "")),
+            "action_text": action_text,
+            "action_signature": _action_signature(action_type, action_text),
+            "decision_class": _decision_class(
+                action_type,
+                action_text,
+                turn_number=turn_number,
+                state_features=state_features,
+            ),
+            "action_features": action_features,
+            "resolved_signatures_by_seat": resolved_signatures_by_seat,
+            "has_identity_resolution": bool(resolved_signatures_by_seat),
             "actor_role_bucket": _actor_role_bucket(actor_kind, human_player_id, player_id),
             "winner_id": winner_id,
             "did_player_win": did_player_win,

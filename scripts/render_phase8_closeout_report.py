@@ -30,6 +30,10 @@ def main() -> None:
     lines.append("## Batch Summary")
     lines.append(f"- slice_field: `{batch.get('slice_field', '')}`")
     lines.append(f"- run_count: `{batch.get('run_count', 0)}`")
+    identity_summary = batch.get("identity_summary", {})
+    if isinstance(identity_summary, dict):
+        lines.append(f"- avg_identity_resolved_example_rate: `{identity_summary.get('avg_identity_resolved_example_rate', 0.0)}`")
+        lines.append(f"- total_identity_resolved_examples: `{identity_summary.get('total_identity_resolved_examples', 0)}`")
     promotion = batch.get("promotion_summary", {})
     if isinstance(promotion, dict):
         lines.append(f"- promoted_run_count: `{promotion.get('promoted_run_count', 0)}`")
@@ -37,6 +41,9 @@ def main() -> None:
         if isinstance(best, dict):
             lines.append(
                 f"- best_promoted: `{best.get('slice_value', '')}` top1=`{best.get('top1_accuracy', 0.0)}` model=`{best.get('model_name', '')}`"
+            )
+            lines.append(
+                f"- best_promoted_identity_rate: `{best.get('identity_resolved_example_rate', 0.0)}`"
             )
     if series:
         lines.append("")

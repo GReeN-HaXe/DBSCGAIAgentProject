@@ -1,0 +1,49 @@
+{
+  "schema_version": "phase14.embedding_sweep.v1",
+  "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+  "profile": "quick",
+  "gallery_split": "train",
+  "query_split": "validation",
+  "config_count": 2,
+  "best": {
+    "config_name": "h128_e10_lr1e3",
+    "hidden_dim": 128,
+    "epochs": 10,
+    "learning_rate": 0.001,
+    "mean_reciprocal_rank": 0.9771918402777778,
+    "recall_at_1": 0.95703125,
+    "recall_at_5": 0.9990234375,
+    "recall_at_10": 1.0,
+    "example_count": 1024,
+    "duration_seconds": 8.806389399996988,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_manifest.json"
+  },
+  "ranking": [
+    {
+      "config_name": "h128_e10_lr1e3",
+      "hidden_dim": 128,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "mean_reciprocal_rank": 0.9771918402777778,
+      "recall_at_1": 0.95703125,
+      "recall_at_5": 0.9990234375,
+      "recall_at_10": 1.0,
+      "example_count": 1024,
+      "duration_seconds": 8.806389399996988,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_manifest.json"
+    },
+    {
+      "config_name": "h64_e10_lr1e3",
+      "hidden_dim": 64,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "mean_reciprocal_rank": 0.4344050153518039,
+      "recall_at_1": 0.314453125,
+      "recall_at_5": 0.5791015625,
+      "recall_at_10": 0.6767578125,
+      "example_count": 1024,
+      "duration_seconds": 8.652939299998252,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h64_e10_lr1e3\\embedding\\phase14_embedding_manifest.json"
+    }
+  ]
+}

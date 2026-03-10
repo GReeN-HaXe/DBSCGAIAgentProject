@@ -1,6 +1,122 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+import re
+
+BOOKKEEPING_ACTION_TYPES = {
+    "pass_counter_window",
+    "end_offense_step",
+    "end_defense_step",
+    "resolve_battle",
+}
+
+_ACTION_FIELD_RE = re.compile(r"([A-Za-z_]+)=([^ ]+)")
+
+
+def derive_action_signature(action_type: object, action_text: object) -> str:
+    base = str(action_type or "unknown").strip() or "unknown"
+    text = str(action_text or "").strip()
+    if not text:
+        return base
+    fields: dict[str, str] = {}
+    for key, value in _ACTION_FIELD_RE.findall(text):
+        fields[str(key)] = str(value)
+    parts = [base]
+    for key in (
+        "card",
+        "source_card",
+        "attacker_card",
+        "target_card",
+        "source_zone",
+        "attacker_zone",
+        "target_zone",
+        "target_player",
+    ):
+        value = fields.get(key, "").strip()
+        if value:
+            parts.append(f"{key}={value}")
+    if len(parts) == 1:
+        for key in ("hand_index", "source_index", "attacker_index", "target_index"):
+            value = fields.get(key, "").strip()
+            if value:
+                parts.append(f"{key}={value}")
+    return "|".join(parts)
+
+
+def filter_decision_trace(
+    payload: dict[str, object],
+    *,
+    include_bookkeeping: bool = False,
+) -> list[dict[str, object]]:
+    decision_trace = payload.get("decision_trace", [])
+    if not isinstance(decision_trace, list):
+        return []
+    rows: list[dict[str, object]] = []
+    for row in decision_trace:
+        if not isinstance(row, dict):
+            continue
+        action_type = str(row.get("chosen_action_type", ""))
+        if not include_bookkeeping and action_type in BOOKKEEPING_ACTION_TYPES:
+            continue
+        rows.append(dict(row))
+    return rows
+
+
+def build_review_trace_payload(
+    payload: dict[str, object],
+    *,
+    include_bookkeeping: bool = False,
+) -> dict[str, object]:
+    filtered = filter_decision_trace(payload, include_bookkeeping=include_bookkeeping)
+    return {
+        "schema_version": "ai_match_review_trace.v1",
+        "source_schema_version": payload.get("schema_version", "raw"),
+        "total_actions": payload.get("total_actions"),
+        "winner_id": payload.get("winner_id"),
+        "stop_reason": payload.get("stop_reason"),
+        "turn_number": payload.get("turn_number"),
+        "active_player": payload.get("active_player"),
+        "phase": payload.get("phase"),
+        "final_state_snapshot": payload.get("final_state_snapshot"),
+        "include_bookkeeping": bool(include_bookkeeping),
+        "filtered_action_types": sorted(BOOKKEEPING_ACTION_TYPES) if not include_bookkeeping else [],
+        "decision_count": len(filtered),
+        "decision_trace": filtered,
+    }
+
+
+def build_training_trace_rows(
+    payload: dict[str, object],
+    *,
+    include_bookkeeping: bool = False,
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    filtered = filter_decision_trace(payload, include_bookkeeping=include_bookkeeping)
+    for row in filtered:
+        candidates = row.get("candidates", [])
+        top = candidates[0] if isinstance(candidates, list) and candidates else {}
+        if not isinstance(top, dict):
+            top = {}
+        rows.append(
+            {
+                "schema_version": "ai_match_training_row.v1",
+                "step_index": row.get("step_index"),
+                "actor_player_id": row.get("actor_player_id"),
+                "turn_number": row.get("turn_number"),
+                "phase": row.get("phase"),
+                "chosen_action_type": row.get("chosen_action_type"),
+                "chosen_action_text": row.get("chosen_action_text"),
+                "action_signature": derive_action_signature(row.get("chosen_action_type"), row.get("chosen_action_text")),
+                "top1_reason": top.get("reason"),
+                "top1_score": top.get("score"),
+                "winner_id": payload.get("winner_id"),
+                "stop_reason": payload.get("stop_reason"),
+                "final_turn_number": payload.get("turn_number"),
+                "state_snapshot": row.get("state_snapshot"),
+                "post_action_state_snapshot": row.get("post_action_state_snapshot"),
+            }
+        )
+    return rows
 
 
 def summarize_trace(payload: dict[str, object]) -> dict[str, object]:

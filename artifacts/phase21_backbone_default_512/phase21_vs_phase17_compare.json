@@ -1,0 +1,20 @@
+{
+  "schema_version": "phase21.compare.v1",
+  "target_type": "card_identity",
+  "example_count": 256,
+  "phase21_model_name": "phase21_efficientnet_b0_classifier",
+  "phase17_model_name": "phase17_resnet18_classifier",
+  "phase21_mean_reciprocal_rank": 0.6378580729166666,
+  "phase17_mean_reciprocal_rank": 0.66796875,
+  "phase21_recall_at_1": 0.62890625,
+  "phase17_recall_at_1": 0.66796875,
+  "phase21_recall_at_5": 0.6484375,
+  "phase17_recall_at_5": 0.66796875,
+  "phase21_recall_at_10": 0.6484375,
+  "phase17_recall_at_10": 0.66796875,
+  "mrr_lift": -0.03011067708333337,
+  "recall_at_1_lift": -0.0390625,
+  "recall_at_5_lift": -0.01953125,
+  "recall_at_10_lift": -0.01953125,
+  "phase21_wins": false
+}

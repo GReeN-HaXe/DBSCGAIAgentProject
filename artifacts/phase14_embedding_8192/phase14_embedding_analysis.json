@@ -1,0 +1,1094 @@
+{
+  "schema_version": "phase14.embedding_analysis.v1",
+  "model_name": "phase14_torch_mlp",
+  "target_type": "card_identity",
+  "gallery_split": "train",
+  "query_split": "validation",
+  "example_count": 2048,
+  "perfect_hit_count": 1999,
+  "perfect_hit_rate": 0.97607421875,
+  "top_confusions": [
+    {
+      "expected_signature": "BT1-095",
+      "predicted_signature": "BT13-065",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-009",
+      "predicted_signature": "BT12-104",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-011",
+      "predicted_signature": "BT11-094",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-016",
+      "predicted_signature": "BT12-114",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-043",
+      "predicted_signature": "BT13-027",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-061",
+      "predicted_signature": "BT12-110",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-092",
+      "predicted_signature": "BT13-109",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT10-094",
+      "predicted_signature": "BT1-099",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT11-124",
+      "predicted_signature": "BT14-039",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT11-132",
+      "predicted_signature": "BT10-111",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT12-030",
+      "predicted_signature": "BT15-128",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT12-055",
+      "predicted_signature": "BT18-122",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT12-067",
+      "predicted_signature": "BT15-111",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT12-107",
+      "predicted_signature": "BT15-152",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT12-114",
+      "predicted_signature": "BT13-115",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT13-006",
+      "predicted_signature": "BT14-107",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT13-094",
+      "predicted_signature": "BT14-001",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT14-003",
+      "predicted_signature": "BT14-136",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT14-098",
+      "predicted_signature": "BT11-080",
+      "count": 1
+    },
+    {
+      "expected_signature": "BT14-099",
+      "predicted_signature": "BT12-029",
+      "count": 1
+    }
+  ],
+  "hardest_rows": [
+    {
+      "expected_signature": "BT10-016",
+      "predicted_signature": "BT12-114",
+      "found_rank": 9,
+      "top_score": 0.9902585744857788,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-016.webp",
+      "top_predictions": [
+        {
+          "signature": "BT12-114",
+          "score": 0.9902585744857788
+        },
+        {
+          "signature": "BT13-115",
+          "score": 0.9875891208648682
+        },
+        {
+          "signature": "BT12-062",
+          "score": 0.9838743209838867
+        },
+        {
+          "signature": "BT15-103",
+          "score": 0.9828472137451172
+        },
+        {
+          "signature": "BT13-115",
+          "score": 0.9826175570487976
+        },
+        {
+          "signature": "BT11-132",
+          "score": 0.9816356301307678
+        },
+        {
+          "signature": "BT13-115",
+          "score": 0.9812427163124084
+        },
+        {
+          "signature": "BT1-089",
+          "score": 0.9808236360549927
+        },
+        {
+          "signature": "BT10-016",
+          "score": 0.980815589427948
+        },
+        {
+          "signature": "BT10-043",
+          "score": 0.9780659079551697
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT21-088",
+      "predicted_signature": "BT10-134",
+      "found_rank": 6,
+      "top_score": 0.9888967871665955,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT21\\BT21-088.webp",
+      "top_predictions": [
+        {
+          "signature": "BT10-134",
+          "score": 0.9888967871665955
+        },
+        {
+          "signature": "BT12-021",
+          "score": 0.9872819781303406
+        },
+        {
+          "signature": "BT15-139",
+          "score": 0.9836878180503845
+        },
+        {
+          "signature": "BT15-137",
+          "score": 0.9826672077178955
+        },
+        {
+          "signature": "BT10-075",
+          "score": 0.9820970296859741
+        },
+        {
+          "signature": "BT21-088",
+          "score": 0.9819464683532715
+        },
+        {
+          "signature": "BT12-104",
+          "score": 0.9789864420890808
+        },
+        {
+          "signature": "BT14-107",
+          "score": 0.9759585857391357
+        },
+        {
+          "signature": "BT10-115",
+          "score": 0.975603461265564
+        },
+        {
+          "signature": "BT1-092",
+          "score": 0.9755273461341858
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT21-140",
+      "predicted_signature": "BT14-032",
+      "found_rank": 4,
+      "top_score": 0.9845882654190063,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT21\\BT21-140.webp",
+      "top_predictions": [
+        {
+          "signature": "BT14-032",
+          "score": 0.9845882654190063
+        },
+        {
+          "signature": "BT14-032",
+          "score": 0.9782114028930664
+        },
+        {
+          "signature": "BT14-032",
+          "score": 0.9763990044593811
+        },
+        {
+          "signature": "BT21-140",
+          "score": 0.9724334478378296
+        },
+        {
+          "signature": "BT11-135",
+          "score": 0.9703042507171631
+        },
+        {
+          "signature": "BT11-135",
+          "score": 0.9683690071105957
+        },
+        {
+          "signature": "BT21-140",
+          "score": 0.967947781085968
+        },
+        {
+          "signature": "BT12-149",
+          "score": 0.9595357179641724
+        },
+        {
+          "signature": "BT11-135",
+          "score": 0.9582617282867432
+        },
+        {
+          "signature": "BT12-081",
+          "score": 0.9578120112419128
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT14-003",
+      "predicted_signature": "BT14-136",
+      "found_rank": 3,
+      "top_score": 0.9958353638648987,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT14\\BT14-003.webp",
+      "top_predictions": [
+        {
+          "signature": "BT14-136",
+          "score": 0.9958353638648987
+        },
+        {
+          "signature": "BT13-144",
+          "score": 0.9911713600158691
+        },
+        {
+          "signature": "BT14-003",
+          "score": 0.9902063012123108
+        },
+        {
+          "signature": "BT14-136",
+          "score": 0.9837254285812378
+        },
+        {
+          "signature": "BT11-134",
+          "score": 0.9836268424987793
+        },
+        {
+          "signature": "BT15-111",
+          "score": 0.983047604560852
+        },
+        {
+          "signature": "BT15-128",
+          "score": 0.9811089634895325
+        },
+        {
+          "signature": "BT14-133",
+          "score": 0.9787457585334778
+        },
+        {
+          "signature": "BT12-067",
+          "score": 0.9755504727363586
+        },
+        {
+          "signature": "BT13-003",
+          "score": 0.9748334884643555
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT2-045",
+      "predicted_signature": "BT11-145",
+      "found_rank": 3,
+      "top_score": 0.9933354258537292,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT2\\BT2-045.webp",
+      "top_predictions": [
+        {
+          "signature": "BT11-145",
+          "score": 0.9933354258537292
+        },
+        {
+          "signature": "BT11-048",
+          "score": 0.9893888831138611
+        },
+        {
+          "signature": "BT2-045",
+          "score": 0.9887052178382874
+        },
+        {
+          "signature": "BT2-045",
+          "score": 0.9831728935241699
+        },
+        {
+          "signature": "BT11-145",
+          "score": 0.9829033017158508
+        },
+        {
+          "signature": "BT11-048",
+          "score": 0.9787122011184692
+        },
+        {
+          "signature": "BT11-013",
+          "score": 0.9782669544219971
+        },
+        {
+          "signature": "BT10-108",
+          "score": 0.9766829609870911
+        },
+        {
+          "signature": "BT11-145",
+          "score": 0.976012647151947
+        },
+        {
+          "signature": "BT10-087",
+          "score": 0.9755162596702576
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT10-094",
+      "predicted_signature": "BT1-099",
+      "found_rank": 3,
+      "top_score": 0.9929967522621155,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-094.webp",
+      "top_predictions": [
+        {
+          "signature": "BT1-099",
+          "score": 0.9929967522621155
+        },
+        {
+          "signature": "BT1-099",
+          "score": 0.9904799461364746
+        },
+        {
+          "signature": "BT10-094",
+          "score": 0.9894309043884277
+        },
+        {
+          "signature": "BT1-099",
+          "score": 0.9884925484657288
+        },
+        {
+          "signature": "BT2-094",
+          "score": 0.985532820224762
+        },
+        {
+          "signature": "BT11-065",
+          "score": 0.9817641377449036
+        },
+        {
+          "signature": "BT13-057",
+          "score": 0.980786919593811
+        },
+        {
+          "signature": "BT11-065",
+          "score": 0.9776628017425537
+        },
+        {
+          "signature": "BT10-094",
+          "score": 0.9776525497436523
+        },
+        {
+          "signature": "BT2-094",
+          "score": 0.9726447463035583
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT17-141",
+      "predicted_signature": "BT14-067",
+      "found_rank": 3,
+      "top_score": 0.9906050562858582,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT17\\BT17-141.webp",
+      "top_predictions": [
+        {
+          "signature": "BT14-067",
+          "score": 0.9906050562858582
+        },
+        {
+          "signature": "BT14-067",
+          "score": 0.9878648519515991
+        },
+        {
+          "signature": "BT17-141",
+          "score": 0.9830206632614136
+        },
+        {
+          "signature": "BT15-008",
+          "score": 0.980680525302887
+        },
+        {
+          "signature": "BT12-005",
+          "score": 0.9802325963973999
+        },
+        {
+          "signature": "BT13-113",
+          "score": 0.9786654710769653
+        },
+        {
+          "signature": "BT12-005",
+          "score": 0.9784652590751648
+        },
+        {
+          "signature": "BT12-005",
+          "score": 0.9753758311271667
+        },
+        {
+          "signature": "BT15-008",
+          "score": 0.9738929271697998
+        },
+        {
+          "signature": "BT14-067",
+          "score": 0.9726431965827942
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT12-030",
+      "predicted_signature": "BT15-128",
+      "found_rank": 3,
+      "top_score": 0.9885054230690002,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT12\\BT12-030.webp",
+      "top_predictions": [
+        {
+          "signature": "BT15-128",
+          "score": 0.9885054230690002
+        },
+        {
+          "signature": "BT15-111",
+          "score": 0.988083004951477
+        },
+        {
+          "signature": "BT12-030",
+          "score": 0.9873070120811462
+        },
+        {
+          "signature": "BT13-144",
+          "score": 0.984744668006897
+        },
+        {
+          "signature": "BT11-134",
+          "score": 0.9823524355888367
+        },
+        {
+          "signature": "BT14-136",
+          "score": 0.9805804491043091
+        },
+        {
+          "signature": "BT14-003",
+          "score": 0.97956782579422
+        },
+        {
+          "signature": "BT1-022",
+          "score": 0.9781689047813416
+        },
+        {
+          "signature": "BT13-003",
+          "score": 0.9771488308906555
+        },
+        {
+          "signature": "BT15-126",
+          "score": 0.9770004749298096
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT15-025",
+      "predicted_signature": "BT10-050",
+      "found_rank": 3,
+      "top_score": 0.9872697591781616,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT15\\BT15-025.webp",
+      "top_predictions": [
+        {
+          "signature": "BT10-050",
+          "score": 0.9872697591781616
+        },
+        {
+          "signature": "BT14-110",
+          "score": 0.9865390658378601
+        },
+        {
+          "signature": "BT15-025",
+          "score": 0.9852145910263062
+        },
+        {
+          "signature": "BT10-130",
+          "score": 0.9817100167274475
+        },
+        {
+          "signature": "BT15-117",
+          "score": 0.9810885787010193
+        },
+        {
+          "signature": "BT10-050",
+          "score": 0.9800471663475037
+        },
+        {
+          "signature": "BT15-117",
+          "score": 0.9789113402366638
+        },
+        {
+          "signature": "BT15-117",
+          "score": 0.9779341220855713
+        },
+        {
+          "signature": "BT11-048",
+          "score": 0.9754977822303772
+        },
+        {
+          "signature": "BT10-050",
+          "score": 0.9743923544883728
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT21-075",
+      "predicted_signature": "BT19-104",
+      "found_rank": 3,
+      "top_score": 0.9773871898651123,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT21\\BT21-075.webp",
+      "top_predictions": [
+        {
+          "signature": "BT19-104",
+          "score": 0.9773871898651123
+        },
+        {
+          "signature": "BT19-029",
+          "score": 0.9737356901168823
+        },
+        {
+          "signature": "BT21-075",
+          "score": 0.970532238483429
+        },
+        {
+          "signature": "BT14-129",
+          "score": 0.9590170979499817
+        },
+        {
+          "signature": "BT13-154",
+          "score": 0.958073616027832
+        },
+        {
+          "signature": "BT11-153",
+          "score": 0.9573909640312195
+        },
+        {
+          "signature": "BT19-104",
+          "score": 0.9571958184242249
+        },
+        {
+          "signature": "BT18-027",
+          "score": 0.9547722935676575
+        },
+        {
+          "signature": "BT12-013",
+          "score": 0.9544987678527832
+        },
+        {
+          "signature": "BT12-013",
+          "score": 0.9530071020126343
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT19-092",
+      "predicted_signature": "BT12-124",
+      "found_rank": 3,
+      "top_score": 0.9690396189689636,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT19\\BT19-092.webp",
+      "top_predictions": [
+        {
+          "signature": "BT12-124",
+          "score": 0.9690396189689636
+        },
+        {
+          "signature": "BT12-107",
+          "score": 0.9668354392051697
+        },
+        {
+          "signature": "BT19-092",
+          "score": 0.9652001857757568
+        },
+        {
+          "signature": "BT18-089",
+          "score": 0.9591974020004272
+        },
+        {
+          "signature": "BT2-118",
+          "score": 0.9553800821304321
+        },
+        {
+          "signature": "BT12-107",
+          "score": 0.9518291354179382
+        },
+        {
+          "signature": "BT12-124",
+          "score": 0.9498150944709778
+        },
+        {
+          "signature": "BT12-004",
+          "score": 0.9474043250083923
+        },
+        {
+          "signature": "BT13-090",
+          "score": 0.9425819516181946
+        },
+        {
+          "signature": "BT14-027",
+          "score": 0.9415923953056335
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT17-095",
+      "predicted_signature": "BT10-044",
+      "found_rank": 2,
+      "top_score": 0.9956852197647095,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT17\\BT17-095.webp",
+      "top_predictions": [
+        {
+          "signature": "BT10-044",
+          "score": 0.9956852197647095
+        },
+        {
+          "signature": "BT17-095",
+          "score": 0.9925086498260498
+        },
+        {
+          "signature": "BT10-044",
+          "score": 0.9757590889930725
+        },
+        {
+          "signature": "BT2-073",
+          "score": 0.9712934494018555
+        },
+        {
+          "signature": "BT17-085",
+          "score": 0.9678781628608704
+        },
+        {
+          "signature": "BT15-064",
+          "score": 0.9654905200004578
+        },
+        {
+          "signature": "BT15-064",
+          "score": 0.9646787047386169
+        },
+        {
+          "signature": "BT2-089",
+          "score": 0.9635252952575684
+        },
+        {
+          "signature": "BT21-037",
+          "score": 0.9611294865608215
+        },
+        {
+          "signature": "BT13-112",
+          "score": 0.9592962265014648
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT14-151",
+      "predicted_signature": "BT11-074",
+      "found_rank": 2,
+      "top_score": 0.9946538209915161,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT14\\BT14-151.webp",
+      "top_predictions": [
+        {
+          "signature": "BT11-074",
+          "score": 0.9946538209915161
+        },
+        {
+          "signature": "BT14-151",
+          "score": 0.9899498820304871
+        },
+        {
+          "signature": "BT10-150",
+          "score": 0.9891935586929321
+        },
+        {
+          "signature": "BT10-150",
+          "score": 0.9881073236465454
+        },
+        {
+          "signature": "BT10-150",
+          "score": 0.9854027032852173
+        },
+        {
+          "signature": "BT14-145",
+          "score": 0.9799298644065857
+        },
+        {
+          "signature": "BT12-060",
+          "score": 0.9794979095458984
+        },
+        {
+          "signature": "BT12-060",
+          "score": 0.9759867787361145
+        },
+        {
+          "signature": "BT14-045",
+          "score": 0.9756392240524292
+        },
+        {
+          "signature": "BT13-132",
+          "score": 0.9752979278564453
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT12-107",
+      "predicted_signature": "BT15-152",
+      "found_rank": 2,
+      "top_score": 0.9946074485778809,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT12\\BT12-107.webp",
+      "top_predictions": [
+        {
+          "signature": "BT15-152",
+          "score": 0.9946074485778809
+        },
+        {
+          "signature": "BT12-107",
+          "score": 0.9930850267410278
+        },
+        {
+          "signature": "BT15-152",
+          "score": 0.9809046387672424
+        },
+        {
+          "signature": "BT12-107",
+          "score": 0.9792807698249817
+        },
+        {
+          "signature": "BT10-152",
+          "score": 0.978105366230011
+        },
+        {
+          "signature": "BT14-037",
+          "score": 0.9772842526435852
+        },
+        {
+          "signature": "BT14-037",
+          "score": 0.9766846299171448
+        },
+        {
+          "signature": "BT10-152",
+          "score": 0.9750354290008545
+        },
+        {
+          "signature": "BT10-152",
+          "score": 0.9743600487709045
+        },
+        {
+          "signature": "BT13-065",
+          "score": 0.9731930494308472
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT2-026",
+      "predicted_signature": "BT10-149",
+      "found_rank": 2,
+      "top_score": 0.9938367009162903,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT2\\BT2-026.webp",
+      "top_predictions": [
+        {
+          "signature": "BT10-149",
+          "score": 0.9938367009162903
+        },
+        {
+          "signature": "BT2-026",
+          "score": 0.990670382976532
+        },
+        {
+          "signature": "BT15-143",
+          "score": 0.9876610636711121
+        },
+        {
+          "signature": "BT12-077",
+          "score": 0.9843735098838806
+        },
+        {
+          "signature": "BT10-149",
+          "score": 0.9842466711997986
+        },
+        {
+          "signature": "BT12-077",
+          "score": 0.9815066456794739
+        },
+        {
+          "signature": "BT11-138",
+          "score": 0.9796770811080933
+        },
+        {
+          "signature": "BT15-143",
+          "score": 0.9791234135627747
+        },
+        {
+          "signature": "BT10-149",
+          "score": 0.976864218711853
+        },
+        {
+          "signature": "BT15-108",
+          "score": 0.9763306975364685
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT16-145",
+      "predicted_signature": "BT13-100",
+      "found_rank": 2,
+      "top_score": 0.9937364459037781,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT16\\BT16-145.webp",
+      "top_predictions": [
+        {
+          "signature": "BT13-100",
+          "score": 0.9937364459037781
+        },
+        {
+          "signature": "BT16-145",
+          "score": 0.991567075252533
+        },
+        {
+          "signature": "BT13-100",
+          "score": 0.982499361038208
+        },
+        {
+          "signature": "BT16-127",
+          "score": 0.9820750951766968
+        },
+        {
+          "signature": "BT13-100",
+          "score": 0.9808187484741211
+        },
+        {
+          "signature": "BT17-075",
+          "score": 0.9777577519416809
+        },
+        {
+          "signature": "BT16-145",
+          "score": 0.975740909576416
+        },
+        {
+          "signature": "BT2-059",
+          "score": 0.9747154712677002
+        },
+        {
+          "signature": "BT13-021",
+          "score": 0.9746355414390564
+        },
+        {
+          "signature": "BT14-052",
+          "score": 0.9738888144493103
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT10-009",
+      "predicted_signature": "BT12-104",
+      "found_rank": 2,
+      "top_score": 0.9932413101196289,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-009.webp",
+      "top_predictions": [
+        {
+          "signature": "BT12-104",
+          "score": 0.9932413101196289
+        },
+        {
+          "signature": "BT10-009",
+          "score": 0.992181658744812
+        },
+        {
+          "signature": "BT10-075",
+          "score": 0.9855550527572632
+        },
+        {
+          "signature": "BT10-075",
+          "score": 0.9826384782791138
+        },
+        {
+          "signature": "BT11-102",
+          "score": 0.979149341583252
+        },
+        {
+          "signature": "BT12-092",
+          "score": 0.9759463667869568
+        },
+        {
+          "signature": "BT14-135",
+          "score": 0.9723677635192871
+        },
+        {
+          "signature": "BT12-104",
+          "score": 0.9713230729103088
+        },
+        {
+          "signature": "BT12-104",
+          "score": 0.9689815044403076
+        },
+        {
+          "signature": "BT14-135",
+          "score": 0.966869592666626
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT17-064",
+      "predicted_signature": "BT21-050",
+      "found_rank": 2,
+      "top_score": 0.993169367313385,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT17\\BT17-064.webp",
+      "top_predictions": [
+        {
+          "signature": "BT21-050",
+          "score": 0.993169367313385
+        },
+        {
+          "signature": "BT17-064",
+          "score": 0.9897530674934387
+        },
+        {
+          "signature": "BT21-050",
+          "score": 0.9838654398918152
+        },
+        {
+          "signature": "BT21-049",
+          "score": 0.9828385710716248
+        },
+        {
+          "signature": "BT20-079",
+          "score": 0.9792957901954651
+        },
+        {
+          "signature": "BT16-036",
+          "score": 0.9776198863983154
+        },
+        {
+          "signature": "BT20-079",
+          "score": 0.9750567674636841
+        },
+        {
+          "signature": "BT21-050",
+          "score": 0.9748830199241638
+        },
+        {
+          "signature": "BT20-079",
+          "score": 0.9738205671310425
+        },
+        {
+          "signature": "BT21-049",
+          "score": 0.9737750887870789
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT15-098",
+      "predicted_signature": "BT15-076",
+      "found_rank": 2,
+      "top_score": 0.9927691221237183,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT15\\BT15-098.webp",
+      "top_predictions": [
+        {
+          "signature": "BT15-076",
+          "score": 0.9927691221237183
+        },
+        {
+          "signature": "BT15-098",
+          "score": 0.9926580190658569
+        },
+        {
+          "signature": "BT11-152",
+          "score": 0.9834047555923462
+        },
+        {
+          "signature": "BT11-152",
+          "score": 0.9827538728713989
+        },
+        {
+          "signature": "BT14-033",
+          "score": 0.9827343225479126
+        },
+        {
+          "signature": "BT15-076",
+          "score": 0.9775282144546509
+        },
+        {
+          "signature": "BT15-098",
+          "score": 0.9770904183387756
+        },
+        {
+          "signature": "BT13-133",
+          "score": 0.9765633940696716
+        },
+        {
+          "signature": "BT15-076",
+          "score": 0.9762282371520996
+        },
+        {
+          "signature": "BT13-097",
+          "score": 0.9762281179428101
+        }
+      ]
+    },
+    {
+      "expected_signature": "BT10-011",
+      "predicted_signature": "BT11-094",
+      "found_rank": 2,
+      "top_score": 0.9927182197570801,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-011.webp",
+      "top_predictions": [
+        {
+          "signature": "BT11-094",
+          "score": 0.9927182197570801
+        },
+        {
+          "signature": "BT10-011",
+          "score": 0.9886500835418701
+        },
+        {
+          "signature": "BT2-029",
+          "score": 0.9741047024726868
+        },
+        {
+          "signature": "BT1-010",
+          "score": 0.9703189730644226
+        },
+        {
+          "signature": "BT13-123",
+          "score": 0.9695584774017334
+        },
+        {
+          "signature": "BT11-094",
+          "score": 0.9684709906578064
+        },
+        {
+          "signature": "BT15-006",
+          "score": 0.9678599834442139
+        },
+        {
+          "signature": "BT11-153",
+          "score": 0.9655799865722656
+        },
+        {
+          "signature": "BT14-150",
+          "score": 0.9643827080726624
+        },
+        {
+          "signature": "BT14-147",
+          "score": 0.9623331427574158
+        }
+      ]
+    }
+  ]
+}

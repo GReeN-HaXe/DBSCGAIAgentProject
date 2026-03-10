@@ -9,14 +9,18 @@ from src.agent.phase10_vision import (
     PHASE10_BENCHMARK_SCHEMA_VERSION,
     PHASE10_DETECTION_SCHEMA_VERSION,
     PHASE10_EVENT_SCHEMA_VERSION,
+    PHASE10_IDENTITY_ENRICHMENT_SCHEMA_VERSION,
     PHASE10_REVIEW_SCHEMA_VERSION,
     MockFrameRecognizer,
     apply_detection_review,
     benchmark_detection_manifest,
+    enrich_detections_with_phase15_identity,
     infer_events_from_detections,
     reviewed_detections_to_external_match,
 )
 from src.agent.phase10_history import summarize_phase10_benchmark_history
+from src.agent.phase13_visual_learning import build_phase13_feature_cache, build_phase13_reference_image_dataset
+from src.agent.phase15_metric import evaluate_phase15_triplet_retrieval, has_torch_support, train_phase15_triplet_model
 from src.agent.phase9_external import build_video_frame_manifest
 
 
@@ -29,6 +33,71 @@ def _frame_manifest(tmp_path) -> dict[str, object]:
         extracted=False,
         ffmpeg_path="ffmpeg",
     )
+
+
+def _write_ppm(path: Path, color: tuple[int, int, int]) -> None:
+    pixel = f"{color[0]} {color[1]} {color[2]}"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rows = "\n".join([((pixel + " ") * 8).rstrip() for _ in range(8)])
+    path.write_text(f"P3\n8 8\n255\n{rows}\n", encoding="utf-8")
+
+
+def _build_phase15_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
+    images = []
+    for index, color in enumerate(((255, 0, 0), (0, 255, 0), (0, 0, 255)), start=1):
+        path = tmp_path / f"BT1-00{index}.ppm"
+        _write_ppm(path, color)
+        images.append(path)
+    manifest = {
+        "schema_version": "card_image_reference_manifest.v1",
+        "cards": [
+            {
+                "card_number": f"BT1-00{index}",
+                "primary_image_path": str(path),
+                "card_name": f"Card {index}",
+                "table_name": "cards",
+                "record_id": index,
+                "image_count": 1,
+                "match_type": "exact_stem",
+            }
+            for index, path in enumerate(images, start=1)
+        ],
+    }
+    dataset = build_phase13_feature_cache(
+        build_phase13_reference_image_dataset(
+            manifest,
+            split_mode="paired_views",
+            train_views=("original", "flip_h"),
+            validation_views=("darken",),
+        )
+    )
+    model = train_phase15_triplet_model(dataset, epochs=1, steps_per_epoch=2, batch_size=2, hidden_dim=8, embedding_dim=4)
+    _ = evaluate_phase15_triplet_retrieval(model, dataset, gallery_split="train", query_split="validation", top_k_values=(1, 2))
+    production_dir = tmp_path / "phase15_production"
+    production_dir.mkdir(parents=True, exist_ok=True)
+    model_path = production_dir / "phase15_triplet_model.json"
+    feature_cache_path = tmp_path / "feature_cache.json"
+    summary_path = production_dir / "phase15_production_summary.json"
+    model_path.write_text(json.dumps(model, indent=2), encoding="utf-8")
+    feature_cache_path.write_text(json.dumps(dataset, indent=2), encoding="utf-8")
+    summary_path.write_text(json.dumps({"feature_cache_path": str(feature_cache_path)}, indent=2), encoding="utf-8")
+    return production_dir, model_path, feature_cache_path
+
+
+def _frame_manifest_with_images(tmp_path) -> dict[str, object]:
+    manifest = build_video_frame_manifest(
+        video_path=tmp_path / "match.mp4",
+        output_dir=tmp_path / "frames_out",
+        every_n_seconds=1.0,
+        frame_count=2,
+        extracted=True,
+        ffmpeg_path="ffmpeg",
+    )
+    for frame, color in zip(manifest["frames"], ((255, 0, 0), (0, 255, 0)), strict=False):
+        relative = Path(str(frame["relative_path"])).with_suffix(".ppm")
+        frame["relative_path"] = str(relative)
+        _write_ppm((tmp_path / "frames_out" / relative), color)
+    return manifest
 
 
 def test_phase10_mock_recognizer_and_event_inference_shape(tmp_path) -> None:
@@ -115,6 +184,31 @@ def test_phase10_review_convert_and_benchmark_shape(tmp_path) -> None:
     benchmark = benchmark_detection_manifest(reviewed, reviewed)
     assert benchmark["schema_version"] == PHASE10_BENCHMARK_SCHEMA_VERSION
     assert benchmark["frame_exact_match_rate"] == 1.0
+
+
+def test_phase10_identity_enrichment_shape(tmp_path) -> None:
+    if not has_torch_support():
+        return
+    production_dir, model_path, feature_cache_path = _build_phase15_fixture(tmp_path)
+    manifest = _frame_manifest_with_images(tmp_path)
+    detections = MockFrameRecognizer().detect(manifest)
+    enriched = enrich_detections_with_phase15_identity(
+        detections,
+        frame_manifest=manifest,
+        crops_output_dir=tmp_path / "identity_crops",
+        crop_image_format="ppm",
+        top_k=2,
+        production_dir=production_dir,
+        model_path=model_path,
+        feature_cache_path=feature_cache_path,
+    )
+    assert enriched["identity_enrichment"]["schema_version"] == PHASE10_IDENTITY_ENRICHMENT_SCHEMA_VERSION
+    assert enriched["identity_enrichment"]["enriched_object_count"] >= 2
+    leader = enriched["detections"][0]["objects"][0]
+    assert leader["resolved_signature"] == "BT1-001"
+    assert len(leader["identity_candidates"]) == 2
+    inferred = infer_events_from_detections(enriched)
+    assert inferred["events"][0]["zone_snapshot"]["1"]["detected_objects"][0]["resolved_signature"] == "BT1-001"
 
 
 def test_phase10_review_supports_add_remove_operations(tmp_path) -> None:
@@ -319,3 +413,50 @@ def test_phase10_pipeline_history_and_closeout_scripts(tmp_path) -> None:
     assert report_result.returncode == 0, report_result.stderr
     report_text = report_path.read_text(encoding="utf-8")
     assert "# Phase 10 Closeout" in report_text
+
+
+def test_phase10_pipeline_optional_identity_enrichment(tmp_path) -> None:
+    if not has_torch_support():
+        return
+    _production_dir, model_path, feature_cache_path = _build_phase15_fixture(tmp_path)
+    frame_manifest_path = tmp_path / "frame_manifest_identity.json"
+    labeled_path = tmp_path / "labeled_identity.json"
+    corrections_path = tmp_path / "corrections_identity.json"
+    artifacts_dir = tmp_path / "phase10_pipeline_identity"
+
+    manifest = _frame_manifest_with_images(tmp_path)
+    frame_manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    labeled_path.write_text(json.dumps(MockFrameRecognizer().detect(manifest), indent=2), encoding="utf-8")
+    corrections_path.write_text(json.dumps([], indent=2), encoding="utf-8")
+
+    pipeline_result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/run_phase10_pipeline.py",
+            "--frame-manifest",
+            str(frame_manifest_path),
+            "--corrections",
+            str(corrections_path),
+            "--match-id",
+            "phase10_pipeline_identity_001",
+            "--labeled-detections",
+            str(labeled_path),
+            "--artifacts-dir",
+            str(artifacts_dir),
+            "--enable-phase15-identity",
+            "--identity-top-k",
+            "2",
+            "--identity-model",
+            str(model_path),
+            "--identity-feature-cache",
+            str(feature_cache_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert pipeline_result.returncode == 0, pipeline_result.stderr
+    pipeline_manifest = json.loads((artifacts_dir / "phase10_pipeline_manifest.json").read_text(encoding="utf-8"))
+    assert pipeline_manifest["identity_summary"]["enriched_object_count"] >= 2
+    enriched_payload = json.loads((artifacts_dir / "phase10_identity_enriched_detections.json").read_text(encoding="utf-8"))
+    assert enriched_payload["detections"][0]["objects"][0]["resolved_signature"] == "BT1-001"

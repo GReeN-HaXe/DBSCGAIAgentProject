@@ -95,6 +95,43 @@ def test_phase9_reconstruct_review_and_convert_to_phase7() -> None:
     assert queue["match_count"] == 2
 
 
+def test_phase9_external_export_carries_identity_resolutions() -> None:
+    payload = normalize_external_match(
+        {
+            "winner_seat": 1,
+            "events": [
+                {
+                    "timestamp_seconds": 1.0,
+                    "phase": "main",
+                    "actor_seat": 1,
+                    "action_type": "detected_frame_state",
+                    "action_text": "frame_0",
+                    "zone_snapshot": {
+                        "1": {
+                            "detected_labels": ["leader_card"],
+                            "detected_objects": [
+                                {
+                                    "label": "leader_card",
+                                    "resolved_signature": "BT1-001",
+                                    "identity_confidence": 0.99,
+                                }
+                            ],
+                        }
+                    },
+                }
+            ],
+        },
+        match_id="identity_1",
+        source_name="identity_test",
+    )
+    trace = external_match_to_phase7_trace_artifact(payload)
+    assert trace["trace"]["setup"]["contains_identity_resolutions"] is True
+    action = trace["trace"]["actions"][0]
+    assert action["has_identity_resolution"] is True
+    assert action["resolved_signatures_by_seat"]["1"] == ["BT1-001"]
+    assert action["state_snapshot"]["resolved_signatures_by_seat"]["1"] == ["BT1-001"]
+
+
 def test_phase9_import_and_extract_scripts(tmp_path) -> None:
     annotation_path = tmp_path / "annotation.json"
     imported_path = tmp_path / "external_match.json"

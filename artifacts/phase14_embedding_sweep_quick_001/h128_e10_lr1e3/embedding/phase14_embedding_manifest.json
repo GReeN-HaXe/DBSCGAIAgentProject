@@ -1,0 +1,74 @@
+{
+  "schema_version": "phase14.embedding_manifest.v1",
+  "status": "pass",
+  "run_name": "h128_e10_lr1e3",
+  "artifacts": {
+    "model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\phase14_torch_model.json",
+    "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+    "embedding_retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_retrieval.json",
+    "embedding_report": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_report.md",
+    "classifier_model_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_classifier_eval.json",
+    "embedding_history_csv": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_history.csv",
+    "embedding_history_summary": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_history_summary.json",
+    "classifier_retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_classifier_retrieval.json",
+    "classifier_comparison": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_quick_001\\h128_e10_lr1e3\\embedding\\phase14_embedding_compare.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "gallery_split": "train",
+    "query_split": "validation",
+    "example_count": 1024,
+    "mean_reciprocal_rank": 0.9771918402777778,
+    "mean_found_rank": 1.056640625,
+    "recall_at_1": 0.95703125,
+    "recall_at_5": 0.9990234375,
+    "recall_at_10": 1.0,
+    "recall_at_20": 1.0
+  },
+  "classifier_comparison": {
+    "schema_version": "phase14.embedding_compare.v1",
+    "target_type": "card_identity",
+    "example_count": 1024,
+    "classifier_model_name": "phase14_torch_mlp",
+    "embedding_model_name": "phase14_torch_mlp",
+    "classifier_mean_reciprocal_rank": 0.577398778521825,
+    "embedding_mean_reciprocal_rank": 0.9771918402777778,
+    "classifier_recall_at_1": 0.447265625,
+    "embedding_recall_at_1": 0.95703125,
+    "classifier_recall_at_5": 0.7529296875,
+    "embedding_recall_at_5": 0.9990234375,
+    "classifier_recall_at_10": 0.8623046875,
+    "embedding_recall_at_10": 1.0,
+    "mrr_lift": 0.39979306175595286,
+    "recall_at_1_lift": 0.509765625,
+    "recall_at_5_lift": 0.24609375,
+    "recall_at_10_lift": 0.1376953125,
+    "embedding_wins": true
+  },
+  "comparison_warning": "",
+  "stage_timings": [
+    {
+      "stage": "evaluate_embedding_retrieval",
+      "duration_seconds": 3.2651680000017222
+    },
+    {
+      "stage": "render_embedding_report",
+      "duration_seconds": 0.2731296999991173
+    },
+    {
+      "stage": "evaluate_classifier_model",
+      "duration_seconds": 2.9300342999995337
+    },
+    {
+      "stage": "evaluate_classifier_retrieval",
+      "duration_seconds": 0.43686199999865494
+    }
+  ],
+  "history": {
+    "run_count": 1,
+    "best_mrr": 0.9771918402777778,
+    "best_recall_at_1": 0.95703125,
+    "best_run_name": "h128_e10_lr1e3",
+    "recent_mrr": 0.9771918402777778
+  }
+}

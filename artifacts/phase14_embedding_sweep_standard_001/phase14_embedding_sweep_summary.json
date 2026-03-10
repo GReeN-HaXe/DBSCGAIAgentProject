@@ -1,0 +1,62 @@
+{
+  "schema_version": "phase14.embedding_sweep.v1",
+  "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+  "profile": "standard",
+  "gallery_split": "train",
+  "query_split": "validation",
+  "config_count": 3,
+  "best": {
+    "config_name": "h256_e20_lr5e4",
+    "hidden_dim": 256,
+    "epochs": 20,
+    "learning_rate": 0.0005,
+    "mean_reciprocal_rank": 0.996337890625,
+    "recall_at_1": 0.9931640625,
+    "recall_at_5": 1.0,
+    "recall_at_10": 1.0,
+    "example_count": 1024,
+    "duration_seconds": 10.518795700001647,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_standard_001\\h256_e20_lr5e4\\embedding\\phase14_embedding_manifest.json"
+  },
+  "ranking": [
+    {
+      "config_name": "h256_e20_lr5e4",
+      "hidden_dim": 256,
+      "epochs": 20,
+      "learning_rate": 0.0005,
+      "mean_reciprocal_rank": 0.996337890625,
+      "recall_at_1": 0.9931640625,
+      "recall_at_5": 1.0,
+      "recall_at_10": 1.0,
+      "example_count": 1024,
+      "duration_seconds": 10.518795700001647,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_standard_001\\h256_e20_lr5e4\\embedding\\phase14_embedding_manifest.json"
+    },
+    {
+      "config_name": "h128_e20_lr1e3",
+      "hidden_dim": 128,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "mean_reciprocal_rank": 0.9884207589285715,
+      "recall_at_1": 0.978515625,
+      "recall_at_5": 0.9990234375,
+      "recall_at_10": 1.0,
+      "example_count": 1024,
+      "duration_seconds": 9.997075499999482,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_standard_001\\h128_e20_lr1e3\\embedding\\phase14_embedding_manifest.json"
+    },
+    {
+      "config_name": "h64_e20_lr1e3",
+      "hidden_dim": 64,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "mean_reciprocal_rank": 0.8688523065476194,
+      "recall_at_1": 0.783203125,
+      "recall_at_5": 0.9794921875,
+      "recall_at_10": 0.998046875,
+      "example_count": 1024,
+      "duration_seconds": 9.86709460000202,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_sweep_standard_001\\h64_e20_lr1e3\\embedding\\phase14_embedding_manifest.json"
+    }
+  ]
+}

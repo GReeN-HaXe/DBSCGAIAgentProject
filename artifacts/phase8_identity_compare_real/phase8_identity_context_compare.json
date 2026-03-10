@@ -1,0 +1,33 @@
+{
+  "schema_version": "phase8.identity_context_compare.v1",
+  "dataset_path": "artifacts\\phase10_with_identity\\phase10_phase7_dataset.json",
+  "dataset_identity_coverage": {
+    "example_count": 3843,
+    "identity_resolved_example_count": 3842,
+    "identity_resolved_example_rate": 0.9997397866250325
+  },
+  "model_type": "backoff",
+  "target_field": "action_type",
+  "train_split": "train",
+  "eval_split": "validation",
+  "artifacts": {
+    "baseline_dir": "artifacts\\phase8_identity_compare_real\\baseline",
+    "identity_dir": "artifacts\\phase8_identity_compare_real\\identity",
+    "baseline_manifest": "artifacts\\phase8_identity_compare_real\\baseline\\phase8_model_manifest.json",
+    "identity_manifest": "artifacts\\phase8_identity_compare_real\\identity\\phase8_model_manifest.json"
+  },
+  "baseline": {
+    "context_mode": "baseline",
+    "top1_accuracy": 1.0,
+    "identity_resolved_example_rate": 0.9987593052109182
+  },
+  "identity": {
+    "context_mode": "identity",
+    "top1_accuracy": 1.0,
+    "identity_resolved_example_rate": 0.9987593052109182
+  },
+  "comparison": {
+    "top1_lift_identity_minus_baseline": 0.0,
+    "dataset_has_identity_signal": true
+  }
+}

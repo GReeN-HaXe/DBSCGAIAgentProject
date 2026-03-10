@@ -1,0 +1,16 @@
+{
+  "total_runs": 3,
+  "recent_window": 3,
+  "recent_avg_top1_lift": -0.028301886792452862,
+  "recent_avg_top1_accuracy": 0.8679245283018867,
+  "win_rate": 0.6666666666666666,
+  "pass_rate": 1.0,
+  "latest_run_name": "h256_e20_lr5e4",
+  "latest_target_field": "decision_class",
+  "latest_top1_accuracy": 0.7452830188679245,
+  "latest_top1_lift": -0.15094339622641517,
+  "best_run_name": "h128_e20_lr1e3",
+  "best_target_field": "decision_class",
+  "best_top1_accuracy": 0.9339622641509434,
+  "best_top1_lift": 0.037735849056603765
+}

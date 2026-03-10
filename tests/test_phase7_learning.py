@@ -35,19 +35,21 @@ def _write_trace(path) -> None:
                         },
                     },
                 },
-                {
-                    "timestamp_utc": "2026-01-01T00:00:01Z",
-                    "actor_kind": "ai",
-                    "player_id": 2,
+            {
+                "timestamp_utc": "2026-01-01T00:00:01Z",
+                "actor_kind": "ai",
+                "player_id": 2,
+                "turn_number": 1,
+                "phase": "end",
+                "action": "end_turn",
+                "action_type": "end_turn",
+                "resolved_signatures_by_seat": {"1": ["BT1-001"], "2": ["BT1-002"]},
+                "has_identity_resolution": True,
+                "state_snapshot": {
+                    "active_player": 2,
                     "turn_number": 1,
                     "phase": "end",
-                    "action": "end_turn",
-                    "action_type": "end_turn",
-                    "state_snapshot": {
-                        "active_player": 2,
-                        "turn_number": 1,
-                        "phase": "end",
-                        "battle_step": None,
+                    "battle_step": None,
                         "counter_window_kind": None,
                         "players": {
                             "1": {"hand_size": 5, "life_size": 8, "energy_size": 1, "energy_resting_count": 1, "battle_size": 1, "unison_size": 0, "drop_size": 0, "warp_size": 0},
@@ -125,6 +127,8 @@ def test_phase7_train_model_and_compare_against_heuristics(tmp_path) -> None:
             "scripts/train_phase7_model.py",
             "--dataset",
             str(dataset_path),
+            "--context-mode",
+            "identity",
             "--output",
             str(model_path),
             "--eval-output",
@@ -139,6 +143,8 @@ def test_phase7_train_model_and_compare_against_heuristics(tmp_path) -> None:
     assert train_result.returncode == 0, train_result.stderr
     model_payload = json.loads(model_path.read_text(encoding="utf-8"))
     assert model_payload["model_name"] == "frequency_policy"
+    assert model_payload["context_mode"] == "identity"
+    assert "state_features.self_primary_resolved_signature" in model_payload["context_fields"]
 
     compare_result = subprocess.run(
         [
@@ -161,6 +167,8 @@ def test_phase7_train_model_and_compare_against_heuristics(tmp_path) -> None:
     compare_payload = json.loads(compare_path.read_text(encoding="utf-8"))
     assert len(compare_payload["ranking"]) == 4
     assert compare_payload["ranking"][0]["rank"] == 1
+    assert "identity_resolution_rankings" in compare_payload
+    assert compare_payload["results"][0]["identity_resolved_example_count"] >= 1
 
     history_result = subprocess.run(
         [
@@ -181,6 +189,7 @@ def test_phase7_train_model_and_compare_against_heuristics(tmp_path) -> None:
     summary_payload = json.loads(history_summary.read_text(encoding="utf-8"))
     assert summary_payload["total_runs"] == 4
     assert "best_top1_accuracy" in summary_payload
+    assert "latest_identity_resolved_example_rate" in summary_payload
 
 
 def test_phase8_backoff_model_and_error_analysis(tmp_path) -> None:
@@ -207,6 +216,8 @@ def test_phase8_backoff_model_and_error_analysis(tmp_path) -> None:
             str(dataset_path),
             "--model-type",
             "backoff",
+            "--context-mode",
+            "identity",
             "--output",
             str(model_path),
             "--eval-output",
@@ -221,6 +232,7 @@ def test_phase8_backoff_model_and_error_analysis(tmp_path) -> None:
     assert train_result.returncode == 0, train_result.stderr
     model_payload = json.loads(model_path.read_text(encoding="utf-8"))
     assert model_payload["model_name"] == "backoff_frequency_policy"
+    assert model_payload["context_mode"] == "identity"
 
     analysis_result = subprocess.run(
         [
@@ -244,3 +256,4 @@ def test_phase8_backoff_model_and_error_analysis(tmp_path) -> None:
     assert analysis_payload["model_name"] == "backoff_frequency_policy"
     assert "top_confusions" in analysis_payload
     assert "ablations" in analysis_payload
+    assert "identity_resolution_slices" in analysis_payload

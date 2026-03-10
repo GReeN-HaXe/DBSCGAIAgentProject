@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from src.agent.policy import AgentPolicy
-from src.agent.session import describe_action, snapshot_state_for_trace
+from src.agent.session import decision_owner_for_state, describe_action, snapshot_state_for_trace
 from src.game import RulesEngine
 from src.game.state import GameState, TurnPhase
 
@@ -25,12 +25,14 @@ class DecisionTraceEntry:
     chosen_action_text: str
     state_snapshot: dict[str, object]
     candidates: tuple[ScoredDecision, ...]
+    post_action_state_snapshot: dict[str, object] | None = None
 
 
 @dataclass(frozen=True)
 class SimulationResult:
     final_state: GameState
     total_actions: int
+    stop_reason: str
     decision_trace: tuple[DecisionTraceEntry, ...] = ()
 
 
@@ -41,6 +43,8 @@ def simulation_result_to_dict(result: SimulationResult) -> dict[str, object]:
         "turn_number": result.final_state.turn_number,
         "active_player": result.final_state.active_player,
         "phase": result.final_state.phase.value,
+        "stop_reason": result.stop_reason,
+        "final_state_snapshot": snapshot_state_for_trace(result.final_state),
         "decision_trace": [
             {
                 "step_index": entry.step_index,
@@ -50,6 +54,7 @@ def simulation_result_to_dict(result: SimulationResult) -> dict[str, object]:
                 "chosen_action_type": entry.chosen_action_type,
                 "chosen_action_text": entry.chosen_action_text,
                 "state_snapshot": entry.state_snapshot,
+                "post_action_state_snapshot": entry.post_action_state_snapshot,
                 "candidates": [
                     {
                         "action_type": c.action_type,
@@ -76,9 +81,11 @@ def run_ai_vs_ai(
 ) -> SimulationResult:
     actions_taken = 0
     trace: list[DecisionTraceEntry] = []
+    stop_reason = "max_actions_reached"
     while state.winner_id is None and actions_taken < max_actions:
-        legal = engine.get_legal_actions(state, state.active_player if state.counter_window is None else state.counter_window.responder_player_id)
+        legal = engine.get_legal_actions(state, decision_owner_for_state(state))
         if not legal:
+            stop_reason = "no_legal_actions"
             break
         actor_id = legal[0].player_id
         policy = p1_policy if actor_id == 1 else p2_policy
@@ -95,6 +102,9 @@ def run_ai_vs_ai(
             choice = policy.choose_action(state, legal)
         if choice not in legal:
             raise ValueError(f"Policy returned illegal action: {choice}")
+        state_before = state
+        state = engine.apply_action(state, choice)
+        actions_taken += 1
         if capture_trace:
             if ranked:
                 top = ranked[: max(1, trace_top_k)]
@@ -116,16 +126,19 @@ def run_ai_vs_ai(
                 )
             trace.append(
                 DecisionTraceEntry(
-                    step_index=actions_taken + 1,
+                    step_index=actions_taken,
                     actor_player_id=actor_id,
-                    turn_number=state.turn_number,
-                    phase=state.phase,
+                    turn_number=state_before.turn_number,
+                    phase=state_before.phase,
                     chosen_action_type=str(choice.action_type.value),
-                    chosen_action_text=describe_action(choice),
-                    state_snapshot=snapshot_state_for_trace(state),
+                    chosen_action_text=describe_action(choice, state=state_before),
+                    state_snapshot=snapshot_state_for_trace(state_before),
+                    post_action_state_snapshot=snapshot_state_for_trace(state),
                     candidates=candidates,
                 )
             )
-        state = engine.apply_action(state, choice)
-        actions_taken += 1
-    return SimulationResult(final_state=state, total_actions=actions_taken, decision_trace=tuple(trace))
+    if state.winner_id is not None:
+        stop_reason = "winner_decided"
+    elif actions_taken >= max_actions:
+        stop_reason = "max_actions_reached"
+    return SimulationResult(final_state=state, total_actions=actions_taken, stop_reason=stop_reason, decision_trace=tuple(trace))

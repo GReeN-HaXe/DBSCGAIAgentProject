@@ -1,0 +1,352 @@
+{
+  "split": "validation",
+  "profiles": [
+    "balanced",
+    "aggressive",
+    "control"
+  ],
+  "model_name": "backoff_frequency_policy",
+  "identity_resolution_rankings": {
+    "with_identity": [
+      {
+        "rank": 1,
+        "profile": "aggressive",
+        "top1_accuracy": 0.0,
+        "family_accuracy": 0.0,
+        "example_count": 805
+      },
+      {
+        "rank": 2,
+        "profile": "balanced",
+        "top1_accuracy": 0.0,
+        "family_accuracy": 0.0,
+        "example_count": 805
+      },
+      {
+        "rank": 3,
+        "profile": "control",
+        "top1_accuracy": 0.0,
+        "family_accuracy": 0.0,
+        "example_count": 805
+      }
+    ],
+    "without_identity": [
+      {
+        "rank": 1,
+        "profile": "aggressive",
+        "top1_accuracy": 0.0,
+        "family_accuracy": 0.0,
+        "example_count": 1
+      },
+      {
+        "rank": 2,
+        "profile": "balanced",
+        "top1_accuracy": 0.0,
+        "family_accuracy": 0.0,
+        "example_count": 1
+      },
+      {
+        "rank": 3,
+        "profile": "control",
+        "top1_accuracy": 0.0,
+        "family_accuracy": 0.0,
+        "example_count": 1
+      }
+    ]
+  },
+  "promotion": {
+    "promoted": true,
+    "min_top1_lift": 0.0,
+    "model_top1_accuracy": 1.0,
+    "best_heuristic_profile": "balanced",
+    "best_heuristic_top1_accuracy": 0.0,
+    "top1_lift_vs_best_heuristic": 1.0
+  },
+  "ranking": [
+    {
+      "profile": "backoff_frequency_policy",
+      "target_field": "action_type",
+      "top1_accuracy": 1.0,
+      "family_accuracy": 1.0,
+      "example_count": 806,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "rank": 1
+    },
+    {
+      "profile": "aggressive",
+      "target_field": "action_type",
+      "top1_accuracy": 0.0,
+      "family_accuracy": 0.0,
+      "example_count": 806,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "rank": 2
+    },
+    {
+      "profile": "balanced",
+      "target_field": "action_type",
+      "top1_accuracy": 0.0,
+      "family_accuracy": 0.0,
+      "example_count": 806,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "rank": 3
+    },
+    {
+      "profile": "control",
+      "target_field": "action_type",
+      "top1_accuracy": 0.0,
+      "family_accuracy": 0.0,
+      "example_count": 806,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "rank": 4
+    }
+  ],
+  "results": [
+    {
+      "profile": "backoff_frequency_policy",
+      "target_field": "action_type",
+      "example_count": 806,
+      "top1_accuracy": 1.0,
+      "family_accuracy": 1.0,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "identity_resolution_slices": {
+        "with_identity": {
+          "example_count": 805,
+          "top1_accuracy": 1.0,
+          "by_target_label": [
+            {
+              "count": 805,
+              "matched": 805,
+              "accuracy": 1.0,
+              "target_label": "detected_frame_state"
+            }
+          ]
+        },
+        "without_identity": {
+          "example_count": 1,
+          "top1_accuracy": 1.0,
+          "by_target_label": [
+            {
+              "count": 1,
+              "matched": 1,
+              "accuracy": 1.0,
+              "target_label": "detected_frame_state"
+            }
+          ]
+        }
+      },
+      "model_name": "backoff_frequency_policy"
+    },
+    {
+      "profile": "balanced",
+      "split": "validation",
+      "example_count": 806,
+      "top1_accuracy": 0.0,
+      "family_accuracy": 0.0,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "by_action_type": [
+        {
+          "count": 806,
+          "matched": 0,
+          "accuracy": 0.0,
+          "action_type": "detected_frame_state"
+        }
+      ],
+      "by_action_family": [
+        {
+          "count": 806,
+          "matched": 0,
+          "accuracy": 0.0,
+          "action_family": "other"
+        }
+      ],
+      "identity_resolution_slices": {
+        "with_identity": {
+          "example_count": 805,
+          "top1_accuracy": 0.0,
+          "family_accuracy": 0.0,
+          "by_action_type": [
+            {
+              "count": 805,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_type": "detected_frame_state"
+            }
+          ],
+          "by_action_family": [
+            {
+              "count": 805,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_family": "other"
+            }
+          ]
+        },
+        "without_identity": {
+          "example_count": 1,
+          "top1_accuracy": 0.0,
+          "family_accuracy": 0.0,
+          "by_action_type": [
+            {
+              "count": 1,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_type": "detected_frame_state"
+            }
+          ],
+          "by_action_family": [
+            {
+              "count": 1,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_family": "other"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "profile": "aggressive",
+      "split": "validation",
+      "example_count": 806,
+      "top1_accuracy": 0.0,
+      "family_accuracy": 0.0,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "by_action_type": [
+        {
+          "count": 806,
+          "matched": 0,
+          "accuracy": 0.0,
+          "action_type": "detected_frame_state"
+        }
+      ],
+      "by_action_family": [
+        {
+          "count": 806,
+          "matched": 0,
+          "accuracy": 0.0,
+          "action_family": "other"
+        }
+      ],
+      "identity_resolution_slices": {
+        "with_identity": {
+          "example_count": 805,
+          "top1_accuracy": 0.0,
+          "family_accuracy": 0.0,
+          "by_action_type": [
+            {
+              "count": 805,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_type": "detected_frame_state"
+            }
+          ],
+          "by_action_family": [
+            {
+              "count": 805,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_family": "other"
+            }
+          ]
+        },
+        "without_identity": {
+          "example_count": 1,
+          "top1_accuracy": 0.0,
+          "family_accuracy": 0.0,
+          "by_action_type": [
+            {
+              "count": 1,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_type": "detected_frame_state"
+            }
+          ],
+          "by_action_family": [
+            {
+              "count": 1,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_family": "other"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "profile": "control",
+      "split": "validation",
+      "example_count": 806,
+      "top1_accuracy": 0.0,
+      "family_accuracy": 0.0,
+      "identity_resolved_example_count": 805,
+      "identity_resolved_example_rate": 0.9987593052109182,
+      "by_action_type": [
+        {
+          "count": 806,
+          "matched": 0,
+          "accuracy": 0.0,
+          "action_type": "detected_frame_state"
+        }
+      ],
+      "by_action_family": [
+        {
+          "count": 806,
+          "matched": 0,
+          "accuracy": 0.0,
+          "action_family": "other"
+        }
+      ],
+      "identity_resolution_slices": {
+        "with_identity": {
+          "example_count": 805,
+          "top1_accuracy": 0.0,
+          "family_accuracy": 0.0,
+          "by_action_type": [
+            {
+              "count": 805,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_type": "detected_frame_state"
+            }
+          ],
+          "by_action_family": [
+            {
+              "count": 805,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_family": "other"
+            }
+          ]
+        },
+        "without_identity": {
+          "example_count": 1,
+          "top1_accuracy": 0.0,
+          "family_accuracy": 0.0,
+          "by_action_type": [
+            {
+              "count": 1,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_type": "detected_frame_state"
+            }
+          ],
+          "by_action_family": [
+            {
+              "count": 1,
+              "matched": 0,
+              "accuracy": 0.0,
+              "action_family": "other"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

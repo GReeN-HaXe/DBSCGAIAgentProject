@@ -94,6 +94,8 @@ def main() -> None:
                 "artifacts_dir": str(run_dir),
                 "model_name": manifest_json.get("model_name"),
                 "top1_accuracy": manifest_json.get("metrics", {}).get("model_top1_accuracy", 0.0),
+                "identity_resolved_example_count": manifest_json.get("metrics", {}).get("identity_resolved_example_count", 0),
+                "identity_resolved_example_rate": manifest_json.get("metrics", {}).get("identity_resolved_example_rate", 0.0),
                 "promotion_passed": manifest_json.get("metrics", {}).get("promotion_passed", False),
                 "summary": summary,
             }
@@ -107,6 +109,14 @@ def main() -> None:
     payload = {
         "slice_field": str(args.slice_field),
         "run_count": len(runs),
+        "identity_summary": {
+            "avg_identity_resolved_example_rate": (
+                sum(float(row.get("identity_resolved_example_rate", 0.0) or 0.0) for row in runs) / len(runs)
+                if runs
+                else 0.0
+            ),
+            "total_identity_resolved_examples": sum(int(row.get("identity_resolved_example_count", 0) or 0) for row in runs),
+        },
         "runs": runs,
         "ranking": [{**row, "rank": idx + 1} for idx, row in enumerate(ranking)],
         "promotion_summary": {

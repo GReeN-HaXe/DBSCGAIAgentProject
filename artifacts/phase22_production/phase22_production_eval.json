@@ -1,0 +1,3621 @@
+{
+  "schema_version": "phase22.state_eval.v1",
+  "model_name": "phase22_state_encoder",
+  "target_field": "decision_class",
+  "split": "validation",
+  "example_count": 106,
+  "top1_accuracy": 0.9339622641509434,
+  "top_k_accuracy": {
+    "1": 0.9339622641509434,
+    "3": 1.0,
+    "5": 1.0
+  },
+  "rows": [
+    {
+      "example_index": 0,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.569095611572266
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.248227596282959
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.1528223752975464
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.2791918516159058
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.230634927749634
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.413334369659424
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.025248646736145
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.49348750710487366
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -0.2691701352596283
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.5083581209182739
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.641515254974365
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 0.9636728167533875
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.5134843587875366
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.3320203721523285
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.924478769302368
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 7.724876403808594
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 0.8884720802307129
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.7975096106529236
+        },
+        {
+          "rank": 4,
+          "label": "charge_midgame",
+          "score": 0.5296916961669922
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.3760967254638672
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 4.198331832885742
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 3.474642753601074
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 1.5308588743209839
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 0.5189869403839111
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.6048526763916016
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 6,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.281335353851318
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.1844587326049805
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.2648847103118896
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.9818973541259766
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.6036441326141357
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.942259788513184
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 0.9385736584663391
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.6823610067367554
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.5903446674346924
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.6916000843048096
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.9651994705200195
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.43478536605835
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.4377951920032501
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.028458833694458
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.009335517883301
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.358288288116455
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 4.893399715423584
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_reset",
+          "score": -1.0463342666625977
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.080206274986267
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -1.510284662246704
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 2.096998453140259
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.8190112113952637
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.12936851382255554
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": 0.08911052346229553
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.1978548765182495
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 12,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.4485626220703125
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.302473545074463
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.0223835706710815
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.3060634136199951
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.2211124897003174
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.6488988399505615
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 1.3985793590545654
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.4383634626865387
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -1.9652738571166992
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -3.1235644817352295
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 2.60373592376709
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.860369324684143
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": -0.009907897561788559
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -0.7766846418380737
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.0578545331954956
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 6.716010570526123
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.932046413421631
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": 2.073781728744507
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_leader",
+          "score": 0.9622341394424438
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.38790255784988403
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.798480987548828
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.4870526790618896
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 1.514236330986023
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 1.4584413766860962
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.1797618865966797
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 18,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_board_setup",
+      "actual_label": "play_board_setup",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_setup",
+          "score": 2.4322967529296875
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 1.8580974340438843
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -1.9858912229537964
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -2.5106191635131836
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.6449151039123535
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 20,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 5.328091144561768
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 4.476132392883301
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.9894609451293945
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.4222463369369507
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -2.086411952972412
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.851198673248291
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.842102527618408
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.7181869149208069
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.7267006635665894
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.717635989189148
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.8433713912963867
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.667117118835449
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -1.164075493812561
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -1.5654637813568115
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.9001715183258057
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 24,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.959283351898193
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 1.7307357788085938
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.5486005544662476
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.3046630918979645
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.1341331005096436
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.8034029006958
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.792525768280029
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.7745200395584106
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.1605042964220047
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.8710938692092896
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.8034029006958
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.792525768280029
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.7745200395584106
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.1605042964220047
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.8710938692092896
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.239020347595215
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 4.9458842277526855
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.6919708847999573
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.7524670362472534
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -0.8519145250320435
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 6.600625038146973
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 4.492988586425781
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 1.8884786367416382
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -0.2582014203071594
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -1.325730800628662
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.152620792388916
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.889947772026062
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.06536121666431427
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -0.33881843090057373
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.8685064315795898
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.686250686645508
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.050189256668091
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.6440575122833252
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.6993151307106018
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -0.7707647681236267
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.457834482192993
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 2.0458006858825684
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.7905755043029785
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": 0.2917133867740631
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.137477159500122
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.985532760620117
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.076021194458008
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 1.6057003736495972
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -0.007691569626331329
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.014284297823905945
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 35,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_battle",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 5.0062479972839355
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 4.710926532745361
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.0622533559799194
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -1.520035982131958
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -2.0860400199890137
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.71397590637207
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 6.228862762451172
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.5326942205429077
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.1381666660308838
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.8388929963111877
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.269392013549805
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 6.2090959548950195
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.9994498491287231
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.03809836506843567
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.12373455613851547
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.030150413513184
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.758638858795166
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.0102872848510742
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.23153963685035706
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.6421432495117188
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 5.6180009841918945
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 3.976334571838379
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.2565016448497772
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.12989699840545654
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.1020493507385254
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 41,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.256381988525391
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.8302037715911865
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.24058803915977478
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -2.477562427520752
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -3.4198973178863525
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.9948627948760986
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 1.4189648628234863
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.04124489799141884
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.40895482897758484
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.6513025760650635
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.702350616455078
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.770184516906738
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.3223681151866913
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.7242368459701538
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.1016430854797363
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.58798599243164
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.870267868041992
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 3.005732536315918
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 2.2179579734802246
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.32874295115470886
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 46,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.860062599182129
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.610014915466309
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.470177412033081
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.4857616424560547
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.5142598152160645
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.589692115783691
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.690035343170166
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.6336079239845276
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.19996273517608643
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.7426729202270508
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.277045249938965
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.723532199859619
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.1518102884292603
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.37174171209335327
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.0579560995101929
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 50,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.668501377105713
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.397704124450684
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.6916653513908386
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.2445905208587646
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.5325779914855957
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.572310447692871
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.5427906513214111
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.20193815231323242
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.674534559249878
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.208244800567627
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.6017935276031494
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.5542899370193481
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": 0.18945565819740295
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.4396132230758667
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.3263700008392334
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.33652400970459
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.862367153167725
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.6070680618286133
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 1.8461226224899292
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.0748932808637619
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 4.198331832885742
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 3.474642753601074
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 1.5308588743209839
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 0.5189869403839111
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.6048526763916016
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 56,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 3.7697885036468506
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.9472739696502686
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.5734784603118896
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3171641826629639
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -3.3306140899658203
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 4.377321243286133
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.8654862642288208
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": -0.99762362241745
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.4471876621246338
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -1.5832973718643188
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.673356056213379
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 6.075514316558838
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.7912217378616333
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.2482672929763794
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.5542937517166138
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.486748218536377
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.333715438842773
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.024979740381240845
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.006977904587984085
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.7018422484397888
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 3.6753807067871094
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.6808629035949707
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.167003333568573
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -0.24639497697353363
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.5772974491119385
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 62,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.706528186798096
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856746673584
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014184951782227
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.384921669960022
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488991975784302
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.585094451904297
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.1215693950653076
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.06588006019592285
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -2.4568302631378174
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.687065839767456
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.082703590393066
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.7207188606262207
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.25885510444641113
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -0.9148606061935425
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.4066656827926636
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.062065362930298
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 1.8290462493896484
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.04165564104914665
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.47349828481674194
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.7997968196868896
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.408060550689697
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.573737621307373
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 1.1158733367919922
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": 0.3500513732433319
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.5554531216621399
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 67,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 1.769888997077942
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.13985125720500946
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.4601908326148987
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -2.257894277572632
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.545734167098999
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.3473801612854
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.848605155944824
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.4995884895324707
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.20385931432247162
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.45883288979530334
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.3473801612854
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.848605155944824
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.4995884895324707
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.20385931432247162
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.45883288979530334
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 8.344076156616211
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 4.299457550048828
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.9724509716033936
+        },
+        {
+          "rank": 4,
+          "label": "charge_midgame",
+          "score": -1.161338448524475
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -1.751617431640625
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 72,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.256252765655518
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.501938819885254
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.670254111289978
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.016286849975586
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -3.0554256439208984
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.794095039367676
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.6983281373977661
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.15575459599494934
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.8323028087615967
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -0.9862260222434998
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.6567511558532715
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.0885517597198486
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.5612801313400269
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.18416662514209747
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.432401418685913
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 4.644547462463379
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 4.084662914276123
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.15614905953407288
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.7094638347625732
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -1.4553877115249634
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 3.742589235305786
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.628527045249939
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.6339450478553772
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_leader",
+          "score": -0.5520031452178955
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.0198493003845215
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 78,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.769057750701904
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 0.17827582359313965
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": 0.057650722563266754
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -0.3135039508342743
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.9112251996994019
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.152788162231445
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.2641087770462036
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.39997395873069763
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.5627241134643555
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -2.8379085063934326
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.3238108158111572
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.9457488656044006
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.13686293363571167
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.326558381319046
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.9241325855255127
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_leader",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.471301078796387
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.442234039306641
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.8899509906768799
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": 0.3046302795410156
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.4776473045349121
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 83,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.188055992126465
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.3384811878204346
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.13432052731513977
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -2.4634273052215576
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.138856887817383
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_board_setup",
+      "actual_label": "play_board_setup",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_setup",
+          "score": 3.9390318393707275
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 2.5625672340393066
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": -1.260818362236023
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -1.6203681230545044
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.6656696796417236
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.6839380264282227
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 2.0240211486816406
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.4446287155151367
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -2.3068747520446777
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.484347105026245
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 9.417628288269043
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.816084861755371
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.6998960971832275
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 2.2879340648651123
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.7375575304031372
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 88,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.902449131011963
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.063144207000732
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.5450363159179688
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.5472463369369507
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.20271635055542
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.88599157333374
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.7583627104759216
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.44712987542152405
+        },
+        {
+          "rank": 4,
+          "label": "charge_midgame",
+          "score": -0.47061365842819214
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.331998348236084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.603513717651367
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.4329962730407715
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.4024622440338135
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.8410994410514832
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.1852548122406006
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 6.906442165374756
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.7775559425354
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.08150195330381393
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.35111767053604126
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.9778385162353516
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 3.967170238494873
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 1.114652156829834
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.9392224550247192
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.5595948100090027
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.26770249009132385
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 94,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.7065277099609375
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.311856269836426
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 3.1014180183410645
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.38492128252983093
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.1488993167877197
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 3.5888426303863525
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.450260877609253
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.17334987223148346
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -3.205458641052246
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -3.8346145153045654
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.894989967346191
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.2620534896850586
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.27882832288742065
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -0.7493991255760193
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -3.0182976722717285
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 5.153799057006836
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.052122116088867
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_reset",
+          "score": -0.9909749031066895
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.4601770639419556
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.6633813381195068
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.107234954833984
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.713507652282715
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.2121567726135254
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.010234721004962921
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.14507678151130676
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 7.522180080413818
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.1212798357009888
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 1.0167592763900757
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.12659740447998047
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -0.8019766807556152
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 100,
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.567816734313965
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.251526355743408
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.987678289413452
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_passive",
+          "score": -0.44096145033836365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.4945504665374756
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_battle",
+      "matched": false,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 5.064719200134277
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 5.053246021270752
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.3619624078273773
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -0.3378410339355469
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.7783623933792114
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.312666893005371
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.809943675994873
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.503251552581787
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.11247082054615021
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.9344570636749268
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.889402866363525
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 5.806400299072266
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.9280591011047363
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.08245420455932617
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.3508985936641693
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 4.237872123718262
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.3184146881103516
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": -0.3521573543548584
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -0.4942519962787628
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -1.8829463720321655
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 6.931440830230713
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 5.113046646118164
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.9841981530189514
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": 0.08844490349292755
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.1075887531042099
+        }
+      ],
+      "has_identity_resolution": false
+    }
+  ],
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0
+}

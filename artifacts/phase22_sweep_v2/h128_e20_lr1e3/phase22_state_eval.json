@@ -1,0 +1,4151 @@
+{
+  "schema_version": "phase22.state_eval.v1",
+  "model_name": "phase22_state_encoder",
+  "target_field": "decision_class",
+  "split": "validation",
+  "example_count": 106,
+  "top1_accuracy": 0.9905660377358491,
+  "top_k_accuracy": {
+    "1": 0.9905660377358491,
+    "3": 1.0,
+    "5": 1.0
+  },
+  "rows": [
+    {
+      "example_index": 0,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5847",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.713865280151367
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.4455492496490479
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.8507292866706848
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.1950843334197998
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.6763250827789307
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.771144866943359
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.0674840211868286
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.1512276828289032
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.8329012393951416
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -1.9963246583938599
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9659",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.116302967071533
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 0.8940951228141785
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.8315377235412598
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.4408509433269501
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -3.8383660316467285
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9736",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 7.2578911781311035
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 0.7156363725662231
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.5542874336242676
+        },
+        {
+          "rank": 4,
+          "label": "charge_midgame",
+          "score": 0.12457814812660217
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.9647536277770996
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9787",
+      "decision_class": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 3.527895450592041
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 3.157330274581909
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 0.9290252923965454
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 0.09191038459539413
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.8266849517822266
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 6,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9657",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.756203651428223
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.2984498739242554
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.8965147733688354
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.9208546280860901
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.5510077476501465
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=6999",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.561100482940674
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 1.0509583950042725
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 1.041905403137207
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.30233728885650635
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -3.186655044555664
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.67477035522461
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 0.7565215229988098
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.11041085422039032
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.7744980454444885
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.9921181201934814
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.55485725402832
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.2608423233032227
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -1.0256776809692383
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.1054455041885376
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -1.2156916856765747
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 2.4449291229248047
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.717966079711914
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.1660672277212143
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.4275341033935547
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -1.7617565393447876
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 12,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9724",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.763318061828613
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.559619665145874
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.690187931060791
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.2190372943878174
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.4178483486175537
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9721",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.777653694152832
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 0.8710452318191528
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.6595728993415833
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -2.430171012878418
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -3.089548110961914
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 3.1036317348480225
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.8368405103683472
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.43874508142471313
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.8655588626861572
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.2456183433532715
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 6.615255832672119
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.7944812774658203
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.7310423851013184
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -1.4237821102142334
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -2.1493170261383057
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=4440",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.35524320602417
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.9308583736419678
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 0.9867358803749084
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 0.5551312565803528
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -3.72406268119812
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 18,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_029_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=6999",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_029_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_setup",
+      "matched": false,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=6688",
+      "decision_class": "play_board_setup",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.03851318359375
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 1.5511435270309448
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -1.9136451482772827
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -2.687885284423828
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -3.249965190887451
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 20,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_030_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5106",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_030_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 7.134665489196777
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 2.0282938480377197
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": 1.32969069480896
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -2.185615062713623
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.744492530822754
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_030_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 7.759552001953125
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.2741221189498901
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": 1.2449498176574707
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.3657150268554688
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.8044540882110596
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_030_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9721",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.769448757171631
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.522369384765625
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.8669090867042542
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -2.3732547760009766
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.6572062969207764
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 24,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9657",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 5.494665622711182
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 0.05971876531839371
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": -1.754983901977539
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -1.9194259643554688
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -2.2269370555877686
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.825724601745605
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.4299348592758179
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.910725474357605
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.2600903809070587
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.166635513305664
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.825724601745605
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.4299348592758179
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.910725474357605
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.2600903809070587
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.166635513305664
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 7.5198869705200195
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 1.1140527725219727
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.6687113046646118
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -0.9666595458984375
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.742612600326538
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=8630",
+      "decision_class": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 5.9924821853637695
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 4.397975444793701
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 1.4865450859069824
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.4145475625991821
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.424938678741455
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5847",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.666501998901367
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.7467454671859741
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.4779903292655945
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_leader",
+          "score": -2.210455894470215
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.3135907649993896
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9737",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 5.697817802429199
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.3787472248077393
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.2969105541706085
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.1851352453231812
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.7374695539474487
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=1536",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.11203670501709
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 0.8426352739334106
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.2666616141796112
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.556765079498291
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -3.6660025119781494
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=4726|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.121623992919922
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.7336992621421814
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.42096835374832153
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -0.3876928687095642
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.541422426700592
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 35,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9635",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=1536|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.819767475128174
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.8782544136047363
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.4756486415863037
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -1.0519788265228271
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.4786052703857422
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.804659843444824
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.3285878896713257
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.289031982421875
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.2989272475242615
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.146857738494873
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9635|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.686075210571289
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.6258465051651
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.186832070350647
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.3699977993965149
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.3988462686538696
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=1536|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.025531768798828
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.6320456266403198
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.0052814483642578
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.6208995580673218
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.3884896039962769
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=6688",
+      "decision_class": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 5.239885330200195
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 3.670881509780884
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.13924700021743774
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.7937597036361694
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -2.7637717723846436
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 41,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9728",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=8458",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 3.7253048419952393
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.7955589294433594
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.04173843190073967
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -2.0464329719543457
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -3.379685163497925
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=7236",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.97568941116333
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 0.7273856997489929
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.08776257932186127
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.8089507818222046
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -4.0430779457092285
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=1536|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.023491859436035
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.5861459970474243
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.7115769386291504
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.7146640419960022
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.4547595977783203
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9638|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.599660873413086
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 2.2039871215820312
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.024208664894104
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.9250850081443787
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.1537446826696396
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 46,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_035_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=6999",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_035_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.903875350952148
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.623308777809143
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.3922480344772339
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.2000889778137207
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.7372236251831055
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_035_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=5301|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.744327545166016
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.1365396976470947
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.32131779193878174
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.5706676244735718
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.809335231781006
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_035_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.646846771240234
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.080456256866455
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.626611053943634
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.6419752836227417
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.0334675312042236
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 50,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9728",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9638|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.845454216003418
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.59718918800354
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.5719287991523743
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.1787092685699463
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.7270541191101074
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9721",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.81304931640625
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.31108820438385
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.30040502548217773
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.9771360158920288
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.634709358215332
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9728",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.800011396408081
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.2574622631072998
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.00825553759932518
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -1.7636111974716187
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -2.795616388320923
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 6.800377368927002
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 2.0246427059173584
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.0203449726104736
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.3995855450630188
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.6669037342071533
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=5847",
+      "decision_class": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 3.527895450592041
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 3.157330274581909
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 0.9290252923965454
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 0.09191038459539413
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.8266849517822266
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 56,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=8456",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5847",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 3.1725704669952393
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.805130958557129
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.5753532648086548
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.4449336528778076
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -3.2430472373962402
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9642",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 4.08613920211792
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.8938108682632446
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -1.3347841501235962
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -2.1221604347229004
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -3.1600663661956787
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.893967628479004
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.4763704538345337
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.2748701572418213
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.28246185183525085
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.9489766359329224
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.47062349319458
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.1386022567749023
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.01914265751838684
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.3490847647190094
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.0006532669067383
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 3.801262378692627
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 1.6918293237686157
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_reset",
+          "score": -0.03430147469043732
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.07626315951347351
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -1.103156566619873
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 62,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5847",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446340560913086
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113534927368
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863943815231323
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092004537582397
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=8458",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.221521377563477
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.120107412338257
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.13524246215820312
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.940596580505371
+        },
+        {
+          "rank": 5,
+          "label": "charge_opening",
+          "score": -3.5464723110198975
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9736",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 5.356314182281494
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.409868597984314
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.14521872997283936
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.5267667770385742
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.5483473539352417
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=7236",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.957925796508789
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 1.0085943937301636
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.14317281544208527
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.9735793471336365
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -3.7755227088928223
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.469818115234375
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 0.6672317981719971
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.19066166877746582
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -0.046326734125614166
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.6985611915588379
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 67,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=8456",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=4265",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 2.1421945095062256
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.01672091893851757
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.41925954818725586
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -2.484387159347534
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -3.085344076156616
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.587560653686523
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.9939682483673096
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.0471709966659546
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.5602222084999084
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.7476660013198853
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 7.055418491363525
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 2.0077476501464844
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": 1.8878005743026733
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.0827968120574951
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.1535916328430176
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9660",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 7.875043869018555
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 4.3428144454956055
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 1.842747688293457
+        },
+        {
+          "rank": 4,
+          "label": "charge_midgame",
+          "score": -1.1046379804611206
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.864556074142456
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 72,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9736",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9635|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.748974800109863
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.3693828582763672
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.49428024888038635
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.0546340942382812
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -3.4329986572265625
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 5.0959553718566895
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.8116607666015625
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.2898216247558594
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_leader",
+          "score": -1.972345232963562
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.9760419130325317
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9659",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 6.504090785980225
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.1731162071228027
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.8903135657310486
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.5052729249000549
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -4.1471848487854
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 6.97295618057251
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 0.7039156556129456
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.3659507632255554
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.3763118982315063
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -1.4684704542160034
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 3.9975972175598145
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 1.9347035884857178
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 0.9597148299217224
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.16917338967323303
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.9582123756408691
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 78,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9649",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 5.3135457038879395
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_reset",
+          "score": 0.11564923822879791
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.2641338109970093
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -2.119150400161743
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -2.141402006149292
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=8458",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 5.415284156799316
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.064202904701233
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.6706443428993225
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.4429371654987335
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -3.1330599784851074
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9641",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.412797212600708
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.9340833425521851
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.6072458028793335
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.9297599792480469
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.9774255752563477
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_leader",
+      "actual_label": "attack_leader_with_leader",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_leader",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_leader",
+          "score": 6.815088272094727
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_battle",
+          "score": 0.7777533531188965
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.14934475719928741
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.032974570989608765
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -0.5601426959037781
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 83,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5847",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9658",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 3.951010227203369
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.270125389099121
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.24364104866981506
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -2.0104293823242188
+        },
+        {
+          "rank": 5,
+          "label": "charge_opening",
+          "score": -3.8872151374816895
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_setup",
+      "actual_label": "play_board_setup",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=5106",
+      "decision_class": "play_board_setup",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_setup",
+          "score": 2.6557254791259766
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 2.490299701690674
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": -1.7895822525024414
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.9248263835906982
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.0085442066192627
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=4440",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.303391695022583
+        },
+        {
+          "rank": 2,
+          "label": "play_board_setup",
+          "score": 0.9006943702697754
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": -0.6184512376785278
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -2.230438232421875
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.4534189701080322
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=4726|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.664082527160645
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 2.0044336318969727
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 1.032849907875061
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_leader",
+          "score": 0.8276591897010803
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.024051837623119354
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 88,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=7166",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9638|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.442916870117188
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 2.0769035816192627
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.8394607305526733
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.0191357135772705
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.9475815296173096
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9658",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.381904602050781
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 1.2437865734100342
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 1.150657057762146
+        },
+        {
+          "rank": 4,
+          "label": "charge_midgame",
+          "score": 0.006598078645765781
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.1536240577697754
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.678227424621582
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 0.9976274967193604
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 0.7920633554458618
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.7626904249191284
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.769779920578003
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.07625961303711
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.7665557861328125
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.3028412163257599
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.654442548751831
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.269364595413208
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "trace_hash": "",
+      "predicted_label": "end_turn_after_development",
+      "actual_label": "end_turn_after_development",
+      "matched": true,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "decision_class": "end_turn_after_development",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_after_development",
+          "score": 4.27402400970459
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 0.38368335366249084
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.29842323064804077
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -0.5126667022705078
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -1.550598382949829
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 94,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=6688",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.446341037750244
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.169898986816406
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.950113296508789
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.3863942623138428
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.5092008113861084
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9660",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 3.2945549488067627
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 2.3656632900238037
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.0015944689512252808
+        },
+        {
+          "rank": 4,
+          "label": "charge_opening",
+          "score": -3.056457757949829
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -3.191756248474121
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=5847",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 4.552761554718018
+        },
+        {
+          "rank": 2,
+          "label": "charge_midgame",
+          "score": 1.9994239807128906
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.0980338603258133
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.2482147216796875
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.9141929149627686
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.57280158996582
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.2972564697265625
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.9330042004585266
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -1.1753575801849365
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.203733205795288
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9637|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.884037971496582
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.6325536966323853
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.111523985862732
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.38090285658836365
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.3905646800994873
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_lategame",
+      "actual_label": "charge_lategame",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=9729",
+      "decision_class": "charge_lategame",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_lategame",
+          "score": 7.185702323913574
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 0.7263626456260681
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 0.5933446884155273
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.3084777891635895
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -1.5787769556045532
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 100,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "trace_hash": "",
+      "predicted_label": "charge_opening",
+      "actual_label": "charge_opening",
+      "matched": true,
+      "action_type": "charge_from_hand",
+      "action_signature": "charge_from_hand|card=card_id=8456",
+      "decision_class": "charge_opening",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "charge_opening",
+          "score": 5.4156389236450195
+        },
+        {
+          "rank": 2,
+          "label": "play_development",
+          "score": 4.0623369216918945
+        },
+        {
+          "rank": 3,
+          "label": "charge_midgame",
+          "score": 2.9168317317962646
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": -1.6655811071395874
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_passive",
+          "score": -1.7555255889892578
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 7.791684150695801
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 1.8226406574249268
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.6979097127914429
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -0.5823986530303955
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.503990888595581
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9637|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.8401517868042
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.9072984457015991
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.1394562721252441
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.3092593252658844
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -2.3592867851257324
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "trace_hash": "",
+      "predicted_label": "attack_leader_with_battle",
+      "actual_label": "attack_leader_with_battle",
+      "matched": true,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "decision_class": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.732419967651367
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 2.2387845516204834
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": 1.037632942199707
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.3958744704723358
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -1.6092027425765991
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_board_extension",
+      "actual_label": "play_board_extension",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=7179",
+      "decision_class": "play_board_extension",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_board_extension",
+          "score": 3.688875675201416
+        },
+        {
+          "rank": 2,
+          "label": "play_pressure",
+          "score": 2.117591142654419
+        },
+        {
+          "rank": 3,
+          "label": "play_board_setup",
+          "score": -0.9056896567344666
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.9963558912277222
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -1.8829883337020874
+        }
+      ],
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "source_name": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "trace_hash": "",
+      "predicted_label": "play_pressure",
+      "actual_label": "play_pressure",
+      "matched": true,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=4726",
+      "decision_class": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 6.342506408691406
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 4.652669429779053
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.5372319221496582
+        },
+        {
+          "rank": 4,
+          "label": "charge_lategame",
+          "score": -0.5674405694007874
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -3.1779119968414307
+        }
+      ],
+      "has_identity_resolution": false
+    }
+  ],
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0
+}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from pathlib import Path
 from typing import Any, Protocol
 
 from src.agent.phase9_external import apply_external_review, normalize_external_match, reconstruct_external_match
@@ -10,11 +11,15 @@ PHASE10_DETECTION_SCHEMA_VERSION = "phase10.detections.v1"
 PHASE10_EVENT_SCHEMA_VERSION = "phase10.events.v1"
 PHASE10_REVIEW_SCHEMA_VERSION = "phase10.reviewed_detections.v1"
 PHASE10_BENCHMARK_SCHEMA_VERSION = "phase10.benchmark.v1"
+PHASE10_IDENTITY_ENRICHMENT_SCHEMA_VERSION = "phase10.identity_enrichment.v1"
 
 
 class FrameRecognizer(Protocol):
     def detect(self, frame_manifest: dict[str, Any]) -> dict[str, Any]:
         ...
+
+
+CARD_LIKE_LABELS = {"leader_card", "battle_card", "unison_card", "z_battle_card"}
 
 
 def build_detection_manifest(
@@ -117,7 +122,18 @@ def infer_events_from_detections(detection_manifest: dict[str, Any]) -> dict[str
                     default=0.0,
                 ),
                 "zone_snapshot": {
-                    str(obj.get("seat")): {"detected_labels": [str(item.get("label", "")) for item in objects if isinstance(item, dict) and item.get("seat") == obj.get("seat")]}
+                    str(obj.get("seat")): {
+                        "detected_labels": [str(item.get("label", "")) for item in objects if isinstance(item, dict) and item.get("seat") == obj.get("seat")],
+                        "detected_objects": [
+                            {
+                                "label": str(item.get("label", "")),
+                                "resolved_signature": str(item.get("resolved_signature", "")),
+                                "identity_confidence": float(item.get("identity_confidence", 0.0) or 0.0),
+                            }
+                            for item in objects
+                            if isinstance(item, dict) and item.get("seat") == obj.get("seat")
+                        ],
+                    }
                     for obj in objects
                     if isinstance(obj, dict) and obj.get("seat") is not None
                 },
@@ -199,6 +215,132 @@ def apply_detection_review(
         "notes": str(notes),
         "correction_count": len([row for row in corrections if isinstance(row, dict)]),
         "applied_correction_count": applied,
+    }
+    return reviewed
+
+
+def enrich_detections_with_phase15_identity(
+    detection_manifest: dict[str, Any],
+    *,
+    frame_manifest: dict[str, Any],
+    crops_output_dir: Path,
+    crop_image_format: str = "ppm",
+    top_k: int = 5,
+    production_dir: Path | None = None,
+    model_path: Path | None = None,
+    summary_path: Path | None = None,
+    feature_cache_path: Path | None = None,
+    card_like_labels: set[str] | None = None,
+) -> dict[str, Any]:
+    from src.agent.phase12_visual import export_phase13_real_crop_dataset
+    from src.agent.phase15_runtime import query_phase15_production_crop
+
+    reviewed = deepcopy(detection_manifest)
+    labels_to_enrich = {str(label).strip().lower() for label in (card_like_labels or CARD_LIKE_LABELS)}
+    crop_dataset = export_phase13_real_crop_dataset(
+        frame_manifest=frame_manifest,
+        labeled_manifest=reviewed,
+        crops_output_dir=crops_output_dir,
+        crop_image_format=crop_image_format,
+        validation_ratio=0.2,
+    )
+    examples = crop_dataset.get("examples", [])
+    if not isinstance(examples, list):
+        examples = []
+    detections = reviewed.get("detections", [])
+    if not isinstance(detections, list):
+        detections = []
+    frame_by_index = {int(frame.get("frame_index", -1) or -1): frame for frame in detections if isinstance(frame, dict)}
+    object_lookup: dict[tuple[int, int], dict[str, Any]] = {}
+    for frame in detections:
+        if not isinstance(frame, dict):
+            continue
+        frame_index = int(frame.get("frame_index", -1) or -1)
+        objects = frame.get("objects", [])
+        if not isinstance(objects, list):
+            continue
+        for object_index, obj in enumerate(objects):
+            if not isinstance(obj, dict):
+                continue
+            if str(obj.get("label", "")).strip().lower() in labels_to_enrich:
+                objects[object_index] = {
+                    **obj,
+                    "identity_candidates": [],
+                    "resolved_signature": "",
+                    "identity_confidence": 0.0,
+                    "identity_crop_image_path": "",
+                }
+                object_lookup[(frame_index, object_index)] = objects[object_index]
+    enriched_count = 0
+    skipped_count = 0
+    for row in examples:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("label", "")).strip().lower() not in labels_to_enrich:
+            skipped_count += 1
+            continue
+        crop_path = Path(str(row.get("crop_image_path", "")))
+        if not crop_path.exists():
+            skipped_count += 1
+            continue
+        prediction = query_phase15_production_crop(
+            crop_image_path=crop_path,
+            top_k=int(top_k),
+            production_dir=production_dir,
+            model_path=model_path,
+            summary_path=summary_path,
+            feature_cache_path=feature_cache_path,
+        )
+        predictions = prediction.get("predictions", [])
+        if not isinstance(predictions, list):
+            predictions = []
+        frame_index = int(row.get("frame_index", -1) or -1)
+        object_index = int(row.get("object_index", -1) or -1)
+        target = object_lookup.get((frame_index, object_index))
+        if not isinstance(target, dict):
+            frame = frame_by_index.get(frame_index)
+            objects = frame.get("objects", []) if isinstance(frame, dict) else []
+            bbox = row.get("bbox", {})
+            if not isinstance(objects, list) or not isinstance(bbox, dict):
+                skipped_count += 1
+                continue
+            target = next(
+                (
+                    obj
+                    for obj in objects
+                    if isinstance(obj, dict)
+                    and str(obj.get("label", "")).strip().lower() == str(row.get("label", "")).strip().lower()
+                    and isinstance(obj.get("bbox"), dict)
+                    and obj.get("bbox") == bbox
+                ),
+                None,
+            )
+        if not isinstance(target, dict):
+            skipped_count += 1
+            continue
+        top_prediction = predictions[0] if predictions else {}
+        target["identity_candidates"] = [
+            {
+                "rank": int(item.get("rank", 0) or 0),
+                "signature": str(item.get("signature", "")),
+                "score": float(item.get("score", 0.0) or 0.0),
+            }
+            for item in predictions
+            if isinstance(item, dict)
+        ]
+        target["resolved_signature"] = str(top_prediction.get("signature", ""))
+        target["identity_confidence"] = float(top_prediction.get("score", 0.0) or 0.0)
+        target["identity_crop_image_path"] = str(crop_path)
+        enriched_count += 1
+    reviewed["detections"] = detections
+    reviewed["identity_enrichment"] = {
+        "schema_version": PHASE10_IDENTITY_ENRICHMENT_SCHEMA_VERSION,
+        "resolver_name": "phase15_production",
+        "top_k": int(top_k),
+        "crop_image_format": str(crop_image_format),
+        "crops_output_dir": str(crops_output_dir),
+        "enriched_object_count": enriched_count,
+        "skipped_object_count": skipped_count,
     }
     return reviewed
 

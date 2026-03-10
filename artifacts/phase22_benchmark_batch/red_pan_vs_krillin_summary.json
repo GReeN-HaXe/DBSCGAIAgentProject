@@ -1,0 +1,473 @@
+{
+  "schema_version": "phase22.benchmark_dataset_summary.v1",
+  "group_name": "red_pan_vs_krillin",
+  "pattern": "artifacts/phase22_normalized/red_pan_vs_krillin/*_review.json",
+  "input_count": 20,
+  "included_count": 19,
+  "skipped_count": 1,
+  "included_traces": [
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_001_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 148
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_002_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 140
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_003_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 149
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_004_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 140
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_005_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 148
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_006_review.json",
+      "action_count": 150,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 143
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_007_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 149
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_008_review.json",
+      "action_count": 150,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 143
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_009_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 149
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_010_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 140
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_012_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 141
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_013_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 149
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_014_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 141
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_015_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 149
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_016_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 139
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 4
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_017_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 148
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_018_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 139
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 4
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_019_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 149
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_020_review.json",
+      "action_count": 148,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 140
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 2
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 2
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "skipped_traces": [
+    {
+      "path": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_011_review.json",
+      "action_count": 151,
+      "unique_action_type_count": 2,
+      "top_action_types": [
+        {
+          "action_type": "activate_main_skill",
+          "count": 150
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "dataset_example_count": 2843,
+  "dataset_split_counts": {
+    "train": 2452,
+    "validation": 391
+  }
+}

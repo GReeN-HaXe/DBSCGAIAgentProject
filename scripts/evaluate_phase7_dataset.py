@@ -66,17 +66,13 @@ def _action_family(action_type: str) -> str:
     return "other"
 
 
-def evaluate_phase7_dataset(dataset: dict[str, object], *, profile: str, split: str) -> dict[str, object]:
-    examples = dataset.get("examples", [])
-    if not isinstance(examples, list):
-        examples = []
-    filtered = [row for row in examples if isinstance(row, dict) and (split == "all" or row.get("split") == split)]
-    total = len(filtered)
+def _score_rows(rows: list[dict[str, object]], *, profile: str) -> dict[str, object]:
+    total = len(rows)
     matches = 0
     by_action: dict[str, dict[str, int | float | str]] = {}
     family_matches = 0
     by_family: dict[str, dict[str, int | float | str]] = {}
-    for row in filtered:
+    for row in rows:
         actual = str(row.get("action_type", "unknown"))
         predicted = _predict_action_type(row, profile)
         bucket = by_action.setdefault(actual, {"count": 0, "matched": 0})
@@ -100,13 +96,36 @@ def evaluate_phase7_dataset(dataset: dict[str, object], *, profile: str, split: 
         bucket["accuracy"] = 0.0 if count == 0 else float(bucket["matched"]) / float(count)
         bucket["action_family"] = actual_family
     return {
-        "profile": profile,
-        "split": split,
         "example_count": total,
         "top1_accuracy": 0.0 if total == 0 else float(matches) / float(total),
         "family_accuracy": 0.0 if total == 0 else float(family_matches) / float(total),
         "by_action_type": [by_action[key] for key in sorted(by_action.keys())],
         "by_action_family": [by_family[key] for key in sorted(by_family.keys())],
+    }
+
+
+def evaluate_phase7_dataset(dataset: dict[str, object], *, profile: str, split: str) -> dict[str, object]:
+    examples = dataset.get("examples", [])
+    if not isinstance(examples, list):
+        examples = []
+    filtered = [row for row in examples if isinstance(row, dict) and (split == "all" or row.get("split") == split)]
+    overall = _score_rows(filtered, profile=profile)
+    with_identity = [row for row in filtered if bool(row.get("has_identity_resolution"))]
+    without_identity = [row for row in filtered if not bool(row.get("has_identity_resolution"))]
+    return {
+        "profile": profile,
+        "split": split,
+        "example_count": int(overall["example_count"]),
+        "top1_accuracy": float(overall["top1_accuracy"]),
+        "family_accuracy": float(overall["family_accuracy"]),
+        "identity_resolved_example_count": len(with_identity),
+        "identity_resolved_example_rate": (float(len(with_identity)) / float(len(filtered))) if filtered else 0.0,
+        "by_action_type": overall["by_action_type"],
+        "by_action_family": overall["by_action_family"],
+        "identity_resolution_slices": {
+            "with_identity": _score_rows(with_identity, profile=profile),
+            "without_identity": _score_rows(without_identity, profile=profile),
+        },
     }
 
 

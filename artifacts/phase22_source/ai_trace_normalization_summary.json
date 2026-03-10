@@ -1,0 +1,48 @@
+{
+  "schema_version": "ai_trace_normalization_batch.v1",
+  "input_glob": "artifacts/phase22_source/ai_match_trace_*.json",
+  "include_bookkeeping": false,
+  "processed_count": 5,
+  "outputs": [
+    {
+      "source": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_001.json",
+      "review_output": "artifacts\\phase22_normalized\\ai_match_trace_001_review.json",
+      "training_output": "artifacts\\phase22_normalized\\ai_match_trace_001_training.jsonl",
+      "decision_count": 5,
+      "winner_id": null,
+      "stop_reason": null
+    },
+    {
+      "source": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_002.json",
+      "review_output": "artifacts\\phase22_normalized\\ai_match_trace_002_review.json",
+      "training_output": "artifacts\\phase22_normalized\\ai_match_trace_002_training.jsonl",
+      "decision_count": 5,
+      "winner_id": null,
+      "stop_reason": null
+    },
+    {
+      "source": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_003.json",
+      "review_output": "artifacts\\phase22_normalized\\ai_match_trace_003_review.json",
+      "training_output": "artifacts\\phase22_normalized\\ai_match_trace_003_training.jsonl",
+      "decision_count": 5,
+      "winner_id": null,
+      "stop_reason": null
+    },
+    {
+      "source": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_004.json",
+      "review_output": "artifacts\\phase22_normalized\\ai_match_trace_004_review.json",
+      "training_output": "artifacts\\phase22_normalized\\ai_match_trace_004_training.jsonl",
+      "decision_count": 70,
+      "winner_id": 2,
+      "stop_reason": null
+    },
+    {
+      "source": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_005.json",
+      "review_output": "artifacts\\phase22_normalized\\ai_match_trace_005_review.json",
+      "training_output": "artifacts\\phase22_normalized\\ai_match_trace_005_training.jsonl",
+      "decision_count": 70,
+      "winner_id": 2,
+      "stop_reason": "winner_decided"
+    }
+  ]
+}

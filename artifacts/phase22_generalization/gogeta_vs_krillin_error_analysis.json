@@ -1,0 +1,545 @@
+{
+  "schema_version": "phase22.error_analysis.v1",
+  "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\gogeta_vs_krillin.json",
+  "split": "validation",
+  "example_count": 78,
+  "top1_accuracy": 0.8717948717948718,
+  "top_k_accuracy": {
+    "1": 0.8717948717948718,
+    "3": 1.0,
+    "5": 1.0
+  },
+  "error_count": 10,
+  "top_confusions": [
+    {
+      "pair": "attack_leader_with_leader->attack_leader_with_battle",
+      "count": 7
+    },
+    {
+      "pair": "play_board_extension->play_pressure",
+      "count": 2
+    },
+    {
+      "pair": "end_turn_after_development->end_turn_reset",
+      "count": 1
+    }
+  ],
+  "per_source": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_001_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_002_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_003_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_004_review.json",
+      "example_count": 2,
+      "error_count": 1,
+      "top1_accuracy": 0.5
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_005_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_006_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_007_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_008_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_009_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_010_review.json",
+      "example_count": 4,
+      "error_count": 1,
+      "top1_accuracy": 0.75
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_011_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_012_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_013_review.json",
+      "example_count": 6,
+      "error_count": 2,
+      "top1_accuracy": 0.6666666666666666
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_014_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_015_review.json",
+      "example_count": 8,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_016_review.json",
+      "example_count": 2,
+      "error_count": 1,
+      "top1_accuracy": 0.5
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_017_review.json",
+      "example_count": 6,
+      "error_count": 1,
+      "top1_accuracy": 0.8333333333333334
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_018_review.json",
+      "example_count": 5,
+      "error_count": 1,
+      "top1_accuracy": 0.8
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_019_review.json",
+      "example_count": 3,
+      "error_count": 2,
+      "top1_accuracy": 0.3333333333333333
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_020_review.json",
+      "example_count": 2,
+      "error_count": 1,
+      "top1_accuracy": 0.5
+    }
+  ],
+  "per_actual_label": [
+    {
+      "label": "attack_leader_with_battle",
+      "example_count": 28,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "attack_leader_with_leader",
+      "example_count": 8,
+      "error_count": 7,
+      "top1_accuracy": 0.125
+    },
+    {
+      "label": "charge_lategame",
+      "example_count": 8,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "charge_opening",
+      "example_count": 20,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "end_turn_after_development",
+      "example_count": 6,
+      "error_count": 1,
+      "top1_accuracy": 0.8333333333333334
+    },
+    {
+      "label": "play_board_extension",
+      "example_count": 6,
+      "error_count": 2,
+      "top1_accuracy": 0.6666666666666666
+    },
+    {
+      "label": "play_pressure",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    }
+  ],
+  "sample_errors": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_004_review.json",
+      "example_index": 30,
+      "action_type": "end_turn",
+      "action_signature": "end_turn",
+      "actual_label": "end_turn_after_development",
+      "predicted_label": "end_turn_reset",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "end_turn_reset",
+          "score": 2.7156784534454346
+        },
+        {
+          "rank": 2,
+          "label": "end_turn_after_development",
+          "score": 1.8143956661224365
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_leader",
+          "score": -1.3933337926864624
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -2.3169238567352295
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -2.957510471343994
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_010_review.json",
+      "example_index": 38,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=9638",
+      "actual_label": "play_board_extension",
+      "predicted_label": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 7.995367050170898
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 7.342088222503662
+        },
+        {
+          "rank": 3,
+          "label": "attack_leader_with_battle",
+          "score": 0.8033464550971985
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": 0.2511356472969055
+        },
+        {
+          "rank": 5,
+          "label": "charge_lategame",
+          "score": -1.2372679710388184
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_013_review.json",
+      "example_index": 38,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.705774307250977
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.357970237731934
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.19021306931972504
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.5334548354148865
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.1397578716278076
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_013_review.json",
+      "example_index": 48,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9623|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 11.422131538391113
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.108534812927246
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 4.537566184997559
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 2.8599295616149902
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 1.5796676874160767
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_016_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 9.298558235168457
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 7.423189640045166
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.360324889421463
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_reset",
+          "score": -2.4655098915100098
+        },
+        {
+          "rank": 5,
+          "label": "play_board_setup",
+          "score": -3.1281509399414062
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_017_review.json",
+      "example_index": 38,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.771265029907227
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.468067169189453
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": -0.25730714201927185
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.5667715072631836
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.188190221786499
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_018_review.json",
+      "example_index": 48,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 9.950607299804688
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.79045295715332
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 1.563269853591919
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": 0.4387841820716858
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.5057317614555359
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_019_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.149860382080078
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.922547340393066
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_reset",
+          "score": -1.2324867248535156
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.6961243152618408
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -2.1012074947357178
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_019_review.json",
+      "example_index": 38,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=9623|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.62531852722168
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.594768524169922
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 3.673340320587158
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 2.971653938293457
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": 0.16848477721214294
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_020_review.json",
+      "example_index": 30,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=8630",
+      "actual_label": "play_board_extension",
+      "predicted_label": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 7.238901615142822
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 6.645358562469482
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": -0.034125328063964844
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -1.3679872751235962
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -3.4553985595703125
+        }
+      ]
+    }
+  ]
+}

@@ -14,6 +14,8 @@ class Phase7EvalHistoryRow:
     example_count: int
     top1_accuracy: float
     family_accuracy: float
+    identity_resolved_example_count: int
+    identity_resolved_example_rate: float
 
 
 def build_phase7_eval_history_row(
@@ -24,6 +26,8 @@ def build_phase7_eval_history_row(
     example_count: int,
     top1_accuracy: float,
     family_accuracy: float = 0.0,
+    identity_resolved_example_count: int = 0,
+    identity_resolved_example_rate: float = 0.0,
 ) -> Phase7EvalHistoryRow:
     return Phase7EvalHistoryRow(
         timestamp_utc=datetime.now(timezone.utc).isoformat(),
@@ -33,6 +37,8 @@ def build_phase7_eval_history_row(
         example_count=int(example_count),
         top1_accuracy=float(top1_accuracy),
         family_accuracy=float(family_accuracy),
+        identity_resolved_example_count=int(identity_resolved_example_count),
+        identity_resolved_example_rate=float(identity_resolved_example_rate),
     )
 
 
@@ -45,6 +51,8 @@ def phase7_eval_history_row_to_dict(row: Phase7EvalHistoryRow) -> dict[str, str]
         "example_count": str(row.example_count),
         "top1_accuracy": str(row.top1_accuracy),
         "family_accuracy": str(row.family_accuracy),
+        "identity_resolved_example_count": str(row.identity_resolved_example_count),
+        "identity_resolved_example_rate": str(row.identity_resolved_example_rate),
     }
 
 
@@ -63,6 +71,8 @@ def summarize_phase7_eval_history(rows: Iterable[dict[str, str]], *, recent_wind
     baseline_top1 = _f(items[0], "top1_accuracy") if items else 0.0
     recent_avg_top1 = (sum(_f(row, "top1_accuracy") for row in recent) / len(recent)) if recent else 0.0
     best_top1 = max((_f(row, "top1_accuracy") for row in items), default=0.0)
+    latest_identity_rate = _f(latest, "identity_resolved_example_rate")
+    recent_avg_identity_rate = (sum(_f(row, "identity_resolved_example_rate") for row in recent) / len(recent)) if recent else 0.0
     improving = latest_top1 >= baseline_top1 if items else False
     return {
         "total_runs": len(items),
@@ -74,5 +84,7 @@ def summarize_phase7_eval_history(rows: Iterable[dict[str, str]], *, recent_wind
         "baseline_top1_accuracy": baseline_top1,
         "recent_avg_top1_accuracy": recent_avg_top1,
         "best_top1_accuracy": best_top1,
+        "latest_identity_resolved_example_rate": latest_identity_rate,
+        "recent_avg_identity_resolved_example_rate": recent_avg_identity_rate,
         "improving_vs_baseline": improving,
     }

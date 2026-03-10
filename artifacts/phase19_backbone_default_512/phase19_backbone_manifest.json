@@ -1,0 +1,52 @@
+{
+  "schema_version": "phase19.backbone_manifest.v1",
+  "status": "pass",
+  "run_name": "phase19_backbone_default_512",
+  "artifacts": {
+    "dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_image_dataset.json",
+    "model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase19_backbone_default_512\\phase19_resnet50_model.json",
+    "retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase19_backbone_default_512\\phase19_resnet50_retrieval.json",
+    "phase17_retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase19_backbone_default_512\\phase17_resnet18_retrieval.json",
+    "compare": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase19_backbone_default_512\\phase19_vs_phase17_compare.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "gallery_split": "train",
+    "query_split": "validation",
+    "example_count": 256,
+    "mean_reciprocal_rank": 0.46753792882236556,
+    "mean_found_rank": 2.74025974025974,
+    "recall_at_1": 0.421875,
+    "recall_at_5": 0.51953125,
+    "recall_at_10": 0.55859375,
+    "recall_at_20": 0.6015625,
+    "phase19_vs_phase17_mrr_lift": -0.20043082117763444,
+    "phase19_vs_phase17_recall_at_1_lift": -0.24609375
+  },
+  "training": {
+    "epochs": 3,
+    "batch_size": 16,
+    "learning_rate": 0.0001,
+    "image_size": 96,
+    "weights_mode": "default",
+    "weights_loaded": true,
+    "freeze_backbone_epochs": 1,
+    "max_train_examples": 512,
+    "max_gallery_examples": 512,
+    "max_query_examples": 256
+  },
+  "stage_timings": [
+    {
+      "stage": "train_phase19_resnet50_model",
+      "duration_seconds": 107.90925330000027
+    },
+    {
+      "stage": "evaluate_phase19_resnet50_retrieval",
+      "duration_seconds": 47.87791699999798
+    },
+    {
+      "stage": "evaluate_phase17_resnet18_retrieval_baseline",
+      "duration_seconds": 25.659215299994685
+    }
+  ]
+}

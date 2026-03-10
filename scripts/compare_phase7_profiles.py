@@ -25,6 +25,25 @@ def compare_profiles(dataset: dict[str, object], *, profiles: list[str], split: 
         results,
         key=lambda row: (-float(row.get("top1_accuracy", 0.0)), -float(row.get("family_accuracy", 0.0)), str(row.get("profile", ""))),
     )
+    def _rank_for_slice(slice_name: str) -> list[dict[str, object]]:
+        ranked_slice = sorted(
+            results,
+            key=lambda row: (
+                -float(((row.get("identity_resolution_slices", {}) if isinstance(row.get("identity_resolution_slices"), dict) else {}).get(slice_name, {}) or {}).get("top1_accuracy", 0.0)),
+                -float(((row.get("identity_resolution_slices", {}) if isinstance(row.get("identity_resolution_slices"), dict) else {}).get(slice_name, {}) or {}).get("family_accuracy", 0.0)),
+                str(row.get("profile", "")),
+            ),
+        )
+        return [
+            {
+                "rank": idx + 1,
+                "profile": row.get("profile"),
+                "top1_accuracy": (((row.get("identity_resolution_slices", {}) if isinstance(row.get("identity_resolution_slices"), dict) else {}).get(slice_name, {}) or {}).get("top1_accuracy")),
+                "family_accuracy": (((row.get("identity_resolution_slices", {}) if isinstance(row.get("identity_resolution_slices"), dict) else {}).get(slice_name, {}) or {}).get("family_accuracy")),
+                "example_count": (((row.get("identity_resolution_slices", {}) if isinstance(row.get("identity_resolution_slices"), dict) else {}).get(slice_name, {}) or {}).get("example_count")),
+            }
+            for idx, row in enumerate(ranked_slice)
+        ]
     return {
         "split": split,
         "profiles": profiles,
@@ -38,6 +57,10 @@ def compare_profiles(dataset: dict[str, object], *, profiles: list[str], split: 
             }
             for idx, row in enumerate(ranked)
         ],
+        "identity_resolution_rankings": {
+            "with_identity": _rank_for_slice("with_identity"),
+            "without_identity": _rank_for_slice("without_identity"),
+        },
         "results": results,
     }
 

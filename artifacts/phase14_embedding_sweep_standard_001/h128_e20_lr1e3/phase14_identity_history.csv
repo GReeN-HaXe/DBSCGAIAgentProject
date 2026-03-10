@@ -1,0 +1,2 @@
+schema_version,run_name,top1_accuracy,top5_accuracy,top10_accuracy,example_count,manifest_path,recorded_at_utc
+phase14.identity_history.v1,h128_e20_lr1e3,0.734375,0.9501953125,0.9853515625,1024,C:\Users\PC\Desktop\dbsAIAgent\artifacts\phase14_embedding_sweep_standard_001\h128_e20_lr1e3\phase14_torch_manifest.json,2026-03-08T17:32:55.384066+00:00

@@ -252,7 +252,7 @@ class RulesEngine:
             if action.hand_index is None:
                 raise RulesViolation("CHARGE_FROM_HAND requires hand_index.")
             card = player.hand.pop(action.hand_index)
-            card.resting = True
+            card.resting = False
             player.energy.append(card)
             player.has_charged_this_turn = True
             ns.phase = TurnPhase.MAIN

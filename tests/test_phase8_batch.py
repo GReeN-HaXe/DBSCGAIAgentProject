@@ -93,6 +93,7 @@ def test_phase8_self_play_generation_and_batch_runs(tmp_path) -> None:
     assert batch_summary["run_count"] >= 1
     assert len(batch_summary["ranking"]) >= 1
     assert "promotion_summary" in batch_summary
+    assert "identity_summary" in batch_summary
 
     batch_series_result = subprocess.run(
         [
@@ -131,4 +132,6 @@ def test_phase8_self_play_generation_and_batch_runs(tmp_path) -> None:
         text=True,
     )
     assert closeout_result.returncode == 0, closeout_result.stderr
-    assert "Phase 8 Closeout" in closeout_path.read_text(encoding="utf-8")
+    closeout_text = closeout_path.read_text(encoding="utf-8")
+    assert "Phase 8 Closeout" in closeout_text
+    assert "avg_identity_resolved_example_rate" in closeout_text
