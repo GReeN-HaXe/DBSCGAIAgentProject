@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 
@@ -23,6 +24,7 @@ from src.agent import (
     compute_trace_hash,
     describe_action,
     evaluate_match_expectations,
+    format_full_board_for_cli,
     summarize_state_for_cli,
     validate_deck_legality,
 )
@@ -477,15 +479,7 @@ def _show_board_entry_detail(
     label, detail = board_entries[entry_index]
     print(f"\n{label}:")
     print(detail)
-    print(
-        "\n"
-        + summarize_state_for_cli(
-            session.state,
-            card_name_resolver=_card_name_resolver(repo),
-            reveal_hand_player_ids=(),
-            show_zone_details=True,
-        )
-    )
+    print("\n" + format_full_board_for_cli(session.state, card_name_resolver=_card_name_resolver(repo)))
 
 
 def _render_tui_layout(
@@ -690,6 +684,18 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
 
 def _history_action_text(entry: dict[str, object], *, repo: SQLiteCardRepository | None) -> str:
     text = str(entry.get("action", "unknown"))
+    for label in ("card", "source_card", "attacker_card", "target_card"):
+        pattern = rf"{label}=card_id=(\d+)"
+        text = re.sub(
+            pattern,
+            lambda match: f"{label}={_card_brief_label(repo, int(match.group(1)))}",
+            text,
+        )
+    text = re.sub(
+        r"\bcard_id=(\d+)\b",
+        lambda match: _card_brief_label(repo, int(match.group(1))),
+        text,
+    )
     for field, label in (
         ("hand_card_id", "card"),
         ("source_card_id", "source_card"),
@@ -883,11 +889,10 @@ def _interactive_action_picker(
         if key in {"b", "B"}:
             print(
                 "\n"
-                + summarize_state_for_cli(
+                + format_full_board_for_cli(
                     session.state,
                     card_name_resolver=card_name_resolver,
                     reveal_hand_player_ids=revealed_hand_players,
-                    show_zone_details=True,
                 )
             )
             print("\nPress any key to continue...")
@@ -1316,11 +1321,10 @@ def main() -> None:
             if raw in {"s", "b"}:
                 print(
                     "\n"
-                    + summarize_state_for_cli(
+                    + format_full_board_for_cli(
                         session.state,
                         card_name_resolver=card_name_resolver,
                         reveal_hand_player_ids=revealed_hand_players,
-                        show_zone_details=True,
                     )
                 )
                 continue

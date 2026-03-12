@@ -398,7 +398,14 @@ from src.agent.simulator import (
     run_ai_vs_ai,
     simulation_result_to_dict,
 )
-from src.agent.session import HumanVsAiSession, decision_owner_for_state, describe_action, snapshot_state_for_trace, summarize_state_for_cli
+from src.agent.session import (
+    HumanVsAiSession,
+    decision_owner_for_state,
+    describe_action,
+    format_full_board_for_cli,
+    snapshot_state_for_trace,
+    summarize_state_for_cli,
+)
 from src.agent.replay import ReplayResult, compute_trace_hash, run_scripted_replay
 from src.agent.trace_summary import (
     BOOKKEEPING_ACTION_TYPES,
@@ -706,6 +713,7 @@ __all__ = [
     "decision_owner_for_state",
     "HumanVsAiSession",
     "describe_action",
+    "format_full_board_for_cli",
     "snapshot_state_for_trace",
     "summarize_state_for_cli",
     "ReplayResult",

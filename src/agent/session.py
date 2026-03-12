@@ -54,6 +54,19 @@ def _zone_card_summary(cards: list[CardInstance], card_name_resolver: CardNameRe
     return ", ".join(rendered)
 
 
+def _zone_card_lines(
+    cards: list[CardInstance],
+    card_name_resolver: CardNameResolver | None = None,
+) -> list[str]:
+    if not cards:
+        return ["  -"]
+    lines: list[str] = []
+    for index, card in enumerate(cards):
+        mode = "R" if card.resting else "A"
+        lines.append(f"  [{index}] {_card_label(card, card_name_resolver)} ({mode})")
+    return lines
+
+
 def decision_owner_for_state(state: GameState) -> int:
     if state.counter_window is not None:
         return int(state.counter_window.responder_player_id)
@@ -163,18 +176,17 @@ def summarize_state_for_cli(
         f"P2 leader={_card_label(p2.leader_area, card_name_resolver)} ({'R' if p2.leader_area.resting else 'A'})",
     ]
     if show_zone_details:
-        if p1.energy:
-            lines.append(f"P1 energy_cards={_zone_card_summary(p1.energy, card_name_resolver)}")
-        if p2.energy:
-            lines.append(f"P2 energy_cards={_zone_card_summary(p2.energy, card_name_resolver)}")
-        if p1.battle_area:
-            lines.append(f"P1 battle_cards={_zone_card_summary(p1.battle_area, card_name_resolver)}")
-        if p2.battle_area:
-            lines.append(f"P2 battle_cards={_zone_card_summary(p2.battle_area, card_name_resolver)}")
-        if p1.unison_area:
-            lines.append(f"P1 unison_cards={_zone_card_summary(p1.unison_area, card_name_resolver)}")
-        if p2.unison_area:
-            lines.append(f"P2 unison_cards={_zone_card_summary(p2.unison_area, card_name_resolver)}")
+        def _append_player_zones(player_id: int, player) -> None:
+            lines.append(f"P{player_id} zones:")
+            lines.append(" Energy:")
+            lines.extend(_zone_card_lines(player.energy, card_name_resolver))
+            lines.append(" Battle:")
+            lines.extend(_zone_card_lines(player.battle_area, card_name_resolver))
+            lines.append(" Unison:")
+            lines.extend(_zone_card_lines(player.unison_area, card_name_resolver))
+
+        _append_player_zones(1, p1)
+        _append_player_zones(2, p2)
     players_to_reveal: list[int] = []
     if reveal_hand_player_ids is not None:
         players_to_reveal.extend(int(player_id) for player_id in reveal_hand_player_ids if player_id in state.players)
@@ -182,11 +194,51 @@ def summarize_state_for_cli(
         players_to_reveal.append(int(reveal_hand_player_id))
     for player_id in players_to_reveal:
         player = state.players[player_id]
-        rendered_hand = ", ".join(
-            f"[{index}] {_card_label(card, card_name_resolver)}"
-            for index, card in enumerate(player.hand)
+        lines.append(f"P{player_id} hand:")
+        if player.hand:
+            for index, card in enumerate(player.hand):
+                lines.append(f"  [{index}] {_card_label(card, card_name_resolver)}")
+        else:
+            lines.append("  -")
+    return "\n".join(lines)
+
+
+def format_full_board_for_cli(
+    state: GameState,
+    *,
+    card_name_resolver: CardNameResolver | None = None,
+    reveal_hand_player_ids: tuple[int, ...] = (),
+) -> str:
+    def _append_player_block(lines: list[str], player_id: int) -> None:
+        player = state.players[player_id]
+        lines.append(f"P{player_id}")
+        lines.append(f"  Leader: {_card_label(player.leader_area, card_name_resolver)} ({'R' if player.leader_area.resting else 'A'})")
+        lines.append(
+            "  Summary: "
+            f"life={len(player.life)} hand={len(player.hand)} energy={len(player.energy)} "
+            f"battle={len(player.battle_area)} unison={len(player.unison_area)}"
         )
-        lines.append(f"P{player_id} hand_cards={rendered_hand}")
+        lines.append("  Energy:")
+        lines.extend(_zone_card_lines(player.energy, card_name_resolver))
+        lines.append("  Battle:")
+        lines.extend(_zone_card_lines(player.battle_area, card_name_resolver))
+        lines.append("  Unison:")
+        lines.extend(_zone_card_lines(player.unison_area, card_name_resolver))
+        if player_id in reveal_hand_player_ids:
+            lines.append("  Hand:")
+            if player.hand:
+                for index, card in enumerate(player.hand):
+                    lines.append(f"    [{index}] {_card_label(card, card_name_resolver)}")
+            else:
+                lines.append("    -")
+
+    lines = [
+        f"Turn {state.turn_number} | Phase {state.phase.value} | Active P{state.active_player} | Winner {state.winner_id}",
+        "",
+    ]
+    _append_player_block(lines, 1)
+    lines.append("")
+    _append_player_block(lines, 2)
     return "\n".join(lines)
 
 

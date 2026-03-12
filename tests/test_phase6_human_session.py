@@ -3,7 +3,13 @@ from __future__ import annotations
 from dataclasses import replace
 
 from src.agent import HeuristicPolicy
-from src.agent.session import HumanVsAiSession, describe_action, snapshot_state_for_trace, summarize_state_for_cli
+from src.agent.session import (
+    HumanVsAiSession,
+    describe_action,
+    format_full_board_for_cli,
+    snapshot_state_for_trace,
+    summarize_state_for_cli,
+)
 from src.game import RulesEngine
 from src.game.actions import Action, ActionType
 from src.game.state import CardInstance, GameState, PlayerState, TurnPhase
@@ -94,7 +100,8 @@ def test_phase6_cli_helpers_can_render_card_names() -> None:
         reveal_hand_player_id=1,
     )
     assert "card=CARD-" in action_text
-    assert "P1 hand_cards=" in state_text
+    assert "P1 hand:" in state_text
+    assert "[0] CARD-" in state_text
 
 
 def test_phase6_cli_helpers_can_reveal_multiple_hands() -> None:
@@ -111,8 +118,8 @@ def test_phase6_cli_helpers_can_reveal_multiple_hands() -> None:
         card_name_resolver=lambda card_id: f"CARD-{card_id}",
         reveal_hand_player_ids=(1, 2),
     )
-    assert "P1 hand_cards=" in state_text
-    assert "P2 hand_cards=" in state_text
+    assert "P1 hand:" in state_text
+    assert "P2 hand:" in state_text
 
 
 def test_phase6_cli_helpers_render_board_details() -> None:
@@ -132,8 +139,33 @@ def test_phase6_cli_helpers_render_board_details() -> None:
         reveal_hand_player_id=1,
     )
     assert "P1 leader=" in state_text
-    assert "P1 energy_cards=" in state_text
-    assert "P1 battle_cards=" in state_text
+    assert "P1 zones:" in state_text
+    assert "Energy:" in state_text
+    assert "Battle:" in state_text
+
+
+def test_phase6_full_board_formatter_is_sectioned_and_readable() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].energy.append(CardInstance(instance_id=9001, card_id=9001, owner_id=1, resting=False))
+    state.players[1].battle_area.append(CardInstance(instance_id=9002, card_id=9002, owner_id=1, resting=True))
+    text = format_full_board_for_cli(
+        state,
+        card_name_resolver=lambda card_id: f"CARD-{card_id}",
+        reveal_hand_player_ids=(1,),
+    )
+    assert "P1" in text
+    assert "P2" in text
+    assert "  Energy:" in text
+    assert "  Battle:" in text
+    assert "  Hand:" in text
+    assert "    [0] CARD-" in text
 
 
 def test_phase6_session_trace_payload_collects_actions() -> None:

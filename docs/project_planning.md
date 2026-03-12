@@ -231,6 +231,154 @@ Current planning assumption:
   - human-vs-AI
 - current solved benchmarks are too narrow to justify more architecture work
 
+## Improvement Suggestions
+
+These are review-driven improvement ideas that are worth preserving in planning, but are not yet committed backlog items unless promoted into the priority sections above.
+
+### Effect Catalog as a Formal Artifact
+
+Priority:
+- high
+
+Assessment:
+- strongest suggestion in this set
+- directly aligned with the current correctness / scale bottleneck
+
+Suggestion:
+- formalize the effect catalog as a first-class project artifact
+- consider a DSL or structured schema (`YAML` / `JSON`) for card behavior definitions
+
+Why it matters:
+- decouples the engine's "what" from the implementation "how"
+- makes new card support easier to add in batches
+- improves coverage tracking for supported / unsupported effect families
+- enables direct testing of engine behavior against catalog specifications
+
+Recommended approach:
+- start with a structured schema, not a custom DSL
+- define effect primitives and family mappings first
+- add validation/tests against the schema
+- only consider a richer DSL later if schema expressiveness becomes a real blocker
+
+### High-Level Roadmap Visualization
+
+Priority:
+- medium
+
+Assessment:
+- good coordination improvement
+- low engineering cost
+
+Suggestion:
+- add a concise roadmap section showing:
+  - completed phases
+  - frozen baselines
+  - current focus
+  - next benchmark/data/model frontier
+
+Why it matters:
+- makes current work easier to place in the broader project trajectory
+- helps collaborators understand what is solved vs exploratory
+
+Recommended approach:
+- keep it text-based in this planning document
+- avoid diagram/tooling overhead unless the team/process complexity grows
+
+### `play_vs_ai.py` Monolith Reduction
+
+Priority:
+- medium-high
+
+Assessment:
+- real maintainability issue
+- should become backlog work once current trace-collection flow is stable
+
+Suggestion:
+- break up `scripts/play_vs_ai.py` into smaller modules
+
+Why it matters:
+- current script handles:
+  - CLI parsing
+  - TUI rendering
+  - keyboard navigation
+  - game loop orchestration
+  - output writing
+- this reduces maintainability and makes targeted testing harder
+
+### Isolate the TUI
+
+Priority:
+- medium-high
+
+Assessment:
+- best concrete refactor under the monolith-reduction theme
+- high leverage once more CLI/TUI work continues
+
+Suggestion:
+- extract the TUI layer into a dedicated module, for example:
+  - `src/agent/tui.py`
+
+Candidate responsibilities:
+- panel rendering
+- color handling
+- keyboard input handling
+- action selection flow
+
+Target shape:
+- main script orchestrates the session
+- TUI module exposes a higher-level entrypoint such as:
+  - `tui.run(session)`
+
+### Separate Data From Presentation
+
+Priority:
+- medium-high
+
+Assessment:
+- strong architectural cleanup
+- best handled as part of TUI extraction, not as an isolated standalone refactor
+
+Suggestion:
+- split data gathering from string/color rendering in the CLI/TUI
+
+Example direction:
+- one function returns structured action rows:
+  - action text
+  - score
+  - hints
+  - selected-state metadata
+- a separate renderer formats that structure into terminal output
+
+Why it matters:
+- improves testability
+- reduces formatting logic inside gameplay orchestration
+- makes future UI migrations easier
+
+### Consider a TUI Framework
+
+Priority:
+- low for now
+
+Assessment:
+- valid long-term option
+- not the current best use of engineering effort
+
+Suggestion:
+- evaluate a dedicated TUI framework such as `Textual` if terminal UX remains a long-term priority
+
+Tradeoff:
+- higher migration cost now
+- potentially much simpler layout/input/state handling later
+
+Use when:
+- the terminal interface remains central
+- panel complexity keeps growing
+- hand-rolled TUI maintenance starts becoming the bottleneck
+
+Current recommendation:
+- do not migrate yet
+- revisit only if the existing TUI keeps expanding and maintenance becomes the main bottleneck
+
 ## Decision Log
 
 ### Freeze Decision
