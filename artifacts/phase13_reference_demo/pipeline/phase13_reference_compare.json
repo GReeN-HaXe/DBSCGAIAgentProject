@@ -1,0 +1,12 @@
+{
+  "schema_version": "phase13.reference_compare.v1",
+  "run_name": "phase13_reference_demo",
+  "reference_model_name": "phase13_visual_histogram_knn",
+  "gameplay_model_name": "phase13_visual_histogram_knn",
+  "reference_frame_exact_match_rate": 0.0,
+  "gameplay_frame_exact_match_rate": 1.0,
+  "reference_object_precision": 0.0,
+  "gameplay_object_precision": 1.0,
+  "reference_minus_gameplay_exact_match": -1.0,
+  "reference_minus_gameplay_precision": -1.0
+}

@@ -1,0 +1,38 @@
+{
+  "ok": true,
+  "failures": [],
+  "summary": {
+    "winner_id": null,
+    "total_actions": 3,
+    "human_player_id": 1,
+    "ai_profile": "balanced",
+    "final_turn_number": 2,
+    "final_phase": "main",
+    "checkpoint_count": 15,
+    "checkpoint_tail": [
+      "pregame_leaders_placed",
+      "pregame_starting_player_decided",
+      "pregame_setup_complete",
+      "charge_phase_begin",
+      "charge_phase_after_untap",
+      "charge_phase_after_draw_skipped",
+      "charge_phase_charge_window",
+      "charge_phase_end",
+      "end_phase_begin",
+      "charge_phase_begin",
+      "charge_phase_after_untap",
+      "charge_phase_after_draw",
+      "charge_phase_charge_window",
+      "charge_phase_end",
+      "counter_timing_attack"
+    ],
+    "effect_resolution_count": 0,
+    "effect_unresolved_count": 0,
+    "setup": {
+      "mode": "replay",
+      "state_input": "artifacts\\ci_smoke_run\\phase6_pipeline_v6\\human_vs_ai_state.json",
+      "actions_file": "artifacts\\ci_smoke_run\\phase6_pipeline_v6\\actions_replay.txt",
+      "ai_profile": "balanced"
+    }
+  }
+}

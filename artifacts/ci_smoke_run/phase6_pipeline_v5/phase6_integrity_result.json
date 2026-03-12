@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "failures": [],
+  "checks": {
+    "play_trace_hash": "2cb84164419116223ce9651a379f570d49268b7b0b32f33ece31bd2c5edb30da",
+    "summary_trace_hash": "2cb84164419116223ce9651a379f570d49268b7b0b32f33ece31bd2c5edb30da",
+    "replay_trace_hash": "9413e70d6f9075fcdefe0554781cbadfb92db126b1a8191474a677f2d5dfbf9e",
+    "play_result_ok": true,
+    "replay_result_ok": true
+  }
+}

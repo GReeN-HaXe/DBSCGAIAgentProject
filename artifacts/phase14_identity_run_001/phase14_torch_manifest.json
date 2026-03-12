@@ -1,0 +1,39 @@
+{
+  "schema_version": "phase14.identity_manifest.v1",
+  "status": "pass",
+  "run_name": "phase14_identity_run_001",
+  "artifacts": {
+    "feature_cache": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_feature_cache.json",
+    "model": "artifacts\\phase14_identity_run_001\\phase14_torch_model.json",
+    "evaluation": "artifacts\\phase14_identity_run_001\\phase14_torch_eval.json",
+    "history_csv": "artifacts\\phase14_identity_run_001\\phase14_identity_history.csv",
+    "history_summary": "artifacts\\phase14_identity_run_001\\phase14_identity_history_summary.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "split": "validation",
+    "top1_accuracy": 0.0,
+    "top5_accuracy": 0.0,
+    "top10_accuracy": 0.0,
+    "example_count": 52
+  },
+  "stage_timings": [
+    {
+      "stage": "train_torch_model",
+      "duration_seconds": 4.508491000000504
+    },
+    {
+      "stage": "evaluate_torch_model",
+      "duration_seconds": 2.9191611999995075
+    }
+  ],
+  "history": {
+    "run_count": 1,
+    "best_top1_accuracy": 0.0,
+    "best_top5_accuracy": 0.0,
+    "best_top10_accuracy": 0.0,
+    "recent_top1_accuracy": 0.0,
+    "recent_top5_accuracy": 0.0,
+    "recent_top10_accuracy": 0.0
+  }
+}

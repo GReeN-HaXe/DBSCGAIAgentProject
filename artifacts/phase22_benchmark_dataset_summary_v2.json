@@ -1,0 +1,474 @@
+{
+  "schema_version": "phase22.benchmark_dataset_summary.v1",
+  "input_count": 20,
+  "included_count": 20,
+  "skipped_count": 0,
+  "included_traces": [
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_026_review.json",
+      "action_count": 57,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 20
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 18
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_027_review.json",
+      "action_count": 61,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 25
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 19
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_028_review.json",
+      "action_count": 59,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 21
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 19
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_029_review.json",
+      "action_count": 37,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 13
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 11
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 7
+        },
+        {
+          "action_type": "end_turn",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_030_review.json",
+      "action_count": 47,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 18
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 14
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_031_review.json",
+      "action_count": 58,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 21
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 20
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_032_review.json",
+      "action_count": 49,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 20
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 14
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_033_review.json",
+      "action_count": 60,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 23
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 20
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_034_review.json",
+      "action_count": 51,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 18
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 18
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_035_review.json",
+      "action_count": 48,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 17
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 16
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_036_review.json",
+      "action_count": 55,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 20
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 18
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_037_review.json",
+      "action_count": 58,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 22
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 19
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_038_review.json",
+      "action_count": 50,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 18
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 17
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_039_review.json",
+      "action_count": 52,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 19
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 16
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_040_review.json",
+      "action_count": 58,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 20
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 19
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_041_review.json",
+      "action_count": 49,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 19
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 15
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_042_review.json",
+      "action_count": 50,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 19
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 16
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_043_review.json",
+      "action_count": 60,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 26
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 17
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_044_review.json",
+      "action_count": 65,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 26
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 20
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\ai_match_trace_045_review.json",
+      "action_count": 56,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 20
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 19
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    }
+  ],
+  "skipped_traces": [],
+  "dataset_example_count": 1080,
+  "dataset_split_counts": {
+    "train": 974,
+    "validation": 106
+  }
+}

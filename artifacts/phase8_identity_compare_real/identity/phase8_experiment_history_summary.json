@@ -1,0 +1,16 @@
+{
+  "total_runs": 1,
+  "recent_window": 1,
+  "recent_avg_top1_accuracy": 1.0,
+  "recent_avg_identity_resolved_example_rate": 0.9987593052109182,
+  "pass_rate": 1.0,
+  "promoted_rate_proxy": 1.0,
+  "latest_run_name": "phase8_identity_compare_real_identity",
+  "latest_model_name": "backoff_frequency_policy",
+  "latest_context_mode": "identity",
+  "latest_top1_accuracy": 1.0,
+  "best_run_name": "phase8_identity_compare_real_identity",
+  "best_model_name": "backoff_frequency_policy",
+  "best_context_mode": "identity",
+  "best_top1_accuracy": 1.0
+}

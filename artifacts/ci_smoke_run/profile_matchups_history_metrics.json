@@ -1,0 +1,12 @@
+{
+  "total_runs": 11,
+  "overall_status": "critical",
+  "is_ready_for_next_phase": false,
+  "readiness_score": 0.8518181818181818,
+  "readiness_blocker_count": 2,
+  "recommended_action": "retune_policy",
+  "stability_label": "watch",
+  "quality_alert_count": 5,
+  "seat_bias_alert_count": 0,
+  "low_decisive_rate_alert_count": 5
+}

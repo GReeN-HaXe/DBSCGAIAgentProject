@@ -1,0 +1,28 @@
+{
+  "schema_version": "phase7.v1",
+  "example_count": 3,
+  "trajectory_count": 1,
+  "sources": [
+    "trace_b"
+  ],
+  "split_counts": {
+    "train": 2,
+    "validation": 1
+  },
+  "trajectories": [
+    {
+      "source_name": "trace_b"
+    }
+  ],
+  "examples": [
+    {
+      "split": "train"
+    },
+    {
+      "split": "train"
+    },
+    {
+      "split": "validation"
+    }
+  ]
+}

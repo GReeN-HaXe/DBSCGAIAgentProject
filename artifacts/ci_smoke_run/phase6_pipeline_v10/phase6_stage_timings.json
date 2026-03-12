@@ -1,0 +1,26 @@
+{
+  "stages": [
+    {
+      "name": "play_vs_ai",
+      "duration_seconds": 0.3268036999979813
+    },
+    {
+      "name": "replay_human_vs_ai",
+      "duration_seconds": 0.2930497999986983
+    },
+    {
+      "name": "replay_human_vs_ai_second",
+      "duration_seconds": 0.3068585000000894
+    },
+    {
+      "name": "check_phase6_artifacts",
+      "duration_seconds": 0.2553690999993705
+    }
+  ],
+  "summary": {
+    "stage_count": 4,
+    "total_seconds": 1.1820810999961395,
+    "slowest_stage": "play_vs_ai",
+    "slowest_seconds": 0.3268036999979813
+  }
+}

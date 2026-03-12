@@ -1,0 +1,3 @@
+timestamp_utc,source_json,profiles,games_per_matchup,max_actions,shuffle_decks,seat_balanced,seed,min_games_for_recommendation,recommended_profile,recommendation_reason,recommendation_reliable,recommendation_clear_edge,seat_bias_games,seat_bias_p1_win_rate,seat_bias_p2_win_rate,seat_bias_draw_rate,seat_bias_p1_minus_p2,match_quality_draw_rate,match_quality_decisive_rate,match_quality_low_decisive_rate_alert
+2026-03-05T14:21:21.695885+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,5,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True
+2026-03-05T14:21:24.584186+00:00,artifacts\profile_matchups.json,"balanced,aggressive",1,5,False,False,,6,balanced,insufficient_sample,False,False,4,0.0,0.0,1.0,0.0,1.0,0.0,True

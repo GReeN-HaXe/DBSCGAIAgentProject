@@ -1,0 +1,18 @@
+{
+  "total_actions": 1,
+  "winner_id": null,
+  "final_turn_number": 1,
+  "final_phase": "main",
+  "human_player_id": 1,
+  "actions": [
+    {
+      "timestamp_utc": "2026-03-05T15:34:14.759900+00:00",
+      "actor_kind": "human",
+      "player_id": 1,
+      "turn_number": 1,
+      "phase": "charge",
+      "action": "end_charge",
+      "action_type": "end_charge"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "replay": {
+    "consumed_human_actions": 1,
+    "ai_actions": 2,
+    "completed": false,
+    "winner_id": null,
+    "final_turn_number": 2,
+    "final_phase": "main"
+  },
+  "summary": {
+    "winner_id": null,
+    "total_actions": 3,
+    "human_player_id": 1,
+    "ai_profile": "balanced",
+    "final_turn_number": 2,
+    "final_phase": "main",
+    "checkpoint_count": 15,
+    "checkpoint_tail": [
+      "pregame_leaders_placed",
+      "pregame_starting_player_decided",
+      "pregame_setup_complete",
+      "charge_phase_begin",
+      "charge_phase_after_untap",
+      "charge_phase_after_draw_skipped",
+      "charge_phase_charge_window",
+      "charge_phase_end",
+      "end_phase_begin",
+      "charge_phase_begin",
+      "charge_phase_after_untap",
+      "charge_phase_after_draw",
+      "charge_phase_charge_window",
+      "charge_phase_end",
+      "counter_timing_attack"
+    ],
+    "effect_resolution_count": 0,
+    "effect_unresolved_count": 0,
+    "setup": {
+      "mode": "replay",
+      "state_input": "artifacts\\ci_smoke_run\\phase6_pipeline_v7\\human_vs_ai_state.json",
+      "actions_file": "artifacts\\ci_smoke_run\\phase6_pipeline_v7\\actions_replay.txt",
+      "ai_profile": "balanced"
+    }
+  },
+  "trace": {
+    "total_actions": 3,
+    "winner_id": null,
+    "final_turn_number": 2,
+    "final_phase": "main",
+    "human_player_id": 1,
+    "setup": {
+      "mode": "replay",
+      "state_input": "artifacts\\ci_smoke_run\\phase6_pipeline_v7\\human_vs_ai_state.json",
+      "actions_file": "artifacts\\ci_smoke_run\\phase6_pipeline_v7\\actions_replay.txt",
+      "ai_profile": "balanced"
+    },
+    "actions": [
+      {
+        "timestamp_utc": "2026-03-05T16:21:38.139342+00:00",
+        "actor_kind": "human",
+        "player_id": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "action": "end_turn",
+        "action_type": "end_turn"
+      },
+      {
+        "timestamp_utc": "2026-03-05T16:21:38.140497+00:00",
+        "actor_kind": "ai",
+        "player_id": 2,
+        "turn_number": 2,
+        "phase": "charge",
+        "action": "end_charge",
+        "action_type": "end_charge"
+      },
+      {
+        "timestamp_utc": "2026-03-05T16:21:38.141686+00:00",
+        "actor_kind": "ai",
+        "player_id": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "action": "declare_attack attacker_zone=leader target_player=1 target_zone=leader",
+        "action_type": "declare_attack"
+      }
+    ]
+  },
+  "trace_hash": "b23b406042e8af4935b52d42aa42596645a9fc9e4242f6a66d445d17333a21f6"
+}

@@ -1,0 +1,2 @@
+profiles,games_per_matchup,max_actions,shuffle_decks,seat_balanced,seed,min_games_for_recommendation,recommended_profile,recommendation_reason,recommendation_reliable,recommendation_clear_edge,seat_bias_games,seat_bias_p1_win_rate,seat_bias_p2_win_rate,seat_bias_draw_rate,seat_bias_p1_minus_p2,match_quality_draw_rate,match_quality_decisive_rate,match_quality_low_decisive_rate_alert
+"balanced,aggressive",1,20,False,True,,6,aggressive,tied_or_inconclusive,True,False,8,0.0,0.0,1.0,0.0,1.0,0.0,True

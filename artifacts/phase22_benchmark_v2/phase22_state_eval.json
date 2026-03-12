@@ -1,0 +1,754 @@
+{
+  "schema_version": "phase22.state_eval.v1",
+  "model_name": "phase22_state_encoder",
+  "target_field": "action_signature",
+  "split": "validation",
+  "example_count": 106,
+  "top1_accuracy": 0.19811320754716982,
+  "rows": [
+    {
+      "example_index": 0,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=9659",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_from_hand|card=card_id=5847",
+      "actual_label": "charge_from_hand|card=card_id=9736",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=9787",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 6,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9657",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=6999",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 12,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9724",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=9721",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand|card=card_id=7236",
+      "actual_label": "play_card_from_hand|card=card_id=4440",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 18,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=6999",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=6688",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 20,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5106",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand|card=card_id=6688",
+      "actual_label": "play_card_from_hand|card=card_id=9721",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 24,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9657",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=5106|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand|card=card_id=9635",
+      "actual_label": "play_card_from_hand|card=card_id=8630",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand|card=card_id=5847",
+      "actual_label": "charge_from_hand|card=card_id=9737",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand|card=card_id=7236",
+      "actual_label": "play_card_from_hand|card=card_id=1536",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=4726|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 35,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9635",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=1536|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9635|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=1536|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand|card=card_id=6688",
+      "actual_label": "play_card_from_hand|card=card_id=6688",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 41,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9728",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=8458",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand|card=card_id=7236",
+      "actual_label": "play_card_from_hand|card=card_id=7236",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=1536|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9635|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9638|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 46,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=6999",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=5301|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 50,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9728",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9638|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=9721",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=9728",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 56,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=8456",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand|card=card_id=9638",
+      "actual_label": "play_card_from_hand|card=card_id=9642",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 62,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=8458",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand|card=card_id=5847",
+      "actual_label": "charge_from_hand|card=card_id=9736",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand|card=card_id=7236",
+      "actual_label": "play_card_from_hand|card=card_id=7236",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9641|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 67,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=8456",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "play_card_from_hand|card=card_id=3755",
+      "actual_label": "play_card_from_hand|card=card_id=4265",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=9660",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 72,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9736",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9635|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "charge_from_hand|card=card_id=1785",
+      "actual_label": "charge_from_hand|card=card_id=9659",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 78,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=9649",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand|card=card_id=5847",
+      "actual_label": "charge_from_hand|card=card_id=8458",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand|card=card_id=9635",
+      "actual_label": "play_card_from_hand|card=card_id=9641",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 83,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand|card=card_id=8458",
+      "actual_label": "charge_from_hand|card=card_id=9658",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "play_card_from_hand|card=card_id=7236",
+      "actual_label": "play_card_from_hand|card=card_id=5106",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "play_card_from_hand|card=card_id=6688",
+      "actual_label": "play_card_from_hand|card=card_id=4440",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=4726|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 88,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=7166",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9638|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=9658",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9642|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "end_turn",
+      "actual_label": "end_turn",
+      "matched": true,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 94,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=6688",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "charge_from_hand|card=card_id=2409",
+      "actual_label": "charge_from_hand|card=card_id=9660",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=5847",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9637|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "charge_from_hand|card=card_id=5847",
+      "actual_label": "charge_from_hand|card=card_id=9729",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 100,
+      "predicted_label": "charge_from_hand|card=card_id=9737",
+      "actual_label": "charge_from_hand|card=card_id=8456",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 30,
+      "predicted_label": "declare_attack|attacker_card=card_id=9629|target_card=card_id=9623|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "declare_attack|attacker_card=card_id=7236|target_card=card_id=9623|attacker_zone=battle|target_zone=leader|target_player=2",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 38,
+      "predicted_label": "declare_attack|attacker_card=card_id=6|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=9637|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 39,
+      "predicted_label": "declare_attack|attacker_card=card_id=9623|target_card=card_id=9629|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "declare_attack|attacker_card=card_id=8630|target_card=card_id=9629|attacker_zone=battle|target_zone=leader|target_player=1",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 48,
+      "predicted_label": "play_card_from_hand|card=card_id=6688",
+      "actual_label": "play_card_from_hand|card=card_id=7179",
+      "matched": false,
+      "has_identity_resolution": false
+    },
+    {
+      "example_index": 52,
+      "predicted_label": "play_card_from_hand|card=card_id=9638",
+      "actual_label": "play_card_from_hand|card=card_id=4726",
+      "matched": false,
+      "has_identity_resolution": false
+    }
+  ],
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0
+}

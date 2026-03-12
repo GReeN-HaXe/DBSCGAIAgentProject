@@ -1,0 +1,16 @@
+{
+  "schema_version": "human_trace_normalization_batch.v1",
+  "input_glob": "C:/Users/PC/Desktop/dbsAIAgent/artifacts/phase22_human_smoke/raw/*.json",
+  "include_bookkeeping": false,
+  "processed_count": 1,
+  "outputs": [
+    {
+      "source": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_human_smoke\\raw\\human_vs_ai_trace_001.json",
+      "review_output": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_human_smoke\\normalized\\human_vs_ai_trace_001_review.json",
+      "training_output": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_human_smoke\\normalized\\human_vs_ai_trace_001_training.jsonl",
+      "decision_count": 3,
+      "winner_id": 1,
+      "stop_reason": ""
+    }
+  ]
+}

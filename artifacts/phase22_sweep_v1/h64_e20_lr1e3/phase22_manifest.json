@@ -1,0 +1,35 @@
+{
+  "schema_version": "phase22.manifest.v1",
+  "timestamp_utc": "2026-03-10T08:45:28.404617+00:00",
+  "run_name": "h64_e20_lr1e3",
+  "status": "pass",
+  "model_name": "phase22_state_encoder",
+  "baseline_model_name": "backoff_frequency_policy",
+  "target_field": "decision_class",
+  "train_split": "train",
+  "eval_split": "validation",
+  "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_dataset_v3.json",
+  "artifacts": {
+    "phase22_model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\h64_e20_lr1e3\\phase22_state_model.json",
+    "phase22_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\h64_e20_lr1e3\\phase22_state_eval.json",
+    "baseline_model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\h64_e20_lr1e3\\phase22_baseline_model.json",
+    "baseline_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\h64_e20_lr1e3\\phase22_baseline_eval.json",
+    "compare": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\h64_e20_lr1e3\\phase22_compare.json"
+  },
+  "metrics": {
+    "phase22_top1_accuracy": 0.9245283018867925,
+    "baseline_top1_accuracy": 0.8962264150943396,
+    "top1_lift": 0.028301886792452824,
+    "phase22_wins": true,
+    "example_count": 106,
+    "identity_resolved_example_rate": 0.0
+  },
+  "phase22_summary": {
+    "schema_version": "phase22.state_encoder.v1",
+    "example_count": 974,
+    "hidden_dim": 64,
+    "embedding_dim": 16,
+    "epochs": 20,
+    "learning_rate": 0.001
+  }
+}

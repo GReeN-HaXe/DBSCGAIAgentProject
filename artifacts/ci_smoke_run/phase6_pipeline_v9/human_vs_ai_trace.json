@@ -1,0 +1,32 @@
+{
+  "trace": {
+    "total_actions": 1,
+    "winner_id": null,
+    "final_turn_number": 1,
+    "final_phase": "main",
+    "human_player_id": 1,
+    "setup": {
+      "mode": "fresh",
+      "first_player": 1,
+      "shuffle_decks": false,
+      "seed": 31,
+      "p1_leader_id": 1,
+      "p2_leader_id": 2,
+      "p1_deck_size": 60,
+      "p2_deck_size": 60,
+      "deck_source": "synthetic"
+    },
+    "actions": [
+      {
+        "timestamp_utc": "2026-03-05T16:31:09.853654+00:00",
+        "actor_kind": "human",
+        "player_id": 1,
+        "turn_number": 1,
+        "phase": "charge",
+        "action": "end_charge",
+        "action_type": "end_charge"
+      }
+    ]
+  },
+  "trace_hash": "3030ebf07d9540c96708b1ea60ddf9d25478034951ac74b218cf32bb2dd345d4"
+}

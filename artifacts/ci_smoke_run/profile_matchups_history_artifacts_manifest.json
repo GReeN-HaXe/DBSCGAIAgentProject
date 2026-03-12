@@ -1,0 +1,21 @@
+{
+  "history_csv": "artifacts\\ci_smoke_run\\profile_matchups_history.csv",
+  "generated_at_utc": "2026-03-05T14:43:05.641798+00:00",
+  "history_profile": "standard",
+  "recent_window": 10,
+  "recent_runs_window": 10,
+  "seat_bias_alert_threshold": 0.15,
+  "decisive_rate_alert_threshold": 0.3,
+  "min_runs_for_ready": 5,
+  "artifacts": {
+    "history_summary_json": "artifacts\\ci_smoke_run\\profile_matchups_history_summary.json",
+    "history_summary_csv": "artifacts\\ci_smoke_run\\profile_matchups_history_summary.csv",
+    "history_recent_runs_csv": "artifacts\\ci_smoke_run\\profile_matchups_history_recent.csv",
+    "history_commands_output": "artifacts\\ci_smoke_run\\profile_matchups_history_next_commands.txt",
+    "history_commands_csv": "artifacts\\ci_smoke_run\\profile_matchups_history_next_commands.csv",
+    "history_commands_json": "artifacts\\ci_smoke_run\\profile_matchups_history_next_commands.json",
+    "history_metrics_output": "artifacts\\ci_smoke_run\\profile_matchups_history_metrics.json",
+    "history_bundle_output": "artifacts\\ci_smoke_run\\profile_matchups_history_bundle.json",
+    "history_ci_output_json": "artifacts\\ci_smoke_run\\profile_matchups_history_ci.json"
+  }
+}

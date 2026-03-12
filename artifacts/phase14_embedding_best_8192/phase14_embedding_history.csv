@@ -1,0 +1,2 @@
+schema_version,run_name,mean_reciprocal_rank,recall_at_1,recall_at_5,recall_at_10,example_count,manifest_path,recorded_at_utc
+phase14.embedding_history.v1,phase14_embedding_best_8192,0.9935302734375,0.98779296875,0.99951171875,1.0,2048,C:\Users\PC\Desktop\dbsAIAgent\artifacts\phase14_embedding_best_8192\phase14_embedding_manifest.json,2026-03-08T17:34:06.994671+00:00

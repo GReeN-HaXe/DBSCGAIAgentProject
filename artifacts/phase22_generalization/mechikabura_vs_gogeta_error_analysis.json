@@ -1,0 +1,681 @@
+{
+  "schema_version": "phase22.error_analysis.v1",
+  "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\mechikabura_vs_gogeta.json",
+  "split": "validation",
+  "example_count": 79,
+  "top1_accuracy": 0.8227848101265823,
+  "top_k_accuracy": {
+    "1": 0.8227848101265823,
+    "3": 1.0,
+    "5": 1.0
+  },
+  "error_count": 14,
+  "top_confusions": [
+    {
+      "pair": "attack_leader_with_leader->attack_leader_with_battle",
+      "count": 10
+    },
+    {
+      "pair": "play_board_extension->play_pressure",
+      "count": 4
+    }
+  ],
+  "per_source": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_001_review.json",
+      "example_count": 4,
+      "error_count": 2,
+      "top1_accuracy": 0.5
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_002_review.json",
+      "example_count": 4,
+      "error_count": 1,
+      "top1_accuracy": 0.75
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_003_review.json",
+      "example_count": 5,
+      "error_count": 1,
+      "top1_accuracy": 0.8
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_004_review.json",
+      "example_count": 6,
+      "error_count": 2,
+      "top1_accuracy": 0.6666666666666666
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_005_review.json",
+      "example_count": 4,
+      "error_count": 1,
+      "top1_accuracy": 0.75
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_006_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_007_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_008_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_009_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_010_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_011_review.json",
+      "example_count": 2,
+      "error_count": 1,
+      "top1_accuracy": 0.5
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_012_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_013_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_014_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+      "example_count": 5,
+      "error_count": 3,
+      "top1_accuracy": 0.4
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_016_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_017_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_018_review.json",
+      "example_count": 4,
+      "error_count": 1,
+      "top1_accuracy": 0.75
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_019_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+      "example_count": 6,
+      "error_count": 2,
+      "top1_accuracy": 0.6666666666666666
+    }
+  ],
+  "per_actual_label": [
+    {
+      "label": "attack_leader_with_battle",
+      "example_count": 19,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "attack_leader_with_leader",
+      "example_count": 11,
+      "error_count": 10,
+      "top1_accuracy": 0.09090909090909091
+    },
+    {
+      "label": "charge_lategame",
+      "example_count": 11,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "charge_opening",
+      "example_count": 20,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "end_turn_after_development",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "play_board_extension",
+      "example_count": 7,
+      "error_count": 4,
+      "top1_accuracy": 0.42857142857142855
+    },
+    {
+      "label": "play_pressure",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    }
+  ],
+  "sample_errors": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_001_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=8314|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 8.907248497009277
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 7.7067131996154785
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.348894327878952
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -0.9198386073112488
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_after_development",
+          "score": -1.1567902565002441
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_001_review.json",
+      "example_index": 38,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.017480850219727
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.378211975097656
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.0365960597991943
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 0.6606569886207581
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.38943490386009216
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_002_review.json",
+      "example_index": 39,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.347214698791504
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.978665351867676
+        },
+        {
+          "rank": 3,
+          "label": "play_pressure",
+          "score": 2.342668294906616
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": 2.2290334701538086
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.4081474542617798
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_003_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.517461776733398
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.525687217712402
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 0.23905304074287415
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -1.0003141164779663
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -2.5059974193573
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_004_review.json",
+      "example_index": 39,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.748189926147461
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 8.887624740600586
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 0.8826423287391663
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": 0.08077134937047958
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.7025346755981445
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_004_review.json",
+      "example_index": 48,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=8324",
+      "actual_label": "play_board_extension",
+      "predicted_label": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 10.24746036529541
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 8.259636878967285
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 4.880895137786865
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": 0.4963729679584503
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -2.555330276489258
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_005_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=8314|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 9.28282356262207
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 8.847147941589355
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.7582929134368896
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": -1.117882490158081
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -1.159063458442688
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_011_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.95401382446289
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 10.029973030090332
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": -0.6582474112510681
+        },
+        {
+          "rank": 4,
+          "label": "end_turn_after_development",
+          "score": -0.8254017233848572
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -1.9982213973999023
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+      "example_index": 30,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.672417640686035
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.00435733795166
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.9385972023010254
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": -0.25717422366142273
+        },
+        {
+          "rank": 5,
+          "label": "end_turn_reset",
+          "score": -3.6403250694274902
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+      "example_index": 38,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=1190",
+      "actual_label": "play_board_extension",
+      "predicted_label": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 8.301645278930664
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 8.116037368774414
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 2.079113721847534
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": -0.20389443635940552
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -3.1731529235839844
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+      "example_index": 48,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=7869",
+      "actual_label": "play_board_extension",
+      "predicted_label": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 6.855567932128906
+        },
+        {
+          "rank": 2,
+          "label": "charge_lategame",
+          "score": 5.989358901977539
+        },
+        {
+          "rank": 3,
+          "label": "play_board_extension",
+          "score": 5.735416889190674
+        },
+        {
+          "rank": 4,
+          "label": "play_board_setup",
+          "score": 1.81602144241333
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_battle",
+          "score": -1.5722471475601196
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_018_review.json",
+      "example_index": 38,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=7838|target_card=card_id=8314|attacker_zone=leader|target_zone=leader|target_player=1",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 10.740053176879883
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 10.54694938659668
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 1.5273351669311523
+        },
+        {
+          "rank": 4,
+          "label": "play_pressure",
+          "score": 1.4425337314605713
+        },
+        {
+          "rank": 5,
+          "label": "play_board_extension",
+          "score": -0.6348591446876526
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+      "example_index": 39,
+      "action_type": "declare_attack",
+      "action_signature": "declare_attack|attacker_card=card_id=8314|target_card=card_id=7838|attacker_zone=leader|target_zone=leader|target_player=2",
+      "actual_label": "attack_leader_with_leader",
+      "predicted_label": "attack_leader_with_battle",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "attack_leader_with_battle",
+          "score": 11.640311241149902
+        },
+        {
+          "rank": 2,
+          "label": "attack_leader_with_leader",
+          "score": 9.10277271270752
+        },
+        {
+          "rank": 3,
+          "label": "end_turn_after_development",
+          "score": 2.696965217590332
+        },
+        {
+          "rank": 4,
+          "label": "play_board_extension",
+          "score": 0.9873933792114258
+        },
+        {
+          "rank": 5,
+          "label": "play_pressure",
+          "score": -0.749440610408783
+        }
+      ]
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+      "example_index": 48,
+      "action_type": "play_card_from_hand",
+      "action_signature": "play_card_from_hand|card=card_id=8492",
+      "actual_label": "play_board_extension",
+      "predicted_label": "play_pressure",
+      "top_predictions": [
+        {
+          "rank": 1,
+          "label": "play_pressure",
+          "score": 11.68795394897461
+        },
+        {
+          "rank": 2,
+          "label": "play_board_extension",
+          "score": 9.454977035522461
+        },
+        {
+          "rank": 3,
+          "label": "charge_lategame",
+          "score": 5.544704914093018
+        },
+        {
+          "rank": 4,
+          "label": "attack_leader_with_battle",
+          "score": 1.4240206480026245
+        },
+        {
+          "rank": 5,
+          "label": "attack_leader_with_leader",
+          "score": -2.887598991394043
+        }
+      ]
+    }
+  ]
+}

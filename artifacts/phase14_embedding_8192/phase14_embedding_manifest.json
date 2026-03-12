@@ -1,0 +1,74 @@
+{
+  "schema_version": "phase14.embedding_manifest.v1",
+  "status": "pass",
+  "run_name": "phase14_embedding_8192",
+  "artifacts": {
+    "model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_identity_run_8192\\phase14_torch_model.json",
+    "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_8192.json",
+    "embedding_retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_embedding_retrieval.json",
+    "embedding_report": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_embedding_report.md",
+    "classifier_model_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_classifier_eval.json",
+    "embedding_history_csv": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_embedding_history.csv",
+    "embedding_history_summary": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_embedding_history_summary.json",
+    "classifier_retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_classifier_retrieval.json",
+    "classifier_comparison": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_embedding_8192\\phase14_embedding_compare.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "gallery_split": "train",
+    "query_split": "validation",
+    "example_count": 2048,
+    "mean_reciprocal_rank": 0.9869113498263888,
+    "mean_found_rank": 1.0341796875,
+    "recall_at_1": 0.97607421875,
+    "recall_at_5": 0.9990234375,
+    "recall_at_10": 1.0,
+    "recall_at_20": 1.0
+  },
+  "classifier_comparison": {
+    "schema_version": "phase14.embedding_compare.v1",
+    "target_type": "card_identity",
+    "example_count": 2048,
+    "classifier_model_name": "phase14_torch_mlp",
+    "embedding_model_name": "phase14_torch_mlp",
+    "classifier_mean_reciprocal_rank": 0.739990621899801,
+    "embedding_mean_reciprocal_rank": 0.9869113498263888,
+    "classifier_recall_at_1": 0.6162109375,
+    "embedding_recall_at_1": 0.97607421875,
+    "classifier_recall_at_5": 0.916015625,
+    "embedding_recall_at_5": 0.9990234375,
+    "classifier_recall_at_10": 0.958984375,
+    "embedding_recall_at_10": 1.0,
+    "mrr_lift": 0.2469207279265878,
+    "recall_at_1_lift": 0.35986328125,
+    "recall_at_5_lift": 0.0830078125,
+    "recall_at_10_lift": 0.041015625,
+    "embedding_wins": true
+  },
+  "comparison_warning": "",
+  "stage_timings": [
+    {
+      "stage": "evaluate_embedding_retrieval",
+      "duration_seconds": 3.783352200000081
+    },
+    {
+      "stage": "render_embedding_report",
+      "duration_seconds": 0.221961300001567
+    },
+    {
+      "stage": "evaluate_classifier_model",
+      "duration_seconds": 3.726486500003375
+    },
+    {
+      "stage": "evaluate_classifier_retrieval",
+      "duration_seconds": 0.43778740000198013
+    }
+  ],
+  "history": {
+    "run_count": 3,
+    "best_mrr": 0.9869113498263888,
+    "best_recall_at_1": 0.97607421875,
+    "best_run_name": "phase14_embedding_8192",
+    "recent_mrr": 0.9869113498263888
+  }
+}

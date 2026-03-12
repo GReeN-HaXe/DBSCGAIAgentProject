@@ -1,0 +1,19 @@
+{
+  "schema_version": "phase14.compare.v1",
+  "target_type": "card_identity",
+  "split": "validation",
+  "phase14_model_name": "phase14_torch_mlp",
+  "phase13_model_name": "phase13_visual_histogram_knn",
+  "phase14_top1_accuracy": 0.734375,
+  "phase13_top1_accuracy": 0.0146484375,
+  "phase14_top5_accuracy": 0.9501953125,
+  "phase13_top5_accuracy": 0.0478515625,
+  "phase14_top10_accuracy": 0.9853515625,
+  "phase13_top10_accuracy": 0.0869140625,
+  "top1_lift": 0.7197265625,
+  "top5_lift": 0.90234375,
+  "top10_lift": 0.8984375,
+  "phase14_example_count": 1024,
+  "phase13_example_count": 1024,
+  "phase14_wins": true
+}

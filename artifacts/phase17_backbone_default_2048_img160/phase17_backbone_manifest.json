@@ -1,0 +1,44 @@
+{
+  "schema_version": "phase17.backbone_manifest.v1",
+  "status": "pass",
+  "run_name": "phase17_backbone_default_2048_img160",
+  "artifacts": {
+    "dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_image_dataset.json",
+    "model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase17_backbone_default_2048_img160\\phase17_resnet18_model.json",
+    "retrieval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase17_backbone_default_2048_img160\\phase17_resnet18_retrieval.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "gallery_split": "train",
+    "query_split": "validation",
+    "example_count": 1024,
+    "mean_reciprocal_rank": 0.6669921875,
+    "mean_found_rank": 1.0,
+    "recall_at_1": 0.6669921875,
+    "recall_at_5": 0.6669921875,
+    "recall_at_10": 0.6669921875,
+    "recall_at_20": 0.6669921875
+  },
+  "training": {
+    "epochs": 3,
+    "batch_size": 16,
+    "learning_rate": 0.0001,
+    "image_size": 160,
+    "weights_mode": "default",
+    "weights_loaded": true,
+    "freeze_backbone_epochs": 1,
+    "max_train_examples": 2048,
+    "max_gallery_examples": 2048,
+    "max_query_examples": 1024
+  },
+  "stage_timings": [
+    {
+      "stage": "train_resnet18_model",
+      "duration_seconds": 222.47489099999802
+    },
+    {
+      "stage": "evaluate_resnet18_retrieval",
+      "duration_seconds": 124.8856887999973
+    }
+  ]
+}

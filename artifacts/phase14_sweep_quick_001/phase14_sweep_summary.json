@@ -1,0 +1,44 @@
+{
+  "schema_version": "phase14.sweep.v1",
+  "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+  "profile": "quick",
+  "config_count": 2,
+  "best": {
+    "config_name": "h128_e10_lr1e3",
+    "hidden_dim": 128,
+    "epochs": 10,
+    "learning_rate": 0.001,
+    "top1_accuracy": 0.447265625,
+    "top5_accuracy": 0.7529296875,
+    "top10_accuracy": 0.8623046875,
+    "example_count": 1024,
+    "duration_seconds": 10.011134200001834,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h128_e10_lr1e3\\phase14_torch_manifest.json"
+  },
+  "ranking": [
+    {
+      "config_name": "h128_e10_lr1e3",
+      "hidden_dim": 128,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "top1_accuracy": 0.447265625,
+      "top5_accuracy": 0.7529296875,
+      "top10_accuracy": 0.8623046875,
+      "example_count": 1024,
+      "duration_seconds": 10.011134200001834,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h128_e10_lr1e3\\phase14_torch_manifest.json"
+    },
+    {
+      "config_name": "h64_e10_lr1e3",
+      "hidden_dim": 64,
+      "epochs": 10,
+      "learning_rate": 0.001,
+      "top1_accuracy": 0.0693359375,
+      "top5_accuracy": 0.19921875,
+      "top10_accuracy": 0.2744140625,
+      "example_count": 1024,
+      "duration_seconds": 9.560881399993377,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_quick_001\\h64_e10_lr1e3\\phase14_torch_manifest.json"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "phase10.detections.v1",
+  "recognizer_name": "phase13_labeled_reference",
+  "video_manifest": {"video_path": "artifacts/phase13_reference_demo/demo.mp4", "frame_count": 4},
+  "detections": [
+    {"frame_index": 0, "timestamp_seconds": 0.0, "objects": [{"label": "leader_card", "seat": 1, "bbox": {"x": 0.08, "y": 0.68, "w": 0.16, "h": 0.20}, "confidence": 0.95}, {"label": "battle_card", "seat": 2, "bbox": {"x": 0.72, "y": 0.08, "w": 0.16, "h": 0.20}, "confidence": 0.94}, {"label": "phase_marker", "seat": null, "phase": "draw", "bbox": {"x": 0.42, "y": 0.02, "w": 0.14, "h": 0.08}, "confidence": 0.93}]},
+    {"frame_index": 1, "timestamp_seconds": 1.0, "objects": [{"label": "leader_card", "seat": 1, "bbox": {"x": 0.08, "y": 0.68, "w": 0.16, "h": 0.20}, "confidence": 0.95}, {"label": "unison_card", "seat": 2, "bbox": {"x": 0.72, "y": 0.08, "w": 0.16, "h": 0.20}, "confidence": 0.94}, {"label": "phase_marker", "seat": null, "phase": "charge", "bbox": {"x": 0.42, "y": 0.02, "w": 0.14, "h": 0.08}, "confidence": 0.93}]},
+    {"frame_index": 2, "timestamp_seconds": 2.0, "objects": [{"label": "leader_card", "seat": 1, "bbox": {"x": 0.08, "y": 0.68, "w": 0.16, "h": 0.20}, "confidence": 0.95}, {"label": "battle_card", "seat": 2, "bbox": {"x": 0.72, "y": 0.08, "w": 0.16, "h": 0.20}, "confidence": 0.94}, {"label": "phase_marker", "seat": null, "phase": "draw", "bbox": {"x": 0.42, "y": 0.02, "w": 0.14, "h": 0.08}, "confidence": 0.93}]},
+    {"frame_index": 3, "timestamp_seconds": 3.0, "objects": [{"label": "leader_card", "seat": 1, "bbox": {"x": 0.08, "y": 0.68, "w": 0.16, "h": 0.20}, "confidence": 0.95}, {"label": "unison_card", "seat": 2, "bbox": {"x": 0.72, "y": 0.08, "w": 0.16, "h": 0.20}, "confidence": 0.94}, {"label": "phase_marker", "seat": null, "phase": "charge", "bbox": {"x": 0.42, "y": 0.02, "w": 0.14, "h": 0.08}, "confidence": 0.93}]}
+  ]
+}

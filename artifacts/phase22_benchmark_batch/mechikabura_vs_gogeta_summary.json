@@ -1,0 +1,476 @@
+{
+  "schema_version": "phase22.benchmark_dataset_summary.v1",
+  "group_name": "mechikabura_vs_gogeta",
+  "pattern": "artifacts/phase22_normalized/mechikabura_vs_gogeta/*_review.json",
+  "input_count": 20,
+  "included_count": 20,
+  "skipped_count": 0,
+  "included_traces": [
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_001_review.json",
+      "action_count": 46,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 23
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_002_review.json",
+      "action_count": 40,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 17
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_003_review.json",
+      "action_count": 51,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 23
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_004_review.json",
+      "action_count": 54,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 26
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_005_review.json",
+      "action_count": 44,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 19
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_006_review.json",
+      "action_count": 43,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 20
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_007_review.json",
+      "action_count": 42,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 19
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_008_review.json",
+      "action_count": 40,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 15
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_009_review.json",
+      "action_count": 38,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 18
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 7
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 7
+        },
+        {
+          "action_type": "end_turn",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_010_review.json",
+      "action_count": 42,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 20
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_011_review.json",
+      "action_count": 37,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 15
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 7
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_012_review.json",
+      "action_count": 44,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 20
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_013_review.json",
+      "action_count": 51,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 25
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 11
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_014_review.json",
+      "action_count": 36,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 16
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+      "action_count": 52,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 22
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 11
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_016_review.json",
+      "action_count": 43,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 17
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_017_review.json",
+      "action_count": 44,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 18
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_018_review.json",
+      "action_count": 47,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 18
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_019_review.json",
+      "action_count": 34,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 12
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 8
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 7
+        },
+        {
+          "action_type": "end_turn",
+          "count": 7
+        }
+      ]
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+      "action_count": 57,
+      "unique_action_type_count": 4,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 29
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 10
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 9
+        }
+      ]
+    }
+  ],
+  "skipped_traces": [],
+  "dataset_example_count": 885,
+  "dataset_split_counts": {
+    "train": 806,
+    "validation": 79
+  }
+}

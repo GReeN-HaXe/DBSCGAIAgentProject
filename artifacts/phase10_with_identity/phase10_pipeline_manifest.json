@@ -1,0 +1,25 @@
+{
+  "schema_version": "phase10.pipeline.v1",
+  "status": "pass",
+  "match_id": "phase10_with_identity_001",
+  "source_name": "phase10_pipeline",
+  "artifacts": {
+    "detections": "artifacts\\phase10_with_identity\\phase10_detections.json",
+    "reviewed_detections": "artifacts\\phase10_with_identity\\phase10_reviewed_detections.json",
+    "identity_enriched_detections": "artifacts\\phase10_with_identity\\phase10_identity_enriched_detections.json",
+    "external_match": "artifacts\\phase10_with_identity\\phase10_external_match.json",
+    "phase7_dataset": "artifacts\\phase10_with_identity\\phase10_phase7_dataset.json",
+    "benchmark": ""
+  },
+  "identity_summary": {
+    "schema_version": "phase10.identity_enrichment.v1",
+    "resolver_name": "phase15_production",
+    "top_k": 5,
+    "crop_image_format": "ppm",
+    "crops_output_dir": "artifacts\\phase10_with_identity\\identity_crops",
+    "enriched_object_count": 7684,
+    "skipped_object_count": 3842
+  },
+  "benchmark_summary": {},
+  "history_summary": {}
+}

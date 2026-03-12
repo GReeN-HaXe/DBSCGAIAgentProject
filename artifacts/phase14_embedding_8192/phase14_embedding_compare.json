@@ -1,0 +1,20 @@
+{
+  "schema_version": "phase14.embedding_compare.v1",
+  "target_type": "card_identity",
+  "example_count": 2048,
+  "classifier_model_name": "phase14_torch_mlp",
+  "embedding_model_name": "phase14_torch_mlp",
+  "classifier_mean_reciprocal_rank": 0.739990621899801,
+  "embedding_mean_reciprocal_rank": 0.9869113498263888,
+  "classifier_recall_at_1": 0.6162109375,
+  "embedding_recall_at_1": 0.97607421875,
+  "classifier_recall_at_5": 0.916015625,
+  "embedding_recall_at_5": 0.9990234375,
+  "classifier_recall_at_10": 0.958984375,
+  "embedding_recall_at_10": 1.0,
+  "mrr_lift": 0.2469207279265878,
+  "recall_at_1_lift": 0.35986328125,
+  "recall_at_5_lift": 0.0830078125,
+  "recall_at_10_lift": 0.041015625,
+  "embedding_wins": true
+}

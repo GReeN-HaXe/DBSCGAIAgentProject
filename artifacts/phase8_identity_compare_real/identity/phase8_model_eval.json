@@ -1,0 +1,43 @@
+{
+  "model_name": "backoff_frequency_policy",
+  "target_field": "action_type",
+  "split": "validation",
+  "example_count": 806,
+  "top1_accuracy": 1.0,
+  "identity_resolved_example_count": 805,
+  "identity_resolved_example_rate": 0.9987593052109182,
+  "by_target_label": [
+    {
+      "count": 806,
+      "matched": 806,
+      "accuracy": 1.0,
+      "target_label": "detected_frame_state"
+    }
+  ],
+  "identity_resolution_slices": {
+    "with_identity": {
+      "example_count": 805,
+      "top1_accuracy": 1.0,
+      "by_target_label": [
+        {
+          "count": 805,
+          "matched": 805,
+          "accuracy": 1.0,
+          "target_label": "detected_frame_state"
+        }
+      ]
+    },
+    "without_identity": {
+      "example_count": 1,
+      "top1_accuracy": 1.0,
+      "by_target_label": [
+        {
+          "count": 1,
+          "matched": 1,
+          "accuracy": 1.0,
+          "target_label": "detected_frame_state"
+        }
+      ]
+    }
+  }
+}

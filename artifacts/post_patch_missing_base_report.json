@@ -1,0 +1,21 @@
+{
+  "patched_found_count": 122,
+  "remaining_missing_count": 13,
+  "remaining_missing_card_numbers": [
+    "BT21-051S",
+    "BT29-48",
+    "BT30-001B",
+    "BT30-016B",
+    "BT30-017B",
+    "BT30-043B",
+    "BT30-044B",
+    "BT30-067B",
+    "BT30-081B",
+    "BT30-082B",
+    "BT30-107B",
+    "BT30-108B",
+    "BT8-022S"
+  ],
+  "backup_path": "c:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\dbs_masters_before_missing_patch.db",
+  "db_path": "c:\\Users\\PC\\Desktop\\dbsAIAgent\\dbdatabase\\dbs_masters.db"
+}

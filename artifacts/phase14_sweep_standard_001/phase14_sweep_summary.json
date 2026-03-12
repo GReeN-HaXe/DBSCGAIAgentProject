@@ -1,0 +1,56 @@
+{
+  "schema_version": "phase14.sweep.v1",
+  "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+  "profile": "standard",
+  "config_count": 3,
+  "best": {
+    "config_name": "h128_e20_lr1e3",
+    "hidden_dim": 128,
+    "epochs": 20,
+    "learning_rate": 0.001,
+    "top1_accuracy": 0.734375,
+    "top5_accuracy": 0.9501953125,
+    "top10_accuracy": 0.9853515625,
+    "example_count": 1024,
+    "duration_seconds": 11.13452430000325,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_standard_001\\h128_e20_lr1e3\\phase14_torch_manifest.json"
+  },
+  "ranking": [
+    {
+      "config_name": "h128_e20_lr1e3",
+      "hidden_dim": 128,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "top1_accuracy": 0.734375,
+      "top5_accuracy": 0.9501953125,
+      "top10_accuracy": 0.9853515625,
+      "example_count": 1024,
+      "duration_seconds": 11.13452430000325,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_standard_001\\h128_e20_lr1e3\\phase14_torch_manifest.json"
+    },
+    {
+      "config_name": "h256_e20_lr5e4",
+      "hidden_dim": 256,
+      "epochs": 20,
+      "learning_rate": 0.0005,
+      "top1_accuracy": 0.6767578125,
+      "top5_accuracy": 0.943359375,
+      "top10_accuracy": 0.98046875,
+      "example_count": 1024,
+      "duration_seconds": 11.513490099998307,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_standard_001\\h256_e20_lr5e4\\phase14_torch_manifest.json"
+    },
+    {
+      "config_name": "h64_e20_lr1e3",
+      "hidden_dim": 64,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "top1_accuracy": 0.2548828125,
+      "top5_accuracy": 0.5732421875,
+      "top10_accuracy": 0.7294921875,
+      "example_count": 1024,
+      "duration_seconds": 10.657430500003102,
+      "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_sweep_standard_001\\h64_e20_lr1e3\\phase14_torch_manifest.json"
+    }
+  ]
+}

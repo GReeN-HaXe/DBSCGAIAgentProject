@@ -1,0 +1,12 @@
+{
+  "model_family": "phase15_triplet_mlp",
+  "epochs": 20,
+  "steps_per_epoch": 200,
+  "batch_size": 128,
+  "hidden_dim": 256,
+  "embedding_dim": 128,
+  "learning_rate": 0.0005,
+  "margin": 0.2,
+  "negative_mining": "",
+  "negative_pool_size": 0
+}

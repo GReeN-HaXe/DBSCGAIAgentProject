@@ -70,6 +70,25 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "ignores_barrier": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1004": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "1005": [
@@ -96,6 +115,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "101": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_hand_to_life_on_play",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
+        "requires_played_from": "hand"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1011": [
@@ -207,6 +238,16 @@
       "trigger": "self_played"
     }
   ],
+  "1026": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1027": [
     {
       "handler_id": "auto_draw_n",
@@ -235,6 +276,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "1033": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "1034": [
@@ -448,6 +499,30 @@
       "trigger": "turn_end"
     }
   ],
+  "107": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader card is a yellow \u226asaiyan\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    }
+  ],
+  "1070": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1077": [
     {
       "handler_id": "auto_draw_n",
@@ -455,6 +530,31 @@
         "amount": 1
       },
       "once_per_turn": true,
+      "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -20000,
+        "target_policy": "first"
+      },
+      "once_per_turn": true,
+      "trigger": "self_attacks"
+    }
+  ],
+  "1081": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -25000,
+        "requires_leader": "if your leader is a &lt;pan&gt; card and your opponent has 2 or more energy",
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
       "trigger": "self_attacks"
     }
   ],
@@ -510,6 +610,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_comboed"
+    }
+  ],
+  "109": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": 3,
+        "max_targets": 1,
+        "requires_leader": "if your leader card is a yellow \u226asaiyan\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1090": [
@@ -576,6 +688,16 @@
       "trigger": "self_played"
     }
   ],
+  "1101": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1102": [
     {
       "handler_id": "auto_draw_n",
@@ -594,6 +716,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "1105": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a &lt;piccolo",
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1106": [
@@ -637,6 +771,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a &lt;piccolo"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1113": [
@@ -657,6 +801,26 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a &lt;piccolo",
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a &lt;piccolo",
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
     },
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -683,6 +847,19 @@
       "trigger": "self_comboed"
     }
   ],
+  "1119": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -15000,
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    }
+  ],
   "1121": [
     {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
@@ -695,6 +872,19 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "1122": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "blue",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 5
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1124": [
@@ -760,6 +950,14 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_battle"
     }
   ],
   "1135": [
@@ -778,6 +976,26 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a &lt;pan&gt; card and you have 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
+    }
+  ],
+  "1137": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a &lt;pan&gt; card and there are 1 or more red cards in your combo area"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
     }
   ],
   "114": [
@@ -971,6 +1189,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": -1,
+        "requires_leader": "if your leader is a black &lt;supreme kai of time&gt; card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1192": [
@@ -1057,6 +1287,19 @@
   ],
   "127": [
     {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 5,
+        "required_card_type": "BATTLE",
+        "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_top_deck_add_if_color_on_play",
       "handler_params": {
         "move_to_bottom_on_fail": true,
@@ -1109,6 +1352,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1281": [
@@ -1156,6 +1409,19 @@
       "trigger": "self_attacks"
     }
   ],
+  "1315": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -10000,
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    }
+  ],
   "1318": [
     {
       "handler_id": "auto_draw_n",
@@ -1175,6 +1441,30 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -15000,
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    }
+  ],
+  "1319": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -30000,
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
     }
   ],
   "1320": [
@@ -1201,6 +1491,21 @@
       "handler_params": {},
       "once_per_turn": false,
       "trigger": "turn_end"
+    }
+  ],
+  "1322": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": -1,
+        "requires_leader": "if your leader's back side is a &lt;vegeks",
+        "requires_played_from": "hand"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1323": [
@@ -1265,6 +1570,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 4,
+        "requires_leader": "if your leader's back side is {frieza, resurrected}"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1346": [
@@ -1300,6 +1617,19 @@
       "trigger": "self_played"
     }
   ],
+  "1349": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a black &lt;son goku"
+      },
+      "once_per_turn": true,
+      "trigger": "self_played"
+    }
+  ],
   "1356": [
     {
       "handler_id": "auto_draw_n",
@@ -1309,6 +1639,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_comboed"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 5,
+        "requires_leader": "if your leader is black and you remove 1 of your skill-less battle cards from the game"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1358": [
@@ -1319,6 +1661,18 @@
       },
       "once_per_turn": true,
       "trigger": "self_attacks"
+    }
+  ],
+  "1359": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a yellow &lt;baby&gt; card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "136": [
@@ -1335,6 +1689,14 @@
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "turn_end"
+    },
+    {
+      "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
+      "handler_params": {
+        "max_targets": 1
+      },
       "once_per_turn": false,
       "trigger": "turn_end"
     }
@@ -1379,6 +1741,18 @@
       "handler_params": {},
       "once_per_turn": false,
       "trigger": "turn_end"
+    }
+  ],
+  "1363": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a green &lt;cell&gt; card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1364": [
@@ -1472,6 +1846,15 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 2,
+        "requires_leader": "if your leader is a red &lt;vegito&gt; card, its front side is facing up, you have 2 or more energy, and you remove this card from the game"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
       "handler_params": {
         "look_count": 7,
@@ -1491,6 +1874,32 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "138": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is blue or a \u226auniverse 6\u226b card and your opponent has 3 or more energy"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1380": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "blue",
+        "look_count": 7,
+        "max_add": 1,
+        "max_cost": 4,
+        "requires_leader": "if your leader is a blue &lt;majin buu&gt; card",
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1381": [
@@ -1538,6 +1947,20 @@
       "trigger": "turn_end"
     }
   ],
+  "1391": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "red",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": -1,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1395": [
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -1571,6 +1994,14 @@
       },
       "once_per_turn": true,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_battle"
     }
   ],
   "14": [
@@ -1589,6 +2020,31 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -20000,
+        "requires_leader": "if your leader is a red &lt;android 13&gt; card and you have 2 or more energy and a red &lt;android 14&gt; card in your z-energy",
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    }
+  ],
+  "1401": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -25000,
+        "target_policy": "first"
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
@@ -1625,6 +2081,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a red \u226aandroid\u226b card and all of your energy is mono-red"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "1408": [
@@ -1632,7 +2098,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
-        "requires_leader": "if your leader is red and\u2015your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
+        "requires_leader": "if your leader is red and - your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
       },
       "once_per_turn": false,
       "trigger": "self_comboed"
@@ -1643,6 +2109,16 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a red \u226aandroid\u226b card and all of your energy is mono-red"
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -1698,6 +2174,23 @@
       "trigger": "self_played"
     }
   ],
+  "1418": [
+    {
+      "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
+      "handler_params": {
+        "allowed_colors": "green",
+        "discard_from_hand_before": 1,
+        "max_cost": 3,
+        "max_targets": 1,
+        "negate_skills": true,
+        "requires_leader": "if your leader is a green &lt;veku",
+        "rest_mode": true,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    }
+  ],
   "142": [
     {
       "handler_id": "auto_draw_n",
@@ -1719,7 +2212,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
-        "requires_leader": "if your leader is green and\u2015your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
+        "requires_leader": "if your leader is green and - your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
       },
       "once_per_turn": false,
       "trigger": "self_comboed"
@@ -1792,6 +2285,17 @@
       "trigger": "self_comboed"
     }
   ],
+  "1430": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a green &lt;broly"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1436": [
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -1823,6 +2327,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "144": [
+    {
+      "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+      "handler_params": {
+        "grant_keyword": "Critical",
+        "life_to_hand": 1,
+        "power_delta": 10000
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
     }
   ],
   "1443": [
@@ -1877,6 +2393,30 @@
       "trigger": "self_played"
     }
   ],
+  "145": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a blue \u226auniverse 6\u226b card and you have 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1452": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "ignores_barrier": true,
+        "requires_leader": "if your leader is a &lt;piccolo",
+        "rest_mode_only": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_battle"
+    }
+  ],
   "1453": [
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -1907,7 +2447,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
-        "requires_leader": "if your leader is yellow and\u2015your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
+        "requires_leader": "if your leader is yellow and - your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
       },
       "once_per_turn": false,
       "trigger": "self_comboed"
@@ -1930,6 +2470,18 @@
         "look_count": 3,
         "max_add": 1,
         "max_cost": -1
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    }
+  ],
+  "1466": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "max_cost": -1,
+        "max_targets": 1
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -1975,6 +2527,14 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1487": [
@@ -1985,9 +2545,28 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "149": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "blue",
+        "look_count": 3,
+        "max_add": 1,
+        "max_cost": 3
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    },
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
       "handler_params": {
@@ -2062,7 +2641,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
-        "requires_leader": "if your leader is blue and\u2015your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
+        "requires_leader": "if your leader is blue and - your leader is a z-leader, or you have 2 or more z-energy, or you have a z-battle card in play"
       },
       "once_per_turn": false,
       "trigger": "self_comboed"
@@ -2145,6 +2724,18 @@
       "trigger": "self_played"
     }
   ],
+  "1522": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is black"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    }
+  ],
   "1524": [
     {
       "handler_id": "auto_draw_n",
@@ -2184,6 +2775,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "blue,yellow",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 4,
+        "requires_leader": "if your leader card is a blue \u226auniverse 6\u226b card and you discard this card from your hand"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1530": [
@@ -2327,6 +2930,25 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader is a yellow &lt;son goku"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader is a yellow &lt;son goku"
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -2545,6 +3167,17 @@
       "trigger": "self_played"
     }
   ],
+  "18": [
+    {
+      "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
+      "handler_params": {
+        "max_targets": 1,
+        "requires_leader": "if your leader card is a blue \u226asaiyan\u226b card"
+      },
+      "once_per_turn": true,
+      "trigger": "turn_end"
+    }
+  ],
   "180": [
     {
       "handler_id": "auto_draw_n",
@@ -2563,6 +3196,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "186": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "188": [
@@ -2744,6 +3387,15 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
     }
   ],
   "229": [
@@ -2798,6 +3450,25 @@
       },
       "once_per_turn": true,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "24": [
+    {
+      "handler_id": "auto_add_n_life_to_hand_on_self_ko",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a blue \u226asaiyan\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_koed"
     }
   ],
   "240": [
@@ -2819,6 +3490,19 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    }
+  ],
+  "241": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": 7,
+        "max_targets": 1,
+        "power_delta": -35000,
+        "target_policy": "first"
+      },
+      "once_per_turn": true,
+      "trigger": "self_attacks"
     }
   ],
   "242": [
@@ -2911,6 +3595,17 @@
       "trigger": "self_played"
     }
   ],
+  "252": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card and energy are all red"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
+    }
+  ],
   "26": [
     {
       "handler_id": "auto_draw_n",
@@ -2919,6 +3614,20 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "29": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "green,yellow",
+        "discard_after_add": 1,
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": -1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "294": [
@@ -2975,12 +3684,32 @@
       "trigger": "self_played"
     }
   ],
+  "300": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
+    }
+  ],
   "301": [
     {
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
         "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "302": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 2
       },
       "once_per_turn": false,
       "trigger": "self_activate_main"
@@ -3011,8 +3740,54 @@
   ],
   "308": [
     {
+      "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+      "handler_params": {
+        "life_to_hand": 1,
+        "power_delta": 11000
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    },
+    {
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "turn_end"
+    }
+  ],
+  "31": [
+    {
+      "handler_id": "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play",
+      "handler_params": {
+        "markers": 1,
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader card is a &lt;meta-cooler&gt; or &lt;meta-cooler core&gt; card, you have 2 or more energy, and you don't have a unison card in play",
+        "requires_played_from": "hand",
+        "rest_mode": true,
+        "rest_mode_only": true,
+        "source_pool": "hand"
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    }
+  ],
+  "312": [
+    {
+      "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+      "handler_params": {
+        "life_to_hand": 1,
+        "power_delta": 11000
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
+      "handler_params": {
+        "allowed_colors": "blue",
+        "max_targets": 1
+      },
       "once_per_turn": false,
       "trigger": "turn_end"
     }
@@ -3099,6 +3874,17 @@
       "trigger": "self_activate_main"
     }
   ],
+  "325": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card and all of your energy is blue"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
+    }
+  ],
   "326": [
     {
       "handler_id": "auto_draw_n",
@@ -3168,6 +3954,23 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    }
+  ],
+  "34": [
+    {
+      "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "discard_from_hand_before": 1,
+        "max_cost": 2,
+        "max_targets": 1,
+        "negate_skills": true,
+        "requires_leader": "if your leader card is a mono-yellow \u226auniverse 11\u226b card and it's your opponent's turn",
+        "rest_mode": true,
+        "rest_mode_only": true
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -3256,6 +4059,17 @@
       "trigger": "self_attacks"
     }
   ],
+  "352": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "rest_mode_only": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "353": [
     {
       "handler_id": "auto_ko_opponent_battle_on_play",
@@ -3276,6 +4090,17 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "355": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
     }
   ],
   "357": [
@@ -3316,6 +4141,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "362": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "363": [
@@ -3413,6 +4248,14 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_battle"
     }
   ],
   "378": [
@@ -3447,6 +4290,17 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    }
+  ],
+  "385": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card and energy are all black"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
     }
   ],
   "386": [
@@ -3677,6 +4531,29 @@
       "trigger": "self_played"
     }
   ],
+  "423": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
+    }
+  ],
+  "424": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card and you choose 1 of your &lt;gowasu&gt; cards and place it in its owner's drop area"
+      },
+      "once_per_turn": true,
+      "trigger": "self_played"
+    }
+  ],
   "425": [
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -3689,6 +4566,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "426": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is yellow",
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
     }
   ],
   "43": [
@@ -3711,6 +4600,18 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "look_count": 7,
+        "max_add": 1,
+        "max_cost": 3,
+        "requires_leader": "if your leader card is a black \u226aandroid\u226b card and you choose 1 card in your hand and discard it"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "44": [
@@ -3784,6 +4685,17 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    }
+  ],
+  "451": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 2,
+        "requires_leader": "if your leader card is a blue &lt;zamasu&gt; card and you have 4 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "46": [
@@ -3954,6 +4866,28 @@
       "trigger": "self_activate_main"
     }
   ],
+  "539": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "54": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a red &lt;son goten&gt; card and your opponent has 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "540": [
     {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
@@ -3965,6 +4899,17 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -20000,
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
     }
   ],
   "541": [
@@ -4045,6 +4990,19 @@
       "trigger": "self_comboed"
     }
   ],
+  "55": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "red",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 3
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "552": [
     {
       "handler_id": "auto_draw_n",
@@ -4097,6 +5055,17 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "56": [
+    {
+      "handler_id": "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power",
+      "handler_params": {
+        "power_delta": -15000,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "owner_opponent_skill_plays_overcost_battle"
     }
   ],
   "564": [
@@ -4283,6 +5252,16 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "ignores_barrier": true,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "ignores_barrier": true,
@@ -4331,6 +5310,15 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "608": [
@@ -4363,6 +5351,19 @@
       "trigger": "self_comboed"
     }
   ],
+  "61": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -10000,
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    }
+  ],
   "610": [
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -4377,6 +5378,15 @@
     }
   ],
   "611": [
+    {
+      "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+      "handler_params": {
+        "life_to_hand": 1,
+        "power_delta": 11000
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    },
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {},
@@ -4395,6 +5405,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "621": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 2
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
     }
   ],
   "623": [
@@ -4487,6 +5507,18 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "64": [
+    {
+      "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+      "handler_params": {
+        "grant_keyword": "Double Strike",
+        "life_to_hand": 1,
+        "power_delta": 10000
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
     }
   ],
   "643": [
@@ -4612,6 +5644,17 @@
       "trigger": "self_attacks"
     }
   ],
+  "669": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a blue \u226ared ribbon army\u226b card and you discard 1 \u226ared ribbon army\u226b card from your hand"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "67": [
     {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
@@ -4680,6 +5723,17 @@
         "max_cost": 3
       },
       "once_per_turn": true,
+      "trigger": "self_played"
+    }
+  ],
+  "69": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1
+      },
+      "once_per_turn": false,
       "trigger": "self_played"
     }
   ],
@@ -4785,6 +5839,20 @@
       "trigger": "self_comboed_battle_end"
     }
   ],
+  "73": [
+    {
+      "handler_id": "auto_power_reduce_up_to_n_on_attack",
+      "handler_params": {
+        "max_cost": -1,
+        "max_targets": 1,
+        "power_delta": -10000,
+        "requires_leader": "if your leader card is a red &lt;broly&gt; card",
+        "target_policy": "first"
+      },
+      "once_per_turn": false,
+      "trigger": "self_attacks"
+    }
+  ],
   "74": [
     {
       "handler_id": "auto_draw_n",
@@ -4817,6 +5885,18 @@
       "trigger": "self_activate_main"
     }
   ],
+  "77": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handler_params": {
+        "max_cost": 2,
+        "max_targets": 2,
+        "requires_skill_less": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_played"
+    }
+  ],
   "8": [
     {
       "handler_id": "auto_draw_n",
@@ -4827,6 +5907,28 @@
       "trigger": "self_played"
     }
   ],
+  "82": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a red &lt;broly&gt; card, reduce the energy cost of this card in your hand by 2.. [activate"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_battle"
+    }
+  ],
+  "84": [
+    {
+      "handler_id": "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "max_targets": 1
+      },
+      "once_per_turn": false,
+      "trigger": "owner_field_extra_placed"
+    }
+  ],
   "85": [
     {
       "handler_id": "auto_draw_n",
@@ -4835,6 +5937,17 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "87": [
+    {
+      "handler_id": "auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack",
+      "handler_params": {
+        "amount": 1,
+        "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "owner_leader_attacks"
     }
   ],
   "888": [
@@ -4915,12 +6028,40 @@
       "trigger": "self_attacks"
     }
   ],
+  "94": [
+    {
+      "handler_id": "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_switch_target_rest",
+      "handler_params": {
+        "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "owner_opponent_skill_plays_overcost_battle"
+    }
+  ],
   "95": [
     {
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
         "requires_leader": "if your leader card is yellow and your life is at 4 or less"
+      },
+      "once_per_turn": false,
+      "trigger": "self_comboed"
+    }
+  ],
+  "96": [
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_draw_n",
+      "handler_params": {
+        "amount": 1
       },
       "once_per_turn": false,
       "trigger": "self_comboed"

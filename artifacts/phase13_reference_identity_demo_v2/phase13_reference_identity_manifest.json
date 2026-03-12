@@ -1,0 +1,51 @@
+{
+  "schema_version": "phase13.reference_identity_manifest.v1",
+  "status": "pass",
+  "run_name": "phase13_reference_identity_demo_v2",
+  "artifacts": {
+    "reference_dataset": "artifacts\\phase13_reference_image_dataset.json",
+    "reference_dataset_limited": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_dataset_limited.json",
+    "feature_cache": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_feature_cache.json",
+    "model": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_model.json",
+    "evaluation": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_eval.json",
+    "history_csv": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_history.csv",
+    "history_summary": "artifacts\\phase13_reference_identity_demo_v2\\phase13_reference_identity_history_summary.json"
+  },
+  "metrics": {
+    "target_type": "card_identity",
+    "split": "validation",
+    "top1_accuracy": 0.0,
+    "top5_accuracy": 0.0,
+    "top10_accuracy": 0.0,
+    "example_count": 52,
+    "reference_example_count": 256,
+    "reference_example_count_total": 6213
+  },
+  "stage_timings": [
+    {
+      "stage": "build_feature_cache",
+      "duration_seconds": 34.27740959999937
+    },
+    {
+      "stage": "train_identity_model",
+      "duration_seconds": 0.3566103000048315
+    },
+    {
+      "stage": "evaluate_identity_model",
+      "duration_seconds": 7.820975000002363
+    }
+  ],
+  "history": {
+    "total_runs": 1,
+    "recent_window": 1,
+    "recent_avg_top1_accuracy": 0.0,
+    "latest_run_name": "phase13_reference_identity_demo_v2",
+    "latest_top1_accuracy": 0.0,
+    "latest_top5_accuracy": 0.0,
+    "latest_top10_accuracy": 0.0,
+    "best_run_name": "phase13_reference_identity_demo_v2",
+    "best_top1_accuracy": 0.0,
+    "best_top5_accuracy": 0.0,
+    "best_top10_accuracy": 0.0
+  }
+}

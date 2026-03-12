@@ -1,0 +1,72 @@
+{
+  "model_name": "backoff_frequency_policy",
+  "target_field": "action_type",
+  "split": "validation",
+  "example_count": 104,
+  "top1_accuracy": 1.0,
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0,
+  "by_target_label": [
+    {
+      "count": 37,
+      "matched": 37,
+      "accuracy": 1.0,
+      "target_label": "charge_from_hand"
+    },
+    {
+      "count": 29,
+      "matched": 29,
+      "accuracy": 1.0,
+      "target_label": "declare_attack"
+    },
+    {
+      "count": 9,
+      "matched": 9,
+      "accuracy": 1.0,
+      "target_label": "end_turn"
+    },
+    {
+      "count": 29,
+      "matched": 29,
+      "accuracy": 1.0,
+      "target_label": "play_card_from_hand"
+    }
+  ],
+  "identity_resolution_slices": {
+    "with_identity": {
+      "example_count": 0,
+      "top1_accuracy": 0.0,
+      "by_target_label": []
+    },
+    "without_identity": {
+      "example_count": 104,
+      "top1_accuracy": 1.0,
+      "by_target_label": [
+        {
+          "count": 37,
+          "matched": 37,
+          "accuracy": 1.0,
+          "target_label": "charge_from_hand"
+        },
+        {
+          "count": 29,
+          "matched": 29,
+          "accuracy": 1.0,
+          "target_label": "declare_attack"
+        },
+        {
+          "count": 9,
+          "matched": 9,
+          "accuracy": 1.0,
+          "target_label": "end_turn"
+        },
+        {
+          "count": 29,
+          "matched": 29,
+          "accuracy": 1.0,
+          "target_label": "play_card_from_hand"
+        }
+      ]
+    }
+  }
+}

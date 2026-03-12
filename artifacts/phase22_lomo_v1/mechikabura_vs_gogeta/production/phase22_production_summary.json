@@ -1,0 +1,27 @@
+{
+  "schema_version": "phase22.production_summary.v1",
+  "best_config_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\phase22_best_config.json",
+  "source_manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\pipeline\\phase22_manifest.json",
+  "target_field": "decision_class",
+  "metrics": {
+    "phase22_top1_accuracy": 1.0,
+    "baseline_top1_accuracy": 0.9712746858168761,
+    "top1_lift": 0.02872531418312385,
+    "phase22_wins": true,
+    "example_count": 557,
+    "identity_resolved_example_rate": 0.0,
+    "top_k_accuracy": {
+      "1": 1.0,
+      "3": 1.0,
+      "5": 1.0
+    }
+  },
+  "production_paths": {
+    "manifest": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_manifest.json",
+    "model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_state_model.json",
+    "evaluation": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_state_eval.json",
+    "baseline_model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_baseline_model.json",
+    "baseline_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_baseline_eval.json",
+    "compare": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_compare.json"
+  }
+}

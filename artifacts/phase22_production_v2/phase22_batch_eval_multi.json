@@ -1,0 +1,457 @@
+{
+  "schema_version": "phase22.batch_eval.v1",
+  "production_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_production_v2",
+  "split": "validation",
+  "dataset_count": 4,
+  "overall_example_count": 264,
+  "overall_top1_accuracy": 0.5643939393939394,
+  "datasets": [
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\mechikabura_vs_krillin.json",
+      "example_count": 88,
+      "top1_accuracy": 0.5227272727272727,
+      "top_k_accuracy": {
+        "1": 0.5227272727272727,
+        "3": 0.9431818181818182,
+        "5": 0.9886363636363636
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_007_review.json",
+          "example_count": 4,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_017_review.json",
+          "example_count": 4,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_014_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.8333333333333334
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_016_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.75
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_005_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.6666666666666666
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_001_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_003_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_004_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_009_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_011_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_012_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_018_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_020_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_015_review.json",
+          "example_count": 7,
+          "top1_accuracy": 0.42857142857142855
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_010_review.json",
+          "example_count": 5,
+          "top1_accuracy": 0.4
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_013_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.3333333333333333
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_002_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_006_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_008_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_krillin\\ai_match_trace_019_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        }
+      ]
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\gogeta_vs_krillin.json",
+      "example_count": 78,
+      "top1_accuracy": 0.5,
+      "top_k_accuracy": {
+        "1": 0.5,
+        "3": 0.8846153846153846,
+        "5": 0.9871794871794872
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_001_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_002_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_004_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_006_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_009_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.75
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_015_review.json",
+          "example_count": 8,
+          "top1_accuracy": 0.625
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_003_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_007_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_010_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_011_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_014_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_016_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_017_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_020_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_013_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.3333333333333333
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_019_review.json",
+          "example_count": 3,
+          "top1_accuracy": 0.3333333333333333
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_005_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_008_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_012_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\gogeta_vs_krillin\\ai_match_trace_018_review.json",
+          "example_count": 5,
+          "top1_accuracy": 0.2
+        }
+      ]
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\red_pan_vs_krillin.json",
+      "example_count": 19,
+      "top1_accuracy": 1.0,
+      "top_k_accuracy": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_001_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_002_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_003_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_004_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_005_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_006_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_007_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_008_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_009_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_010_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_012_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_013_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_014_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_015_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_016_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_017_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_018_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_019_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\red_pan_vs_krillin\\ai_match_trace_020_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        }
+      ]
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch\\mechikabura_vs_gogeta.json",
+      "example_count": 79,
+      "top1_accuracy": 0.569620253164557,
+      "top_k_accuracy": {
+        "1": 0.569620253164557,
+        "3": 0.8607594936708861,
+        "5": 1.0
+      },
+      "identity_resolved_example_rate": 0.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_012_review.json",
+          "example_count": 4,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_014_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_016_review.json",
+          "example_count": 4,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_017_review.json",
+          "example_count": 4,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_019_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_005_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.75
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_007_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.75
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_003_review.json",
+          "example_count": 5,
+          "top1_accuracy": 0.6
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_013_review.json",
+          "example_count": 5,
+          "top1_accuracy": 0.6
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_001_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_006_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_008_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_009_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_010_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_011_review.json",
+          "example_count": 2,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_018_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.5
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_004_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.3333333333333333
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_002_review.json",
+          "example_count": 4,
+          "top1_accuracy": 0.25
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+          "example_count": 5,
+          "top1_accuracy": 0.2
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+          "example_count": 6,
+          "top1_accuracy": 0.16666666666666666
+        }
+      ]
+    }
+  ]
+}

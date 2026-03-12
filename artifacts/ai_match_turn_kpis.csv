@@ -1,0 +1,3 @@
+turn,decisions,declare_attack,play_card_from_hand,end_turn,attack_rate,play_rate,end_turn_rate
+1,6,0,2,1,0.0,0.3333333333333333,0.16666666666666666
+2,4,1,0,0,0.25,0.0,0.0

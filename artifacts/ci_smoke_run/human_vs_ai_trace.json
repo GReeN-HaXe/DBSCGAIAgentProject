@@ -1,0 +1,45 @@
+{
+  "total_actions": 4,
+  "winner_id": null,
+  "final_turn_number": 2,
+  "final_phase": "main",
+  "human_player_id": 1,
+  "actions": [
+    {
+      "timestamp_utc": "2026-03-05T15:27:27.214353+00:00",
+      "actor_kind": "human",
+      "player_id": 1,
+      "turn_number": 1,
+      "phase": "charge",
+      "action": "end_charge",
+      "action_type": "end_charge"
+    },
+    {
+      "timestamp_utc": "2026-03-05T15:27:27.215418+00:00",
+      "actor_kind": "human",
+      "player_id": 1,
+      "turn_number": 1,
+      "phase": "main",
+      "action": "end_turn",
+      "action_type": "end_turn"
+    },
+    {
+      "timestamp_utc": "2026-03-05T15:27:27.217927+00:00",
+      "actor_kind": "ai",
+      "player_id": 2,
+      "turn_number": 2,
+      "phase": "charge",
+      "action": "end_charge",
+      "action_type": "end_charge"
+    },
+    {
+      "timestamp_utc": "2026-03-05T15:27:27.219018+00:00",
+      "actor_kind": "ai",
+      "player_id": 2,
+      "turn_number": 2,
+      "phase": "main",
+      "action": "declare_attack attacker_zone=leader target_player=1 target_zone=leader",
+      "action_type": "declare_attack"
+    }
+  ]
+}

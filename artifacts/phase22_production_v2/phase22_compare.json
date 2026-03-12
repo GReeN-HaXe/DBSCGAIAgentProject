@@ -1,0 +1,12 @@
+{
+  "schema_version": "phase22.compare.v1",
+  "phase22_model_name": "phase22_state_encoder",
+  "baseline_model_name": "backoff_frequency_policy",
+  "target_field": "decision_class",
+  "split": "validation",
+  "phase22_top1_accuracy": 0.9905660377358491,
+  "baseline_top1_accuracy": 0.8962264150943396,
+  "top1_lift": 0.09433962264150941,
+  "phase22_wins": true,
+  "identity_resolved_example_rate": 0.0
+}

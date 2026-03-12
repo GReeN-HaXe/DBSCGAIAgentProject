@@ -1,0 +1,28 @@
+{
+  "total_runs": 2,
+  "recommendation_counts": {
+    "aggressive": 2
+  },
+  "reliable_rate": 1.0,
+  "recommendation_switches": 0,
+  "recent_window": 2,
+  "recent_recommendation_counts": {
+    "aggressive": 2
+  },
+  "recent_reliable_rate": 1.0,
+  "recent_avg_abs_seat_bias_delta": 0.0,
+  "latest": {
+    "timestamp_utc": "2026-02-26T23:18:10.212549+00:00",
+    "recommended_profile": "aggressive",
+    "recommendation_reason": "tied_or_inconclusive",
+    "seat_bias_p1_minus_p2": "0.0",
+    "source_json": "artifacts\\profile_matchups.json"
+  },
+  "latest_delta": {
+    "recommendation_changed": false,
+    "reason_changed": false,
+    "reliability_changed": false,
+    "seat_bias_delta_change": 0.0,
+    "previous_timestamp_utc": "2026-02-26T23:18:08.647001+00:00"
+  }
+}

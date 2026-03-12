@@ -1,0 +1,28 @@
+{
+  "schema_version": "phase22.pipeline.v1",
+  "status": "pass",
+  "run_name": "phase22_benchmark_v2",
+  "dataset_path": "artifacts\\phase22_benchmark_dataset_v2.json",
+  "target_field": "action_signature",
+  "train_split": "train",
+  "eval_split": "validation",
+  "artifacts": {
+    "phase22_model": "artifacts\\phase22_benchmark_v2\\phase22_state_model.json",
+    "phase22_eval": "artifacts\\phase22_benchmark_v2\\phase22_state_eval.json",
+    "baseline_model": "artifacts\\phase22_benchmark_v2\\phase22_baseline_model.json",
+    "baseline_eval": "artifacts\\phase22_benchmark_v2\\phase22_baseline_eval.json",
+    "compare": "artifacts\\phase22_benchmark_v2\\phase22_compare.json"
+  },
+  "metrics": {
+    "schema_version": "phase22.compare.v1",
+    "phase22_model_name": "phase22_state_encoder",
+    "baseline_model_name": "backoff_frequency_policy",
+    "target_field": "action_signature",
+    "split": "validation",
+    "phase22_top1_accuracy": 0.19811320754716982,
+    "baseline_top1_accuracy": 0.22641509433962265,
+    "top1_lift": -0.028301886792452824,
+    "phase22_wins": false,
+    "identity_resolved_example_rate": 0.0
+  }
+}

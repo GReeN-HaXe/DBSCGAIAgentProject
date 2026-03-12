@@ -1,0 +1,18 @@
+{
+  "schema_version": "phase22.best_config.v1",
+  "source_summary": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\phase22_sweep_summary.json",
+  "profile": "standard",
+  "target_field": "decision_class",
+  "best": {
+    "config_name": "h128_e20_lr1e3",
+    "hidden_dim": 128,
+    "epochs": 20,
+    "learning_rate": 0.001,
+    "top1_accuracy": 0.9339622641509434,
+    "baseline_top1_accuracy": 0.8962264150943396,
+    "top1_lift": 0.037735849056603765,
+    "phase22_wins": true,
+    "duration_seconds": 6.523518900000454,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_sweep_v1\\h128_e20_lr1e3\\phase22_manifest.json"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "total_runs": 1,
+  "recent_window": 1,
+  "avg_total_seconds_recent": 0.879968,
+  "max_total_seconds_recent": 0.879968,
+  "regression_rate_recent": 0.0,
+  "latest_total_seconds": 0.879968,
+  "max_recent_regression_rate": 0.0,
+  "regression_rate_failed": false
+}

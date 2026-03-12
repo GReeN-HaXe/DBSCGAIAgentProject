@@ -1,0 +1,9 @@
+{
+  "has_baseline": true,
+  "current_total_seconds": 0.8819121000015002,
+  "baseline_total_seconds": 0.0001,
+  "ratio_current_over_baseline": 8819.121000015002,
+  "max_total_seconds_regression_ratio": 0.01,
+  "regressed": true,
+  "reason": "timing_regression_detected current_total=0.881912 baseline_total=0.000100 ratio=8819.121000 threshold=1.010000"
+}

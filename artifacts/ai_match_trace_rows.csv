@@ -1,0 +1,11 @@
+step,player,turn,phase,chosen,top1_reason,top1_score
+1,1,1,charge,end_charge,end_charge_phase,180.0
+2,1,1,main,play_card_from_hand,play_card_from_hand,99.0
+3,2,1,main,pass_counter_window,pass_counter_window,200.0
+4,1,1,main,play_card_from_hand,play_card_from_hand,98.99985
+5,2,1,main,pass_counter_window,pass_counter_window,200.00015
+6,1,1,main,end_turn,end_turn,9.9997
+7,2,2,charge,end_charge,end_charge_phase,180.00045
+8,2,2,main,declare_attack,declare_attack,99.00045
+9,1,2,main,pass_counter_window,pass_counter_window,199.99955
+10,2,2,main,end_offense_step,advance_battle_step,160.00045

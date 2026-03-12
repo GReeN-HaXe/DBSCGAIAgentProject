@@ -1,0 +1,2 @@
+schema_version,run_name,top1_accuracy,top5_accuracy,top10_accuracy,example_count,manifest_path,recorded_at_utc
+phase14.identity_history.v1,phase14_embedding_best_8192,0.73095703125,0.9677734375,0.99365234375,2048,C:\Users\PC\Desktop\dbsAIAgent\artifacts\phase14_embedding_best_8192_model\phase14_torch_manifest.json,2026-03-08T17:34:02.461399+00:00

@@ -1,0 +1,6066 @@
+{
+  "schema_version": "ai_match_review_trace.v1",
+  "source_schema_version": "raw",
+  "total_actions": 194,
+  "winner_id": 1,
+  "stop_reason": "winner_decided",
+  "turn_number": 9,
+  "active_player": 1,
+  "phase": "main",
+  "final_state_snapshot": {
+    "active_player": 1,
+    "turn_number": 9,
+    "phase": "main",
+    "battle_step": "battle_end",
+    "winner_id": 1,
+    "counter_window_kind": null,
+    "players": {
+      "1": {
+        "hand_size": 7,
+        "life_size": 1,
+        "energy_size": 5,
+        "energy_resting_count": 5,
+        "z_energy_size": 0,
+        "battle_size": 5,
+        "battle_resting_count": 2,
+        "unison_size": 0,
+        "combo_size": 0,
+        "drop_size": 0,
+        "warp_size": 0,
+        "removed_size": 0,
+        "deck_size": 42,
+        "has_charged_this_turn": true
+      },
+      "2": {
+        "hand_size": 5,
+        "life_size": 0,
+        "energy_size": 4,
+        "energy_resting_count": 4,
+        "z_energy_size": 0,
+        "battle_size": 4,
+        "battle_resting_count": 4,
+        "unison_size": 0,
+        "combo_size": 0,
+        "drop_size": 5,
+        "warp_size": 0,
+        "removed_size": 0,
+        "deck_size": 42,
+        "has_charged_this_turn": true
+      }
+    }
+  },
+  "include_bookkeeping": false,
+  "filtered_action_types": [
+    "end_defense_step",
+    "end_offense_step",
+    "pass_counter_window",
+    "resolve_battle"
+  ],
+  "decision_count": 56,
+  "decision_trace": [
+    {
+      "step_index": 1,
+      "actor_player_id": 1,
+      "turn_number": 1,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=0 card=card_id=8170",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 1,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.25,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.25,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.25,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 2,
+      "actor_player_id": 1,
+      "turn_number": 1,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=2 card=card_id=8325",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 114.25005,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 112.25005,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 10.00005,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 4,
+      "actor_player_id": 1,
+      "turn_number": 1,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 7,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 10.00015,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 5,
+      "actor_player_id": 2,
+      "turn_number": 2,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=2 card=card_id=9637",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 7,
+            "life_size": 8,
+            "energy_size": 0,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 210.25,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 210.25,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.25,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 6,
+      "actor_player_id": 2,
+      "turn_number": 2,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=9623 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.00005,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 96.25005,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 96.25005,
+          "reason": "play_card_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 12,
+      "actor_player_id": 2,
+      "turn_number": 2,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=0 card=card_id=2409",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "activate_extra_from_hand",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 1,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 96.2502,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 96.2502,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 89.0002,
+          "reason": "play_card_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 14,
+      "actor_player_id": 2,
+      "turn_number": 2,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=1 card=card_id=8458",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 1,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "activate_extra_from_hand",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 2,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 112.25005,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 89.00005,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 10.00005,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 16,
+      "actor_player_id": 2,
+      "turn_number": 2,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=2 card=card_id=9661",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 2,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "activate_extra_from_hand",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 88.9999,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 9.9999,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 18,
+      "actor_player_id": 2,
+      "turn_number": 2,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 46,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 9.99975,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 19,
+      "actor_player_id": 1,
+      "turn_number": 3,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=0 card=card_id=2250",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2504,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2504,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2504,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 20,
+      "actor_player_id": 1,
+      "turn_number": 3,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=0 card=card_id=1178",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 137.50045,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00045,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.00045,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 22,
+      "actor_player_id": 1,
+      "turn_number": 3,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=8325 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.00055,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00055,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.00055,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 28,
+      "actor_player_id": 1,
+      "turn_number": 3,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=1 attacker_card=card_id=1178 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 8,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.00055,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.00055,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 10.00055,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 34,
+      "actor_player_id": 1,
+      "turn_number": 3,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=8314 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.0007,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 10.0007,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 40,
+      "actor_player_id": 1,
+      "turn_number": 3,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 3,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 1,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 6,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 10.00085,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 41,
+      "actor_player_id": 2,
+      "turn_number": 4,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=5 card=card_id=6999",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 6,
+            "energy_size": 1,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 216.9993,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2493,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 198.9993,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 42,
+      "actor_player_id": 2,
+      "turn_number": 4,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=9623 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 7,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 98.99935,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 98.24935,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 90.99935,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 48,
+      "actor_player_id": 2,
+      "turn_number": 4,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=3 card=card_id=6",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 0,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 98.2495,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 88.9995,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 9.9995,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 50,
+      "actor_player_id": 2,
+      "turn_number": 4,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=6 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.9996,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.9996,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.9996,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 56,
+      "actor_player_id": 2,
+      "turn_number": 4,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=3 card=card_id=9659",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 3,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "activate_extra_from_hand",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 88.9996,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 9.9996,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 58,
+      "actor_player_id": 2,
+      "turn_number": 4,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 4,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 2,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 45,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 9.99945,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 59,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=1 card=card_id=8324",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2507,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2507,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.2507,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 60,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=3 card=card_id=1190",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 138.75075,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00075,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00075,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 62,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=8325 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.00085,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00085,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00085,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 68,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=1 attacker_card=card_id=1178 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 6,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.00085,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00085,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.00085,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 74,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=2 attacker_card=card_id=1190 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 5,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 5,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 92.001,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 80,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=8314 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 5,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 5,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 10.001,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 86,
+      "actor_player_id": 1,
+      "turn_number": 5,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 5,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 2,
+            "energy_resting_count": 1,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 10.00115,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 87,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=0 card=card_id=1785",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 2,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.249,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 198.999,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 187.249,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 88,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=0 card=card_id=9637",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 1,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 116.74905,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 116.74905,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99905,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 90,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=6 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.99915,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99915,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 98.99915,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 96,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=1 attacker_card=card_id=9637 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 4,
+            "life_size": 6,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.99915,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 98.99915,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.99915,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 102,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=9623 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 5,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 5,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 98.9993,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 90.9993,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 90.9993,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 108,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=1 card=card_id=9659",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 4,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "activate_extra_from_hand",
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 88.99945,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "end_turn",
+          "score": 9.99945,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 110,
+      "actor_player_id": 2,
+      "turn_number": 6,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 6,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 44,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 9.9993,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 111,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=1 card=card_id=8318",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 214.25085,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 214.25085,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.25085,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 112,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=1 card=card_id=8326",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 118.0009,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 118.0009,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 100.7509,
+          "reason": "play_card_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 114,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=8325 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 120,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=1 attacker_card=card_id=1178 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 3,
+            "life_size": 4,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.001,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 126,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=2 attacker_card=card_id=1190 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 3,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 3,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.00115,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.00115,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.00115,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 132,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=3 attacker_card=card_id=8326 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 3,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 3,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.00115,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.00115,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 92.00115,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 138,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=8314 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 2,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 2,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.0013,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.0013,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.0013,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 144,
+      "actor_player_id": 1,
+      "turn_number": 7,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 7,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 1,
+            "energy_size": 3,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 7,
+            "life_size": 1,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 10.00145,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 145,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=3 card=card_id=9649",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 7,
+            "life_size": 1,
+            "energy_size": 3,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": false
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 222.2487,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 222.2487,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 187.2487,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 146,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=0 card=card_id=8630",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 6,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 2,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 100.74875,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 100.74875,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99875,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 148,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=0 card=card_id=9642",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 3,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 5,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 3,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 114.24885,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 114.24885,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 114.24885,
+          "reason": "play_card_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 150,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=6 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.99895,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99895,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99895,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 156,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=1 attacker_card=card_id=9637 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 5,
+            "life_size": 4,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.99895,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99895,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.99895,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 162,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=2 attacker_card=card_id=8630 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 3,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 6,
+            "life_size": 3,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.9991,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 99.9991,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 98.9991,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 168,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=3 attacker_card=card_id=9642 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 2,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 3,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 2,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 99.99925,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 98.99925,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 91.99925,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 174,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=leader attacker_card=card_id=9623 target_player=1 target_zone=leader target_card=card_id=8314",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 2,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 2,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 98.99925,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 90.99925,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 90.99925,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 180,
+      "actor_player_id": 2,
+      "turn_number": 8,
+      "phase": "main",
+      "chosen_action_type": "end_turn",
+      "chosen_action_text": "end_turn",
+      "state_snapshot": {
+        "active_player": 2,
+        "turn_number": 8,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 8,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 43,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 9,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "end_turn",
+          "score": 9.9994,
+          "reason": "end_turn"
+        }
+      ]
+    },
+    {
+      "step_index": 181,
+      "actor_player_id": 1,
+      "turn_number": 9,
+      "phase": "charge",
+      "chosen_action_type": "charge_from_hand",
+      "chosen_action_text": "charge_from_hand hand_index=7 card=card_id=2152",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "charge",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 9,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": false
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 8,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "charge_from_hand",
+          "score": 207.25075,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 199.25075,
+          "reason": "charge_from_hand"
+        },
+        {
+          "action_type": "charge_from_hand",
+          "score": 199.25075,
+          "reason": "charge_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 182,
+      "actor_player_id": 1,
+      "turn_number": 9,
+      "phase": "main",
+      "chosen_action_type": "play_card_from_hand",
+      "chosen_action_text": "play_card_from_hand hand_index=2 card=card_id=7035",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 8,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 0,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "play",
+        "players": {
+          "1": {
+            "hand_size": 8,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 5,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "play_card_from_hand",
+          "score": 119.2508,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 102.0008,
+          "reason": "play_card_from_hand"
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "score": 102.0008,
+          "reason": "play_card_from_hand"
+        }
+      ]
+    },
+    {
+      "step_index": 184,
+      "actor_player_id": 1,
+      "turn_number": 9,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=8325 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 5,
+            "z_energy_size": 0,
+            "battle_size": 5,
+            "battle_resting_count": 0,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 5,
+            "z_energy_size": 0,
+            "battle_size": 5,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.0009,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.0009,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.0009,
+          "reason": "declare_attack"
+        }
+      ]
+    },
+    {
+      "step_index": 190,
+      "actor_player_id": 1,
+      "turn_number": 9,
+      "phase": "main",
+      "chosen_action_type": "declare_attack",
+      "chosen_action_text": "declare_attack attacker_zone=battle attacker_index=1 attacker_card=card_id=1178 target_player=2 target_zone=leader target_card=card_id=9623",
+      "state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": null,
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 5,
+            "z_energy_size": 0,
+            "battle_size": 5,
+            "battle_resting_count": 1,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "post_action_state_snapshot": {
+        "active_player": 1,
+        "turn_number": 9,
+        "phase": "main",
+        "battle_step": null,
+        "winner_id": null,
+        "counter_window_kind": "attack",
+        "players": {
+          "1": {
+            "hand_size": 7,
+            "life_size": 1,
+            "energy_size": 5,
+            "energy_resting_count": 5,
+            "z_energy_size": 0,
+            "battle_size": 5,
+            "battle_resting_count": 2,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 0,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          },
+          "2": {
+            "hand_size": 4,
+            "life_size": 1,
+            "energy_size": 4,
+            "energy_resting_count": 4,
+            "z_energy_size": 0,
+            "battle_size": 4,
+            "battle_resting_count": 4,
+            "unison_size": 0,
+            "combo_size": 0,
+            "drop_size": 5,
+            "warp_size": 0,
+            "removed_size": 0,
+            "deck_size": 42,
+            "has_charged_this_turn": true
+          }
+        }
+      },
+      "candidates": [
+        {
+          "action_type": "declare_attack",
+          "score": 100.0009,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.0009,
+          "reason": "declare_attack"
+        },
+        {
+          "action_type": "declare_attack",
+          "score": 100.0009,
+          "reason": "declare_attack"
+        }
+      ]
+    }
+  ]
+}

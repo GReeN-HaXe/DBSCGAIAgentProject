@@ -1,0 +1,40 @@
+{
+  "schema_version": "phase22.production_query.v1",
+  "query_index": 0,
+  "split": "validation",
+  "expected_label": "charge_opening",
+  "found_rank": 1,
+  "predictions": [
+    {
+      "rank": 1,
+      "label": "charge_opening",
+      "score": 5.706528663635254
+    },
+    {
+      "rank": 2,
+      "label": "play_development",
+      "score": 4.3118577003479
+    },
+    {
+      "rank": 3,
+      "label": "charge_midgame",
+      "score": 3.1014182567596436
+    },
+    {
+      "rank": 4,
+      "label": "end_turn_passive",
+      "score": -0.38492152094841003
+    },
+    {
+      "rank": 5,
+      "label": "play_board_setup",
+      "score": -1.1488991975784302
+    }
+  ],
+  "row": {
+    "example_index": 0,
+    "action_type": "charge_from_hand",
+    "action_signature": "charge_from_hand|card=card_id=5847",
+    "decision_class": "charge_opening"
+  }
+}

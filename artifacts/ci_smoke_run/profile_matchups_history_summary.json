@@ -1,0 +1,95 @@
+{
+  "total_runs": 11,
+  "recommendation_counts": {
+    "balanced": 11
+  },
+  "reliable_rate": 0.5454545454545454,
+  "recommendation_switches": 0,
+  "recent_window": 10,
+  "recent_recommendation_counts": {
+    "balanced": 10
+  },
+  "recent_recommendation_switches": 0,
+  "recent_switch_rate": 0.0,
+  "top_recommendation_share": 1.0,
+  "recent_top_recommendation_share": 1.0,
+  "distinct_recommended_profiles": 1,
+  "recommendation_entropy": 0.0,
+  "recent_distinct_recommended_profiles": 1,
+  "recent_recommendation_entropy": 0.0,
+  "recent_reliable_rate": 0.6,
+  "recent_unreliable_rate": 0.4,
+  "avg_hours_between_runs": 0.06251681188888888,
+  "median_hours_between_runs": 0.013664369166666666,
+  "latest_hours_since_previous": 0.0004180430555555556,
+  "recent_avg_abs_seat_bias_delta": 0.0,
+  "seat_bias_alert_threshold": 0.15,
+  "seat_bias_alert_count": 0,
+  "recent_seat_bias_alert_count": 0,
+  "decisive_rate_alert_threshold": 0.3,
+  "low_decisive_rate_alert_count": 5,
+  "recent_low_decisive_rate_alert_count": 4,
+  "quality_alert_count": 5,
+  "recent_quality_alert_count": 4,
+  "current_recommendation_streak_profile": "balanced",
+  "current_recommendation_streak_len": 11,
+  "current_reliable_streak_len": 6,
+  "current_quality_alert_streak_len": 0,
+  "stability_index": 0.7727272727272727,
+  "recent_stability_index": 0.8,
+  "stability_label": "watch",
+  "overall_status": "critical",
+  "status_reasons": [
+    "stability_watch",
+    "recent_quality_alerts_high",
+    "recent_unreliable_rate_high"
+  ],
+  "status_reason_primary": "stability_watch",
+  "recommended_action": "retune_policy",
+  "recommended_action_confidence": 0.31363636363636366,
+  "recommended_action_rationale": "retune_policy because status=critical, primary_reason=stability_watch, confidence=0.314",
+  "min_runs_for_ready": 5,
+  "runs_needed_for_ready": 0,
+  "ready_progress": 1.0,
+  "estimated_hours_to_ready": 0.0,
+  "estimated_ready_timestamp_utc": "2026-03-05T14:43:05.611797+00:00",
+  "is_ready_for_next_phase": false,
+  "readiness_reason": "status_not_healthy",
+  "readiness_score": 0.8518181818181818,
+  "readiness_label": "near_ready",
+  "readiness_blockers": [
+    "status_not_healthy",
+    "action_not_continue"
+  ],
+  "readiness_blocker_count": 2,
+  "next_command_hint": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv",
+  "followup_command_hint": "python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+  "next_steps_plan": [
+    "Execute: python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv",
+    "Execute: python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+    "Address readiness blocker(s): status_not_healthy, action_not_continue"
+  ],
+  "prioritized_next_step": "Execute: python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv",
+  "next_command_sequence": [
+    "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv",
+    "python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10"
+  ],
+  "next_command_sequence_shell": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv ; python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+  "next_command_sequence_powershell": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv ; python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+  "next_command_sequence_bash": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv && python scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+  "next_command_sequence_multiline": "python scripts/run_profile_matchups.py --seat-balanced --shuffle-decks --seed 42 --games-per-matchup 5 --min-games-for-recommendation 5 --decisive-rate-alert-threshold 0.30 --history-csv artifacts/profile_matchups_history.csv\npython scripts/summarize_profile_history.py --input artifacts/profile_matchups_history.csv --recent-window 10 --csv-output artifacts/profile_matchups_history_summary.csv --recent-runs-csv artifacts/profile_matchups_history_recent.csv --recent-runs-window 10",
+  "latest": {
+    "timestamp_utc": "2026-03-05T14:43:05.611797+00:00",
+    "recommended_profile": "balanced",
+    "recommendation_reason": "tied_or_inconclusive",
+    "seat_bias_p1_minus_p2": "0.0",
+    "source_json": "artifacts\\profile_matchups.json"
+  },
+  "latest_delta": {
+    "recommendation_changed": false,
+    "reason_changed": false,
+    "reliability_changed": false,
+    "seat_bias_delta_change": 0.0,
+    "previous_timestamp_utc": "2026-03-05T14:43:04.106842+00:00"
+  }
+}

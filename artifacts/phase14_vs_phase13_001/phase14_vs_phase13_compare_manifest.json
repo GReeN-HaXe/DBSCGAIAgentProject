@@ -1,0 +1,58 @@
+{
+  "schema_version": "phase14.compare_manifest.v1",
+  "status": "pass",
+  "run_name": "phase14_vs_phase13_001",
+  "artifacts": {
+    "feature_cache": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase13_reference_identity_feature_cache_v3_4096.json",
+    "phase13_model": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_vs_phase13_001\\phase13_identity_model.json",
+    "phase13_evaluation": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_vs_phase13_001\\phase13_identity_eval.json",
+    "phase14_manifest": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_vs_phase13_001\\phase14_pipeline\\phase14_torch_manifest.json",
+    "phase14_evaluation": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_vs_phase13_001\\phase14_pipeline\\phase14_torch_eval.json",
+    "comparison": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase14_vs_phase13_001\\phase14_vs_phase13_compare.json"
+  },
+  "metrics": {
+    "schema_version": "phase14.compare.v1",
+    "target_type": "card_identity",
+    "split": "validation",
+    "phase14_model_name": "phase14_torch_mlp",
+    "phase13_model_name": "phase13_visual_histogram_knn",
+    "phase14_top1_accuracy": 0.734375,
+    "phase13_top1_accuracy": 0.0146484375,
+    "phase14_top5_accuracy": 0.9501953125,
+    "phase13_top5_accuracy": 0.0478515625,
+    "phase14_top10_accuracy": 0.9853515625,
+    "phase13_top10_accuracy": 0.0869140625,
+    "top1_lift": 0.7197265625,
+    "top5_lift": 0.90234375,
+    "top10_lift": 0.8984375,
+    "phase14_example_count": 1024,
+    "phase13_example_count": 1024,
+    "phase14_wins": true
+  },
+  "phase14_metrics": {
+    "target_type": "card_identity",
+    "split": "validation",
+    "top1_accuracy": 0.734375,
+    "top5_accuracy": 0.9501953125,
+    "top10_accuracy": 0.9853515625,
+    "example_count": 1024,
+    "model_label_count": 1024,
+    "dataset_label_count": 1024,
+    "unseen_expected_label_count": 0,
+    "unseen_example_count": 0
+  },
+  "stage_timings": [
+    {
+      "stage": "train_phase13",
+      "duration_seconds": 0.7085032000031788
+    },
+    {
+      "stage": "evaluate_phase13",
+      "duration_seconds": 54.87831339999684
+    },
+    {
+      "stage": "run_phase14",
+      "duration_seconds": 11.2457368999967
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "phase8.manifest.v1",
+  "timestamp_utc": "2026-03-09T11:03:08.771000+00:00",
+  "run_name": "phase8_identity_compare_real_identity",
+  "status": "pass",
+  "model_name": "backoff_frequency_policy",
+  "target_field": "action_type",
+  "context_mode": "identity",
+  "train_split": "train",
+  "eval_split": "validation",
+  "dataset_path": "artifacts\\phase10_with_identity\\phase10_phase7_dataset.json",
+  "artifacts": {
+    "model": "artifacts\\phase8_identity_compare_real\\identity\\phase8_model.json",
+    "evaluation": "artifacts\\phase8_identity_compare_real\\identity\\phase8_model_eval.json",
+    "comparison": "artifacts\\phase8_identity_compare_real\\identity\\phase8_model_vs_heuristic.json"
+  },
+  "metrics": {
+    "model_top1_accuracy": 1.0,
+    "model_example_count": 806,
+    "identity_resolved_example_count": 805,
+    "identity_resolved_example_rate": 0.9987593052109182,
+    "best_ranked_profile": "backoff_frequency_policy",
+    "best_ranked_top1_accuracy": 1.0,
+    "promotion_passed": true,
+    "top1_lift_vs_best_heuristic": 1.0
+  },
+  "model_summary": {
+    "schema_version": "phase8.backoff_frequency.v1",
+    "example_count": 3037,
+    "context_fields": [
+      "phase",
+      "actor_role_bucket",
+      "action_family",
+      "state_features.battle_step",
+      "state_features.self_energy_size",
+      "state_features.self_battle_size",
+      "state_features.opponent_life_size"
+    ],
+    "global_majority_label": "detected_frame_state"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "replay": {
+    "consumed_human_actions": 1,
+    "ai_actions": 2,
+    "completed": false,
+    "winner_id": null,
+    "final_turn_number": 2,
+    "final_phase": "main"
+  },
+  "trace": {
+    "total_actions": 3,
+    "winner_id": null,
+    "final_turn_number": 2,
+    "final_phase": "main",
+    "human_player_id": 1,
+    "actions": [
+      {
+        "timestamp_utc": "2026-03-05T15:40:13.986837+00:00",
+        "actor_kind": "human",
+        "player_id": 1,
+        "turn_number": 1,
+        "phase": "main",
+        "action": "end_turn",
+        "action_type": "end_turn"
+      },
+      {
+        "timestamp_utc": "2026-03-05T15:40:13.987924+00:00",
+        "actor_kind": "ai",
+        "player_id": 2,
+        "turn_number": 2,
+        "phase": "charge",
+        "action": "end_charge",
+        "action_type": "end_charge"
+      },
+      {
+        "timestamp_utc": "2026-03-05T15:40:13.989021+00:00",
+        "actor_kind": "ai",
+        "player_id": 2,
+        "turn_number": 2,
+        "phase": "main",
+        "action": "declare_attack attacker_zone=leader target_player=1 target_zone=leader",
+        "action_type": "declare_attack"
+      }
+    ]
+  }
+}

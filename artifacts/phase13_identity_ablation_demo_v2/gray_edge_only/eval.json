@@ -1,0 +1,1576 @@
+{
+  "schema_version": "phase13.visual_eval.v1",
+  "model_name": "phase13_visual_histogram_knn",
+  "target_type": "card_identity",
+  "split": "validation",
+  "example_count": 26,
+  "top1_accuracy": 0.0,
+  "top_k_accuracy": {
+    "1": 0.0,
+    "5": 0.0,
+    "10": 0.0
+  },
+  "correct_count": 0,
+  "rows": [
+    {
+      "index": 0,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-001.webp",
+      "expected_signature": "BT1-001",
+      "predicted_signature": "BT10-004",
+      "confidence": 0.9703881401582082,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT10-004",
+          "distance": 52.85716981759846,
+          "confidence": 0.9703881401582082
+        },
+        {
+          "signature": "BT1-084",
+          "distance": 64.3007476545867,
+          "confidence": 0.9639771721823044
+        },
+        {
+          "signature": "BT1-005",
+          "distance": 64.38938999032,
+          "confidence": 0.9639275126104649
+        },
+        {
+          "signature": "BT1-022",
+          "distance": 66.70989514448364,
+          "confidence": 0.9626275097229784
+        },
+        {
+          "signature": "BT1-007",
+          "distance": 68.81426888560618,
+          "confidence": 0.9614485888596044
+        },
+        {
+          "signature": "BT1-010",
+          "distance": 74.2765588310048,
+          "confidence": 0.9583884824476163
+        },
+        {
+          "signature": "BT1-009",
+          "distance": 78.06612183389757,
+          "confidence": 0.956265477964203
+        },
+        {
+          "signature": "BT1-085",
+          "distance": 78.94820499694451,
+          "confidence": 0.9557713137272019
+        },
+        {
+          "signature": "BT1-033",
+          "distance": 81.52819034967281,
+          "confidence": 0.9543259437816959
+        },
+        {
+          "signature": "BT1-050",
+          "distance": 82.9761690736858,
+          "confidence": 0.9535147512192237
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-006.webp",
+      "expected_signature": "BT1-006",
+      "predicted_signature": "BT1-005",
+      "confidence": 0.9722151984724559,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-005",
+          "distance": 49.59587072666628,
+          "confidence": 0.9722151984724559
+        },
+        {
+          "signature": "BT1-022",
+          "distance": 55.3741831173627,
+          "confidence": 0.9689780486737464
+        },
+        {
+          "signature": "BT1-023",
+          "distance": 56.46356187377256,
+          "confidence": 0.9683677524516681
+        },
+        {
+          "signature": "BT1-010",
+          "distance": 59.83762424907172,
+          "confidence": 0.9664775214290915
+        },
+        {
+          "signature": "BT1-047",
+          "distance": 61.015690191069694,
+          "confidence": 0.9658175405092047
+        },
+        {
+          "signature": "BT1-024",
+          "distance": 62.72589338004891,
+          "confidence": 0.9648594434845664
+        },
+        {
+          "signature": "BT1-007",
+          "distance": 65.31731186899725,
+          "confidence": 0.9634076684207298
+        },
+        {
+          "signature": "BT1-009",
+          "distance": 67.07143507430604,
+          "confidence": 0.9624249663449266
+        },
+        {
+          "signature": "BT10-017",
+          "distance": 69.5256682343777,
+          "confidence": 0.9610500458070713
+        },
+        {
+          "signature": "BT1-088",
+          "distance": 71.02125656873538,
+          "confidence": 0.9602121811939858
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-011.webp",
+      "expected_signature": "BT1-011",
+      "predicted_signature": "BT1-007",
+      "confidence": 0.9565469109361151,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-007",
+          "distance": 77.56376397903449,
+          "confidence": 0.9565469109361151
+        },
+        {
+          "signature": "BT1-030",
+          "distance": 83.5538305927029,
+          "confidence": 0.9531911313206146
+        },
+        {
+          "signature": "BT1-084",
+          "distance": 84.87896321399292,
+          "confidence": 0.9524487601042056
+        },
+        {
+          "signature": "BT1-100",
+          "distance": 84.90802961353582,
+          "confidence": 0.9524324764069827
+        },
+        {
+          "signature": "BT1-038",
+          "distance": 85.95368991330616,
+          "confidence": 0.9518466723174756
+        },
+        {
+          "signature": "BT1-078",
+          "distance": 87.71124589164852,
+          "confidence": 0.9508620471195246
+        },
+        {
+          "signature": "BT1-033",
+          "distance": 90.10444634884034,
+          "confidence": 0.9495213185720782
+        },
+        {
+          "signature": "BT1-022",
+          "distance": 90.90220182774895,
+          "confidence": 0.9490743967351547
+        },
+        {
+          "signature": "BT10-016",
+          "distance": 91.87942927461734,
+          "confidence": 0.9485269303783657
+        },
+        {
+          "signature": "BT10-009",
+          "distance": 92.20118393485566,
+          "confidence": 0.9483466756667476
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-016.webp",
+      "expected_signature": "BT1-016",
+      "predicted_signature": "BT1-047",
+      "confidence": 0.9768751363832578,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-047",
+          "distance": 41.27788155588475,
+          "confidence": 0.9768751363832578
+        },
+        {
+          "signature": "BT1-017",
+          "distance": 46.724593604718514,
+          "confidence": 0.9738237570841913
+        },
+        {
+          "signature": "BT1-023",
+          "distance": 47.53246269674723,
+          "confidence": 0.9733711693575646
+        },
+        {
+          "signature": "BT1-015",
+          "distance": 49.04508298368479,
+          "confidence": 0.9725237630343503
+        },
+        {
+          "signature": "BT1-055",
+          "distance": 50.13767339160007,
+          "confidence": 0.9719116675677311
+        },
+        {
+          "signature": "BT1-042",
+          "distance": 56.071411484938345,
+          "confidence": 0.968587444546253
+        },
+        {
+          "signature": "BT1-069",
+          "distance": 60.43408551543553,
+          "confidence": 0.9661433694591398
+        },
+        {
+          "signature": "BT1-058",
+          "distance": 61.171617704398294,
+          "confidence": 0.965730186160001
+        },
+        {
+          "signature": "BT1-062",
+          "distance": 63.45645904967929,
+          "confidence": 0.9644501629973785
+        },
+        {
+          "signature": "BT1-085",
+          "distance": 64.19195859720543,
+          "confidence": 0.9640381184329382
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-021.webp",
+      "expected_signature": "BT1-021",
+      "predicted_signature": "BT1-037",
+      "confidence": 0.9666691465784076,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-037",
+          "distance": 59.49557335754231,
+          "confidence": 0.9666691465784076
+        },
+        {
+          "signature": "BT1-072",
+          "distance": 61.708044909829,
+          "confidence": 0.9654296667171827
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 62.07145641568608,
+          "confidence": 0.9652260748371506
+        },
+        {
+          "signature": "BT1-023",
+          "distance": 62.78725675683307,
+          "confidence": 0.9648250662426705
+        },
+        {
+          "signature": "BT1-047",
+          "distance": 64.7366263835019,
+          "confidence": 0.9637329824182063
+        },
+        {
+          "signature": "BT10-017",
+          "distance": 67.18225192853066,
+          "confidence": 0.9623628840736523
+        },
+        {
+          "signature": "BT1-105",
+          "distance": 67.76778282900779,
+          "confidence": 0.9620348555579789
+        },
+        {
+          "signature": "BT1-005",
+          "distance": 69.14326804105414,
+          "confidence": 0.9612642756072526
+        },
+        {
+          "signature": "BT1-008",
+          "distance": 69.92767977630969,
+          "confidence": 0.9608248292569693
+        },
+        {
+          "signature": "BT1-010",
+          "distance": 72.36209218593453,
+          "confidence": 0.959461012780989
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-026.webp",
+      "expected_signature": "BT1-026",
+      "predicted_signature": "BT1-020",
+      "confidence": 0.9667320274425193,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-020",
+          "distance": 59.383331015103,
+          "confidence": 0.9667320274425193
+        },
+        {
+          "signature": "BT10-014",
+          "distance": 72.74487244391409,
+          "confidence": 0.9592465700594319
+        },
+        {
+          "signature": "BT10-011",
+          "distance": 76.36574279346746,
+          "confidence": 0.9572180712641639
+        },
+        {
+          "signature": "BT1-063",
+          "distance": 78.46446477666952,
+          "confidence": 0.9560423166517258
+        },
+        {
+          "signature": "BT1-087",
+          "distance": 81.70723932808808,
+          "confidence": 0.954225636230763
+        },
+        {
+          "signature": "BT1-014",
+          "distance": 83.8909007603396,
+          "confidence": 0.953002296492807
+        },
+        {
+          "signature": "BT1-090",
+          "distance": 85.16843027585783,
+          "confidence": 0.9522865936829928
+        },
+        {
+          "signature": "BT1-093",
+          "distance": 86.73464849743439,
+          "confidence": 0.951409160505639
+        },
+        {
+          "signature": "BT1-013",
+          "distance": 87.37271121247663,
+          "confidence": 0.9510517024019739
+        },
+        {
+          "signature": "BT1-108",
+          "distance": 87.96507497046713,
+          "confidence": 0.9507198459549204
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-031.webp",
+      "expected_signature": "BT1-031",
+      "predicted_signature": "BT1-072",
+      "confidence": 0.9716183845013319,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-072",
+          "distance": 50.66118366512262,
+          "confidence": 0.9716183845013319
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 62.35304128384417,
+          "confidence": 0.9650683242107315
+        },
+        {
+          "signature": "BT1-067",
+          "distance": 69.22712493772936,
+          "confidence": 0.961217296953653
+        },
+        {
+          "signature": "BT1-089",
+          "distance": 73.2037797878471,
+          "confidence": 0.9589894791104498
+        },
+        {
+          "signature": "BT10-012",
+          "distance": 74.5712331088308,
+          "confidence": 0.9582233988185822
+        },
+        {
+          "signature": "BT1-092",
+          "distance": 75.2324405981674,
+          "confidence": 0.9578529744548082
+        },
+        {
+          "signature": "BT1-037",
+          "distance": 75.25163162011252,
+          "confidence": 0.9578422231820098
+        },
+        {
+          "signature": "BT1-065",
+          "distance": 75.78196383769527,
+          "confidence": 0.95754511829821
+        },
+        {
+          "signature": "BT10-017",
+          "distance": 77.26101614422134,
+          "confidence": 0.9567165175662625
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 78.89807676328354,
+          "confidence": 0.9557993967712697
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-036.webp",
+      "expected_signature": "BT1-036",
+      "predicted_signature": "BT1-047",
+      "confidence": 0.9721292251127814,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-047",
+          "distance": 49.749333173685145,
+          "confidence": 0.9721292251127814
+        },
+        {
+          "signature": "BT1-062",
+          "distance": 51.82157050785276,
+          "confidence": 0.970968307838738
+        },
+        {
+          "signature": "BT1-023",
+          "distance": 58.00140846111894,
+          "confidence": 0.9675062137472723
+        },
+        {
+          "signature": "BT1-088",
+          "distance": 58.14421388442873,
+          "confidence": 0.9674262107090035
+        },
+        {
+          "signature": "BT1-015",
+          "distance": 58.270676020606764,
+          "confidence": 0.9673553635738897
+        },
+        {
+          "signature": "BT1-017",
+          "distance": 64.72716928831397,
+          "confidence": 0.9637382805107485
+        },
+        {
+          "signature": "BT1-042",
+          "distance": 66.84874140998869,
+          "confidence": 0.9625497247002864
+        },
+        {
+          "signature": "BT1-085",
+          "distance": 67.5796724335908,
+          "confidence": 0.9621402395330023
+        },
+        {
+          "signature": "BT1-064",
+          "distance": 68.31545332704857,
+          "confidence": 0.9617280373517936
+        },
+        {
+          "signature": "BT1-069",
+          "distance": 68.64245498928346,
+          "confidence": 0.9615448431432586
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-041.webp",
+      "expected_signature": "BT1-041",
+      "predicted_signature": "BT1-008",
+      "confidence": 0.9645726225351602,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-008",
+          "distance": 63.23786877473908,
+          "confidence": 0.9645726225351602
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 73.61838386334088,
+          "confidence": 0.958757207919697
+        },
+        {
+          "signature": "BT1-065",
+          "distance": 75.38551793152327,
+          "confidence": 0.957767216845085
+        },
+        {
+          "signature": "BT1-095",
+          "distance": 78.59138951710796,
+          "confidence": 0.9559712103545613
+        },
+        {
+          "signature": "BT1-094",
+          "distance": 79.37486874678932,
+          "confidence": 0.9555322864163646
+        },
+        {
+          "signature": "BT10-007",
+          "distance": 80.41580218934149,
+          "confidence": 0.9549491304261393
+        },
+        {
+          "signature": "BT1-099",
+          "distance": 80.4362008450432,
+          "confidence": 0.954937702607819
+        },
+        {
+          "signature": "BT1-098",
+          "distance": 81.40310265363378,
+          "confidence": 0.954396020922334
+        },
+        {
+          "signature": "BT10-008",
+          "distance": 82.12564115032082,
+          "confidence": 0.9539912374508006
+        },
+        {
+          "signature": "BT1-092",
+          "distance": 82.13612503260238,
+          "confidence": 0.9539853641273937
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-046.webp",
+      "expected_signature": "BT1-046",
+      "predicted_signature": "BT1-050",
+      "confidence": 0.9719144118495663,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-050",
+          "distance": 50.132774848524214,
+          "confidence": 0.9719144118495663
+        },
+        {
+          "signature": "BT1-009",
+          "distance": 60.13485967013912,
+          "confidence": 0.9663110029859164
+        },
+        {
+          "signature": "BT1-089",
+          "distance": 62.37218144113118,
+          "confidence": 0.9650576014335399
+        },
+        {
+          "signature": "BT1-042",
+          "distance": 67.96726918613952,
+          "confidence": 0.9619230984951599
+        },
+        {
+          "signature": "BT1-045",
+          "distance": 71.39841392137465,
+          "confidence": 0.960000888559454
+        },
+        {
+          "signature": "BT1-100",
+          "distance": 71.70831971522615,
+          "confidence": 0.9598272718682206
+        },
+        {
+          "signature": "BT1-058",
+          "distance": 72.0959571465926,
+          "confidence": 0.9596101080411246
+        },
+        {
+          "signature": "BT1-010",
+          "distance": 72.18091555820332,
+          "confidence": 0.959562512292323
+        },
+        {
+          "signature": "BT1-005",
+          "distance": 72.94220090482533,
+          "confidence": 0.9591360219020586
+        },
+        {
+          "signature": "BT10-012",
+          "distance": 74.0554660811891,
+          "confidence": 0.9585123439321069
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-051.webp",
+      "expected_signature": "BT1-051",
+      "predicted_signature": "BT1-018",
+      "confidence": 0.9573686966467441,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-018",
+          "distance": 76.09687648556181,
+          "confidence": 0.9573686966467441
+        },
+        {
+          "signature": "BT10-007",
+          "distance": 79.79442837288686,
+          "confidence": 0.9552972390067861
+        },
+        {
+          "signature": "BT1-008",
+          "distance": 81.1453509045821,
+          "confidence": 0.9545404196612985
+        },
+        {
+          "signature": "BT1-053",
+          "distance": 81.3812827912061,
+          "confidence": 0.9544082449348985
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 81.67607311995583,
+          "confidence": 0.9542430962913413
+        },
+        {
+          "signature": "BT1-024",
+          "distance": 88.57891742685325,
+          "confidence": 0.9503759566236116
+        },
+        {
+          "signature": "BT1-068",
+          "distance": 90.03733490494768,
+          "confidence": 0.9495589160196372
+        },
+        {
+          "signature": "BT1-019",
+          "distance": 91.74583211794133,
+          "confidence": 0.9486017747238424
+        },
+        {
+          "signature": "BT1-097",
+          "distance": 93.19996973511073,
+          "confidence": 0.9477871318010584
+        },
+        {
+          "signature": "BT1-094",
+          "distance": 93.26292295237127,
+          "confidence": 0.947751863892229
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-056.webp",
+      "expected_signature": "BT1-056",
+      "predicted_signature": "BT10-007",
+      "confidence": 0.9638620621930981,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT10-007",
+          "distance": 64.50621898531983,
+          "confidence": 0.9638620621930981
+        },
+        {
+          "signature": "BT1-057",
+          "distance": 65.23358722900309,
+          "confidence": 0.9634545729809506
+        },
+        {
+          "signature": "BT1-068",
+          "distance": 65.27072464326281,
+          "confidence": 0.9634337677068556
+        },
+        {
+          "signature": "BT1-097",
+          "distance": 67.63737088272445,
+          "confidence": 0.962107915471863
+        },
+        {
+          "signature": "BT1-033",
+          "distance": 68.4540188663413,
+          "confidence": 0.9616504095986883
+        },
+        {
+          "signature": "BT1-103",
+          "distance": 68.92817736924262,
+          "confidence": 0.9613847745830574
+        },
+        {
+          "signature": "BT1-100",
+          "distance": 68.93532100506681,
+          "confidence": 0.961380772546181
+        },
+        {
+          "signature": "BT10-016",
+          "distance": 70.37829816573763,
+          "confidence": 0.960572381979979
+        },
+        {
+          "signature": "BT10-001",
+          "distance": 71.83682313798589,
+          "confidence": 0.9597552811551899
+        },
+        {
+          "signature": "BT1-007",
+          "distance": 71.91637719662309,
+          "confidence": 0.9597107130551131
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-061.webp",
+      "expected_signature": "BT1-061",
+      "predicted_signature": "BT1-058",
+      "confidence": 0.9639237797000181,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-058",
+          "distance": 64.39605323546768,
+          "confidence": 0.9639237797000181
+        },
+        {
+          "signature": "BT1-105",
+          "distance": 66.31118540847619,
+          "confidence": 0.9628508765218621
+        },
+        {
+          "signature": "BT1-035",
+          "distance": 66.65078263900375,
+          "confidence": 0.9626606259725469
+        },
+        {
+          "signature": "BT1-037",
+          "distance": 67.8702794655501,
+          "confidence": 0.9619774344730811
+        },
+        {
+          "signature": "BT1-034",
+          "distance": 72.87351497865858,
+          "confidence": 0.9591745014125161
+        },
+        {
+          "signature": "BT1-025",
+          "distance": 75.50654982481845,
+          "confidence": 0.9576994118628468
+        },
+        {
+          "signature": "BT1-047",
+          "distance": 76.86096755969739,
+          "confidence": 0.9569406344203376
+        },
+        {
+          "signature": "BT1-072",
+          "distance": 77.07270349769824,
+          "confidence": 0.9568220148472278
+        },
+        {
+          "signature": "BT1-069",
+          "distance": 77.86258629094893,
+          "confidence": 0.95637950347846
+        },
+        {
+          "signature": "BT1-023",
+          "distance": 78.33073069501157,
+          "confidence": 0.9561172377058759
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-066.webp",
+      "expected_signature": "BT1-066",
+      "predicted_signature": "BT1-063",
+      "confidence": 0.9624415685044895,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-063",
+          "distance": 67.04180021948635,
+          "confidence": 0.9624415685044895
+        },
+        {
+          "signature": "BT1-069",
+          "distance": 74.91848696896731,
+          "confidence": 0.9580288588409147
+        },
+        {
+          "signature": "BT1-064",
+          "distance": 75.84987339112146,
+          "confidence": 0.9575070737304642
+        },
+        {
+          "signature": "BT1-075",
+          "distance": 77.02052743923805,
+          "confidence": 0.9568512451320795
+        },
+        {
+          "signature": "BT1-070",
+          "distance": 77.89027993572687,
+          "confidence": 0.9563639888315255
+        },
+        {
+          "signature": "BT1-020",
+          "distance": 79.21957996769169,
+          "confidence": 0.9556192829312652
+        },
+        {
+          "signature": "BT1-087",
+          "distance": 80.92251635284741,
+          "confidence": 0.9546652569451836
+        },
+        {
+          "signature": "BT1-014",
+          "distance": 82.52996274354389,
+          "confidence": 0.9537647267543171
+        },
+        {
+          "signature": "BT1-083",
+          "distance": 83.57913719587981,
+          "confidence": 0.9531769539518881
+        },
+        {
+          "signature": "BT1-017",
+          "distance": 83.98795640060207,
+          "confidence": 0.9529479235850968
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-071.webp",
+      "expected_signature": "BT1-071",
+      "predicted_signature": "BT1-064",
+      "confidence": 0.9583110951035505,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-064",
+          "distance": 74.41469524016242,
+          "confidence": 0.9583110951035505
+        },
+        {
+          "signature": "BT1-040",
+          "distance": 75.13036254113996,
+          "confidence": 0.9579101610413782
+        },
+        {
+          "signature": "BT1-075",
+          "distance": 84.98022607689326,
+          "confidence": 0.9523920302090234
+        },
+        {
+          "signature": "BT1-062",
+          "distance": 87.89870059658797,
+          "confidence": 0.950757030478102
+        },
+        {
+          "signature": "BT1-077",
+          "distance": 90.4129607660542,
+          "confidence": 0.9493484813635551
+        },
+        {
+          "signature": "BT10-017",
+          "distance": 90.85894569722836,
+          "confidence": 0.9490986298614967
+        },
+        {
+          "signature": "BT1-069",
+          "distance": 94.51100965759863,
+          "confidence": 0.9470526556540064
+        },
+        {
+          "signature": "BT1-073",
+          "distance": 98.17111289215288,
+          "confidence": 0.945002177651455
+        },
+        {
+          "signature": "BT1-044",
+          "distance": 98.63920672805644,
+          "confidence": 0.9447399402083717
+        },
+        {
+          "signature": "BT10-014",
+          "distance": 99.30596143977341,
+          "confidence": 0.9443664081569897
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-076.webp",
+      "expected_signature": "BT1-076",
+      "predicted_signature": "BT1-008",
+      "confidence": 0.9787649240683686,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-008",
+          "distance": 37.90461053796204,
+          "confidence": 0.9787649240683686
+        },
+        {
+          "signature": "BT1-097",
+          "distance": 49.60055207434662,
+          "confidence": 0.9722125758687133
+        },
+        {
+          "signature": "BT1-068",
+          "distance": 50.01739063653108,
+          "confidence": 0.9719790528646884
+        },
+        {
+          "signature": "BT1-057",
+          "distance": 51.114806595687654,
+          "confidence": 0.9713642540080181
+        },
+        {
+          "signature": "BT1-103",
+          "distance": 57.7797498655169,
+          "confidence": 0.9676303922322034
+        },
+        {
+          "signature": "BT1-089",
+          "distance": 57.92011156232936,
+          "confidence": 0.9675517582283869
+        },
+        {
+          "signature": "BT1-100",
+          "distance": 60.58076139146624,
+          "confidence": 0.9660611981000189
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 67.12915855955077,
+          "confidence": 0.9623926282579548
+        },
+        {
+          "signature": "BT1-092",
+          "distance": 67.89590853554523,
+          "confidence": 0.9619630764506749
+        },
+        {
+          "signature": "BT1-094",
+          "distance": 71.15743912872539,
+          "confidence": 0.9601358884432911
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-081.webp",
+      "expected_signature": "BT1-081",
+      "predicted_signature": "BT1-072",
+      "confidence": 0.9726610604190206,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-072",
+          "distance": 48.80000715204838,
+          "confidence": 0.9726610604190206
+        },
+        {
+          "signature": "BT1-067",
+          "distance": 65.09726480047074,
+          "confidence": 0.9635309440893721
+        },
+        {
+          "signature": "BT1-037",
+          "distance": 66.88033530149373,
+          "confidence": 0.96253202504118
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 68.10906268700292,
+          "confidence": 0.9618436623602225
+        },
+        {
+          "signature": "BT1-089",
+          "distance": 69.1595447324201,
+          "confidence": 0.9612551570126499
+        },
+        {
+          "signature": "BT1-092",
+          "distance": 72.65581882365758,
+          "confidence": 0.9592964600427689
+        },
+        {
+          "signature": "BT1-008",
+          "distance": 75.32005803222341,
+          "confidence": 0.957803889057578
+        },
+        {
+          "signature": "BT1-058",
+          "distance": 76.31789007412765,
+          "confidence": 0.9572448795102926
+        },
+        {
+          "signature": "BT1-065",
+          "distance": 76.5994414223808,
+          "confidence": 0.9570871476625318
+        },
+        {
+          "signature": "BT1-105",
+          "distance": 77.70641609977652,
+          "confidence": 0.9564669937816378
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-086.webp",
+      "expected_signature": "BT1-086",
+      "predicted_signature": "BT1-077",
+      "confidence": 0.9699505802826167,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-077",
+          "distance": 53.638214195529244,
+          "confidence": 0.9699505802826167
+        },
+        {
+          "signature": "BT1-095",
+          "distance": 70.24229741234953,
+          "confidence": 0.9606485728782356
+        },
+        {
+          "signature": "BT1-059",
+          "distance": 70.5316999282312,
+          "confidence": 0.9604864426172374
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 70.59777465259354,
+          "confidence": 0.9604494259649335
+        },
+        {
+          "signature": "BT1-085",
+          "distance": 72.66632035078946,
+          "confidence": 0.9592905768342916
+        },
+        {
+          "signature": "BT1-004",
+          "distance": 72.66769173586012,
+          "confidence": 0.9592898085513388
+        },
+        {
+          "signature": "BT1-073",
+          "distance": 74.22131102528645,
+          "confidence": 0.9584194335992793
+        },
+        {
+          "signature": "BT10-017",
+          "distance": 75.8261120148636,
+          "confidence": 0.9575203854258467
+        },
+        {
+          "signature": "BT1-088",
+          "distance": 75.96323138216002,
+          "confidence": 0.9574435678531317
+        },
+        {
+          "signature": "BT1-089",
+          "distance": 75.98522003724489,
+          "confidence": 0.9574312492788544
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-091.webp",
+      "expected_signature": "BT1-091",
+      "predicted_signature": "BT1-092",
+      "confidence": 0.9818494258908439,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-092",
+          "distance": 32.39877478484357,
+          "confidence": 0.9818494258908439
+        },
+        {
+          "signature": "BT1-094",
+          "distance": 39.051037195494935,
+          "confidence": 0.978122668237818
+        },
+        {
+          "signature": "BT10-009",
+          "distance": 48.779660048294474,
+          "confidence": 0.9726724593566978
+        },
+        {
+          "signature": "BT1-007",
+          "distance": 54.15143707859173,
+          "confidence": 0.9696630604601727
+        },
+        {
+          "signature": "BT10-012",
+          "distance": 58.210556960361956,
+          "confidence": 0.9673890437196851
+        },
+        {
+          "signature": "BT10-004",
+          "distance": 60.29916248816204,
+          "confidence": 0.9662189565892649
+        },
+        {
+          "signature": "BT1-100",
+          "distance": 62.442415188044755,
+          "confidence": 0.9650182547966136
+        },
+        {
+          "signature": "BT1-078",
+          "distance": 63.992548075131,
+          "confidence": 0.9641498330111311
+        },
+        {
+          "signature": "BT1-022",
+          "distance": 65.144301849029,
+          "confidence": 0.9635045928016645
+        },
+        {
+          "signature": "BT1-024",
+          "distance": 66.67566027510706,
+          "confidence": 0.9626466889215086
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-096.webp",
+      "expected_signature": "BT1-096",
+      "predicted_signature": "BT10-002",
+      "confidence": 0.9587005251580306,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT10-002",
+          "distance": 73.71956259291534,
+          "confidence": 0.9587005251580306
+        },
+        {
+          "signature": "BT1-098",
+          "distance": 81.43656438893308,
+          "confidence": 0.9543772748521383
+        },
+        {
+          "signature": "BT1-099",
+          "distance": 82.88342079542717,
+          "confidence": 0.9535667110389764
+        },
+        {
+          "signature": "BT1-019",
+          "distance": 89.78749289107779,
+          "confidence": 0.9496988835344102
+        },
+        {
+          "signature": "BT1-018",
+          "distance": 91.70982839190548,
+          "confidence": 0.9486219448784843
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 94.2011461786969,
+          "confidence": 0.9472262486393855
+        },
+        {
+          "signature": "BT10-006",
+          "distance": 98.33053139001123,
+          "confidence": 0.9449128675686211
+        },
+        {
+          "signature": "BT10-001",
+          "distance": 100.5109485074111,
+          "confidence": 0.9436913453739993
+        },
+        {
+          "signature": "BT10-008",
+          "distance": 102.1053609200966,
+          "confidence": 0.9427981171315986
+        },
+        {
+          "signature": "BT1-008",
+          "distance": 102.18286735841505,
+          "confidence": 0.9427546961577506
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-101.webp",
+      "expected_signature": "BT1-101",
+      "predicted_signature": "BT1-072",
+      "confidence": 0.971966411072667,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-072",
+          "distance": 50.039956235289424,
+          "confidence": 0.971966411072667
+        },
+        {
+          "signature": "BT1-067",
+          "distance": 62.421110094198625,
+          "confidence": 0.9650301904234181
+        },
+        {
+          "signature": "BT1-058",
+          "distance": 62.69906091688479,
+          "confidence": 0.9648744756768153
+        },
+        {
+          "signature": "BT1-037",
+          "distance": 64.97588549946029,
+          "confidence": 0.9635989436977813
+        },
+        {
+          "signature": "BT1-093",
+          "distance": 67.10765226474422,
+          "confidence": 0.9624046766023842
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 69.04517624978087,
+          "confidence": 0.9613192289917194
+        },
+        {
+          "signature": "BT1-105",
+          "distance": 70.35998555548527,
+          "confidence": 0.9605826411453864
+        },
+        {
+          "signature": "BT1-104",
+          "distance": 79.23355360687636,
+          "confidence": 0.955611454561974
+        },
+        {
+          "signature": "BT1-068",
+          "distance": 80.81937757388718,
+          "confidence": 0.9547230377737327
+        },
+        {
+          "signature": "BT1-065",
+          "distance": 81.7832849873569,
+          "confidence": 0.9541830336205284
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-106.webp",
+      "expected_signature": "BT1-106",
+      "predicted_signature": "BT1-019",
+      "confidence": 0.9736353320446283,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-019",
+          "distance": 47.060932300338465,
+          "confidence": 0.9736353320446283
+        },
+        {
+          "signature": "BT10-013",
+          "distance": 51.2606364294235,
+          "confidence": 0.9712825566221717
+        },
+        {
+          "signature": "BT1-095",
+          "distance": 65.87174340588174,
+          "confidence": 0.9630970625177133
+        },
+        {
+          "signature": "BT1-018",
+          "distance": 79.42384161897729,
+          "confidence": 0.9555048506336261
+        },
+        {
+          "signature": "BT10-014",
+          "distance": 79.70970071436092,
+          "confidence": 0.9553447054821508
+        },
+        {
+          "signature": "BT1-065",
+          "distance": 84.85829313525022,
+          "confidence": 0.952460339980252
+        },
+        {
+          "signature": "BT1-010",
+          "distance": 85.45356677014914,
+          "confidence": 0.9521268533500565
+        },
+        {
+          "signature": "BT1-068",
+          "distance": 85.67919750941572,
+          "confidence": 0.952000449574557
+        },
+        {
+          "signature": "BT10-002",
+          "distance": 87.14631879627247,
+          "confidence": 0.9511785328872423
+        },
+        {
+          "signature": "BT1-040",
+          "distance": 87.8339313643461,
+          "confidence": 0.9507933157622711
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT1\\BT1-111.webp",
+      "expected_signature": "BT1-111",
+      "predicted_signature": "BT10-014",
+      "confidence": 0.963901627556654,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT10-014",
+          "distance": 64.43559481137264,
+          "confidence": 0.963901627556654
+        },
+        {
+          "signature": "BT1-014",
+          "distance": 72.0762965616119,
+          "confidence": 0.9596211223744471
+        },
+        {
+          "signature": "BT10-011",
+          "distance": 72.51225082948923,
+          "confidence": 0.9593768902916027
+        },
+        {
+          "signature": "BT1-104",
+          "distance": 79.9915738313369,
+          "confidence": 0.9551867933718
+        },
+        {
+          "signature": "BT1-004",
+          "distance": 85.3754286989751,
+          "confidence": 0.9521706281798459
+        },
+        {
+          "signature": "BT1-085",
+          "distance": 87.32061587695031,
+          "confidence": 0.9510808874638934
+        },
+        {
+          "signature": "BT1-040",
+          "distance": 87.34810001726315,
+          "confidence": 0.9510654901864072
+        },
+        {
+          "signature": "BT1-013",
+          "distance": 88.31218360197519,
+          "confidence": 0.950525387337829
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 88.67773368575452,
+          "confidence": 0.9503205973749275
+        },
+        {
+          "signature": "BT10-003",
+          "distance": 89.73533295905004,
+          "confidence": 0.9497281047848459
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-005.webp",
+      "expected_signature": "BT10-005",
+      "predicted_signature": "BT1-012",
+      "confidence": 0.9548613838495611,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-012",
+          "distance": 80.5724298285335,
+          "confidence": 0.9548613838495611
+        },
+        {
+          "signature": "BT1-058",
+          "distance": 90.12446047837024,
+          "confidence": 0.9495101061745825
+        },
+        {
+          "signature": "BT1-032",
+          "distance": 92.98419090551302,
+          "confidence": 0.9479080162994324
+        },
+        {
+          "signature": "BT1-039",
+          "distance": 98.46387120068125,
+          "confidence": 0.9448381673945764
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 101.41004623458535,
+          "confidence": 0.9431876491682996
+        },
+        {
+          "signature": "BT1-067",
+          "distance": 102.09370424163168,
+          "confidence": 0.9428046474836798
+        },
+        {
+          "signature": "BT1-029",
+          "distance": 102.58111272668403,
+          "confidence": 0.9425315895088605
+        },
+        {
+          "signature": "BT1-030",
+          "distance": 104.45546141172507,
+          "confidence": 0.9414815342231232
+        },
+        {
+          "signature": "BT1-093",
+          "distance": 104.99658331248995,
+          "confidence": 0.9411783846988852
+        },
+        {
+          "signature": "BT1-005",
+          "distance": 105.25493560921603,
+          "confidence": 0.9410336495186464
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-010.webp",
+      "expected_signature": "BT10-010",
+      "predicted_signature": "BT10-013",
+      "confidence": 0.9728522657407832,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT10-013",
+          "distance": 48.45870565270188,
+          "confidence": 0.9728522657407832
+        },
+        {
+          "signature": "BT10-014",
+          "distance": 51.17695192439417,
+          "confidence": 0.9713294386978184
+        },
+        {
+          "signature": "BT1-010",
+          "distance": 52.87324327716324,
+          "confidence": 0.9703791354189562
+        },
+        {
+          "signature": "BT1-095",
+          "distance": 52.918748184676794,
+          "confidence": 0.9703536424735705
+        },
+        {
+          "signature": "BT1-028",
+          "distance": 53.00871879407166,
+          "confidence": 0.9703032387708282
+        },
+        {
+          "signature": "BT1-004",
+          "distance": 56.82081070355732,
+          "confidence": 0.9681676130512284
+        },
+        {
+          "signature": "BT1-040",
+          "distance": 57.67644349395491,
+          "confidence": 0.9676882669501653
+        },
+        {
+          "signature": "BT1-077",
+          "distance": 62.044263044015736,
+          "confidence": 0.9652413092190388
+        },
+        {
+          "signature": "BT1-073",
+          "distance": 62.27842622611709,
+          "confidence": 0.9651101253635198
+        },
+        {
+          "signature": "BT10-002",
+          "distance": 62.5522573409361,
+          "confidence": 0.9649567185765063
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "crop_image_path": "F:\\Dragon-Ball-Masters-Arena-main\\Dragon-Ball-Masters-Arena-main\\assets\\BT10\\BT10-015.webp",
+      "expected_signature": "BT10-015",
+      "predicted_signature": "BT1-002",
+      "confidence": 0.9689239327262789,
+      "correct": false,
+      "top_predictions": [
+        {
+          "signature": "BT1-002",
+          "distance": 55.47078008359224,
+          "confidence": 0.9689239327262789
+        },
+        {
+          "signature": "BT1-003",
+          "distance": 58.43685022488679,
+          "confidence": 0.9672622687815761
+        },
+        {
+          "signature": "BT1-078",
+          "distance": 64.81902409413152,
+          "confidence": 0.9636868212357806
+        },
+        {
+          "signature": "BT10-016",
+          "distance": 64.90339441998105,
+          "confidence": 0.9636395549467893
+        },
+        {
+          "signature": "BT1-007",
+          "distance": 66.22934805120549,
+          "confidence": 0.9628967237808372
+        },
+        {
+          "signature": "BT1-094",
+          "distance": 75.13210748417728,
+          "confidence": 0.9579091834822536
+        },
+        {
+          "signature": "BT1-049",
+          "distance": 79.87401247558954,
+          "confidence": 0.9552526540753
+        },
+        {
+          "signature": "BT1-057",
+          "distance": 80.4262749818405,
+          "confidence": 0.9549432633154955
+        },
+        {
+          "signature": "BT1-022",
+          "distance": 82.48679389175453,
+          "confidence": 0.9537889109850115
+        },
+        {
+          "signature": "BT1-084",
+          "distance": 86.88059491625683,
+          "confidence": 0.9513273978060186
+        }
+      ]
+    }
+  ]
+}

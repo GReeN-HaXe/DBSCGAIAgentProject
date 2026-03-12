@@ -1,0 +1,91 @@
+{
+  "schema_version": "phase13.identity_ablation.v1",
+  "dataset": "artifacts\\phase13_reference_image_dataset.json",
+  "max_examples": 128,
+  "eval_split": "validation",
+  "runs": [
+    {
+      "config_name": "grid2_hist4",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid2_hist4\\eval.json"
+    },
+    {
+      "config_name": "grid3_hist4",
+      "patch_grid_size": 3,
+      "hist_bins": 4,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid3_hist4\\eval.json"
+    },
+    {
+      "config_name": "grid2_hist8",
+      "patch_grid_size": 2,
+      "hist_bins": 8,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid2_hist8\\eval.json"
+    },
+    {
+      "config_name": "grid3_hist8",
+      "patch_grid_size": 3,
+      "hist_bins": 8,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid3_hist8\\eval.json"
+    }
+  ],
+  "ranking": [
+    {
+      "config_name": "grid2_hist4",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid2_hist4\\eval.json"
+    },
+    {
+      "config_name": "grid2_hist8",
+      "patch_grid_size": 2,
+      "hist_bins": 8,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid2_hist8\\eval.json"
+    },
+    {
+      "config_name": "grid3_hist4",
+      "patch_grid_size": 3,
+      "hist_bins": 4,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid3_hist4\\eval.json"
+    },
+    {
+      "config_name": "grid3_hist8",
+      "patch_grid_size": 3,
+      "hist_bins": 8,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid3_hist8\\eval.json"
+    }
+  ],
+  "best": {
+    "config_name": "grid2_hist4",
+    "patch_grid_size": 2,
+    "hist_bins": 4,
+    "top1_accuracy": 0.0,
+    "top5_accuracy": 0.0,
+    "top10_accuracy": 0.0,
+    "evaluation_path": "artifacts\\phase13_identity_ablation_demo\\grid2_hist4\\eval.json"
+  }
+}

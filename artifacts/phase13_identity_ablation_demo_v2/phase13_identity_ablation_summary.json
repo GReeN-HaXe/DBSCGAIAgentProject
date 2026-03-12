@@ -1,0 +1,131 @@
+{
+  "schema_version": "phase13.identity_ablation.v1",
+  "dataset": "artifacts\\phase13_reference_image_dataset.json",
+  "max_examples": 128,
+  "eval_split": "validation",
+  "runs": [
+    {
+      "config_name": "rgb_grid2_hist4",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 8,
+      "edge_grid_size": 2,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_grid2_hist4\\eval.json"
+    },
+    {
+      "config_name": "rgb_gray_grid2_hist4",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 8,
+      "edge_grid_size": 2,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_gray_grid2_hist4\\eval.json"
+    },
+    {
+      "config_name": "rgb_gray_edge_grid2",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 8,
+      "edge_grid_size": 2,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_gray_edge_grid2\\eval.json"
+    },
+    {
+      "config_name": "rgb_gray_edge_grid3",
+      "patch_grid_size": 3,
+      "hist_bins": 8,
+      "gray_hist_bins": 16,
+      "edge_grid_size": 3,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_gray_edge_grid3\\eval.json"
+    },
+    {
+      "config_name": "gray_edge_only",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 16,
+      "edge_grid_size": 3,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\gray_edge_only\\eval.json"
+    }
+  ],
+  "ranking": [
+    {
+      "config_name": "gray_edge_only",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 16,
+      "edge_grid_size": 3,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\gray_edge_only\\eval.json"
+    },
+    {
+      "config_name": "rgb_gray_edge_grid2",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 8,
+      "edge_grid_size": 2,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_gray_edge_grid2\\eval.json"
+    },
+    {
+      "config_name": "rgb_gray_edge_grid3",
+      "patch_grid_size": 3,
+      "hist_bins": 8,
+      "gray_hist_bins": 16,
+      "edge_grid_size": 3,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_gray_edge_grid3\\eval.json"
+    },
+    {
+      "config_name": "rgb_gray_grid2_hist4",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 8,
+      "edge_grid_size": 2,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_gray_grid2_hist4\\eval.json"
+    },
+    {
+      "config_name": "rgb_grid2_hist4",
+      "patch_grid_size": 2,
+      "hist_bins": 4,
+      "gray_hist_bins": 8,
+      "edge_grid_size": 2,
+      "top1_accuracy": 0.0,
+      "top5_accuracy": 0.0,
+      "top10_accuracy": 0.0,
+      "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\rgb_grid2_hist4\\eval.json"
+    }
+  ],
+  "best": {
+    "config_name": "gray_edge_only",
+    "patch_grid_size": 2,
+    "hist_bins": 4,
+    "gray_hist_bins": 16,
+    "edge_grid_size": 3,
+    "top1_accuracy": 0.0,
+    "top5_accuracy": 0.0,
+    "top10_accuracy": 0.0,
+    "evaluation_path": "artifacts\\phase13_identity_ablation_demo_v2\\gray_edge_only\\eval.json"
+  }
+}

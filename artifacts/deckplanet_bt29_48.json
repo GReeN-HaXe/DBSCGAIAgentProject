@@ -1,0 +1,11 @@
+{
+  "schema_version": "deckplanet.missing_cards_export.v1",
+  "source": "https://api.deckplanet.net/cardsearch/dbs_masters_cards",
+  "requested_count": 1,
+  "found_count": 0,
+  "missing_count": 1,
+  "missing_card_numbers": [
+    "BT29-48"
+  ],
+  "cards": []
+}
