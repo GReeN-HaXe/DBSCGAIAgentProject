@@ -58,7 +58,7 @@ def test_first_player_first_turn_skips_draw() -> None:
     assert len(state.players[1].hand) == 6
 
 
-def test_charge_from_hand_moves_card_to_rest_energy_and_main() -> None:
+def test_charge_from_hand_moves_card_to_active_energy_and_main() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(
         p1_leader_card_id=1,
@@ -76,8 +76,76 @@ def test_charge_from_hand_moves_card_to_rest_energy_and_main() -> None:
     assert charged.phase == TurnPhase.MAIN
     assert p1.has_charged_this_turn is True
     assert len(p1.energy) == 1
-    assert p1.energy[0].resting is True
+    assert p1.energy[0].resting is False
     assert len(p1.hand) == 5
+
+
+def test_charge_from_hand_allows_immediate_one_cost_play() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 10:
+                return SimpleNamespace(
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                )
+            if card_id == 11:
+                return SimpleNamespace(
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                )
+            return SimpleNamespace(
+                power_int=15000,
+                card_type="BATTLE",
+                card_color="Blue",
+                energy_cost_int=2,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_barrier=False,
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=[11, 10] + _deck(1000, 28),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+
+    charged = engine.apply_action(
+        state,
+        Action(action_type=ActionType.CHARGE_FROM_HAND, player_id=1, hand_index=0),
+    )
+    legal = engine.get_legal_actions(charged, 1)
+    assert any(action.action_type == ActionType.PLAY_CARD_FROM_HAND for action in legal)
 
 
 def test_end_turn_switches_player_and_resets_to_draw() -> None:

@@ -243,6 +243,38 @@ def test_phase5_heuristic_policy_prefers_turn_one_cantrip_play_after_charge() ->
     assert choice.hand_index == 0
 
 
+def test_phase5_heuristic_scores_activate_main_skill_from_source_card_features() -> None:
+    policy = HeuristicPolicy(profile="balanced")
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(
+            instance_id=991401,
+            card_id=390001,
+            owner_id=1,
+            has_activate_main=True,
+            energy_cost=0,
+            has_draw=True,
+        )
+    )
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle"
+    )
+    end_turn = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.END_TURN)
+    activate_score, _ = policy.score_action_with_reason(state, activate)
+    end_turn_score, _ = policy.score_action_with_reason(state, end_turn)
+    assert activate_score > end_turn_score
+
+
 def test_phase5_custom_action_weights_can_override_profile_behavior() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

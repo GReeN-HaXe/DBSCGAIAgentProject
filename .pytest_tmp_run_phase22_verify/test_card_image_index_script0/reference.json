@@ -1,0 +1,33 @@
+{
+  "schema_version": "card_image_reference_manifest.v1",
+  "image_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\.pytest_tmp_run_phase22_verify\\test_card_image_index_script0\\images",
+  "card_count": 1,
+  "cards": [
+    {
+      "card_number": "BT1-001",
+      "primary_image_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\.pytest_tmp_run_phase22_verify\\test_card_image_index_script0\\images\\BT1-001.webp",
+      "primary_image_format": "webp",
+      "card_name": "Card A",
+      "table_name": "cards",
+      "record_id": 1,
+      "match_type": "exact_stem",
+      "image_count": 1,
+      "images": [
+        {
+          "image_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\.pytest_tmp_run_phase22_verify\\test_card_image_index_script0\\images\\BT1-001.webp",
+          "image_format": "webp",
+          "table_name": "cards",
+          "record_id": 1,
+          "match_type": "exact_stem"
+        },
+        {
+          "image_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\.pytest_tmp_run_phase22_verify\\test_card_image_index_script0\\images\\BT1-001.webp",
+          "image_format": "webp",
+          "table_name": "variants",
+          "record_id": 10,
+          "match_type": "exact_stem"
+        }
+      ]
+    }
+  ]
+}

@@ -115,6 +115,27 @@ def test_phase6_cli_helpers_can_reveal_multiple_hands() -> None:
     assert "P2 hand_cards=" in state_text
 
 
+def test_phase6_cli_helpers_render_board_details() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].energy.append(CardInstance(instance_id=9001, card_id=9001, owner_id=1, resting=False))
+    state.players[1].battle_area.append(CardInstance(instance_id=9002, card_id=9002, owner_id=1, resting=True))
+    state_text = summarize_state_for_cli(
+        state,
+        card_name_resolver=lambda card_id: f"CARD-{card_id}",
+        reveal_hand_player_id=1,
+    )
+    assert "P1 leader=" in state_text
+    assert "P1 energy_cards=" in state_text
+    assert "P1 battle_cards=" in state_text
+
+
 def test_phase6_session_trace_payload_collects_actions() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

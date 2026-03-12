@@ -1,0 +1,31 @@
+{
+  "schema_version": "phase22.merged_benchmark_summary.v1",
+  "input_count": 3,
+  "inputs": [
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\mechikabura_vs_krillin.json",
+      "example_count": 938,
+      "trajectory_count": 20,
+      "source_count": 20
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\gogeta_vs_krillin.json",
+      "example_count": 912,
+      "trajectory_count": 20,
+      "source_count": 20
+    },
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\red_pan_vs_krillin.json",
+      "example_count": 2843,
+      "trajectory_count": 19,
+      "source_count": 19
+    }
+  ],
+  "merged_example_count": 4693,
+  "merged_trajectory_count": 59,
+  "merged_source_count": 59,
+  "split_counts": {
+    "train": 4136,
+    "validation": 557
+  }
+}

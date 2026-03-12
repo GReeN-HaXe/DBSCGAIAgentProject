@@ -5,6 +5,7 @@ from dataclasses import asdict, dataclass
 from src.agent.evaluator import evaluate_state
 from src.agent.policy import AgentPolicy
 from src.game import Action, ActionType, GameState
+from src.game.state import CardInstance
 
 
 @dataclass(frozen=True)
@@ -173,6 +174,14 @@ class HeuristicPolicy(AgentPolicy):
                     score -= w.play_zero_energy_penalty
                 if card.has_draw or card.auto_draw_on_play:
                     score += w.play_draw_bonus
+                if card.has_activate_main or card.has_activate_battle:
+                    score += 10.0
+                if card.has_auto:
+                    score += 8.0
+                if card.has_permanent:
+                    score += 6.0
+                if card.has_counter:
+                    score += 4.0
             return score, "play_card_from_hand"
 
         if action.action_type == ActionType.DECLARE_ATTACK:
@@ -186,9 +195,35 @@ class HeuristicPolicy(AgentPolicy):
             return score, "declare_attack"
 
         if action.action_type in {ActionType.ACTIVATE_MAIN_SKILL, ActionType.ACTIVATE_BATTLE_SKILL}:
-            return w.activate_skill, "activate_skill"
+            score = w.activate_skill
+            source = self._resolve_source_card(state, action)
+            if source is not None:
+                if source.energy_cost == 0:
+                    score += 8.0
+                if source.has_draw or source.auto_draw_on_play or source.auto_draw_on_attack:
+                    score += 12.0
+                if source.has_auto:
+                    score += 6.0
+                if source.has_permanent:
+                    score += 4.0
+                if source.card_type == "UNISON" and getattr(source, "markers", 0) > 0:
+                    score += 6.0
+            return score, "activate_skill"
         if action.action_type == ActionType.COMBO_FROM_HAND:
             return w.combo, "combo_from_hand"
         if action.action_type == ActionType.END_TURN:
             return w.end_turn, "end_turn"
         return 0.0, "fallback"
+
+    @staticmethod
+    def _resolve_source_card(state: GameState, action: Action) -> CardInstance | None:
+        player = state.players.get(action.player_id)
+        if player is None:
+            return None
+        if action.source_zone == "leader":
+            return player.leader_area
+        if action.source_zone == "battle" and action.source_index is not None and 0 <= action.source_index < len(player.battle_area):
+            return player.battle_area[action.source_index]
+        if action.source_zone == "unison" and action.source_index is not None and 0 <= action.source_index < len(player.unison_area):
+            return player.unison_area[action.source_index]
+        return None

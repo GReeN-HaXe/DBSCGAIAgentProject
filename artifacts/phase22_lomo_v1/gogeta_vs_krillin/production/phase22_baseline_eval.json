@@ -1,0 +1,120 @@
+{
+  "model_name": "backoff_frequency_policy",
+  "target_field": "decision_class",
+  "split": "validation",
+  "example_count": 558,
+  "top1_accuracy": 0.9605734767025089,
+  "identity_resolved_example_count": 0,
+  "identity_resolved_example_rate": 0.0,
+  "by_target_label": [
+    {
+      "count": 372,
+      "matched": 372,
+      "accuracy": 1.0,
+      "target_label": "activate_main_skill"
+    },
+    {
+      "count": 53,
+      "matched": 48,
+      "accuracy": 0.9056603773584906,
+      "target_label": "attack_leader_with_battle"
+    },
+    {
+      "count": 15,
+      "matched": 2,
+      "accuracy": 0.13333333333333333,
+      "target_label": "attack_leader_with_leader"
+    },
+    {
+      "count": 18,
+      "matched": 18,
+      "accuracy": 1.0,
+      "target_label": "charge_lategame"
+    },
+    {
+      "count": 59,
+      "matched": 59,
+      "accuracy": 1.0,
+      "target_label": "charge_opening"
+    },
+    {
+      "count": 16,
+      "matched": 16,
+      "accuracy": 1.0,
+      "target_label": "end_turn_after_development"
+    },
+    {
+      "count": 15,
+      "matched": 14,
+      "accuracy": 0.9333333333333333,
+      "target_label": "play_board_extension"
+    },
+    {
+      "count": 10,
+      "matched": 7,
+      "accuracy": 0.7,
+      "target_label": "play_pressure"
+    }
+  ],
+  "identity_resolution_slices": {
+    "with_identity": {
+      "example_count": 0,
+      "top1_accuracy": 0.0,
+      "by_target_label": []
+    },
+    "without_identity": {
+      "example_count": 558,
+      "top1_accuracy": 0.9605734767025089,
+      "by_target_label": [
+        {
+          "count": 372,
+          "matched": 372,
+          "accuracy": 1.0,
+          "target_label": "activate_main_skill"
+        },
+        {
+          "count": 53,
+          "matched": 48,
+          "accuracy": 0.9056603773584906,
+          "target_label": "attack_leader_with_battle"
+        },
+        {
+          "count": 15,
+          "matched": 2,
+          "accuracy": 0.13333333333333333,
+          "target_label": "attack_leader_with_leader"
+        },
+        {
+          "count": 18,
+          "matched": 18,
+          "accuracy": 1.0,
+          "target_label": "charge_lategame"
+        },
+        {
+          "count": 59,
+          "matched": 59,
+          "accuracy": 1.0,
+          "target_label": "charge_opening"
+        },
+        {
+          "count": 16,
+          "matched": 16,
+          "accuracy": 1.0,
+          "target_label": "end_turn_after_development"
+        },
+        {
+          "count": 15,
+          "matched": 14,
+          "accuracy": 0.9333333333333333,
+          "target_label": "play_board_extension"
+        },
+        {
+          "count": 10,
+          "matched": 7,
+          "accuracy": 0.7,
+          "target_label": "play_pressure"
+        }
+      ]
+    }
+  }
+}

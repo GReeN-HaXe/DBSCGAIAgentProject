@@ -44,6 +44,16 @@ def snapshot_state_for_trace(state: GameState) -> dict[str, object]:
 CardNameResolver = Callable[[int], str]
 
 
+def _zone_card_summary(cards: list[CardInstance], card_name_resolver: CardNameResolver | None = None) -> str:
+    if not cards:
+        return "-"
+    rendered: list[str] = []
+    for index, card in enumerate(cards):
+        mode = "R" if card.resting else "A"
+        rendered.append(f"[{index}] {_card_label(card, card_name_resolver)} ({mode})")
+    return ", ".join(rendered)
+
+
 def decision_owner_for_state(state: GameState) -> int:
     if state.counter_window is not None:
         return int(state.counter_window.responder_player_id)
@@ -133,6 +143,7 @@ def summarize_state_for_cli(
     card_name_resolver: CardNameResolver | None = None,
     reveal_hand_player_id: int | None = None,
     reveal_hand_player_ids: tuple[int, ...] | None = None,
+    show_zone_details: bool = True,
 ) -> str:
     p1 = state.players[1]
     p2 = state.players[2]
@@ -148,7 +159,22 @@ def summarize_state_for_cli(
             f"hand={len(p2.hand)} life={len(p2.life)} energy={len(p2.energy)} "
             f"battle={len(p2.battle_area)} unison={len(p2.unison_area)}"
         ),
+        f"P1 leader={_card_label(p1.leader_area, card_name_resolver)} ({'R' if p1.leader_area.resting else 'A'})",
+        f"P2 leader={_card_label(p2.leader_area, card_name_resolver)} ({'R' if p2.leader_area.resting else 'A'})",
     ]
+    if show_zone_details:
+        if p1.energy:
+            lines.append(f"P1 energy_cards={_zone_card_summary(p1.energy, card_name_resolver)}")
+        if p2.energy:
+            lines.append(f"P2 energy_cards={_zone_card_summary(p2.energy, card_name_resolver)}")
+        if p1.battle_area:
+            lines.append(f"P1 battle_cards={_zone_card_summary(p1.battle_area, card_name_resolver)}")
+        if p2.battle_area:
+            lines.append(f"P2 battle_cards={_zone_card_summary(p2.battle_area, card_name_resolver)}")
+        if p1.unison_area:
+            lines.append(f"P1 unison_cards={_zone_card_summary(p1.unison_area, card_name_resolver)}")
+        if p2.unison_area:
+            lines.append(f"P2 unison_cards={_zone_card_summary(p2.unison_area, card_name_resolver)}")
     players_to_reveal: list[int] = []
     if reveal_hand_player_ids is not None:
         players_to_reveal.extend(int(player_id) for player_id in reveal_hand_player_ids if player_id in state.players)
@@ -291,15 +317,44 @@ class HumanVsAiSession:
 
     def _record_action(self, action: Action, *, actor_kind: str) -> None:
         assert self.action_trace is not None
+        player = self.state.players.get(int(action.player_id))
+        hand_card = None
+        if player is not None and action.hand_index is not None and 0 <= action.hand_index < len(player.hand):
+            hand_card = player.hand[action.hand_index]
+        source_card = _resolve_zone_card_for_action(
+            self.state,
+            player_id=int(action.player_id),
+            zone=action.source_zone,
+            index=action.source_index,
+        )
+        attacker_card = _resolve_zone_card_for_action(
+            self.state,
+            player_id=int(action.player_id),
+            zone=action.attacker_zone,
+            index=action.attacker_index,
+        )
+        target_card = None
+        if action.target_player_id is not None:
+            target_card = _resolve_zone_card_for_action(
+                self.state,
+                player_id=int(action.target_player_id),
+                zone=action.target_zone,
+                index=action.target_index,
+            )
         self.action_trace.append(
             {
+                "action_index": len(self.action_trace) + 1,
                 "timestamp_utc": datetime.now(timezone.utc).isoformat(),
                 "actor_kind": actor_kind,
                 "player_id": int(action.player_id),
                 "turn_number": int(self.state.turn_number),
                 "phase": self.state.phase.value,
-                "action": describe_action(action),
+                "action": describe_action(action, state=self.state),
                 "action_type": action.action_type.value,
+                "hand_card_id": None if hand_card is None else int(hand_card.card_id),
+                "source_card_id": None if source_card is None else int(source_card.card_id),
+                "attacker_card_id": None if attacker_card is None else int(attacker_card.card_id),
+                "target_card_id": None if target_card is None else int(target_card.card_id),
                 "state_snapshot": snapshot_state_for_trace(self.state),
             }
         )

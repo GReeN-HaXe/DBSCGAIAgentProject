@@ -1,0 +1,12 @@
+{
+  "schema_version": "phase22.best_config.v1",
+  "profile": "manual",
+  "target_field": "decision_class",
+  "best": {
+    "config_name": "h128_e20_lr0001",
+    "hidden_dim": 128,
+    "epochs": 20,
+    "learning_rate": 0.001,
+    "manifest_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\gogeta_vs_krillin\\pipeline\\phase22_manifest.json"
+  }
+}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 from pathlib import Path
 import sys
@@ -31,7 +32,7 @@ def _parse_group(value: str) -> tuple[str, str]:
 
 
 def _collect_paths(pattern: str) -> list[Path]:
-    matches = sorted(Path().glob(pattern))
+    matches = sorted(Path(match) for match in glob.glob(pattern))
     return [path for path in matches if path.is_file()]
 
 

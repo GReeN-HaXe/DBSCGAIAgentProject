@@ -1,0 +1,70 @@
+{
+  "schema_version": "phase22.lomo.v1",
+  "target_field": "decision_class",
+  "dataset_count": 4,
+  "overall_example_count": 264,
+  "overall_top1_accuracy_weighted": 1.0,
+  "overall_top1_accuracy_macro": 1.0,
+  "folds": [
+    {
+      "fold_name": "mechikabura_vs_krillin",
+      "holdout_dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\mechikabura_vs_krillin.json",
+      "train_dataset_count": 3,
+      "example_count": 88,
+      "top1_accuracy": 1.0,
+      "top_k_accuracy": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "artifacts_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_krillin",
+      "production_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_krillin\\production",
+      "batch_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_krillin\\phase22_generalization_batch_eval.json"
+    },
+    {
+      "fold_name": "gogeta_vs_krillin",
+      "holdout_dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\gogeta_vs_krillin.json",
+      "train_dataset_count": 3,
+      "example_count": 78,
+      "top1_accuracy": 1.0,
+      "top_k_accuracy": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "artifacts_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\gogeta_vs_krillin",
+      "production_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\gogeta_vs_krillin\\production",
+      "batch_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\gogeta_vs_krillin\\phase22_generalization_batch_eval.json"
+    },
+    {
+      "fold_name": "red_pan_vs_krillin",
+      "holdout_dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\red_pan_vs_krillin.json",
+      "train_dataset_count": 3,
+      "example_count": 19,
+      "top1_accuracy": 1.0,
+      "top_k_accuracy": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "artifacts_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\red_pan_vs_krillin",
+      "production_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\red_pan_vs_krillin\\production",
+      "batch_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\red_pan_vs_krillin\\phase22_generalization_batch_eval.json"
+    },
+    {
+      "fold_name": "mechikabura_vs_gogeta",
+      "holdout_dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\mechikabura_vs_gogeta.json",
+      "train_dataset_count": 3,
+      "example_count": 79,
+      "top1_accuracy": 1.0,
+      "top_k_accuracy": {
+        "1": 1.0,
+        "3": 1.0,
+        "5": 1.0
+      },
+      "artifacts_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta",
+      "production_dir": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production",
+      "batch_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\phase22_generalization_batch_eval.json"
+    }
+  ]
+}

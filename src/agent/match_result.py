@@ -13,10 +13,11 @@ def build_compact_match_summary(
     ai_profile: str,
     checkpoint_tail_count: int = 20,
     setup_metadata: dict[str, Any] | None = None,
+    turn_history: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     cp_names = [cp.name for cp in state.checkpoints[-max(1, int(checkpoint_tail_count)) :]]
     unresolved = [r for r in state.effect_resolutions if not r.resolved]
-    return {
+    summary = {
         "winner_id": state.winner_id,
         "total_actions": int(total_actions),
         "human_player_id": int(human_player_id),
@@ -29,6 +30,9 @@ def build_compact_match_summary(
         "effect_unresolved_count": len(unresolved),
         "setup": dict(setup_metadata or {}),
     }
+    if turn_history is not None:
+        summary["turn_history"] = list(turn_history)
+    return summary
 
 
 def evaluate_match_expectations(

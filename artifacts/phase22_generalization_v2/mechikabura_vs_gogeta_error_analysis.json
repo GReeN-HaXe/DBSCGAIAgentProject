@@ -1,0 +1,181 @@
+{
+  "schema_version": "phase22.error_analysis.v1",
+  "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\mechikabura_vs_gogeta.json",
+  "split": "validation",
+  "example_count": 79,
+  "top1_accuracy": 1.0,
+  "top_k_accuracy": {
+    "1": 1.0,
+    "3": 1.0,
+    "5": 1.0
+  },
+  "error_count": 0,
+  "top_confusions": [],
+  "per_source": [
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_001_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_002_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_003_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_004_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_005_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_006_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_007_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_008_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_009_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_010_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_011_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_012_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_013_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_014_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_015_review.json",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_016_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_017_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_018_review.json",
+      "example_count": 4,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_019_review.json",
+      "example_count": 2,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "source_name": "artifacts\\phase22_normalized\\mechikabura_vs_gogeta\\ai_match_trace_020_review.json",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    }
+  ],
+  "per_actual_label": [
+    {
+      "label": "attack_leader_with_battle",
+      "example_count": 19,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "attack_leader_with_leader",
+      "example_count": 11,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "charge_lategame",
+      "example_count": 11,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "charge_opening",
+      "example_count": 20,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "end_turn_after_development",
+      "example_count": 6,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "play_board_extension",
+      "example_count": 7,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    },
+    {
+      "label": "play_pressure",
+      "example_count": 5,
+      "error_count": 0,
+      "top1_accuracy": 1.0
+    }
+  ],
+  "sample_errors": []
+}

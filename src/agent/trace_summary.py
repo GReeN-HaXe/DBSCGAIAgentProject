@@ -119,6 +119,105 @@ def build_training_trace_rows(
     return rows
 
 
+def filter_human_trace_actions(
+    payload: dict[str, object],
+    *,
+    include_bookkeeping: bool = False,
+) -> list[dict[str, object]]:
+    trace = payload.get("trace", {})
+    if not isinstance(trace, dict):
+        return []
+    actions = trace.get("actions", [])
+    if not isinstance(actions, list):
+        return []
+    rows: list[dict[str, object]] = []
+    for row in actions:
+        if not isinstance(row, dict):
+            continue
+        action_type = str(row.get("action_type", ""))
+        if not include_bookkeeping and action_type in BOOKKEEPING_ACTION_TYPES:
+            continue
+        rows.append(dict(row))
+    return rows
+
+
+def build_human_review_trace_payload(
+    payload: dict[str, object],
+    *,
+    include_bookkeeping: bool = False,
+) -> dict[str, object]:
+    trace = payload.get("trace", {})
+    if not isinstance(trace, dict):
+        trace = {}
+    filtered = filter_human_trace_actions(payload, include_bookkeeping=include_bookkeeping)
+    decision_trace: list[dict[str, object]] = []
+    for index, row in enumerate(filtered, start=1):
+        decision_trace.append(
+            {
+                "step_index": index,
+                "actor_player_id": row.get("player_id"),
+                "actor_kind": row.get("actor_kind", "unknown"),
+                "turn_number": row.get("turn_number"),
+                "phase": row.get("phase", ""),
+                "chosen_action_type": row.get("action_type", ""),
+                "chosen_action_text": row.get("action", ""),
+                "state_snapshot": row.get("state_snapshot", {}),
+            }
+        )
+    return {
+        "schema_version": "human_match_review_trace.v1",
+        "source_schema_version": trace.get("schema_version", payload.get("schema_version", "human_trace")),
+        "total_actions": trace.get("total_actions"),
+        "winner_id": trace.get("winner_id"),
+        "stop_reason": trace.get("stop_reason", ""),
+        "turn_number": trace.get("final_turn_number"),
+        "active_player": None,
+        "phase": trace.get("final_phase", ""),
+        "human_player_id": trace.get("human_player_id"),
+        "setup": trace.get("setup", {}),
+        "final_state_snapshot": trace.get("final_state_snapshot"),
+        "include_bookkeeping": bool(include_bookkeeping),
+        "filtered_action_types": sorted(BOOKKEEPING_ACTION_TYPES) if not include_bookkeeping else [],
+        "decision_count": len(decision_trace),
+        "decision_trace": decision_trace,
+    }
+
+
+def build_human_training_trace_rows(
+    payload: dict[str, object],
+    *,
+    include_bookkeeping: bool = False,
+) -> list[dict[str, object]]:
+    trace = payload.get("trace", {})
+    if not isinstance(trace, dict):
+        trace = {}
+    rows: list[dict[str, object]] = []
+    filtered = filter_human_trace_actions(payload, include_bookkeeping=include_bookkeeping)
+    for index, row in enumerate(filtered, start=1):
+        action_type = row.get("action_type", "")
+        action_text = row.get("action", "")
+        rows.append(
+            {
+                "schema_version": "human_match_training_row.v1",
+                "step_index": index,
+                "actor_player_id": row.get("player_id"),
+                "actor_kind": row.get("actor_kind", "unknown"),
+                "turn_number": row.get("turn_number"),
+                "phase": row.get("phase", ""),
+                "chosen_action_type": action_type,
+                "chosen_action_text": action_text,
+                "action_signature": derive_action_signature(action_type, action_text),
+                "winner_id": trace.get("winner_id"),
+                "stop_reason": trace.get("stop_reason", ""),
+                "final_turn_number": trace.get("final_turn_number"),
+                "human_player_id": trace.get("human_player_id"),
+                "state_snapshot": row.get("state_snapshot", {}),
+                "post_action_state_snapshot": row.get("post_action_state_snapshot"),
+            }
+        )
+    return rows
+
+
 def summarize_trace(payload: dict[str, object]) -> dict[str, object]:
     decision_trace = payload.get("decision_trace", [])
     if not isinstance(decision_trace, list):

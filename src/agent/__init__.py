@@ -248,52 +248,102 @@ from src.agent.phase15_runtime import (
     query_phase15_production,
     resolve_phase15_production_paths,
 )
-from src.agent.phase16_cnn import (
-    PHASE16_EVAL_SCHEMA_VERSION,
-    PHASE16_MODEL_SCHEMA_VERSION,
-    PHASE16_RETRIEVAL_SCHEMA_VERSION,
-    evaluate_phase16_cnn_retrieval,
-    train_phase16_cnn_model,
-)
-from src.agent.phase17_backbone import (
-    PHASE17_MODEL_SCHEMA_VERSION,
-    PHASE17_RETRIEVAL_SCHEMA_VERSION,
-    evaluate_phase17_resnet18_retrieval,
-    has_torchvision_support,
-    train_phase17_resnet18_model,
-)
-from src.agent.phase18_metric_backbone import (
-    PHASE18_COMPARE_SCHEMA_VERSION,
-    PHASE18_MODEL_SCHEMA_VERSION,
-    PHASE18_RETRIEVAL_SCHEMA_VERSION,
-    compare_phase18_vs_phase17_retrieval,
-    evaluate_phase18_resnet18_triplet_retrieval,
-    train_phase18_resnet18_triplet_model,
-)
-from src.agent.phase19_backbone import (
-    PHASE19_COMPARE_SCHEMA_VERSION,
-    PHASE19_MODEL_SCHEMA_VERSION,
-    PHASE19_RETRIEVAL_SCHEMA_VERSION,
-    compare_phase19_vs_phase17_retrieval,
-    evaluate_phase19_resnet50_retrieval,
-    train_phase19_resnet50_model,
-)
-from src.agent.phase20_hybrid_backbone import (
-    PHASE20_COMPARE_SCHEMA_VERSION,
-    PHASE20_MODEL_SCHEMA_VERSION,
-    PHASE20_RETRIEVAL_SCHEMA_VERSION,
-    compare_phase20_vs_phase17_retrieval,
-    evaluate_phase20_resnet18_hybrid_retrieval,
-    train_phase20_resnet18_hybrid_model,
-)
-from src.agent.phase21_backbone import (
-    PHASE21_COMPARE_SCHEMA_VERSION,
-    PHASE21_MODEL_SCHEMA_VERSION,
-    PHASE21_RETRIEVAL_SCHEMA_VERSION,
-    compare_phase21_vs_phase17_retrieval,
-    evaluate_phase21_efficientnet_b0_retrieval,
-    train_phase21_efficientnet_b0_model,
-)
+
+
+def _missing_optional_vision_dependency(*_args, **_kwargs):
+    raise RuntimeError(
+        "Optional vision/backbone dependencies are not installed. "
+        "Install requirements-dev.txt and, if needed, requirements-torch.txt."
+    )
+
+
+try:
+    from src.agent.phase16_cnn import (
+        PHASE16_EVAL_SCHEMA_VERSION,
+        PHASE16_MODEL_SCHEMA_VERSION,
+        PHASE16_RETRIEVAL_SCHEMA_VERSION,
+        evaluate_phase16_cnn_retrieval,
+        train_phase16_cnn_model,
+    )
+    from src.agent.phase17_backbone import (
+        PHASE17_MODEL_SCHEMA_VERSION,
+        PHASE17_RETRIEVAL_SCHEMA_VERSION,
+        evaluate_phase17_resnet18_retrieval,
+        has_torchvision_support,
+        train_phase17_resnet18_model,
+    )
+    from src.agent.phase18_metric_backbone import (
+        PHASE18_COMPARE_SCHEMA_VERSION,
+        PHASE18_MODEL_SCHEMA_VERSION,
+        PHASE18_RETRIEVAL_SCHEMA_VERSION,
+        compare_phase18_vs_phase17_retrieval,
+        evaluate_phase18_resnet18_triplet_retrieval,
+        train_phase18_resnet18_triplet_model,
+    )
+    from src.agent.phase19_backbone import (
+        PHASE19_COMPARE_SCHEMA_VERSION,
+        PHASE19_MODEL_SCHEMA_VERSION,
+        PHASE19_RETRIEVAL_SCHEMA_VERSION,
+        compare_phase19_vs_phase17_retrieval,
+        evaluate_phase19_resnet50_retrieval,
+        train_phase19_resnet50_model,
+    )
+    from src.agent.phase20_hybrid_backbone import (
+        PHASE20_COMPARE_SCHEMA_VERSION,
+        PHASE20_MODEL_SCHEMA_VERSION,
+        PHASE20_RETRIEVAL_SCHEMA_VERSION,
+        compare_phase20_vs_phase17_retrieval,
+        evaluate_phase20_resnet18_hybrid_retrieval,
+        train_phase20_resnet18_hybrid_model,
+    )
+    from src.agent.phase21_backbone import (
+        PHASE21_COMPARE_SCHEMA_VERSION,
+        PHASE21_MODEL_SCHEMA_VERSION,
+        PHASE21_RETRIEVAL_SCHEMA_VERSION,
+        compare_phase21_vs_phase17_retrieval,
+        evaluate_phase21_efficientnet_b0_retrieval,
+        train_phase21_efficientnet_b0_model,
+    )
+except ModuleNotFoundError:
+    PHASE16_MODEL_SCHEMA_VERSION = None
+    PHASE16_EVAL_SCHEMA_VERSION = None
+    PHASE16_RETRIEVAL_SCHEMA_VERSION = None
+    train_phase16_cnn_model = _missing_optional_vision_dependency
+    evaluate_phase16_cnn_retrieval = _missing_optional_vision_dependency
+
+    PHASE17_MODEL_SCHEMA_VERSION = None
+    PHASE17_RETRIEVAL_SCHEMA_VERSION = None
+    train_phase17_resnet18_model = _missing_optional_vision_dependency
+    evaluate_phase17_resnet18_retrieval = _missing_optional_vision_dependency
+    has_torchvision_support = lambda: False
+
+    PHASE18_MODEL_SCHEMA_VERSION = None
+    PHASE18_RETRIEVAL_SCHEMA_VERSION = None
+    PHASE18_COMPARE_SCHEMA_VERSION = None
+    train_phase18_resnet18_triplet_model = _missing_optional_vision_dependency
+    evaluate_phase18_resnet18_triplet_retrieval = _missing_optional_vision_dependency
+    compare_phase18_vs_phase17_retrieval = _missing_optional_vision_dependency
+
+    PHASE19_MODEL_SCHEMA_VERSION = None
+    PHASE19_RETRIEVAL_SCHEMA_VERSION = None
+    PHASE19_COMPARE_SCHEMA_VERSION = None
+    train_phase19_resnet50_model = _missing_optional_vision_dependency
+    evaluate_phase19_resnet50_retrieval = _missing_optional_vision_dependency
+    compare_phase19_vs_phase17_retrieval = _missing_optional_vision_dependency
+
+    PHASE20_MODEL_SCHEMA_VERSION = None
+    PHASE20_RETRIEVAL_SCHEMA_VERSION = None
+    PHASE20_COMPARE_SCHEMA_VERSION = None
+    train_phase20_resnet18_hybrid_model = _missing_optional_vision_dependency
+    evaluate_phase20_resnet18_hybrid_retrieval = _missing_optional_vision_dependency
+    compare_phase20_vs_phase17_retrieval = _missing_optional_vision_dependency
+
+    PHASE21_MODEL_SCHEMA_VERSION = None
+    PHASE21_RETRIEVAL_SCHEMA_VERSION = None
+    PHASE21_COMPARE_SCHEMA_VERSION = None
+    train_phase21_efficientnet_b0_model = _missing_optional_vision_dependency
+    evaluate_phase21_efficientnet_b0_retrieval = _missing_optional_vision_dependency
+    compare_phase21_vs_phase17_retrieval = _missing_optional_vision_dependency
 from src.agent.phase22_state_encoder import (
     PHASE22_COMPARE_SCHEMA_VERSION,
     PHASE22_DISTRIBUTION_SCHEMA_VERSION,

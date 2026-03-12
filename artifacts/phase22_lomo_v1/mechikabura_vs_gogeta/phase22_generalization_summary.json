@@ -1,0 +1,12 @@
+{
+  "schema_version": "phase22.generalization.v1",
+  "train_dataset": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\phase22_lomo_train.json",
+  "eval_datasets": [
+    "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\mechikabura_vs_gogeta.json"
+  ],
+  "target_field": "decision_class",
+  "pipeline_manifest": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\pipeline\\phase22_manifest.json",
+  "best_config": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\phase22_best_config.json",
+  "production_summary": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\production\\phase22_production_summary.json",
+  "batch_eval": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_lomo_v1\\mechikabura_vs_gogeta\\phase22_generalization_batch_eval.json"
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "phase22.benchmark_dataset_summary.v1",
+  "group_name": "group_a",
+  "pattern": "C:/Users/PC/Desktop/dbsAIAgent/.pytest_tmp_run_phase22_verify/test_build_phase22_benchmark_b0/normalized/match_a_*_review.json",
+  "input_count": 2,
+  "included_count": 2,
+  "skipped_count": 0,
+  "included_traces": [
+    {
+      "path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\.pytest_tmp_run_phase22_verify\\test_build_phase22_benchmark_b0\\normalized\\match_a_001_review.json",
+      "action_count": 3,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\.pytest_tmp_run_phase22_verify\\test_build_phase22_benchmark_b0\\normalized\\match_a_002_review.json",
+      "action_count": 3,
+      "unique_action_type_count": 3,
+      "top_action_types": [
+        {
+          "action_type": "charge_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 1
+        },
+        {
+          "action_type": "end_turn",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "skipped_traces": [],
+  "dataset_example_count": 6,
+  "dataset_split_counts": {
+    "train": 4,
+    "validation": 2
+  }
+}

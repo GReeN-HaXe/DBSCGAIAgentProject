@@ -1,0 +1,15 @@
+{
+  "trace": {
+    "total_actions": 3,
+    "winner_id": 1,
+    "final_turn_number": 2,
+    "final_phase": "main",
+    "human_player_id": 1,
+    "setup": {"mode": "fresh", "deck_source": "db_sample"},
+    "actions": [
+      {"timestamp_utc": "2026-01-01T00:00:00Z", "actor_kind": "human", "player_id": 1, "turn_number": 1, "phase": "charge", "action": "charge_from_hand", "action_type": "charge_from_hand", "state_snapshot": {"active_player": 1, "turn_number": 1, "phase": "charge", "battle_step": "", "counter_window_kind": "", "players": {"1": {"hand_size": 6, "life_size": 8, "energy_size": 0, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0}, "2": {"hand_size": 6, "life_size": 8, "energy_size": 0, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0}}}},
+      {"timestamp_utc": "2026-01-01T00:00:01Z", "actor_kind": "human", "player_id": 1, "turn_number": 1, "phase": "main", "action": "play_card_from_hand", "action_type": "play_card_from_hand", "state_snapshot": {"active_player": 1, "turn_number": 1, "phase": "main", "battle_step": "", "counter_window_kind": "", "players": {"1": {"hand_size": 5, "life_size": 8, "energy_size": 1, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0}, "2": {"hand_size": 6, "life_size": 8, "energy_size": 0, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0}}}},
+      {"timestamp_utc": "2026-01-01T00:00:02Z", "actor_kind": "ai", "player_id": 2, "turn_number": 2, "phase": "main", "action": "declare_attack attacker_zone=leader target_zone=leader target_player=1", "action_type": "declare_attack", "state_snapshot": {"active_player": 2, "turn_number": 2, "phase": "main", "battle_step": "", "counter_window_kind": "", "players": {"1": {"hand_size": 5, "life_size": 8, "energy_size": 1, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0}, "2": {"hand_size": 6, "life_size": 8, "energy_size": 1, "energy_resting_count": 0, "battle_size": 0, "unison_size": 0, "drop_size": 0, "warp_size": 0}}}}
+    ]
+  }
+}

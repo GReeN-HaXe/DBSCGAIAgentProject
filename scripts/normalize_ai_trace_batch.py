@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 from pathlib import Path
 import sys
@@ -57,7 +58,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    candidates = [path for path in sorted(ROOT.glob(args.input_glob)) if _is_raw_trace_candidate(path)]
+    candidates = [Path(match) for match in sorted(glob.glob(args.input_glob)) if _is_raw_trace_candidate(Path(match))]
     outputs: list[dict[str, object]] = []
     for source_path in candidates:
         payload = json.loads(source_path.read_text(encoding="utf-8"))
