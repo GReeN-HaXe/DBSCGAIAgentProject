@@ -209,6 +209,8 @@ class HeuristicPolicy(AgentPolicy):
                 if source.card_type == "UNISON" and getattr(source, "markers", 0) > 0:
                     score += 6.0
             return score, "activate_skill"
+        if action.action_type == ActionType.AWAKEN:
+            return w.activate_skill + 25.0, "awaken_leader"
         if action.action_type == ActionType.COMBO_FROM_HAND:
             return w.combo, "combo_from_hand"
         if action.action_type == ActionType.END_TURN:

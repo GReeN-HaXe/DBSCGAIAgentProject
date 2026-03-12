@@ -352,6 +352,62 @@ def test_activate_main_pays_skill_cost_via_callback() -> None:
     assert calls == [(710031, "activate_main")]
 
 
+def test_activate_main_limit_one_is_not_legal_twice_in_same_turn() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(
+            instance_id=710032,
+            card_id=32,
+            owner_id=1,
+            has_activate_main=True,
+            activate_limit_once_per_turn=True,
+            skill_text_raw="[Activate: Main][Limit 1] Draw 1 card.",
+            energy_cost=0,
+            card_type="BATTLE",
+        )
+    )
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ACTIVATE_MAIN_SKILL)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    legal = engine.get_legal_actions(state, 1)
+    assert all(
+        not (
+            a.action_type == ActionType.ACTIVATE_MAIN_SKILL
+            and a.source_zone == "battle"
+            and a.source_index == 0
+        )
+        for a in legal
+    )
+
+
+def test_activate_main_without_registered_effect_emits_diagnostic_checkpoint() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(
+            instance_id=710033,
+            card_id=33,
+            owner_id=1,
+            has_activate_main=True,
+            energy_cost=0,
+            card_type="BATTLE",
+            skill_text_raw="[Activate: Main] Do something unsupported.",
+        )
+    )
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ACTIVATE_MAIN_SKILL)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(cp.name == "skill_activation_no_registered_effect" for cp in state.checkpoints)
+    assert any("Unsupported skill activation" in line for line in state.log)
+
+
 def test_extra_activation_fails_when_skill_cost_unpayable() -> None:
     def can_pay(_player, _card, context):
         return context != "activate_extra_from_hand"

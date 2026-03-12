@@ -9,6 +9,7 @@ class ActionType(str, Enum):
     CHARGE_FROM_HAND = "charge_from_hand"
     END_CHARGE = "end_charge"
     PLAY_CARD_FROM_HAND = "play_card_from_hand"
+    AWAKEN = "awaken"
     ACTIVATE_MAIN_SKILL = "activate_main_skill"
     ACTIVATE_BATTLE_SKILL = "activate_battle_skill"
     COMBO_FROM_HAND = "combo_from_hand"
