@@ -27,6 +27,7 @@ from src.agent import (
     validate_deck_legality,
 )
 from src.agent.deck_setup import (
+    import_deckplanet_deck_text,
     load_sample_game_setup_from_db,
     read_card_ids_file,
     validate_leader_and_deck,
@@ -428,10 +429,39 @@ def _selected_action_footer_lines(
     compact = _compact_action_text(action, state=session.state, repo=repo)
     hints = _action_hints(session, action, repo=repo)
     hint_text = " ".join(hints) if hints else "-"
-    return [
+    lines = [
         _style(f"Selected: {_truncate(compact, 110)}", "1;36", use_color=use_color),
         f"Recommendation: score={score:.2f} | reason={reason} | hints={hint_text}",
     ]
+    player = session.state.players.get(int(action.player_id))
+    if (
+        player is not None
+        and action.hand_index is not None
+        and 0 <= int(action.hand_index) < len(player.hand)
+    ):
+        card = player.hand[int(action.hand_index)]
+        lines.append(f"Card: {_card_row(repo, card.card_id)}")
+        skill = _card_detail_text(repo, card.card_id).splitlines()
+        if skill:
+            for line in skill:
+                if line.startswith("Skill: "):
+                    lines.append(_truncate(line, 120))
+                    break
+    return lines
+
+
+def _linked_hand_index(session: HumanVsAiSession, legal: list[object], action_selected: int, fallback: int) -> int:
+    if 0 <= action_selected < len(legal):
+        action = legal[action_selected]
+        player = session.state.players.get(int(action.player_id))
+        if (
+            player is not None
+            and int(action.player_id) == int(session.human_player_id)
+            and action.hand_index is not None
+            and 0 <= int(action.hand_index) < len(player.hand)
+        ):
+            return int(action.hand_index)
+    return fallback
 
 
 def _show_board_entry_detail(
@@ -486,8 +516,9 @@ def _render_tui_layout(
     board_width = max(44, total_width // 3)
     action_width = max(54, total_width - hand_width - board_width - 4)
     board_entries = _board_entries(session, repo=repo)
-    hand_lines = _hand_panel_lines(session, repo=repo, selected=hand_selected)
-    hand_lines = [hand_lines[0], *(_windowed_lines(hand_lines[1:], selected=hand_selected, body_height=panel_body_height - 1))]
+    effective_hand_selected = _linked_hand_index(session, legal, action_selected, hand_selected)
+    hand_lines = _hand_panel_lines(session, repo=repo, selected=effective_hand_selected)
+    hand_lines = [hand_lines[0], *(_windowed_lines(hand_lines[1:], selected=effective_hand_selected, body_height=panel_body_height - 1))]
     action_lines = _action_panel_lines(session, repo=repo, use_color=use_color, legal=legal, selected=action_selected)
     action_lines = [action_lines[0], *(_windowed_lines(action_lines[1:], selected=action_selected, body_height=panel_body_height - 1))]
     board_lines = _board_panel_lines(board_entries, selected=board_selected)
@@ -511,7 +542,7 @@ def _render_tui_layout(
     footer = [
         _focus_status_line(
             focus=focus,
-            hand_selected=hand_selected,
+            hand_selected=effective_hand_selected,
             hand_count=len(session.state.players[int(session.human_player_id)].hand),
             action_selected=action_selected,
             action_count=len(legal),
@@ -580,6 +611,14 @@ def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) ->
         return "End turn"
     if action_type == "pass_counter_window":
         return "Pass counter window"
+    if action_type == "charge_from_hand":
+        if action.hand_index is not None:
+            player = state.players.get(action.player_id)
+            if player is not None and 0 <= action.hand_index < len(player.hand):
+                label = _card_brief_label(repo, player.hand[action.hand_index].card_id)
+                return f"Charge [{action.hand_index}] {label}"
+            return f"Charge [{action.hand_index}]"
+        return "Charge energy"
     if action.hand_index is not None:
         player = state.players.get(action.player_id)
         if player is not None and 0 <= action.hand_index < len(player.hand):
@@ -936,6 +975,14 @@ def _revealed_hand_players(*, human_player: int, reveal_ai_hand: bool, reveal_al
     return (int(human_player),)
 
 
+def _using_real_deck_source(args: argparse.Namespace) -> bool:
+    if args.use_db_sample_decks:
+        return True
+    if args.p1_deckplanet_file is not None and args.p2_deckplanet_file is not None:
+        return True
+    return all(x is not None for x in [args.p1_leader_id, args.p2_leader_id, args.p1_deck_file, args.p2_deck_file])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Play DBS card game against heuristic AI in terminal.")
     parser.add_argument("--human-player", type=int, choices=[1, 2], default=1, help="Human player id (1 or 2).")
@@ -950,6 +997,8 @@ def main() -> None:
     parser.add_argument("--p2-leader-id", type=int, default=None, help="Optional explicit P2 leader card id.")
     parser.add_argument("--p1-deck-file", type=Path, default=None, help="Optional P1 deck id file (comma/newline separated ids).")
     parser.add_argument("--p2-deck-file", type=Path, default=None, help="Optional P2 deck id file (comma/newline separated ids).")
+    parser.add_argument("--p1-deckplanet-file", type=Path, default=None, help="Optional DeckPlanet text export for player 1.")
+    parser.add_argument("--p2-deckplanet-file", type=Path, default=None, help="Optional DeckPlanet text export for player 2.")
     parser.add_argument(
         "--use-db-sample-decks",
         action="store_true",
@@ -1053,6 +1102,27 @@ def main() -> None:
             if not args.db_path.exists():
                 raise ValueError("--use-db-sample-decks requires --db-path to exist.")
             p1_leader, p1_deck, p2_leader, p2_deck = load_sample_game_setup_from_db(args.db_path, deck_size=60)
+        elif args.p1_deckplanet_file is not None and args.p2_deckplanet_file is not None:
+            if not args.db_path.exists():
+                raise ValueError("DeckPlanet import requires --db-path to exist.")
+            p1_payload = import_deckplanet_deck_text(
+                db_path=args.db_path,
+                raw=args.p1_deckplanet_file.read_text(encoding="utf-8"),
+            )
+            p2_payload = import_deckplanet_deck_text(
+                db_path=args.db_path,
+                raw=args.p2_deckplanet_file.read_text(encoding="utf-8"),
+            )
+            if p1_payload["unresolved_card_numbers"] or p2_payload["unresolved_card_numbers"]:
+                raise ValueError(
+                    "DeckPlanet import has unresolved card numbers: "
+                    f"p1={p1_payload['unresolved_card_numbers'][:10]} "
+                    f"p2={p2_payload['unresolved_card_numbers'][:10]}"
+                )
+            p1_leader = int(p1_payload["leader_id"])
+            p2_leader = int(p2_payload["leader_id"])
+            p1_deck = list(p1_payload["deck_ids"])
+            p2_deck = list(p2_payload["deck_ids"])
         elif all(x is not None for x in [args.p1_leader_id, args.p2_leader_id, args.p1_deck_file, args.p2_deck_file]):
             p1_leader = int(args.p1_leader_id)
             p2_leader = int(args.p2_leader_id)
@@ -1062,11 +1132,11 @@ def main() -> None:
                 raise ValueError("Deck validation requires --db-path to exist.")
             validate_leader_and_deck(db_path=args.db_path, leader_id=p1_leader, deck_ids=p1_deck, expected_deck_size=60)
             validate_leader_and_deck(db_path=args.db_path, leader_id=p2_leader, deck_ids=p2_deck, expected_deck_size=60)
-            if repo is not None:
-                validate_deck_legality(repo=repo, leader_id=p1_leader, deck_ids=p1_deck, expected_deck_size=60)
-                validate_deck_legality(repo=repo, leader_id=p2_leader, deck_ids=p2_deck, expected_deck_size=60)
         else:
             p1_leader, p1_deck, p2_leader, p2_deck = 1, _build_deck(1000), 2, _build_deck(2000)
+        if repo is not None and _using_real_deck_source(args):
+            validate_deck_legality(repo=repo, leader_id=p1_leader, deck_ids=p1_deck, expected_deck_size=60)
+            validate_deck_legality(repo=repo, leader_id=p2_leader, deck_ids=p2_deck, expected_deck_size=60)
         setup_meta = {
             "mode": "fresh",
             "first_player": int(args.first_player),
@@ -1079,7 +1149,11 @@ def main() -> None:
             "deck_source": (
                 "db_sample"
                 if args.use_db_sample_decks
-                else ("deck_files" if all(x is not None for x in [args.p1_leader_id, args.p2_leader_id, args.p1_deck_file, args.p2_deck_file]) else "synthetic")
+                else (
+                    "deckplanet"
+                    if args.p1_deckplanet_file is not None and args.p2_deckplanet_file is not None
+                    else ("deck_files" if all(x is not None for x in [args.p1_leader_id, args.p2_leader_id, args.p1_deck_file, args.p2_deck_file]) else "synthetic")
+                )
             ),
         }
 

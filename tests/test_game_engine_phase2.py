@@ -352,6 +352,71 @@ def test_engine_uses_repository_power_for_leader_and_drawn_cards() -> None:
     assert state.players[1].hand[1].has_barrier is True
 
 
+def test_leader_awaken_is_legal_at_four_life_and_flips_to_back_side() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 1:
+                return SimpleNamespace(
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="Red",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=("Awaken",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=True,
+                    has_draw=True,
+                    max_draw=1,
+                    has_barrier=False,
+                    card_skill_unstyled="[Auto] When this card attacks, draw 1 card.<br>[Awaken] When your life is at 4 or less: You may draw 2 cards, and flip this card over.",
+                    card_back_name="Awakened Leader",
+                    card_back_power=15000,
+                    card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.<br>[Activate: Main][Once per turn] This card gets +5000 power for the turn.",
+                )
+            return SimpleNamespace(
+                power_int=15000,
+                card_type="LEADER",
+                card_color="Blue",
+                energy_cost_int=0,
+                combo_cost_int=0,
+                combo_power_int=0,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                has_barrier=False,
+                card_skill_unstyled="",
+                card_back_skill_unstyled="",
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000, 40),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000, 40),
+        shuffle_decks=False,
+    )
+    state.players[1].life = state.players[1].life[:4]
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+    legal = engine.get_legal_actions(state, 1)
+    assert any(action.action_type == ActionType.AWAKEN for action in legal)
+    awakened = engine.apply_action(state, next(action for action in legal if action.action_type == ActionType.AWAKEN))
+    leader = awakened.players[1].leader_area
+    assert leader.awakened is True
+    assert leader.power == 15000
+    assert leader.has_activate_main is True
+    assert len(awakened.players[1].life) == 4
+    assert any(cp.name == "leader_awakened" for cp in awakened.checkpoints)
+
+
 def test_engine_power_falls_back_when_repo_missing_id() -> None:
     class EmptyRepo:
         def get_by_id(self, card_id: int, source_table: str = "cards"):

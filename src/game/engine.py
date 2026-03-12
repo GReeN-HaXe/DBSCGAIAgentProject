@@ -61,6 +61,9 @@ class CardRuntimeData:
     has_barrier: bool = False
     z_energy_cost: int | None = None
     specified_costs: tuple[tuple[str, int], ...] = ()
+    skill_text_raw: str | None = None
+    has_awaken: bool = False
+    activate_limit_once_per_turn: bool = False
 
 
 class RulesEngine:
@@ -78,7 +81,7 @@ class RulesEngine:
         effect_multi_target_chooser: Any | None = None,
     ) -> None:
         self._card_repository = card_repository
-        self._card_cache: dict[int, CardRuntimeData] = {}
+        self._card_cache: dict[tuple[int, str], CardRuntimeData] = {}
         # Signature: chooser(player_state, damage_index:int, max_index:int) -> selected_index:int
         self._life_card_chooser = life_card_chooser
         # Signature: can_pay(player_state, card_instance, context:str) -> bool
@@ -236,6 +239,8 @@ class RulesEngine:
 
         if state.phase == TurnPhase.MAIN:
             actions = [Action(action_type=ActionType.END_TURN, player_id=player_id)]
+            if self._can_awaken_leader(state, player_id):
+                actions.append(Action(action_type=ActionType.AWAKEN, player_id=player_id, source_zone="leader"))
             actions.extend(self._legal_play_actions(state, player_id))
             actions.extend(self._legal_activate_main_actions(state, player_id))
             actions.extend(self._legal_attack_actions(state, player_id))
@@ -266,6 +271,10 @@ class RulesEngine:
             return ns
         if action.action_type == ActionType.PLAY_CARD_FROM_HAND:
             self._declare_play_card_from_hand(ns, action)
+            self._after_action(ns)
+            return ns
+        if action.action_type == ActionType.AWAKEN:
+            self._awaken_leader(ns, action.player_id)
             self._after_action(ns)
             return ns
         if action.action_type == ActionType.ACTIVATE_MAIN_SKILL:
@@ -364,6 +373,7 @@ class RulesEngine:
             return
         state.phase = TurnPhase.CHARGE
         self._reset_once_per_turn_effect_counters(state, player_id=state.active_player)
+        state.activate_skill_usage = {entry for entry in state.activate_skill_usage if entry[0] != state.active_player}
         self._emit_effect_event(state, name="turn_start", actor_player_id=state.active_player, payload={})
         self._checkpoint(state, "charge_phase_begin")
         player = state.players[state.active_player]
@@ -403,6 +413,37 @@ class RulesEngine:
             return
         state.winner_id = self._opponent_of(losers[0])
 
+    def _can_awaken_leader(self, state: GameState, player_id: int) -> bool:
+        player = state.players[player_id]
+        leader = player.leader_area
+        if leader.awakened or not leader.has_awaken:
+            return False
+        if len(player.life) <= 4:
+            return True
+        return any(
+            unison.color == leader.color and sum(count for _code, count in unison.specified_costs) >= 3
+            for unison in player.unison_area
+        )
+
+    def _awaken_leader(self, state: GameState, player_id: int) -> None:
+        player = state.players[player_id]
+        leader = player.leader_area
+        if not self._can_awaken_leader(state, player_id):
+            raise RulesViolation("Leader cannot awaken now.")
+        for _ in range(2):
+            self._draw_one(state, player_id)
+        while len(player.life) > 6:
+            player.hand.append(player.life.pop(0))
+        self._apply_leader_back_side(leader)
+        self._register_card_effects(state, player_id=player_id, source_zone="leader", card=leader)
+        self._emit_effect_event(
+            state,
+            name="leader_awakened",
+            actor_player_id=player_id,
+            payload={"source_instance_id": leader.instance_id, "source_card_id": leader.card_id},
+        )
+        self._checkpoint(state, "leader_awakened")
+
     def _legal_play_actions(self, state: GameState, player_id: int) -> list[Action]:
         player = state.players[player_id]
         actions: list[Action] = []
@@ -430,6 +471,7 @@ class RulesEngine:
                 required_color=player.leader_area.color,
                 specified_costs=dict(player.leader_area.specified_costs),
             )
+            and not self._is_activate_limited_this_turn(state, player_id, "main", player.leader_area)
             and self._can_pay_skill_cost(player, player.leader_area, "activate_main")
         ):
             actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="leader"))
@@ -444,6 +486,7 @@ class RulesEngine:
                     required_color=c.color,
                     specified_costs=dict(c.specified_costs),
                 )
+                and not self._is_activate_limited_this_turn(state, player_id, "main", c)
                 and self._can_pay_skill_cost(player, c, "activate_main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="battle", source_index=i))
@@ -458,6 +501,7 @@ class RulesEngine:
                     required_color=c.color,
                     specified_costs=dict(c.specified_costs),
                 )
+                and not self._is_activate_limited_this_turn(state, player_id, "main", c)
                 and self._can_pay_skill_cost(player, c, "activate_main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="unison", source_index=i))
@@ -507,6 +551,7 @@ class RulesEngine:
                 required_color=player.leader_area.color,
                 specified_costs=dict(player.leader_area.specified_costs),
             )
+            and not self._is_activate_limited_this_turn(state, player_id, "battle", player.leader_area)
             and self._can_pay_skill_cost(player, player.leader_area, "activate_battle")
         ):
             actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="leader"))
@@ -521,6 +566,7 @@ class RulesEngine:
                     required_color=c.color,
                     specified_costs=dict(c.specified_costs),
                 )
+                and not self._is_activate_limited_this_turn(state, player_id, "battle", c)
                 and self._can_pay_skill_cost(player, c, "activate_battle")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="battle", source_index=i))
@@ -535,6 +581,7 @@ class RulesEngine:
                     required_color=c.color,
                     specified_costs=dict(c.specified_costs),
                 )
+                and not self._is_activate_limited_this_turn(state, player_id, "battle", c)
                 and self._can_pay_skill_cost(player, c, "activate_battle")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="unison", source_index=i))
@@ -693,6 +740,8 @@ class RulesEngine:
             raise RulesViolation("No Activate: Battle.")
         if not self._is_valid_skill_source_area(source, action.source_zone):
             raise RulesViolation("Skill source is in an invalid area for its card type.")
+        if self._is_activate_limited_this_turn(state, action.player_id, source_kind, source):
+            raise RulesViolation("Activate skill limit already used this turn.")
         if not self._can_pay_skill_cost(player, source, f"activate_{source_kind}"):
             raise RulesViolation("Cannot pay skill cost.")
         self._pay_energy_cost(
@@ -718,6 +767,15 @@ class RulesEngine:
             ),
         )
         self._checkpoint(state, f"counter_timing_activate_{source_kind}")
+
+    @staticmethod
+    def _activate_usage_key(player_id: int, source_kind: str, source: CardInstance) -> tuple[int, str, int]:
+        return (player_id, f"activate_{source_kind}", int(source.card_id))
+
+    def _is_activate_limited_this_turn(self, state: GameState, player_id: int, source_kind: str, source: CardInstance) -> bool:
+        if not source.activate_limit_once_per_turn:
+            return False
+        return self._activate_usage_key(player_id, source_kind, source) in state.activate_skill_usage
 
     def _combo_from_hand(self, state: GameState, action: Action) -> None:
         ctx = state.attack_context
@@ -936,6 +994,13 @@ class RulesEngine:
             if negated:
                 self._checkpoint(state, "skill_activation_negated")
                 return
+            source_zone = str(pending.payload.get("source_zone") or "")
+            source_index_raw = pending.payload.get("source_index")
+            source_index = None if source_index_raw in {None, -1} else int(source_index_raw)
+            source = self._resolve_zone_card(state, player_id=pending.actor_player_id, zone=source_zone, index=source_index)
+            if source is not None and source.activate_limit_once_per_turn:
+                source_kind = "main" if pending.action_type == "activate_main" else "battle"
+                state.activate_skill_usage.add(self._activate_usage_key(pending.actor_player_id, source_kind, source))
             self._emit_effect_event(
                 state,
                 name="skill_activated",
@@ -948,6 +1013,17 @@ class RulesEngine:
                     "skill_kind": pending.action_type,
                 },
             )
+            source_instance_id = int(pending.payload.get("source_instance_id") or -1)
+            matching_registered_effect = any(
+                reg.source_instance_id == source_instance_id
+                and reg.trigger == ("self_activate_main" if pending.action_type == "activate_main" else "self_activate_battle")
+                for reg in state.effect_registry
+            )
+            if not matching_registered_effect:
+                state.log.append(
+                    f"Unsupported skill activation: source_card_id={int(pending.payload.get('source_card_id') or -1)} kind={pending.action_type}"
+                )
+                self._checkpoint(state, "skill_activation_no_registered_effect")
             self._checkpoint(state, "skill_activation_resolved")
             return
         raise RulesViolation(f"Unknown pending action type: {pending.action_type}")
@@ -2876,49 +2952,93 @@ class RulesEngine:
             has_barrier=runtime.has_barrier,
             z_energy_cost=runtime.z_energy_cost,
             specified_costs=runtime.specified_costs,
+            skill_text_raw=runtime.skill_text_raw,
+            has_awaken=runtime.has_awaken,
+            activate_limit_once_per_turn=runtime.activate_limit_once_per_turn,
         )
 
-    def _resolve_card_runtime_data(self, card_id: int) -> CardRuntimeData:
-        if card_id in self._card_cache:
-            return self._card_cache[card_id]
+    def _resolve_card_runtime_data(self, card_id: int, *, side: str = "front") -> CardRuntimeData:
+        cache_key = (card_id, side)
+        if cache_key in self._card_cache:
+            return self._card_cache[cache_key]
         runtime = CardRuntimeData()
         if self._card_repository is not None:
             try:
                 card = self._card_repository.get_by_id(card_id, source_table="cards")
-                runtime = CardRuntimeData(
-                    power=int(card.power_int) if getattr(card, "power_int", None) is not None else 15000,
-                    card_type=str(getattr(card, "card_type", None) or "BATTLE"),
-                    color=getattr(card, "card_color", None),
-                    energy_cost_raw=getattr(card, "card_energy_cost", None),
-                    energy_cost=getattr(card, "energy_cost_int", None),
-                    combo_cost=getattr(card, "combo_cost_int", None),
-                    combo_power=getattr(card, "combo_power_int", None),
-                    keywords=tuple(getattr(card, "keywords", ()) or ()),
-                    has_counter=bool(getattr(card, "has_counter", False)),
-                    counter_modes=tuple(k for k in (tuple(getattr(card, "keywords", ()) or ())) if str(k).startswith("Counter:")),
-                    has_counter_attack=bool(getattr(card, "has_counter_attack", False)),
-                    has_counter_battle_card_attack=any(
-                        str(k) == "Counter: Battle Card Attack" for k in (tuple(getattr(card, "keywords", ()) or ()))
-                    ),
-                    has_counter_play=bool(getattr(card, "has_counter_play", False)),
-                    has_counter_counter=any(str(k) == "Counter: Counter" for k in (tuple(getattr(card, "keywords", ()) or ()))),
-                    has_activate_main=bool(getattr(card, "has_activate_main", False)),
-                    has_activate_battle=bool(getattr(card, "has_activate_battle", False)),
-                    has_auto=bool(getattr(card, "has_auto", False)),
-                    has_permanent=bool(getattr(card, "has_permanent", False)),
-                    has_draw=bool(getattr(card, "has_draw", False)),
-                    max_draw=self._parse_optional_int(getattr(card, "max_draw", None)),
-                    auto_once_per_turn=self._has_once_per_turn(getattr(card, "card_skill_unstyled", None)),
-                    auto_draw_on_play=self._has_auto_draw_on_play(getattr(card, "card_skill_unstyled", None), bool(getattr(card, "has_draw", False))),
-                    auto_draw_on_attack=self._has_auto_draw_on_attack(getattr(card, "card_skill_unstyled", None), bool(getattr(card, "has_draw", False))),
-                    has_barrier=bool(getattr(card, "has_barrier", False)),
-                    z_energy_cost=self._parse_optional_int(getattr(card, "z_energy_cost", None)),
-                    specified_costs=self._parse_specified_costs(getattr(card, "card_energy_cost", None), getattr(card, "card_color", None)),
-                )
+                runtime = self._build_card_runtime_data(card, side=side)
             except Exception:
                 runtime = CardRuntimeData()
-        self._card_cache[card_id] = runtime
+        self._card_cache[cache_key] = runtime
         return runtime
+
+    def _apply_leader_back_side(self, leader: CardInstance) -> None:
+        runtime = self._resolve_card_runtime_data(leader.card_id, side="back")
+        leader.power = runtime.power
+        leader.energy_cost_raw = runtime.energy_cost_raw
+        leader.energy_cost = runtime.energy_cost
+        leader.combo_cost = runtime.combo_cost
+        leader.combo_power = runtime.combo_power
+        leader.keywords = runtime.keywords
+        leader.has_counter = runtime.has_counter
+        leader.counter_modes = runtime.counter_modes
+        leader.has_counter_attack = runtime.has_counter_attack
+        leader.has_counter_battle_card_attack = runtime.has_counter_battle_card_attack
+        leader.has_counter_play = runtime.has_counter_play
+        leader.has_counter_counter = runtime.has_counter_counter
+        leader.has_activate_main = runtime.has_activate_main
+        leader.has_activate_battle = runtime.has_activate_battle
+        leader.has_auto = runtime.has_auto
+        leader.has_permanent = runtime.has_permanent
+        leader.has_draw = runtime.has_draw
+        leader.max_draw = runtime.max_draw
+        leader.auto_once_per_turn = runtime.auto_once_per_turn
+        leader.auto_draw_on_play = runtime.auto_draw_on_play
+        leader.auto_draw_on_attack = runtime.auto_draw_on_attack
+        leader.has_barrier = runtime.has_barrier
+        leader.z_energy_cost = runtime.z_energy_cost
+        leader.specified_costs = runtime.specified_costs
+        leader.skill_text_raw = runtime.skill_text_raw
+        leader.has_awaken = False
+        leader.activate_limit_once_per_turn = runtime.activate_limit_once_per_turn
+        leader.awakened = True
+
+    def _build_card_runtime_data(self, card: Any, *, side: str) -> CardRuntimeData:
+        is_back = side == "back"
+        power_raw = getattr(card, "card_back_power", None) if is_back else getattr(card, "power_int", None)
+        skill_text = getattr(card, "card_back_skill_unstyled", None) if is_back else getattr(card, "card_skill_unstyled", None)
+        keywords = tuple(getattr(card, "keywords", ()) or ())
+        has_draw_flag = bool(getattr(card, "has_draw", False))
+        return CardRuntimeData(
+            power=int(power_raw) if power_raw is not None else 15000,
+            card_type=str(getattr(card, "card_type", None) or "BATTLE"),
+            color=getattr(card, "card_color", None),
+            energy_cost_raw=getattr(card, "card_energy_cost", None),
+            energy_cost=getattr(card, "energy_cost_int", None),
+            combo_cost=getattr(card, "combo_cost_int", None),
+            combo_power=getattr(card, "combo_power_int", None),
+            keywords=keywords,
+            has_counter=bool(getattr(card, "has_counter", False)),
+            counter_modes=tuple(k for k in keywords if str(k).startswith("Counter:")),
+            has_counter_attack=bool(getattr(card, "has_counter_attack", False)),
+            has_counter_battle_card_attack=any(str(k) == "Counter: Battle Card Attack" for k in keywords),
+            has_counter_play=bool(getattr(card, "has_counter_play", False)),
+            has_counter_counter=any(str(k) == "Counter: Counter" for k in keywords),
+            has_activate_main=bool(getattr(card, "has_activate_main", False)) if not is_back else self._text_has_activate_main(skill_text),
+            has_activate_battle=bool(getattr(card, "has_activate_battle", False)) if not is_back else self._text_has_activate_battle(skill_text),
+            has_auto=bool(getattr(card, "has_auto", False)) if not is_back else self._text_has_auto(skill_text),
+            has_permanent=bool(getattr(card, "has_permanent", False)) if not is_back else self._text_has_permanent(skill_text),
+            has_draw=has_draw_flag if not is_back else self._text_has_draw(skill_text),
+            max_draw=self._parse_optional_int(getattr(card, "max_draw", None)),
+            auto_once_per_turn=self._has_once_per_turn(skill_text),
+            auto_draw_on_play=self._has_auto_draw_on_play(skill_text, has_draw_flag if not is_back else self._text_has_draw(skill_text)),
+            auto_draw_on_attack=self._has_auto_draw_on_attack(skill_text, has_draw_flag if not is_back else self._text_has_draw(skill_text)),
+            has_barrier=bool(getattr(card, "has_barrier", False)) if not is_back else self._text_has_barrier(skill_text),
+            z_energy_cost=self._parse_optional_int(getattr(card, "z_energy_cost", None)),
+            specified_costs=self._parse_specified_costs(getattr(card, "card_energy_cost", None), getattr(card, "card_color", None)),
+            skill_text_raw=str(skill_text or "") if skill_text is not None else None,
+            has_awaken=("[Awaken]" in str(skill_text or "")) if not is_back else False,
+            activate_limit_once_per_turn=("[Limit 1]" in str(skill_text or "")) or self._has_once_per_turn(skill_text),
+        )
 
     @staticmethod
     def _parse_optional_int(value: object) -> int | None:
@@ -2928,6 +3048,30 @@ class RulesEngine:
             return value
         text = str(value).strip()
         return int(text) if text.isdigit() else None
+
+    @staticmethod
+    def _text_has_activate_main(skill_text: object) -> bool:
+        return "[Activate: Main]" in str(skill_text or "")
+
+    @staticmethod
+    def _text_has_activate_battle(skill_text: object) -> bool:
+        return "[Activate: Battle]" in str(skill_text or "")
+
+    @staticmethod
+    def _text_has_auto(skill_text: object) -> bool:
+        return "[Auto]" in str(skill_text or "")
+
+    @staticmethod
+    def _text_has_permanent(skill_text: object) -> bool:
+        return "[Permanent]" in str(skill_text or "")
+
+    @staticmethod
+    def _text_has_draw(skill_text: object) -> bool:
+        return "draw" in str(skill_text or "").lower()
+
+    @staticmethod
+    def _text_has_barrier(skill_text: object) -> bool:
+        return "[Barrier]" in str(skill_text or "")
 
     @staticmethod
     def _parse_specified_costs(raw_cost: object, fallback_color: object) -> tuple[tuple[str, int], ...]:

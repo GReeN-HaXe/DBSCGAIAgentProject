@@ -20,6 +20,8 @@ def _encode_value(value: Any) -> Any:
         return value.value
     if isinstance(value, tuple):
         return [_encode_value(v) for v in value]
+    if isinstance(value, set):
+        return [_encode_value(v) for v in sorted(value, key=repr)]
     if isinstance(value, list):
         return [_encode_value(v) for v in value]
     if isinstance(value, dict):
@@ -46,6 +48,9 @@ def _decode_value(type_hint: Any, value: Any) -> Any:
     if origin is list:
         inner = args[0] if args else Any
         return [_decode_value(inner, v) for v in value]
+    if origin is set:
+        inner = args[0] if args else Any
+        return {_decode_value(inner, v) for v in value}
     if origin is tuple:
         if len(args) == 2 and args[1] is Ellipsis:
             return tuple(_decode_value(args[0], v) for v in value)

@@ -1,0 +1,98 @@
+{
+  "winner_id": null,
+  "total_actions": 18,
+  "human_player_id": 1,
+  "ai_profile": "balanced",
+  "final_turn_number": 3,
+  "final_phase": "main",
+  "checkpoint_count": 39,
+  "checkpoint_tail": [
+    "battle_end_step",
+    "counter_timing_play",
+    "main_play_unison",
+    "rule_unison_zero_markers",
+    "counter_timing_play",
+    "main_play_unison",
+    "rule_unison_zero_markers",
+    "end_phase_begin",
+    "charge_phase_begin",
+    "charge_phase_after_untap",
+    "charge_phase_after_draw",
+    "charge_phase_charge_window",
+    "charge_phase_after_energy_placement",
+    "counter_timing_attack",
+    "battle_offense_step",
+    "battle_defense_step",
+    "battle_damage_step",
+    "damage_processing",
+    "battle_end_step",
+    "battle_combo_cleanup"
+  ],
+  "effect_resolution_count": 0,
+  "effect_unresolved_count": 0,
+  "setup": {
+    "mode": "fresh",
+    "first_player": 1,
+    "shuffle_decks": false,
+    "seed": null,
+    "p1_leader_id": 9623,
+    "p2_leader_id": 9629,
+    "p1_deck_size": 60,
+    "p2_deck_size": 60,
+    "deck_source": "deckplanet"
+  },
+  "turn_history": [
+    {
+      "turn_number": 1,
+      "action_count": 2,
+      "charges": 1,
+      "plays": 0,
+      "attacks": 0,
+      "skills": 0,
+      "end_turns": 1,
+      "actions": [
+        "1. P1 charge_from_hand hand_index=4 card=card_id=7459",
+        "2. P1 end_turn"
+      ]
+    },
+    {
+      "turn_number": 2,
+      "action_count": 9,
+      "charges": 1,
+      "plays": 2,
+      "attacks": 1,
+      "skills": 0,
+      "end_turns": 1,
+      "actions": [
+        "3. P2 charge_from_hand hand_index=4 card=card_id=9721",
+        "4. P2 declare_attack attacker_zone=leader attacker_card=card_id=9629 target_player=1 target_zone=leader target_card=card_id=9623",
+        "5. P1 declare_counter_from_hand hand_index=1 card=card_id=6",
+        "6. P2 pass_counter_window",
+        "7. P2 play_card_from_hand hand_index=4 card=card_id=9721",
+        "8. P1 pass_counter_window",
+        "9. P2 play_card_from_hand hand_index=4 card=card_id=9725",
+        "10. P1 pass_counter_window",
+        "11. P2 end_turn"
+      ]
+    },
+    {
+      "turn_number": 3,
+      "action_count": 7,
+      "charges": 1,
+      "plays": 0,
+      "attacks": 1,
+      "skills": 0,
+      "end_turns": 0,
+      "actions": [
+        "12. P1 charge_from_hand hand_index=2 card=card_id=6",
+        "13. P1 declare_attack attacker_zone=leader attacker_card=card_id=9623 target_player=2 target_zone=leader target_card=card_id=9629",
+        "14. P2 pass_counter_window",
+        "15. P1 end_offense_step",
+        "16. P2 end_defense_step",
+        "17. P1 resolve_battle",
+        "18. P1 resolve_battle"
+      ]
+    }
+  ],
+  "trace_hash": "623fc786595f4d76e0f8e61e8705677b30ed21412261aee4141f71b5d55806da"
+}

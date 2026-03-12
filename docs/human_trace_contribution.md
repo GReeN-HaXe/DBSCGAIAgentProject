@@ -1,5 +1,13 @@
 # Human Trace Contribution
 
+Planning source of truth:
+- `docs/project_planning.md`
+
+Before collecting or normalizing new traces, check:
+- current canonical production artifacts
+- current benchmark priorities
+- active blockers and TODOs
+
 This document defines the minimum workflow for contributing human-vs-AI traces to the Phase 22 benchmark pipeline.
 
 ## Goal
@@ -156,4 +164,3 @@ Human-vs-AI traces are the next benchmark step after the solved AI-vs-AI matchup
 1. different action preferences
 2. less deterministic play patterns
 3. a better signal for policy generalization
-

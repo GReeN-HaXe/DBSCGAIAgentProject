@@ -52,6 +52,10 @@ class CardInstance:
     z_energy_cost: Optional[int] = None
     markers: int = 0
     specified_costs: Tuple[Tuple[str, int], ...] = ()
+    skill_text_raw: Optional[str] = None
+    has_awaken: bool = False
+    awakened: bool = False
+    activate_limit_once_per_turn: bool = False
 
 
 @dataclass
@@ -200,3 +204,4 @@ class GameState:
     pending_effects: list[PendingEffect] = field(default_factory=list)
     effect_events: list[EffectEvent] = field(default_factory=list)
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
+    activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
