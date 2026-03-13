@@ -751,6 +751,133 @@ def test_unison_markers_equal_energy_cards_rested_not_total_cost() -> None:
     assert state.players[1].unison_area[0].markers == 1
 
 
+def test_unison_growth_adds_marker_once_per_turn_for_same_card_number() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(instance_id=700075, card_id=75, owner_id=1, card_type="UNISON", markers=2)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=700076, card_id=75, owner_id=1, card_type="UNISON"),
+        CardInstance(instance_id=700077, card_id=76, owner_id=1, card_type="UNISON"),
+    ]
+    legal = engine.get_legal_actions(state, player_id=1)
+    growth_actions = [a for a in legal if a.action_type == ActionType.UNISON_GROWTH]
+    assert len(growth_actions) == 1
+    state = engine.apply_action(state, growth_actions[0])
+    assert state.players[1].unison_area[0].markers == 3
+    assert state.players[1].unison_area[0].stacked_card_ids == (75,)
+    assert len(state.players[1].hand) == 1
+    assert all(a.action_type != ActionType.UNISON_GROWTH for a in engine.get_legal_actions(state, player_id=1))
+    assert any(cp.name == "unison_growth" for cp in state.checkpoints)
+
+
+def test_unison_marker_cost_skill_locks_after_one_resolution() -> None:
+    rules = {900101: {"activate_main": [{"kind": "remove_markers", "amount": 1}]}}
+    engine = RulesEngine(skill_cost_rules=rules)
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(
+            instance_id=700078,
+            card_id=900101,
+            owner_id=1,
+            card_type="UNISON",
+            has_activate_main=True,
+            energy_cost=0,
+            markers=3,
+        )
+    )
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, player_id=1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert 700078 in state.unison_marker_skill_usage
+    legal = engine.get_legal_actions(state, player_id=1)
+    assert all(
+        not (
+            a.action_type == ActionType.ACTIVATE_MAIN_SKILL
+            and a.source_zone == "unison"
+            and a.source_index == 0
+        )
+        for a in legal
+    )
+
+
+def test_skill_cost_dsl_add_markers_for_unison_activate_main() -> None:
+    rules = {900102: {"activate_main": [{"kind": "add_markers", "amount": 2}]}}
+    engine = RulesEngine(skill_cost_rules=rules)
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(
+            instance_id=700079,
+            card_id=900102,
+            owner_id=1,
+            card_type="UNISON",
+            has_activate_main=True,
+            energy_cost=0,
+            markers=1,
+        )
+    )
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, player_id=1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].unison_area[0].markers == 3
+
+
+def test_unison_add_marker_skill_locks_after_one_resolution() -> None:
+    rules = {900103: {"activate_main": [{"kind": "add_markers", "amount": 1}]}}
+    engine = RulesEngine(skill_cost_rules=rules)
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(
+            instance_id=700080,
+            card_id=900103,
+            owner_id=1,
+            card_type="UNISON",
+            has_activate_main=True,
+            energy_cost=0,
+            markers=1,
+        )
+    )
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, player_id=1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].unison_area[0].markers == 2
+    assert 700080 in state.unison_marker_skill_usage
+    legal = engine.get_legal_actions(state, player_id=1)
+    assert all(
+        not (
+            a.action_type == ActionType.ACTIVATE_MAIN_SKILL
+            and a.source_zone == "unison"
+            and a.source_index == 0
+        )
+        for a in legal
+    )
+
+
 def test_extra_from_hand_uses_activate_extra_counter_window() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

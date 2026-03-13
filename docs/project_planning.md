@@ -200,6 +200,50 @@ Resolved:
 - [x] implement first shortlisted family: generic `Blocker` redirection / target-change
 - [x] implement sparking super-combo family (life<=4 or `Sparking N` drop threshold)
 - [x] implement owner-leader-attack search/add-to-hand family for Krillin-style leader autos
+- [ ] upgrade `[Limit X]` enforcement to match rules text:
+  - across the same skill
+  - across cards with the same card number
+  - including `[Auto]` skills that can go pending multiple times but only resolve up to limit
+- [ ] implement full pending/checkpoint handling for `[Auto]` skills:
+  - make every trigger instance pending
+  - resolve one pending auto at a time at checkpoints
+  - allow hidden/secret-area autos to remain undeclared
+- [ ] upgrade `[Counter]` handling to match full counter-motion-chain semantics:
+  - declaring one pending counter ends the pending status of the others in that hand
+  - resolve counter motions in descending order
+  - preserve the distinction between counter timing and counter motion resolution
+- [ ] implement full Unison rules batch:
+  - playing Unison from hand with correct marker entry count
+  - replacing an existing Unison / Hidden Mode card in the Unison Area
+  - skill-based Unison play with both counter timings
+    - status: first slice complete for effect-driven play-from-hand; second `Counter: Play` timing now opens correctly
+  - on-play triggers entering pending correctly
+    - status: first slice complete where effect-driven Unison play now reuses normal `card_played` resolution
+- [x] implement first Unison rules slice:
+  - explicit `Unison Growth` action
+  - once-per-turn growth lockout
+  - per-turn lockout for marker-cost Unison skills after one resolution
+- [ ] implement Unison growth:
+  - once per turn
+  - same card number under existing Unison
+  - marker increase after growth
+- [ ] implement marker-skill-cost (`[X]`) rules for Unisons:
+  - status: first slice complete
+  - positive adds markers through the shared skill-cost DSL
+  - negative removes markers only if enough markers exist
+  - once per turn, per card
+  - after one marker-skill resolution, no other marker-cost skills on that card that turn
+  - remaining work: broaden beyond generic skill-cost specs into more marker-driven effect families
+- [ ] implement Unison battle rules:
+  - defense step skipped when a Unison is attacked
+  - damage removes markers instead of life
+  - `Strike` / `Victory Strike` marker removal behavior
+- [ ] implement reusable leader keyword families from rule manual additions:
+  - `[Wish]`
+  - `[Z-Awaken]`
+  - `[Aegis]`
+  - `[Arrival]`
+  - `[Dark Over Realm]` / `Wormhole`
 
 ### P1: Human-vs-AI Benchmark Expansion
 
@@ -244,11 +288,46 @@ Current next implementation batch from the shortlist:
   - generic counter family: negate attack -> play self in rest -> optional attack restriction
   - unsupported counter diagnostics for unresolved counter skills
   - owner-leader-attack search/add-to-hand family with color / trait / character filtering
+  - `SS4's Call`-style activate-main search family with card-name token filtering and bottom-of-deck post-processing
+  - `Power Wish` activate-main family:
+    - play self from hand with reusable leader/energy/board-state requirements
+    - draw-and-gain-keyword-for-turn (`Dual Attack`) family support
 - high-priority `Activate: Main/Battle` extra-card families from active decks:
-  - `Power Wish`
   - `Mighty Blast`
-  - `SS4's Call`
   - `Mechikabura`
+
+### Newly Confirmed Rule Knowledge From `GameRules`
+
+These are rule details confirmed from the new manuals/flowchart set that should shape future engine work.
+
+- `[Limit X]` is broader than per-card runtime tracking:
+  - it applies across the same skill
+  - across cards with the same card number
+  - updated/oracle text still counts as the same skill
+- `[Auto]` skills are made pending once per trigger occurrence, including simultaneous occurrences
+- hidden-area `[Auto]` skills can remain undeclared by their controller
+- `[Counter]` skills operate through counter motions and counter-motion chains, not just a single yes/no response window
+- when multiple players must make simultaneous choices/resolutions, the turn player acts first
+- Unison play has specific replacement and marker-entry rules:
+  - existing Unison / Hidden Mode replacement
+  - marker entry count based on rested energy or explicit effect text
+  - marker count can be modified while the Unison is being played
+- skill-based Unison play has two counter timings around the play process
+- Unison growth is once per turn with the same card number from hand
+- marker skill costs (`[X]`) have their own once-per-turn-per-card lockout semantics
+- when a Unison is attacked:
+  - defense step is skipped
+  - damage removes markers
+  - `Strike` / `Victory Strike` change the amount removed
+- tournament policy confirms additional useful public-knowledge expectations:
+  - names/counts in drop and warp are public
+  - cards played this turn are public
+  - missed autos / illegal actions should be repairable/reviewable when possible
+
+Practical interpretation:
+- the current engine needs a more explicit pending/checkpoint model than the current ad hoc trigger handling
+- Unison needs to move from partial support to a dedicated rules track
+- future trace/review tooling can lean on the tournament public-knowledge model
 
 ### Human Data
 

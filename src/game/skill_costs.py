@@ -84,6 +84,8 @@ class SkillCostDsl:
                 if len(player.hand) < step.amount:
                     return False
                 continue
+            if step.kind == "add_markers":
+                continue
             if step.kind == "remove_markers":
                 if source_card.markers < step.amount:
                     return False
@@ -130,6 +132,9 @@ class SkillCostDsl:
             if step.kind == "discard_hand":
                 for _ in range(step.amount):
                     player.drop.append(player.hand.pop(0))
+                continue
+            if step.kind == "add_markers":
+                source_card.markers += step.amount
                 continue
             if step.kind == "remove_markers":
                 source_card.markers -= step.amount

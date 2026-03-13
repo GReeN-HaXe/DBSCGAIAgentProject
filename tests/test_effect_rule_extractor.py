@@ -433,6 +433,48 @@ def test_extract_activate_main_look_top_add_to_hand_with_discard_rule() -> None:
     assert rule.handler_params["discard_after_add"] == 1
 
 
+def test_extract_activate_main_ss4_call_style_search_rule() -> None:
+    card = _card(
+        "[Activate: Main][Limit 1] If your Leader Card is a black Bardock: Xeno card or a Saiyan card with {SS4} in its card name: "
+        "Look at up to 3 cards from the top of your deck, add up to 2 black cards with {SS4} in their card names among them to your hand, "
+        "then place the rest at the bottom of your deck in any order. If you added 2 cards to your hand, choose 1 card in your hand and place it at the bottom of your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.handler_params["look_count"] == 3
+    assert rule.handler_params["max_add"] == 2
+    assert rule.handler_params["allowed_colors"] == "black"
+    assert rule.handler_params["required_name_contains"] == "SS4"
+    assert rule.handler_params["move_unpicked_to_bottom"] is True
+    assert rule.handler_params["bottom_deck_after_add"] == 1
+    assert rule.handler_params["bottom_deck_after_add_exact_add_count"] == 2
+
+
+def test_extract_activate_main_power_wish_play_self_from_hand_rule() -> None:
+    card = _card(
+        "[Activate: Main] If your Leader Card is a Power Wish card and you have 3 or more energy, and neither you nor your opponent have a Battle Card in play: Play this card from your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_play_self_from_hand")
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["required_leader_traits"] == "Power Wish"
+    assert rule.handler_params["min_owner_energy"] == 3
+    assert rule.handler_params["requires_no_owner_battle"] is True
+    assert rule.handler_params["requires_no_opponent_battle"] is True
+
+
+def test_extract_activate_main_power_wish_draw_and_gain_keyword_rule() -> None:
+    card = _card(
+        "[Activate: Main][Once per turn]{1}: Draw 1 card, and this card gains [Dual Attack] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_draw_n_and_gain_keyword_for_turn")
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["grant_keyword"] == "Dual Attack"
+    assert rule.once_per_turn is True
+
+
 def test_extract_play_gain_control_opponent_unison_rule() -> None:
     card = _card("[Auto] When this card is played from your hand, choose 1 of your opponent's Unison Cards and gain control of it.")
     rules = extract_effect_rules_from_card(card)

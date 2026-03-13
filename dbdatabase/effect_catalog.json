@@ -31,9 +31,23 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "required_leader_traits": "Mono-Yellow \u226aSaiyan\u226b",
+        "requires_leader": "if your leader card is a mono-yellow \u226asaiyan\u226b card and you have 3 or more energy",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "min_owner_energy": 3,
+        "required_leader_traits": "Mono-Yellow \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a mono-yellow \u226asaiyan\u226b card and you have 3 or more energy",
         "rest_mode_only": true
       },
@@ -56,6 +70,16 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "requires_leader": "if your leader is mono-blue and you discard 1 extra from your hand"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_draw_n_and_gain_keyword_for_turn",
+      "handler_params": {
+        "amount": 1,
+        "grant_keyword": "Critical",
         "requires_leader": "if your leader is mono-blue and you discard 1 extra from your hand"
       },
       "once_per_turn": true,
@@ -105,6 +129,12 @@
       "handler_params": {},
       "once_per_turn": false,
       "trigger": "turn_end"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1006": [
@@ -115,6 +145,14 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "101": [
@@ -122,6 +160,7 @@
       "handler_id": "auto_add_up_to_n_from_owner_hand_to_life_on_play",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
         "requires_played_from": "hand"
       },
@@ -178,6 +217,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
         "rest_mode_only": true,
         "resting": true
@@ -189,6 +229,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": 4,
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
         "rest_mode_only": true
       },
@@ -329,6 +370,15 @@
   ],
   "1037": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "requires_leader": "if your leader is green"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "ignores_barrier": true,
@@ -343,6 +393,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
         "resting": false
       },
@@ -370,10 +421,21 @@
         "max_add": 1,
         "max_cost": 2,
         "required_characters": "&Lt;Son Goku&Gt;",
+        "required_leader_traits": "&Lt;Son Goku&Gt;",
         "requires_leader": "if your leader is a &lt;son goku&gt; card and you place this card in its owner's drop"
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "1044": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is green"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1045": [
@@ -419,6 +481,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "required_leader_traits": "Green &Lt;King Piccolo&Gt;,&Lt;Piccolo Jr.&Gt;",
         "requires_leader": "if your leader is a green &lt;king piccolo&gt; or &lt;piccolo jr.&gt; card with an original power of 15000"
       },
       "once_per_turn": false,
@@ -429,6 +492,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
         "rest_mode_only": true,
         "resting": true
@@ -462,6 +526,20 @@
       "trigger": "self_activate_main"
     }
   ],
+  "1057": [
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "look_count": 10,
+        "max_add": 1,
+        "max_cost": -1,
+        "required_characters": "\u226aEarthling\u226b-Only With An Energy Cost Of 1 Or 1 Unison With A Specified Cost Of 1"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1059": [
     {
       "handler_id": "auto_draw_n",
@@ -476,6 +554,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card",
         "rest_mode_only": true,
         "resting": true
@@ -511,6 +590,7 @@
         "allowed_colors": "yellow",
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "Yellow \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a yellow \u226asaiyan\u226b card"
       },
       "once_per_turn": false,
@@ -549,6 +629,18 @@
       "trigger": "self_attacks"
     }
   ],
+  "1080": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 4,
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
+        "requires_leader": "if your leader is a \u226ashadow dragon\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1081": [
     {
       "handler_id": "auto_power_reduce_up_to_n_on_attack",
@@ -556,6 +648,7 @@
         "max_cost": -1,
         "max_targets": 1,
         "power_delta": -25000,
+        "required_leader_traits": "&Lt;Pan&Gt;",
         "requires_leader": "if your leader is a &lt;pan&gt; card and your opponent has 2 or more energy",
         "target_policy": "first"
       },
@@ -589,6 +682,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 2,
         "power_delta": -15000,
         "requires_leader": "if your leader is a red &lt;son goku",
         "target_policy": "first"
@@ -623,6 +717,7 @@
       "handler_params": {
         "max_cost": 3,
         "max_targets": 1,
+        "required_leader_traits": "Yellow \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a yellow \u226asaiyan\u226b card"
       },
       "once_per_turn": false,
@@ -653,6 +748,16 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Red \u226aShadow Dragon\u226b",
+        "requires_leader": "if your leader is a red \u226ashadow dragon\u226b card and your leader is a z-leader or you have 6 or more z-energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Red \u226aShadow Dragon\u226b",
         "requires_leader": "if your leader is a red \u226ashadow dragon\u226b card and your leader is a z-leader or you have 6 or more z-energy"
       },
       "once_per_turn": false,
@@ -667,6 +772,26 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "1095": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a z-leader or you have 6 or more z-energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1096": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a z-leader or you have 6 or more z-energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1098": [
@@ -688,6 +813,7 @@
         "max_add": 1,
         "max_cost": 4,
         "required_characters": "\u226aShadow Dragon\u226b Or 1 Unison With A Specified Cost Of 2",
+        "required_leader_traits": "Red \u226aShadow Dragon\u226b",
         "requires_leader": "if your leader is a red \u226ashadow dragon\u226b card, reduce the energy cost of this card in your hand by 1.. [auto] if your leader is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -698,7 +824,8 @@
     {
       "handler_id": "auto_draw_n",
       "handler_params": {
-        "amount": 1
+        "amount": 1,
+        "required_leader_traits": "Red \u226aShadow Dragon\u226b"
       },
       "once_per_turn": false,
       "trigger": "self_activate_main"
@@ -763,6 +890,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "min_owner_energy": 4,
         "rest_mode_only": true
       },
       "once_per_turn": false,
@@ -797,6 +925,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a yellow &lt;piccolo",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1115": [
@@ -869,11 +1007,21 @@
   ],
   "1121": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Red,Black \u226aSaiyan\u226b",
+        "requires_leader": "if your leader is a red or black \u226asaiyan\u226b card and there are 3 or more red or black \u226asaiyan\u226b cards in your energy and/or battle area"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
       "handler_params": {
         "max_cost": -1,
         "max_targets": 2,
         "power_delta": -30000,
+        "required_leader_traits": "Red,Black \u226aSaiyan\u226b",
         "requires_leader": "if your leader is a red or black \u226asaiyan\u226b card and there are 3 or more red or black \u226asaiyan\u226b cards in your energy and/or battle area",
         "target_policy": "first"
       },
@@ -889,9 +1037,23 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": 5,
+        "required_leader_traits": "Blue \u226aAndroid\u226b",
         "required_traits": "\u226aAndroid\u226b"
       },
       "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1123": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Blue \u226aPhantom Demon\u226b",
+        "requires_leader": "if your leader is a blue \u226aphantom demon\u226b card, play up to 1 blue or green &lt;hirudegarn&gt; card with an energy cost of 6, 7, or 9 from your hand.. [activate",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": true,
       "trigger": "self_activate_main"
     }
   ],
@@ -935,6 +1097,8 @@
       "handler_params": {
         "ignores_barrier": true,
         "max_cost": -1,
+        "min_owner_energy": 4,
+        "required_leader_traits": "Z-Leader,You Have A Z-Battle",
         "requires_leader": "if your leader is green and has &lt;gotenks&gt; in its character name"
       },
       "once_per_turn": false,
@@ -990,10 +1154,22 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "min_owner_energy": 2,
+        "required_leader_traits": "&Lt;Pan&Gt;",
         "requires_leader": "if your leader is a &lt;pan&gt; card and you have 2 or more energy"
       },
       "once_per_turn": false,
       "trigger": "self_activate_battle"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 2,
+        "required_leader_traits": "&Lt;Pan&Gt;",
+        "requires_leader": "if your leader is a &lt;pan&gt; card and you have 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1137": [
@@ -1001,6 +1177,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "&Lt;Pan&Gt;",
         "requires_leader": "if your leader is a &lt;pan&gt; card and there are 1 or more red cards in your combo area"
       },
       "once_per_turn": false,
@@ -1027,6 +1204,20 @@
       "trigger": "self_played"
     }
   ],
+  "1152": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "required_leader_traits": "Yellow \u226aBardock'S Crew\u226b",
+        "requires_leader": "if your leader is a yellow \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1153": [
     {
       "handler_id": "auto_draw_n",
@@ -1037,6 +1228,20 @@
       "trigger": "self_played"
     }
   ],
+  "1154": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "required_leader_traits": "Yellow \u226aBardock'S Crew\u226b",
+        "requires_leader": "if your leader is a yellow \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1156": [
     {
       "handler_id": "auto_draw_n",
@@ -1045,6 +1250,26 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "\u226aBardock'S Crew\u226b",
+        "requires_leader": "if your leader is a \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1158": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "\u226aBardock'S Crew\u226b",
+        "requires_leader": "if your leader is a \u226abardock's crew\u226b card, your opponent has 3 or more energy, and you use 1 card from under this card in a combo"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1159": [
@@ -1055,7 +1280,8 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": 4,
-        "required_characters": "\u226aBardock'S Crew\u226b Or 1 Unison With A Specified Cost Of 2"
+        "required_characters": "\u226aBardock'S Crew\u226b Or 1 Unison With A Specified Cost Of 2",
+        "required_leader_traits": "\u226aBardock'S Crew\u226b"
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -1069,6 +1295,12 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1164": [
@@ -1101,6 +1333,17 @@
       "trigger": "self_played"
     }
   ],
+  "1171": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Black \u226aDemon Realm Race\u226b",
+        "requires_leader": "if your leader is a black \u226ademon realm race\u226b card and there are 6 or more cards in your warp"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1172": [
     {
       "handler_id": "auto_draw_n",
@@ -1128,7 +1371,8 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": -1,
-        "required_characters": "\u226aDemon Realm Race\u226b Or \u226aDemon God\u226b"
+        "required_characters": "\u226aDemon Realm Race\u226b Or \u226aDemon God\u226b",
+        "required_leader_traits": "Black \u226aDemon Realm Race\u226b"
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -1155,11 +1399,23 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "required_leader_traits": "Mono-Red \u226aSaiyan\u226b",
+        "requires_leader": "if your leader is a mono-red \u226asaiyan\u226b card and you have 3 or more energy"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 3,
         "power_delta": -20000,
+        "required_leader_traits": "Mono-Red \u226aSaiyan\u226b",
         "requires_leader": "if your leader is a mono-red \u226asaiyan\u226b card and you have 3 or more energy",
         "target_policy": "first"
       },
@@ -1187,6 +1443,7 @@
         "max_cost": 3,
         "required_card_type": "UNISON",
         "required_characters": "\u226aAndroid\u226b Or \u226aDemon Realm Race\u226b , Or 1 With A Specified Cost Of 2",
+        "required_leader_traits": "Black &Lt;Fin&Gt;",
         "requires_leader": "if your leader card is a black &lt;fin&gt; card"
       },
       "once_per_turn": false,
@@ -1198,6 +1455,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 2,
+        "required_leader_traits": "Black &Lt;Supreme Kai Of Time&Gt;",
         "requires_leader": "if your leader is a black &lt;supreme kai of time&gt; card"
       },
       "once_per_turn": false,
@@ -1211,6 +1469,7 @@
         "max_add": 1,
         "max_cost": -1,
         "required_characters": "&Lt;Son Goku: Xeno&Gt; Or &Lt;Vegeta: Xeno&Gt;",
+        "required_leader_traits": "Black &Lt;Supreme Kai Of Time&Gt;",
         "requires_leader": "if your leader is a black &lt;supreme kai of time&gt; card"
       },
       "once_per_turn": false,
@@ -1231,10 +1490,56 @@
       "trigger": "self_played"
     }
   ],
+  "1199": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "120": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "min_owner_energy": 4,
+        "required_leader_traits": "Black &Lt;Fin&Gt;",
+        "requires_leader": "if your leader card is a black &lt;fin&gt; card"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1202": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Yellow \u226aDemon Clan\u226b",
+        "requires_leader": "if your leader is a yellow \u226ademon clan\u226b card",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1204": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "&Lt;Mechikabura&Gt;",
+        "requires_leader": "if your leader is a &lt;mechikabura&gt; card and there are 2 or more \u226adark dragon ball\u226b cards in your drop"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "122": [
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Black &Lt;Fin&Gt;",
         "requires_leader": "if your leader card is a black &lt;fin&gt; card",
         "rest_mode_only": true,
         "resting": true
@@ -1245,10 +1550,22 @@
   ],
   "123": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
+        "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_top_deck_add_if_color_on_play",
       "handler_params": {
+        "min_owner_energy": 3,
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1257,10 +1574,20 @@
   ],
   "124": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
+        "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_top_deck_add_if_color_on_play",
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1271,6 +1598,7 @@
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1281,6 +1609,7 @@
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1293,6 +1622,7 @@
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1309,6 +1639,7 @@
         "max_cost": 5,
         "required_card_type": "BATTLE",
         "required_characters": "\u226aShadow Dragon\u226b",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1319,6 +1650,7 @@
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1339,7 +1671,9 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 3,
         "power_delta": -15000,
+        "required_leader_traits": "&Lt;Dr. Myuu&Gt;",
         "requires_leader": "if your leader is a &lt;dr. myuu&gt; card, you have 3 or more energy, and you choose 1 &lt;nezi&gt;, 1 &lt;bizu&gt;, and 1 &lt;ribet&gt; card in your drop",
         "target_policy": "first"
       },
@@ -1363,6 +1697,7 @@
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1373,6 +1708,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1395,6 +1731,7 @@
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card",
         "rest_mode_only": true
       },
@@ -1408,6 +1745,7 @@
       "handler_params": {
         "move_to_bottom_on_fail": true,
         "required_color": "black",
+        "required_leader_traits": "\u226aShadow Dragon\u226b",
         "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card"
       },
       "once_per_turn": false,
@@ -1447,6 +1785,12 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
       "handler_params": {
         "max_cost": -1,
@@ -1471,6 +1815,12 @@
   ],
   "1319": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_attack",
       "handler_params": {
         "max_cost": -1,
@@ -1490,6 +1840,12 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1321": [
@@ -1506,6 +1862,12 @@
       "handler_params": {},
       "once_per_turn": false,
       "trigger": "turn_end"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1322": [
@@ -1516,6 +1878,7 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": -1,
+        "min_owner_energy": 3,
         "required_characters": "&Lt;Vegeta: Xeno&Gt;, &Lt;Trunks: Xeno&Gt;, Or &Lt;Vegeks: Xeno&Gt; - All",
         "requires_leader": "if your leader's back side is a &lt;vegeks",
         "requires_played_from": "hand"
@@ -1562,7 +1925,9 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": 3,
+        "min_owner_energy": 4,
         "required_characters": "\u226aSaiyan\u226b Or \u226aEarthling\u226b -- Both And",
+        "required_leader_traits": "Red &Lt;Son Goten&Gt;",
         "requires_leader": "if your leader is a red &lt;son goten&gt; card, you have 4 or more energy, and you discard this card from your hand"
       },
       "once_per_turn": false,
@@ -1607,8 +1972,20 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Yellow &Lt;Toppo&Gt;",
         "requires_leader": "if your leader is a yellow &lt;toppo&gt; card and you have a unison with a specified cost of 2 in play",
         "rest_mode_only": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Yellow &Lt;Toppo&Gt;",
+        "requires_leader": "if your leader is a yellow &lt;toppo&gt; card and you have a unison with a specified cost of 2 in play",
+        "rest_mode_only": true,
+        "resting": true
       },
       "once_per_turn": false,
       "trigger": "self_activate_main"
@@ -1653,6 +2030,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Black &Lt;Towa&Gt;",
         "requires_leader": "if your leader is black and you remove 1 of your skill-less battle cards from the game"
       },
       "once_per_turn": false,
@@ -1666,6 +2044,7 @@
         "max_add": 1,
         "max_cost": 5,
         "required_characters": "\u226aEvil Wizard\u226b Or \u226aDemon God\u226b - Both And - Or 1 Unison With A Specified Cost Of 3",
+        "required_leader_traits": "Black &Lt;Towa&Gt;",
         "requires_leader": "if your leader is black and you remove 1 of your skill-less battle cards from the game"
       },
       "once_per_turn": false,
@@ -1688,6 +2067,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "Yellow &Lt;Baby&Gt;",
         "requires_leader": "if your leader is a yellow &lt;baby&gt; card"
       },
       "once_per_turn": false,
@@ -1707,14 +2087,17 @@
   "1360": [
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
-      "handler_params": {},
+      "handler_params": {
+        "min_owner_energy": 3
+      },
       "once_per_turn": false,
       "trigger": "turn_end"
     },
     {
       "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
       "handler_params": {
-        "max_targets": 1
+        "max_targets": 1,
+        "min_owner_energy": 3
       },
       "once_per_turn": false,
       "trigger": "turn_end"
@@ -1769,6 +2152,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "Green &Lt;Cell&Gt;",
         "requires_leader": "if your leader is a green &lt;cell&gt; card"
       },
       "once_per_turn": false,
@@ -1798,6 +2182,7 @@
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {
         "ignores_barrier": true,
+        "required_leader_traits": "Blue &Lt;Kale&Gt;",
         "requires_leader": "if your leader is a blue &lt;kale&gt; card"
       },
       "once_per_turn": false,
@@ -1821,7 +2206,8 @@
         "look_count": 3,
         "max_add": 1,
         "max_cost": -1,
-        "required_characters": "\u226aGinyu Force\u226b"
+        "required_characters": "\u226aGinyu Force\u226b",
+        "required_leader_traits": "\u226aGinyu Force\u226b"
       },
       "once_per_turn": false,
       "trigger": "self_played"
@@ -1835,6 +2221,15 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Green &Lt;Evil Wizard Babidi&Gt;",
+        "requires_leader": "if your leader is a green &lt;evil wizard babidi&gt; card and your opponent has 1 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "137": [
@@ -1870,6 +2265,8 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 2,
+        "min_owner_energy": 2,
+        "required_leader_traits": "Red &Lt;Vegito&Gt;",
         "requires_leader": "if your leader is a red &lt;vegito&gt; card, its front side is facing up, you have 2 or more energy, and you remove this card from the game"
       },
       "once_per_turn": false,
@@ -1881,6 +2278,8 @@
         "look_count": 7,
         "max_add": 1,
         "max_cost": -1,
+        "min_owner_energy": 2,
+        "required_leader_traits": "Red &Lt;Vegito&Gt;",
         "required_traits": "&Lt;Vegito&Gt;",
         "requires_leader": "if your leader is a red &lt;vegito&gt; card, its front side is facing up, you have 2 or more energy, and you remove this card from the game"
       },
@@ -1918,6 +2317,7 @@
         "max_add": 1,
         "max_cost": 4,
         "required_characters": "&Lt;Majin Buu&Gt;",
+        "required_leader_traits": "Blue &Lt;Majin Buu&Gt;",
         "requires_leader": "if your leader is a blue &lt;majin buu&gt; card",
         "rest_mode_only": true
       },
@@ -1940,7 +2340,8 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 2,
-        "ignores_barrier": true
+        "ignores_barrier": true,
+        "min_owner_energy": 3
       },
       "once_per_turn": true,
       "trigger": "self_activate_main"
@@ -1964,6 +2365,7 @@
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {
+        "required_leader_traits": "[Warrior Of Universe 7]",
         "requires_leader": "if your leader is a [warrior of universe 7] card, you switch this card to rest mode, and you add 1 red skill-less battle card from your drop to your hand",
         "rest_mode_only": true
       },
@@ -1979,6 +2381,7 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": -1,
+        "min_owner_energy": 2,
         "required_traits": "\u226aAndroid\u226b",
         "rest_mode_only": true
       },
@@ -1986,7 +2389,29 @@
       "trigger": "self_activate_main"
     }
   ],
+  "1392": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a red &lt;son goku&gt; &lt;vegeta&gt; &lt;trunks",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1395": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a red &lt;son goku&gt; &lt;vegeta&gt; &lt;trunks",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
     {
       "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
       "handler_params": {
@@ -2010,6 +2435,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a red &lt;son goku&gt; &lt;vegeta&gt; &lt;trunks",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1399": [
@@ -2055,7 +2490,9 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 2,
         "power_delta": -20000,
+        "required_leader_traits": "Red &Lt;Android 13&Gt;",
         "requires_leader": "if your leader is a red &lt;android 13&gt; card and you have 2 or more energy and a red &lt;android 14&gt; card in your z-energy",
         "target_policy": "first"
       },
@@ -2083,6 +2520,7 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": 3,
+        "required_leader_traits": "Red &Lt;Android 13&Gt;",
         "required_traits": "\u226aAndroid\u226b",
         "requires_leader": "if your leader is a red &lt;android 13&gt; card, your opponent has 3 or more energy, and you place 1 &lt;android 14&gt; and 1 &lt;android 15&gt; card from your drop under this card"
       },
@@ -2094,6 +2532,8 @@
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
       "handler_params": {
+        "min_owner_energy": 2,
+        "required_leader_traits": "Red &Lt;Android 13&Gt;",
         "requires_leader": "if your leader is a red &lt;android 13&gt; card and you have 2 or more energy and a red &lt;android 15&gt; card in your z-energy"
       },
       "once_per_turn": false,
@@ -2114,6 +2554,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "Red \u226aAndroid\u226b",
         "requires_leader": "if your leader is a red \u226aandroid\u226b card and all of your energy is mono-red"
       },
       "once_per_turn": false,
@@ -2145,6 +2586,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "Red \u226aAndroid\u226b",
         "requires_leader": "if your leader is a red \u226aandroid\u226b card and all of your energy is mono-red"
       },
       "once_per_turn": false,
@@ -2192,9 +2634,19 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "requires_leader": "if your leader is a green &lt;veku"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": 6,
+        "min_owner_energy": 3,
         "requires_leader": "if your leader is a green &lt;veku"
       },
       "once_per_turn": false,
@@ -2295,6 +2747,12 @@
   ],
   "1429": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1
@@ -2351,6 +2809,12 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": 5
@@ -2369,6 +2833,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "1442": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "1443": [
@@ -2429,7 +2903,30 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "min_owner_energy": 2,
+        "required_leader_traits": "Blue \u226aUniverse 6\u226b",
         "requires_leader": "if your leader card is a blue \u226auniverse 6\u226b card and you have 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 2,
+        "required_leader_traits": "Blue \u226aUniverse 6\u226b",
+        "requires_leader": "if your leader card is a blue \u226auniverse 6\u226b card and you have 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1450": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Yellow \u226aNamekian\u226b",
+        "requires_leader": "if your leader is a yellow \u226anamekian\u226b card and you have a yellow \u226anamekian\u226b in your battle area"
       },
       "once_per_turn": false,
       "trigger": "self_activate_main"
@@ -2462,6 +2959,45 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    }
+  ],
+  "1454": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 4
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1455": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1457": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1459": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "146": [
@@ -2520,11 +3056,23 @@
       "trigger": "self_played"
     }
   ],
+  "1468": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "requires_leader": "if your leader is a yellow &lt;piccolo"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1471": [
     {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "min_owner_energy": 3,
         "requires_leader": "if your leader is a &lt;piccolo",
         "rest_mode_only": true
       },
@@ -2540,6 +3088,12 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "1476": [
@@ -2550,6 +3104,30 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1481": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1482": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1483": [
@@ -2565,6 +3143,16 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "1485": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3
       },
       "once_per_turn": false,
       "trigger": "self_activate_main"
@@ -2633,6 +3221,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "required_leader_traits": "Red &Lt;Android 13&Gt;",
         "requires_leader": "if your leader is a red &lt;android 13&gt; card and you place this card from your hand under a red \u226aandroid\u226b card in your battle area"
       },
       "once_per_turn": false,
@@ -2704,6 +3293,14 @@
       "trigger": "self_played"
     }
   ],
+  "1507": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1509": [
     {
       "handler_id": "auto_draw_n",
@@ -2730,7 +3327,23 @@
       "trigger": "self_played"
     }
   ],
+  "1512": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is blue"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "1517": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
     {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
@@ -2745,6 +3358,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "required_leader_traits": "Yellow &Lt;Lord Slug&Gt;",
         "requires_leader": "if your leader is a yellow &lt;lord slug&gt; card",
         "rest_mode_only": true
       },
@@ -2760,6 +3374,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "1521": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a black &lt;son goku"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "1522": [
@@ -2822,6 +3446,16 @@
         "max_add": 1,
         "max_cost": 4,
         "required_characters": "Or &Lt;Caulifla&Gt; Or &Lt;Kale&Gt;",
+        "required_leader_traits": "Blue \u226aUniverse 6\u226b",
+        "requires_leader": "if your leader card is a blue \u226auniverse 6\u226b card and you discard this card from your hand"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Blue \u226aUniverse 6\u226b",
         "requires_leader": "if your leader card is a blue \u226auniverse 6\u226b card and you discard this card from your hand"
       },
       "once_per_turn": false,
@@ -2890,6 +3524,14 @@
   ],
   "1539": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is green"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
@@ -2928,6 +3570,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Mono-Red &Lt;Broly&Gt;",
         "requires_leader": "if your leader is a mono-red &lt;broly&gt; card, reduce the energy cost of this card in your hand by 2.. [activate"
       },
       "once_per_turn": false,
@@ -2942,6 +3585,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 4,
+        "required_leader_traits": "Green &Lt;Videl&Gt;",
+        "requires_leader": "if your leader is a green &lt;videl&gt; card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1549": [
@@ -2952,6 +3605,19 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "green",
+        "look_count": 7,
+        "max_add": 1,
+        "max_cost": -1,
+        "required_characters": "Mono- &Lt;Gogeta: Br&Gt;",
+        "requires_leader": "if your leader is a green &lt;veku"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1554": [
@@ -2983,6 +3649,14 @@
       "trigger": "self_activate_main"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader is a yellow &lt;son goku"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
       "handler_params": {
         "max_cost": -1,
@@ -2991,6 +3665,28 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "1558": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "requires_leader": "if your leader is green"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "157": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "158": [
@@ -3086,6 +3782,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 2,
+        "required_leader_traits": "Black &Lt;Supreme Kai Of Time&Gt;. [Permanent] When This",
+        "requires_leader": "if your leader is a black &lt;supreme kai of time&gt;, you have 2 or more energy, and you have a &lt;trunks"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1605": [
@@ -3096,6 +3802,15 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "requires_leader": "if your leader card has {agent of destruction} in its card name and the total number of cards with {agent of destruction} in their names in your leader area, energy, z-energy, battle area, and drop is 7 or more"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     },
     {
       "handler_id": "auto_ko_opponent_battle_on_play",
@@ -3119,7 +3834,9 @@
     },
     {
       "handler_id": "auto_switch_self_active_on_turn_end",
-      "handler_params": {},
+      "handler_params": {
+        "min_owner_energy": 3
+      },
       "once_per_turn": false,
       "trigger": "turn_end"
     }
@@ -3132,6 +3849,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    }
+  ],
+  "1608": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "161": [
@@ -3152,6 +3879,29 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "black",
+        "look_count": 5,
+        "max_add": 1,
+        "max_cost": 6,
+        "required_characters": "&Lt;Mai: Future&Gt; Or \u226aSaiyan\u226b - Both , Not A Copy Of This , And",
+        "required_leader_traits": "&Lt;Evil Saiyan&Gt;,&Lt;Cumber&Gt;",
+        "requires_leader": "if your leader is a &lt;evil saiyan&gt; or &lt;cumber&gt; card - both black"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "&Lt;Evil Saiyan&Gt;,&Lt;Cumber&Gt;",
+        "requires_leader": "if your leader is a &lt;evil saiyan&gt; or &lt;cumber&gt; card - both black"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "1614": [
@@ -3212,6 +3962,7 @@
       "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
       "handler_params": {
         "max_targets": 1,
+        "required_leader_traits": "Blue \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a blue \u226asaiyan\u226b card"
       },
       "once_per_turn": true,
@@ -3304,6 +4055,14 @@
       "trigger": "self_played"
     }
   ],
+  "196": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "201": [
     {
       "handler_id": "auto_draw_n",
@@ -3365,6 +4124,14 @@
       "trigger": "self_played"
     }
   ],
+  "217": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "22": [
     {
       "handler_id": "auto_play_up_to_n_from_owner_hand_on_self_combo",
@@ -3372,6 +4139,8 @@
         "allowed_colors": "blue",
         "max_cost": 5,
         "max_targets": 1,
+        "min_owner_energy": 3,
+        "required_leader_traits": "Blue \u226aBardock'S Crew\u226b",
         "requires_leader": "if your leader card is a blue \u226abardock's crew\u226b card, your life is at 3 or less, and you have 3 or more energy",
         "rest_mode": true,
         "rest_mode_only": true
@@ -3398,6 +4167,14 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader card is yellow, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and ko it.. [activate"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     },
     {
       "handler_id": "auto_ko_opponent_battle_on_play",
@@ -3442,6 +4219,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "\u226aUniverse 6\u226b",
         "requires_leader": "if your leader card is a \u226auniverse 6\u226b card",
         "rest_mode_only": true,
         "resting": true
@@ -3505,6 +4283,7 @@
       "handler_id": "auto_add_n_life_to_hand_on_self_ko",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Blue \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a blue \u226asaiyan\u226b card"
       },
       "once_per_turn": false,
@@ -3534,6 +4313,12 @@
   ],
   "241": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_attack",
       "handler_params": {
         "max_cost": 7,
@@ -3560,11 +4345,23 @@
         "max_cost": -1,
         "max_targets": 1,
         "power_delta": -15000,
+        "required_leader_traits": "Mono-Red &Lt;Son Goku&Gt;",
         "requires_leader": "if your leader card is a mono-red &lt;son goku&gt; card, reduce the energy cost of this card in your hand by 2. [auto] if your leader card is a \u226auniverse 7\u226b card",
         "target_policy": "first"
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "244": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Red \u226aUniverse 7\u226b",
+        "requires_leader": "if your leader card is a red \u226auniverse 7\u226b card and there are 5 or more \u226auniverse 7\u226b cards in your drop area"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "245": [
@@ -3579,11 +4376,21 @@
   ],
   "246": [
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Red \u226aUniverse 7\u226b &Lt;Son Goku&Gt;",
+        "requires_leader": "if your leader card is a red \u226auniverse 7\u226b &lt;son goku&gt; card and there are 5 or more \u226auniverse 7\u226b cards in your drop area"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
         "power_delta": -15000,
+        "required_leader_traits": "Red \u226aUniverse 7\u226b &Lt;Son Goku&Gt;",
         "requires_leader": "if your leader card is a red \u226auniverse 7\u226b &lt;son goku&gt; card and there are 5 or more \u226auniverse 7\u226b cards in your drop area",
         "target_policy": "first"
       },
@@ -3612,12 +4419,23 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "required_leader_traits": "Mono-Color \u226aUniverse 7\u226b",
+        "requires_leader": "if your leader card is a mono-color \u226auniverse 7\u226b card"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_power_reduce_up_to_n_on_play",
       "handler_params": {
         "ignores_barrier": true,
         "max_cost": -1,
         "max_targets": 2,
         "power_delta": -15000,
+        "required_leader_traits": "Mono-Color \u226aUniverse 7\u226b",
         "requires_leader": "if your leader card is a mono-color \u226auniverse 7\u226b card",
         "target_policy": "first"
       },
@@ -3756,6 +4574,19 @@
       "trigger": "self_activate_main"
     }
   ],
+  "303": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "&Lt;Zen-Oh&Gt;,&Lt;Great Priest&Gt;",
+        "requires_leader": "if your leader card is a &lt;zen-oh&gt; or &lt;great priest&gt; card",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "305": [
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
@@ -3803,6 +4634,8 @@
         "markers": 1,
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 2,
+        "required_leader_traits": "&Lt;Meta-Cooler&Gt;,&Lt;Meta-Cooler Core&Gt;",
         "requires_leader": "if your leader card is a &lt;meta-cooler&gt; or &lt;meta-cooler core&gt; card, you have 2 or more energy, and you don't have a unison card in play",
         "requires_played_from": "hand",
         "rest_mode": true,
@@ -3932,6 +4765,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "requires_no_owner_battle": true,
         "rest_mode_only": true
       },
       "once_per_turn": false,
@@ -3943,6 +4777,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "requires_no_owner_battle": true,
         "rest_mode_only": true
       },
       "once_per_turn": false,
@@ -3973,6 +4808,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "min_owner_energy": 3,
         "requires_leader": "if your leader card is green and you have 3 or more energy",
         "resting": false
       },
@@ -4010,6 +4846,7 @@
         "max_cost": 2,
         "max_targets": 1,
         "negate_skills": true,
+        "required_leader_traits": "Mono-Yellow \u226aUniverse 11\u226b",
         "requires_leader": "if your leader card is a mono-yellow \u226auniverse 11\u226b card and it's your opponent's turn",
         "rest_mode": true,
         "rest_mode_only": true
@@ -4038,9 +4875,21 @@
       "trigger": "self_played"
     },
     {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "required_leader_traits": "&Lt;Champa&Gt;",
+        "requires_leader": "if your leader card is a &lt;champa&gt; card and you have 3 or more energy and no battle cards in play"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "min_owner_energy": 3,
+        "required_leader_traits": "&Lt;Champa&Gt;",
         "requires_leader": "if your leader card is a &lt;champa&gt; card and you have 3 or more energy and no battle cards in play"
       },
       "once_per_turn": false,
@@ -4077,6 +4926,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Green &Lt;Beerus&Gt;,Green &Lt;Champa&Gt;",
         "requires_leader": "if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card"
       },
       "once_per_turn": false,
@@ -4141,10 +4991,21 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "min_owner_energy": 3,
         "rest_mode_only": true
       },
       "once_per_turn": false,
       "trigger": "self_activate_battle"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3,
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "357": [
@@ -4165,6 +5026,19 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+      "handler_params": {
+        "allowed_colors": "yellow",
+        "look_count": 7,
+        "max_add": 1,
+        "max_cost": 3,
+        "required_characters": "&Lt;Vegeta&Gt; Or &Lt;Trunks: Future&Gt;",
+        "requires_leader": "if your leader card is a mono-yellow &lt;trunks"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "359": [
@@ -4215,6 +5089,15 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "371": [
@@ -4394,6 +5277,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "&Lt;Great Priest&Gt;",
         "requires_leader": "if your leader card is a &lt;great priest&gt; card and you have 1 or more multicolor energy",
         "rest_mode_only": true,
         "resting": true
@@ -4405,6 +5289,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "&Lt;Great Priest&Gt;",
         "requires_leader": "if your leader card is a &lt;great priest&gt; card and you have 1 or more multicolor energy",
         "rest_mode_only": true
       },
@@ -4452,6 +5337,7 @@
         "max_cost": -1,
         "required_card_type": "UNISON",
         "required_characters": "&Lt;Jiren&Gt; Or 1 With A Specified Cost Of 1",
+        "required_leader_traits": "\u226aUniverse 11\u226b",
         "requires_leader": "if your leader card is a \u226auniverse 11\u226b card, mono-red &lt;jiren&gt; cards with original energy costs of 4 in your hand gain the following effect\uff0d. \u30fb[ex-evolve] (red)(2)"
       },
       "once_per_turn": false,
@@ -4467,6 +5353,20 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "403": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "required_leader_traits": "Black \u226aAndroid\u226b",
+        "requires_leader": "if your leader card is a black \u226aandroid\u226b card",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "412": [
@@ -4591,6 +5491,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "&Lt;Zamasu&Gt;,&Lt;Goku Black&Gt;",
         "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card"
       },
       "once_per_turn": false,
@@ -4603,6 +5504,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "required_leader_traits": "&Lt;Zamasu&Gt;,&Lt;Goku Black&Gt;",
         "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card and you choose 1 of your &lt;gowasu&gt; cards and place it in its owner's drop area"
       },
       "once_per_turn": true,
@@ -4617,8 +5519,10 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": 5,
+        "min_owner_energy": 3,
         "required_card_type": "UNISON",
         "required_characters": "\u226aGod\u226b , Or 1 With A Specified Cost Of 2",
+        "required_leader_traits": "&Lt;Zamasu&Gt;,&Lt;Goku Black&Gt;",
         "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card, you have 3 or more energy, and you choose this card and 1 &lt;goku black&gt; card in your battle area and send them to their owners' warps"
       },
       "once_per_turn": false,
@@ -4641,6 +5545,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Black \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
         "rest_mode_only": true,
         "resting": true
@@ -4665,6 +5570,7 @@
         "look_count": 7,
         "max_add": 1,
         "max_cost": 3,
+        "required_leader_traits": "Black \u226aAndroid\u226b",
         "required_traits": "\u226aAndroid\u226b",
         "requires_leader": "if your leader card is a black \u226aandroid\u226b card and you choose 1 card in your hand and discard it"
       },
@@ -4753,6 +5659,18 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 2,
+        "min_owner_energy": 4,
+        "required_leader_traits": "Blue &Lt;Zamasu&Gt;",
+        "requires_leader": "if your leader card is a blue &lt;zamasu&gt; card and you have 4 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 4,
+        "required_leader_traits": "Blue &Lt;Zamasu&Gt;",
         "requires_leader": "if your leader card is a blue &lt;zamasu&gt; card and you have 4 or more energy"
       },
       "once_per_turn": false,
@@ -4764,6 +5682,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": 4,
+        "min_owner_energy": 3,
         "rest_mode_only": true
       },
       "once_per_turn": true,
@@ -4784,6 +5703,7 @@
     {
       "handler_id": "auto_play_self_from_combo_on_battle_end",
       "handler_params": {
+        "required_leader_traits": "Black \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
         "rest_mode_only": true,
         "resting": true
@@ -4842,6 +5762,7 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": -1,
+        "required_leader_traits": "Mono-Green &Lt;Cell&Gt;",
         "required_traits": "\u226aAndroid\u226b",
         "requires_leader": "if your leader card is a mono-green &lt;cell&gt; card"
       },
@@ -4854,6 +5775,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Green \u226aAndroid\u226b",
         "requires_leader": "if your leader card is a green \u226aandroid\u226b card"
       },
       "once_per_turn": false,
@@ -4944,6 +5866,16 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Red &Lt;Son Goten&Gt;",
+        "requires_leader": "if your leader card is a red &lt;son goten&gt; card and your opponent has 2 or more energy"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Red &Lt;Son Goten&Gt;",
         "requires_leader": "if your leader card is a red &lt;son goten&gt; card and your opponent has 2 or more energy"
       },
       "once_per_turn": false,
@@ -4956,6 +5888,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 3,
         "power_delta": -20000,
         "target_policy": "first"
       },
@@ -4967,6 +5900,7 @@
       "handler_params": {
         "max_cost": -1,
         "max_targets": 1,
+        "min_owner_energy": 3,
         "power_delta": -20000,
         "target_policy": "first"
       },
@@ -5165,6 +6099,17 @@
       "trigger": "self_played"
     }
   ],
+  "567": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Blue \u226aRed Ribbon Army\u226b",
+        "requires_leader": "if your leader card is a blue \u226ared ribbon army\u226b card and you choose 1 of your \u226ared ribbon army\u226b cards and place it in its owner's drop area"
+      },
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
+    }
+  ],
   "57": [
     {
       "handler_id": "auto_draw_n",
@@ -5190,6 +6135,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": -1,
+        "required_leader_traits": "Yellow &Lt;Son Goku&Gt;",
         "requires_leader": "if your leader card is a yellow &lt;son goku&gt; card",
         "rest_mode_only": true
       },
@@ -5225,6 +6171,14 @@
       },
       "once_per_turn": false,
       "trigger": "self_attacks"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "min_owner_energy": 3
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "58": [
@@ -5240,6 +6194,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Red &Lt;Son Goten&Gt;",
         "requires_leader": "if your leader card is a red &lt;son goten&gt; card and you choose this card and 1 of your unison cards and switch them to rest mode",
         "rest_mode_only": true
       },
@@ -5276,6 +6231,27 @@
       },
       "once_per_turn": true,
       "trigger": "self_played"
+    }
+  ],
+  "587": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "ignores_barrier": true,
+        "requires_leader": "if your leader card is black and there are 1 or more tokens in your battle area"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
+  "589": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader card is black and there are 1 or more tokens in your battle area"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "60": [
@@ -5497,6 +6473,7 @@
         "max_add": 1,
         "max_cost": 4,
         "required_characters": "Or \u226aNamekian\u226b",
+        "required_leader_traits": "\u226aNamekian\u226b",
         "requires_leader": "if your leader card is a \u226anamekian\u226b card and you choose 1 \u226anamekian\u226b card in your hand or battle area and place it under this card"
       },
       "once_per_turn": true,
@@ -5542,6 +6519,7 @@
         "look_count": 5,
         "max_add": 1,
         "max_cost": -1,
+        "required_leader_traits": "\u226aNamekian\u226b",
         "required_traits": "\u226aNamekian\u226b",
         "requires_leader": "if your leader card is a \u226anamekian\u226b card and you choose 1 \u226anamekian\u226b card in your hand or battle area and place it under this card"
       },
@@ -5635,6 +6613,7 @@
       "handler_id": "auto_ko_opponent_battle_on_play",
       "handler_params": {
         "max_cost": 7,
+        "required_leader_traits": "Green \u226aFrieza Clan\u226b",
         "requires_leader": "if your leader card is a green \u226afrieza clan\u226b card and this card has 3 or more markers on it"
       },
       "once_per_turn": false,
@@ -5727,6 +6706,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Blue \u226aRed Ribbon Army\u226b",
         "requires_leader": "if your leader card is a blue \u226ared ribbon army\u226b card and you discard 1 \u226ared ribbon army\u226b card from your hand"
       },
       "once_per_turn": false,
@@ -5776,10 +6756,19 @@
         "look_count": 3,
         "max_add": 1,
         "max_cost": -1,
+        "min_owner_energy": 3,
         "required_characters": "\u226a Ribbon Army\u226b"
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    }
+  ],
+  "681": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {},
+      "once_per_turn": true,
+      "trigger": "self_activate_main"
     }
   ],
   "683": [
@@ -5818,6 +6807,17 @@
       "trigger": "self_played"
     }
   ],
+  "691": [
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "required_leader_traits": "Blue \u226aRed Ribbon Army\u226b",
+        "requires_leader": "if your leader card is blue or green"
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
+    }
+  ],
   "696": [
     {
       "handler_id": "auto_draw_n",
@@ -5843,6 +6843,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Red \u226aMachine Mutant\u226b",
         "requires_leader": "if your leader card is a red \u226amachine mutant\u226b card and you choose 1 of your &lt;vegeta"
       },
       "once_per_turn": true,
@@ -5888,6 +6889,16 @@
       },
       "once_per_turn": false,
       "trigger": "self_played"
+    },
+    {
+      "handler_id": "activate_play_self_from_hand",
+      "handler_params": {
+        "requires_leader": "if your leader card is blue or a \u226auniverse 6\u226b card",
+        "rest_mode_only": true,
+        "resting": true
+      },
+      "once_per_turn": false,
+      "trigger": "self_activate_main"
     }
   ],
   "710": [
@@ -5927,6 +6938,7 @@
         "max_cost": -1,
         "max_targets": 1,
         "power_delta": -10000,
+        "required_leader_traits": "Red &Lt;Broly&Gt;",
         "requires_leader": "if your leader card is a red &lt;broly&gt; card",
         "target_policy": "first"
       },
@@ -5960,6 +6972,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 2,
+        "required_leader_traits": "Mono-Red \u226aSaiyan\u226b",
         "requires_leader": "if your leader card is a mono-red \u226asaiyan\u226b card and you choose 1 red extra card in your hand and discard it"
       },
       "once_per_turn": false,
@@ -5993,6 +7006,7 @@
       "handler_id": "auto_draw_n",
       "handler_params": {
         "amount": 1,
+        "required_leader_traits": "Red &Lt;Broly&Gt;",
         "requires_leader": "if your leader card is a red &lt;broly&gt; card, reduce the energy cost of this card in your hand by 2.. [activate"
       },
       "once_per_turn": false,
@@ -6004,7 +7018,8 @@
       "handler_id": "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed",
       "handler_params": {
         "allowed_colors": "yellow",
-        "max_targets": 1
+        "max_targets": 1,
+        "min_owner_energy": 1
       },
       "once_per_turn": false,
       "trigger": "owner_field_extra_placed"
@@ -6027,6 +7042,7 @@
         "amount": 1,
         "max_cost": -1,
         "required_characters": "\u226aTurles Crusher Corps\u226b",
+        "required_leader_traits": "Yellow \u226aTurles Crusher Corps\u226b",
         "requires_leader": "if your leader card is a yellow \u226aturles crusher corps\u226b card"
       },
       "once_per_turn": false,

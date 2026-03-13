@@ -1,10 +1,12 @@
 {
   "candidates_scanned": 776,
   "cards_with_diagnostics": 0,
-  "cards_with_rules": 480,
-  "cards_without_rules": 296,
+  "cards_with_rules": 521,
+  "cards_without_rules": 255,
   "coverage": {
     "by_handler": {
+      "activate_draw_n_and_gain_keyword_for_turn": 1,
+      "activate_play_self_from_hand": 86,
       "auto_add_n_life_to_hand_on_self_ko": 1,
       "auto_add_top_deck_to_energy_rest_on_play": 3,
       "auto_add_up_to_n_from_owner_deck_to_hand_on_play": 14,
@@ -15,7 +17,7 @@
       "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
       "auto_ko_opponent_battle_on_play": 53,
       "auto_ko_up_to_n_opponent_battle_on_play": 2,
-      "auto_look_top_add_up_to_one_to_hand_on_play": 66,
+      "auto_look_top_add_up_to_one_to_hand_on_play": 70,
       "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 5,
       "auto_play_self_from_combo_on_battle_end": 20,
       "auto_play_up_to_n_from_owner_deck_on_play": 1,
@@ -38,7 +40,7 @@
       "owner_leader_attacks": 1,
       "owner_opponent_skill_plays_overcost_battle": 2,
       "self_activate_battle": 16,
-      "self_activate_main": 72,
+      "self_activate_main": 163,
       "self_attacks": 84,
       "self_comboed": 30,
       "self_comboed_battle_end": 20,
@@ -49,7 +51,7 @@
   },
   "diagnostic_counts": {},
   "diagnostics": {},
-  "total_extracted_rules": 565,
+  "total_extracted_rules": 656,
   "unmatched_top_templates": [
     {
       "count": 1,
@@ -148,8 +150,8 @@
     },
     {
       "count": 1,
-      "example_card_id": 120,
-      "template": "[auto][spirit boost <n>] if your leader card is a black &lt;fin&gt; card: when this card is played, choose all of your opponent's battle card, ignoring [barrier], and place them under your leader card.. [activate: main](..."
+      "example_card_id": 121,
+      "template": "[deflect]. [auto] if your leader card is black: when this card is played from your hand, your opponent chooses <n> of their battle card, then you choose the rest of their battle card and send them to their owners' warps."
     }
   ]
 }

@@ -25,6 +25,7 @@ class CardInstance:
     owner_id: int
     resting: bool = False
     attacked_this_turn: bool = False
+    attack_count_this_turn: int = 0
     power: int = 15000
     card_type: str = "BATTLE"
     color: Optional[str] = None
@@ -58,6 +59,8 @@ class CardInstance:
     activate_limit_once_per_turn: bool = False
     has_super_combo: bool = False
     sparking_threshold: Optional[int] = None
+    temporary_keywords: Tuple[str, ...] = ()
+    stacked_card_ids: Tuple[int, ...] = ()
 
 
 @dataclass
@@ -208,3 +211,5 @@ class GameState:
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
+    unison_marker_skill_usage: set[int] = field(default_factory=set)
+    unison_growth_usage: set[int] = field(default_factory=set)

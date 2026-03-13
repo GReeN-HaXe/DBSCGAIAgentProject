@@ -1,0 +1,809 @@
+### auto_counter_common
+--- PAGE 35 ---
+35 
+8-5-9. Skills that trigger “at the end of a battle” enter pending.  
+8-5-10. A checkpoint occurs.  
+8-5-10-1. If any cards with skills that trigger at “the end of the battle after you combo with this card” are placed in the Drop Area from the Combo 
+Area during 8-5-8, those skills enter pending in 8-5-9.  
+8-5-11. The turn player’s effects that last “for the battle” end.  
+8-5-12. The non-turn player’s effects that last “for the battle” end.  
+8-5-13. The battle ends, so return to 7-3-3.  
+ 
+9. Activating/Resolving Skills and Effects 
+Cards with [Activate], [Auto], and [Counter] as well as cards in a player’s hand are resolved by activating them and triggering their effects. [Permanent] 
+skills do not activate; their effects are constantly active. 
+ 
+9-1. Rendering Skills Valid or Negated  
+9-1-1. Some effects may render specific skills valid or negated. In this case, follow the rules below.  
+9-1-2. If an effect specifies that a skill is partially or totally negated, activation of that part can’t be declared and its effects can’t be performed. If the 
+negated skill requires a choice, the choice is not made.  
+9-1-2-1. If the original skill written on a card is negated, the effect won't activate, but the text is still considered to exist.  
+9-1-2-2. If a skill gained from another skill in negated, the skill text is considered to be deleted.  
+9-1-2-2-1. If a skill gained from another skill is negated by an effect for a specific time period, that part is considered to be deleted. The skill will 
+no longer be gained even if the negating effect ends. 
+9-1-3. If a skill is specified as partially or totally valid under specific conditions, activation can't be declared for the negated part, and its effects can’t 
+be performed. If the negated skill requires a choice, the choice is not made if those conditions are not fulfilled.  
+9-1-3-1. Unless otherwise specified, the skills (card text) of Leader Cards are only valid in the Leader Area, the skills of Battle Cards and Z-Extra 
+Cards are only valid in the Battle Area, and the skills of Unison Cards are only valid in the Unison Area.  
+9-1-3-2. Some [Activate], [Auto], and [Counter] skills may contain skill costs or effect text that specifies the area where the activates, such as “play 
+this card from your hand” or “send this card from your Drop to your Warp.” Skills like these can’t be activated unless they’re in the specified 
+area. If they’re in a different area, the activation of the skill can’t be declared, and the skill can’t be activated.  
+9-1-3-3. Some [Permanent] skills may contain text that specifies the area where the skill is valid, such as “reduce the energy cost of  this card in 
+your hand by 1” or “this card gains [Dragon Ball] in all areas.” In such cases, that skill is only valid in the specified area.  
+9-1-4. If all of a card’s skills are negated due to a skill, the card is treated as a skill-less card.  
+9-1-5.  If a card’s skills are negated by a skill that doesn’t specify the type of skill to negate (i.e., “Choose 1 of your opponent’ s Battle Cards and 
+negate its skills”), that card can’t gain new skills from effects.  
+9-1-5-1.  If a card’s skills are negated by a skill that specifies the type of skill to negate (i.e., “Choose 1 of your opponent’s Battle Cards and negate 
+its keyword skills”), that card can’t gain new skills of the specified type from effects.  
+9-1-6. If a skill instructs you to reference a skill that is negated, that skill can't be referenced.  
+ 
+9-2. Common Activation Rules                                                   
+9-2-1.  In general, activated skills are immediately resolved, and —from the time when the activation of a certain skill is declared until that skill’s 
+effect is resolved—other activated skills can’t interrupt the first skill or be resolved.  
+9-2-1-1. However, [Counter] skills are activated during the counter timing following the activation of other skills, and [Counter] skills are therefore 
+--- PAGE 36 ---
+36 
+activated and resolved after interrupting other activated skills before they are resolved.  
+9-2-1-2. If activation of another skill is specified for a skill's effect, the target skill will activate and resolve while the skill that activated it is resolving. 
+(9-11-1)  
+9-2-1-3. During the time between activation and resolution of a delayed effect, other skills may activate and/or resolve. (1-7-2-1-1) (1-7-2-2-1)  
+9-2-2. Depending on the skills and rules, it might not be possible to activate certain skills or pay their skill costs.  
+9-2-3.  If—due to the skills and rules —“skill activation can’t be declared,” “the skill cost can’t be paid,” or “the energy cost can’t be paid,” the 
+corresponding skill can’t be activated.  
+ 
+9-3. Skill Sources                                                   
+9-3-1.  Activated effects that have occurred are considered independent of their source. If the area in which such an effect’s source is placed is later 
+changed, this change does not affect the resolution of that effect.(23-3)  
+ 
+9-4. Activating [Activate] Skills                                              
+9-4-1.  To activate an [Activate] skill, follow the procedure below. For details on activating Extra Card skills, refer to “12. Characteristics of Extra 
+Cards.”  
+9-4-2. The player declares which skill they wish to activate. If they wish to activate the skill of a card in their hand, they reveal that card.  
+9-4-2-1. If there is a necessary skill cost, determine that cost and then pay it in its entirety. （5-8） 
+9-4-2-1-1.  Some [Activate] skills of Battle Cards, Leader Cards, and Unison Cards do not have a skill cost. Those skills can be activated simply 
+by declaring them.  
+9-4-3. The skill is activated.  
+9-4-4.  A counter timing occurs, and then the player who did not declare the activation of the skill in 9-4-2 can declare the activation of a [Counter] 
+skill.  
+9-4-5. Resolve the effects.  
+9-4-6.  A counter timing occurs, and then the player who did not declare the activation of the skill in 9-4-2 can declare the activation of a [Counter] 
+skill.  
+ 
+9-5. Handling [Permanent] Skills                                                  
+9-5-1.  [Permanent] skills are not activated in the same way as other skills. Instead, they constantly have some kind of effect on ga meplay while 
+they are active.  
+9-5-2.  If an effect renders a certain target of a [Permanent] skill invalid as a target of that skill, it can’t be targeted by that [Permanent] skill for the 
+duration of the turn.  
+9-5-3.  [Permanent] skills that affect deck construction take effect during deck preparation （2-3-3）（2-10-5）（2-11-5）(6-1-5-2).  
+9-5-4.  [Permanent] skills that affect the situation before the game starts take effect during the pre-game procedures (6-2-2).  
+ 
+9-6. Activating [Auto] Skills                                              
+9-6-1. To activate an [Auto] skill, follow the procedure below. For details on activating Extra Card skills, refer to “12. Characteristics of Extra Cards.”  
+9-6-2. If the trigger condition of an [Auto] skill is fulfilled, that [Auto] skill is made pending.  
+9-6-2-1. If the trigger condition of an [Auto] skill is fulfilled multiple times, that [Auto] skill is made pending that many times.  
+9-6-2-1-1. Even if a trigger condition is simultaneously fulfilled multiple times, that [Auto] skill is made pending that many times.  
+9-6-2-1-2. As an exception, this does not apply in the case of 5-1-5 or 5-10-4.  
+9-6-3.  When a checkpoint occurs, a player being requested to activate an [Auto] skill chooses one pending [Auto] skill that they are the master of 
+--- PAGE 37 ---
+37 
+and activates it. After resolving the activated skill, the number of pending [Auto] skills (of that type) decreases by one.  
+9-6-3-1. The player specifies which skill they wish to activate. If they wish to activate the skill of a card in their hand, they reveal that card.  
+9-6-3-1-1.  If a pending [Auto] skill is in a secret area such as a player’s hand, that skill’s master can choose not to declare the skill’s activation 
+and refrain from revealing the skill. The player does not have to communicate this choice to their opponent.  
+9-6-3-2. If for some reason the chosen pending [Auto] skill cannot be activated, cancel 1 of the pending [Auto] skills (of that type).  
+9-6-4. If the skill has a necessary cost, determine that cost, and then choose to either pay it in its entirety or not pay it. （5-8） 
+9-6-4-1. If the skill cost is not paid, the [Auto] skill is not activated or resolved.  
+9-6-4-1-1.  Refer to any skill cost conditions and—if the conditions have been fulfilled—you can’t choose not to pay that part of the skill cost. 
+Example: Assume that your Leader is red and you must pay the following skill cost: “[Auto] If your leader is red and you swit ch this 
+card to Rest Mode : .” If this [Auto] skill is pending, because the “if your leader is red” part of the skill cost is automatically fulfilled, you 
+can’t choose not to pay that part of the skill cost. However, you can choose whether to pay the “switch this card to Rest Mode” part.  
+9-6-4-2. If the skill cost is paid, activate and resolve the [Auto] skill.  
+9-6-4-3.  Some [Auto] skills of Battle Cards, Leader Cards, and Unison Cards do not have a skill cost. Those skills can be activated si mply by 
+declaring them.  
+9-6-5. The skill is activated.  
+9-6-6.  A counter timing occurs, and then the player who did not declare the activation of the skill in 9-6-3 can declare the activation of a [Counter] 
+skill.  
+9-6-7. Resolve the effects.  
+9-6-8.  A counter timing occurs, and then the player who did not declare the activation of the skill in 9-6-3 can declare the activation of a [Counter] 
+skill.  
+ 
+--- PAGE 38 ---
+38 
+  
+9-6-9.  There are [Auto] skills for which the trigger condition is a card moving to a different area. This is called an area movement trigger. Additionally, 
+cases where “removal from the game” (20-10) is the trigger condition for an [Auto] skill also follow the rules for area movement triggers.  
+9-6-9-1.  An [Auto] skill activated by an area movement trigger may request information of the card that triggered the skill. In cases like these, 
+track the information by following the procedure below.  
+9-6-9-1-1.  If an [Auto] skill triggered by the movement of a card from an open area to a secret area (or vice versa) requests information of the 
+card, use the information of the card as if it were in the open area. Similarly, if an [Auto] skill triggered by a card in an open area being 
+removed from the game requests information of the card, use the information of the card as if it were in its original open area.  
+9-6-9-1-2.  If an [Auto] skill triggered by the movement of a card in the Battle Area/Unison Area to any other area or an [Auto] skill re lated to 
+inter-player area movement requests information of the card, use the information of the card as if it were in its origina l Battle 
+Area/Unison Area.  
+9-6-9-1-3.  If an [Auto] skill (other than those described in 9-6-9-1-2 above) triggered by the movement of a card from an open area to another 
+open area requests information of the card, use the information of the card as it is in the new area.  
+9-6-9-2.  If an [Auto] skill with an area movement trigger is negated in its original area by another skill, the skill does not trigger  even if the card 
+moves to a different area.  
+9-6-9-3. Unless specified otherwise, when a Hidden Mode card has an [Auto] skill with an area movement trigger on its front side, then  the card 
+is moved, the skill does not trigger. 
+
+--- PAGE 39 ---
+39 
+9-6-9-4.  [Auto] skills that trigger “when you play this card/when this card is played” are area movement trigger [Auto] skills that trigger when the 
+cards they’re on move from an area other than a Battle Area/Unison Area to a Battle Area/Unison Area.  
+9-6-10. An [Auto] skill may have a trigger condition of not a specific event but the fulfillment of a specific condition (example: “w hen there are no 
+cards in your hand,” etc.). These kinds of conditions are called situation triggers.  
+9-6-10-1. A situation trigger is made pending (only once) when the specified situation occurs. After this [Auto] skill is resolved, if the trigger 
+condition is fulfilled again, the skill is also made pending again.  
+9-6-11. If an [Auto] skill activates and its trigger condition is fulfilled but the card with that skill is no longer in the same area, or if the skill has been 
+negated, the player must still resolve that [Auto] skill. However, if the effect of that [Auto] skill has become impossible to carry out due to the 
+change of areas, the effect fails to resolve.  
+ 
+9-7. Activating [Counter] Skills                                              
+9-7-1.  [Counter] skills are one type of skill and are also a keyword skill (22-10).  
+9-7-2.  When the intention to activate a [Counter] skill is declared, a counter motion is initiated. A counter motion is the point in time when [Counter] 
+effects can be resolved.  
+9-7-2-1. Sometimes, multiple counter motions occur in sequence. A sequence of more than one counter motion is called a counter motion chain.  
+9-7-2-2.  While being processed as a chain, each counter motion is numbered as follows: counter motion 1, counter motion 2 counter motion X.  
+9-7-2-3.  If a player has a pending [Counter] skill in their hand, they can choose not to declare its activation. The player does not h ave to 
+communicate this choice to their opponent.  
+--- PAGE 40 ---
+40 
+ 
+9-7-3. The first counter motion chain during counter timing proceeds in the following order.  
+9-7-3-1. A counter timing occurs with some event as a condition.  
+9-7-3-1-1.  All rules processing that currently needs to be carried out is resolved simultaneously. If a situation requiring new rules pr ocessing 
+results, repeat this procedure as long as rules processing is required.  
+9-7-3-2. The master of a pending [Counter] skill chooses one of the following, and then the counter timing ends: 
+・The master chooses to do nothing, and play proceeds to 9-7-4.  
+・The master declares the intention to activate one pending [Counter] skill, this skill becomes counter motion 1, and it is activated.  
+9-7-3-2-1. If the player activates a [Counter] skill, the pending status of the player’s other [Counter] skills ends (22-10-4-1).  
+9-7-3-3. A counter timing occurs. (4-3-2-3)  
+9-7-3-4. The master of a pending [Counter] skill chooses one of the following, and then the counter timing ends: 
+・The master chooses to do nothing, and play proceeds to the counter motion chain processing (9-7-3-5). 
+・The master declares the intention to activate one pending [Counter] skill, this skill becomes counter motion X, and it is activated. Here, 
+X is the current total number of counter motions + 1.  
+9-7-3-4-1.  If the player activates a [Counter] skill, the pending status of the player’s other [Counter] skills ends, and play returns to 9-7-3-3. (22-
+10-4-1)  
+
+--- PAGE 41 ---
+41 
+9-7-3-5.  Counter-motion-chain processing is performed. Unprocessed counter motions are processed in descending order of their numbers, and 
+the [Counter] effects that triggered each counter motion are resolved.  
+9-7-3-5-1. If a new counter timing occurs for a resolved [Counter] effect (4-3-2-4), play returns to 9-7-3-3.  
+9-7-3-5-2. No checkpoints occur until the end of the counter-motion-chain processing.  
+9-7-3-6. Once there are no more unprocessed counter motions in the counter motion chain, the counter motion chain ends.  
+9-7-4. Carry out the action that triggered the counter timing in 9-7-3-1, resolve the skill, and carry it out if possible.  
+ 
+9-8. Resolving Immediate Effects                                             
+9-8-1. If a player is requested to carry out an immediate effect, they must carry out the specified action only once.  
+ 
+9-9. Resolving Continuous Effects                                          
+9-9-1.  When information of a card is requested while some continuous effect is active, follow the procedure below to apply the continuous effect to 
+that information.  
+9-9-1-1. The information specified on a card itself will always be the base reference for information.  
+9-9-1-2. Next, apply all continuous effects except for effects that rewrite numerical information.  
+9-9-1-3. Then, apply all continuous effects that rewrite numerical information.  
+9-9-2.  All continuous effects except for those generated by [Permanent] skills are not applied to cards that have moved to areas oth er than the 
+Leader Area/Battle Area/Unison Area after the effect was resolved. (3-1-4) In addition, except for [Permanent] skills, continuous effects do 
+not apply to cards that have switched from Hidden Mode to Revealed Mode or from Revealed Mode to Hidden Mode after the effect 's skill 
+has resolved. (23-5-2-1) 
+9-9-3. Continuous effects that rewrite the information of cards in specific areas are applied immediately as cards enter that area.  
+9-9-3-1. An [Auto] skill triggered by a card with specific information entering an area checks the said information after any continuous effects are 
+applied to the area. 
+ 
+9-10. Resolving Replacement Effects                                                
+9-10-1. If a replacement effect is active, the specified event is not processed when it occurs, and the event specified by the replac ement effect is 
+processed instead.  
+9-10-1-1. Thus, the original event is treated as if it never happened.  
+9-10-1-1-1. However, one exception is when the result doesn't change even after a replacement effect is applied. 
+Example: A Battle Card has a "if this card in Active Mode would leave the Battle Area, switch it to Rest Mode instead" replac ement 
+effect and 10000 power, and then it's affected by a "that card gets -20000 power for the turn" effect. In such cases, the replacement 
+effect causes this card to switch to Rest Mode, but the power-reducing effect still results in the card leaving the Battle Area. (21-6-2-
+1)  
+9-10-2. If there are multiple replacement effects concerning a single event, the player affected by the event decides which replaceme nt effect to 
+activate first.  
+9-10-2-1. If cards or skills are the subject of the replacement, the master of those cards or skills makes the choice.  
+9-10-2-2. If actions during the game are the subject of the replacement, the player carrying out the action or the master of the target  card of the 
+action makes the choice.  
+9-10-2-3. Each replacement effect can only be applied once for a given subject event.  
+9-10-3. If the replacement effect is a voluntary replacement effect (when X, you can do X instead. If so, do X), and a player is unable to make that 
+choice, they cannot apply the replacement effect. （20-1-11） 
+### unison
+--- PAGE 44 ---
+44 
+12-3-1. If the activation of an Extra Card skill in a player’s hand is declared but fails to activate for some reason, that card is placed in the Drop Area.  
+ 
+ 
+13. Characteristics of Unison Cards 
+13-1. Unison Card Standards                                              
+13-1-1. Cards with the “Unison” card type are primarily played in Unison Areas (3-11).  
+13-1-2. If skill text refers to a “Unison” or “Unison Card,” it is referring to a card of the “Unison” card type.  
+ 
+13-2. Playing Unison Cards                                             
+13-2-1. During the Main Phase, the turn player can play a Unison Card from their hand by placing it in their Unison Area (7-3-4-1). To do so, follow 
+the procedure below.  
+ 
+13-2-1-1. Players reveal the card they’re playing from their hand, switch an amount of energy equal to the total cost determined in 1-2-2-2-1 to 
+Rest Mode, and declare that they’re playing the card. (5-3)  
+13-2-1-2. A counter timing occurs. The non-turn player can declare the activation of [Counter : Play] skills.  
+13-2-1-3. If a Unison Card is already in play in your Unison Area, you choose 1 card in your Unison Area other than the one currently being played 
+and place it into its owner’s Drop Area. The Unison Card enters play with a number of markers on it equal to the number of energy cards 
+switched to Rest Mode to play the card.  
+13-2-1-3-1. When the markers on a Unison Card being played are added to or subtracted from by effects like [Empower] (22-45) or effects that 
+read, “remove a marker from the played Unison Card,” the number of markers on the Unison Card becomes the number specified by 
+the effect. When there are multiple effects that add markers to or subtract markers from a Unison Card being played, the Unison Card 
+is played with a number of markers on it equal to the final marker count following all effect additions and subtractions. 
+13-2-1-3-2. In cases where an effect allows you to play multiple Unison Cards into your Unison Area while your Unison Area already has th e 
+maximum number of cards allowed for that effect, you choose 1 card among them and place it into its owner’s Drop Area.  
+13-2-1-4. Skills that trigger “when you play this card” enter pending.  
+ 
+13-2-2. If a Unison Card is played due to a skill, it is played in the Unison Area without paying an energy cost unless otherwise specified.  
+13-2-2-1. The player specifies which skill they wish to use to play a Unison Card.  
+13-2-2-2. If there is a necessary skill cost, determine that cost and then pay it in its entirety (5-8).  
+13-2-2-3. The skill is activated.  
+13-2-2-4. A counter timing occurs.  
+13-2-2-5. If a Unison Card is already in play or a Hidden Mode card is already placed in your Unison Area, you choose 1 card in your Unison Area 
+other than the one currently being played and place it into its owner’s Drop Area. When playing a Unison Card by using an  effect that 
+reads “play (a Unison Card) with X markers on it,” etc., the number of markers placed on the Unison Card is determined by the effect.  
+13-2-2-5-1. When the markers on a Unison Card being played are added to or subtracted from by effects like [Empower] (22-45) or effects that 
+read, “remove a marker from the played Unison Card,” the number of markers on the Unison Card becomes the number specified by 
+the effect. When there are multiple effects that add markers to or subtract markers from a Unison Card being played, the Unison Card 
+is played with a number of markers on it equal to the final marker count following all effect additions and subtractions. 
+13-2-2-5-2. In cases where an effect allows you to play multiple Unison Cards into your Unison Area while your Unison Area already has th e 
+maximum number of cards allowed for that effect, you choose 1 card among them and place it into its owner’s Drop Area.  
+--- PAGE 45 ---
+45 
+13-2-2-6. Skills that trigger “when you play this card” enter pending.  
+13-2-2-7. A counter timing occurs.  
+13-2-3. If there is a failure to play a card due to an effect, that card is generally placed in the Drop Area.  
+ 
+13-3. Unison Card Growth                                                 
+13-3-1. Unison Card growth refers to adding a marker to the Unison Card in the Unison Area according to the rules below.  
+13-3-2. Once per turn, during the Main Phase, if the turn player has a Unison Card in their hand with the same card number as the Unison Card in 
+their Unison Area, they can place that card under the Unison Card in their Unison Area. If they do, they add one marker  to the Unison Card 
+in their Unison Area.  
+13-3-3. A counter timing occurs.  
+ 
+13-4. Paying Marker Skill Costs ([X])                                        
+13-4-1. The marker skill cost is the skill cost indicated by [X] (1-6-5-4).  
+13-4-1-1. If the marker skill cost X is a positive number, the skill adds that many markers to the card upon activation.  
+13-4-1-2. If the marker skill cost is zero, the skill adds no markers to the card upon activation.  
+13-4-1-2-1. When a skill has a marker skill cost of zero, it means that activation is possible using actions that don't affect the number of markers 
+as the skill cost.  
+13-4-1-3. If the marker skill cost X is a negative number, the skill removes markers from the card equal to the absolute value of that number upon 
+activation. If paying the skill cost would remove more markers than are currently on the card, the skill cost can’t be paid. （5-8-3） 
+13-4-2. Skills with marker skill costs can only be activated and resolved once per turn, per card. Additionally, after activating and  resolving such a 
+skill on a card, no skills with marker skill costs on that card can be activated or resolved for the rest of the turn. 
+13-4-3. A marker skill cost can only be paid when the card with that skill is in the Unison Area.  
+ 
+13-5. Unison Card Battles                                           
+13-5-1. Defense Step  
+If the guard card is a Unison Card, skip the Defense Step (8-2-4-3-1-1).  
+13-5-2. Damage Step (8-4-6-3)  
+If the guard card is a Unison Card and the attack card’s power is greater than or equal to the guard card’s power, follow the procedure below.  
+13-5-2-1. If the attack card has [Strike], remove markers from the Unison Card equal to the amount of life damage the card would deal w hen 
+attacking a Leader Card.  
+13-5-2-2. If the attack card has [Victory Strike], remove all markers from the guard card.  
+13-5-2-3. If the attack card has neither [Strike] or [Victory Strike], remove one marker from the guard card. 
+ 
+14. Characteristics of Z-Cards 
+14-1. Z-Card Standards                                                
+14-1-1. Card type “Z” is an additional type some cards have.  
+14-1-2. Cards with card type “Z” are sometimes referred to as “Z-Cards.”  
+14-1-3. During game preparation, Z-Cards are placed in the Z-Deck (6-1-4).  
+14-1-4. In general, Z-Cards that leave the Leader Area, Battle Area, or Unison Area are removed from the game (15-1-5) (16-1-4) (17-1-4) (18-1-4) 
+(21-15).  
+--- PAGE 46 ---
+46 
+14-1-4-1. If a Z -Card leaves an area due to an effect and then the Z -Card is removed from the game, the Z -Card is considered to have been 
+removed by that effect (23-3-2-4).  
+14-1-4-2. 14-1-4 also applies when a card is in Hidden Mode. (23-5-2-2) 
+14-1-5. If a Z-Card is placed under a card in the Battle Area and that card is moved either from the Battle Area to a non -Combo Area or from a 
+Combo Area to a non-Battle Area, the Z-Card placed under that card is removed from the game.  
+ 
+15. Characteristics of Z-Leader Cards 
+15-1. Z-Leader Card Standards                                           
+15-1-1. Z-Leader Cards are cards that have the card types “Leader” and “Z” and are placed in the Leader Area.  
+15-1-2. Cards with the card types “Leader” and “Z” are sometimes referred to as “Z-Leader Cards” or “Z-Leaders.”  
+15-1-3. Except for cards explicitly referred to as “Z-Leaders,” rules and skills apply to Z-Leader Cards in the same way that they apply to “Leaders.”  
+15-1-3-1. Z-Leader Cards don’t have any special information on the back.  
+15-1-4. A Z-Leader Card placed in a Leader Area is treated as a Leader.  
+15-1-4-1. If a Z-Leader Card is treated as a Leader, effects, etc. that refer to the Leader refer to the Z-Leader Card information.  
+15-1-4-2. If a Z-Leader Card is treated as a Leader, the Z-Leader Card will not be moved out of the Leader Area by an opponent’s effects.  
+15-1-5. If a Z-Leader Card in a Leader Area is moved out of the Leader Area —in addition to cases where the card is “removed from the game” —
+the top Z-Leader Card is removed from the game instead.  
+15-1-5-1. In this case, a card other than the Z-Leader Card placed on top remains in the Leader Area.  
+15-1-6. When a Z-Leader Card placed in an area other than the Z -Deck Area would be moved to an area other than the Leader Area due to an 
+effect, remove that card from the game instead.  
+ 
+16. Characteristics of Z-Battle Cards 
+16-1. Z-Battle Card Standards                                             
+16-1-1. Z-Battle Cards are cards that have the card types “Battle” and “Z” and are placed in the Battle Area.  
+16-1-2. Cards with the card types “Battle” and “Z” are sometimes referred to as “Z-Battle Cards.”  
+16-1-3. Except for cards explicitly referred to “Z -Battle Cards,” rules and skills apply to Z -Battle Cards in the same way that they apply to “Battle 
+Cards.”  
+16-1-4. If a player’s Z-Battle Card in a Battle Area is moved out of that player’s Battle area—except in cases where the card is “removed from the 
+game”—the Z-Battle Card is removed from the game instead.  
+16-1-4-1. In this case, any non-Z-Cards placed under that card are placed in the Drop Area.  
+16-1-5. If a Z-Battle Card is not placed in the Battle Area to play it or there is failure to play it due to an effect, that card is removed from the game.  
+ 
+16-2. Playing Z-Battle Cards                                          
+16-2-1. During the Main Phase, the turn player can play a face-down Z-Battle Card in their Z-Deck Area by placing it in the Battle Area. Play follows 
+the procedure below.  
+16-2-1-1. The player reveals the card they wish to play from their Z -Deck Area, switches enough energy to pay that card’s energy cost to Rest 
+Mode, places a number of Z-Energy cards equal to that card’s Z-Energy cost in their Drop Area, and declares the intention to play. (5-3) 
+(5-4)  
+16-2-1-2. A counter timing occurs, and the non-turn player can declare the activation of a [Counter : Play] skill.  
+### keywords1
+--- PAGE 56 ---
+56 
+ 
+22. Keyword Skills and Keywords 
+22-1. Keyword Skills and Keyword Standards                                
+22-1-1. Keyword skills are used to refer to specific instructions (for which the text is long or the effects are complex in many cases) in simplifie d 
+ways. Keyword skills can be [Activate], [Permanent], [Auto], or [Counter] skills.  
+22-1-2. Keywords are non-skill supplementary terms such as the conditions under which skills are valid, limitations on skill costs, and activation. On 
+their own, keywords are not treated as skills. (1-5-2).  
+22-1-3. If a card reads “negate its keyword skills,” that keyword isn't applied.  
+ 
+22-2. [Awaken] ([Awaken : Surge])                                           
+22-2-1.  [Awaken] ([Awaken : Surge]) is an [Activate : Main/Battle] skill related to Leaders.  
+22-2-2.  [Awaken] ([Awaken : Surge]) is described as follows: “[Awaken] ([Awaken : Surge]) condition : (effect).”  
+22-2-2-1. Some card text refers to [Awaken] skills. This refers to both [Awaken] and [Awaken : Surge] skills.  
+22-2-3.  [Awaken] ([Awaken : Surge]) can be activated by fulfilling conditions and paying associated costs. These skills can’t be activated otherwise.  
+22-2-4. To resolve the effects of [Awaken] ([Awaken : Surge]), carry out the indicated effects, and then—if the card with this skill is face-up—flip it 
+over onto its back.  
+22-2-4-1. The skill text sometimes says to “flip the card onto its back.”  
+ 
+22-3. [Field]                                                           
+22-3-1.  [Field] is an [Activate : Main] keyword skill on Extra Cards.  
+22-3-2. The effects of [Field] are resolved as follows: “Place the Extra Card that activated this skill in the Battle Area in Active Mode.”  
+22-3-3. If the [Field] skill of a card is activated by another card’s skill, the card text might say to “activate {card name}.”  
+22-3-4. Extra Cards with [Field] may have other skills as well. Those skills are generally only valid when the card is placed in the Battle Area, and 
+they are activated without placing the card in the Drop Area. (if not specified otherwise) 
+22-3-4-1. This excludes [Energy Exhaust] skills on [Field] Extra Cards, as they aren't affected by 22-3-4. When such cards are placed in an Energy 
+Area, the [Energy Exhaust] skills place them in Rest Mode.  
+22-3-5. When placing another Extra Card with [Field] in a Battle Area, all other Extra Cards with [Field] in the player’s Battle Area are placed in their 
+owner’s Drop Area.  
+22-3-5-1. However, when an Extra Card with [Field] is placed under a card in a Battle Area, rule 22-3-5 is ignored. 
+ 
+22-4.  [Blocker]                                                        
+22-4-1. This [Auto] keyword skill is related to battle.  
+22-4-2.  [Blocker] can be activated by switching the card with this skill to Rest Mode as the skill cost when one of your cards other than the one with 
+this skill is attacked and made pending (8-1-3).  
+22-4-3. The effects of [Blocker] are resolved as follows: “Switch the guard card of the attack to the card that activated [Blocker].”  
+22-4-3-1. When [Blocker] is used to switch a guard card to the card that activated [Blocker], any [Auto] skills on that card that trigg er “when this 
+card is attacked” enter pending (1-5-6-4).  
+22-4-4.  “Negate [Blocker]” is a special procedure in which the target of the attack (the guard card) is switched back to the original target.  
+ 
+22-5.  [Evolve] ([EX-Evolve] [Xeno-Evolve])                                       
+--- PAGE 57 ---
+57 
+22-5-1. This [Activate : Main] keyword skill is related to playing cards.  
+22-5-2.  [Evolve] ([EX-Evolve] [Xeno-Evolve]) is described as follows: “[Evolve] ([EX-Evolve] [Xeno-Evolve]) skill cost : condition <character name>.”  
+22-5-2-1. Sometimes conditions are not specified. In these cases, no condition is required.  
+22-5-2-2. Some card text refers to [Evolve] skills. This refers to [Evolve], [EX-Evolve], and [Xeno-Evolve] skills.  
+22-5-2-3. If a card says to “evolve,” it means to play the card as if you were to play it with [Evolve] ([EX-Evolve] [Xeno-Evolve]).  
+22-5-2-4. If a card says “evolved,” it means a card that was played with [Evolve] ([EX-Evolve] [Xeno-Evolve]).  
+22-5-3.  [Evolve] ([EX-Evolve] [Xeno-Evolve]) can be activated by paying the skill cost and choosing one Battle Card with the specified <character 
+name> that fulfills the specified conditions in your Battle Area. If the specified Battle Card can’t be chosen, [Evolve] ([EX-Evolve] [Xeno-
+Evolve]) can’t be activated.  
+22-5-3-1. Some card text reads “when choosing this card's [Evolve] conditions, you can choose a specified Battle Card in your area.” These skills 
+expand the conditions that can be fulfilled when choosing cards for a given keyword skill.  
+22-5-3-1-1. When using such a skill to choose Battle Cards from an expanded range of areas, if the skill resolution would cause the card that 
+activated [Evolve] to be played, first move any Battle Cards in that area to the Battle Area, and then resolve the keyword skill normally. 
+Furthermore, any area movement triggers resulting from the chosen Battle Card moving to a different area are not made pending, nor 
+does counter timing occur.  
+22-5-4.  [Evolve] ([EX-Evolve] [Xeno-Evolve]) can only be activated from a player’s hand.  
+22-5-5. When resolving the effects of [Evolve] ([EX-Evolve]), the card that activated this skill is played on top of the Battle Card chosen in 22-5-3. 
+Henceforth, the whole stack of cards is treated as the Battle Card on top, but the position and any effects affecting the prior card’s power are 
+carried over (21-5-2).  
+22-5-5-1. Before resolving the effects of [Evolve] (EX-Evolve), if the Battle Card chosen in 22-5-3 is moved from the Battle Area or if the conditions 
+in 22-5-3 are not fulfilled, [Evolve] (EX-Evolve) fails to resolve.  
+22-5-6. When resolving the effects of [Xeno-Evolve], the Battle Card chosen in 22-5-3 is sent to the Warp, and the card that activated this skill is 
+played.  
+22-5-6-1. Before resolving the effects of [Xeno-Evolve], if the Battle Card chosen in 22-5-3 is moved from the Battle Area or if the conditions in  
+22-5-3 are not fulfilled, [Xeno-Evolve] fails to resolve.  
+22-5-7. If the card that activated [Evolve] fails to enter play and did not move from its original area due to an effect, it is place d in its owner’s Drop 
+Area.  
+22-5-7-1. As an exception to the above rule, if a skill states that a card is “returned to its owner's hand instead of being played,” etc., cards returned 
+to a player’s hand by such a skill are not placed in their owner’s Drop Area. 
+  
+22-6.  [Critical]                                                      
+22-6-1. This [Permanent] keyword skill is related to damage.  
+22-6-2.  [Critical] is described as follows: “When this card inflicts damage to your opponent's life by attacking, they place that many Life Area cards 
+in their Drop Area instead of their hand during the damage processing (21-3).”  
+ 
+22-7.  [Strike]                                                      
+22-7-1. This [Permanent] keyword skill is related to damage.  
+22-7-2.  [Strike] is described as follows: “When this card inflicts damage to your opponent's life by attacking, if it deals X-1 damage or less, this card 
+inflicts X damage instead.”  
+22-7-2-1. The X of [Double Strike] is 2.  
+22-7-2-2. The X of [Triple Strike] is 3.  
+--- PAGE 58 ---
+58 
+22-7-2-3. The X of [Quadruple Strike] is 4.  
+22-7-3. Some card text refers to [Strike] skills. This refers to [Double Strike], [Triple Strike], and [Quadruple Strike] skills. 
+ 
+22-8.  [Dual Attack] ([X Attack])                                                
+22-8-1. This [Auto] keyword skill is related to battle.  
+22-8-2. When a card with [X Attack] attacks, this card is made pending.  
+22-8-3. The effects of [X Attack] are resolved as follows: “When this card attacks, switch this card to Active Mode at the end of bat tle.” The skill 
+activates X-1 times per turn.  
+22-8-3-1. The X of [Dual Attack] is 2.  
+22-8-3-2. The X of [Triple Attack] is 3.  
+ 
+22-9.  [Revenge]                                                    
+22-9-1. This [Auto] keyword skill is related to battle.  
+22-9-2.  [Revenge] can only be activated by Battle Cards and Unison Cards with the skill.  
+22-9-3.  [Revenge] is described as follows: when this card becomes a guard card, it is made pending.  
+22-9-4. The effects of [Revenge] are resolved as follows: “KO the attack card at the end of the battle.”  
+ 
+22-10.  [Counter]                            
+22-10-1.  [Counter] keyword skills are related to skill activation.  
+22-10-2.  [Counter] is described as follows: “[Counter : condition] skill cost: effect.”  
+22-10-2-1. Some cards refer to [Counter] skills. This refers to [Counter : Play], [Counter : Attack], [Counter : Battle Card Attack], an d [Counter : 
+Counter] skills.  
+22-10-3. Each [Counter] skill is made pending when it fulfills the conditions below.  
+22-10-3-1.  [Counter : Play] is made pending when the opponent pays the energy cost and declares the playing of a card during the free ti ming 
+of their Main Phase (5-5-2-2) or when the opponent activates (5-5-3-3) or resolves (5-5-3-5) a skill that has descriptions such as “play” 
+or “when played.”  
+22-10-3-2.  [Counter : Attack] is made pending when the opponent declares an attack (8-1-4) or when the opponent activates (4-3-2-3) or resolves 
+(4-3-2-4) a skill that has descriptions such as “attack” or “when attacking.”  
+22-10-3-3.  [Counter : Battle Card Attack] is made pending when the opponent attacks with a Battle Card, or when an opponent activates or  
+resolves a skill that reads “attack with a Battle Card.”  
+22-10-3-4.  [Counter : Counter] is made pending when the opponent activates [Counter] (9-7-3-3).  
+22-10-4. A pending [Counter] skill can be activated only during a counter timing by paying its energy and skill cost. When the activation of [Counter] 
+is declared, it is assigned counter motion number X (9-7-2).  
+22-10-4-1. The pending status of a [Counter] skill ends when you activate that [Counter] skill or when the counter timing ends.  
+22-10-5.  [Counter] can only be activated from a player’s hand.  
+22-10-6. If a given [Counter] skill is assigned counter motion number X, the effects of that skill are resolved when counter motion X is processed (9-
+7-3-5).  
+22-10-7. Unless specified otherwise, cards that activated [Counter] are placed in the Drop Area.  
+22-10-7-1. If a card for which the activation of [Counter] was declared fails to activate due to an effect or the [Counter] skill is neg ated, that card 
+is placed in the Drop Area unless otherwise specified.  
+22-10-8.  “Negate [Counter]” means the following: “Eliminate the counter motion that would have been used to resolve the effects of the  target 
+--- PAGE 59 ---
+59 
+[Counter] skill.”  
+22-10-8-1. The effects of any [Counter] skill for which the counter motion has been eliminated fail to resolve. 
+ 
+22-11.  [Once per turn]                                                   
+22-11-1. This keyword is related to skill activation.  
+22-11-2.  [Once per turn] indicates that an [Auto] or [Activate] skill can only be activated and resolved once per turn.  
+22-11-3. The “once per turn” limitation is set individually for each skill. If there are multiple cards with the same “once per turn” skill, they can each 
+be activated once per turn.  
+22-11-4. When an [Auto] skill with [Once per turn] is made pending simultaneously multiple times, only one of the activations is resol ved, and the 
+rest fail.  
+22-11-5. After a skill with [Once per turn] is resolved once, it won’t be triggered for the rest of the turn even if its cost and cond itions are fulfilled, 
+and it can’t be activated or resolved.  
+ 
+22-12.  [Indestructible]                                                    
+22-12-1. This [Permanent] keyword skill is related to movement between areas.  
+22-12-2.  [Indestructible] is described as follows: “This card can’t be KO’d or removed from your Battle Area by the opponent’s card sk ills or as a 
+result of battle.”  
+ 
+22-13.  [Union]                                                            
+22-13-1. This [Activate : Main] keyword skill is related to playing cards.  
+22-13-2.  [Union] is a general term for a subset of skills that play Battle Cards to Battle Areas from specific areas when certain costs and conditions 
+are fulfilled.  
+22-13-3.  [Union] skills are generally formatted [Union-(type)].  
+22-13-3-1. Some card text refers to [Union] skills. This refers to [Union-Fusion], [Union-Potara], and [Union-Absorb] skills.  
+ 
+22-13-4.  [Union-Fusion]  
+22-13-4-1.  [Union-Fusion] is described as follows: “[Union-Fusion] skill cost : <Character Name A> and <Character Name B>.” Here, “<Character 
+Name A> and <Character Name B>” are the conditions for the [Union-Fusion] skill.  
+22-13-4-2. [Union-Fusion] can be activated by revealing 1 of each of the specified character’s Battle Cards from your hand, with each Battle 
+Card’s power being equal. If such a set of cards can’t be revealed, you can't declare activation of [Union-Fusion]. 
+22-13-4-2-1. Some card text reads “you can choose Battle Cards in one of your areas when choosing cards to use with this card's [Union -
+Fusion] skill.” These skills expand the conditions that can be fulfilled when choosing cards for a given keyword skill.  
+22-13-4-3.  [Union-Fusion] can only be activated from a player’s hand.  
+22-13-4-4. When activating [Union-Fusion], players place one of each of the specified Battle Cards with the same power from their hand in the 
+Drop Area as the skill cost. 
+22-13-4-4-1. Then, if there is a necessary skill cost, determine that cost and then pay it in its entirety.  
+22-13-4-5. To resolve the effects of [Union-Fusion], players play the Battle Card that activated the skill.  
+22-13-4-5-1. If a card that activated [Union-Fusion] fails to enter play, it is placed in its owner’s Drop Area.  
+22-13-4-5-1-1. As an exception to the above rule, if a skill states that a card is “returned to its owner's hand instead of being played,” c ards 
+returned to a player’s hand by such a skill are not placed in their owner’s Drop Area.  
+ 
+--- PAGE 60 ---
+60 
+22-13-5. [Union-Potara]  
+22-13-5-1.  [Union-Potara] is described as follows: “[Union-Potara] skill cost : <Character Name A> and <Character Name B>.” Here, “<Character 
+Name A> and <Character Name B>” are the conditions for the [Union-Potara] skill.  
+22-13-5-2.  [Union-Potara] can be activated by paying the skill cost and choosing one of each specified character’s Battle Card in your Battle Area. 
+If the player can’t choose all of the specified Battle Cards, they can’t activate [Union-Potara].  
+22-13-5-2-1. Some card text reads “you can choose Battle Cards in one of your areas when choosing cards to use with this card's [Union -
+Potara] skill.” These skills expand the conditions that can be fulfilled when choosing cards for a given keyword skill.  
+22-13-5-2-1-1. When using such a skill to choose Battle Cards from an expanded range of areas, if the skill resolution would cause the card 
+that activated [Union-Potara] to be played, first move any Battle Cards in that area to the Battle Area, and then resolve the keyword 
+skill normally. Furthermore, any area movement triggers resulting from the chosen Battle Card moving to a different area are not 
+made pending, nor does counter timing occur.  
+22-13-5-3.  [Union-Potara] can only be activated from a player’s hand.  
+22-13-5-4. To resolve the effects of [Union-Potara], the card that activated the skill is played by placing it on top of the two Battle Cards chosen 
+in 22-13-5-2, which can be in any order.  
+22-13-5-4-1. All continuous effects affecting the power of the played Battle Cards carry over.  
+22-13-5-4-2. If a card that activated [Union-Potara] fails to enter play, it is placed in its owner’s Drop Area.  
+22-13-5-4-2-1. As an exception to the above rule, if a skill states that a card is “returned to its owner's hand instead of being played,” c ards 
+returned to a player’s hand by such a skill are not placed in their owner’s Drop Area.  
+ 
+22-13-6. [Union-Absorb]  
+22-13-6-1.  [Union-Absorb] is described as follows: “[Union-Absorb] skill cost : effect.”  
+22-13-6-2.  [Union-Absorb] can only be activated from the Battle Area.  
+22-13-6-3. To resolve the effects of [Union-Absorb], one specified Battle Card in the area specified by the effect is played on top of the card that 
+activated the skill.  
+22-13-6-3-1. All continuous effects affecting the position or power of the played cards carry over.  
+22-13-6-3-2. If a Battle Card chosen for a [Union-Absorb] effect fails to enter play, it is placed in its owner’s Drop Area.  
+22-13-6-3-2-1. As an exception to the above rule, if a skill states that a card is “returned to its owner's hand instead of being played,” cards 
+returned to a player’s hand by such a skill are not placed in their owner’s Drop Area.  
+ 
+22-14. [Ultimate]                                                         
+22-14-1. This [Permanent] keyword skill is related to deck construction conditions (6-1-5-2).  
+22-14-2.  [Ultimate] is described as follows: “A player may only have up to one card with [Ultimate] in their deck.”  
+22-14-3. If a player’s card with [Ultimate] in a Battle Area or Unison Area is moved out of that player’s Battle Are a or Unison Area—in addition to 
+cases where the card is “removed from the game”—the card is removed from the game instead (21-12).  
+22-14-3-1. If a card with [Ultimate] is moved out of an area due to an effect, and then that card is removed from the game, that card is considered 
+to have been removed from the game by that effect (23-3-2-5).  
+22-14-3-1-1. 22-14-3-1 also applies when a card is in Hidden Mode. (23-5-2-5) 
+22-14-4. If a card with [Ultimate] fails to enter play, that card is removed from the game instead of being placed in the Drop Area (5-5-4) (21-12).  
+22-14-5. If the activation of an Extra Card with [Ultimate] is declared and the card is placed in the Drop Area, after the skill is re solved, the card is 
+removed from the game. In addition, even if the skill can’t be resolved due to an effect, the card is removed from the game anyway. (21-12)  
+ 
+--- PAGE 61 ---
+61 
+22-15. [Over Realm] ([Over Realm X])                                        
+22-15-1. This [Activate : Main] keyword skill is related to playing cards.  
+22-15-2.  [Over Realm] is described as follows: “[Over Realm X] skill cost :” or “[Over Realm X] skill cost.”  
+22-15-3.  [Over Realm] can be activated if you have X or more cards in your Drop Area. If your Drop Area does not have at least the spe cified 
+number of cards, [Over Realm] can’t be activated.  
+22-15-4. To activate [Over Realm], send all the cards in your Drop Area to your Warp as the skill cost.  
+22-15-5.  [Over Realm] can only be activated from a player’s hand.  
+22-15-6. To resolve the effects of [Over Realm], play the card that activated the skill. If a card played using [Over Realm] is still in the Battle Area 
+at the end of the turn when it was played, that card is sent to its owner’s Warp.  
+22-15-7.  [Over Realm] and [Dark Over Realm] can only be activated a combined total of once per turn.  
+ 
+22-16.  [Barrier]                                                        
+22-16-1. This [Permanent] keyword skill is related to skill targets.  
+22-16-2.  [Barrier] is described as follows: “This card can't be chosen by the skills of cards mastered by your opponent.” 
+ 
+22-17.  [Super Combo]                                                    
+22-17-1. This [Permanent] keyword skill is related to deck construction conditions (6-1-5-2).  
+22-17-2.  [Super Combo] is described as follows: “You can only include up to four cards with [Super Combo] in a deck.”  
+ 
+22-18.  [Victory Strike]                                                       
+22-18-1. This [Permanent] keyword skill is related to damage and victory conditions.  
+22-18-2.  [Victory Strike] is described as follows: “When you deal life damage by attacking with this card, you win the game.”  
+ 
+22-19.  [Warrior of Universe 7]                                                
+22-19-1. This [Permanent] keyword skill is related to energy costs.  
+22-19-2.  [Warrior of Universe 7] is described as follows: “Treat your 《Universe 7》 cards in all areas as if they had no specified cost (1-2-3-2-2).”  
+ 
+22-20.  [Deflect]                                                           
+22-20-1. This [Permanent] keyword skill is related to playing cards.  
+22-20-2.  [Deflect] is described as follows and is valid in all areas: “This card isn't affected by your opponent's [Counter : Play] skills.” 
+ 
+22-21. [Bond] ([Bond X])                                                   
+22-21-1. This keyword is related to the conditions when a skill is valid.  
+22-21-2.  [Bond] skills are written as either “[Bond X] : ” or “[Bond X] specified Battle Card :  
+22-21-2-1. Descriptions of this keyword include the following: “[Bond X] and [Bond X] specified Battle Card.”  
+22-21-3. Skills with [Bond X] are valid only if you have X or more Battle Cards in your Battle Area.  
+22-21-3-1. If the card text indicates a specified Battle Card, skills with that instance of [Bond X] are valid only if you have X or more of the specified 
+Battle Card in your Battle Area.  
+ 
+22-22. [Swap] ([Swap X])                                                   
+22-22-1. This [Activate : Main] keyword skill is related to playing cards.  
+--- PAGE 62 ---
+62 
+22-22-2.  [Swap] is described as follows: “[Swap X] skill cost : specified Battle Card with an energy cost of X.”  
+22-22-3. To activate [Swap], reveal up to one specified Battle Card from your hand with an energy cost of X, and then return the Battl e Card that 
+activated [Swap] to your hand. If you can’t choose the specified Battle Card or return the card that declared the activ ation of [Swap] to your 
+hand, you can’t activate [Swap].  
+22-22-4. To resolve [Swap], play up to one specified Battle Card revealed from your hand with an energy cost of X as the skill cost.  
+ 
+22-23.  [Dark Over Realm] ([Dark Over Realm X])                                  
+22-23-1. This [Activate : Main] keyword skill is related to playing cards.  
+22-23-2.  [Dark Over Realm] is described as follows: “[Dark Over Realm X] skill cost :” or “[Dark Over Realm X] skill cost.”  
+22-23-3.  [Dark Over Realm] can be activated if you have X or more black cards in your Drop Area. If your Drop Area does not have at le ast the 
+specified number of cards, [Dark Over Realm] can’t be activated.  
+22-23-4. To activate [Dark Over Realm], send all the cards in your Drop Area to your Warp as the skill cost.  
+22-23-5.  [Dark Over Realm] can only be activated from a player’s hand.  
+22-23-6. To resolve the effects of [Dark Over Realm], play the card that activated the skill.  
+22-23-7.  [Over Realm] and [Dark Over Realm] can only be activated a combined total of once per turn.  
+ 
+22-24.  [Wormhole]                                                        
+22-24-1. This [Permanent] keyword skill is related to skill activation.  
+22-24-2. Normally, “ [Over Realm] and [Dark Over Realm] can only be activated a combined total of once per turn (22-15-7) (22-23-7),” but 
+[Wormhole] has the following effect: “You can activate [Over Realm] and [Dark Over Realm] up to a total of 2 times a turn.”  
+ 
+22-25.  [Wish]                                                            
+22-25-1. This [Activate Main/Battle] keyword skill is related to Leaders.  
+22-25-2.  [Wish] is described as follows: “[Wish] condition : (effect).”  
+22-25-3.  [Wish] can be activated by fulfilling conditions and paying costs. If the conditions can’t be fulfilled or the costs can’t be  paid, [Wish] can’t 
+be activated.  
+22-25-4. To resolve the effects of [Wish], execute the specified effects, and then—if the card with [Wish] is face-up—flip it over.  
+22-25-4-1. The skill text might tell you to “flip the card over.” 
+ 
+22-26.  [Sparking] ([Sparking X])                                                 
+22-26-1. This keyword is related to the conditions when a skill is valid.  
+22-26-2.  [Sparking] is described as follows: “[Sparking X].”  
+22-26-3. Skills with [Sparking X] are valid only if you have X or more Cards in your Drop Area.  
+ 
+22-27. [Burst] ([Burst X])                                                    
+22-27-1. This keyword is related to skill activation.  
+22-27-2.  [Burst] is described as follows: “[Burst X].”  
+22-27-3. Skills with [Burst X] can be activated only if you place X cards from the top of your deck into your Drop Area.  
+22-27-4. Skills with [Burst X] can’t be activated if X is greater than the number of cards in your deck.  
+ 
+22-28. [Dragon Ball]                                                        
+--- PAGE 63 ---
+63 
+22-28-1. This [Permanent] keyword skill is related to deck construction conditions (6-1-5-2).  
+22-28-2.  [Dragon Ball] is described as follows: “You can include as many copies of cards with [Dragon Ball] with the same card number in your 
+deck as you like, as long as the total number doesn't exceed 7.” 
+ 
+22-29.  [Arrival] ([Arrival XY])                                                  
+22-29-1. This [Activate : Battle] keyword skill is related to playing cards.  
+22-29-2.  [Arrival] is described as follows: “[Arrival XY] skill cost :” or [Arrival XY] skill cost.”  
+22-29-3.  [Arrival] can be activated when the original colors of the Battle Cards in your Combo Area match the colors specified by [Arr ival] (X and 
+Y). If the conditions can’t be fulfilled or the skill cost can’t be paid, [Arrival] can’t be activated.  
+22-29-4.  [Arrival] can only be activated from a player’s hand.  
+22-29-5. To resolve the effects of [Arrival], play the card that activated [Arrival].  
+22-29-6. Some card text refers to [Arrival] skills. This refers to [Arrival] with any color combination.  
+ 
+22-30.  [Aegis] ([Aegis XY])                                             
+22-30-1. This [Activate : Battle] keyword skill is related to energy.  
+22-30-2.  [Aegis] is described as follows: “[Aegis XY]” or “[Aegis XY] skill cost：.”  
+22-30-3.  [Aegis] can be activated when you place one each of the cards whose original colors match those specified by [Aegis] (X and Y) from your 
+hand into your Drop Area as part of the skill cost. This includes placing cards such as 1 blue single-color card and 1 yellow single-color card, 
+or 1 Blue/Yellow multicolor card. Then, if there is an additional skill cost, determine that cost and pay it.  
+22-30-4.  [Aegis] can only be activated during the Defense Step of your opponent’s turn.  
+22-30-5. To resolve the effects of [Aegis], a player who activates [Aegis] chooses up to two of their energy and switches them from Re st Mode to 
+Active Mode.  
+ 
+22-31.  [Energy-Exhaust]                                               
+22-31-1. This [Permanent] keyword skill is related to energy.  
+22-31-2. If a card with [Energy-Exhaust], which is valid in all areas, is placed in an Energy Area as energy, it must be placed there in Rest Mode.  
+ 
+22-32.  [Alliance] ([Alliance XY])                                              
+22-32-1. This [Auto] keyword skill is related to attacking.  
+22-32-2.  [Alliance] is described as follows: “[Alliance XY] (effect)” or “[Alliance XY] skill cost : effect.”  
+22-32-3. When a card with [Alliance] attacks, that card is made pending, and its owner may activate [Alliance] by choosing one or more Battle Cards 
+in their Battle Area with colors that match the colors specified by [Alliance] (X and Y) and switching them from Active Mode to Rest Mode as 
+part of its skill cost.  
+22-32-4. To resolve the effects of [Alliance], execute the specified effects.  
+ 
+22-33. [Offering]                                                          
+22-33-1. This [Auto] keyword skill is related to playing cards.  
+22-33-2. When a Battle Card with [Offering] is played, it is made pending.  
+22-33-3. The effects of [Offering] are resolved as follows: “The opponent of the player who played the card with [Offering] may place a card from 
+their life in their Drop Area. If they don’t, the owner of the card with [Offering] draws 2 cards.”  
+ 
+--- PAGE 64 ---
+64 
+22-34.  [Revive] ([Revive XY])                                                 
+22-34-1. This [Auto] keyword skill is related to playing cards.  
+22-34-2.  [Revive] is described as follows: “[Revive XY]” or “[Revive XY] skill cost :”  
+22-34-3. When a Battle Card with [Revive] is KO’d, its owner can activate [Revive] by placing one or more cards whose original colors match both 
+X and Y from their hand into their Drop Area as its skill cost. Then, if there is an additional skill cost, determine that cost and pay it.  
+22-34-4. The effects of [Revive] are resolved as follows: “ The card that activated [Revive] is played from its owner’s Drop Area, and [Revive] is 
+negated on that card for the duration of the turn.”  
+ 
+22-35. [Heroic]                                                          
+22-35-1. This [Auto] keyword skill is related to the player’s hand.  
+22-35-2.  [Heroic] is made pending when its owner plays another Battle Card with 《Heroic》 or activates a 《Heroic》 Extra Card’s skill.  
+22-35-3. The effects of [Heroic] are resolved as follows: “Draw 1 card and negate the effects of this skill for the duration of the turn.”  
+ 
+22-36.  [Villainous]                                                     
+22-36-1. This [Auto] keyword skill is related to the player’s hand.  
+22-36-2.  [Villainous] is made pending when its owner plays another Battle Card with 《Villainous》 or activates a 《Villainous》 Extra Card’s skill.  
+22-36-3. The effects of [Villainous] are resolved as follows: “Make the opponent choose 1 card from their hand and place it in their Drop Area, and 
+negate the effects of this skill for the duration of the turn.” 
+ 
+22-37.  [Invoker]                                                       
+22-37-1. This [Permanent] keyword skill is related to energy costs.  
+22-37-2.  [Invoker] allows its owner to activate a Red/Blue multicolor Extra Card in their hand without paying its energy cost by switching an Active 
+Mode Red/Blue multicolor card in their Energy Area to Rest Mode.  
+ 
+22-38.  [Successor]                                                      
+22-38-1. This [Activate: Main] keyword skill is related to playing cards.  
+22-38-2.  [Successor] is described as follows: “[Successor] skill cost :” or “[Successor] skill cost.”  
+22-38-3.  [Successor] can be activated by choosing any number of mono-green, mono-yellow, and/or Green/Yellow multicolor Battle Cards in your 
+Battle Area whose energy costs add up to the original energy cost of the card with [Successor] and then placing those cards in your Drop 
+Area.  
+22-38-4.  [Successor] can only be activated from its owner’s hand.  
+22-38-5. To resolve the effects of [Successor], play the Battle Card that activated this skill.  
+ 
+22-39.  [Unique]                                                          
+22-39-1. This [Permanent] keyword skill is related to playing cards.  
+22-39-2. If a card with [Unique] is in play, no other cards with the same name can be played in its owner’s Battle Area. This skill is valid in all areas.  
+22-39-3. If a card with [Unique] is already in play, its owner can’t play another card with the same card name as that card.  
+22-39-4. If two or more cards with [Unique] and the same card name are in play in the same Battle Area, their master chooses one of the cards to 
+keep in play, placing any remaining cards with the same card name in their Drop Areas (21-11).  
+ 
+22-40. [Servant]                                                     
+--- PAGE 65 ---
+65 
+22-40-1. This [Permanent] keyword skill is related to power and position.  
+22-40-2. Cards with [Servant] get +10000 power but can’t be switched to Active Mode during their masters’ Charge Phases.  
+ 
+22-41.  [Overlord]                                                      
+22-41-1. This [Activate : Main] keyword skill is related to the player’s hand.  
+22-41-2.  [Overlord] is activated by placing one of your Battle Cards with [Servant] at the bottom of its owner's deck as the skill cost.  
+22-41-3. To resolve the effects of [Overlord], the player who activated this skill draws 1 card.  
+ 
+22-42.  [Rejuvenate]                                                         
+22-42-1. This [Activate : Main] keyword skill is related to life.  
+22-42-2.  [Rejuvenate] is described as follows: “[Rejuvenate] skill cost :” or “[Rejuvenate] skill cost.”  
+22-42-3.  [Rejuvenate] can be activated by placing a card from beneath the card activating [Rejuvenate] in its owner’s Drop Area and pa ying the 
+skill cost.  
+22-42-4. A player who activates [Rejuvenate] can add the top card of their deck to their life.  
+ 
+22-43.  [Spirit Boost] ([Spirit Boost X])                                           
+22-43-1. This keyword is related to skill activation.  
+22-43-2.  [Spirit Boost] is described as follows: “[Spirit Boost X]” or “[Spirit Boost X] specified Unison Card.”  
+22-43-3. A skill with [Spirit Boost X] can be activated by removing X markers from your Unison Card as the skill cost.  
+22-43-3-1. If the card text indicates a specified Unison Card, markers must be removed from the specified Unison Card.  
+ 
+22-44. [Limit] ([Limit X])                                                
+22-44-1. This keyword is related to skill activation.  
+22-44-2.  [Limit] is described as follows: “[Limit X].”  
+22-44-3. A skill with [Limit X] can only be activated and resolved by its master X times during the same turn, across all copies of th e same skill on 
+cards with the same card number.  
+22-44-3-1.  “The same skill” in 22-44-3 refers to skills that have the same wordings, accompanying keywords, skill costs, effects, etc. An exception 
+to this is when card text is changed or updated, with announcements on the official web page or elsewhere. In cases such as t hese, 
+the updated card text and the original card text are both treated as the same skill.  
+22-44-4. If an [Auto] skill has [Limit X], it may be made pending multiple times simultaneously. In this case, once the skill has been resolved X times, 
+the remaining fail to activate.  
+22-44-5. After resolving a skill with [Limit X] the specified number of times, the skill can’t be resolved or activated again for the rest of the turn, even 
+if its costs are paid or its activation conditions are fulfilled.  
+22-44-6. If an effect causes a card that has the same card number and belongs to the same master to have multiple copies of the same s kill, one 
+with [Limit X] and one without, only the skill with [Limit X] is limited to being activated X times in the same turn. The  skill without [Limit X] is 
+not affected and can be activated any number of times without issue.  
+Example: A card with [Blocker] [Limit 1] gains [Blocker] via an effect. The card now has both [Blocker] [Limit 1] and [Blocker]. The card’s master 
+can only activate the card’s [Blocker] [Limit 1] skill one more time across all copies of the card, but the [Blocker] skill without [Limit 1] 
+can be activated any number of times. 
+ 
+22-45. [Empower] ([Empower XY])                                          
+--- PAGE 66 ---
+66 
+22-45-1. This [Permanent] keyword skill is related to markers.  
+22-45-2.  [Empower] is described as follows: “[Empower XY].” X specifies a color, and Y specifies a number.  
+22-45-3.  [Empower] can be activated from all areas. If you have one or more Unison Cards with a color matching X in play in your Unison Area, if 
+those Unison Cards are placed in your Drop Area when you play a Unison Card with [Empower], you may add up to Y markers from 1 of the 
+Unison Cards whose colors match X to the Unison Card with this skill as you play it.  
+22-45-3-1. If there are multiple colors specified by [Empower] (for example, [Empower XY/ZY]), you choose one of the colors, and then add up to 
+Y markers from Unison Cards whose colors match the color you chose and are placed in your Drop Area to the Unison Card with  this 
+skill as you play it (13-2-1-3-1) (13-2-2-5-1).  
+22-45-3-2. Some [Empower] skills don’t specify a color. In these cases, Unison Cards of any color can be placed in your Drop Area.  
+ 
+22-46. [Z-Awaken]                                                                         
+22-46-1. This [Activate : Main/Battle] keyword skill is related to Leaders.  
+22-46-2.  [Z-Awaken] is described as follows: “[Z -Awaken] skill cost : <character name>” or “[Z -Awaken] skill cost : specified Leader Card.” Here, 
+“<character name>” and “specified Leader Card” are conditions for [Z-Awaken].  
+22-46-3.  [Z-Awaken] can be activated by choosing one specified face-down Leader Card—which must be in your Leader Area and must not be a 
+Z-Card—paying the specified Z-Energy cost, satisfying the specified conditions, and paying the skill cost. If the specified Leader Card can’t 
+be chosen, [Z-Awaken] can’t be activated.  
+22-46-3-1. Z-Energy costs and skill costs can be paid in any order.  
+22-46-4.  [Z-Awaken] can only be declared and activated a total of once per turn.  
+22-46-5. A card with [Z-Awaken] can only be activated if the card is face-down in the Z-Deck Area.  
+22-46-6. To resolve the effects of [Z-Awaken], place the card that activated [Z-Awaken] on top of the Leader Card chosen in 22-46-5. From then on, 
+all the cards under the card that activated [Z-Awaken] are treated as the Z-Leader Card on top and are therefore treated as one card.  
+22-46-6-1. Any continuous effects that affect the original Leader’s power or position carry over.  
+22-46-6-2. If the card that activated [Z-Awaken] is not placed in the Leader Area, that card is removed from the game.  
+22-46-6-3. Skills that trigger when “this card is placed in the Leader Area,” etc. enter pending.  
+ 
+22-47. 【Z-Stack X】                                                                           
+22-47-1. This [Auto] keyword skill is related to cards in the Z-Deck Area.  
+22-47-2.  [Z-Stack X] is described as “[Z-Stack X] Specified card” or “[Z-Stack X] Skill cost : Specified card.” “Specified card” is the condition for [Z-
+Stack X].  
+22-47-2-1. Unless specified otherwise, “Specified card” is a card that fulfills the conditions from your Z-Deck Area.  
+22-47-3. For [Z-Stack X], a card with this skill in the Z -Deck is made pending when it is placed at the top of a Leader Area or in a Battle Area or 
+Unison Area.  
+22-47-4. The effects of [Z-Stack X] are resolved as follows: Place up to X cards under the card that activated this skill as specified in 22-47-2. Then, 
+all of the cards placed under that card are treated as the same card as the top Z -Card in that stack, and those cards are treated as a single 
+card.  
+22-47-4-1. Some skills read “when choosing this card's [Z-Stack] conditions, you can choose up to X (condition) cards.” These skills expand the 
+conditions that can be fulfilled when choosing cards for a given keyword skill.  
+ 
+23. Other 

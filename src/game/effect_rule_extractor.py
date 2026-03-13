@@ -34,7 +34,13 @@ _ACTIVATE_MAIN_DRAW_RE = re.compile(r"\[activate:\s*main\][^.]{0,200}?(?::\s*)?d
 _ACTIVATE_BATTLE_DRAW_RE = re.compile(r"\[activate:\s*battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
 _ACTIVATE_MAIN_BATTLE_DRAW_RE = re.compile(r"\[activate:\s*main/battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
 _ACTIVATE_MAIN_LOOK_TOP_ADD_TO_HAND_RE = re.compile(
-    r"\[activate:\s*main\](?:[^:]{0,220}:)?\s*look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[â€”â€•-])to your hand"
+    r"\[activate:\s*main\].{0,260}?look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[â€”â€•-])to your hand"
+)
+_ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE = re.compile(
+    r"\[activate:\s*main\].{0,240}?play this card from your hand"
+)
+_ACTIVATE_MAIN_DRAW_GAIN_KEYWORD_RE = re.compile(
+    r"\[activate:\s*main\].{0,240}?draw (\d+) card(?:s)?[,;]?\s*and this card gains \[([^\]]+)\] for the turn"
 )
 _PLAY_TOP_IF_COLOR_ADD_HAND_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is played(?: from your hand)?(?: or discarded by [^:]{1,120})?.*?"
@@ -135,6 +141,31 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
     m_leader = re.search(r"(if your leader[^:]{0,200}):", text)
     if m_leader:
         params["requires_leader"] = m_leader.group(1).strip()
+    m_leader_traits = re.search(r"if your leader(?: card)? is a ([^:]+?) card", text)
+    if m_leader_traits:
+        raw_traits = m_leader_traits.group(1)
+        traits = [part.strip().title() for part in re.split(r"\bor\b|/|,", raw_traits) if part.strip()]
+        if traits:
+            params["required_leader_traits"] = ",".join(traits)
+    m_energy = re.search(r"\byou have (\d+) or more energy", text)
+    if m_energy:
+        params["min_owner_energy"] = int(m_energy.group(1))
+    if "neither you nor your opponent have a battle card in play" in text:
+        params["requires_no_owner_battle"] = True
+        params["requires_no_opponent_battle"] = True
+    if "if you have no battle cards in play" in text:
+        params["requires_no_owner_battle"] = True
+    m_only_battle = re.search(r"if you only have (.+?) cards? in play in your battle area", text)
+    if m_only_battle:
+        descriptor = m_only_battle.group(1).strip().lower()
+        params["required_owner_battle_only_matching"] = True
+        params.update(
+            {
+                f"required_owner_battle_{k}": v
+                for k, v in _descriptor_filters(descriptor, text).items()
+                if k in {"allowed_colors", "required_traits", "required_characters", "required_name_contains"}
+            }
+        )
     m_mono_energy = re.search(r"if all of your energy is mono-(red|blue|green|yellow|black)", text)
     if m_mono_energy:
         params["requires_mono_energy"] = m_mono_energy.group(1).strip()
@@ -175,7 +206,12 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
     if required_card_type:
         params["required_card_type"] = required_card_type
 
+    m_name_token = re.search(r"\{([^}]+)\}\s+in\s+(?:their\s+)?card\s+names?", descriptor_lc)
+    if m_name_token:
+        params["required_name_contains"] = m_name_token.group(1).strip().upper()
+
     cleaned = descriptor_lc
+    cleaned = re.sub(r"\{[^}]+\}\s+in\s+(?:their\s+)?card\s+names?", " ", cleaned)
     cleaned = re.sub(r"\b(red|blue|green|yellow|black)\b", " ", cleaned)
     cleaned = re.sub(r"\b(z-battle|z battle|z-unison|z unison|battle|unison|extra|monster)\s+cards?\b", " ", cleaned)
     cleaned = re.sub(r"\bcards?\b", " ", cleaned)
@@ -442,6 +478,12 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             descriptor = m_activate_main_search.group(3).lower()
             m_discard = re.search(r"if you added a card to your hand, choose (\d+) card in your hand and discard it", branch)
             discard_after_add = int(m_discard.group(1)) if m_discard else 0
+            m_bottom_after_add = re.search(
+                r"if you added (\d+) cards? to your hand, choose (\d+) card in your hand and place it at the bottom of your deck",
+                branch,
+            )
+            bottom_after_add_count = int(m_bottom_after_add.group(2)) if m_bottom_after_add else 0
+            bottom_after_add_exact = int(m_bottom_after_add.group(1)) if m_bottom_after_add else 0
             extra = _extract_common_conditions(branch)
             params: dict[str, int | str | bool] = {
                 "look_count": look_count,
@@ -451,11 +493,45 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             }
             if discard_after_add > 0:
                 params["discard_after_add"] = discard_after_add
+            if "place the rest at the bottom of your deck" in branch:
+                params["move_unpicked_to_bottom"] = True
+            if bottom_after_add_count > 0:
+                params["bottom_deck_after_add"] = bottom_after_add_count
+            if bottom_after_add_exact > 0:
+                params["bottom_deck_after_add_exact_add_count"] = bottom_after_add_exact
             rules.append(
                 EffectRule(
                     trigger="self_activate_main",
                     handler_id="auto_look_top_add_up_to_one_to_hand_on_play",
                     handler_params=params,
+                    once_per_turn=once,
+                )
+            )
+
+        if _ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {**extra}
+            if "rest mode" in branch:
+                params["resting"] = True
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_play_self_from_hand",
+                    handler_params=params,
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_main_draw_keyword = _ACTIVATE_MAIN_DRAW_GAIN_KEYWORD_RE.search(branch)
+        if m_activate_main_draw_keyword:
+            amount = int(m_activate_main_draw_keyword.group(1))
+            grant_keyword = m_activate_main_draw_keyword.group(2).strip().title()
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_draw_n_and_gain_keyword_for_turn",
+                    handler_params={"amount": amount, "grant_keyword": grant_keyword, **extra},
                     once_per_turn=once,
                 )
             )
