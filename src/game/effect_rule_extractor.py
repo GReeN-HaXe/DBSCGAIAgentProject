@@ -42,6 +42,21 @@ _ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE = re.compile(
 _ACTIVATE_MAIN_DRAW_GAIN_KEYWORD_RE = re.compile(
     r"\[activate:\s*main\].{0,240}?draw (\d+) card(?:s)?[,;]?\s*and this card gains \[([^\]]+)\] for the turn"
 )
+_ACTIVATE_MAIN_DROP_OWNER_HIDDEN_MODE_DRAW_RE = re.compile(
+    r"\[activate:\s*main\].{0,260}?choose 1 hidden mode card in your battle area and place it into (?:its|that card's) owner'?s drop:\s*draw (\d+) card"
+)
+_ACTIVATE_MAIN_SWITCH_OWNER_BATTLE_TO_HIDDEN_RE = re.compile(
+    r"\[activate:\s*main\].{0,260}?choose 1 of your (.+?) battle cards? and switch it to hidden mode"
+)
+_ACTIVATE_MAIN_SWITCH_OWNER_BOARD_TO_REVEALED_RE = re.compile(
+    r"\[activate:\s*main\].{0,260}?choose 1 card in your battle area and switch it to revealed mode"
+)
+_ATTACK_SWITCH_UP_TO_N_OPP_BATTLE_HIDDEN_THEN_REVEAL_OPP_TURN_END_RE = re.compile(
+    r"when this card attacks, choose up to (\d+) of your opponent'?s battle cards?, switch (?:it|them) to hidden mode, then switch (?:it|them) to revealed mode at the end of your opponent'?s turn"
+)
+_PLAY_SWITCH_UP_TO_N_OPP_BATTLE_HIDDEN_THEN_REVEAL_TURN_END_RE = re.compile(
+    r"when this card is played(?: from your hand)?(?:[^.]{0,180})?choose up to (\d+) of your opponent'?s battle cards?, switch (?:it|them) to hidden mode, then switch (?:it|them) to revealed mode at the end of the turn"
+)
 _PLAY_TOP_IF_COLOR_ADD_HAND_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is played(?: from your hand)?(?: or discarded by [^:]{1,120})?.*?"
     r"look at the top card of your deck; if it's a (red|blue|green|yellow|black)\b.*?you may add it to your hand.*?otherwise,?\s*place it at the bottom of your deck"
@@ -532,6 +547,69 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_activate_main",
                     handler_id="activate_draw_n_and_gain_keyword_for_turn",
                     handler_params={"amount": amount, "grant_keyword": grant_keyword, **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_main_drop_hidden_draw = _ACTIVATE_MAIN_DROP_OWNER_HIDDEN_MODE_DRAW_RE.search(branch)
+        if m_activate_main_drop_hidden_draw:
+            amount = int(m_activate_main_drop_hidden_draw.group(1))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_drop_owner_hidden_mode_draw_n",
+                    handler_params={"amount": amount, **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_main_switch_hidden = _ACTIVATE_MAIN_SWITCH_OWNER_BATTLE_TO_HIDDEN_RE.search(branch)
+        if m_activate_main_switch_hidden:
+            descriptor = m_activate_main_switch_hidden.group(1).strip().lower()
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_switch_owner_battle_to_hidden_mode",
+                    handler_params={**_descriptor_filters(descriptor, branch), **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        if _ACTIVATE_MAIN_SWITCH_OWNER_BOARD_TO_REVEALED_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_switch_owner_board_to_revealed_mode",
+                    handler_params={**extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_attack_hidden_then_reveal = _ATTACK_SWITCH_UP_TO_N_OPP_BATTLE_HIDDEN_THEN_REVEAL_OPP_TURN_END_RE.search(branch)
+        if m_attack_hidden_then_reveal:
+            max_targets = int(m_attack_hidden_then_reveal.group(1))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end",
+                    handler_params={"max_targets": max_targets, **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_play_hidden_then_reveal_turn_end = _PLAY_SWITCH_UP_TO_N_OPP_BATTLE_HIDDEN_THEN_REVEAL_TURN_END_RE.search(branch)
+        if m_play_hidden_then_reveal_turn_end:
+            max_targets = int(m_play_hidden_then_reveal_turn_end.group(1))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end",
+                    handler_params={"max_targets": max_targets, **extra},
                     once_per_turn=once,
                 )
             )

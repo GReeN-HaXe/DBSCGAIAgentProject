@@ -215,6 +215,7 @@ Resolved:
 - [ ] implement full Unison rules batch:
   - playing Unison from hand with correct marker entry count
   - replacing an existing Unison / Hidden Mode card in the Unison Area
+    - status: Unison replacement is now standardized across normal play and effect-driven play; Hidden Mode-specific replacement remains a separate track
   - skill-based Unison play with both counter timings
     - status: first slice complete for effect-driven play-from-hand; second `Counter: Play` timing now opens correctly
   - on-play triggers entering pending correctly
@@ -234,10 +235,28 @@ Resolved:
   - once per turn, per card
   - after one marker-skill resolution, no other marker-cost skills on that card that turn
   - remaining work: broaden beyond generic skill-cost specs into more marker-driven effect families
+- [ ] implement Hidden Mode-specific replacement / interaction track:
+  - status: replacement/runtime + delayed reveal slices partially complete
+  - supported now:
+    - hidden-mode battle cards are inert for attacking and skill sourcing
+    - reusable `Activate: Main` family to switch an owner battle card to Hidden Mode
+    - reusable `Activate: Main` family to drop an owner Hidden Mode battle card and draw
+    - existing Unison / Hidden Mode replacement semantics now route through the shared replacement path
+    - reusable `Activate: Main` family to switch an owner board card to Revealed Mode
+    - reusable delayed reveal families for:
+      - attack-triggered switch of opponent battle card(s) to Hidden Mode, then Revealed Mode at end of opponent's turn
+      - play-triggered switch of opponent battle card(s) to Hidden Mode, then Revealed Mode at end of turn
+  - remaining work:
+    - broader Revealed Mode / switch-back interactions, especially cost-selected card tracking
+    - Hidden Mode-specific auto triggers and delayed state changes beyond the generic delayed-reveal families
+    - broader Hidden Mode family extraction from active decks and traces
 - [ ] implement Unison battle rules:
+  - status: complete
   - defense step skipped when a Unison is attacked
   - damage removes markers instead of life
-  - `Strike` / `Victory Strike` marker removal behavior
+  - `Double/Triple/Quadruple Strike` remove the corresponding number of markers
+  - `Victory Strike` removes all remaining markers
+  - regression-covered in `tests/test_phase3_rule_fixes.py`
 - [ ] implement reusable leader keyword families from rule manual additions:
   - `[Wish]`
   - `[Z-Awaken]`

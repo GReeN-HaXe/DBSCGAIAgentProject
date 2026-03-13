@@ -116,6 +116,93 @@ def test_unison_guard_loses_markers_not_immediate_ko() -> None:
     assert state.players[2].unison_area[0].markers == 1
 
 
+def test_unison_attack_skips_defense_step() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area.append(CardInstance(instance_id=700033, card_id=33, owner_id=1, power=20000))
+    state.players[2].unison_area.append(CardInstance(instance_id=700034, card_id=34, owner_id=2, card_type="UNISON", power=10000, resting=True, markers=2))
+    state = engine.apply_action(
+        state,
+        Action(
+            action_type=ActionType.DECLARE_ATTACK,
+            player_id=1,
+            attacker_zone="battle",
+            attacker_index=0,
+            target_player_id=2,
+            target_zone="unison",
+            target_index=0,
+        ),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    assert state.battle_step == BattleStep.DAMAGE
+    legal = engine.get_legal_actions(state, player_id=2)
+    assert all(a.action_type != ActionType.END_DEFENSE_STEP for a in legal)
+    assert any(cp.name == "battle_damage_step" for cp in state.checkpoints)
+
+
+def test_double_strike_removes_two_unison_markers() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=700035, card_id=35, owner_id=1, power=20000, keywords=("Double Strike",))
+    )
+    state.players[2].unison_area.append(CardInstance(instance_id=700036, card_id=36, owner_id=2, card_type="UNISON", power=10000, resting=True, markers=3))
+    state = engine.apply_action(
+        state,
+        Action(
+            action_type=ActionType.DECLARE_ATTACK,
+            player_id=1,
+            attacker_zone="battle",
+            attacker_index=0,
+            target_player_id=2,
+            target_zone="unison",
+            target_index=0,
+        ),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    assert len(state.players[2].unison_area) == 1
+    assert state.players[2].unison_area[0].markers == 1
+    assert any(cp.name == "unison_marker_damage" for cp in state.checkpoints)
+
+
+def test_victory_strike_removes_all_unison_markers_and_drops_unison() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=700037, card_id=37, owner_id=1, power=25000, keywords=("Victory Strike",))
+    )
+    state.players[2].unison_area.append(CardInstance(instance_id=700038, card_id=38, owner_id=2, card_type="UNISON", power=10000, resting=True, markers=4))
+    state = engine.apply_action(
+        state,
+        Action(
+            action_type=ActionType.DECLARE_ATTACK,
+            player_id=1,
+            attacker_zone="battle",
+            attacker_index=0,
+            target_player_id=2,
+            target_zone="unison",
+            target_index=0,
+        ),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    assert len(state.players[2].unison_area) == 0
+    assert any(card.instance_id == 700038 for card in state.players[2].drop)
+
+
 def test_counter_can_negate_attack() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(
@@ -751,6 +838,46 @@ def test_unison_markers_equal_energy_cards_rested_not_total_cost() -> None:
     assert state.players[1].unison_area[0].markers == 1
 
 
+def test_playing_unison_from_hand_replaces_existing_unison() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    p1 = state.players[1]
+    p1.unison_area.append(CardInstance(instance_id=700073, card_id=73, owner_id=1, card_type="UNISON", markers=2))
+    p1.hand = [CardInstance(instance_id=700074, card_id=74, owner_id=1, card_type="UNISON", energy_cost=1)]
+    p1.energy = [CardInstance(instance_id=700075, card_id=75, owner_id=1, resting=False)]
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].unison_area) == 1
+    assert state.players[1].unison_area[0].card_id == 74
+    assert any(card.instance_id == 700073 for card in state.players[1].drop)
+    assert any(cp.name == "unison_replaced" for cp in state.checkpoints)
+
+
+def test_playing_unison_from_hand_replaces_hidden_mode_card_in_unison_area() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    p1 = state.players[1]
+    p1.unison_area.append(CardInstance(instance_id=700074, card_id=740, owner_id=1, card_type="BATTLE", hidden_mode=True))
+    p1.hand = [CardInstance(instance_id=700075, card_id=75, owner_id=1, card_type="UNISON", energy_cost=1)]
+    p1.energy = [CardInstance(instance_id=700076, card_id=76, owner_id=1, resting=False)]
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].unison_area) == 1
+    assert state.players[1].unison_area[0].card_id == 75
+    assert any(card.instance_id == 700074 for card in state.players[1].drop)
+    assert any(cp.name == "unison_replaced" for cp in state.checkpoints)
+
+
 def test_unison_growth_adds_marker_once_per_turn_for_same_card_number() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(
@@ -872,6 +999,46 @@ def test_unison_add_marker_skill_locks_after_one_resolution() -> None:
         not (
             a.action_type == ActionType.ACTIVATE_MAIN_SKILL
             and a.source_zone == "unison"
+            and a.source_index == 0
+        )
+        for a in legal
+    )
+
+
+def test_hidden_mode_battle_card_cannot_attack_or_activate_skill() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(
+            instance_id=700081,
+            card_id=81,
+            owner_id=1,
+            card_type="BATTLE",
+            hidden_mode=True,
+            has_activate_main=True,
+        )
+    )
+    legal = engine.get_legal_actions(state, player_id=1)
+    assert all(
+        not (
+            a.action_type == ActionType.DECLARE_ATTACK
+            and a.attacker_zone == "battle"
+            and a.attacker_index == 0
+        )
+        for a in legal
+    )
+    assert all(
+        not (
+            a.action_type == ActionType.ACTIVATE_MAIN_SKILL
+            and a.source_zone == "battle"
             and a.source_index == 0
         )
         for a in legal

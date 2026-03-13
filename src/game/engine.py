@@ -15,6 +15,7 @@ from src.game.state import (
     BattleStep,
     CardInstance,
     CheckpointEvent,
+    DelayedModeSwitch,
     EffectEvent,
     EffectRegistration,
     EffectResolution,
@@ -130,6 +131,11 @@ class RulesEngine:
             "auto_play_self_from_combo_on_battle_end": self._handle_auto_play_self_from_combo_on_battle_end,
             "activate_play_self_from_hand": self._handle_activate_play_self_from_hand,
             "activate_draw_n_and_gain_keyword_for_turn": self._handle_activate_draw_n_and_gain_keyword_for_turn,
+            "activate_switch_owner_battle_to_hidden_mode": self._handle_activate_switch_owner_battle_to_hidden_mode,
+            "activate_switch_owner_board_to_revealed_mode": self._handle_activate_switch_owner_board_to_revealed_mode,
+            "activate_drop_owner_hidden_mode_draw_n": self._handle_activate_drop_owner_hidden_mode_draw_n,
+            "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end": self._handle_auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end,
+            "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end": self._handle_auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end,
             "auto_ko_opponent_battle_on_play": self._handle_auto_ko_opponent_battle_on_play,
             "auto_ko_up_to_n_opponent_battle_on_play": self._handle_auto_ko_up_to_n_opponent_battle_on_play,
             "auto_power_reduce_up_to_n_on_play": self._handle_auto_power_reduce_up_to_n_on_play,
@@ -425,9 +431,11 @@ class RulesEngine:
         self._checkpoint(state, "charge_phase_charge_window")
 
     def _end_turn(self, state: GameState) -> None:
-        self._emit_effect_event(state, name="turn_end", actor_player_id=state.active_player, payload={})
-        self._clear_end_of_turn_modifiers(state.players[state.active_player])
-        state.active_player = self._opponent_of(state.active_player)
+        ending_player = state.active_player
+        self._emit_effect_event(state, name="turn_end", actor_player_id=ending_player, payload={})
+        self._apply_due_delayed_mode_switches(state, trigger_player_id=ending_player)
+        self._clear_end_of_turn_modifiers(state.players[ending_player])
+        state.active_player = self._opponent_of(ending_player)
         state.turn_number += 1
         self._start_charge_phase(state)
 
@@ -1190,7 +1198,7 @@ class RulesEngine:
         return max(int(getattr(card, "attack_count_this_turn", 0)), 1 if card.attacked_this_turn else 0)
 
     def _can_card_attack_this_turn(self, card: CardInstance, state: GameState) -> bool:
-        if card.resting or card.instance_id in state.attack_restricted_instance_ids:
+        if card.resting or card.hidden_mode or card.instance_id in state.attack_restricted_instance_ids:
             return False
         return self._attacks_used_this_turn(card) < self._max_attacks_per_turn(card)
 
@@ -1446,12 +1454,7 @@ class RulesEngine:
             marker_override = pending.payload.get("marker_count")
             paid_energy = int(pending.payload.get("paid_energy_cards") or 0)
             card.markers = max(int(marker_override) if marker_override is not None else paid_energy, 0)
-            if player.unison_area:
-                replaced = player.unison_area.pop()
-                if replaced.card_type.startswith("Z-"):
-                    player.removed_from_game.append(replaced)
-                else:
-                    player.drop.append(replaced)
+            self._replace_owner_unison_if_needed(state, player)
             player.unison_area.append(card)
             self._register_card_effects(state, player_id=pending.actor_player_id, source_zone="unison", card=card)
             self._emit_effect_event(
@@ -1536,6 +1539,66 @@ class RulesEngine:
                 return c
         return None
 
+    def _find_board_card_by_instance(self, player: PlayerState, instance_id: int) -> CardInstance | None:
+        for card in player.battle_area:
+            if card.instance_id == instance_id:
+                return card
+        for card in player.unison_area:
+            if card.instance_id == instance_id:
+                return card
+        return None
+
+    def _schedule_delayed_mode_switch(
+        self,
+        state: GameState,
+        *,
+        owner_player_id: int,
+        target_instance_id: int,
+        trigger_player_id: int,
+        switch_to_hidden: bool,
+    ) -> None:
+        state.delayed_mode_switches.append(
+            DelayedModeSwitch(
+                owner_player_id=owner_player_id,
+                target_instance_id=target_instance_id,
+                trigger_player_id=trigger_player_id,
+                switch_to_hidden=switch_to_hidden,
+            )
+        )
+
+    def _apply_due_delayed_mode_switches(self, state: GameState, *, trigger_player_id: int) -> None:
+        if not state.delayed_mode_switches:
+            return
+        remaining: list[DelayedModeSwitch] = []
+        changed = False
+        for delayed in state.delayed_mode_switches:
+            if delayed.trigger_player_id != trigger_player_id:
+                remaining.append(delayed)
+                continue
+            owner = state.players.get(delayed.owner_player_id)
+            if owner is None:
+                continue
+            target = self._find_board_card_by_instance(owner, delayed.target_instance_id)
+            if target is None:
+                continue
+            target.hidden_mode = bool(delayed.switch_to_hidden)
+            changed = True
+            event_name = "card_switched_hidden_mode" if delayed.switch_to_hidden else "card_switched_revealed_mode"
+            self._emit_effect_event(
+                state,
+                name=event_name,
+                actor_player_id=delayed.owner_player_id,
+                payload={
+                    "source_instance_id": target.instance_id,
+                    "source_card_id": target.card_id,
+                    "source_zone": "unison" if target in owner.unison_area else "battle",
+                    "owner_player_id": delayed.owner_player_id,
+                },
+            )
+        state.delayed_mode_switches = remaining
+        if changed:
+            self._checkpoint(state, "delayed_mode_switch_resolved")
+
     def _ko_card(self, state: GameState, player_id: int, zone: str, instance_id: int) -> None:
         player = state.players[player_id]
         zone_cards = player.battle_area if zone == "battle" else player.unison_area
@@ -1559,6 +1622,17 @@ class RulesEngine:
                 )
                 self._checkpoint(state, "ko_processing")
                 return
+
+    def _replace_owner_unison_if_needed(self, state: GameState, player: PlayerState) -> CardInstance | None:
+        if not player.unison_area:
+            return None
+        replaced = player.unison_area.pop()
+        if replaced.card_type.startswith("Z-"):
+            player.removed_from_game.append(replaced)
+        else:
+            player.drop.append(replaced)
+        self._checkpoint(state, "unison_replaced")
+        return replaced
 
     def _apply_unison_battle_damage(self, state: GameState, player_id: int, instance_id: int, attacker: CardInstance) -> None:
         player = state.players[player_id]
@@ -1635,6 +1709,9 @@ class RulesEngine:
             i = 0
             while i < len(player.unison_area):
                 unison = player.unison_area[i]
+                if "UNISON" not in (unison.card_type or "").upper():
+                    i += 1
+                    continue
                 if unison.power <= 0:
                     self._remove_unison_markers(state, unison=unison, amount=1, reason="rule_power_zero")
                 if unison.markers <= 0:
@@ -1716,6 +1793,8 @@ class RulesEngine:
     def _is_valid_skill_source_area(card: CardInstance, zone: str | None) -> bool:
         if zone == "leader":
             return True
+        if card.hidden_mode:
+            return False
         ctype = (card.card_type or "").upper()
         if zone == "hand":
             return ctype in {"BATTLE", "UNISON", "Z-BATTLE", "Z-UNISON"}
@@ -2287,12 +2366,7 @@ class RulesEngine:
         if not indexes:
             return
         # Current engine model allows one Unison in play; mirror play replacement semantics.
-        if owner.unison_area:
-            replaced = owner.unison_area.pop()
-            if replaced.card_type.startswith("Z-"):
-                owner.removed_from_game.append(replaced)
-            else:
-                owner.drop.append(replaced)
+        self._replace_owner_unison_if_needed(state, owner)
         idx = sorted(indexes)[0]
         taken = opponent.unison_area.pop(idx)
         taken.owner_id = reg.owner_player_id
@@ -2559,12 +2633,7 @@ class RulesEngine:
             target_zone = "battle"
             if "UNISON" in (card.card_type or "").upper():
                 target_zone = "unison"
-                if owner.unison_area:
-                    replaced = owner.unison_area.pop()
-                    if replaced.card_type.startswith("Z-"):
-                        owner.removed_from_game.append(replaced)
-                    else:
-                        owner.drop.append(replaced)
+                self._replace_owner_unison_if_needed(state, owner)
                 owner.unison_area.append(card)
             else:
                 owner.battle_area.append(card)
@@ -2724,6 +2793,185 @@ class RulesEngine:
         if grant_keyword and not self._card_has_keyword(source, grant_keyword):
             source.temporary_keywords = tuple(list(source.temporary_keywords) + [grant_keyword])
         self._checkpoint(state, "effect_activate_draw_n_and_gain_keyword_for_turn")
+
+    def _handle_activate_switch_owner_battle_to_hidden_mode(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        candidates = [
+            card
+            for card in owner.battle_area
+            if not card.hidden_mode
+            and self._card_matches_effect_filters(
+                card,
+                allowed_colors=allowed_colors,
+                required_traits=required_traits,
+                required_characters=required_characters,
+                required_name_contains=required_name_contains,
+            )
+        ]
+        if not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        target = candidates[self._choose_effect_target_index(state, reg, candidates, policy)]
+        target.hidden_mode = True
+        self._emit_effect_event(
+            state,
+            name="card_switched_hidden_mode",
+            actor_player_id=reg.owner_player_id,
+            payload={
+                "target_instance_id": target.instance_id,
+                "target_card_id": target.card_id,
+                "target_zone": "battle",
+            },
+        )
+        self._checkpoint(state, "effect_activate_switch_owner_battle_to_hidden_mode")
+
+    def _handle_activate_switch_owner_board_to_revealed_mode(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        candidates = [card for card in [*owner.battle_area, *owner.unison_area] if card.hidden_mode]
+        if not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        target = candidates[self._choose_effect_target_index(state, reg, candidates, policy)]
+        target.hidden_mode = False
+        self._emit_effect_event(
+            state,
+            name="card_switched_revealed_mode",
+            actor_player_id=reg.owner_player_id,
+            payload={
+                "source_instance_id": target.instance_id,
+                "source_card_id": target.card_id,
+                "source_zone": "unison" if target in owner.unison_area else "battle",
+                "owner_player_id": reg.owner_player_id,
+            },
+        )
+        self._checkpoint(state, "effect_activate_switch_owner_board_to_revealed_mode")
+
+    def _handle_activate_drop_owner_hidden_mode_draw_n(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        candidates = [card for card in owner.battle_area if card.hidden_mode]
+        if not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        target = candidates[self._choose_effect_target_index(state, reg, candidates, policy)]
+        owner.battle_area.remove(target)
+        owner.drop.append(target)
+        amount = self._resolve_effect_int_param(state, reg, "amount", default=1)
+        for _ in range(max(amount, 0)):
+            self._draw_one(state, reg.owner_player_id)
+        self._checkpoint(state, "effect_activate_drop_owner_hidden_mode_draw_n")
+
+    def _handle_auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end(
+        self, state: GameState, event: EffectEvent, reg: EffectRegistration
+    ) -> None:
+        if event.name != "attack_declared":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if opponent is None:
+            return
+        candidates = [card for card in opponent.battle_area if not card.hidden_mode]
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0 or not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
+        if not indexes:
+            return
+        for idx in indexes:
+            target = candidates[idx]
+            target.hidden_mode = True
+            self._emit_effect_event(
+                state,
+                name="card_switched_hidden_mode",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": target.instance_id,
+                    "source_card_id": target.card_id,
+                    "source_zone": "battle",
+                    "owner_player_id": opponent_id,
+                },
+            )
+            self._schedule_delayed_mode_switch(
+                state,
+                owner_player_id=opponent_id,
+                target_instance_id=target.instance_id,
+                trigger_player_id=opponent_id,
+                switch_to_hidden=False,
+            )
+        self._checkpoint(state, "effect_auto_switch_opponent_battle_hidden_then_reveal_on_opponent_turn_end")
+
+    def _handle_auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end(
+        self, state: GameState, event: EffectEvent, reg: EffectRegistration
+    ) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if opponent is None:
+            return
+        candidates = [card for card in opponent.battle_area if not card.hidden_mode]
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0 or not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
+        if not indexes:
+            return
+        for idx in indexes:
+            target = candidates[idx]
+            target.hidden_mode = True
+            self._emit_effect_event(
+                state,
+                name="card_switched_hidden_mode",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": target.instance_id,
+                    "source_card_id": target.card_id,
+                    "source_zone": "battle",
+                    "owner_player_id": opponent_id,
+                },
+            )
+            self._schedule_delayed_mode_switch(
+                state,
+                owner_player_id=opponent_id,
+                target_instance_id=target.instance_id,
+                trigger_player_id=reg.owner_player_id,
+                switch_to_hidden=False,
+            )
+        self._checkpoint(state, "effect_auto_switch_opponent_battle_hidden_then_reveal_on_turn_end")
 
     def _handle_auto_switch_self_active_on_turn_end(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "turn_end":
@@ -3054,12 +3302,7 @@ class RulesEngine:
                 target_zone = "battle"
                 if "UNISON" in (card.card_type or "").upper():
                     target_zone = "unison"
-                    if owner.unison_area:
-                        replaced = owner.unison_area.pop()
-                        if replaced.card_type.startswith("Z-"):
-                            owner.removed_from_game.append(replaced)
-                        else:
-                            owner.drop.append(replaced)
+                    self._replace_owner_unison_if_needed(state, owner)
                     owner.unison_area.append(card)
                 else:
                     owner.battle_area.append(card)
@@ -3266,24 +3509,13 @@ class RulesEngine:
             if not owner.battle_area:
                 return False
             for card in owner.battle_area:
-                runtime = self._resolve_card_runtime_data(card.card_id)
-                runtime_colors = {
-                    part.strip().lower()
-                    for part in str(runtime.color or "").replace("/", ",").split(",")
-                    if part.strip()
-                }
-                runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
-                runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
-                runtime_name = str(runtime.card_name or "").upper()
-                matches = True
-                if owner_battle_allowed_colors and runtime_colors.isdisjoint(owner_battle_allowed_colors):
-                    matches = False
-                if owner_battle_required_traits and runtime_traits.isdisjoint(owner_battle_required_traits):
-                    matches = False
-                if owner_battle_required_characters and runtime_characters.isdisjoint(owner_battle_required_characters):
-                    matches = False
-                if owner_battle_required_name_contains and owner_battle_required_name_contains not in runtime_name:
-                    matches = False
+                matches = self._card_matches_effect_filters(
+                    card,
+                    allowed_colors=owner_battle_allowed_colors,
+                    required_traits=owner_battle_required_traits,
+                    required_characters=owner_battle_required_characters,
+                    required_name_contains=owner_battle_required_name_contains,
+                )
                 if owner_battle_only_matching and not matches:
                     return False
                 if not owner_battle_only_matching and matches:
@@ -3297,6 +3529,34 @@ class RulesEngine:
                 color = (e.color or "").strip().lower()
                 if color and color != required:
                     return False
+        return True
+
+    def _card_matches_effect_filters(
+        self,
+        card: CardInstance,
+        *,
+        allowed_colors: set[str],
+        required_traits: set[str],
+        required_characters: set[str],
+        required_name_contains: str,
+    ) -> bool:
+        runtime = self._resolve_card_runtime_data(card.card_id)
+        runtime_colors = {
+            part.strip().lower()
+            for part in str(runtime.color or "").replace("/", ",").split(",")
+            if part.strip()
+        }
+        runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+        runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
+        runtime_name = str(runtime.card_name or "").upper()
+        if allowed_colors and runtime_colors.isdisjoint(allowed_colors):
+            return False
+        if required_traits and runtime_traits.isdisjoint(required_traits):
+            return False
+        if required_characters and runtime_characters.isdisjoint(required_characters):
+            return False
+        if required_name_contains and required_name_contains not in runtime_name:
+            return False
         return True
 
     def _resolve_effect_int_param(self, state: GameState, reg: EffectRegistration, key: str, *, default: int) -> int:

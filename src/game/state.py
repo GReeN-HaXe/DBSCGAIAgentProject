@@ -24,6 +24,7 @@ class CardInstance:
     card_id: int
     owner_id: int
     resting: bool = False
+    hidden_mode: bool = False
     attacked_this_turn: bool = False
     attack_count_this_turn: int = 0
     power: int = 15000
@@ -184,6 +185,14 @@ class EffectResolution:
     reason: str
 
 
+@dataclass(frozen=True)
+class DelayedModeSwitch:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+    switch_to_hidden: bool
+
+
 @dataclass
 class GameState:
     players: dict[int, PlayerState]
@@ -209,6 +218,7 @@ class GameState:
     pending_effects: list[PendingEffect] = field(default_factory=list)
     effect_events: list[EffectEvent] = field(default_factory=list)
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
+    delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
     unison_marker_skill_usage: set[int] = field(default_factory=set)
