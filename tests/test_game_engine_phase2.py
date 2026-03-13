@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 import pytest
 
-from src.game import Action, ActionType, RulesEngine, RulesViolation, TurnPhase
+from src.game import Action, ActionType, AttackContext, BattleStep, RulesEngine, RulesViolation, TurnPhase
 
 
 def _deck(seed: int, size: int = 30) -> list[int]:
@@ -146,6 +146,135 @@ def test_charge_from_hand_allows_immediate_one_cost_play() -> None:
     )
     legal = engine.get_legal_actions(charged, 1)
     assert any(action.action_type == ActionType.PLAY_CARD_FROM_HAND for action in legal)
+
+
+def test_sparking_super_combo_is_not_legal_without_life_or_drop_requirement() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 10:
+                return SimpleNamespace(
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=10000,
+                    keywords=("Super Combo",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    card_skill_unstyled="[Super Combo][Sparking 5] When you combo with this card, if you have 5 or more cards in your Drop Area, this card gets +10000 combo power.",
+                )
+            return SimpleNamespace(
+                power_int=15000,
+                card_type="BATTLE",
+                card_color="Blue",
+                energy_cost_int=2,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_barrier=False,
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=[10] + _deck(1000, 29),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.attack_context = AttackContext(
+        attacker_player_id=2,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[2].leader_area.instance_id,
+        target_player_id=1,
+        target_zone="leader",
+        target_instance_id=state.players[1].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+    state.players[1].life = state.players[1].life[:5]
+    state.players[1].drop = []
+
+    legal = engine.get_legal_actions(state, 1)
+    assert not any(
+        action.action_type == ActionType.COMBO_FROM_HAND and action.hand_index == 0
+        for action in legal
+    )
+
+
+def test_sparking_super_combo_is_legal_with_five_cards_in_drop() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 10:
+                return SimpleNamespace(
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=10000,
+                    keywords=("Super Combo",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    card_skill_unstyled="[Super Combo][Sparking 5] When you combo with this card, if you have 5 or more cards in your Drop Area, this card gets +10000 combo power.",
+                )
+            return SimpleNamespace(
+                power_int=15000,
+                card_type="BATTLE",
+                card_color="Blue",
+                energy_cost_int=2,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_barrier=False,
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=[10] + _deck(1000, 29),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.attack_context = AttackContext(
+        attacker_player_id=2,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[2].leader_area.instance_id,
+        target_player_id=1,
+        target_zone="leader",
+        target_instance_id=state.players[1].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+    state.players[1].life = state.players[1].life[:5]
+    state.players[1].drop = [
+        state.players[1].hand.pop()
+        for _ in range(5)
+    ]
+
+    legal = engine.get_legal_actions(state, 1)
+    assert any(
+        action.action_type == ActionType.COMBO_FROM_HAND and action.hand_index == 0
+        for action in legal
+    )
 
 
 def test_end_turn_switches_player_and_resets_to_draw() -> None:

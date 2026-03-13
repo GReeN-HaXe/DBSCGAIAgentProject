@@ -22,6 +22,9 @@ _ATTACK_PAY_LIFE_GAIN_POWER_AND_KEYWORD_RE = re.compile(
 _OWNER_LEADER_ATTACK_ADD_FROM_HAND_TO_LIFE_RE = re.compile(
     r"when your leader card attacks, you may choose (\d+) (.+?) card in your hand and add it to your life"
 )
+_OWNER_LEADER_ATTACK_LOOK_TOP_ADD_TO_HAND_RE = re.compile(
+    r"when your leader card attacks, look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[-\u2014\u2015])to your hand"
+)
 _COMBO_DRAW_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when this card is used in a combo.*?draw (\d+) card")
 _COMBO_BATTLE_END_PLAY_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?at the end of a battle in which this card was used in a combo(?: from your (?:hand|life|energy|drop area))?.*?play this card from (?:your )?drop"
@@ -142,6 +145,56 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
     return params
 
 
+def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | bool]:
+    descriptor_lc = descriptor.lower()
+    params: dict[str, int | str | bool] = {}
+    m_cost = re.search(r"energy costs? of (\d+) or less", descriptor_lc)
+    if m_cost is None:
+        m_cost = re.search(r"energy cost of (\d+) or less", descriptor_lc)
+    if m_cost is None:
+        m_cost = re.search(r"energy costs? of (\d+) or less", text)
+    if m_cost is None:
+        m_cost = re.search(r"energy cost of (\d+) or less", text)
+    params["max_cost"] = int(m_cost.group(1)) if m_cost else -1
+
+    colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor_lc)))
+    if colors:
+        params["allowed_colors"] = ",".join(colors)
+
+    required_card_type = ""
+    if "z-battle card" in descriptor_lc or "z battle card" in descriptor_lc:
+        required_card_type = "Z-BATTLE"
+    elif "z-unison card" in descriptor_lc or "z unison card" in descriptor_lc:
+        required_card_type = "Z-UNISON"
+    elif "unison card" in descriptor_lc:
+        required_card_type = "UNISON"
+    elif "extra card" in descriptor_lc:
+        required_card_type = "EXTRA"
+    elif "battle card" in descriptor_lc or "monster card" in descriptor_lc:
+        required_card_type = "BATTLE"
+    if required_card_type:
+        params["required_card_type"] = required_card_type
+
+    cleaned = descriptor_lc
+    cleaned = re.sub(r"\b(red|blue|green|yellow|black)\b", " ", cleaned)
+    cleaned = re.sub(r"\b(z-battle|z battle|z-unison|z unison|battle|unison|extra|monster)\s+cards?\b", " ", cleaned)
+    cleaned = re.sub(r"\bcards?\b", " ", cleaned)
+    cleaned = re.sub(r"\bamong them\b", " ", cleaned)
+    cleaned = re.sub(r"\bwith an energy costs? of \d+ or less\b", " ", cleaned)
+    cleaned = re.sub(r"\bwith an energy cost of \d+ or less\b", " ", cleaned)
+    cleaned = re.sub(r"\bof \d+ or less\b", " ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,.-")
+
+    if cleaned:
+        tokens = [t for t in cleaned.split() if t]
+        if len(tokens) == 1:
+            params["required_traits"] = cleaned.title()
+        else:
+            params["required_characters"] = cleaned.title()
+
+    return params
+
+
 def _infer_x_expression(text: str) -> str | None:
     t = text.lower()
     # Common templated "where X is equal to ..." phrasings.
@@ -255,15 +308,38 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
         if m_owner_leader_attack_life:
             amount = int(m_owner_leader_attack_life.group(1))
             descriptor = m_owner_leader_attack_life.group(2).lower()
-            colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor)))
             extra = _extract_common_conditions(branch)
-            params: dict[str, int | str | bool] = {"amount": amount, **extra}
-            if colors:
-                params["allowed_colors"] = ",".join(colors)
+            params: dict[str, int | str | bool] = {
+                "amount": amount,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
             rules.append(
                 EffectRule(
                     trigger="owner_leader_attacks",
                     handler_id="auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack",
+                    handler_params=params,
+                    once_per_turn=once,
+                )
+            )
+
+        # [Auto] When your leader attacks... look at top N; add up to M matching cards to hand.
+        m_owner_leader_attack_search = _OWNER_LEADER_ATTACK_LOOK_TOP_ADD_TO_HAND_RE.search(branch)
+        if m_owner_leader_attack_search:
+            look_count = int(m_owner_leader_attack_search.group(1))
+            max_add = int(m_owner_leader_attack_search.group(2))
+            descriptor = m_owner_leader_attack_search.group(3).lower()
+            extra = _extract_common_conditions(branch)
+            params = {
+                "look_count": look_count,
+                "max_add": max_add,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            rules.append(
+                EffectRule(
+                    trigger="owner_leader_attacks",
+                    handler_id="auto_look_top_add_up_to_one_to_hand_on_play",
                     handler_params=params,
                     once_per_turn=once,
                 )
@@ -364,25 +440,15 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             look_count = int(m_activate_main_search.group(1))
             max_add = int(m_activate_main_search.group(2))
             descriptor = m_activate_main_search.group(3).lower()
-            m_cost = re.search(r"energy cost of (\d+) or less", descriptor)
-            if m_cost is None:
-                m_cost = re.search(r"energy cost of (\d+) or less", branch)
-            max_cost = int(m_cost.group(1)) if m_cost else -1
-            colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor)))
-            required_card_type = "BATTLE" if "battle card" in descriptor else ""
             m_discard = re.search(r"if you added a card to your hand, choose (\d+) card in your hand and discard it", branch)
             discard_after_add = int(m_discard.group(1)) if m_discard else 0
             extra = _extract_common_conditions(branch)
             params: dict[str, int | str | bool] = {
                 "look_count": look_count,
                 "max_add": max_add,
-                "max_cost": max_cost,
+                **_descriptor_filters(descriptor, branch),
                 **extra,
             }
-            if colors:
-                params["allowed_colors"] = ",".join(colors)
-            if required_card_type:
-                params["required_card_type"] = required_card_type
             if discard_after_add > 0:
                 params["discard_after_add"] = discard_after_add
             rules.append(
@@ -696,23 +762,13 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             look_count = int(m_top_search.group(2))
             max_add = int(m_top_search.group(3))
             descriptor = m_top_search.group(4).lower()
-            m_cost = re.search(r"energy cost of (\d+) or less", descriptor)
-            if m_cost is None:
-                m_cost = re.search(r"energy cost of (\d+) or less", branch)
-            max_cost = int(m_cost.group(1)) if m_cost else -1
-            colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor)))
-            required_card_type = "BATTLE" if "battle card" in descriptor else ""
             extra = _extract_common_conditions(branch)
             params: dict[str, int | str | bool] = {
                 "look_count": look_count,
                 "max_add": max_add,
-                "max_cost": max_cost,
+                **_descriptor_filters(descriptor, branch),
                 **extra,
             }
-            if colors:
-                params["allowed_colors"] = ",".join(colors)
-            if required_card_type:
-                params["required_card_type"] = required_card_type
             if played_from_hand:
                 params["requires_played_from"] = "hand"
             rules.append(
@@ -1001,6 +1057,10 @@ def _skill_template_signature(raw: str | None) -> str:
     if len(text) > 220:
         return text[:220].rstrip() + "..."
     return text
+
+
+def skill_template_signature(raw: str | None) -> str:
+    return _skill_template_signature(raw)
 
 
 def build_effect_rules_with_diagnostics_and_report(

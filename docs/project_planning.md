@@ -71,6 +71,10 @@ Important recent fixes:
 - `AWAKEN` action support
 - activate once-per-turn / `[Limit 1]` enforcement
 - unsupported activate diagnostics in trace/checkpoints
+- pattern-driven effect support audit tooling:
+  - `scripts/run_effect_support_audit.py`
+- effect-family implementation shortlist tooling:
+  - `scripts/build_effect_family_shortlist.py`
 
 ### CLI / TUI
 
@@ -171,21 +175,31 @@ Resolved:
 - Contributor instructions:
   - `docs/human_trace_contribution.md`
 
+### Effect Support
+
+- Audit artifact:
+  - `artifacts/effect_support_audit.json`
+- Ranked implementation shortlist:
+  - `artifacts/effect_family_shortlist.json`
+
 ## Priority Backlog
 
 ### P0: Rules / Effect Correctness
 
-- [ ] implement batch/pattern-driven effect support audit
+- [x] implement batch/pattern-driven effect support audit
 - [ ] build and maintain an effect pattern catalog as the source of truth for reusable skill behavior
-- [ ] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
+- [x] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
 - [ ] map high-frequency deck/trace cards to those effect families
 - [ ] auto-assign cards to effect families where pattern confidence is high
 - [ ] keep manual overrides for edge cases and low-confidence pattern matches
 - [ ] implement leader auto families used in current human traces
-- [ ] implement counter families that negate / play self / apply attack restrictions
-- [ ] add unsupported counter diagnostics similar to unsupported activate diagnostics
+- [x] implement counter families that negate / play self / apply attack restrictions
+- [x] add unsupported counter diagnostics similar to unsupported activate diagnostics
+- [x] implement first shortlisted family: generic `Blocker` redirection / target-change
+- [x] implement sparking super-combo family (life<=4 or `Sparking N` drop threshold)
+- [x] implement owner-leader-attack search/add-to-hand family for Krillin-style leader autos
 
 ### P1: Human-vs-AI Benchmark Expansion
 
@@ -222,6 +236,19 @@ Current planning assumption:
 - effect coverage is the next real correctness bottleneck
 - fixing cards one by one is not scalable
 - effect families and coverage tracking are required
+
+Current next implementation batch from the shortlist:
+- completed:
+  - blocker redirection / target-change `Blocker` family
+  - sparking super-combo family
+  - generic counter family: negate attack -> play self in rest -> optional attack restriction
+  - unsupported counter diagnostics for unresolved counter skills
+  - owner-leader-attack search/add-to-hand family with color / trait / character filtering
+- high-priority `Activate: Main/Battle` extra-card families from active decks:
+  - `Power Wish`
+  - `Mighty Blast`
+  - `SS4's Call`
+  - `Mechikabura`
 
 ### Human Data
 

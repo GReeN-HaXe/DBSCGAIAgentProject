@@ -1881,6 +1881,125 @@ def test_phase4_owner_leader_attack_can_add_from_hand_to_life() -> None:
     assert any(cp.name == "effect_auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack" for cp in state.checkpoints)
 
 
+def test_phase4_owner_leader_attack_can_search_top_and_add_matching_card_to_hand() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: SimpleNamespace(
+                    card_name="Leader",
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="Red",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    card_skill_unstyled="[Auto] When your Leader Card attacks, look at up to 5 cards from the top of your deck, add up to 1 red Earthling card among them to your hand, then shuffle your deck.",
+                    card_traits_json='["Earthling"]',
+                    card_character_json='["Krillin"]',
+                ),
+                900961: SimpleNamespace(
+                    card_name="Red Earthling",
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    card_skill_unstyled="",
+                    card_traits_json='["Earthling"]',
+                    card_character_json='["Krillin"]',
+                ),
+                900962: SimpleNamespace(
+                    card_name="Blue Earthling",
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Blue",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    card_skill_unstyled="",
+                    card_traits_json='["Earthling"]',
+                    card_character_json='["Krillin"]',
+                ),
+            }
+            return data[card_id]
+
+    engine = RulesEngine(
+        card_repository=FakeRepo(),
+        effect_rules={
+            424284: [
+                {
+                    "trigger": "owner_leader_attacks",
+                    "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+                    "handler_params": {
+                        "look_count": 5,
+                        "max_add": 1,
+                        "allowed_colors": "red",
+                        "required_traits": "Earthling",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880357, card_id=424284, owner_id=1, card_type="BATTLE", energy_cost=0)
+    )
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=state.players[1].battle_area[0])
+    state.players[1].deck = [
+        CardInstance(instance_id=880358, card_id=900962, owner_id=1, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=880359, card_id=900961, owner_id=1, card_type="BATTLE", color="Red"),
+        *state.players[1].deck,
+    ]
+    hand_before = len(state.players[1].hand)
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader" and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].hand) == hand_before + 1
+    assert any(c.card_id == 900961 for c in state.players[1].hand)
+    assert any(c.card_id == 900962 for c in state.players[1].deck)
+    assert any(cp.name == "effect_auto_look_top_add_up_to_one_to_hand_on_play" for cp in state.checkpoints)
+
+
 def test_phase4_self_played_can_add_from_hand_to_life() -> None:
     engine = RulesEngine(
         effect_rules={

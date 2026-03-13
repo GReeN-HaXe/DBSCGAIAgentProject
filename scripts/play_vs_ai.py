@@ -135,19 +135,26 @@ def _leader_id_from_player(state, player_id: int) -> int:
 def _card_brief_label(repo: SQLiteCardRepository | None, card_id: int) -> str:
     if repo is None:
         return f"card_id={card_id}"
-    try:
-        card = repo.get_by_id(int(card_id))
-        return f"{card.card_number} {card.card_name}"
-    except Exception:
-        return f"card_id={card_id}"
+    for source_table in ("cards", "variants"):
+        try:
+            card = repo.get_by_id(int(card_id), source_table=source_table)
+            return f"{card.card_number} {card.card_name}"
+        except Exception:
+            continue
+    return f"card_id={card_id}"
 
 
 def _card_detail_text(repo: SQLiteCardRepository | None, card_id: int) -> str:
     if repo is None:
         return f"card_id={card_id}"
-    try:
-        card = repo.get_by_id(int(card_id))
-    except Exception:
+    card = None
+    for source_table in ("cards", "variants"):
+        try:
+            card = repo.get_by_id(int(card_id), source_table=source_table)
+            break
+        except Exception:
+            continue
+    if card is None:
         return f"card_id={card_id}"
     tags: list[str] = []
     if card.card_type:

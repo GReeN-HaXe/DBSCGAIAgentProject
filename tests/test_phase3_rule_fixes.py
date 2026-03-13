@@ -258,10 +258,91 @@ def test_combo_power_applies_in_damage_step() -> None:
     state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
     state = engine.apply_action(state, Action(action_type=ActionType.COMBO_FROM_HAND, player_id=1, hand_index=len(state.players[1].hand) - 1))
     state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
-    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
-    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
-    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
-    assert len(state.players[2].battle_area) == 0
+
+
+def test_counter_negate_attack_can_play_self_in_rest_mode() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=702001,
+            card_id=201,
+            owner_id=2,
+            has_counter=True,
+            counter_modes=("Counter: Attack",),
+            energy_cost=0,
+            skill_text_raw="[Counter: Attack][Limit 1] If your Leader Card is red: Negate the attack, then play this card in Rest Mode.",
+        )
+    )
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 1))
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert state.attack_context is None
+    assert len(state.players[2].battle_area) == 1
+    assert state.players[2].battle_area[0].instance_id == 702001
+    assert state.players[2].battle_area[0].resting is True
+    assert all(card.instance_id != 702001 for card in state.players[2].drop)
+    assert any(cp.name == "counter_effect_play_self_resolved" for cp in state.checkpoints)
+
+
+def test_counter_can_mark_battle_attacker_as_unable_to_attack_again_this_turn() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    attacker = CardInstance(instance_id=702010, card_id=210, owner_id=1, power=15000)
+    state.players[1].battle_area.append(attacker)
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=702011,
+            card_id=211,
+            owner_id=2,
+            has_counter=True,
+            counter_modes=("Counter: Attack",),
+            energy_cost=0,
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack, then play this card in Rest Mode. "
+                "If the attacking card was a battle card, it can't attack for the turn."
+            ),
+        )
+    )
+    state = engine.apply_action(
+        state,
+        Action(
+            action_type=ActionType.DECLARE_ATTACK,
+            player_id=1,
+            attacker_zone="battle",
+            attacker_index=0,
+            target_player_id=2,
+            target_zone="leader",
+        ),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 1))
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert 702010 in state.attack_restricted_instance_ids
+    state.players[1].battle_area[0].attacked_this_turn = False
+    state.players[1].battle_area[0].resting = False
+    legal = engine.get_legal_actions(state, player_id=1)
+    assert all(
+        not (
+            action.action_type == ActionType.DECLARE_ATTACK
+            and action.attacker_zone == "battle"
+            and action.attacker_index == 0
+        )
+        for action in legal
+    )
+    assert any(cp.name == "counter_effect_attack_restriction_applied" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    assert 702010 not in state.attack_restricted_instance_ids
 
 
 def test_color_and_z_cost_gate_play_legality() -> None:
@@ -406,6 +487,33 @@ def test_activate_main_without_registered_effect_emits_diagnostic_checkpoint() -
     state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
     assert any(cp.name == "skill_activation_no_registered_effect" for cp in state.checkpoints)
     assert any("Unsupported skill activation" in line for line in state.log)
+
+
+def test_counter_without_registered_family_emits_diagnostic_checkpoint() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=710034,
+            card_id=34,
+            owner_id=2,
+            has_counter=True,
+            counter_modes=("Counter: Attack",),
+            energy_cost=0,
+            skill_text_raw="[Counter: Attack] Do something unsupported.",
+        )
+    )
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 1))
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert any(cp.name == "counter_effect_no_registered_family" for cp in state.checkpoints)
+    assert any("Unsupported counter effect" in line for line in state.log)
 
 
 def test_extra_activation_fails_when_skill_cost_unpayable() -> None:

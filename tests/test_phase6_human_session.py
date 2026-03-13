@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from types import SimpleNamespace
 
 from src.agent import HeuristicPolicy
 from src.agent.session import (
@@ -13,6 +14,7 @@ from src.agent.session import (
 from src.game import RulesEngine
 from src.game.actions import Action, ActionType
 from src.game.state import CardInstance, GameState, PlayerState, TurnPhase
+from scripts.play_vs_ai import _history_action_text
 
 
 def _deck(seed: int, size: int = 60) -> list[int]:
@@ -318,3 +320,24 @@ def test_phase6_session_ai_action_context_uses_pre_action_state() -> None:
             card_name_resolver=lambda card_id: f"CARD-{card_id}",
         )
         assert "card=CARD-" in rendered
+
+
+def test_phase6_history_action_text_renders_card_labels_from_cards_and_variants() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, *, source_table: str = "cards"):
+            if source_table == "cards" and card_id == 9629:
+                return SimpleNamespace(card_number="BT29-086", card_name="Goku Black")
+            if source_table == "variants" and card_id == 6:
+                return SimpleNamespace(card_number="BT14-019", card_name="Dyspo, Thwarting the Enemy")
+            raise KeyError(card_id)
+
+    text = _history_action_text(
+        {
+            "action": "declare_attack attacker_zone=battle attacker_index=0 attacker_card=card_id=6 target_player=2 target_zone=leader target_card=card_id=9629"
+        },
+        repo=FakeRepo(),
+    )
+    assert "attacker_card=BT14-019 Dyspo, Thwarting the Enemy" in text
+    assert "target_card=BT29-086 Goku Black" in text
+    assert "card_id=6" not in text
+    assert "card_id=9629" not in text

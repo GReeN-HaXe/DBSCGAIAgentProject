@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
+import json
 import random
 from typing import Any
 from pathlib import Path
@@ -35,6 +36,7 @@ class RulesViolation(ValueError):
 
 @dataclass(frozen=True)
 class CardRuntimeData:
+    card_name: str = ""
     power: int = 15000
     card_type: str = "BATTLE"
     color: str | None = None
@@ -64,6 +66,10 @@ class CardRuntimeData:
     skill_text_raw: str | None = None
     has_awaken: bool = False
     activate_limit_once_per_turn: bool = False
+    has_super_combo: bool = False
+    sparking_threshold: int | None = None
+    traits: tuple[str, ...] = ()
+    characters: tuple[str, ...] = ()
 
 
 class RulesEngine:
@@ -285,6 +291,10 @@ class RulesEngine:
             self._declare_activate_skill(ns, action, source_kind="battle")
             self._after_action(ns)
             return ns
+        if action.action_type == ActionType.ACTIVATE_BLOCKER:
+            self._activate_blocker(ns, action)
+            self._after_action(ns)
+            return ns
         if action.action_type == ActionType.COMBO_FROM_HAND:
             self._combo_from_hand(ns, action)
             self._after_action(ns)
@@ -372,6 +382,7 @@ class RulesEngine:
         if state.winner_id is not None:
             return
         state.phase = TurnPhase.CHARGE
+        state.attack_restricted_instance_ids.clear()
         self._reset_once_per_turn_effect_counters(state, player_id=state.active_player)
         state.activate_skill_usage = {entry for entry in state.activate_skill_usage if entry[0] != state.active_player}
         self._emit_effect_event(state, name="turn_start", actor_player_id=state.active_player, payload={})
@@ -517,14 +528,18 @@ class RulesEngine:
         targets.extend(("battle", i) for i, c in enumerate(opp.battle_area) if c.resting)
         targets.extend(("unison", i) for i, c in enumerate(opp.unison_area) if c.resting)
         actions: list[Action] = []
-        if not player.leader_area.resting and not player.leader_area.attacked_this_turn:
+        if (
+            not player.leader_area.resting
+            and not player.leader_area.attacked_this_turn
+            and player.leader_area.instance_id not in state.attack_restricted_instance_ids
+        ):
             actions.extend(
                 Action(action_type=ActionType.DECLARE_ATTACK, player_id=player_id, attacker_zone="leader", target_player_id=opponent_id, target_zone=z, target_index=i)
                 for z, i in targets
             )
         for zone_name, zone_cards in (("battle", player.battle_area), ("unison", player.unison_area)):
             for ai, attacker in enumerate(zone_cards):
-                if attacker.resting or attacker.attacked_this_turn:
+                if attacker.resting or attacker.attacked_this_turn or attacker.instance_id in state.attack_restricted_instance_ids:
                     continue
                 for tz, ti in targets:
                     actions.append(
@@ -593,6 +608,8 @@ class RulesEngine:
         for i, c in enumerate(player.hand):
             if c.card_type not in {"BATTLE", "Z-BATTLE"}:
                 continue
+            if not self._can_combo_card(state, player_id, c):
+                continue
             if (c.combo_cost or 0) < 0 or (c.combo_power or 0) < 0:
                 continue
             if self._can_pay_energy_cost(player, c.combo_cost or 0):
@@ -634,6 +651,7 @@ class RulesEngine:
             if player_id != ctx.target_player_id:
                 return []
             acts = [Action(action_type=ActionType.END_DEFENSE_STEP, player_id=player_id)]
+            acts.extend(self._legal_blocker_actions(state, player_id))
             acts.extend(self._legal_combo_actions(state, player_id))
             acts.extend(self._legal_activate_battle_actions(state, player_id))
             return acts
@@ -642,6 +660,27 @@ class RulesEngine:
                 return []
             return [Action(action_type=ActionType.RESOLVE_BATTLE, player_id=player_id)]
         return []
+
+    def _legal_blocker_actions(self, state: GameState, player_id: int) -> list[Action]:
+        ctx = state.attack_context
+        if ctx is None or state.battle_step != BattleStep.DEFENSE or player_id != ctx.target_player_id:
+            return []
+        player = state.players[player_id]
+        actions: list[Action] = []
+        for i, card in enumerate(player.battle_area):
+            if card.resting or not self._card_has_keyword(card, "Blocker"):
+                continue
+            if ctx.target_zone == "battle" and ctx.target_instance_id == card.instance_id:
+                continue
+            actions.append(
+                Action(
+                    action_type=ActionType.ACTIVATE_BLOCKER,
+                    player_id=player_id,
+                    source_zone="battle",
+                    source_index=i,
+                )
+            )
+        return actions
 
     def _declare_attack(self, state: GameState, action: Action) -> None:
         if action.attacker_zone not in {"leader", "battle", "unison"}:
@@ -777,6 +816,16 @@ class RulesEngine:
             return False
         return self._activate_usage_key(player_id, source_kind, source) in state.activate_skill_usage
 
+    def _can_combo_card(self, state: GameState, player_id: int, card: CardInstance) -> bool:
+        if not card.has_super_combo:
+            return True
+        player = state.players[player_id]
+        if len(player.life) <= 4:
+            return True
+        if card.sparking_threshold is not None and len(player.drop) >= int(card.sparking_threshold):
+            return True
+        return False
+
     def _combo_from_hand(self, state: GameState, action: Action) -> None:
         ctx = state.attack_context
         if ctx is None or state.battle_step not in {BattleStep.OFFENSE, BattleStep.DEFENSE}:
@@ -790,6 +839,8 @@ class RulesEngine:
         card = player.hand[action.hand_index]
         if card.card_type not in {"BATTLE", "Z-BATTLE"}:
             raise RulesViolation("Only battle cards can combo.")
+        if not self._can_combo_card(state, action.player_id, card):
+            raise RulesViolation("This card cannot be comboed right now.")
         self._pay_energy_cost(player, card.combo_cost or 0)
         combo_card = player.hand.pop(action.hand_index)
         player.combo_area.append(combo_card)
@@ -805,6 +856,42 @@ class RulesEngine:
             },
         )
         self._checkpoint(state, "combo_declared")
+
+    def _activate_blocker(self, state: GameState, action: Action) -> None:
+        ctx = state.attack_context
+        if ctx is None or state.battle_step != BattleStep.DEFENSE:
+            raise RulesViolation("Blocker cannot be activated now.")
+        if action.player_id != ctx.target_player_id:
+            raise RulesViolation("Wrong blocker player.")
+        if action.source_zone != "battle" or action.source_index is None:
+            raise RulesViolation("Blocker requires a battle card source.")
+        blocker = self._resolve_zone_card(state, player_id=action.player_id, zone="battle", index=action.source_index)
+        if blocker.resting:
+            raise RulesViolation("Blocker must be active.")
+        if not self._card_has_keyword(blocker, "Blocker"):
+            raise RulesViolation("Selected card does not have Blocker.")
+        if ctx.target_zone == "battle" and ctx.target_instance_id == blocker.instance_id:
+            raise RulesViolation("Attack is already targeting this blocker.")
+        blocker.resting = True
+        state.attack_context = AttackContext(
+            attacker_player_id=ctx.attacker_player_id,
+            attacker_zone=ctx.attacker_zone,
+            attacker_instance_id=ctx.attacker_instance_id,
+            target_player_id=ctx.target_player_id,
+            target_zone="battle",
+            target_instance_id=blocker.instance_id,
+        )
+        self._emit_effect_event(
+            state,
+            name="blocker_activated",
+            actor_player_id=action.player_id,
+            payload={
+                "source_instance_id": blocker.instance_id,
+                "source_card_id": blocker.card_id,
+                "redirected_attacker_instance_id": ctx.attacker_instance_id,
+            },
+        )
+        self._checkpoint(state, "blocker_redirect")
 
     def _end_offense_step(self, state: GameState, player_id: int) -> None:
         ctx = state.attack_context
@@ -972,6 +1059,31 @@ class RulesEngine:
             return True
         return False
 
+    @staticmethod
+    def _card_has_keyword(card: CardInstance, keyword: str) -> bool:
+        needle = str(keyword).strip().lower()
+        return any(str(item).strip().lower() == needle for item in (card.keywords or ()))
+
+    @staticmethod
+    def _text_describes_counter_negate_play_self(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "negate the attack" in text and "play this card" in text
+
+    @staticmethod
+    def _text_requires_play_self_in_rest(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "rest mode" in text or "in rest" in text
+
+    @staticmethod
+    def _text_restricts_leader_attacker(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "if the attacking card was a leader card" in text and "can't attack for the turn" in text
+
+    @staticmethod
+    def _text_restricts_battle_attacker(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "if the attacking card was a battle card" in text and "can't attack for the turn" in text
+
     def _resolve_pending_action(self, state: GameState, *, negated: bool) -> None:
         win = state.counter_window
         if win is None:
@@ -1088,8 +1200,72 @@ class RulesEngine:
                 )
             )
         root_negated = any(r.resolved and r.negated_motion_id is None for r in resolutions)
+        self._apply_resolved_counter_motion_effects(state, motions, resolutions)
         state.counter_chain = []
         return root_negated
+
+    def _apply_resolved_counter_motion_effects(
+        self,
+        state: GameState,
+        motions: list[CounterMotion],
+        resolutions: list[CounterResolution],
+    ) -> None:
+        if state.attack_context is None:
+            return
+        motion_by_id = {motion.motion_id: motion for motion in motions}
+        for resolution in resolutions:
+            if not resolution.resolved or resolution.negated_motion_id is not None:
+                continue
+            motion = motion_by_id.get(resolution.motion_id)
+            if motion is None:
+                continue
+            player = state.players[motion.player_id]
+            card = next((c for c in player.drop if c.instance_id == motion.card_instance_id), None)
+            if card is None:
+                continue
+            handled = False
+            if self._text_describes_counter_negate_play_self(card):
+                self._resolve_counter_play_self_family(state, player, card)
+                handled = True
+            if self._apply_counter_attack_restriction_family(state, card):
+                handled = True
+            if not handled and str(card.skill_text_raw or "").strip():
+                state.log.append(
+                    f"Unsupported counter effect: source_card_id={card.card_id} modes={','.join(card.counter_modes or ()) or 'unknown'}"
+                )
+                self._checkpoint(state, "counter_effect_no_registered_family")
+
+    def _resolve_counter_play_self_family(self, state: GameState, player: PlayerState, card: CardInstance) -> None:
+        card.resting = self._text_requires_play_self_in_rest(card)
+        if card in player.drop:
+            player.drop.remove(card)
+        player.battle_area.append(card)
+        self._register_card_effects(state, player_id=player.player_id, source_zone="battle", card=card)
+        self._emit_effect_event(
+            state,
+            name="counter_played_from_drop",
+            actor_player_id=player.player_id,
+            payload={
+                "source_instance_id": card.instance_id,
+                "source_card_id": card.card_id,
+                "source_zone": "battle",
+            },
+        )
+        self._checkpoint(state, "counter_effect_play_self_resolved")
+
+    def _apply_counter_attack_restriction_family(self, state: GameState, card: CardInstance) -> bool:
+        ctx = state.attack_context
+        if ctx is None:
+            return False
+        if self._text_restricts_leader_attacker(card) and ctx.attacker_zone == "leader":
+            state.attack_restricted_instance_ids.add(ctx.attacker_instance_id)
+            self._checkpoint(state, "counter_effect_attack_restriction_applied")
+            return True
+        if self._text_restricts_battle_attacker(card) and ctx.attacker_zone == "battle":
+            state.attack_restricted_instance_ids.add(ctx.attacker_instance_id)
+            self._checkpoint(state, "counter_effect_attack_restriction_applied")
+            return True
+        return False
 
     def _resolve_play_from_hand(self, state: GameState, pending: PendingAction, *, negated: bool) -> None:
         player = state.players[pending.actor_player_id]
@@ -1982,7 +2158,7 @@ class RulesEngine:
         self._checkpoint(state, "effect_auto_add_n_life_to_hand_on_self_ko")
 
     def _handle_auto_look_top_add_up_to_one_to_hand_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
-        if event.name not in {"card_played", "skill_activated"}:
+        if event.name not in {"card_played", "skill_activated", "attack_declared"}:
             return
         if not self._effect_requirements_met(state, reg):
             return
@@ -2005,10 +2181,15 @@ class RulesEngine:
         raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
         allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").split(",") if c.strip()}
         required_type = str(reg.handler_params.get("required_card_type", "")).strip().upper()
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
         picked_indexes: list[int] = []
         for i in range(top_n):
-            card_id = owner.deck[i]
-            runtime = self._resolve_card_runtime_data(card_id)
+            deck_card = owner.deck[i]
+            deck_card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            runtime = self._resolve_card_runtime_data(deck_card_id)
             if required_type and required_type not in (runtime.card_type or "").upper():
                 continue
             if max_cost >= 0:
@@ -2023,6 +2204,14 @@ class RulesEngine:
                 }
                 if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
                     continue
+            if required_traits:
+                runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+                if runtime_traits.isdisjoint(required_traits):
+                    continue
+            if required_characters:
+                runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
+                if runtime_characters.isdisjoint(required_characters):
+                    continue
             picked_indexes.append(i)
             if len(picked_indexes) >= max_add:
                 break
@@ -2031,8 +2220,9 @@ class RulesEngine:
         added = 0
         removed = 0
         for idx in picked_indexes:
-            card_id = owner.deck.pop(idx - removed)
+            deck_card = owner.deck.pop(idx - removed)
             removed += 1
+            card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
             card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=card_id, owner_id=reg.owner_player_id)
             state.next_instance_id += 1
             owner.hand.append(card)
@@ -2064,9 +2254,14 @@ class RulesEngine:
         allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
         required_type = str(reg.handler_params.get("required_card_type", "")).strip().upper()
         requires_skill_less = bool(reg.handler_params.get("requires_skill_less", False))
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
         chosen_indexes: list[int] = []
-        for i, card_id in enumerate(owner.deck):
-            runtime = self._resolve_card_runtime_data(card_id)
+        for i, deck_card in enumerate(owner.deck):
+            deck_card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            runtime = self._resolve_card_runtime_data(deck_card_id)
             if required_type and required_type not in (runtime.card_type or "").upper():
                 continue
             if max_cost >= 0 and (runtime.energy_cost is None or runtime.energy_cost > max_cost):
@@ -2074,6 +2269,14 @@ class RulesEngine:
             if allowed_colors:
                 runtime_colors = {part.strip().lower() for part in str(runtime.color or "").replace("/", ",").split(",") if part.strip()}
                 if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
+                    continue
+            if required_traits:
+                runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+                if runtime_traits.isdisjoint(required_traits):
+                    continue
+            if required_characters:
+                runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
+                if runtime_characters.isdisjoint(required_characters):
                     continue
             if requires_skill_less:
                 kws = {k.strip().lower() for k in (runtime.keywords or ()) if k}
@@ -2086,8 +2289,9 @@ class RulesEngine:
             return
         removed = 0
         for idx in chosen_indexes:
-            card_id = owner.deck.pop(idx - removed)
+            deck_card = owner.deck.pop(idx - removed)
             removed += 1
+            card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
             card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=card_id, owner_id=reg.owner_player_id)
             state.next_instance_id += 1
             owner.hand.append(card)
@@ -2955,6 +3159,8 @@ class RulesEngine:
             skill_text_raw=runtime.skill_text_raw,
             has_awaken=runtime.has_awaken,
             activate_limit_once_per_turn=runtime.activate_limit_once_per_turn,
+            has_super_combo=runtime.has_super_combo,
+            sparking_threshold=runtime.sparking_threshold,
         )
 
     def _resolve_card_runtime_data(self, card_id: int, *, side: str = "front") -> CardRuntimeData:
@@ -3000,6 +3206,8 @@ class RulesEngine:
         leader.skill_text_raw = runtime.skill_text_raw
         leader.has_awaken = False
         leader.activate_limit_once_per_turn = runtime.activate_limit_once_per_turn
+        leader.has_super_combo = runtime.has_super_combo
+        leader.sparking_threshold = runtime.sparking_threshold
         leader.awakened = True
 
     def _build_card_runtime_data(self, card: Any, *, side: str) -> CardRuntimeData:
@@ -3007,8 +3215,11 @@ class RulesEngine:
         power_raw = getattr(card, "card_back_power", None) if is_back else getattr(card, "power_int", None)
         skill_text = getattr(card, "card_back_skill_unstyled", None) if is_back else getattr(card, "card_skill_unstyled", None)
         keywords = tuple(getattr(card, "keywords", ()) or ())
+        traits_raw = getattr(card, "card_back_traits_json", None) if is_back else getattr(card, "card_traits_json", None)
+        characters_raw = getattr(card, "card_back_character_json", None) if is_back else getattr(card, "card_character_json", None)
         has_draw_flag = bool(getattr(card, "has_draw", False))
         return CardRuntimeData(
+            card_name=str(getattr(card, "card_name", None) or ""),
             power=int(power_raw) if power_raw is not None else 15000,
             card_type=str(getattr(card, "card_type", None) or "BATTLE"),
             color=getattr(card, "card_color", None),
@@ -3038,6 +3249,10 @@ class RulesEngine:
             skill_text_raw=str(skill_text or "") if skill_text is not None else None,
             has_awaken=("[Awaken]" in str(skill_text or "")) if not is_back else False,
             activate_limit_once_per_turn=("[Limit 1]" in str(skill_text or "")) or self._has_once_per_turn(skill_text),
+            has_super_combo=self._text_has_super_combo(skill_text),
+            sparking_threshold=self._parse_sparking_threshold(skill_text),
+            traits=self._parse_json_string_tuple(traits_raw),
+            characters=self._parse_json_string_tuple(characters_raw),
         )
 
     @staticmethod
@@ -3048,6 +3263,20 @@ class RulesEngine:
             return value
         text = str(value).strip()
         return int(text) if text.isdigit() else None
+
+    @staticmethod
+    def _parse_json_string_tuple(value: object) -> tuple[str, ...]:
+        if value in (None, ""):
+            return ()
+        if isinstance(value, (list, tuple)):
+            return tuple(str(item) for item in value if str(item).strip())
+        try:
+            parsed = json.loads(str(value))
+        except Exception:
+            return ()
+        if isinstance(parsed, list):
+            return tuple(str(item) for item in parsed if str(item).strip())
+        return ()
 
     @staticmethod
     def _text_has_activate_main(skill_text: object) -> bool:
@@ -3072,6 +3301,23 @@ class RulesEngine:
     @staticmethod
     def _text_has_barrier(skill_text: object) -> bool:
         return "[Barrier]" in str(skill_text or "")
+
+    @staticmethod
+    def _text_has_super_combo(skill_text: object) -> bool:
+        return "[super combo]" in str(skill_text or "").lower()
+
+    @staticmethod
+    def _parse_sparking_threshold(skill_text: object) -> int | None:
+        import re
+
+        text = str(skill_text or "")
+        match = re.search(r"\[sparking\s+(\d+)\]", text, flags=re.IGNORECASE)
+        if not match:
+            return None
+        try:
+            return int(match.group(1))
+        except (TypeError, ValueError):
+            return None
 
     @staticmethod
     def _parse_specified_costs(raw_cost: object, fallback_color: object) -> tuple[tuple[str, int], ...]:

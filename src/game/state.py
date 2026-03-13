@@ -56,6 +56,8 @@ class CardInstance:
     has_awaken: bool = False
     awakened: bool = False
     activate_limit_once_per_turn: bool = False
+    has_super_combo: bool = False
+    sparking_threshold: Optional[int] = None
 
 
 @dataclass
@@ -205,3 +207,4 @@ class GameState:
     effect_events: list[EffectEvent] = field(default_factory=list)
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
+    attack_restricted_instance_ids: set[int] = field(default_factory=set)

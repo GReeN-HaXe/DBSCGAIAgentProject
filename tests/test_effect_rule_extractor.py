@@ -179,6 +179,19 @@ def test_extract_owner_leader_attack_add_from_hand_to_life_rule() -> None:
     assert rule.handler_params["allowed_colors"] == "yellow"
 
 
+def test_extract_owner_leader_attack_look_top_add_to_hand_rule() -> None:
+    card = _card(
+        "[Auto] When your Leader Card attacks, look at up to 5 cards from the top of your deck, "
+        "add up to 1 red Earthling card among them to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "owner_leader_attacks" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.handler_params["look_count"] == 5
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Earthling"
+
+
 def test_extract_play_from_hand_add_from_hand_to_life_rule() -> None:
     card = _card(
         "[Auto] If your leader card is a yellow Turles Crusher Corps card: "
