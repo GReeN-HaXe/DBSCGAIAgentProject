@@ -44,7 +44,11 @@ def _load_real_ids(db_path: Path) -> tuple[int, list[int], int, list[int]] | Non
 def simulate(turns: int, db_path: Path) -> object:
     real_ids = _load_real_ids(db_path)
     repo = SQLiteCardRepository(db_path) if db_path.exists() else None
-    engine = RulesEngine(card_repository=repo, effect_rules_path=EFFECT_CATALOG_PATH if EFFECT_CATALOG_PATH else None)
+    engine = RulesEngine(
+        card_repository=repo,
+        skill_cost_rules_path=SKILL_COST_CATALOG_PATH if SKILL_COST_CATALOG_PATH else None,
+        effect_rules_path=EFFECT_CATALOG_PATH if EFFECT_CATALOG_PATH else None,
+    )
 
     if real_ids is None:
         p1_leader, p1_deck, p2_leader, p2_deck = 1001, _build_deck(10000), 2001, _build_deck(20000)
@@ -145,18 +149,26 @@ def main() -> None:
         default=ROOT / "dbdatabase" / "effect_catalog.json",
         help="Path to optional effect catalog JSON.",
     )
+    parser.add_argument(
+        "--skill-cost-catalog",
+        type=Path,
+        default=ROOT / "dbdatabase" / "skill_cost_catalog.json",
+        help="Path to optional skill cost catalog JSON.",
+    )
     args = parser.parse_args()
 
     if args.turns < 1:
         raise ValueError("--turns must be >= 1")
 
-    global EFFECT_CATALOG_PATH
+    global EFFECT_CATALOG_PATH, SKILL_COST_CATALOG_PATH
     EFFECT_CATALOG_PATH = args.effect_catalog if args.effect_catalog.exists() else None
+    SKILL_COST_CATALOG_PATH = args.skill_cost_catalog if args.skill_cost_catalog.exists() else None
     state = simulate(args.turns, args.db_path)
     print_timeline(state)
 
 
 EFFECT_CATALOG_PATH: Path | None = None
+SKILL_COST_CATALOG_PATH: Path | None = None
 
 
 if __name__ == "__main__":

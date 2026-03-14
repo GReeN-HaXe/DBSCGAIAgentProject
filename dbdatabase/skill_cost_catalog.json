@@ -1,0 +1,37 @@
+{
+  "8910": {
+    "activate_main": [
+      {
+        "allowed_colors": "white",
+        "amount": 1,
+        "kind": "switch_owner_battle_to_hidden"
+      }
+    ]
+  },
+  "8917": {
+    "activate_main": [
+      {
+        "allowed_colors": "white",
+        "amount": 1,
+        "kind": "switch_owner_battle_or_energy_to_hidden"
+      }
+    ]
+  },
+  "8926": {
+    "counter_from_hand": [
+      {
+        "allowed_colors": "white",
+        "amount": 1,
+        "kind": "switch_owner_battle_to_hidden"
+      }
+    ]
+  },
+  "8936": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hidden_mode_battle_to_drop"
+      }
+    ]
+  }
+}

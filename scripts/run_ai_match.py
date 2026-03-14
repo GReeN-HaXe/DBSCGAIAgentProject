@@ -66,6 +66,7 @@ def main() -> None:
     parser.add_argument("--shuffle-decks", action="store_true", help="Shuffle decks before opening draws.")
     parser.add_argument("--seed", type=int, default=None, help="Optional random seed used when shuffling decks.")
     parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")
     parser.add_argument("--p1-leader-id", type=int, default=None, help="Optional explicit P1 leader card id.")
     parser.add_argument("--p2-leader-id", type=int, default=None, help="Optional explicit P2 leader card id.")
@@ -79,7 +80,8 @@ def main() -> None:
 
     repo = SQLiteCardRepository(args.db_path) if args.db_path.exists() else None
     effect_catalog = args.effect_catalog if args.effect_catalog.exists() else None
-    engine = RulesEngine(card_repository=repo, effect_rules_path=effect_catalog)
+    skill_cost_catalog = args.skill_cost_catalog if args.skill_cost_catalog.exists() else None
+    engine = RulesEngine(card_repository=repo, skill_cost_rules_path=skill_cost_catalog, effect_rules_path=effect_catalog)
     if args.use_db_sample_decks:
         if not args.db_path.exists():
             raise ValueError("--use-db-sample-decks requires --db-path to exist.")

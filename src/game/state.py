@@ -61,6 +61,10 @@ class CardInstance:
     has_super_combo: bool = False
     sparking_threshold: Optional[int] = None
     temporary_keywords: Tuple[str, ...] = ()
+    temporary_power_delta: int = 0
+    battle_temporary_keywords: Tuple[str, ...] = ()
+    battle_temporary_power_delta: int = 0
+    delayed_temporary_keywords: Tuple[str, ...] = ()
     stacked_card_ids: Tuple[int, ...] = ()
 
 
@@ -124,6 +128,7 @@ class CounterMotion:
     player_id: int
     card_instance_id: int
     modes: Tuple[str, ...]
+    payload: dict[str, int | str | None] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -193,6 +198,14 @@ class DelayedModeSwitch:
     switch_to_hidden: bool
 
 
+@dataclass(frozen=True)
+class DelayedKeywordClear:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+    keyword: str
+
+
 @dataclass
 class GameState:
     players: dict[int, PlayerState]
@@ -219,6 +232,7 @@ class GameState:
     effect_events: list[EffectEvent] = field(default_factory=list)
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
     delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
+    delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
     unison_marker_skill_usage: set[int] = field(default_factory=set)

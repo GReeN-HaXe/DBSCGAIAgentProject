@@ -338,6 +338,7 @@ def main() -> None:
     parser.add_argument("--games-per-matchup", type=int, default=None, help="Number of games for each ordered profile pair.")
     parser.add_argument("--max-actions", type=int, default=None, help="Maximum actions before ending a game.")
     parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")
     parser.add_argument("--output", type=Path, default=Path("artifacts/profile_matchups.json"), help="Output JSON path.")
     parser.add_argument(
@@ -1025,7 +1026,8 @@ def main() -> None:
     effect_catalog = args.effect_catalog if args.effect_catalog.exists() else None
 
     def _engine_factory() -> RulesEngine:
-        return RulesEngine(card_repository=repo, effect_rules_path=effect_catalog)
+        skill_cost_catalog = args.skill_cost_catalog if args.skill_cost_catalog.exists() else None
+        return RulesEngine(card_repository=repo, skill_cost_rules_path=skill_cost_catalog, effect_rules_path=effect_catalog)
 
     if args.seat_balanced:
         rows_fp1 = run_profile_matchup_matrix(

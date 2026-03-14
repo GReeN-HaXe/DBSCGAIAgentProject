@@ -241,15 +241,71 @@ Resolved:
     - hidden-mode battle cards are inert for attacking and skill sourcing
     - reusable `Activate: Main` family to switch an owner battle card to Hidden Mode
     - reusable `Activate: Main` family to drop an owner Hidden Mode battle card and draw
+    - reusable `Activate: Main` family to send up to `N` opponent Battle Cards to Warp
     - existing Unison / Hidden Mode replacement semantics now route through the shared replacement path
     - reusable `Activate: Main` family to switch an owner board card to Revealed Mode
+    - exact-card delayed reveal now tracks the specific Hidden Mode card chosen as a skill cost
+    - reusable `Counter: Play` Hidden Mode cost/runtime slice now supports:
+      - switch owner battle card to Hidden Mode as a counter cost
+      - play self from the counter resolution path
+      - reveal the same chosen card again at end of turn
+    - battle-duration temporary modifier support now exists separately from turn-duration modifiers:
+      - battle-only power deltas
+      - battle-only temporary keywords
+      - cleanup on the final `BattleStep.BATTLE_END` resolution
+    - reusable `Activate: Battle` Hidden Mode cost family now supports:
+      - switch owner battle card to Hidden Mode as an activate-battle cost
+      - self gains `+power` and a keyword for the battle
+    - reusable `Activate: Battle` Hidden Mode-drop family now supports:
+      - place an owner Hidden Mode battle card into its owner's Drop as an activate-battle cost
+      - choose up to `N` opponent Battle Cards and KO them
+    - effect requirement matching now supports:
+      - `if you have N or more Hidden Mode cards in your Battle Area`
+      - activate-skill legality is gated by extracted `requires_*` conditions when a matching effect family exists
+    - reusable `Activate: Main` play-self family now supports:
+      - draw `N`
+      - play this card from hand through the normal second `Counter: Play` timing
+      - gain a keyword until the end of the opponent's turn
+    - hand-based permanent cost reduction is now supported for Hidden Mode white cards:
+      - parse `reduce the energy cost of this card in your hand by N`
+      - enforce leader color / trait requirements from text
+      - enforce Hidden Mode board requirements from text
+      - use the effective reduced cost for:
+        - normal play legality and payment
+        - counter legality and payment
+        - hand-based activate-skill legality and payment
+      - regression-covered with Android 17-style play/counter tests in `tests/test_game_engine_phase2.py`
+    - skill cost catalog path is now available in `RulesEngine` and gameplay scripts
+    - initial extracted skill cost catalog now covers four current white Hidden Mode cost families
     - reusable delayed reveal families for:
       - attack-triggered switch of opponent battle card(s) to Hidden Mode, then Revealed Mode at end of opponent's turn
       - play-triggered switch of opponent battle card(s) to Hidden Mode, then Revealed Mode at end of turn
+    - reusable owner-side on-play Hidden / Revealed families now support:
+      - switch up to `N` owner board cards to Revealed Mode on play
+      - switch up to `N` any-player board cards to Revealed Mode on play
+      - switch up to `N` owner battle cards to Hidden Mode on play
+      - switch self to Hidden Mode on play
+      - extractor coverage now picks up simple BT28/BT29 owner-side Hidden/Revealed play triggers
+      - regression-covered in `tests/test_effect_rule_extractor.py` and `tests/test_phase4_effect_pipeline.py`
+    - generic counter play-self family now also supports:
+      - `Play this card, then switch it to Hidden Mode`
+      - regression-covered in `tests/test_phase3_rule_fixes.py`
+    - switch-triggered auto families now support:
+      - `When this card in a Battle Area is switched to Hidden Mode by one of your skills, your Leader gets +power until the end of your opponent's turn`
+      - `When this card in a Battle Area is switched to Hidden Mode by one of your skills, choose up to N of your cards and it gains [Keyword] until the end of your opponent's turn`
+      - `When this card is switched to Revealed Mode, it gets +power and [Keyword] for the turn`
+      - `When this card is switched to Revealed Mode or Hidden Mode, choose up to N of your cards and it gets +power for the turn`
+      - `When this card is switched to Revealed Mode or Hidden Mode, choose up to N of your opponent's Battle Cards and KO it`
+      - extractor and runtime now recognize `self_switched_hidden` / `self_switched_revealed` trigger families
+      - turn-gated switch autos (`If it's your turn`) are now supported through generic effect requirements
   - remaining work:
-    - broader Revealed Mode / switch-back interactions, especially cost-selected card tracking
+    - broader Revealed Mode / switch-back interactions beyond the current exact-card cost-selected slice
     - Hidden Mode-specific auto triggers and delayed state changes beyond the generic delayed-reveal families
     - broader Hidden Mode family extraction from active decks and traces
+    - broaden skill cost extraction beyond the first Hidden Mode family
+
+- [x] broaden effect catalog scan so activate/counter text families are included even when DB flags are stale
+  - `scripts/build_effect_catalog.py` and `tests/test_effect_catalog_drift.py` now scan on normalized skill text markers in addition to DB flags
 - [ ] implement Unison battle rules:
   - status: complete
   - defense step skipped when a Unison is attacked

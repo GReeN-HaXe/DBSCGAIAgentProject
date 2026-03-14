@@ -475,12 +475,141 @@ def test_extract_activate_main_power_wish_draw_and_gain_keyword_rule() -> None:
     assert rule.once_per_turn is True
 
 
+def test_extract_activate_battle_gain_power_and_keyword_for_battle_rule() -> None:
+    card = _card(
+        "[Activate: Battle][Once per turn](1), choose 1 white card in your Battle Area and switch it to Hidden Mode: "
+        "This card gets +10000 power and [Double Strike] for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_gain_power_and_keyword_for_battle")
+    assert rule.trigger == "self_activate_battle"
+    assert rule.handler_params["power_delta"] == 10000
+    assert rule.handler_params["grant_keyword"] == "Double Strike"
+    assert rule.once_per_turn is True
+
+
+def test_extract_activate_battle_ko_up_to_n_opponent_battle_rule() -> None:
+    card = _card(
+        "[Activate: Battle][Limit 1] Choose 1 Hidden Mode card in your Battle Area and place it into its owner's Drop: "
+        "Choose up to 1 of your opponent's Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_ko_up_to_n_opponent_battle")
+    assert rule.trigger == "self_activate_battle"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_activate_main_draw_play_self_and_gain_keyword_until_opponent_turn_end_rule() -> None:
+    card = _card(
+        "[Activate: Main]{w}(2), if you have 2 or more Hidden Mode cards in your Battle Area: "
+        "Draw 1 card, play this card from your hand, and this card gains [Barrier] until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end"
+    )
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["grant_keyword"] == "Barrier"
+    assert rule.handler_params["min_owner_hidden_mode_battle"] == 2
+
+
 def test_extract_play_gain_control_opponent_unison_rule() -> None:
     card = _card("[Auto] When this card is played from your hand, choose 1 of your opponent's Unison Cards and gain control of it.")
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_unison_on_play")
     assert rule.trigger == "self_played"
     assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_play_switch_owner_board_to_revealed_rule() -> None:
+    card = _card("[Auto] When this card is played, choose up to 1 card in your Battle Area and switch it to Revealed Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_board_to_revealed_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_play_switch_any_player_board_to_revealed_rule() -> None:
+    card = _card("[Auto] When this card is played, choose up to 1 player's card and switch it to Revealed Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_any_player_board_to_revealed_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_play_switch_owner_battle_to_hidden_rule() -> None:
+    card = _card("[Auto] When this card is played, choose up to 1 white card in your Battle Area and switch it to Hidden Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_battle_to_hidden_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "white"
+
+
+def test_extract_play_draw_and_switch_self_to_hidden_rule() -> None:
+    card = _card("[Auto] When this card is played, draw 1 card and switch this card to Hidden Mode.")
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.handler_id == "auto_draw_n" and r.trigger == "self_played" for r in rules)
+    assert any(r.handler_id == "auto_switch_self_to_hidden_on_play" and r.trigger == "self_played" for r in rules)
+
+
+def test_extract_hidden_switch_owner_leader_buff_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] When this card in a Battle Area is switched to Hidden Mode by one of your skills, "
+        "your Leader gets +5000 power until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_buff_owner_leader_on_switch_until_opponent_turn_end")
+    assert rule.trigger == "self_switched_hidden"
+    assert rule.handler_params["power_delta"] == 5000
+    assert rule.handler_params["requires_owner_actor"] is True
+
+
+def test_extract_hidden_switch_owner_card_keyword_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] When this card in a Battle Area is switched to Hidden Mode by one of your skills, "
+        "choose up to 1 of your white ≪Universe 7≫ cards and it gains [Barrier] until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_switch")
+    assert rule.trigger == "self_switched_hidden"
+    assert rule.handler_params["grant_keyword"] == "Barrier"
+    assert rule.handler_params["keyword_duration"] == "opponent_turn"
+
+
+def test_extract_revealed_switch_self_gain_power_and_keyword_rule() -> None:
+    card = _card("[Auto] When this card is switched to Revealed Mode, it gets +5000 power and [Double Strike] for the turn.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_self_gain_power_and_keyword_for_turn_on_switch")
+    assert rule.trigger == "self_switched_revealed"
+    assert rule.handler_params["power_delta"] == 5000
+    assert rule.handler_params["grant_keyword"] == "Double Strike"
+
+
+def test_extract_revealed_or_hidden_switch_owner_card_gain_power_rule() -> None:
+    card = _card(
+        "[Auto] If it's your turn : When this card is switched to Revealed Mode or Hidden Mode, "
+        "choose up to 1 of your white <Baby> or ≪Brainwashed≫ cards and it gets +10000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    matching = [r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_switch"]
+    assert {r.trigger for r in matching} == {"self_switched_hidden", "self_switched_revealed"}
+    assert all(r.handler_params["power_delta"] == 10000 for r in matching)
+    assert all(r.handler_params["requires_owner_turn"] is True for r in matching)
+
+
+def test_extract_revealed_or_hidden_switch_ko_opponent_battle_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If it's your turn : When this card is switched to Revealed Mode or Hidden Mode, "
+        "choose up to 1 of your opponent's Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    matching = [r for r in rules if r.handler_id == "auto_ko_up_to_n_opponent_battle_on_switch"]
+    assert {r.trigger for r in matching} == {"self_switched_hidden", "self_switched_revealed"}
+    assert all(r.handler_params["max_targets"] == 1 for r in matching)
 
 
 def test_extract_attack_power_reduce_rule() -> None:

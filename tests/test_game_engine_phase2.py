@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 import pytest
 
-from src.game import Action, ActionType, AttackContext, BattleStep, RulesEngine, RulesViolation, TurnPhase
+from src.game import Action, ActionType, AttackContext, BattleStep, CardInstance, RulesEngine, RulesViolation, TurnPhase
 
 
 def _deck(seed: int, size: int = 30) -> list[int]:
@@ -544,6 +544,276 @@ def test_leader_awaken_is_legal_at_four_life_and_flips_to_back_side() -> None:
     assert leader.has_activate_main is True
     assert len(awakened.players[1].life) == 4
     assert any(cp.name == "leader_awakened" for cp in awakened.checkpoints)
+
+
+def test_leader_awaken_is_legal_with_two_hidden_mode_cards_in_battle_area() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 1:
+                return SimpleNamespace(
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="White",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=("Awaken",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    card_skill_unstyled=(
+                        "[Auto] When this card attacks, draw 1 card.<br>"
+                        "[Awaken] When your life is at 4 or less, or you have 2 or more Hidden Mode cards in your Battle Area: "
+                        "Draw 2 cards and add cards from your life to your hand until you have 6 life left."
+                    ),
+                    card_back_name="Awakened Hidden Mode Leader",
+                    card_back_power=15000,
+                    card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.",
+                )
+            return SimpleNamespace(
+                power_int=15000,
+                card_type="LEADER",
+                card_color="Blue",
+                energy_cost_int=0,
+                combo_cost_int=0,
+                combo_power_int=0,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                has_barrier=False,
+                card_skill_unstyled="",
+                card_back_skill_unstyled="",
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000, 40),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000, 40),
+        shuffle_decks=False,
+    )
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=720001, card_id=101, owner_id=1, card_type="BATTLE", color="White", hidden_mode=True),
+            CardInstance(instance_id=720002, card_id=102, owner_id=1, card_type="BATTLE", color="White", hidden_mode=True),
+        ]
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+    legal = engine.get_legal_actions(state, 1)
+    assert any(action.action_type == ActionType.AWAKEN for action in legal)
+    awakened = engine.apply_action(state, next(action for action in legal if action.action_type == ActionType.AWAKEN))
+    assert awakened.players[1].leader_area.awakened is True
+    assert awakened.players[1].leader_area.power == 15000
+    assert any(cp.name == "leader_awakened" for cp in awakened.checkpoints)
+
+
+def test_hand_permanent_hidden_mode_cost_reduction_makes_play_legal() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 1:
+                return SimpleNamespace(
+                    card_name="Universe 7 Leader",
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="White",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    card_energy_cost="0",
+                    card_skill_unstyled="",
+                    card_traits_json='["Universe 7"]',
+                    card_character_json="[]",
+                )
+            if card_id == 900901:
+                return SimpleNamespace(
+                    card_name="Hidden Cost Reducer",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="White",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=True,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    card_energy_cost="2",
+                    card_skill_unstyled=(
+                        "[Permanent] If your Leader is a white ≪Universe 7≫ card and you have a Hidden Mode card in your Battle Area, "
+                        "reduce the energy cost of this card in your hand by 2."
+                    ),
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                )
+            return SimpleNamespace(
+                card_name="Card",
+                power_int=15000,
+                card_type="LEADER" if card_id == 2 else "BATTLE",
+                card_color="Blue",
+                energy_cost_int=0,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                card_energy_cost="0",
+                card_skill_unstyled="",
+                card_traits_json="[]",
+                card_character_json="[]",
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000, 40),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000, 40),
+        shuffle_decks=False,
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+    state.players[1].energy = []
+    state.players[1].hand = [engine._create_card_instance(next_instance_id=880901, card_id=900901, owner_id=1)]
+    legal = engine.get_legal_actions(state, 1)
+    assert all(a.action_type != ActionType.PLAY_CARD_FROM_HAND for a in legal)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880902, card_id=100, owner_id=1, card_type="BATTLE", color="White", hidden_mode=True)
+    )
+    legal = engine.get_legal_actions(state, 1)
+    assert any(a.action_type == ActionType.PLAY_CARD_FROM_HAND for a in legal)
+
+
+def test_hand_permanent_hidden_mode_cost_reduction_makes_counter_legal() -> None:
+    class FakeRepo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 1:
+                return SimpleNamespace(
+                    card_name="Universe 7 Leader",
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="White",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    card_energy_cost="0",
+                    card_skill_unstyled="",
+                    card_traits_json='["Universe 7"]',
+                    card_character_json="[]",
+                )
+            if card_id == 900903:
+                return SimpleNamespace(
+                    card_name="Hidden Counter Reducer",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="White",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=True,
+                    has_counter_attack=False,
+                    has_counter_play=True,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=True,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    card_energy_cost="2",
+                    card_skill_unstyled=(
+                        "[Counter: Play] Play this card.<br>"
+                        "[Permanent] If your Leader is a white ≪Universe 7≫ card and you have a Hidden Mode card in your Battle Area, "
+                        "reduce the energy cost of this card in your hand by 2."
+                    ),
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                )
+            return SimpleNamespace(
+                card_name="Card",
+                power_int=15000,
+                card_type="LEADER" if card_id == 2 else "BATTLE",
+                card_color="Blue",
+                energy_cost_int=0,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                card_energy_cost="0",
+                card_skill_unstyled="",
+                card_traits_json="[]",
+                card_character_json="[]",
+            )
+
+    engine = RulesEngine(card_repository=FakeRepo())
+    state = engine.initialize_game(
+        p1_leader_card_id=2,
+        p1_deck_card_ids=_deck(1000, 40),
+        p2_leader_card_id=1,
+        p2_deck_card_ids=_deck(2000, 40),
+        shuffle_decks=False,
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+    state.players[1].energy = []
+    state.players[1].hand = [CardInstance(instance_id=880904, card_id=111, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    state.players[2].energy = []
+    state.players[2].hand = [engine._create_card_instance(next_instance_id=880903, card_id=900903, owner_id=2)]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    legal = engine.get_legal_actions(state, 2)
+    assert all(a.action_type != ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+    state.players[2].battle_area.append(
+        CardInstance(instance_id=880905, card_id=112, owner_id=2, card_type="BATTLE", color="White", hidden_mode=True)
+    )
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
 
 
 def test_engine_power_falls_back_when_repo_missing_id() -> None:

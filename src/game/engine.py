@@ -4,17 +4,19 @@ from copy import deepcopy
 from dataclasses import dataclass
 import json
 import random
+import re
 from typing import Any
 from pathlib import Path
 
 from src.game.actions import Action, ActionType
 from src.game.effect_rules import EffectRule, load_effect_rules_json, normalize_effect_rules
-from src.game.skill_costs import SkillCostDsl, SkillCostSpec
+from src.game.skill_costs import SkillCostDsl, SkillCostSpec, load_skill_cost_rules_json, normalize_skill_cost_rules
 from src.game.state import (
     AttackContext,
     BattleStep,
     CardInstance,
     CheckpointEvent,
+    DelayedKeywordClear,
     DelayedModeSwitch,
     EffectEvent,
     EffectRegistration,
@@ -81,6 +83,7 @@ class RulesEngine:
         skill_cost_can_pay: Any | None = None,
         skill_cost_pay: Any | None = None,
         skill_cost_rules: dict[int, dict[str, object]] | None = None,
+        skill_cost_rules_path: str | Path | None = None,
         effect_rules: dict[int, list[dict[str, object]] | list[EffectRule]] | None = None,
         effect_rules_path: str | Path | None = None,
         effect_handlers: dict[str, Any] | None = None,
@@ -96,7 +99,9 @@ class RulesEngine:
         # Signature: pay(player_state, card_instance, context:str) -> None
         self._skill_cost_pay = skill_cost_pay
         # Mapping: card_id -> context -> list[{"kind": ..., "amount": ...}] | SkillCostSpec
-        self._skill_cost_rules = skill_cost_rules or {}
+        loaded_skill_cost_rules = load_skill_cost_rules_json(skill_cost_rules_path) if skill_cost_rules_path is not None else {}
+        provided_skill_cost_rules = normalize_skill_cost_rules(skill_cost_rules)
+        self._skill_cost_rules = self._merge_skill_cost_rule_maps(loaded_skill_cost_rules, provided_skill_cost_rules)
         # Mapping: card_id -> tuple[EffectRule, ...]
         loaded_rules = load_effect_rules_json(effect_rules_path) if effect_rules_path is not None else {}
         provided_rules = normalize_effect_rules(effect_rules)
@@ -128,10 +133,24 @@ class RulesEngine:
             "auto_gain_wormhole_on_owner_black_battle_played_from_warp": self._handle_auto_gain_wormhole_on_owner_black_battle_played_from_warp,
             "auto_top_deck_add_if_color_on_play": self._handle_auto_top_deck_add_if_color_on_play,
             "auto_switch_self_active_on_turn_end": self._handle_auto_switch_self_active_on_turn_end,
+            "auto_switch_self_to_hidden_on_play": self._handle_auto_switch_self_to_hidden_on_play,
+            "auto_switch_up_to_n_owner_board_to_revealed_on_play": self._handle_auto_switch_up_to_n_owner_board_to_revealed_on_play,
+            "auto_switch_up_to_n_any_player_board_to_revealed_on_play": self._handle_auto_switch_up_to_n_any_player_board_to_revealed_on_play,
+            "auto_switch_up_to_n_owner_battle_to_hidden_on_play": self._handle_auto_switch_up_to_n_owner_battle_to_hidden_on_play,
+            "auto_self_gain_power_and_keyword_for_turn_on_switch": self._handle_auto_self_gain_power_and_keyword_for_turn_on_switch,
+            "auto_buff_owner_leader_on_switch_until_opponent_turn_end": self._handle_auto_buff_owner_leader_on_switch_until_opponent_turn_end,
+            "auto_buff_up_to_n_owner_cards_on_switch": self._handle_auto_buff_up_to_n_owner_cards_on_switch,
+            "auto_ko_up_to_n_opponent_battle_on_switch": self._handle_auto_ko_up_to_n_opponent_battle_on_switch,
             "auto_play_self_from_combo_on_battle_end": self._handle_auto_play_self_from_combo_on_battle_end,
             "activate_play_self_from_hand": self._handle_activate_play_self_from_hand,
             "activate_draw_n_and_gain_keyword_for_turn": self._handle_activate_draw_n_and_gain_keyword_for_turn,
+            "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end": self._handle_activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end,
+            "activate_gain_power_and_keyword_for_battle": self._handle_activate_gain_power_and_keyword_for_battle,
+            "activate_ko_up_to_n_opponent_battle": self._handle_activate_ko_up_to_n_opponent_battle,
             "activate_switch_owner_battle_to_hidden_mode": self._handle_activate_switch_owner_battle_to_hidden_mode,
+            "activate_gain_power_by_hidden_cost_target_original_power_for_turn": self._handle_activate_gain_power_by_hidden_cost_target_original_power_for_turn,
+            "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": self._handle_activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn,
+            "activate_send_up_to_n_opponent_battle_to_warp": self._handle_activate_send_up_to_n_opponent_battle_to_warp,
             "activate_switch_owner_board_to_revealed_mode": self._handle_activate_switch_owner_board_to_revealed_mode,
             "activate_drop_owner_hidden_mode_draw_n": self._handle_activate_drop_owner_hidden_mode_draw_n,
             "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end": self._handle_auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end,
@@ -146,6 +165,22 @@ class RulesEngine:
         self._effect_target_chooser = effect_target_chooser
         # Signature: chooser(state, registration, candidates, count, policy) -> list[int]
         self._effect_multi_target_chooser = effect_multi_target_chooser
+
+    @staticmethod
+    def _merge_skill_cost_rule_maps(
+        base: dict[int, dict[str, SkillCostSpec]],
+        overlay: dict[int, dict[str, SkillCostSpec]],
+    ) -> dict[int, dict[str, SkillCostSpec]]:
+        if not base:
+            return {card_id: dict(contexts) for card_id, contexts in overlay.items()}
+        if not overlay:
+            return {card_id: dict(contexts) for card_id, contexts in base.items()}
+        merged: dict[int, dict[str, SkillCostSpec]] = {}
+        for card_id in set(base.keys()) | set(overlay.keys()):
+            combined = dict(base.get(card_id, {}))
+            combined.update(overlay.get(card_id, {}))
+            merged[card_id] = combined
+        return merged
 
     @staticmethod
     def _merge_effect_rule_maps(
@@ -434,6 +469,7 @@ class RulesEngine:
         ending_player = state.active_player
         self._emit_effect_event(state, name="turn_end", actor_player_id=ending_player, payload={})
         self._apply_due_delayed_mode_switches(state, trigger_player_id=ending_player)
+        self._apply_due_delayed_keyword_clears(state, trigger_player_id=ending_player)
         self._clear_end_of_turn_modifiers(state.players[ending_player])
         state.active_player = self._opponent_of(ending_player)
         state.turn_number += 1
@@ -454,6 +490,9 @@ class RulesEngine:
         if leader.awakened or not leader.has_awaken:
             return False
         if len(player.life) <= 4:
+            return True
+        hidden_mode_threshold = self._parse_hidden_mode_awaken_threshold(leader.skill_text_raw)
+        if hidden_mode_threshold is not None and sum(1 for card in player.battle_area if card.hidden_mode) >= hidden_mode_threshold:
             return True
         return any(
             unison.color == leader.color and sum(count for _code, count in unison.specified_costs) >= 3
@@ -485,9 +524,10 @@ class RulesEngine:
         for i, card in enumerate(player.hand):
             if card.card_type not in {"BATTLE", "UNISON", "EXTRA", "Z-BATTLE", "Z-UNISON", "Z-EXTRA"}:
                 continue
+            effective_energy_cost = self._effective_hand_energy_cost(state, player_id=player_id, card=card)
             if self._can_pay_costs(
                 player,
-                energy_cost=card.energy_cost or 0,
+                energy_cost=effective_energy_cost,
                 required_color=card.color,
                 specified_costs=dict(card.specified_costs),
                 z_cost=card.z_energy_cost or 0,
@@ -532,6 +572,7 @@ class RulesEngine:
             )
             and not self._is_activate_limited_this_turn(state, player_id, "main", player.leader_area)
             and self._can_pay_skill_cost(player, player.leader_area, "activate_main")
+            and self._activate_effect_requirements_met(state, player_id=player_id, source=player.leader_area, source_zone="leader", source_kind="main")
         ):
             actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="leader"))
         for i, c in enumerate(player.battle_area):
@@ -547,6 +588,7 @@ class RulesEngine:
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "main", c)
                 and self._can_pay_skill_cost(player, c, "activate_main")
+                and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="battle", source_kind="main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="battle", source_index=i))
         for i, c in enumerate(player.unison_area):
@@ -563,6 +605,7 @@ class RulesEngine:
                 and not self._is_activate_limited_this_turn(state, player_id, "main", c)
                 and not self._is_unison_marker_skill_limited_this_turn(state, c, "activate_main")
                 and self._can_pay_skill_cost(player, c, "activate_main")
+                and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="unison", source_kind="main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="unison", source_index=i))
         for i, c in enumerate(player.hand):
@@ -571,12 +614,13 @@ class RulesEngine:
                 and c.has_activate_main
                 and self._can_pay_energy_cost(
                     player,
-                    c.energy_cost or 0,
+                    self._effective_hand_energy_cost(state, player_id=player_id, card=c),
                     required_color=c.color,
                     specified_costs=dict(c.specified_costs),
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "main", c)
                 and self._can_pay_skill_cost(player, c, "activate_main")
+                and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="hand", source_kind="main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="hand", source_index=i))
         return actions
@@ -627,6 +671,7 @@ class RulesEngine:
             )
             and not self._is_activate_limited_this_turn(state, player_id, "battle", player.leader_area)
             and self._can_pay_skill_cost(player, player.leader_area, "activate_battle")
+            and self._activate_effect_requirements_met(state, player_id=player_id, source=player.leader_area, source_zone="leader", source_kind="battle")
         ):
             actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="leader"))
         for i, c in enumerate(player.battle_area):
@@ -642,6 +687,7 @@ class RulesEngine:
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "battle", c)
                 and self._can_pay_skill_cost(player, c, "activate_battle")
+                and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="battle", source_kind="battle")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="battle", source_index=i))
         for i, c in enumerate(player.unison_area):
@@ -658,6 +704,7 @@ class RulesEngine:
                 and not self._is_activate_limited_this_turn(state, player_id, "battle", c)
                 and not self._is_unison_marker_skill_limited_this_turn(state, c, "activate_battle")
                 and self._can_pay_skill_cost(player, c, "activate_battle")
+                and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="unison", source_kind="battle")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="unison", source_index=i))
         return actions
@@ -687,12 +734,13 @@ class RulesEngine:
                 continue
             if allowed_modes and not self._card_matches_counter_window(c, allowed_modes):
                 continue
+            effective_energy_cost = self._effective_hand_energy_cost(state, player_id=player_id, card=c)
             if self._can_pay_energy_cost(
                 player,
-                c.energy_cost or 0,
+                effective_energy_cost,
                 required_color=c.color,
                 specified_costs=dict(c.specified_costs),
-            ):
+            ) and self._can_pay_skill_cost(player, c, "counter_from_hand"):
                 actions.append(Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=player_id, hand_index=i))
         return actions
 
@@ -786,9 +834,10 @@ class RulesEngine:
         if action.hand_index is None or not (0 <= action.hand_index < len(player.hand)):
             raise RulesViolation("Invalid hand index.")
         card = player.hand[action.hand_index]
+        effective_energy_cost = self._effective_hand_energy_cost(state, player_id=action.player_id, card=card)
         paid_energy_cards, _ = self._pay_costs(
             player,
-            energy_cost=card.energy_cost or 0,
+            energy_cost=effective_energy_cost,
             required_color=card.color,
             specified_costs=dict(card.specified_costs),
             z_cost=card.z_energy_cost or 0,
@@ -853,15 +902,26 @@ class RulesEngine:
             raise RulesViolation("Activate skill limit already used this turn.")
         if self._is_unison_marker_skill_limited_this_turn(state, source, f"activate_{source_kind}"):
             raise RulesViolation("This Unison already used a marker-cost skill this turn.")
+        if not self._activate_effect_requirements_met(
+            state,
+            player_id=action.player_id,
+            source=source,
+            source_zone=action.source_zone,
+            source_kind=source_kind,
+        ):
+            raise RulesViolation("Activate skill requirements are not met.")
         if not self._can_pay_skill_cost(player, source, f"activate_{source_kind}"):
             raise RulesViolation("Cannot pay skill cost.")
+        energy_cost = source.energy_cost or 0
+        if action.source_zone == "hand":
+            energy_cost = self._effective_hand_energy_cost(state, player_id=action.player_id, card=source)
         self._pay_energy_cost(
             player,
-            source.energy_cost or 0,
+            energy_cost,
             required_color=source.color,
             specified_costs=dict(source.specified_costs),
         )
-        self._pay_skill_cost(state, player, source, f"activate_{source_kind}")
+        skill_cost_payload = self._pay_skill_cost(state, player, source, f"activate_{source_kind}")
         self._open_counter_window(
             state,
             kind=f"activate_{source_kind}",
@@ -874,6 +934,7 @@ class RulesEngine:
                     "source_index": action.source_index,
                     "source_instance_id": source.instance_id,
                     "source_card_id": source.card_id,
+                    **dict(skill_cost_payload),
                 },
             ),
         )
@@ -1037,6 +1098,7 @@ class RulesEngine:
         if player_id != ctx.attacker_player_id:
             raise RulesViolation("Only attacker resolves battle.")
         if state.battle_step == BattleStep.BATTLE_END:
+            self._clear_battle_modifiers(state)
             self._cleanup_combo_areas(state)
             state.attack_context = None
             state.battle_step = None
@@ -1092,12 +1154,16 @@ class RulesEngine:
         allowed_modes = self._allowed_counter_modes(state)
         if allowed_modes and not self._card_matches_counter_window(card, allowed_modes):
             raise RulesViolation("Counter mode does not match current counter timing.")
+        if not self._can_pay_skill_cost(player, card, "counter_from_hand"):
+            raise RulesViolation("Cannot pay counter skill cost.")
+        effective_energy_cost = self._effective_hand_energy_cost(state, player_id=action.player_id, card=card)
         self._pay_energy_cost(
             player,
-            card.energy_cost or 0,
+            effective_energy_cost,
             required_color=card.color,
             specified_costs=dict(card.specified_costs),
         )
+        skill_cost_payload = self._pay_skill_cost(state, player, card, "counter_from_hand")
         declared = player.hand.pop(action.hand_index)
         player.drop.append(declared)
         self._checkpoint(state, "counter_declared")
@@ -1107,6 +1173,7 @@ class RulesEngine:
                 player_id=action.player_id,
                 card_instance_id=declared.instance_id,
                 modes=declared.counter_modes,
+                payload=dict(skill_cost_payload),
             )
         )
         state.counter_motion_trace.append(
@@ -1189,7 +1256,15 @@ class RulesEngine:
     @staticmethod
     def _card_has_keyword(card: CardInstance, keyword: str) -> bool:
         needle = str(keyword).strip().lower()
-        return any(str(item).strip().lower() == needle for item in ((card.keywords or ()) + (card.temporary_keywords or ())))
+        return any(
+            str(item).strip().lower() == needle
+            for item in (
+                (card.keywords or ())
+                + (card.temporary_keywords or ())
+                + (card.battle_temporary_keywords or ())
+                + (card.delayed_temporary_keywords or ())
+            )
+        )
 
     def _max_attacks_per_turn(self, card: CardInstance) -> int:
         return 2 if self._card_has_keyword(card, "Dual Attack") else 1
@@ -1204,16 +1279,83 @@ class RulesEngine:
 
     @staticmethod
     def _clear_end_of_turn_modifiers(player: PlayerState) -> None:
+        player.leader_area.power -= int(getattr(player.leader_area, "temporary_power_delta", 0))
+        player.leader_area.temporary_power_delta = 0
         player.leader_area.temporary_keywords = ()
+        player.leader_area.power -= int(getattr(player.leader_area, "battle_temporary_power_delta", 0))
+        player.leader_area.battle_temporary_power_delta = 0
+        player.leader_area.battle_temporary_keywords = ()
         for c in player.battle_area:
+            c.power -= int(getattr(c, "temporary_power_delta", 0))
+            c.temporary_power_delta = 0
             c.temporary_keywords = ()
+            c.power -= int(getattr(c, "battle_temporary_power_delta", 0))
+            c.battle_temporary_power_delta = 0
+            c.battle_temporary_keywords = ()
         for c in player.unison_area:
+            c.power -= int(getattr(c, "temporary_power_delta", 0))
+            c.temporary_power_delta = 0
             c.temporary_keywords = ()
+            c.power -= int(getattr(c, "battle_temporary_power_delta", 0))
+            c.battle_temporary_power_delta = 0
+            c.battle_temporary_keywords = ()
+
+    def _apply_temporary_power_delta(self, state: GameState, *, card: CardInstance, delta: int, reason: str) -> None:
+        if delta == 0:
+            return
+        self._modify_card_power(state, card=card, delta=delta, reason=reason)
+        card.temporary_power_delta = int(getattr(card, "temporary_power_delta", 0)) + delta
+
+    def _apply_battle_temporary_power_delta(self, state: GameState, *, card: CardInstance, delta: int, reason: str) -> None:
+        if delta == 0:
+            return
+        self._modify_card_power(state, card=card, delta=delta, reason=reason)
+        card.battle_temporary_power_delta = int(getattr(card, "battle_temporary_power_delta", 0)) + delta
+
+    @staticmethod
+    def _append_temporary_keyword(card: CardInstance, keyword: str, *, duration: str) -> None:
+        normalized = str(keyword).strip()
+        if not normalized:
+            return
+        if duration == "battle":
+            if any(str(item).strip().lower() == normalized.lower() for item in (card.battle_temporary_keywords or ())):
+                return
+            card.battle_temporary_keywords = tuple(list(card.battle_temporary_keywords) + [normalized])
+            return
+        if duration == "delayed":
+            if any(str(item).strip().lower() == normalized.lower() for item in (card.delayed_temporary_keywords or ())):
+                return
+            card.delayed_temporary_keywords = tuple(list(card.delayed_temporary_keywords) + [normalized])
+            return
+        if any(str(item).strip().lower() == normalized.lower() for item in (card.temporary_keywords or ())):
+            return
+        card.temporary_keywords = tuple(list(card.temporary_keywords) + [normalized])
+
+    def _clear_battle_modifiers(self, state: GameState) -> None:
+        cleared = False
+        for player in state.players.values():
+            cards = [player.leader_area, *player.battle_area, *player.unison_area]
+            for card in cards:
+                battle_delta = int(getattr(card, "battle_temporary_power_delta", 0))
+                if battle_delta:
+                    card.power -= battle_delta
+                    card.battle_temporary_power_delta = 0
+                    cleared = True
+                if card.battle_temporary_keywords:
+                    card.battle_temporary_keywords = ()
+                    cleared = True
+        if cleared:
+            self._checkpoint(state, "battle_modifiers_cleared")
 
     @staticmethod
     def _text_describes_counter_negate_play_self(card: CardInstance) -> bool:
         text = str(card.skill_text_raw or "").lower()
         return "negate the attack" in text and "play this card" in text
+
+    @staticmethod
+    def _text_describes_counter_play_self(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "play this card" in text
 
     @staticmethod
     def _text_requires_play_self_in_rest(card: CardInstance) -> bool:
@@ -1229,6 +1371,16 @@ class RulesEngine:
     def _text_restricts_battle_attacker(card: CardInstance) -> bool:
         text = str(card.skill_text_raw or "").lower()
         return "if the attacking card was a battle card" in text and "can't attack for the turn" in text
+
+    @staticmethod
+    def _text_reveals_hidden_cost_target_at_turn_end(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "switch the card that was switched to hidden mode by this skill to revealed mode at the end of the turn" in text
+
+    @staticmethod
+    def _text_counter_switches_self_to_hidden(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "play this card, then switch it to hidden mode" in text
 
     def _resolve_pending_action(self, state: GameState, *, negated: bool) -> None:
         win = state.counter_window
@@ -1278,6 +1430,11 @@ class RulesEngine:
                     "source_instance_id": int(pending.payload.get("source_instance_id") or -1),
                     "source_card_id": int(pending.payload.get("source_card_id") or -1),
                     "skill_kind": pending.action_type,
+                    **{
+                        str(key): value
+                        for key, value in pending.payload.items()
+                        if str(key).startswith("cost_")
+                    },
                 },
             )
             source_instance_id = int(pending.payload.get("source_instance_id") or -1)
@@ -1365,8 +1522,6 @@ class RulesEngine:
         motions: list[CounterMotion],
         resolutions: list[CounterResolution],
     ) -> None:
-        if state.attack_context is None:
-            return
         motion_by_id = {motion.motion_id: motion for motion in motions}
         for resolution in resolutions:
             if not resolution.resolved or resolution.negated_motion_id is not None:
@@ -1379,8 +1534,8 @@ class RulesEngine:
             if card is None:
                 continue
             handled = False
-            if self._text_describes_counter_negate_play_self(card):
-                self._resolve_counter_play_self_family(state, player, card)
+            if self._text_describes_counter_play_self(card):
+                self._resolve_counter_play_self_family(state, player, card, motion.payload)
                 handled = True
             if self._apply_counter_attack_restriction_family(state, card):
                 handled = True
@@ -1390,7 +1545,13 @@ class RulesEngine:
                 )
                 self._checkpoint(state, "counter_effect_no_registered_family")
 
-    def _resolve_counter_play_self_family(self, state: GameState, player: PlayerState, card: CardInstance) -> None:
+    def _resolve_counter_play_self_family(
+        self,
+        state: GameState,
+        player: PlayerState,
+        card: CardInstance,
+        payload: dict[str, int | str | None],
+    ) -> None:
         card.resting = self._text_requires_play_self_in_rest(card)
         if card in player.drop:
             player.drop.remove(card)
@@ -1406,6 +1567,30 @@ class RulesEngine:
                 "source_zone": "battle",
             },
         )
+        if self._text_counter_switches_self_to_hidden(card):
+            card.hidden_mode = True
+            self._emit_effect_event(
+                state,
+                name="card_switched_hidden_mode",
+                actor_player_id=player.player_id,
+                payload={
+                    "source_instance_id": card.instance_id,
+                    "source_card_id": card.card_id,
+                    "source_zone": "battle",
+                    "owner_player_id": player.player_id,
+                },
+            )
+            self._checkpoint(state, "counter_effect_switch_self_hidden_resolved")
+        target_instance_id = int(payload.get("cost_target_instance_id") or -1)
+        if target_instance_id > 0 and self._text_reveals_hidden_cost_target_at_turn_end(card):
+            self._schedule_delayed_mode_switch(
+                state,
+                owner_player_id=player.player_id,
+                target_instance_id=target_instance_id,
+                trigger_player_id=state.active_player,
+                switch_to_hidden=False,
+            )
+            self._checkpoint(state, "counter_effect_delayed_reveal_scheduled")
         self._checkpoint(state, "counter_effect_play_self_resolved")
 
     def _apply_counter_attack_restriction_family(self, state: GameState, card: CardInstance) -> bool:
@@ -1430,12 +1615,25 @@ class RulesEngine:
             return
         card = player.hand.pop(idx)
         card.resting = bool(pending.payload.get("resting") or False)
+        delayed_keyword = str(pending.payload.get("grant_keyword_after_play") or "").strip()
+        keyword_clear_trigger_player_id = int(pending.payload.get("keyword_clear_trigger_player_id") or -1)
         if negated:
             player.drop.append(card)
             self._checkpoint(state, "play_negated")
             return
         if card.card_type in {"BATTLE", "Z-BATTLE"}:
             player.battle_area.append(card)
+            if delayed_keyword:
+                self._append_temporary_keyword(card, delayed_keyword, duration="delayed")
+                if keyword_clear_trigger_player_id > 0:
+                    state.delayed_keyword_clears.append(
+                        DelayedKeywordClear(
+                            owner_player_id=pending.actor_player_id,
+                            target_instance_id=card.instance_id,
+                            trigger_player_id=keyword_clear_trigger_player_id,
+                            keyword=delayed_keyword,
+                        )
+                    )
             self._register_card_effects(state, player_id=pending.actor_player_id, source_zone="battle", card=card)
             self._emit_effect_event(
                 state,
@@ -1599,6 +1797,35 @@ class RulesEngine:
         if changed:
             self._checkpoint(state, "delayed_mode_switch_resolved")
 
+    def _apply_due_delayed_keyword_clears(self, state: GameState, *, trigger_player_id: int) -> None:
+        if not state.delayed_keyword_clears:
+            return
+        remaining: list[DelayedKeywordClear] = []
+        changed = False
+        for delayed in state.delayed_keyword_clears:
+            if delayed.trigger_player_id != trigger_player_id:
+                remaining.append(delayed)
+                continue
+            owner = state.players.get(delayed.owner_player_id)
+            if owner is None:
+                continue
+            target = self._find_board_card_by_instance(owner, delayed.target_instance_id)
+            if target is None and owner.leader_area.instance_id == delayed.target_instance_id:
+                target = owner.leader_area
+            if target is None:
+                continue
+            filtered = tuple(
+                item
+                for item in (target.delayed_temporary_keywords or ())
+                if str(item).strip().lower() != delayed.keyword.strip().lower()
+            )
+            if filtered != target.delayed_temporary_keywords:
+                target.delayed_temporary_keywords = filtered
+                changed = True
+        state.delayed_keyword_clears = remaining
+        if changed:
+            self._checkpoint(state, "delayed_keyword_clear_resolved")
+
     def _ko_card(self, state: GameState, player_id: int, zone: str, instance_id: int) -> None:
         player = state.players[player_id]
         zone_cards = player.battle_area if zone == "battle" else player.unison_area
@@ -1753,23 +1980,26 @@ class RulesEngine:
         except Exception:
             return False
 
-    def _pay_skill_cost(self, state: GameState, player: PlayerState, card: CardInstance, context: str) -> None:
+    def _pay_skill_cost(self, state: GameState, player: PlayerState, card: CardInstance, context: str) -> dict[str, int | str | None]:
         if self._skill_cost_pay is None:
             spec = self._resolve_skill_cost_spec(card.card_id, context)
             if spec is None:
-                return
+                return {}
             try:
                 before_markers = card.markers
-                SkillCostDsl.pay(player, card, spec)
+                metadata = SkillCostDsl.pay(player, card, spec)
                 removed_markers = max(before_markers - card.markers, 0)
                 if removed_markers > 0 and card.card_type in {"UNISON", "Z-UNISON"}:
                     self._checkpoint(state, "marker_remove_begin_skill_cost")
                     self._checkpoint(state, "marker_removed_skill_cost")
-                return
+                return dict(metadata)
             except Exception as exc:
                 raise RulesViolation(f"Skill cost payment failed: {exc}") from exc
         try:
-            self._skill_cost_pay(player, card, context)
+            metadata = self._skill_cost_pay(player, card, context)
+            if isinstance(metadata, dict):
+                return {str(k): v for k, v in metadata.items() if isinstance(k, str) and isinstance(v, (int, str, bool, type(None)))}
+            return {}
         except Exception as exc:
             raise RulesViolation(f"Skill cost payment failed: {exc}") from exc
 
@@ -2030,6 +2260,14 @@ class RulesEngine:
             if event.name != "card_comboed":
                 return False
             return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
+        if reg.trigger == "self_switched_hidden":
+            if event.name != "card_switched_hidden_mode":
+                return False
+            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
+        if reg.trigger == "self_switched_revealed":
+            if event.name != "card_switched_revealed_mode":
+                return False
+            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
         if reg.trigger == "self_activate_main":
             if event.name != "skill_activated":
                 return False
@@ -2217,10 +2455,10 @@ class RulesEngine:
                 owner.hand.append(owner.life.pop(0))
         delta = self._resolve_effect_int_param(state, reg, "power_delta", default=0)
         if delta != 0:
-            self._modify_card_power(state, card=source, delta=delta, reason="effect_self_attack_buff")
+            self._apply_temporary_power_delta(state, card=source, delta=delta, reason="effect_self_attack_buff")
         grant_keyword = str(reg.handler_params.get("grant_keyword", "")).strip()
-        if grant_keyword and grant_keyword not in source.keywords:
-            source.keywords = tuple(list(source.keywords) + [grant_keyword])
+        if grant_keyword and not self._card_has_keyword(source, grant_keyword):
+            source.temporary_keywords = tuple(list(source.temporary_keywords) + [grant_keyword])
         self._checkpoint(state, "effect_auto_pay_life_on_attack_gain_power_and_keyword_for_turn")
 
     def _handle_auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
@@ -2790,9 +3028,98 @@ class RulesEngine:
         for _ in range(max(amount, 0)):
             self._draw_one(state, reg.owner_player_id)
         grant_keyword = str(reg.handler_params.get("grant_keyword", "")).strip()
-        if grant_keyword and not self._card_has_keyword(source, grant_keyword):
-            source.temporary_keywords = tuple(list(source.temporary_keywords) + [grant_keyword])
+        if grant_keyword:
+            self._append_temporary_keyword(source, grant_keyword, duration="turn")
         self._checkpoint(state, "effect_activate_draw_n_and_gain_keyword_for_turn")
+
+    def _handle_activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, "hand", reg.source_instance_id)
+        if source is None:
+            return
+        amount = self._resolve_effect_int_param(state, reg, "amount", default=1)
+        for _ in range(max(amount, 0)):
+            self._draw_one(state, reg.owner_player_id)
+        grant_keyword = str(reg.handler_params.get("grant_keyword", "")).strip()
+        self._open_counter_window(
+            state,
+            kind="play",
+            responder_player_id=self._opponent_of(reg.owner_player_id),
+            pending_action=PendingAction(
+                action_type="play_from_hand",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "card_instance_id": source.instance_id,
+                    "paid_energy_cards": 0,
+                    "declared_via_effect": "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end",
+                    "declared_from_skill_kind": str(event.payload.get("skill_kind") or ""),
+                    "grant_keyword_after_play": grant_keyword or None,
+                    "keyword_clear_trigger_player_id": self._opponent_of(reg.owner_player_id) if grant_keyword else None,
+                },
+            ),
+        )
+        self._checkpoint(state, "counter_timing_play_from_skill")
+        self._checkpoint(state, "effect_activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end")
+
+    def _handle_activate_gain_power_and_keyword_for_battle(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_battle":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        delta = self._resolve_effect_int_param(state, reg, "power_delta", default=0)
+        if delta:
+            self._apply_battle_temporary_power_delta(state, card=source, delta=delta, reason="effect_activate_battle_buff")
+        grant_keyword = str(reg.handler_params.get("grant_keyword", "")).strip()
+        if grant_keyword:
+            self._append_temporary_keyword(source, grant_keyword, duration="battle")
+        self._checkpoint(state, "effect_activate_gain_power_and_keyword_for_battle")
+
+    def _handle_activate_ko_up_to_n_opponent_battle(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_battle":
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        target_policy = str(reg.handler_params.get("target_policy", "first"))
+        selected = self._select_opponent_battle_targets(
+            state,
+            reg,
+            max_targets=max_targets,
+            max_cost=max_cost,
+            policy=target_policy,
+        )
+        if not selected:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        for target in list({c.instance_id for c in selected}):
+            self._ko_card(state, opponent_id, "battle", target)
+        self._checkpoint(state, "effect_activate_ko_up_to_n_opponent_battle")
 
     def _handle_activate_switch_owner_battle_to_hidden_mode(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "skill_activated":
@@ -2839,6 +3166,128 @@ class RulesEngine:
             },
         )
         self._checkpoint(state, "effect_activate_switch_owner_battle_to_hidden_mode")
+
+    def _handle_activate_gain_power_by_hidden_cost_target_original_power_for_turn(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        cost_target_card_id = int(event.payload.get("cost_target_card_id") or -1)
+        if cost_target_card_id <= 0:
+            return
+        delta = self._resolve_card_runtime_data(cost_target_card_id).power
+        if delta == 0:
+            return
+        target_scope = str(reg.handler_params.get("target_scope", "self")).strip().lower()
+        target: CardInstance | None = None
+        if target_scope == "self":
+            target = source
+        elif target_scope == "owner_leader_or_matching_battle":
+            candidates: list[CardInstance] = [owner.leader_area]
+            raw_colors = str(reg.handler_params.get("target_allowed_colors", "")).strip().lower()
+            allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+            raw_traits = str(reg.handler_params.get("target_required_traits", "")).strip().lower()
+            required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+            raw_characters = str(reg.handler_params.get("target_required_characters", "")).strip().lower()
+            required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+            required_name_contains = str(reg.handler_params.get("target_required_name_contains", "")).strip().upper()
+            candidates.extend(
+                card
+                for card in owner.battle_area
+                if self._card_matches_effect_filters(
+                    card,
+                    allowed_colors=allowed_colors,
+                    required_traits=required_traits,
+                    required_characters=required_characters,
+                    required_name_contains=required_name_contains,
+                )
+            )
+            if not candidates:
+                return
+            target_policy = str(reg.handler_params.get("target_policy", "first"))
+            target = candidates[self._choose_effect_target_index(state, reg, candidates, target_policy)]
+        if target is None:
+            return
+        self._apply_temporary_power_delta(state, card=target, delta=delta, reason="effect_hidden_mode_power_copy")
+        self._checkpoint(state, "effect_activate_gain_power_by_hidden_cost_target_original_power_for_turn")
+
+    def _handle_activate_send_up_to_n_opponent_battle_to_warp(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        target_policy = str(reg.handler_params.get("target_policy", "first"))
+        selected = self._select_opponent_battle_targets(
+            state,
+            reg,
+            max_targets=max_targets,
+            max_cost=max_cost,
+            policy=target_policy,
+        )
+        if not selected:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if opponent is None:
+            return
+        target_ids = {c.instance_id for c in selected}
+        i = 0
+        while i < len(opponent.battle_area):
+            card = opponent.battle_area[i]
+            if card.instance_id not in target_ids:
+                i += 1
+                continue
+            opponent.warp.append(opponent.battle_area.pop(i))
+        self._checkpoint(state, "effect_activate_send_up_to_n_opponent_battle_to_warp")
+
+    def _handle_activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets > 0:
+            max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+            target_policy = str(reg.handler_params.get("target_policy", "first"))
+            selected = self._select_opponent_battle_targets(
+                state,
+                reg,
+                max_targets=max_targets,
+                max_cost=max_cost,
+                policy=target_policy,
+            )
+            if selected:
+                opponent_id = self._opponent_of(reg.owner_player_id)
+                for target in list({c.instance_id for c in selected}):
+                    self._ko_card(state, opponent_id, "battle", target)
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        leader_delta = self._resolve_effect_int_param(state, reg, "leader_power_delta", default=0)
+        if leader_delta != 0:
+            self._apply_temporary_power_delta(state, card=owner.leader_area, delta=leader_delta, reason="effect_owner_leader_buff")
+        self._checkpoint(state, "effect_activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn")
 
     def _handle_activate_switch_owner_board_to_revealed_mode(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "skill_activated":
@@ -2986,7 +3435,285 @@ class RulesEngine:
             return
         if source.resting:
             source.resting = False
-            self._checkpoint(state, "effect_auto_switch_self_active_on_turn_end")
+        self._checkpoint(state, "effect_auto_switch_self_active_on_turn_end")
+
+    def _handle_auto_switch_self_to_hidden_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        target = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if target is None or target.hidden_mode:
+            return
+        target.hidden_mode = True
+        self._emit_effect_event(
+            state,
+            name="card_switched_hidden_mode",
+            actor_player_id=reg.owner_player_id,
+            payload={
+                "source_instance_id": target.instance_id,
+                "source_card_id": target.card_id,
+                "source_zone": reg.source_zone,
+                "owner_player_id": reg.owner_player_id,
+            },
+        )
+        self._checkpoint(state, "effect_auto_switch_self_to_hidden_on_play")
+
+    def _handle_auto_switch_up_to_n_owner_board_to_revealed_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        raw_colors = str(reg.handler_params.get("allowed_colors", ""))
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        raw_traits = str(reg.handler_params.get("required_traits", ""))
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", ""))
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        candidates = [
+            card
+            for card in [*owner.battle_area, *owner.unison_area]
+            if card.hidden_mode
+            and self._card_matches_effect_filters(
+                card,
+                allowed_colors=allowed_colors,
+                required_traits=required_traits,
+                required_characters=required_characters,
+                required_name_contains=required_name_contains,
+            )
+        ]
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0 or not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
+        if not indexes:
+            return
+        for idx in indexes:
+            target = candidates[idx]
+            target.hidden_mode = False
+            self._emit_effect_event(
+                state,
+                name="card_switched_revealed_mode",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": target.instance_id,
+                    "source_card_id": target.card_id,
+                    "source_zone": "unison" if target in owner.unison_area else "battle",
+                    "owner_player_id": reg.owner_player_id,
+                },
+            )
+        self._checkpoint(state, "effect_auto_switch_owner_board_to_revealed_on_play")
+
+    def _handle_auto_switch_up_to_n_owner_battle_to_hidden_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        raw_colors = str(reg.handler_params.get("allowed_colors", ""))
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        raw_traits = str(reg.handler_params.get("required_traits", ""))
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", ""))
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        candidates = [
+            card
+            for card in owner.battle_area
+            if not card.hidden_mode
+            and self._card_matches_effect_filters(
+                card,
+                allowed_colors=allowed_colors,
+                required_traits=required_traits,
+                required_characters=required_characters,
+                required_name_contains=required_name_contains,
+            )
+        ]
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0 or not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
+        if not indexes:
+            return
+        for idx in indexes:
+            target = candidates[idx]
+            target.hidden_mode = True
+            self._emit_effect_event(
+                state,
+                name="card_switched_hidden_mode",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": target.instance_id,
+                    "source_card_id": target.card_id,
+                    "source_zone": "battle",
+                    "owner_player_id": reg.owner_player_id,
+                },
+            )
+        self._checkpoint(state, "effect_auto_switch_owner_battle_to_hidden_on_play")
+
+    def _handle_auto_switch_up_to_n_any_player_board_to_revealed_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        candidates: list[tuple[int, str, CardInstance]] = []
+        for owner_player_id, owner in state.players.items():
+            for card in owner.battle_area:
+                if card.hidden_mode:
+                    candidates.append((owner_player_id, "battle", card))
+            for card in owner.unison_area:
+                if card.hidden_mode:
+                    candidates.append((owner_player_id, "unison", card))
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0 or not candidates:
+            return
+        raw_cards = [card for _, _, card in candidates]
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, raw_cards, max_targets, policy)
+        if not indexes:
+            return
+        for idx in indexes:
+            owner_player_id, zone_name, target = candidates[idx]
+            target.hidden_mode = False
+            self._emit_effect_event(
+                state,
+                name="card_switched_revealed_mode",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": target.instance_id,
+                    "source_card_id": target.card_id,
+                    "source_zone": zone_name,
+                    "owner_player_id": owner_player_id,
+                },
+            )
+        self._checkpoint(state, "effect_auto_switch_any_player_board_to_revealed_on_play")
+
+    def _handle_auto_self_gain_power_and_keyword_for_turn_on_switch(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name not in {"card_switched_hidden_mode", "card_switched_revealed_mode"}:
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        delta = self._resolve_effect_int_param(state, reg, "power_delta", default=0)
+        if delta:
+            self._apply_temporary_power_delta(state, card=source, delta=delta, reason="effect_switch_self_buff")
+        grant_keyword = str(reg.handler_params.get("grant_keyword", "")).strip()
+        if grant_keyword:
+            self._append_temporary_keyword(source, grant_keyword, duration="turn")
+        self._checkpoint(state, "effect_auto_self_gain_power_and_keyword_for_turn_on_switch")
+
+    def _handle_auto_buff_owner_leader_on_switch_until_opponent_turn_end(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_switched_hidden_mode":
+            return
+        if bool(reg.handler_params.get("requires_owner_actor", False)) and event.actor_player_id != reg.owner_player_id:
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        delta = self._resolve_effect_int_param(state, reg, "power_delta", default=0)
+        if delta:
+            self._apply_temporary_power_delta(state, card=owner.leader_area, delta=delta, reason="effect_switch_owner_leader_buff")
+        self._checkpoint(state, "effect_auto_buff_owner_leader_on_switch_until_opponent_turn_end")
+
+    def _handle_auto_buff_up_to_n_owner_cards_on_switch(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name not in {"card_switched_hidden_mode", "card_switched_revealed_mode"}:
+            return
+        if bool(reg.handler_params.get("requires_owner_actor", False)) and event.actor_player_id != reg.owner_player_id:
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        raw_colors = str(reg.handler_params.get("allowed_colors", ""))
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        raw_traits = str(reg.handler_params.get("required_traits", ""))
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", ""))
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        candidates = [
+            card
+            for card in [owner.leader_area, *owner.battle_area, *owner.unison_area]
+            if self._card_matches_effect_filters(
+                card,
+                allowed_colors=allowed_colors,
+                required_traits=required_traits,
+                required_characters=required_characters,
+                required_name_contains=required_name_contains,
+            )
+        ]
+        if not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
+        if not indexes:
+            return
+        delta = self._resolve_effect_int_param(state, reg, "power_delta", default=0)
+        grant_keyword = str(reg.handler_params.get("grant_keyword", "")).strip()
+        keyword_duration = str(reg.handler_params.get("keyword_duration", "turn")).strip().lower()
+        for idx in indexes:
+            target = candidates[idx]
+            if delta:
+                self._apply_temporary_power_delta(state, card=target, delta=delta, reason="effect_switch_owner_target_buff")
+            if grant_keyword:
+                if keyword_duration == "opponent_turn":
+                    self._append_temporary_keyword(target, grant_keyword, duration="delayed")
+                    state.delayed_keyword_clears.append(
+                        DelayedKeywordClear(
+                            owner_player_id=reg.owner_player_id,
+                            target_instance_id=target.instance_id,
+                            trigger_player_id=self._opponent_of(reg.owner_player_id),
+                            keyword=grant_keyword,
+                        )
+                    )
+                else:
+                    self._append_temporary_keyword(target, grant_keyword, duration="turn")
+        self._checkpoint(state, "effect_auto_buff_up_to_n_owner_cards_on_switch")
+
+    def _handle_auto_ko_up_to_n_opponent_battle_on_switch(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name not in {"card_switched_hidden_mode", "card_switched_revealed_mode"}:
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        target_policy = str(reg.handler_params.get("target_policy", "first"))
+        selected = self._select_opponent_battle_targets(
+            state,
+            reg,
+            max_targets=max_targets,
+            max_cost=-1,
+            policy=target_policy,
+        )
+        if not selected:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        for target in selected:
+            self._ko_card(state, opponent_id, "battle", target.instance_id)
+        self._checkpoint(state, "effect_auto_ko_up_to_n_opponent_battle_on_switch")
 
     def _handle_auto_switch_up_to_n_owner_energy_active_on_turn_end(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "turn_end":
@@ -3438,6 +4165,8 @@ class RulesEngine:
             candidates = [c for c in candidates if (c.energy_cost or 0) <= max_cost]
         if bool(reg.handler_params.get("rest_mode_only", False)):
             candidates = [c for c in candidates if c.resting]
+        if not bool(reg.handler_params.get("ignores_barrier", False)):
+            candidates = [c for c in candidates if not c.has_barrier]
         if not candidates:
             return []
         indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
@@ -3477,6 +4206,11 @@ class RulesEngine:
         min_owner_energy = self._resolve_effect_int_param(state, reg, "min_owner_energy", default=-1)
         if min_owner_energy >= 0 and len(owner.energy) < min_owner_energy:
             return False
+        min_owner_hidden_mode_battle = self._resolve_effect_int_param(state, reg, "min_owner_hidden_mode_battle", default=-1)
+        if min_owner_hidden_mode_battle >= 0:
+            hidden_count = sum(1 for card in owner.battle_area if card.hidden_mode)
+            if hidden_count < min_owner_hidden_mode_battle:
+                return False
         if bool(reg.handler_params.get("requires_no_owner_battle", False)) and owner.battle_area:
             return False
         opponent = state.players.get(self._opponent_of(reg.owner_player_id))
@@ -3529,6 +4263,110 @@ class RulesEngine:
                 color = (e.color or "").strip().lower()
                 if color and color != required:
                     return False
+        if bool(reg.handler_params.get("requires_owner_turn", False)) and state.active_player != reg.owner_player_id:
+            return False
+        if bool(reg.handler_params.get("requires_opponent_turn", False)) and state.active_player == reg.owner_player_id:
+            return False
+        return True
+
+    def _activate_effect_requirements_met(
+        self,
+        state: GameState,
+        *,
+        player_id: int,
+        source: CardInstance,
+        source_zone: str,
+        source_kind: str,
+    ) -> bool:
+        trigger = f"self_activate_{source_kind}"
+        rules = [rule for rule in self._effect_rules.get(source.card_id, ()) if rule.trigger == trigger]
+        if not rules:
+            return True
+        for rule in rules:
+            reg = EffectRegistration(
+                effect_id=0,
+                owner_player_id=player_id,
+                source_instance_id=source.instance_id,
+                source_card_id=source.card_id,
+                source_zone=source_zone,
+                trigger=rule.trigger,
+                handler_id=rule.handler_id,
+                handler_params=dict(rule.handler_params),
+                once_per_turn=rule.once_per_turn,
+            )
+            if self._effect_requirements_met(state, reg):
+                return True
+        return False
+
+    def _effective_hand_energy_cost(self, state: GameState, *, player_id: int, card: CardInstance) -> int:
+        base_cost = int(card.energy_cost or 0)
+        reduction = self._hand_cost_reduction_amount(state, player_id=player_id, card=card)
+        return max(base_cost - reduction, 0)
+
+    def _hand_cost_reduction_amount(self, state: GameState, *, player_id: int, card: CardInstance) -> int:
+        text = str(card.skill_text_raw or "")
+        if not text:
+            return 0
+        reduction = self._parse_hand_cost_reduction_amount(text)
+        if reduction <= 0:
+            return 0
+        owner = state.players[player_id]
+        leader = owner.leader_area
+        leader_runtime = self._resolve_card_runtime_data(leader.card_id)
+        if not self._text_hand_cost_reduction_requirements_met(text, owner=owner, leader=leader, leader_runtime=leader_runtime):
+            return 0
+        return reduction
+
+    @staticmethod
+    def _parse_hand_cost_reduction_amount(skill_text: object) -> int:
+        text = str(skill_text or "").lower()
+        match = re.search(r"reduce the energy cost of this card in your hand by (\d+)", text)
+        if match is None:
+            return 0
+        try:
+            return int(match.group(1))
+        except ValueError:
+            return 0
+
+    def _text_hand_cost_reduction_requirements_met(
+        self,
+        skill_text: object,
+        *,
+        owner: PlayerState,
+        leader: CardInstance,
+        leader_runtime: CardRuntimeData,
+    ) -> bool:
+        text = str(skill_text or "").lower()
+        leader_color = (leader.color or "").strip().lower()
+        if "if your leader is a white" in text and leader_color != "white":
+            return False
+        if "if your leader is a red" in text and leader_color != "red":
+            return False
+        if "if your leader is a blue" in text and leader_color != "blue":
+            return False
+        if "if your leader is a green" in text and leader_color != "green":
+            return False
+        if "if your leader is a yellow" in text and leader_color != "yellow":
+            return False
+        if "if your leader is a black" in text and leader_color != "black":
+            return False
+        required_traits = {
+            part.strip().lower()
+            for part in re.findall(r"≪([^≫]+)≫", text)
+            if part.strip()
+        }
+        if required_traits:
+            leader_traits = {part.strip().lower() for part in (leader_runtime.traits or ()) if part.strip()}
+            if leader_traits.isdisjoint(required_traits):
+                return False
+        hidden_threshold = self._parse_hidden_mode_awaken_threshold(text)
+        if hidden_threshold is not None:
+            hidden_count = sum(1 for board_card in owner.battle_area if board_card.hidden_mode)
+            if hidden_count < hidden_threshold:
+                return False
+        elif "you have a hidden mode card in your battle area" in text:
+            if not any(board_card.hidden_mode for board_card in owner.battle_area):
+                return False
         return True
 
     def _card_matches_effect_filters(
@@ -3546,6 +4384,12 @@ class RulesEngine:
             for part in str(runtime.color or "").replace("/", ",").split(",")
             if part.strip()
         }
+        if not runtime_colors and card.color:
+            runtime_colors = {
+                part.strip().lower()
+                for part in str(card.color).replace("/", ",").split(",")
+                if part.strip()
+            }
         runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
         runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
         runtime_name = str(runtime.card_name or "").upper()
@@ -3790,6 +4634,8 @@ class RulesEngine:
         power_raw = getattr(card, "card_back_power", None) if is_back else getattr(card, "power_int", None)
         skill_text = getattr(card, "card_back_skill_unstyled", None) if is_back else getattr(card, "card_skill_unstyled", None)
         keywords = tuple(getattr(card, "keywords", ()) or ())
+        text_counter_modes = self._text_counter_modes(skill_text)
+        merged_keywords = tuple(list(keywords) + [mode for mode in text_counter_modes if mode not in keywords])
         traits_raw = getattr(card, "card_back_traits_json", None) if is_back else getattr(card, "card_traits_json", None)
         characters_raw = getattr(card, "card_back_character_json", None) if is_back else getattr(card, "card_character_json", None)
         has_draw_flag = bool(getattr(card, "has_draw", False))
@@ -3802,23 +4648,23 @@ class RulesEngine:
             energy_cost=getattr(card, "energy_cost_int", None),
             combo_cost=getattr(card, "combo_cost_int", None),
             combo_power=getattr(card, "combo_power_int", None),
-            keywords=keywords,
-            has_counter=bool(getattr(card, "has_counter", False)),
-            counter_modes=tuple(k for k in keywords if str(k).startswith("Counter:")),
-            has_counter_attack=bool(getattr(card, "has_counter_attack", False)),
-            has_counter_battle_card_attack=any(str(k) == "Counter: Battle Card Attack" for k in keywords),
-            has_counter_play=bool(getattr(card, "has_counter_play", False)),
-            has_counter_counter=any(str(k) == "Counter: Counter" for k in keywords),
-            has_activate_main=bool(getattr(card, "has_activate_main", False)) if not is_back else self._text_has_activate_main(skill_text),
-            has_activate_battle=bool(getattr(card, "has_activate_battle", False)) if not is_back else self._text_has_activate_battle(skill_text),
-            has_auto=bool(getattr(card, "has_auto", False)) if not is_back else self._text_has_auto(skill_text),
-            has_permanent=bool(getattr(card, "has_permanent", False)) if not is_back else self._text_has_permanent(skill_text),
-            has_draw=has_draw_flag if not is_back else self._text_has_draw(skill_text),
+            keywords=merged_keywords,
+            has_counter=bool(getattr(card, "has_counter", False)) or self._text_has_counter(skill_text),
+            counter_modes=tuple(k for k in merged_keywords if str(k).startswith("Counter:")),
+            has_counter_attack=bool(getattr(card, "has_counter_attack", False)) or self._text_has_counter_attack(skill_text),
+            has_counter_battle_card_attack=any(str(k) == "Counter: Battle Card Attack" for k in merged_keywords),
+            has_counter_play=bool(getattr(card, "has_counter_play", False)) or self._text_has_counter_play(skill_text),
+            has_counter_counter=any(str(k) == "Counter: Counter" for k in merged_keywords) or self._text_has_counter_counter(skill_text),
+            has_activate_main=bool(getattr(card, "has_activate_main", False)) or self._text_has_activate_main(skill_text),
+            has_activate_battle=bool(getattr(card, "has_activate_battle", False)) or self._text_has_activate_battle(skill_text),
+            has_auto=bool(getattr(card, "has_auto", False)) or self._text_has_auto(skill_text),
+            has_permanent=bool(getattr(card, "has_permanent", False)) or self._text_has_permanent(skill_text),
+            has_draw=has_draw_flag or self._text_has_draw(skill_text),
             max_draw=self._parse_optional_int(getattr(card, "max_draw", None)),
             auto_once_per_turn=self._has_once_per_turn(skill_text),
-            auto_draw_on_play=self._has_auto_draw_on_play(skill_text, has_draw_flag if not is_back else self._text_has_draw(skill_text)),
-            auto_draw_on_attack=self._has_auto_draw_on_attack(skill_text, has_draw_flag if not is_back else self._text_has_draw(skill_text)),
-            has_barrier=bool(getattr(card, "has_barrier", False)) if not is_back else self._text_has_barrier(skill_text),
+            auto_draw_on_play=self._has_auto_draw_on_play(skill_text, has_draw_flag or self._text_has_draw(skill_text)),
+            auto_draw_on_attack=self._has_auto_draw_on_attack(skill_text, has_draw_flag or self._text_has_draw(skill_text)),
+            has_barrier=bool(getattr(card, "has_barrier", False)) or self._text_has_barrier(skill_text),
             z_energy_cost=self._parse_optional_int(getattr(card, "z_energy_cost", None)),
             specified_costs=self._parse_specified_costs(getattr(card, "card_energy_cost", None), getattr(card, "card_color", None)),
             skill_text_raw=str(skill_text or "") if skill_text is not None else None,
@@ -3855,19 +4701,31 @@ class RulesEngine:
 
     @staticmethod
     def _text_has_activate_main(skill_text: object) -> bool:
-        return "[Activate: Main]" in str(skill_text or "")
+        text = str(skill_text or "").lower()
+        return "[activate: main]" in text or "[activate main]" in text
 
     @staticmethod
     def _text_has_activate_battle(skill_text: object) -> bool:
-        return "[Activate: Battle]" in str(skill_text or "")
+        return "[activate: battle]" in str(skill_text or "").lower()
+
+    @staticmethod
+    def _parse_hidden_mode_awaken_threshold(skill_text: object) -> int | None:
+        text = str(skill_text or "").lower()
+        match = re.search(r"you have (\d+) or more hidden mode cards? in your battle area", text)
+        if match is None:
+            return None
+        try:
+            return int(match.group(1))
+        except ValueError:
+            return None
 
     @staticmethod
     def _text_has_auto(skill_text: object) -> bool:
-        return "[Auto]" in str(skill_text or "")
+        return "[auto]" in str(skill_text or "").lower()
 
     @staticmethod
     def _text_has_permanent(skill_text: object) -> bool:
-        return "[Permanent]" in str(skill_text or "")
+        return "[permanent]" in str(skill_text or "").lower()
 
     @staticmethod
     def _text_has_draw(skill_text: object) -> bool:
@@ -3875,7 +4733,37 @@ class RulesEngine:
 
     @staticmethod
     def _text_has_barrier(skill_text: object) -> bool:
-        return "[Barrier]" in str(skill_text or "")
+        return "[barrier]" in str(skill_text or "").lower()
+
+    @staticmethod
+    def _text_counter_modes(skill_text: object) -> tuple[str, ...]:
+        lowered = str(skill_text or "").lower()
+        modes: list[str] = []
+        if "[counter: attack]" in lowered:
+            modes.append("Counter: Attack")
+        if "[counter: play]" in lowered:
+            modes.append("Counter: Play")
+        if "[counter: counter]" in lowered:
+            modes.append("Counter: Counter")
+        if "[counter: battle card attack]" in lowered:
+            modes.append("Counter: Battle Card Attack")
+        return tuple(modes)
+
+    @classmethod
+    def _text_has_counter(cls, skill_text: object) -> bool:
+        return bool(cls._text_counter_modes(skill_text))
+
+    @classmethod
+    def _text_has_counter_attack(cls, skill_text: object) -> bool:
+        return "Counter: Attack" in cls._text_counter_modes(skill_text)
+
+    @classmethod
+    def _text_has_counter_play(cls, skill_text: object) -> bool:
+        return "Counter: Play" in cls._text_counter_modes(skill_text)
+
+    @classmethod
+    def _text_has_counter_counter(cls, skill_text: object) -> bool:
+        return "Counter: Counter" in cls._text_counter_modes(skill_text)
 
     @staticmethod
     def _text_has_super_combo(skill_text: object) -> bool:
