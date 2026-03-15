@@ -68,6 +68,14 @@ def _zone_card_lines(
 
 
 def decision_owner_for_state(state: GameState) -> int:
+    pending_secret = [row for row in state.secret_auto_opportunities if str(row.status or "pending") == "pending"]
+    if pending_secret:
+        owner_order = [int(state.active_player), 1 if int(state.active_player) == 2 else 2]
+        for owner_id in owner_order:
+            owner_pending = [row for row in pending_secret if int(row.owner_player_id) == owner_id]
+            if owner_pending:
+                selected = min(owner_pending, key=lambda row: (int(row.event_id), int(row.opportunity_id)))
+                return int(selected.owner_player_id)
     if state.counter_window is not None:
         return int(state.counter_window.responder_player_id)
     if state.attack_context is not None and state.battle_step is not None:
@@ -115,6 +123,20 @@ def describe_action(
     card_name_resolver: CardNameResolver | None = None,
 ) -> str:
     parts = [action.action_type.value]
+    if action.opportunity_id is not None:
+        parts.append(f"opportunity_id={action.opportunity_id}")
+        if state is not None:
+            opportunity = next(
+                (row for row in state.secret_auto_opportunities if row.opportunity_id == action.opportunity_id),
+                None,
+            )
+            if opportunity is not None:
+                parts.append(f"source_zone={opportunity.source_zone}")
+                if str(opportunity.origin_zone or "") and str(opportunity.origin_zone) != str(opportunity.source_zone):
+                    parts.append(f"origin_zone={opportunity.origin_zone}")
+                parts.append(f"trigger={opportunity.trigger}")
+                parts.append(f"event={opportunity.event_name}#{opportunity.event_id}")
+                parts.append(f"source_card={_card_label(CardInstance(instance_id=opportunity.source_instance_id, card_id=opportunity.source_card_id, owner_id=opportunity.owner_player_id), card_name_resolver)}")
     if action.hand_index is not None:
         parts.append(f"hand_index={action.hand_index}")
         if state is not None:
@@ -379,6 +401,17 @@ class HumanVsAiSession:
             zone=action.source_zone,
             index=action.source_index,
         )
+        if source_card is None and action.opportunity_id is not None:
+            opportunity = next(
+                (row for row in self.state.secret_auto_opportunities if row.opportunity_id == action.opportunity_id),
+                None,
+            )
+            if opportunity is not None:
+                source_card = CardInstance(
+                    instance_id=int(opportunity.source_instance_id),
+                    card_id=int(opportunity.source_card_id),
+                    owner_id=int(opportunity.owner_player_id),
+                )
         attacker_card = _resolve_zone_card_for_action(
             self.state,
             player_id=int(action.player_id),
@@ -393,6 +426,12 @@ class HumanVsAiSession:
                 zone=action.target_zone,
                 index=action.target_index,
             )
+        opportunity = None
+        if action.opportunity_id is not None:
+            opportunity = next(
+                (row for row in self.state.secret_auto_opportunities if row.opportunity_id == action.opportunity_id),
+                None,
+            )
         self.action_trace.append(
             {
                 "action_index": len(self.action_trace) + 1,
@@ -403,6 +442,13 @@ class HumanVsAiSession:
                 "phase": self.state.phase.value,
                 "action": describe_action(action, state=self.state),
                 "action_type": action.action_type.value,
+                "opportunity_id": None if action.opportunity_id is None else int(action.opportunity_id),
+                "secret_auto_id": None if opportunity is None else int(opportunity.secret_auto_id),
+                "secret_auto_trigger": None if opportunity is None else str(opportunity.trigger),
+                "secret_auto_event_id": None if opportunity is None else int(opportunity.event_id),
+                "secret_auto_event_name": None if opportunity is None else str(opportunity.event_name),
+                "secret_auto_origin_zone": None if opportunity is None else str(opportunity.origin_zone),
+                "secret_auto_status_before": None if opportunity is None else str(opportunity.status),
                 "hand_card_id": None if hand_card is None else int(hand_card.card_id),
                 "source_card_id": None if source_card is None else int(source_card.card_id),
                 "attacker_card_id": None if attacker_card is None else int(attacker_card.card_id),

@@ -6,6 +6,8 @@ from typing import Optional
 
 
 class ActionType(str, Enum):
+    DECLARE_SECRET_AUTO = "declare_secret_auto"
+    IGNORE_SECRET_AUTO = "ignore_secret_auto"
     CHARGE_FROM_HAND = "charge_from_hand"
     END_CHARGE = "end_charge"
     PLAY_CARD_FROM_HAND = "play_card_from_hand"
@@ -28,6 +30,7 @@ class ActionType(str, Enum):
 class Action:
     action_type: ActionType
     player_id: int
+    opportunity_id: Optional[int] = None
     hand_index: Optional[int] = None
     source_zone: Optional[str] = None
     source_index: Optional[int] = None

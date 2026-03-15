@@ -222,6 +222,12 @@ def _card_row(repo: SQLiteCardRepository | None, card_id: int) -> str:
     return f"{card.card_number} {name:<27} {cost}c {str(power):>5} {str(combo):>5}combo{tag_suffix}"
 
 
+def _secret_auto_opportunity(state, opportunity_id: int | None):
+    if opportunity_id is None:
+        return None
+    return next((row for row in state.secret_auto_opportunities if row.opportunity_id == int(opportunity_id)), None)
+
+
 def _compact_resolver(repo: SQLiteCardRepository | None):
     def _resolve(card_id: int) -> str:
         return _card_brief_label(repo, card_id)
@@ -442,6 +448,7 @@ def _selected_action_footer_lines(
         _style(f"Selected: {_truncate(compact, 110)}", "1;36", use_color=use_color),
         f"Recommendation: score={score:.2f} | reason={reason} | hints={hint_text}",
     ]
+    opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
     player = session.state.players.get(int(action.player_id))
     if (
         player is not None
@@ -456,6 +463,14 @@ def _selected_action_footer_lines(
                 if line.startswith("Skill: "):
                     lines.append(_truncate(line, 120))
                     break
+    elif opportunity is not None:
+        lines.append(f"Card: {_card_row(repo, int(opportunity.source_card_id))}")
+        origin_text = (
+            f" | origin={opportunity.origin_zone}"
+            if str(opportunity.origin_zone or "") and str(opportunity.origin_zone) != str(opportunity.source_zone)
+            else ""
+        )
+        lines.append(f"Trigger: {opportunity.trigger} | status={opportunity.status}{origin_text}")
     return lines
 
 
@@ -470,6 +485,16 @@ def _linked_hand_index(session: HumanVsAiSession, legal: list[object], action_se
             and 0 <= int(action.hand_index) < len(player.hand)
         ):
             return int(action.hand_index)
+        opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
+        if (
+            player is not None
+            and opportunity is not None
+            and int(action.player_id) == int(session.human_player_id)
+            and str(opportunity.source_zone) == "hand"
+        ):
+            for index, card in enumerate(player.hand):
+                if int(card.instance_id) == int(opportunity.source_instance_id):
+                    return index
     return fallback
 
 
@@ -606,6 +631,13 @@ def _style_hint(hint: str, *, use_color: bool) -> str:
 
 def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) -> str:
     action_type = action.action_type.value
+    opportunity = _secret_auto_opportunity(state, action.opportunity_id)
+    if action_type == "declare_secret_auto":
+        label = _card_brief_label(repo, int(opportunity.source_card_id)) if opportunity is not None else "secret auto"
+        return f"Declare auto: {label}"
+    if action_type == "ignore_secret_auto":
+        label = _card_brief_label(repo, int(opportunity.source_card_id)) if opportunity is not None else "secret auto"
+        return f"Ignore auto: {label}"
     if action_type == "end_charge":
         return "End charge"
     if action_type == "end_turn":
@@ -665,6 +697,18 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
     score, reason = session.ai_policy.score_action_with_reason(session.state, action)
     print(f"\nHeuristic score: {score:.2f}")
     print(f"Heuristic reason: {reason}")
+    if action.opportunity_id is not None:
+        opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
+        if opportunity is not None:
+            print(
+                "\nSecret auto opportunity:"
+                f"\n  id={opportunity.opportunity_id}"
+                f"\n  trigger={opportunity.trigger}"
+                f"\n  status={opportunity.status}"
+                f"\n  event={opportunity.event_name}#{opportunity.event_id}"
+                f"\n  source_zone={opportunity.source_zone}"
+                f"\n  origin_zone={opportunity.origin_zone or opportunity.source_zone}"
+            )
     ranked = session.ai_policy.rank_actions(session.state, legal)
     top_ranked = ranked[:5]
     print("\nTop action ranking:")
@@ -675,6 +719,11 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
     if action.hand_index is not None:
         _show_hand_card_detail(session, repo=repo, hand_index=action.hand_index)
         return
+    if action.opportunity_id is not None:
+        opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
+        if opportunity is not None:
+            print("\n" + _card_detail_text(repo, int(opportunity.source_card_id)))
+            return
     if action.source_zone == "leader":
         print("\n" + _card_detail_text(repo, session.state.players[action.player_id].leader_area.card_id))
         return
@@ -717,6 +766,19 @@ def _history_action_text(entry: dict[str, object], *, repo: SQLiteCardRepository
         except Exception:
             rendered = f"card_id={value}"
         text += f" {label}={rendered}"
+    trigger = entry.get("secret_auto_trigger")
+    if trigger and "trigger=" not in text:
+        text += f" trigger={trigger}"
+    event_name = entry.get("secret_auto_event_name")
+    event_id = entry.get("secret_auto_event_id")
+    if event_name and "event=" not in text:
+        if event_id is None:
+            text += f" event={event_name}"
+        else:
+            text += f" event={event_name}#{event_id}"
+    origin_zone = entry.get("secret_auto_origin_zone")
+    if origin_zone and "origin_zone=" not in text:
+        text += f" origin_zone={origin_zone}"
     return text
 
 

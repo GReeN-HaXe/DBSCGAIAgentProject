@@ -18,9 +18,11 @@ from src.game.state import (
     CheckpointEvent,
     DelayedKeywordClear,
     DelayedModeSwitch,
+    DeferredSecretAuto,
     EffectEvent,
     EffectRegistration,
     EffectResolution,
+    SecretAutoOpportunity,
     CounterMotion,
     CounterMotionTrace,
     CounterResolution,
@@ -284,6 +286,22 @@ class RulesEngine:
     def get_legal_actions(self, state: GameState, player_id: int) -> list[Action]:
         if state.winner_id is not None:
             return []
+        secret_auto = self._next_pending_secret_auto_opportunity(state)
+        if secret_auto is not None:
+            if player_id != secret_auto.owner_player_id:
+                return []
+            return [
+                Action(
+                    action_type=ActionType.DECLARE_SECRET_AUTO,
+                    player_id=player_id,
+                    opportunity_id=secret_auto.opportunity_id,
+                ),
+                Action(
+                    action_type=ActionType.IGNORE_SECRET_AUTO,
+                    player_id=player_id,
+                    opportunity_id=secret_auto.opportunity_id,
+                ),
+            ]
         if state.counter_window is not None:
             return self._legal_counter_actions(state, player_id)
         if state.attack_context is not None:
@@ -315,6 +333,14 @@ class RulesEngine:
         ns = deepcopy(state)
         player = ns.players[action.player_id]
 
+        if action.action_type == ActionType.DECLARE_SECRET_AUTO:
+            self._declare_secret_auto(ns, action)
+            self._after_action(ns)
+            return ns
+        if action.action_type == ActionType.IGNORE_SECRET_AUTO:
+            self._ignore_secret_auto(ns, action)
+            self._after_action(ns)
+            return ns
         if action.action_type == ActionType.CHARGE_FROM_HAND:
             if action.hand_index is None:
                 raise RulesViolation("CHARGE_FROM_HAND requires hand_index.")
@@ -390,6 +416,140 @@ class RulesEngine:
             self._after_action(ns)
             return ns
         raise RulesViolation(f"Unhandled action: {action.action_type}")
+
+    def _next_pending_secret_auto_opportunity(self, state: GameState) -> SecretAutoOpportunity | None:
+        pending = [row for row in state.secret_auto_opportunities if str(row.status or "pending") == "pending"]
+        if not pending:
+            return None
+        owner_order = [state.active_player, self._opponent_of(state.active_player)]
+        for owner_id in owner_order:
+            owner_pending = [row for row in pending if row.owner_player_id == owner_id]
+            if owner_pending:
+                return min(owner_pending, key=lambda row: (int(row.event_id), int(row.opportunity_id)))
+        return min(pending, key=lambda row: (int(row.event_id), int(row.opportunity_id)))
+
+    @staticmethod
+    def _set_secret_auto_opportunity_status(state: GameState, *, opportunity_id: int, status: str) -> SecretAutoOpportunity | None:
+        selected: SecretAutoOpportunity | None = None
+        updated: list[SecretAutoOpportunity] = []
+        for row in state.secret_auto_opportunities:
+            if row.opportunity_id == opportunity_id:
+                selected = SecretAutoOpportunity(
+                    opportunity_id=row.opportunity_id,
+                    secret_auto_id=row.secret_auto_id,
+                    owner_player_id=row.owner_player_id,
+                    source_instance_id=row.source_instance_id,
+                    source_card_id=row.source_card_id,
+                    source_card_number=row.source_card_number,
+                    source_zone=row.source_zone,
+                    trigger=row.trigger,
+                    handler_id=row.handler_id,
+                    event_id=row.event_id,
+                    event_name=row.event_name,
+                    created_turn_number=row.created_turn_number,
+                    created_phase=row.created_phase,
+                    origin_zone=row.origin_zone,
+                    handler_params=dict(row.handler_params),
+                    once_per_turn=row.once_per_turn,
+                    limit_per_turn=row.limit_per_turn,
+                    limit_scope=row.limit_scope,
+                    status=status,
+                )
+                updated.append(selected)
+                continue
+            updated.append(row)
+        state.secret_auto_opportunities = updated
+        return selected
+
+    def _declare_secret_auto(self, state: GameState, action: Action) -> None:
+        if action.opportunity_id is None:
+            raise RulesViolation("DECLARE_SECRET_AUTO requires opportunity_id.")
+        opportunity = self._set_secret_auto_opportunity_status(
+            state,
+            opportunity_id=action.opportunity_id,
+            status="declared",
+        )
+        if opportunity is None:
+            raise RulesViolation("Unknown secret auto opportunity.")
+        event = next((row for row in state.effect_events if row.event_id == opportunity.event_id), None)
+        temp_effect_id = -int(opportunity.secret_auto_id)
+        if event is None:
+            state.effect_resolutions.append(
+                EffectResolution(effect_id=temp_effect_id, event_id=opportunity.event_id, resolved=False, reason="missing_context")
+            )
+            state.log.append(
+                "Secret-area auto declared without event context: "
+                f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id}"
+            )
+            self._checkpoint(state, "secret_auto_declared")
+            return
+        source_context = self._find_card_anywhere_by_instance(
+            state,
+            owner_player_id=opportunity.owner_player_id,
+            instance_id=opportunity.source_instance_id,
+        )
+        if source_context is None:
+            state.effect_resolutions.append(
+                EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=False, reason="source_missing")
+            )
+            state.log.append(
+                "Secret-area auto declared but source was missing: "
+                f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id}"
+            )
+            self._checkpoint(state, "secret_auto_declared")
+            return
+        source_zone, _source = source_context
+        handler = self._effect_handlers.get(opportunity.handler_id)
+        if handler is None:
+            state.effect_resolutions.append(
+                EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=False, reason="missing_handler")
+            )
+            state.log.append(
+                "Secret-area auto declared without handler: "
+                f"opportunity_id={opportunity.opportunity_id} handler_id={opportunity.handler_id}"
+            )
+            self._checkpoint(state, "secret_auto_declared")
+            return
+        temp_reg = EffectRegistration(
+            effect_id=temp_effect_id,
+            owner_player_id=opportunity.owner_player_id,
+            source_instance_id=opportunity.source_instance_id,
+            source_card_id=opportunity.source_card_id,
+            source_zone=source_zone,
+            trigger=opportunity.trigger,
+            handler_id=opportunity.handler_id,
+            handler_params=dict(opportunity.handler_params),
+            source_card_number=opportunity.source_card_number,
+            once_per_turn=opportunity.once_per_turn,
+            limit_per_turn=opportunity.limit_per_turn,
+            limit_scope=opportunity.limit_scope,
+        )
+        handler(state, event, temp_reg)
+        state.effect_resolutions.append(
+            EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=True, reason="ok")
+        )
+        state.log.append(
+            "Secret-area auto declared: "
+            f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id} "
+            f"event_id={event.event_id} handler={opportunity.handler_id}"
+        )
+        self._checkpoint(state, "secret_auto_declared")
+
+    def _ignore_secret_auto(self, state: GameState, action: Action) -> None:
+        if action.opportunity_id is None:
+            raise RulesViolation("IGNORE_SECRET_AUTO requires opportunity_id.")
+        opportunity = self._set_secret_auto_opportunity_status(
+            state,
+            opportunity_id=action.opportunity_id,
+            status="ignored",
+        )
+        if opportunity is None:
+            raise RulesViolation("Unknown secret auto opportunity.")
+        state.log.append(
+            "Secret-area auto ignored: "
+            f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id}"
+        )
+        self._checkpoint(state, "secret_auto_ignored")
 
     def apply_power_delta(
         self,
@@ -1180,6 +1340,11 @@ class RulesEngine:
             raise RulesViolation("Counter mode does not match current counter timing.")
         if not self._can_pay_skill_cost(player, card, "counter_from_hand"):
             raise RulesViolation("Cannot pay counter skill cost.")
+        closed_pending_counter_ids = self._other_pending_counter_hand_instance_ids(
+            state,
+            player_id=action.player_id,
+            chosen_hand_index=action.hand_index,
+        )
         effective_energy_cost = self._effective_hand_energy_cost(state, player_id=action.player_id, card=card)
         if self._can_pay_energy_cost(
             player,
@@ -1214,6 +1379,7 @@ class RulesEngine:
                 turn_number=state.turn_number,
                 phase=state.phase,
                 window_kind=win.kind,
+                pending_action_type=win.pending_action.action_type,
                 player_id=action.player_id,
                 card_instance_id=declared.instance_id,
                 modes=declared.counter_modes,
@@ -1222,6 +1388,12 @@ class RulesEngine:
             )
         )
         self._checkpoint(state, f"counter_motion_declared_{state.next_counter_motion_id}")
+        if closed_pending_counter_ids:
+            state.log.append(
+                "Counter pending choices closed: "
+                f"player_id={action.player_id} hand_instance_ids={','.join(str(v) for v in closed_pending_counter_ids)} window_kind={win.kind}"
+            )
+            self._checkpoint(state, "counter_pending_choices_closed")
         state.next_counter_motion_id += 1
 
         pending = win.pending_action
@@ -1233,6 +1405,38 @@ class RulesEngine:
             pending_action=pending,
         )
         self._checkpoint(state, "counter_chain_timing")
+
+    def _other_pending_counter_hand_instance_ids(
+        self,
+        state: GameState,
+        *,
+        player_id: int,
+        chosen_hand_index: int,
+    ) -> list[int]:
+        win = state.counter_window
+        if win is None or player_id != win.responder_player_id:
+            return []
+        player = state.players[player_id]
+        allowed_modes = self._allowed_counter_modes(state)
+        pending_ids: list[int] = []
+        for index, card in enumerate(player.hand):
+            if index == chosen_hand_index or not card.has_counter:
+                continue
+            if allowed_modes and not self._card_matches_counter_window(card, allowed_modes):
+                continue
+            effective_energy_cost = self._effective_hand_energy_cost(state, player_id=player_id, card=card)
+            can_pay_energy = self._can_pay_energy_cost(
+                player,
+                effective_energy_cost,
+                required_color=card.color,
+                specified_costs=dict(card.specified_costs),
+            )
+            if not (can_pay_energy or self._can_pay_alternate_counter_hand_cost(state, player, card)):
+                continue
+            if not self._can_pay_skill_cost(player, card, "counter_from_hand"):
+                continue
+            pending_ids.append(int(card.instance_id))
+        return pending_ids
 
     def _pass_counter_window(self, state: GameState, player_id: int) -> None:
         if state.counter_window is None or state.counter_window.responder_player_id != player_id:
@@ -1542,20 +1746,29 @@ class RulesEngine:
         motions = state.counter_chain
         if not motions:
             return False
+        self._checkpoint(state, "counter_chain_resolution_begin")
+        state.log.append(f"Counter chain resolution begin: motion_count={len(motions)}")
 
         motion_by_id = {motion.motion_id: motion for motion in motions}
+        pending_action_type_by_motion = {
+            trace.motion_id: trace.pending_action_type
+            for trace in state.counter_motion_trace
+            if trace.resolved is None
+        }
         active: dict[int, bool] = {m.motion_id: True for m in motions}
         index_by_id = {m.motion_id: i for i, m in enumerate(motions)}
 
         resolutions: list[CounterResolution] = []
-        for motion in reversed(motions):
+        for resolution_order, motion in enumerate(reversed(motions), start=1):
             if not active[motion.motion_id]:
                 resolutions.append(
                     CounterResolution(
                         motion_id=motion.motion_id,
                         player_id=motion.player_id,
+                        pending_action_type=pending_action_type_by_motion.get(motion.motion_id, "unknown"),
                         resolved=False,
                         negated_motion_id=None,
+                        resolution_order=resolution_order,
                     )
                 )
                 continue
@@ -1571,13 +1784,28 @@ class RulesEngine:
                 CounterResolution(
                     motion_id=motion.motion_id,
                     player_id=motion.player_id,
+                    pending_action_type=pending_action_type_by_motion.get(motion.motion_id, "unknown"),
                     resolved=True,
                     negated_motion_id=negated_id,
+                    resolution_order=resolution_order,
                 )
             )
 
-        state.counter_resolutions.extend(resolutions)
-        for r in resolutions:
+        effect_tags_by_motion = self._apply_resolved_counter_motion_effects(state, motions, resolutions)
+        enriched_resolutions = [
+            CounterResolution(
+                motion_id=r.motion_id,
+                player_id=r.player_id,
+                pending_action_type=r.pending_action_type,
+                resolved=r.resolved,
+                negated_motion_id=r.negated_motion_id,
+                resolution_order=r.resolution_order,
+                applied_effects=effect_tags_by_motion.get(r.motion_id, ()),
+            )
+            for r in resolutions
+        ]
+        state.counter_resolutions.extend(enriched_resolutions)
+        for r in enriched_resolutions:
             self._checkpoint(state, f"counter_motion_resolved_{r.motion_id}")
             source = next(
                 (t for t in reversed(state.counter_motion_trace) if t.motion_id == r.motion_id and t.resolved is None),
@@ -1591,19 +1819,31 @@ class RulesEngine:
                     turn_number=source.turn_number,
                     phase=source.phase,
                     window_kind=source.window_kind,
+                    pending_action_type=source.pending_action_type,
                     player_id=source.player_id,
                     card_instance_id=source.card_instance_id,
                     modes=source.modes,
                     resolved=r.resolved,
                     negated_motion_id=r.negated_motion_id,
+                    resolution_order=r.resolution_order,
+                    applied_effects=r.applied_effects,
                 )
             )
-        root_negated = any(r.resolved and r.negated_motion_id is None for r in resolutions)
-        self._apply_resolved_counter_motion_effects(state, motions, resolutions)
+        root_negated = any(r.resolved and r.negated_motion_id is None for r in enriched_resolutions)
         state.counter_chain = []
+        state.log.append(
+            "Counter chain resolution complete: "
+            + ", ".join(
+                f"motion_id={r.motion_id} order={r.resolution_order} resolved={r.resolved} "
+                f"pending_action_type={r.pending_action_type} negated_motion_id={r.negated_motion_id} "
+                f"effects={','.join(r.applied_effects) or 'none'}"
+                for r in enriched_resolutions
+            )
+        )
+        self._checkpoint(state, "counter_chain_resolution_complete")
         if not root_negated:
             return False
-        top_resolution = next((r for r in resolutions if r.resolved and r.negated_motion_id is None), None)
+        top_resolution = next((r for r in enriched_resolutions if r.resolved and r.negated_motion_id is None), None)
         if top_resolution is None:
             return False
         top_motion = motion_by_id.get(top_resolution.motion_id)
@@ -1656,8 +1896,9 @@ class RulesEngine:
         state: GameState,
         motions: list[CounterMotion],
         resolutions: list[CounterResolution],
-    ) -> None:
+    ) -> dict[int, Tuple[str, ...]]:
         motion_by_id = {motion.motion_id: motion for motion in motions}
+        effect_tags_by_motion: dict[int, Tuple[str, ...]] = {}
         for resolution in resolutions:
             if not resolution.resolved or resolution.negated_motion_id is not None:
                 continue
@@ -1669,22 +1910,35 @@ class RulesEngine:
             if card is None:
                 continue
             handled = False
+            effect_tags: list[str] = []
             if self._text_describes_counter_play_self(card):
-                self._resolve_counter_play_self_family(state, player, card, motion.payload)
+                effect_tags.extend(self._resolve_counter_play_self_family(state, player, card, motion.payload))
                 handled = True
             if self._apply_counter_hidden_then_reveal_family(state, player, card):
                 handled = True
+                effect_tags.append("hidden_then_reveal")
             if self._apply_counter_switch_owner_energy_hidden_then_draw_family(state, player, card):
                 handled = True
+                effect_tags.append("switch_owner_energy_hidden_then_draw")
             if self._apply_counter_discard_then_switch_owner_card_hidden_family(state, player, card):
                 handled = True
+                effect_tags.append("discard_then_switch_owner_card_hidden")
             if self._apply_counter_attack_restriction_family(state, card):
                 handled = True
+                effect_tags.append("attack_restriction")
             if not handled and str(card.skill_text_raw or "").strip():
                 state.log.append(
                     f"Unsupported counter effect: source_card_id={card.card_id} modes={','.join(card.counter_modes or ()) or 'unknown'}"
                 )
                 self._checkpoint(state, "counter_effect_no_registered_family")
+                effect_tags.append("unsupported")
+            if effect_tags:
+                effect_tags_by_motion[motion.motion_id] = tuple(effect_tags)
+                state.log.append(
+                    "Counter motion effects applied: "
+                    f"motion_id={motion.motion_id} effects={','.join(effect_tags)}"
+                )
+        return effect_tags_by_motion
 
     def _resolve_counter_play_self_family(
         self,
@@ -1692,7 +1946,8 @@ class RulesEngine:
         player: PlayerState,
         card: CardInstance,
         payload: dict[str, int | str | None],
-    ) -> None:
+    ) -> Tuple[str, ...]:
+        effect_tags = ["play_self"]
         card.resting = self._text_requires_play_self_in_rest(card)
         if card in player.drop:
             player.drop.remove(card)
@@ -1710,6 +1965,7 @@ class RulesEngine:
         )
         if self._text_counter_switches_self_to_hidden(card):
             card.hidden_mode = True
+            effect_tags.append("switch_self_hidden")
             self._emit_effect_event(
                 state,
                 name="card_switched_hidden_mode",
@@ -1724,6 +1980,7 @@ class RulesEngine:
             self._checkpoint(state, "counter_effect_switch_self_hidden_resolved")
         target_instance_id = int(payload.get("cost_target_instance_id") or -1)
         if target_instance_id > 0 and self._text_reveals_hidden_cost_target_at_turn_end(card):
+            effect_tags.append("delayed_reveal")
             self._schedule_delayed_mode_switch(
                 state,
                 owner_player_id=player.player_id,
@@ -1734,10 +1991,13 @@ class RulesEngine:
             )
             self._checkpoint(state, "counter_effect_delayed_reveal_scheduled")
         if self._apply_counter_redirect_to_self_family(state, player, card):
+            effect_tags.append("redirect_to_self")
             self._checkpoint(state, "counter_effect_redirect_to_self_resolved")
         if self._apply_counter_switch_owner_battle_hidden_at_battle_end_family(state, player, card):
+            effect_tags.append("delayed_hidden_battle_end")
             self._checkpoint(state, "counter_effect_delayed_hidden_battle_end_scheduled")
         self._checkpoint(state, "counter_effect_play_self_resolved")
+        return tuple(effect_tags)
 
     def _apply_counter_redirect_to_self_family(self, state: GameState, player: PlayerState, card: CardInstance) -> bool:
         if not self._text_counter_redirects_attack_to_self(card):
@@ -2008,6 +2268,36 @@ class RulesEngine:
                 return c
         return None
 
+    def _find_card_anywhere_by_instance(
+        self,
+        state: GameState,
+        *,
+        owner_player_id: int,
+        instance_id: int,
+    ) -> tuple[str, CardInstance] | None:
+        player = state.players.get(owner_player_id)
+        if player is None:
+            return None
+        if player.leader_area.instance_id == instance_id:
+            return ("leader", player.leader_area)
+        zones: list[tuple[str, list[CardInstance]]] = [
+            ("hand", player.hand),
+            ("life", player.life),
+            ("energy", player.energy),
+            ("z_energy", player.z_energy),
+            ("battle", player.battle_area),
+            ("unison", player.unison_area),
+            ("combo", player.combo_area),
+            ("drop", player.drop),
+            ("warp", player.warp),
+            ("removed_from_game", player.removed_from_game),
+        ]
+        for zone_name, zone_cards in zones:
+            for card in zone_cards:
+                if card.instance_id == instance_id:
+                    return (zone_name, card)
+        return None
+
     def _find_board_card_by_instance(self, player: PlayerState, instance_id: int) -> CardInstance | None:
         for card in player.battle_area:
             if card.instance_id == instance_id:
@@ -2212,6 +2502,8 @@ class RulesEngine:
         self._check_loss_conditions(state)
 
     def _run_confirmative_rule_processing(self, state: GameState) -> None:
+        self._prune_stale_deferred_secret_autos(state)
+        self._prune_stale_secret_auto_opportunities(state)
         for player in state.players.values():
             i = 0
             while i < len(player.battle_area):
@@ -2243,6 +2535,50 @@ class RulesEngine:
                     # Confirmative checks repeat until no zero-power unison remains.
                     continue
                 i += 1
+
+    def _prune_stale_deferred_secret_autos(self, state: GameState) -> None:
+        retained: list[DeferredSecretAuto] = []
+        removed_any = False
+        for row in state.deferred_secret_autos:
+            if self._deferred_secret_auto_source_exists(state, row):
+                retained.append(row)
+            else:
+                removed_any = True
+        if removed_any:
+            state.deferred_secret_autos = retained
+            self._checkpoint(state, "secret_auto_registration_pruned")
+
+    def _prune_stale_secret_auto_opportunities(self, state: GameState) -> None:
+        retained: list[SecretAutoOpportunity] = []
+        removed_any = False
+        for row in state.secret_auto_opportunities:
+            if row.status != "pending":
+                retained.append(row)
+                continue
+            if self._find_card_anywhere_by_instance(
+                state,
+                owner_player_id=row.owner_player_id,
+                instance_id=row.source_instance_id,
+            ) is not None:
+                retained.append(row)
+                continue
+            removed_any = True
+        if removed_any:
+            state.secret_auto_opportunities = retained
+            self._checkpoint(state, "secret_auto_opportunity_pruned")
+
+    def _deferred_secret_auto_source_exists(self, state: GameState, row: DeferredSecretAuto) -> bool:
+        player = state.players.get(row.owner_player_id)
+        if player is None:
+            return False
+        zone = str(row.source_zone or "").strip().lower()
+        if zone == "hand":
+            return any(card.instance_id == row.source_instance_id for card in player.hand)
+        if zone == "life":
+            return any(card.instance_id == row.source_instance_id for card in player.life)
+        if zone == "deck":
+            return False
+        return False
 
     def _modify_card_power(self, state: GameState, *, card: CardInstance, delta: int, reason: str) -> None:
         if delta == 0:
@@ -2489,6 +2825,13 @@ class RulesEngine:
 
     def _register_card_effects(self, state: GameState, *, player_id: int, source_zone: str, card: CardInstance) -> None:
         candidates: list[tuple[str, str, bool | None, dict[str, int | str | bool]]] = []
+        deferred_secret_auto = False
+        if not self._is_secret_zone(source_zone):
+            self._promote_deferred_secret_autos_to_public_zone(
+                state,
+                source_instance_id=card.instance_id,
+                source_zone=source_zone,
+            )
         if card.has_auto:
             if source_zone in {"battle", "unison"}:
                 candidates.append(("self_played", "noop_auto", None, {}))
@@ -2504,9 +2847,41 @@ class RulesEngine:
             if rule.limit_per_turn is not None:
                 params["limit_per_turn"] = int(rule.limit_per_turn)
                 params["limit_scope"] = str(rule.limit_scope or "card_number")
+            if not self._can_register_effect_trigger_from_zone(source_zone, rule.trigger):
+                if self._is_secret_zone(source_zone):
+                    deferred_secret_auto = True
+                    self._record_deferred_secret_auto(
+                        state,
+                        owner_player_id=player_id,
+                        card=card,
+                        source_zone=source_zone,
+                        trigger=rule.trigger,
+                        handler_id=rule.handler_id,
+                        handler_params=params,
+                        once_per_turn=bool(rule.once_per_turn),
+                        limit_per_turn=rule.limit_per_turn,
+                        limit_scope=str(rule.limit_scope or "card_number"),
+                    )
+                    state.log.append(
+                        "Deferred secret-area auto registration: "
+                        f"source_instance_id={card.instance_id} zone={source_zone} trigger={rule.trigger}"
+                    )
+                continue
             candidates.append((rule.trigger, rule.handler_id, rule.once_per_turn, params))
 
         for trigger, handler_id, once_per_turn_override, handler_params in candidates:
+            linked_secret = self._find_linked_deferred_secret_auto(
+                state,
+                source_instance_id=card.instance_id,
+                trigger=trigger,
+                handler_id=handler_id,
+                handler_params=handler_params,
+            )
+            if linked_secret is not None and self._preserve_secret_auto_provenance_on_public_registration(
+                linked_secret,
+                source_zone=source_zone,
+            ):
+                continue
             exists = any(
                 reg.source_instance_id == card.instance_id
                 and reg.source_zone == source_zone
@@ -2533,6 +2908,138 @@ class RulesEngine:
                 )
             )
             state.next_effect_id += 1
+        if deferred_secret_auto:
+            self._checkpoint(state, "secret_auto_registration_deferred")
+
+    @staticmethod
+    def _can_register_effect_trigger_from_zone(source_zone: str, trigger: str) -> bool:
+        normalized_zone = str(source_zone or "").strip().lower()
+        if normalized_zone in {"hand", "life", "deck"}:
+            return trigger in {"self_activate_main", "self_activate_battle"}
+        return True
+
+    @staticmethod
+    def _is_secret_zone(source_zone: str) -> bool:
+        return str(source_zone or "").strip().lower() in {"hand", "life", "deck"}
+
+    @staticmethod
+    def _clear_deferred_secret_autos_for_source(state: GameState, *, source_instance_id: int) -> None:
+        state.deferred_secret_autos = [row for row in state.deferred_secret_autos if row.source_instance_id != source_instance_id]
+
+    @staticmethod
+    def _promote_deferred_secret_autos_to_public_zone(
+        state: GameState,
+        *,
+        source_instance_id: int,
+        source_zone: str,
+    ) -> None:
+        updated: list[DeferredSecretAuto] = []
+        for row in state.deferred_secret_autos:
+            if row.source_instance_id != source_instance_id:
+                updated.append(row)
+                continue
+            updated.append(
+                DeferredSecretAuto(
+                    secret_auto_id=row.secret_auto_id,
+                    owner_player_id=row.owner_player_id,
+                    source_instance_id=row.source_instance_id,
+                    source_card_id=row.source_card_id,
+                    source_card_number=row.source_card_number,
+                    source_zone=source_zone,
+                    trigger=row.trigger,
+                    handler_id=row.handler_id,
+                    deferred_turn_number=row.deferred_turn_number,
+                    deferred_phase=row.deferred_phase,
+                    origin_zone=str(row.origin_zone or row.source_zone),
+                    handler_params=dict(row.handler_params),
+                    once_per_turn=row.once_per_turn,
+                    limit_per_turn=row.limit_per_turn,
+                    limit_scope=row.limit_scope,
+                )
+            )
+        state.deferred_secret_autos = updated
+
+    @staticmethod
+    def _find_linked_deferred_secret_auto(
+        state: GameState,
+        *,
+        source_instance_id: int,
+        trigger: str,
+        handler_id: str,
+        handler_params: dict[str, int | str | bool],
+    ) -> DeferredSecretAuto | None:
+        return next(
+            (
+                row
+                for row in state.deferred_secret_autos
+                if row.source_instance_id == source_instance_id
+                and row.trigger == trigger
+                and row.handler_id == handler_id
+                and dict(row.handler_params) == dict(handler_params)
+            ),
+            None,
+        )
+
+    @staticmethod
+    def _preserve_secret_auto_provenance_on_public_registration(
+        row: DeferredSecretAuto,
+        *,
+        source_zone: str,
+    ) -> bool:
+        trigger = str(row.trigger or "")
+        origin_zone = str(row.origin_zone or row.source_zone)
+        current_zone = str(source_zone or "")
+        if trigger == "self_played":
+            return origin_zone in {"hand", "life", "deck"} and current_zone in {"battle", "unison"}
+        return (
+            False
+        )
+
+    def _record_deferred_secret_auto(
+        self,
+        state: GameState,
+        *,
+        owner_player_id: int,
+        card: CardInstance,
+        source_zone: str,
+        trigger: str,
+        handler_id: str,
+        handler_params: dict[str, int | str | bool],
+        once_per_turn: bool,
+        limit_per_turn: int | None,
+        limit_scope: str,
+    ) -> None:
+        exists = any(
+            row.owner_player_id == owner_player_id
+            and row.source_instance_id == card.instance_id
+            and row.source_zone == source_zone
+            and row.trigger == trigger
+            and row.handler_id == handler_id
+            and dict(row.handler_params) == dict(handler_params)
+            for row in state.deferred_secret_autos
+        )
+        if exists:
+            return
+        state.deferred_secret_autos.append(
+            DeferredSecretAuto(
+                secret_auto_id=state.next_secret_auto_id,
+                owner_player_id=owner_player_id,
+                source_instance_id=card.instance_id,
+                source_card_id=card.card_id,
+                source_card_number=str(card.card_number or ""),
+                source_zone=source_zone,
+                trigger=trigger,
+                handler_id=handler_id,
+                deferred_turn_number=state.turn_number,
+                deferred_phase=state.phase,
+                origin_zone=source_zone,
+                handler_params=dict(handler_params),
+                once_per_turn=bool(once_per_turn),
+                limit_per_turn=limit_per_turn,
+                limit_scope=str(limit_scope or "card_number"),
+            )
+        )
+        state.next_secret_auto_id += 1
 
     def _emit_effect_event(
         self,
@@ -2555,84 +3062,147 @@ class RulesEngine:
         for reg in state.effect_registry:
             if self._effect_registration_matches_event(reg, event):
                 state.pending_effects.append(PendingEffect(effect_id=reg.effect_id, event_id=event.event_id))
+        self._record_secret_auto_opportunities(state, event)
 
     @staticmethod
     def _effect_registration_matches_event(reg: EffectRegistration, event: EffectEvent) -> bool:
-        if reg.trigger == "self_played":
+        return RulesEngine._effect_trigger_matches_event(
+            reg.trigger,
+            source_instance_id=reg.source_instance_id,
+            owner_player_id=reg.owner_player_id,
+            event=event,
+        )
+
+    @staticmethod
+    def _effect_trigger_matches_event(
+        trigger: str,
+        *,
+        source_instance_id: int,
+        owner_player_id: int,
+        event: EffectEvent,
+    ) -> bool:
+        if trigger == "self_played":
             if event.name != "card_played":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_attacks":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_attacks":
             if event.name != "attack_declared":
                 return False
-            return int(event.payload.get("attacker_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "owner_leader_attacks":
+            return int(event.payload.get("attacker_instance_id") or -1) == source_instance_id
+        if trigger == "owner_leader_attacks":
             if event.name != "attack_declared":
                 return False
-            if event.actor_player_id != reg.owner_player_id:
+            if event.actor_player_id != owner_player_id:
                 return False
             return str(event.payload.get("attacker_zone") or "") == "leader"
-        if reg.trigger == "self_comboed":
+        if trigger == "self_comboed":
             if event.name != "card_comboed":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_hidden_battle_to_drop":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_hidden_battle_to_drop":
             if event.name != "card_placed_into_drop":
                 return False
             if str(event.payload.get("source_zone") or "") != "battle":
                 return False
             if not bool(event.payload.get("source_hidden_mode") or False):
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_switched_hidden":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_switched_hidden":
             if event.name != "card_switched_hidden_mode":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_switched_revealed":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_switched_revealed":
             if event.name != "card_switched_revealed_mode":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_activate_main":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_activate_main":
             if event.name != "skill_activated":
                 return False
             if str(event.payload.get("skill_kind") or "") != "activate_main":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_activate_battle":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_activate_battle":
             if event.name != "skill_activated":
                 return False
             if str(event.payload.get("skill_kind") or "") != "activate_battle":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "self_koed":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_koed":
             if event.name != "card_koed":
                 return False
-            return int(event.payload.get("source_instance_id") or -1) == reg.source_instance_id
-        if reg.trigger == "owner_battle_played_from_warp":
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "owner_battle_played_from_warp":
             if event.name != "card_played":
                 return False
-            if event.actor_player_id != reg.owner_player_id:
+            if event.actor_player_id != owner_player_id:
                 return False
             if str(event.payload.get("source_zone") or "") != "battle":
                 return False
             return str(event.payload.get("played_from") or "") == "warp"
-        if reg.trigger == "owner_field_extra_placed":
+        if trigger == "owner_field_extra_placed":
             return event.name == "field_extra_placed"
-        if reg.trigger == "owner_opponent_skill_plays_overcost_battle":
+        if trigger == "owner_opponent_skill_plays_overcost_battle":
             if event.name != "card_played":
                 return False
-            if event.actor_player_id in {None, reg.owner_player_id}:
+            if event.actor_player_id in {None, owner_player_id}:
                 return False
             if str(event.payload.get("source_zone") or "") != "battle":
                 return False
             return str(event.payload.get("played_from") or "").strip().lower() not in {"", "hand"}
-        if reg.trigger == "self_comboed_battle_end":
+        if trigger == "self_comboed_battle_end":
             return event.name == "battle_end"
-        if reg.trigger == "turn_start":
-            return event.name == "turn_start" and event.actor_player_id == reg.owner_player_id
-        if reg.trigger == "turn_end":
-            return event.name == "turn_end" and event.actor_player_id == reg.owner_player_id
+        if trigger == "turn_start":
+            return event.name == "turn_start" and event.actor_player_id == owner_player_id
+        if trigger == "turn_end":
+            return event.name == "turn_end" and event.actor_player_id == owner_player_id
         return False
+
+    def _record_secret_auto_opportunities(self, state: GameState, event: EffectEvent) -> None:
+        created = False
+        for row in state.deferred_secret_autos:
+            if not self._effect_trigger_matches_event(
+                row.trigger,
+                source_instance_id=row.source_instance_id,
+                owner_player_id=row.owner_player_id,
+                event=event,
+            ):
+                continue
+            exists = any(
+                opp.secret_auto_id == row.secret_auto_id and opp.event_id == event.event_id
+                for opp in state.secret_auto_opportunities
+            )
+            if exists:
+                continue
+            state.secret_auto_opportunities.append(
+                SecretAutoOpportunity(
+                    opportunity_id=state.next_secret_auto_opportunity_id,
+                    secret_auto_id=row.secret_auto_id,
+                    owner_player_id=row.owner_player_id,
+                    source_instance_id=row.source_instance_id,
+                    source_card_id=row.source_card_id,
+                    source_card_number=row.source_card_number,
+                    source_zone=row.source_zone,
+                    trigger=row.trigger,
+                    handler_id=row.handler_id,
+                    event_id=event.event_id,
+                    event_name=event.name,
+                    created_turn_number=state.turn_number,
+                    created_phase=state.phase,
+                    origin_zone=str(row.origin_zone or row.source_zone),
+                    handler_params=dict(row.handler_params),
+                    once_per_turn=row.once_per_turn,
+                    limit_per_turn=row.limit_per_turn,
+                    limit_scope=row.limit_scope,
+                )
+            )
+            state.next_secret_auto_opportunity_id += 1
+            state.log.append(
+                "Secret-area auto opportunity created: "
+                f"source_instance_id={row.source_instance_id} event_id={event.event_id} trigger={row.trigger}"
+            )
+            created = True
+        if created:
+            self._checkpoint(state, "secret_auto_opportunity_created")
 
     def _reset_once_per_turn_effect_counters(self, state: GameState, *, player_id: int) -> None:
         updated: list[EffectRegistration] = []
@@ -2699,30 +3269,36 @@ class RulesEngine:
             counts[key] = counts.get(key, 0) + 1
         return counts
 
+    def _pop_next_pending_effect(self, state: GameState) -> PendingEffect | None:
+        if not state.pending_effects:
+            return None
+        regs_by_id = {reg.effect_id: reg for reg in state.effect_registry}
+        owner_order = [state.active_player, self._opponent_of(state.active_player)]
+        for owner_id in owner_order:
+            matching: list[tuple[int, PendingEffect]] = []
+            for idx, entry in enumerate(state.pending_effects):
+                reg = regs_by_id.get(entry.effect_id)
+                if reg is not None and reg.owner_player_id == owner_id:
+                    matching.append((idx, entry))
+            if matching:
+                selected_idx = min(matching, key=lambda item: (int(item[1].event_id), int(item[1].effect_id), int(item[0])))[0]
+                return state.pending_effects.pop(selected_idx)
+        return state.pending_effects.pop(0)
+
     def _resolve_pending_effects(self, state: GameState) -> None:
         if not state.pending_effects:
             return
-        pending = list(state.pending_effects)
-        state.pending_effects.clear()
+        resolved_once_per_turn_in_checkpoint: set[int] = set()
         regs_by_id = {reg.effect_id: reg for reg in state.effect_registry}
         events_by_id = {evt.event_id: evt for evt in state.effect_events}
-
-        # Rule-order alignment for checkpoint processing: turn player first, then non-turn player.
-        ordered_pending: list[PendingEffect] = []
-        owner_order = [state.active_player, self._opponent_of(state.active_player)]
-        for owner_id in owner_order:
-            ordered_pending.extend(
-                entry
-                for entry in pending
-                if (regs_by_id.get(entry.effect_id) is not None and regs_by_id[entry.effect_id].owner_player_id == owner_id)
-            )
-        ordered_pending.extend(entry for entry in pending if entry not in ordered_pending)
-
-        updated_registry: dict[int, EffectRegistration] = {}
-        resolved_once_per_turn_in_checkpoint: set[int] = set()
         resolved_limit_counts = self._current_effect_limit_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
-        for entry in ordered_pending:
-            reg = updated_registry.get(entry.effect_id, regs_by_id.get(entry.effect_id))
+        while state.pending_effects:
+            entry = self._pop_next_pending_effect(state)
+            if entry is None:
+                break
+            regs_by_id = {reg.effect_id: reg for reg in state.effect_registry}
+            events_by_id = {evt.event_id: evt for evt in state.effect_events}
+            reg = regs_by_id.get(entry.effect_id)
             evt = events_by_id.get(entry.event_id)
             if reg is None or evt is None:
                 state.effect_resolutions.append(
@@ -2767,7 +3343,7 @@ class RulesEngine:
                 limit_scope=reg.limit_scope,
                 triggers_this_turn=reg.triggers_this_turn + 1,
             )
-            updated_registry[reg.effect_id] = next_reg
+            state.effect_registry = [next_reg if item.effect_id == reg.effect_id else item for item in state.effect_registry]
             if reg.once_per_turn:
                 resolved_once_per_turn_in_checkpoint.add(reg.effect_id)
             if limit_key is not None:
@@ -2775,12 +3351,6 @@ class RulesEngine:
             state.effect_resolutions.append(
                 EffectResolution(effect_id=reg.effect_id, event_id=evt.event_id, resolved=True, reason="ok")
             )
-
-        if updated_registry:
-            final_registry: list[EffectRegistration] = []
-            for reg in state.effect_registry:
-                final_registry.append(updated_registry.get(reg.effect_id, reg))
-            state.effect_registry = final_registry
 
     @staticmethod
     def _evaluate_continuous_effects(_state: GameState) -> None:

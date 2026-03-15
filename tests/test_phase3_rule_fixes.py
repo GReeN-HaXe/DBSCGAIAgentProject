@@ -312,13 +312,226 @@ def test_counter_chain_counter_counter_restores_attack() -> None:
     # Latest counter resolves and negates previous counter; previous one is unresolved.
     assert len(state.counter_resolutions) >= 2
     last_two = state.counter_resolutions[-2:]
+    assert [r.resolution_order for r in last_two] == [1, 2]
     assert any(r.resolved and r.negated_motion_id is not None for r in last_two)
     assert any((not r.resolved) for r in last_two)
+    assert all(r.pending_action_type == "attack" for r in last_two)
     # Trace includes declaration and resolution records.
     assert len(state.counter_motion_trace) >= 4
     assert any(t.resolved is None for t in state.counter_motion_trace)
     assert any(t.resolved is True for t in state.counter_motion_trace)
     assert any(t.resolved is False for t in state.counter_motion_trace)
+    resolved_trace = [t for t in state.counter_motion_trace if t.resolved is not None][-2:]
+    assert [t.resolution_order for t in resolved_trace] == [1, 2]
+    assert resolved_trace[0].motion_id == 2
+    assert resolved_trace[1].motion_id == 1
+    assert all(t.pending_action_type == "attack" for t in resolved_trace)
+    assert any(cp.name == "counter_chain_timing" for cp in state.checkpoints)
+    assert any(cp.name == "counter_chain_resolution_begin" for cp in state.checkpoints)
+    assert any(cp.name == "counter_chain_resolution_complete" for cp in state.checkpoints)
+    assert any("Counter chain resolution begin" in row for row in state.log)
+    assert any("Counter chain resolution complete" in row and "order=1" in row for row in state.log)
+
+
+def test_declaring_counter_closes_other_pending_counters_in_same_hand() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].hand.extend(
+        [
+            CardInstance(instance_id=700048, card_id=48, owner_id=2, has_counter=True, counter_modes=("Counter: Attack",), energy_cost=0),
+            CardInstance(instance_id=700049, card_id=49, owner_id=2, has_counter=True, counter_modes=("Counter: Attack",), energy_cost=0),
+        ]
+    )
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+
+    legal = engine.get_legal_actions(state, 2)
+    counter_actions = [a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND]
+    assert len(counter_actions) == 2
+
+    state = engine.apply_action(state, counter_actions[0])
+
+    assert any(cp.name == "counter_pending_choices_closed" for cp in state.checkpoints)
+    assert any("Counter pending choices closed" in row and "700049" in row for row in state.log)
+
+
+def test_counter_chain_three_motions_resolve_in_descending_order() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].hand.extend(
+        [
+            CardInstance(instance_id=700061, card_id=61, owner_id=2, has_counter=True, counter_modes=("Counter: Attack",), energy_cost=0),
+            CardInstance(instance_id=700062, card_id=62, owner_id=2, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0),
+        ]
+    )
+    state.players[1].hand.append(
+        CardInstance(instance_id=700063, card_id=63, owner_id=1, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 2))
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=1, hand_index=len(state.players[1].hand) - 1))
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 1))
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    last_three = state.counter_resolutions[-3:]
+    assert [r.motion_id for r in last_three] == [3, 2, 1]
+    assert [r.resolution_order for r in last_three] == [1, 2, 3]
+    assert all(r.pending_action_type == "attack" for r in last_three)
+    assert last_three[0].resolved is True and last_three[0].negated_motion_id == 2
+    assert last_three[1].resolved is False
+    assert last_three[2].resolved is True and last_three[2].negated_motion_id is None
+    assert state.attack_context is None
+
+
+def test_counter_chain_on_play_window_keeps_pending_action_type_in_diagnostics() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [CardInstance(instance_id=700084, card_id=84, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    state.players[2].hand.append(
+        CardInstance(instance_id=700085, card_id=85, owner_id=2, has_counter=True, counter_modes=("Counter: Play",), energy_cost=0)
+    )
+    state.players[1].hand.append(
+        CardInstance(instance_id=700086, card_id=86, owner_id=1, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, play)
+    play_counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, play_counter)
+    chain_counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, chain_counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    last_two = state.counter_resolutions[-2:]
+    assert [r.pending_action_type for r in last_two] == ["play_from_hand", "play_from_hand"]
+    resolved_trace = [t for t in state.counter_motion_trace if t.resolved is not None][-2:]
+    assert [t.pending_action_type for t in resolved_trace] == ["play_from_hand", "play_from_hand"]
+    assert any("pending_action_type=play_from_hand" in row for row in state.log)
+    assert any(card.instance_id == 700084 for card in state.players[1].battle_area)
+
+
+def test_counter_chain_on_activate_main_window_keeps_pending_action_type_in_diagnostics() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=700087, card_id=87, owner_id=1, card_type="BATTLE", has_activate_main=True, energy_cost=0)
+    )
+    state.players[2].hand.append(
+        CardInstance(instance_id=700088, card_id=88, owner_id=2, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+    state.players[1].hand.append(
+        CardInstance(instance_id=700089, card_id=89, owner_id=1, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, activate)
+    first_counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, first_counter)
+    second_counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, second_counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    last_two = state.counter_resolutions[-2:]
+    assert [r.pending_action_type for r in last_two] == ["activate_main", "activate_main"]
+    resolved_trace = [t for t in state.counter_motion_trace if t.resolved is not None][-2:]
+    assert [t.pending_action_type for t in resolved_trace] == ["activate_main", "activate_main"]
+    assert any("pending_action_type=activate_main" in row for row in state.log)
+    assert any(cp.name == "skill_activation_no_registered_effect" for cp in state.checkpoints)
+
+
+def test_counter_chain_on_activate_battle_window_keeps_pending_action_type_in_diagnostics() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=700090, card_id=90, owner_id=1, card_type="BATTLE", power=15000, has_activate_battle=True, energy_cost=0)
+    )
+    state.players[2].hand.append(
+        CardInstance(instance_id=700091, card_id=91, owner_id=2, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+    state.players[1].hand.append(
+        CardInstance(instance_id=700092, card_id=92, owner_id=1, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    activate = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL)
+    state = engine.apply_action(state, activate)
+    first_counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, first_counter)
+    second_counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, second_counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    last_two = state.counter_resolutions[-2:]
+    assert [r.pending_action_type for r in last_two] == ["activate_battle", "activate_battle"]
+    resolved_trace = [t for t in state.counter_motion_trace if t.resolved is not None][-2:]
+    assert [t.pending_action_type for t in resolved_trace] == ["activate_battle", "activate_battle"]
+    assert any("pending_action_type=activate_battle" in row for row in state.log)
+    assert any(cp.name == "skill_activation_no_registered_effect" for cp in state.checkpoints)
+
+
+def test_counter_chain_on_activate_extra_from_hand_window_keeps_pending_action_type_in_diagnostics() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=700093, card_id=93, owner_id=1, card_type="EXTRA", energy_cost=0),
+        CardInstance(instance_id=700094, card_id=94, owner_id=1, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0),
+    ]
+    state.players[2].hand.append(
+        CardInstance(instance_id=700095, card_id=95, owner_id=2, has_counter=True, counter_modes=("Counter: Counter",), energy_cost=0)
+    )
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, play)
+    first_counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, first_counter)
+    second_counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, second_counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    last_two = state.counter_resolutions[-2:]
+    assert [r.pending_action_type for r in last_two] == ["activate_extra_from_hand", "activate_extra_from_hand"]
+    resolved_trace = [t for t in state.counter_motion_trace if t.resolved is not None][-2:]
+    assert [t.pending_action_type for t in resolved_trace] == ["activate_extra_from_hand", "activate_extra_from_hand"]
+    assert any("pending_action_type=activate_extra_from_hand" in row for row in state.log)
+    assert any(card.instance_id == 700093 and card.card_type == "EXTRA" for card in state.players[1].drop)
 
 
 def test_combo_power_applies_in_damage_step() -> None:
@@ -376,6 +589,8 @@ def test_counter_negate_attack_can_play_self_in_rest_mode() -> None:
     assert state.players[2].battle_area[0].resting is True
     assert all(card.instance_id != 702001 for card in state.players[2].drop)
     assert any(cp.name == "counter_effect_play_self_resolved" for cp in state.checkpoints)
+    assert state.counter_resolutions[-1].applied_effects == ("play_self",)
+    assert any("Counter motion effects applied" in row and "effects=play_self" in row for row in state.log)
 
 
 def test_counter_can_mark_battle_attacker_as_unable_to_attack_again_this_turn() -> None:
@@ -426,6 +641,7 @@ def test_counter_can_mark_battle_attacker_as_unable_to_attack_again_this_turn() 
         for action in legal
     )
     assert any(cp.name == "counter_effect_attack_restriction_applied" for cp in state.checkpoints)
+    assert state.counter_resolutions[-1].applied_effects == ("play_self", "attack_restriction")
     state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
     state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
     state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
@@ -601,6 +817,7 @@ def test_counter_without_registered_family_emits_diagnostic_checkpoint() -> None
     state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
     assert any(cp.name == "counter_effect_no_registered_family" for cp in state.checkpoints)
     assert any("Unsupported counter effect" in line for line in state.log)
+    assert state.counter_resolutions[-1].applied_effects == ("unsupported",)
 
 
 def test_extra_activation_fails_when_skill_cost_unpayable() -> None:
@@ -1366,6 +1583,7 @@ def test_counter_play_self_can_redirect_attack_to_self_and_hide_white_battle_at_
     assert state.attack_context.target_instance_id == jiren.instance_id
     assert any(cp.name == "counter_effect_redirect_to_self_resolved" for cp in state.checkpoints)
     assert any(cp.name == "counter_effect_delayed_hidden_battle_end_scheduled" for cp in state.checkpoints)
+    assert state.counter_resolutions[-1].applied_effects == ("play_self", "redirect_to_self", "delayed_hidden_battle_end")
 
     state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
     state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))

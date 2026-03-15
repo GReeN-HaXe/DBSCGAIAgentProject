@@ -208,13 +208,117 @@ Resolved:
   - across cards with the same card number
   - including `[Auto]` skills that can go pending multiple times but only resolve up to limit
 - [ ] implement full pending/checkpoint handling for `[Auto]` skills:
+  - status: first queue-driven slice complete
+  - pending-effect resolution now consumes a live queue instead of a one-shot snapshot
+  - effects triggered by an effect can now continue resolving in the same checkpoint
   - make every trigger instance pending
   - resolve one pending auto at a time at checkpoints
+    - simultaneous public pending effects now have explicit turn-player-first regression coverage
   - allow hidden/secret-area autos to remain undeclared
+    - status: first guardrail slice complete
+    - effect registration from secret zones (`hand`, `life`, `deck`) now skips auto-trigger registrations by default
+    - explicit hand-sourced activate-skill registrations are still allowed
+    - deferred secret-area autos now have explicit runtime state in `GameState.deferred_secret_autos`
+    - deferred secret-area autos are pruned automatically when the source leaves the secret zone
+    - trigger-time secret-area auto opportunities now have explicit runtime state in `GameState.secret_auto_opportunities`
+    - matching effect events now create opportunity records without interrupting gameplay flow
+    - opportunity creation now surfaces in:
+      - runtime log entries
+      - checkpoint `secret_auto_opportunity_created`
+    - deferred secret-area auto registrations now surface in:
+      - runtime log entries
+      - checkpoint `secret_auto_registration_deferred`
+    - phased implementation plan:
+      - phase 1: keep deferred secret-auto runtime state as the stable base
+      - phase 2: add explicit declaration-opportunity objects backed by `deferred_secret_autos`
+        - status: complete
+      - phase 3: add engine-level declare / ignore action flow for secret-area auto opportunities
+        - status: first slice complete
+        - legal actions now expose `declare_secret_auto` / `ignore_secret_auto` for the next pending opportunity
+        - opportunities are resolved in deterministic turn-player-first order
+        - declared opportunities now resolve through the engine and append `EffectResolution` audit rows
+        - ignored opportunities now persist with explicit `ignored` status for replay/audit
+        - stale pending opportunities are now pruned automatically when the source leaves all tracked zones
+      - phase 4: expose declare / ignore flow in CLI/TUI for human-controlled secret-area autos
+      - phase 5: define default AI/self-play policy for secret-area auto declaration
+        - status: first slice complete
+        - `HeuristicPolicy` now prefers `declare_secret_auto` over `ignore_secret_auto`
+        - session turn ownership now yields to the next pending secret-auto opportunity owner before normal active-player flow
+        - AI session stepping can now consume pending secret-auto opportunities instead of stalling on them
+      - phase 6: add replay / audit support for declared, ignored, and missed secret-area auto opportunities
+        - status: first slice complete
+        - action traces now persist:
+          - `opportunity_id`
+          - `secret_auto_id`
+          - trigger / event metadata
+          - pre-action opportunity status
+        - history/action rendering now includes secret-auto trigger and event context when available
+    - preserve hidden-origin provenance through public registration
+      - status: first slice complete
+      - secret-origin `self_played` autos now preserve their hidden origin when the source becomes public
+      - deferred secret autos are promoted to the current public zone instead of being discarded
+      - linked public auto registration for those `self_played` secret-origin autos is suppressed to avoid duplicate pending/resolution paths
+      - provenance now survives into:
+        - `SecretAutoOpportunity.origin_zone`
+        - action rendering
+        - session trace metadata
+        - history/review output
+      - deferred for later:
+        - broaden provenance preservation to live transition-point capture during normal gameplay
+        - candidate future families:
+          - ordinary `hand -> battle/unison` `self_played` transitions
+          - `hand -> combo` `self_comboed` and `self_comboed_battle_end` transitions
+        - this broader shift was intentionally deferred because it changes many existing public-auto runtime expectations at once
+    - approach decision:
+      - preferred path is hybrid
+      - keep deferred secret autos as the storage/runtime layer
+      - add explicit trigger-time declaration opportunities on top rather than replacing the deferred model outright
+    - tradeoff summary:
+      - deferred-registration-first is lower risk and preserves current momentum
+      - explicit declaration opportunities are the better long-term rules-faithful model
+      - the hybrid path gives the best short-term stability and long-term architecture
 - [ ] upgrade `[Counter]` handling to match full counter-motion-chain semantics:
+  - status: first pending-choice closure slice complete
+  - when a player declares a counter from hand, the engine now explicitly records that the other pending counter choices in that same hand are closed
+  - closure now surfaces in:
+    - runtime log entries
+    - checkpoint `counter_pending_choices_closed`
   - declaring one pending counter ends the pending status of the others in that hand
   - resolve counter motions in descending order
+    - status: first runtime metadata slice complete
+    - `CounterResolution` and resolved `CounterMotionTrace` rows now carry explicit `resolution_order`
+    - current chain resolution tests now assert latest-declared motion resolves first (`resolution_order=1`)
+    - regression coverage now includes three-motion chains to lock in descending-order behavior beyond the simple two-motion case
   - preserve the distinction between counter timing and counter motion resolution
+    - status: first diagnostics slice complete
+    - counter-chain timing is now explicitly separated from chain resolution in:
+      - checkpoint `counter_chain_timing`
+      - checkpoint `counter_chain_resolution_begin`
+      - checkpoint `counter_chain_resolution_complete`
+      - runtime log summaries of ordered motion resolution
+    - status: mixed-family effect diagnostics slice complete
+    - `CounterResolution` and resolved `CounterMotionTrace` rows now carry `applied_effects`
+    - runtime logs now summarize which reusable counter subfamilies fired per resolved motion
+    - regression coverage now checks:
+      - simple `play_self`
+      - `play_self + attack_restriction`
+      - unsupported counter family tagging
+      - redirecting play-self counters with delayed battle-end Hidden Mode scheduling
+    - status: pending-action-context slice complete
+    - `CounterResolution` and `CounterMotionTrace` now carry `pending_action_type`
+    - runtime logs now expose whether the counter chain was responding to:
+      - `attack`
+      - `play_from_hand`
+      - `activate_main`
+      - `activate_battle`
+      - `activate_extra_from_hand`
+      - other future pending-action kinds
+    - regression coverage now includes:
+      - attack-counter chains
+      - play-counter chains
+      - `activate_main` counter chains
+      - `activate_battle` counter chains
+      - `activate_extra_from_hand` counter chains
 - [ ] implement full Unison rules batch:
   - playing Unison from hand with correct marker entry count
   - replacing an existing Unison / Hidden Mode card in the Unison Area

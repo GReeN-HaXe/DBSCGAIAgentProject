@@ -151,8 +151,11 @@ class CounterMotion:
 class CounterResolution:
     motion_id: int
     player_id: int
+    pending_action_type: str
     resolved: bool
     negated_motion_id: int | None
+    resolution_order: int | None = None
+    applied_effects: Tuple[str, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -161,11 +164,14 @@ class CounterMotionTrace:
     turn_number: int
     phase: TurnPhase
     window_kind: str
+    pending_action_type: str
     player_id: int
     card_instance_id: int
     modes: Tuple[str, ...]
     resolved: bool | None = None
     negated_motion_id: int | None = None
+    resolution_order: int | None = None
+    applied_effects: Tuple[str, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -210,6 +216,48 @@ class EffectResolution:
 
 
 @dataclass(frozen=True)
+class DeferredSecretAuto:
+    secret_auto_id: int
+    owner_player_id: int
+    source_instance_id: int
+    source_card_id: int
+    source_card_number: str
+    source_zone: str
+    trigger: str
+    handler_id: str
+    deferred_turn_number: int
+    deferred_phase: TurnPhase
+    origin_zone: str = ""
+    handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
+
+
+@dataclass(frozen=True)
+class SecretAutoOpportunity:
+    opportunity_id: int
+    secret_auto_id: int
+    owner_player_id: int
+    source_instance_id: int
+    source_card_id: int
+    source_card_number: str
+    source_zone: str
+    trigger: str
+    handler_id: str
+    event_id: int
+    event_name: str
+    created_turn_number: int
+    created_phase: TurnPhase
+    origin_zone: str = ""
+    handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
+    status: str = "pending"
+
+
+@dataclass(frozen=True)
 class DelayedModeSwitch:
     owner_player_id: int
     target_instance_id: int
@@ -245,12 +293,16 @@ class GameState:
     next_checkpoint_index: int = 1
     next_effect_id: int = 1
     next_effect_event_id: int = 1
+    next_secret_auto_id: int = 1
+    next_secret_auto_opportunity_id: int = 1
     log: list[str] = field(default_factory=list)
     checkpoints: list[CheckpointEvent] = field(default_factory=list)
     effect_registry: list[EffectRegistration] = field(default_factory=list)
     pending_effects: list[PendingEffect] = field(default_factory=list)
     effect_events: list[EffectEvent] = field(default_factory=list)
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
+    deferred_secret_autos: list[DeferredSecretAuto] = field(default_factory=list)
+    secret_auto_opportunities: list[SecretAutoOpportunity] = field(default_factory=list)
     delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
     delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)

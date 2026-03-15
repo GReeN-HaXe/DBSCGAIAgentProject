@@ -6,6 +6,7 @@ from types import SimpleNamespace
 from src.agent import HeuristicPolicy
 from src.agent.session import (
     HumanVsAiSession,
+    decision_owner_for_state,
     describe_action,
     format_full_board_for_cli,
     snapshot_state_for_trace,
@@ -104,6 +105,118 @@ def test_phase6_cli_helpers_can_render_card_names() -> None:
     assert "card=CARD-" in action_text
     assert "P1 hand:" in state_text
     assert "[0] CARD-" in state_text
+
+
+def test_phase6_cli_helpers_render_secret_auto_actions_with_card_names() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990501: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=990501, card_id=990501, owner_id=1, card_type="BATTLE", has_auto=True)
+    state.players[1].hand = [card]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=card)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990501, "source_card_id": 990501, "source_zone": "battle", "played_from": "hand"},
+    )
+
+    legal = engine.get_legal_actions(state, 1)
+    action_text = describe_action(
+        legal[0],
+        state=state,
+        card_name_resolver=lambda card_id: f"CARD-{card_id}",
+    )
+    assert "opportunity_id=" in action_text
+    assert "source_card=CARD-990501" in action_text
+    assert "origin_zone=hand" in action_text
+
+
+def test_phase6_decision_owner_prefers_pending_secret_auto_opportunity_owner() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990502: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=990502, card_id=990502, owner_id=2, card_type="BATTLE", has_auto=True)
+    state.players[2].hand = [card]
+    engine._register_card_effects(state, player_id=2, source_zone="hand", card=card)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=2,
+        payload={"source_instance_id": 990502, "source_card_id": 990502, "source_zone": "battle", "played_from": "hand"},
+    )
+
+    assert decision_owner_for_state(state) == 2
+
+
+def test_phase6_ai_declares_pending_secret_auto_opportunity() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990503: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=990503, card_id=990503, owner_id=2, card_type="BATTLE", has_auto=True)
+    state.players[2].hand = [card]
+    engine._register_card_effects(state, player_id=2, source_zone="hand", card=card)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=2,
+        payload={"source_instance_id": 990503, "source_card_id": 990503, "source_zone": "battle", "played_from": "hand"},
+    )
+
+    session = HumanVsAiSession(
+        engine=engine,
+        state=state,
+        human_player_id=1,
+        ai_policy=HeuristicPolicy(profile="balanced"),
+    )
+    deck_before = len(session.state.players[2].deck)
+
+    chosen = session.step_ai_once()
+
+    assert chosen.action_type == ActionType.DECLARE_SECRET_AUTO
+    assert len(session.state.players[2].deck) == deck_before - 1
+    opportunity = next(row for row in session.state.secret_auto_opportunities if row.source_instance_id == 990503)
+    assert opportunity.status == "declared"
+    trace_row = session.action_trace[-1]
+    assert trace_row["opportunity_id"] == chosen.opportunity_id
+    assert trace_row["secret_auto_trigger"] == "self_played"
+    assert trace_row["secret_auto_event_name"] == "card_played"
+    assert trace_row["secret_auto_origin_zone"] == "hand"
+    assert trace_row["secret_auto_status_before"] == "pending"
 
 
 def test_phase6_cli_helpers_can_reveal_multiple_hands() -> None:
