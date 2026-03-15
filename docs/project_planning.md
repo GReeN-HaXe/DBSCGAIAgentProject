@@ -284,20 +284,60 @@ Resolved:
       - switch up to `N` owner board cards to Revealed Mode on play
       - switch up to `N` any-player board cards to Revealed Mode on play
       - switch up to `N` owner battle cards to Hidden Mode on play
+      - owner battle-card hide triggers now extract even when the text omits the explicit `in your Battle Area` phrase
       - switch self to Hidden Mode on play
       - extractor coverage now picks up simple BT28/BT29 owner-side Hidden/Revealed play triggers
       - regression-covered in `tests/test_effect_rule_extractor.py` and `tests/test_phase4_effect_pipeline.py`
+    - reusable `Activate: Main` self-hide family now supports:
+      - `Switch this card to Hidden Mode`
+      - regression-covered in `tests/test_effect_rule_extractor.py` and `tests/test_phase4_effect_pipeline.py`
+    - activate/cost extractor normalization now supports no-colon keyword text:
+      - `[Activate Main]`
+      - `[Activate Battle]`
+      - `[Activate Main/Battle]`
+      - this picked up previously missed BT29/BT30 Hidden Mode lines such as `BT29-106 Baby`
     - generic counter play-self family now also supports:
       - `Play this card, then switch it to Hidden Mode`
       - regression-covered in `tests/test_phase3_rule_fixes.py`
+    - generic counter-chain resolution now preserves the distinction between:
+      - counters that explicitly negate the pending attack
+      - counters that only redirect or modify the battle without negating it
+    - reusable counter redirect family now supports:
+      - `Play this card, switch the target of attack to it, then choose up to 1 of your white Battle Cards and switch it to Hidden Mode at the end of the battle`
+      - regression-covered with `BT28-147 Jiren VS Son Goku`-style gameplay flow in `tests/test_phase3_rule_fixes.py`
+    - counter Hidden-then-Revealed runtime family now supports:
+      - `Negate the attack, choose any number of your opponent's Battle Cards up to the number of your Hidden Mode cards and switch them to Hidden Mode, then switch all the cards switched by this skill to Revealed Mode at the end of the turn`
+      - regression-covered with `Revenge Death Ball Final`-style gameplay flow in `tests/test_phase3_rule_fixes.py`
+    - optional counter follow-up runtime families now support:
+      - `Negate the attack. Additionally, you may switch 1 of your white energy to Hidden Mode. If you do, draw 1 card`
+      - `Negate the attack. Additionally, you may discard 1 card from your hand. If you do, choose up to 1 of your white cards and switch it to Hidden Mode`
+      - regression-covered in `tests/test_phase3_rule_fixes.py`
+    - counter alternate-cost permanents now support:
+      - `If your Leader is white, you can activate this card's [Counter] skill from your hand by switching 1 Hidden Mode card in your Battle Area to Rest Mode instead of paying its energy cost`
+      - `[Permanent][Sparking 5] You can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost`
+      - the legal-action path now treats those alternates as valid payment when normal energy payment is unavailable
+      - extraction/catalog coverage now exists for these alternates under `counter_alternate_from_hand` in `dbdatabase/skill_cost_catalog.json`
+      - regression-covered with `BT28-138 Battles of the Gods of Destruction` / `BT29-138 Key to a God`-style tests in `tests/test_phase3_rule_fixes.py`
+    - Hidden Mode drop-trigger families now support:
+      - `When this Hidden Mode card in a Battle Area is placed into its owner's Drop, choose up to N of your cards and it gets +power for the turn`
+      - works on KO paths and non-KO drop paths driven by skill costs
+      - source-drop autos now resolve even after the source leaves play
     - switch-triggered auto families now support:
       - `When this card in a Battle Area is switched to Hidden Mode by one of your skills, your Leader gets +power until the end of your opponent's turn`
       - `When this card in a Battle Area is switched to Hidden Mode by one of your skills, choose up to N of your cards and it gains [Keyword] until the end of your opponent's turn`
       - `When this card is switched to Revealed Mode, it gets +power and [Keyword] for the turn`
+      - `When this card is switched to Revealed Mode, choose up to N of your cards and it gains [Keyword] for the turn`
       - `When this card is switched to Revealed Mode or Hidden Mode, choose up to N of your cards and it gets +power for the turn`
       - `When this card is switched to Revealed Mode or Hidden Mode, choose up to N of your opponent's Battle Cards and KO it`
       - extractor and runtime now recognize `self_switched_hidden` / `self_switched_revealed` trigger families
       - turn-gated switch autos (`If it's your turn`) are now supported through generic effect requirements
+    - reusable `Activate: Main` Revealed Mode families now support:
+      - `Choose all the cards in your opponent's Battle Area and switch them to Revealed Mode, then choose up to N of your opponent's Battle Cards and KO it`
+      - regression-covered with `Breakthrough`-style extraction/runtime tests
+    - play-search extraction now supports the direct templating variant:
+      - `look at up to N cards from the top of your deck, add up to M matching card to your hand`
+      - this picks up additional white Hidden Mode cards such as `Master Roshi, Elderly Achievement` and `Bulma, Erosion of the Mind and Body`
+    - effect-filter matching now normalizes trait/character comparisons case-insensitively at runtime
   - remaining work:
     - broader Revealed Mode / switch-back interactions beyond the current exact-card cost-selected slice
     - Hidden Mode-specific auto triggers and delayed state changes beyond the generic delayed-reveal families

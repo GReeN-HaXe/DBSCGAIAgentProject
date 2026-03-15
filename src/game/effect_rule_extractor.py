@@ -30,47 +30,53 @@ _COMBO_BATTLE_END_PLAY_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?at the end of a battle in which this card was used in a combo(?: from your (?:hand|life|energy|drop area))?.*?play this card from (?:your )?drop"
 )
 _TURN_END_SWITCH_ACTIVE_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?at the end of your turn, switch this card to active mode")
-_ACTIVATE_MAIN_DRAW_RE = re.compile(r"\[activate:\s*main\][^.]{0,200}?(?::\s*)?draw (\d+) card")
-_ACTIVATE_BATTLE_DRAW_RE = re.compile(r"\[activate:\s*battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
-_ACTIVATE_MAIN_BATTLE_DRAW_RE = re.compile(r"\[activate:\s*main/battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
+_ACTIVATE_MAIN_DRAW_RE = re.compile(r"\[activate(?::)?\s*main\][^.]{0,200}?(?::\s*)?draw (\d+) card")
+_ACTIVATE_BATTLE_DRAW_RE = re.compile(r"\[activate(?::)?\s*battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
+_ACTIVATE_MAIN_BATTLE_DRAW_RE = re.compile(r"\[activate(?::)?\s*main/battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
 _ACTIVATE_BATTLE_SELF_GAIN_POWER_AND_KEYWORD_FOR_BATTLE_RE = re.compile(
-    r"\[activate:\s*battle\].{0,320}?this card gets \+(\d+) power and \[([^\]]+)\] for (?:the|this) battle"
+    r"\[activate(?::)?\s*battle\].{0,320}?this card gets \+(\d+) power and \[([^\]]+)\] for (?:the|this) battle"
 )
 _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE = re.compile(
-    r"\[activate:\s*battle\].{0,320}?choose up to (\d+) of your opponent'?s battle cards?\s*(?:,|and|then)?\s*ko (?:it|them)"
+    r"\[activate(?::)?\s*battle\].{0,320}?choose up to (\d+) of your opponent'?s battle cards?\s*(?:,|and|then)?\s*ko (?:it|them)"
 )
 _ACTIVATE_MAIN_LOOK_TOP_ADD_TO_HAND_RE = re.compile(
-    r"\[activate:\s*main\].{0,260}?look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[â€”â€•-])to your hand"
+    r"\[activate(?::)?\s*main\].{0,260}?look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[â€”â€•-])to your hand"
 )
 _ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE = re.compile(
-    r"\[activate:\s*main\].{0,240}?play this card from your hand"
+    r"\[activate(?::)?\s*main\].{0,240}?play this card from your hand"
 )
 _ACTIVATE_MAIN_DRAW_GAIN_KEYWORD_RE = re.compile(
-    r"\[activate:\s*main\].{0,240}?draw (\d+) card(?:s)?[,;]?\s*and this card gains \[([^\]]+)\] for the turn"
+    r"\[activate(?::)?\s*main\].{0,240}?draw (\d+) card(?:s)?[,;]?\s*and this card gains \[([^\]]+)\] for the turn"
 )
 _ACTIVATE_MAIN_DRAW_PLAY_SELF_AND_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
-    r"\[activate:\s*main\].{0,360}?draw (\d+) card(?:s)?[,;]?\s*play this card from your hand[,;]?\s*and this card gains \[([^\]]+)\] until the end of your opponent'?s turn"
+    r"\[activate(?::)?\s*main\].{0,360}?draw (\d+) card(?:s)?[,;]?\s*play this card from your hand[,;]?\s*and this card gains \[([^\]]+)\] until the end of your opponent'?s turn"
 )
 _ACTIVATE_MAIN_DROP_OWNER_HIDDEN_MODE_DRAW_RE = re.compile(
-    r"\[activate:\s*main\].{0,260}?choose 1 hidden mode card in your battle area and place it into (?:its|that card's) owner'?s drop:\s*draw (\d+) card"
+    r"\[activate(?::)?\s*main\].{0,260}?choose 1 hidden mode card in your battle area and place it into (?:its|that card's) owner'?s drop:\s*draw (\d+) card"
 )
 _ACTIVATE_MAIN_SWITCH_OWNER_BATTLE_TO_HIDDEN_RE = re.compile(
-    r"\[activate:\s*main\].{0,260}?choose 1 of your (.+?) battle cards? and switch it to hidden mode"
+    r"\[activate(?::)?\s*main\].{0,260}?choose 1 of your (.+?) battle cards? and switch it to hidden mode"
+)
+_ACTIVATE_MAIN_SWITCH_SELF_TO_HIDDEN_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?switch this card to hidden mode"
 )
 _ACTIVATE_MAIN_SELF_GAIN_HIDDEN_COST_TARGET_FRONT_POWER_RE = re.compile(
-    r"\[activate:\s*main\].{0,320}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:\s*increase this card'?s power by the original power on the front of the card that was switched to hidden mode by this skill for the turn"
+    r"\[activate(?::)?\s*main\].{0,320}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:\s*increase this card'?s power by the original power on the front of the card that was switched to hidden mode by this skill for the turn"
 )
 _ACTIVATE_MAIN_OWNER_TARGET_GAIN_HIDDEN_COST_TARGET_FRONT_POWER_RE = re.compile(
-    r"\[activate:\s*main\].{0,380}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:\s*choose up to 1 of your leaders? or up to 1 of your (.+?) battle cards? and increase that card'?s power by the original power on the front of the card that was switched to hidden mode by this skill for the turn"
+    r"\[activate(?::)?\s*main\].{0,380}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:\s*choose up to 1 of your leaders? or up to 1 of your (.+?) battle cards? and increase that card'?s power by the original power on the front of the card that was switched to hidden mode by this skill for the turn"
 )
 _ACTIVATE_MAIN_KO_OPP_BATTLE_AND_BUFF_OWNER_LEADER_RE = re.compile(
-    r"\[activate:\s*main\].{0,380}?choose 1 (.+?) card in your battle area or energy and switch it to hidden mode:\s*choose up to 1 of your opponent'?s battle cards?, ko it, and your (.+?) leader gets \+(\d+) power for the turn"
+    r"\[activate(?::)?\s*main\].{0,380}?choose 1 (.+?) card in your battle area or energy and switch it to hidden mode:\s*choose up to 1 of your opponent'?s battle cards?, ko it, and your (.+?) leader gets \+(\d+) power for the turn"
 )
 _ACTIVATE_MAIN_SEND_UP_TO_N_OPP_BATTLE_TO_WARP_RE = re.compile(
-    r"\[activate:\s*main\].{0,320}?choose up to (\d+) of your opponent'?s battle cards? and send (?:it|them) to (?:its|their) owner'?s warp"
+    r"\[activate(?::)?\s*main\].{0,320}?choose up to (\d+) of your opponent'?s battle cards? and send (?:it|them) to (?:its|their) owner'?s warp"
 )
 _ACTIVATE_MAIN_SWITCH_OWNER_BOARD_TO_REVEALED_RE = re.compile(
-    r"\[activate:\s*main\].{0,260}?choose 1 card in your battle area and switch it to revealed mode"
+    r"\[activate(?::)?\s*main\].{0,260}?choose 1 card in your battle area and switch it to revealed mode"
+)
+_ACTIVATE_MAIN_SWITCH_ALL_OPP_BATTLE_TO_REVEALED_THEN_KO_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,320}?choose all the cards? in your opponent'?s battle area and switch (?:it|them) to revealed mode,\s*then choose up to (\d+) of your opponent'?s battle cards? and ko (?:it|them)"
 )
 _ATTACK_SWITCH_UP_TO_N_OPP_BATTLE_HIDDEN_THEN_REVEAL_OPP_TURN_END_RE = re.compile(
     r"when this card attacks, choose up to (\d+) of your opponent'?s battle cards?, switch (?:it|them) to hidden mode, then switch (?:it|them) to revealed mode at the end of your opponent'?s turn"
@@ -85,7 +91,7 @@ _PLAY_SWITCH_UP_TO_N_ANY_PLAYER_BOARD_TO_REVEALED_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,200})?choose up to (\d+) player'?s cards? and switch (?:it|them) to revealed mode"
 )
 _PLAY_SWITCH_UP_TO_N_OWNER_BATTLE_TO_HIDDEN_RE = re.compile(
-    r"when this card is played(?: from your hand)?(?:[^.]{0,200})?choose up to (\d+) (?:(?:of your )?(.*?) )?cards? in your battle area and switch (?:it|them) to hidden mode"
+    r"when this card is played(?: from your hand)?(?:[^.]{0,200})?choose up to (\d+) (?:(?:of your )?(.*?) )?cards?(?: in your battle area)? and switch (?:it|them) to hidden mode"
 )
 _PLAY_DRAW_AND_SWITCH_SELF_TO_HIDDEN_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,120})?draw (\d+) card(?:s)? and switch this card to hidden mode"
@@ -105,8 +111,14 @@ _SWITCHED_TO_REVEALED_OR_HIDDEN_OWNER_CARD_GAIN_POWER_RE = re.compile(
 _SWITCHED_TO_REVEALED_OWNER_CARD_GAIN_POWER_RE = re.compile(
     r"when this card is switched to revealed mode,\s*choose up to (\d+) of your (.+?) cards? and (?:it|they) gets? \+(\d+) power for the turn"
 )
+_SWITCHED_TO_REVEALED_OWNER_CARD_GAIN_KEYWORD_RE = re.compile(
+    r"when this card is switched to revealed mode,\s*choose up to (\d+) of your (.+?) cards? and (?:it|they) gains? \[([^\]]+)\] for the turn"
+)
 _SWITCHED_TO_REVEALED_OR_HIDDEN_KO_OPP_BATTLE_RE = re.compile(
     r"when this card is switched to revealed mode or hidden mode,\s*choose up to (\d+) of your opponent'?s battle cards? and ko (?:it|them)"
+)
+_HIDDEN_BATTLE_TO_DROP_OWNER_CARD_GAIN_POWER_RE = re.compile(
+    r"when this hidden mode card in a battle area is placed into its owner'?s drop,\s*choose up to (\d+) of your (.+?) cards? and (?:it|they) gets? \+(\d+) power for the turn"
 )
 _PLAY_TOP_IF_COLOR_ADD_HAND_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is played(?: from your hand)?(?: or discarded by [^:]{1,120})?.*?"
@@ -154,6 +166,10 @@ _PLAY_FROM_HAND_PLAY_FROM_HAND_OR_DECK_WITH_MARKERS_RE = re.compile(
 _PLAY_LOOK_TOP_ADD_TO_HAND_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is played( from your hand)?[^.]{0,300}?"
     r"look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[-\u2014\u2015])to your hand"
+)
+_PLAY_LOOK_TOP_ADD_DIRECT_TO_HAND_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?when this card is played( from your hand)?[^.]{0,300}?"
+    r"look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) to your hand"
 )
 _PLAY_ADD_UP_TO_N_FROM_DECK_TO_HAND_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is (?:played(?: from your hand)?|placed in a battle area)[^.]{0,240}?add up to (\d+) (.+?) from your deck to your hand"
@@ -292,11 +308,16 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
     cleaned = re.sub(r"\bwith an energy costs? of \d+ or less\b", " ", cleaned)
     cleaned = re.sub(r"\bwith an energy cost of \d+ or less\b", " ", cleaned)
     cleaned = re.sub(r"\bof \d+ or less\b", " ", cleaned)
+    cleaned = cleaned.replace("<", " ").replace(">", " ").replace("≪", " ").replace("≫", " ")
+    cleaned = re.sub(r"[^0-9a-z ,/.-]", " ", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,.-")
 
     if cleaned:
+        parts = [part.strip().title() for part in re.split(r"\bor\b|/|,", cleaned) if part.strip()]
         tokens = [t for t in cleaned.split() if t]
-        if len(tokens) == 1 and tokens[0] not in {"red", "blue", "green", "yellow", "black", "white"}:
+        if len(parts) > 1:
+            params["required_characters"] = ",".join(parts)
+        elif len(tokens) == 1 and tokens[0] not in {"red", "blue", "green", "yellow", "black", "white"}:
             params["required_traits"] = cleaned.title()
         elif len(tokens) > 0:
             params["required_characters"] = cleaned.title()
@@ -676,6 +697,17 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        if _ACTIVATE_MAIN_SWITCH_SELF_TO_HIDDEN_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_switch_self_to_hidden_mode",
+                    handler_params={**extra},
+                    once_per_turn=once,
+                )
+            )
+
         m_activate_main_self_gain_hidden_power = _ACTIVATE_MAIN_SELF_GAIN_HIDDEN_COST_TARGET_FRONT_POWER_RE.search(branch)
         if m_activate_main_self_gain_hidden_power:
             descriptor = m_activate_main_self_gain_hidden_power.group(1).strip().lower()
@@ -754,6 +786,22 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_activate_main",
                     handler_id="activate_switch_owner_board_to_revealed_mode",
                     handler_params={**extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_main_switch_all_opp_revealed_then_ko = _ACTIVATE_MAIN_SWITCH_ALL_OPP_BATTLE_TO_REVEALED_THEN_KO_RE.search(branch)
+        if m_activate_main_switch_all_opp_revealed_then_ko:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n",
+                    handler_params={
+                        "max_targets": int(m_activate_main_switch_all_opp_revealed_then_ko.group(1)),
+                        "target_policy": "first",
+                        **extra,
+                    },
                     once_per_turn=once,
                 )
             )
@@ -911,6 +959,27 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     )
                 )
 
+        m_revealed_owner_keyword = _SWITCHED_TO_REVEALED_OWNER_CARD_GAIN_KEYWORD_RE.search(branch)
+        if m_revealed_owner_keyword:
+            max_targets = int(m_revealed_owner_keyword.group(1))
+            descriptor = m_revealed_owner_keyword.group(2).strip().lower()
+            grant_keyword = " ".join(part.capitalize() for part in m_revealed_owner_keyword.group(3).replace("-", " ").split())
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_switched_revealed",
+                    handler_id="auto_buff_up_to_n_owner_cards_on_switch",
+                    handler_params={
+                        "max_targets": max_targets,
+                        "grant_keyword": grant_keyword,
+                        "keyword_duration": "turn",
+                        **_descriptor_filters(descriptor, branch),
+                        **extra,
+                    },
+                    once_per_turn=once,
+                )
+            )
+
         m_switch_ko = _SWITCHED_TO_REVEALED_OR_HIDDEN_KO_OPP_BATTLE_RE.search(branch)
         if m_switch_ko:
             max_targets = int(m_switch_ko.group(1))
@@ -924,6 +993,26 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                         once_per_turn=once,
                     )
                 )
+
+        m_hidden_drop_owner_power = _HIDDEN_BATTLE_TO_DROP_OWNER_CARD_GAIN_POWER_RE.search(branch)
+        if m_hidden_drop_owner_power:
+            max_targets = int(m_hidden_drop_owner_power.group(1))
+            descriptor = m_hidden_drop_owner_power.group(2).strip().lower()
+            power_delta = int(m_hidden_drop_owner_power.group(3))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_hidden_battle_to_drop",
+                    handler_id="auto_buff_up_to_n_owner_cards_on_hidden_drop",
+                    handler_params={
+                        "max_targets": max_targets,
+                        "power_delta": power_delta,
+                        **_descriptor_filters(descriptor, branch),
+                        **extra,
+                    },
+                    once_per_turn=once,
+                )
+            )
 
         # [Auto] When this card is played... look at top card; if it's COLOR ... add to hand, else bottom.
         m_top_if_color = _PLAY_TOP_IF_COLOR_ADD_HAND_RE.search(branch)
@@ -1222,6 +1311,8 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
 
         # [Auto] When this card is played... look at top N; add up to 1 matching card to hand.
         m_top_search = _PLAY_LOOK_TOP_ADD_TO_HAND_RE.search(branch)
+        if not m_top_search:
+            m_top_search = _PLAY_LOOK_TOP_ADD_DIRECT_TO_HAND_RE.search(branch)
         if m_top_search:
             played_from_hand = bool((m_top_search.group(1) or "").strip())
             look_count = int(m_top_search.group(2))

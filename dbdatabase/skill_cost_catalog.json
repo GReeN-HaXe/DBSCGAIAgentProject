@@ -1,4 +1,92 @@
 {
+  "1411": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "6072": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "6980": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "6999": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "7334": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "7903": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "7904": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "8423": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "8458": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "8896": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "8902": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "8910": {
     "activate_main": [
       {
@@ -31,6 +119,41 @@
       {
         "amount": 1,
         "kind": "send_owner_hidden_mode_battle_to_drop"
+      }
+    ]
+  },
+  "8943": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "rest_owner_hidden_mode_battle",
+        "required_leader_colors": "white"
+      }
+    ]
+  },
+  "8973": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "9631": {
+    "activate_main": [
+      {
+        "allowed_colors": "white",
+        "amount": 1,
+        "kind": "switch_owner_battle_to_hidden"
+      }
+    ]
+  },
+  "9775": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand",
+        "requires_sparking": 5
       }
     ]
   }

@@ -194,6 +194,7 @@ class EffectResolution:
 class DelayedModeSwitch:
     owner_player_id: int
     target_instance_id: int
+    trigger_kind: str
     trigger_player_id: int
     switch_to_hidden: bool
 

@@ -2397,6 +2397,163 @@ def test_phase4_activate_main_switch_owner_battle_to_hidden_mode() -> None:
     assert any(cp.name == "effect_activate_switch_owner_battle_to_hidden_mode" for cp in state.checkpoints)
 
 
+def test_phase4_activate_main_switch_self_to_hidden_mode() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900760: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_switch_self_to_hidden_mode",
+                    "handler_params": {},
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=880760, card_id=900760, owner_id=1, card_type="BATTLE", color="White", has_activate_main=True)
+    state.players[1].battle_area.append(source)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    act = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle"
+    )
+    state = engine.apply_action(state, act)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].battle_area[0].hidden_mode is True
+    assert any(cp.name == "effect_activate_switch_self_to_hidden_mode" for cp in state.checkpoints)
+
+
+def test_phase4_activate_main_switch_all_opponent_battle_to_revealed_then_ko() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900761: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n",
+                    "handler_params": {"max_targets": 1},
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=880761, card_id=900761, owner_id=1, card_type="BATTLE", color="White", has_activate_main=True)
+    state.players[1].battle_area.append(source)
+    state.players[2].battle_area.extend(
+        [
+            CardInstance(instance_id=880762, card_id=900762, owner_id=2, card_type="BATTLE", color="Red", hidden_mode=True, power=10000),
+            CardInstance(instance_id=880763, card_id=900763, owner_id=2, card_type="BATTLE", color="Blue", hidden_mode=True, power=5000),
+        ]
+    )
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    act = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, act)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[2].battle_area) == 1
+    assert state.players[2].battle_area[0].instance_id == 880763
+    assert state.players[2].battle_area[0].hidden_mode is False
+    assert any(card.instance_id == 880762 for card in state.players[2].drop)
+    assert any(cp.name == "effect_activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n" for cp in state.checkpoints)
+
+
+def test_phase4_revealed_switch_can_grant_keyword_to_owner_card_for_turn() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "White", "LEADER", (), (), False),
+                2: ("Other Leader", "Red", "LEADER", (), (), False),
+                900764: ("Switch Source", "White", "BATTLE", (), (), False),
+                900765: ("Baby Target", "White", "BATTLE", ("Baby",), (), False),
+            }
+            name, color, card_type, traits, characters, has_auto = data.get(
+                card_id,
+                ("Card", "White", "BATTLE", (), (), False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=0,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                    keywords=(),
+                    card_traits_json=traits,
+                    card_character_json=characters,
+                    has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=has_auto,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_skill_unstyled="",
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            900764: [
+                {
+                    "trigger": "self_switched_revealed",
+                    "handler_id": "auto_buff_up_to_n_owner_cards_on_switch",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "white",
+                        "required_traits": "Baby",
+                        "grant_keyword": "Double Strike",
+                        "keyword_duration": "turn",
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=880764, card_id=900764, owner_id=1, card_type="BATTLE", color="White", hidden_mode=True)
+    target = CardInstance(instance_id=880765, card_id=900765, owner_id=1, card_type="BATTLE", color="White")
+    state.players[1].battle_area.extend([source, target])
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    source.hidden_mode = False
+    engine._emit_effect_event(
+        state,
+        name="card_switched_revealed_mode",
+        actor_player_id=1,
+        payload={"source_instance_id": source.instance_id, "source_card_id": source.card_id, "source_zone": "battle", "owner_player_id": 1},
+    )
+    engine._resolve_pending_effects(state)
+    assert "Double Strike" in state.players[1].battle_area[1].temporary_keywords
+    assert any(cp.name == "effect_auto_buff_up_to_n_owner_cards_on_switch" for cp in state.checkpoints)
+
+
 def test_phase4_activate_main_hidden_mode_cost_can_send_opponent_battle_to_warp() -> None:
     class Repo:
         def get_by_id(self, card_id: int, source_table: str = "cards"):
@@ -3342,6 +3499,84 @@ def test_phase4_switch_can_ko_opponent_battle_on_owner_turn() -> None:
     )
     engine._resolve_pending_effects(state)
     assert not state.players[2].battle_area
+
+
+def test_phase4_hidden_drop_can_buff_owner_card_on_ko_path() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900830: [
+                {
+                    "trigger": "self_hidden_battle_to_drop",
+                    "handler_id": "auto_buff_up_to_n_owner_cards_on_hidden_drop",
+                    "handler_params": {"max_targets": 1, "allowed_colors": "white", "power_delta": 5000},
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=880830, card_id=900830, owner_id=1, card_type="BATTLE", color="White", hidden_mode=True, power=5000)
+    target = CardInstance(instance_id=880831, card_id=900831, owner_id=1, card_type="BATTLE", color="White", power=10000)
+    state.players[1].battle_area.extend([source, target])
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._ko_card(state, 1, "battle", source.instance_id)
+    engine._resolve_pending_effects(state)
+    assert target.power == 15000
+    assert any(cp.name == "effect_auto_buff_up_to_n_owner_cards_on_hidden_drop" for cp in state.checkpoints)
+
+
+def test_phase4_hidden_drop_can_buff_owner_card_on_non_ko_drop_path() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900832: [
+                {
+                    "trigger": "self_hidden_battle_to_drop",
+                    "handler_id": "auto_buff_up_to_n_owner_cards_on_hidden_drop",
+                    "handler_params": {"max_targets": 1, "allowed_colors": "white", "power_delta": 5000},
+                }
+            ],
+            900833: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "noop_auto",
+                }
+            ],
+        },
+        skill_cost_rules={
+            900833: {
+                "activate_main": [
+                    {"kind": "send_owner_hidden_mode_battle_to_drop", "amount": 1}
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=880832, card_id=900832, owner_id=1, card_type="BATTLE", color="White", hidden_mode=True, power=5000)
+    target = CardInstance(instance_id=880833, card_id=900834, owner_id=1, card_type="BATTLE", color="White", power=10000)
+    activator = CardInstance(instance_id=880834, card_id=900833, owner_id=1, card_type="BATTLE", color="White", has_activate_main=True)
+    state.players[1].battle_area.extend([source, target, activator])
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=activator)
+    act = Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=1, source_zone="battle", source_index=2)
+    state = engine.apply_action(state, act)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    resolved_target = next(card for card in state.players[1].battle_area if card.instance_id == target.instance_id)
+    assert resolved_target.power == 15000
+    assert any(card.instance_id == source.instance_id for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_buff_up_to_n_owner_cards_on_hidden_drop" for cp in state.checkpoints)
 
 
 def test_phase4_activate_main_draw_and_gain_dual_attack_for_turn() -> None:

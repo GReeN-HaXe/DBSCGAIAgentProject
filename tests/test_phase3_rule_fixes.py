@@ -1139,6 +1139,323 @@ def test_counter_play_self_can_switch_self_to_hidden_mode() -> None:
     assert any(cp.name == "counter_effect_switch_self_hidden_resolved" for cp in state.checkpoints)
 
 
+def test_counter_attack_can_switch_opponent_battle_to_hidden_then_reveal_on_turn_end() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=780020, card_id=520, owner_id=1, card_type="BATTLE", power=15000),
+            CardInstance(instance_id=780021, card_id=521, owner_id=1, card_type="BATTLE", power=10000),
+        ]
+    )
+    state.players[2].battle_area.extend(
+        [
+            CardInstance(instance_id=780022, card_id=522, owner_id=2, card_type="BATTLE", hidden_mode=True),
+            CardInstance(instance_id=780023, card_id=523, owner_id=2, card_type="BATTLE", hidden_mode=True),
+        ]
+    )
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=780024,
+            card_id=910024,
+            owner_id=2,
+            card_type="EXTRA",
+            color="White",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack][Limit 1] Negate the attack, choose any number of your opponent's Battle Cards "
+                "up to the number of your Hidden Mode cards and switch them to Hidden Mode, then switch all the cards "
+                "switched to Hidden Mode by this skill to Revealed Mode at the end of the turn."
+            ),
+        )
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert state.players[1].battle_area[0].hidden_mode is True
+    assert state.players[1].battle_area[1].hidden_mode is True
+    assert any(cp.name == "counter_effect_hidden_then_reveal_scheduled" for cp in state.checkpoints)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+
+    assert state.players[1].battle_area[0].hidden_mode is False
+    assert state.players[1].battle_area[1].hidden_mode is False
+    assert any(cp.name == "delayed_mode_switch_resolved" for cp in state.checkpoints)
+
+
+def test_counter_attack_can_switch_owner_energy_to_hidden_then_draw() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].energy.append(CardInstance(instance_id=780030, card_id=530, owner_id=2, card_type="EXTRA", color="White"))
+    deck_before = len(state.players[2].deck)
+    hand_before = len(state.players[2].hand)
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=780031,
+            card_id=910031,
+            owner_id=2,
+            card_type="EXTRA",
+            color="White",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. Additionally, you may switch 1 of your white energy to Hidden Mode. "
+                "If you do, draw 1 card."
+            ),
+        )
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert state.players[2].energy[0].hidden_mode is True
+    assert len(state.players[2].deck) == deck_before - 1
+    assert len(state.players[2].hand) == hand_before + 1
+    assert any(cp.name == "counter_effect_switch_owner_energy_hidden_then_draw" for cp in state.checkpoints)
+
+
+def test_counter_attack_can_discard_then_switch_owner_card_to_hidden() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].battle_area.append(CardInstance(instance_id=780040, card_id=540, owner_id=2, card_type="BATTLE", color="White"))
+    state.players[2].hand = [
+        CardInstance(instance_id=780041, card_id=541, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(
+            instance_id=780042,
+            card_id=910042,
+            owner_id=2,
+            card_type="EXTRA",
+            color="White",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. Additionally, you may discard 1 card from your hand. "
+                "If you do, choose up to 1 of your white cards and switch it to Hidden Mode."
+            ),
+        ),
+    ]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert state.players[2].battle_area[0].hidden_mode is True
+    assert any(card.card_id == 541 for card in state.players[2].drop)
+    assert any(cp.name == "counter_effect_discard_then_switch_owner_card_hidden" for cp in state.checkpoints)
+
+
+def test_counter_play_self_can_redirect_attack_to_self_and_hide_white_battle_at_battle_end() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=780043,
+            card_id=910043,
+            owner_id=2,
+            card_type="BATTLE",
+            color="White",
+            power=20000,
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack][Limit 1] Play this card, switch the target of attack to it, "
+                "then choose up to 1 of your white Battle Cards and switch it to Hidden Mode at the end of the battle."
+            ),
+        )
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    jiren = next(card for card in state.players[2].battle_area if card.instance_id == 780043)
+    assert state.battle_step == BattleStep.OFFENSE
+    assert state.attack_context is not None
+    assert state.attack_context.target_player_id == 2
+    assert state.attack_context.target_zone == "battle"
+    assert state.attack_context.target_instance_id == jiren.instance_id
+    assert any(cp.name == "counter_effect_redirect_to_self_resolved" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_delayed_hidden_battle_end_scheduled" for cp in state.checkpoints)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+
+    jiren = next(card for card in state.players[2].battle_area if card.instance_id == 780043)
+    assert jiren.hidden_mode is True
+    assert any(cp.name == "delayed_mode_switch_resolved" for cp in state.checkpoints)
+
+
+def test_counter_attack_can_use_hidden_mode_battle_rest_as_alternate_cost() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].leader_area.color = "White"
+    state.players[2].battle_area.append(
+        CardInstance(instance_id=780044, card_id=544, owner_id=2, card_type="BATTLE", color="White", hidden_mode=True, resting=False)
+    )
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=780045,
+            card_id=8943,
+            owner_id=2,
+            card_type="EXTRA",
+            color="White",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. Additionally, you may switch 1 of your white energy to Hidden Mode. If you do, draw 1 card. "
+                "[Permanent] If your Leader is white, you can activate this card's [Counter] skill from your hand by switching 1 Hidden Mode card in your Battle Area to Rest Mode instead of paying its energy cost."
+            ),
+        )
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+    counter = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    assert state.players[2].battle_area[0].resting is True
+    assert any(cp.name == "counter_alternate_cost_hidden_battle_rested" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert state.attack_context is None
+
+
+def test_counter_attack_can_use_sparking_life_to_hand_as_alternate_cost() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].drop.extend(
+        [CardInstance(instance_id=780050 + i, card_id=550 + i, owner_id=2, card_type="BATTLE") for i in range(5)]
+    )
+    life_before = len(state.players[2].life)
+    state.players[2].battle_area.append(CardInstance(instance_id=780056, card_id=556, owner_id=2, card_type="BATTLE", color="White"))
+    state.players[2].hand = [
+        CardInstance(instance_id=780057, card_id=557, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(
+            instance_id=780058,
+            card_id=9775,
+            owner_id=2,
+            card_type="EXTRA",
+            color="White",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. Additionally, you may discard 1 card from your hand. If you do, choose up to 1 of your white cards and switch it to Hidden Mode. "
+                "[Permanent][Sparking 5] You can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost."
+            ),
+        ),
+    ]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+    counter = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    assert len(state.players[2].life) == life_before - 1
+    assert any(cp.name == "counter_alternate_cost_life_to_hand" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert state.attack_context is None
+    assert state.players[2].battle_area[0].hidden_mode is True
+
+
 def test_extra_from_hand_uses_activate_extra_counter_window() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

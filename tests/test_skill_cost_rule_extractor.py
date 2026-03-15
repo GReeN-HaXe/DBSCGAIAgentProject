@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
 from types import SimpleNamespace
+import uuid
 
 from src.game.skill_cost_rule_extractor import extract_skill_cost_rules_from_card
 from src.game.skill_costs import load_skill_cost_rules_json, save_skill_cost_rules_json
@@ -55,6 +57,25 @@ def test_extract_activate_hidden_mode_battle_or_energy_skill_cost_rule() -> None
     }
 
 
+def test_extract_activate_main_without_colon_hidden_mode_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[activate main][once per turn] Choose 1 of your white Battle Cards and switch it to Hidden Mode: "
+            "Draw 1 card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "switch_owner_battle_to_hidden",
+                "amount": 1,
+                "allowed_colors": "white",
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_hidden_mode_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -92,8 +113,54 @@ def test_extract_activate_battle_drop_hidden_mode_skill_cost_rule() -> None:
     }
 
 
-def test_engine_loads_skill_cost_catalog_from_path(tmp_path) -> None:
-    catalog_path = tmp_path / "skill_cost_catalog.json"
+def test_extract_counter_alternate_rest_hidden_battle_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack. "
+            "[Permanent] If your Leader is white, you can activate this card's [Counter] skill from your hand by "
+            "switching 1 Hidden Mode card in your Battle Area to Rest Mode instead of paying its energy cost."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "rest_owner_hidden_mode_battle",
+                "amount": 1,
+                "required_leader_colors": "white",
+            }
+        ]
+    }
+
+
+def test_extract_counter_alternate_life_to_hand_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack. "
+            "[Permanent][Sparking 5] You can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand "
+            "instead of paying its energy cost."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "add_life_to_hand",
+                "amount": 1,
+                "requires_sparking": 5,
+            }
+        ]
+    }
+
+
+def _workspace_temp_catalog_path(name: str) -> Path:
+    directory = Path("artifacts") / "_tmp" / f"{name}_{uuid.uuid4().hex}"
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory / "skill_cost_catalog.json"
+
+
+def test_engine_loads_skill_cost_catalog_from_path() -> None:
+    catalog_path = _workspace_temp_catalog_path("skill_cost_catalog")
     save_skill_cost_rules_json(
         catalog_path,
         {
@@ -136,6 +203,56 @@ def test_engine_loads_skill_cost_catalog_from_path(tmp_path) -> None:
 
     play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
     state = engine.apply_action(state, play)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+
+
+def test_engine_uses_catalog_for_counter_alternate_hidden_battle_cost() -> None:
+    catalog_path = _workspace_temp_catalog_path("skill_cost_alt_catalog")
+    save_skill_cost_rules_json(
+        catalog_path,
+        {
+            900303: {
+                "counter_alternate_from_hand": [
+                    {"kind": "rest_owner_hidden_mode_battle", "amount": 1, "required_leader_colors": "white"}
+                ]
+            }
+        },
+    )
+    engine = RulesEngine(skill_cost_rules_path=catalog_path)
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=state.active_player))
+    state = _to_main(engine, state)
+    state.players[2].leader_area.color = "White"
+    state.players[1].hand = [CardInstance(instance_id=790021, card_id=621, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    state.players[2].battle_area.append(
+        CardInstance(instance_id=790022, card_id=622, owner_id=2, card_type="BATTLE", color="White", hidden_mode=True)
+    )
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=790023,
+            card_id=900303,
+            owner_id=2,
+            card_type="EXTRA",
+            color="White",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw="[Counter: Attack] Negate the attack.",
+        )
+    )
+
+    attack = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_ATTACK)
+    state = engine.apply_action(state, attack)
     legal = engine.get_legal_actions(state, 2)
     assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
 

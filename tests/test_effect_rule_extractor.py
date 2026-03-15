@@ -549,11 +549,34 @@ def test_extract_play_switch_owner_battle_to_hidden_rule() -> None:
     assert rule.handler_params["allowed_colors"] == "white"
 
 
+def test_extract_play_switch_owner_battle_to_hidden_rule_without_explicit_area() -> None:
+    card = _card("[Auto] When this card is played, choose up to 1 of your white Battle Cards and switch it to Hidden Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_battle_to_hidden_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "white"
+
+
 def test_extract_play_draw_and_switch_self_to_hidden_rule() -> None:
     card = _card("[Auto] When this card is played, draw 1 card and switch this card to Hidden Mode.")
     rules = extract_effect_rules_from_card(card)
     assert any(r.handler_id == "auto_draw_n" and r.trigger == "self_played" for r in rules)
     assert any(r.handler_id == "auto_switch_self_to_hidden_on_play" and r.trigger == "self_played" for r in rules)
+
+
+def test_extract_activate_main_switch_self_to_hidden_rule() -> None:
+    card = _card("[Activate: Main][Limit 1] If your Leader is a white ≪God≫ card: Switch this card to Hidden Mode.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_switch_self_to_hidden_mode")
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["required_leader_traits"] == "White ≪God≫"
+
+
+def test_extract_activate_main_without_colon_hidden_cost_draw_rule() -> None:
+    card = _card("[activate main][once per turn] Choose 1 of your white Battle Cards and switch it to Hidden Mode: Draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.handler_id == "auto_draw_n" and r.trigger == "self_activate_main" and r.handler_params["amount"] == 1 for r in rules)
 
 
 def test_extract_hidden_switch_owner_leader_buff_rule() -> None:
@@ -610,6 +633,57 @@ def test_extract_revealed_or_hidden_switch_ko_opponent_battle_rule() -> None:
     matching = [r for r in rules if r.handler_id == "auto_ko_up_to_n_opponent_battle_on_switch"]
     assert {r.trigger for r in matching} == {"self_switched_hidden", "self_switched_revealed"}
     assert all(r.handler_params["max_targets"] == 1 for r in matching)
+
+
+def test_extract_hidden_battle_to_drop_owner_card_gain_power_rule() -> None:
+    card = _card(
+        "[Auto] When this Hidden Mode card in a Battle Area is placed into its owner's Drop, "
+        "choose up to 1 of your white ≪Universe 7≫ cards and it gets +5000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_hidden_drop")
+    assert rule.trigger == "self_hidden_battle_to_drop"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == 5000
+    assert rule.handler_params["allowed_colors"] == "white"
+
+
+def test_extract_activate_main_switch_all_opponent_battle_to_revealed_then_ko_rule() -> None:
+    card = _card(
+        "[Activate: Main] Choose all the cards in your opponent's Battle Area and switch them to Revealed Mode, "
+        "then choose up to 1 of your opponent's Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n")
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_revealed_switch_owner_card_gain_keyword_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your opponent has 2 or more energy : When this card is switched to Revealed Mode, "
+        "choose up to 1 of your white <Baby> cards and it gains [Double Strike] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_switch" and r.trigger == "self_switched_revealed")
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["grant_keyword"] == "Double Strike"
+    assert rule.handler_params["allowed_colors"] == "white"
+    assert rule.handler_params["required_traits"] == "Baby"
+
+
+def test_extract_play_search_direct_to_hand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played, look at up to 5 cards from the top of your deck, "
+        "add up to 1 white <Baby> or â‰ªBrainwashedâ‰« card to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["look_count"] == 5
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["allowed_colors"] == "white"
+    assert rule.handler_params["required_characters"] == "Baby,Brainwashed"
 
 
 def test_extract_attack_power_reduce_rule() -> None:

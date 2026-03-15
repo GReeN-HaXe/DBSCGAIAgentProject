@@ -108,6 +108,26 @@ class SkillCostDsl:
         ]
 
     @staticmethod
+    def _owner_hidden_mode_active_battle_candidates(player: PlayerState, source_card: CardInstance, step: SkillCostStep) -> list[CardInstance]:
+        allow_self = bool(step.params.get("allow_self", False))
+        return [
+            c
+            for c in player.battle_area
+            if (allow_self or c.instance_id != source_card.instance_id)
+            and c.hidden_mode
+            and not c.resting
+            and SkillCostDsl._card_matches_filters(c, step)
+        ]
+
+    @staticmethod
+    def _leader_color_matches(player: PlayerState, step: SkillCostStep) -> bool:
+        required = SkillCostDsl._parse_param_set(step.params.get("required_leader_colors"))
+        if not required:
+            return True
+        leader_colors = SkillCostDsl._parse_param_set(player.leader_area.color)
+        return not leader_colors.isdisjoint(required)
+
+    @staticmethod
     def _in_battle_or_unison(player: PlayerState, source_card: CardInstance) -> bool:
         in_battle = any(c.instance_id == source_card.instance_id for c in player.battle_area)
         in_unison = any(c.instance_id == source_card.instance_id for c in player.unison_area)
@@ -207,6 +227,20 @@ class SkillCostDsl:
             if step.kind == "send_owner_hidden_mode_battle_to_drop":
                 available = SkillCostDsl._owner_hidden_mode_battle_candidates(player, source_card, step)
                 if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "rest_owner_hidden_mode_battle":
+                if not SkillCostDsl._leader_color_matches(player, step):
+                    return False
+                available = SkillCostDsl._owner_hidden_mode_active_battle_candidates(player, source_card, step)
+                if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "add_life_to_hand":
+                required_sparking = int(step.params.get("requires_sparking", 0) or 0)
+                if required_sparking > 0 and len(player.drop) < required_sparking:
+                    return False
+                if len(player.life) < step.amount:
                     return False
                 continue
             raise ValueError(f"Unknown skill cost kind: {step.kind}")
@@ -311,6 +345,25 @@ class SkillCostDsl:
                         metadata["cost_target_instance_id"] = int(removed.instance_id)
                         metadata["cost_target_card_id"] = int(removed.card_id)
                         metadata["cost_target_zone"] = "battle"
+                continue
+            if step.kind == "rest_owner_hidden_mode_battle":
+                candidates = SkillCostDsl._owner_hidden_mode_active_battle_candidates(player, source_card, step)
+                rested = 0
+                for card in candidates[: step.amount]:
+                    card.resting = True
+                    rested += 1
+                    if rested == 1:
+                        metadata["cost_target_instance_id"] = int(card.instance_id)
+                        metadata["cost_target_card_id"] = int(card.card_id)
+                        metadata["cost_target_zone"] = "battle"
+                metadata["alternate_cost_kind"] = "rest_owner_hidden_mode_battle"
+                continue
+            if step.kind == "add_life_to_hand":
+                moved = 0
+                while moved < step.amount:
+                    player.hand.append(player.life.pop(0))
+                    moved += 1
+                metadata["alternate_cost_kind"] = "add_life_to_hand"
                 continue
             raise ValueError(f"Unknown skill cost kind: {step.kind}")
         return metadata
