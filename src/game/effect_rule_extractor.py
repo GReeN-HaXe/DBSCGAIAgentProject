@@ -2,6 +2,7 @@
 
 import re
 from collections import Counter
+from dataclasses import replace
 from typing import Iterable
 
 from src.db.interfaces import CardRepository
@@ -196,6 +197,13 @@ def _once_per_turn(text: str) -> bool:
     return ("[once per turn]" in text) or ("once per turn" in text)
 
 
+def _limit_per_turn(text: str) -> int | None:
+    match = re.search(r"\[\s*limit\s+(\d+)\s*\]", text)
+    if match:
+        return int(match.group(1))
+    return None
+
+
 def _split_choose_one_branches(text: str) -> list[str]:
     marker = "choose one"
     if marker not in text:
@@ -357,6 +365,7 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
 
     rules: list[EffectRule] = []
     once = _once_per_turn(text)
+    limit = _limit_per_turn(text)
     for branch in _split_choose_one_branches(text):
         consumed_play_draw = False
         consumed_combo_draw = False
@@ -1545,10 +1554,20 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     )
                 )
 
+    if limit is not None:
+        rules = [replace(rule, limit_per_turn=limit, limit_scope="card_number") for rule in rules]
+
     # De-duplicate exact duplicates.
-    uniq: dict[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool], EffectRule] = {}
+    uniq: dict[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool, int | None, str], EffectRule] = {}
     for rule in rules:
-        key = (rule.trigger, rule.handler_id, tuple(sorted(rule.handler_params.items())), rule.once_per_turn)
+        key = (
+            rule.trigger,
+            rule.handler_id,
+            tuple(sorted(rule.handler_params.items())),
+            rule.once_per_turn,
+            rule.limit_per_turn,
+            rule.limit_scope,
+        )
         uniq[key] = rule
     return list(uniq.values())
 

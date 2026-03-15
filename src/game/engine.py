@@ -30,6 +30,7 @@ from src.game.state import (
     PendingAction,
     PlayerState,
     TurnPhase,
+    ZDeckCard,
 )
 
 
@@ -39,6 +40,7 @@ class RulesViolation(ValueError):
 
 @dataclass(frozen=True)
 class CardRuntimeData:
+    card_number: str = ""
     card_name: str = ""
     power: int = 15000
     card_type: str = "BATTLE"
@@ -201,7 +203,14 @@ class RulesEngine:
             seen: set[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool]] = set()
             uniq: list[EffectRule] = []
             for r in items:
-                sig = (r.trigger, r.handler_id, tuple(sorted(r.handler_params.items())), r.once_per_turn)
+                sig = (
+                    r.trigger,
+                    r.handler_id,
+                    tuple(sorted(r.handler_params.items())),
+                    r.once_per_turn,
+                    r.limit_per_turn,
+                    r.limit_scope,
+                )
                 if sig in seen:
                     continue
                 seen.add(sig)
@@ -240,14 +249,14 @@ class RulesEngine:
                     leader_card_id=p1_leader_card_id,
                     leader_area=p1_leader,
                     deck=list(p1_deck_card_ids),
-                    z_deck=list(p1_z_deck_card_ids or []),
+                    z_deck=[self._create_z_deck_card(card_id=card_id, owner_id=1) for card_id in (p1_z_deck_card_ids or [])],
                 ),
                 2: PlayerState(
                     player_id=2,
                     leader_card_id=p2_leader_card_id,
                     leader_area=p2_leader,
                     deck=list(p2_deck_card_ids),
-                    z_deck=list(p2_z_deck_card_ids or []),
+                    z_deck=[self._create_z_deck_card(card_id=card_id, owner_id=2) for card_id in (p2_z_deck_card_ids or [])],
                 ),
             },
             active_player=first_player,
@@ -549,7 +558,7 @@ class RulesEngine:
         for i, card in enumerate(player.hand):
             if card.card_type not in {"UNISON", "Z-UNISON"}:
                 continue
-            if int(card.card_id) != int(current_unison.card_id):
+            if not self._same_card_number(card, current_unison):
                 continue
             actions.append(
                 Action(
@@ -966,6 +975,12 @@ class RulesEngine:
             return False
         return source.instance_id in state.unison_marker_skill_usage
 
+    @staticmethod
+    def _same_card_number(left: CardInstance, right: CardInstance) -> bool:
+        if str(left.card_number or "").strip() and str(right.card_number or "").strip():
+            return str(left.card_number).strip().upper() == str(right.card_number).strip().upper()
+        return int(left.card_id) == int(right.card_id)
+
     def _apply_unison_growth(self, state: GameState, action: Action) -> None:
         player = state.players[action.player_id]
         if action.hand_index is None or not (0 <= action.hand_index < len(player.hand)):
@@ -980,7 +995,7 @@ class RulesEngine:
         growth_card = player.hand[action.hand_index]
         if growth_card.card_type not in {"UNISON", "Z-UNISON"}:
             raise RulesViolation("Only Unison cards can be used for growth.")
-        if int(growth_card.card_id) != int(current_unison.card_id):
+        if not self._same_card_number(growth_card, current_unison):
             raise RulesViolation("Unison Growth requires the same card number.")
 
         grown = player.hand.pop(action.hand_index)
@@ -2485,7 +2500,11 @@ class RulesEngine:
                     candidates.append(("self_attacks", "auto_draw_on_attack", None, {}))
 
         for rule in self._effect_rules.get(card.card_id, ()):
-            candidates.append((rule.trigger, rule.handler_id, rule.once_per_turn, dict(rule.handler_params)))
+            params = dict(rule.handler_params)
+            if rule.limit_per_turn is not None:
+                params["limit_per_turn"] = int(rule.limit_per_turn)
+                params["limit_scope"] = str(rule.limit_scope or "card_number")
+            candidates.append((rule.trigger, rule.handler_id, rule.once_per_turn, params))
 
         for trigger, handler_id, once_per_turn_override, handler_params in candidates:
             exists = any(
@@ -2507,7 +2526,10 @@ class RulesEngine:
                     trigger=trigger,
                     handler_id=handler_id,
                     handler_params=dict(handler_params),
+                    source_card_number=str(card.card_number or ""),
                     once_per_turn=card.auto_once_per_turn if once_per_turn_override is None else bool(once_per_turn_override),
+                    limit_per_turn=self._resolve_effect_limit_per_turn(handler_params),
+                    limit_scope=str(handler_params.get("limit_scope", "card_number") or "card_number"),
                 )
             )
             state.next_effect_id += 1
@@ -2626,13 +2648,56 @@ class RulesEngine:
                         trigger=reg.trigger,
                         handler_id=reg.handler_id,
                         handler_params=dict(reg.handler_params),
+                        source_card_number=reg.source_card_number,
                         once_per_turn=reg.once_per_turn,
+                        limit_per_turn=reg.limit_per_turn,
+                        limit_scope=reg.limit_scope,
                         triggers_this_turn=0,
                     )
                 )
             else:
                 updated.append(reg)
         state.effect_registry = updated
+
+    @staticmethod
+    def _resolve_effect_limit_per_turn(handler_params: dict[str, int | str | bool]) -> int | None:
+        raw = handler_params.get("limit_per_turn")
+        return int(raw) if isinstance(raw, int) and raw > 0 else None
+
+    @staticmethod
+    def _effect_limit_key(reg: EffectRegistration) -> tuple[object, ...] | None:
+        if reg.limit_per_turn is None or reg.limit_per_turn <= 0:
+            return None
+        source_group = str(reg.source_card_number or f"card_id:{reg.source_card_id}")
+        return (
+            reg.owner_player_id,
+            str(reg.limit_scope or "card_number"),
+            source_group,
+            reg.trigger,
+            reg.handler_id,
+            tuple(sorted(reg.handler_params.items())),
+        )
+
+    def _current_effect_limit_counts(
+        self,
+        state: GameState,
+        *,
+        regs_by_id: dict[int, EffectRegistration],
+        events_by_id: dict[int, EffectEvent],
+    ) -> dict[tuple[object, ...], int]:
+        counts: dict[tuple[object, ...], int] = {}
+        for row in state.effect_resolutions:
+            if not row.resolved:
+                continue
+            reg = regs_by_id.get(row.effect_id)
+            evt = events_by_id.get(row.event_id)
+            if reg is None or evt is None or evt.turn_number != state.turn_number:
+                continue
+            key = self._effect_limit_key(reg)
+            if key is None:
+                continue
+            counts[key] = counts.get(key, 0) + 1
+        return counts
 
     def _resolve_pending_effects(self, state: GameState) -> None:
         if not state.pending_effects:
@@ -2655,6 +2720,7 @@ class RulesEngine:
 
         updated_registry: dict[int, EffectRegistration] = {}
         resolved_once_per_turn_in_checkpoint: set[int] = set()
+        resolved_limit_counts = self._current_effect_limit_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
         for entry in ordered_pending:
             reg = updated_registry.get(entry.effect_id, regs_by_id.get(entry.effect_id))
             evt = events_by_id.get(entry.event_id)
@@ -2666,6 +2732,12 @@ class RulesEngine:
             if reg.once_per_turn and (reg.triggers_this_turn > 0 or reg.effect_id in resolved_once_per_turn_in_checkpoint):
                 state.effect_resolutions.append(
                     EffectResolution(effect_id=reg.effect_id, event_id=evt.event_id, resolved=False, reason="once_per_turn_used")
+                )
+                continue
+            limit_key = self._effect_limit_key(reg)
+            if limit_key is not None and resolved_limit_counts.get(limit_key, 0) >= int(reg.limit_per_turn or 0):
+                state.effect_resolutions.append(
+                    EffectResolution(effect_id=reg.effect_id, event_id=evt.event_id, resolved=False, reason="limit_per_turn_used")
                 )
                 continue
             if not self._is_effect_source_active(state, reg):
@@ -2689,12 +2761,17 @@ class RulesEngine:
                 trigger=reg.trigger,
                 handler_id=reg.handler_id,
                 handler_params=dict(reg.handler_params),
+                source_card_number=reg.source_card_number,
                 once_per_turn=reg.once_per_turn,
+                limit_per_turn=reg.limit_per_turn,
+                limit_scope=reg.limit_scope,
                 triggers_this_turn=reg.triggers_this_turn + 1,
             )
             updated_registry[reg.effect_id] = next_reg
             if reg.once_per_turn:
                 resolved_once_per_turn_in_checkpoint.add(reg.effect_id)
+            if limit_key is not None:
+                resolved_limit_counts[limit_key] = resolved_limit_counts.get(limit_key, 0) + 1
             state.effect_resolutions.append(
                 EffectResolution(effect_id=reg.effect_id, event_id=evt.event_id, resolved=True, reason="ok")
             )
@@ -4709,7 +4786,10 @@ class RulesEngine:
                 trigger=rule.trigger,
                 handler_id=rule.handler_id,
                 handler_params=dict(rule.handler_params),
+                source_card_number=str(source.card_number or ""),
                 once_per_turn=rule.once_per_turn,
+                limit_per_turn=rule.limit_per_turn,
+                limit_scope=rule.limit_scope,
             )
             if self._effect_requirements_met(state, reg):
                 return True
@@ -4724,7 +4804,7 @@ class RulesEngine:
         spec = self._resolve_skill_cost_spec(card.card_id, "counter_alternate_from_hand")
         if spec is not None:
             try:
-                return SkillCostDsl.can_pay(player, card, spec)
+                return SkillCostDsl.can_pay(player, card, spec, opponent=state.players[self._opponent_of(player.player_id)])
             except Exception:
                 return False
         text = str(card.skill_text_raw or "")
@@ -4746,7 +4826,7 @@ class RulesEngine:
         spec = self._resolve_skill_cost_spec(card.card_id, "counter_alternate_from_hand")
         if spec is not None:
             try:
-                metadata = SkillCostDsl.pay(player, card, spec)
+                metadata = SkillCostDsl.pay(player, card, spec, opponent=state.players[self._opponent_of(player.player_id)])
             except Exception:
                 return False
             alt_kind = str(metadata.get("alternate_cost_kind") or "")
@@ -5027,6 +5107,7 @@ class RulesEngine:
             instance_id=next_instance_id,
             card_id=card_id,
             owner_id=owner_id,
+            card_number=runtime.card_number,
             power=runtime.power,
             card_type=runtime.card_type,
             color=runtime.color,
@@ -5058,6 +5139,22 @@ class RulesEngine:
             activate_limit_once_per_turn=runtime.activate_limit_once_per_turn,
             has_super_combo=runtime.has_super_combo,
             sparking_threshold=runtime.sparking_threshold,
+            traits=runtime.traits,
+            characters=runtime.characters,
+        )
+
+    def _create_z_deck_card(self, *, card_id: int, owner_id: int) -> ZDeckCard:
+        runtime = self._resolve_card_runtime_data(card_id)
+        return ZDeckCard(
+            card_id=card_id,
+            owner_id=owner_id,
+            face_up=False,
+            card_name=runtime.card_name,
+            card_type=runtime.card_type,
+            color=runtime.color,
+            energy_cost=runtime.energy_cost,
+            traits=runtime.traits,
+            characters=runtime.characters,
         )
 
     def _resolve_card_runtime_data(self, card_id: int, *, side: str = "front") -> CardRuntimeData:
@@ -5105,6 +5202,8 @@ class RulesEngine:
         leader.activate_limit_once_per_turn = runtime.activate_limit_once_per_turn
         leader.has_super_combo = runtime.has_super_combo
         leader.sparking_threshold = runtime.sparking_threshold
+        leader.traits = runtime.traits
+        leader.characters = runtime.characters
         leader.awakened = True
 
     def _build_card_runtime_data(self, card: Any, *, side: str) -> CardRuntimeData:
@@ -5118,6 +5217,7 @@ class RulesEngine:
         characters_raw = getattr(card, "card_back_character_json", None) if is_back else getattr(card, "card_character_json", None)
         has_draw_flag = bool(getattr(card, "has_draw", False))
         return CardRuntimeData(
+            card_number=str(getattr(card, "card_number", None) or ""),
             card_name=str(getattr(card, "card_name", None) or ""),
             power=int(power_raw) if power_raw is not None else 15000,
             card_type=str(getattr(card, "card_type", None) or "BATTLE"),

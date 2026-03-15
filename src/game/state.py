@@ -23,6 +23,7 @@ class CardInstance:
     instance_id: int
     card_id: int
     owner_id: int
+    card_number: str = ""
     resting: bool = False
     hidden_mode: bool = False
     attacked_this_turn: bool = False
@@ -66,6 +67,21 @@ class CardInstance:
     battle_temporary_power_delta: int = 0
     delayed_temporary_keywords: Tuple[str, ...] = ()
     stacked_card_ids: Tuple[int, ...] = ()
+    traits: Tuple[str, ...] = ()
+    characters: Tuple[str, ...] = ()
+
+
+@dataclass
+class ZDeckCard:
+    card_id: int
+    owner_id: int
+    face_up: bool = False
+    card_name: str = ""
+    card_type: str = "BATTLE"
+    color: Optional[str] = None
+    energy_cost: Optional[int] = None
+    traits: Tuple[str, ...] = ()
+    characters: Tuple[str, ...] = ()
 
 
 @dataclass
@@ -74,7 +90,7 @@ class PlayerState:
     leader_card_id: int
     leader_area: CardInstance
     deck: list[int] = field(default_factory=list)
-    z_deck: list[int] = field(default_factory=list)
+    z_deck: list[ZDeckCard] = field(default_factory=list)
     hand: list[CardInstance] = field(default_factory=list)
     life: list[CardInstance] = field(default_factory=list)
     energy: list[CardInstance] = field(default_factory=list)
@@ -172,7 +188,10 @@ class EffectRegistration:
     trigger: str
     handler_id: str
     handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    source_card_number: str = ""
     once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
     triggers_this_turn: int = 0
 
 

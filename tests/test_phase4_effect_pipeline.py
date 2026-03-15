@@ -628,6 +628,58 @@ def test_phase4_once_per_turn_pending_batch_resolves_only_once() -> None:
     assert any((not r.resolved) and r.reason == "once_per_turn_used" for r in rows)
 
 
+def test_phase4_limit_one_pending_batch_resolves_only_once_across_same_card_number() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=880038, card_id=38, owner_id=1, card_number="TEST-038", card_type="BATTLE", has_auto=True),
+            CardInstance(instance_id=880039, card_id=39, owner_id=1, card_number="TEST-038", card_type="BATTLE", has_auto=True),
+        ]
+    )
+    state.effect_registry.extend(
+        [
+            EffectRegistration(
+                effect_id=state.next_effect_id,
+                owner_player_id=1,
+                source_instance_id=880038,
+                source_card_id=38,
+                source_zone="battle",
+                trigger="turn_start",
+                handler_id="noop_auto",
+                source_card_number="TEST-038",
+                limit_per_turn=1,
+            ),
+            EffectRegistration(
+                effect_id=state.next_effect_id + 1,
+                owner_player_id=1,
+                source_instance_id=880039,
+                source_card_id=39,
+                source_zone="battle",
+                trigger="turn_start",
+                handler_id="noop_auto",
+                source_card_number="TEST-038",
+                limit_per_turn=1,
+            ),
+        ]
+    )
+    effect_ids = {state.next_effect_id, state.next_effect_id + 1}
+    state.next_effect_id += 2
+
+    engine._emit_effect_event(state, name="turn_start", actor_player_id=1, payload={})
+    engine._resolve_pending_effects(state)
+
+    rows = [r for r in state.effect_resolutions if r.effect_id in effect_ids]
+    assert sum(1 for r in rows if r.resolved and r.reason == "ok") == 1
+    assert sum(1 for r in rows if (not r.resolved) and r.reason == "limit_per_turn_used") == 1
+
+
 def test_phase4_auto_draw_on_play_resolves_after_counter_timing() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

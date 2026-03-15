@@ -353,8 +353,10 @@ def test_initialize_supports_z_decks() -> None:
         p2_z_deck_card_ids=[9101],
         shuffle_decks=False,
     )
-    assert state.players[1].z_deck == [9001, 9002, 9003]
-    assert state.players[2].z_deck == [9101]
+    assert [card.card_id for card in state.players[1].z_deck] == [9001, 9002, 9003]
+    assert [card.card_id for card in state.players[2].z_deck] == [9101]
+    assert all(card.face_up is False for card in state.players[1].z_deck)
+    assert all(card.face_up is False for card in state.players[2].z_deck)
 
 
 def test_charge_phase_untaps_leader_energy_battle_unison() -> None:

@@ -35,6 +35,14 @@ def test_extract_draw_rules_on_play_and_attack() -> None:
     assert all(r.once_per_turn for r in rules if r.handler_id == "auto_draw_n")
 
 
+def test_extract_limit_x_tracks_limit_count_on_effect_rules() -> None:
+    card = _card("[Auto][Limit 2] When this card attacks, draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    draw = next(r for r in rules if r.trigger == "self_attacks" and r.handler_id == "auto_draw_n")
+    assert draw.limit_per_turn == 2
+    assert draw.limit_scope == "card_number"
+
+
 def test_extract_ko_and_power_reduce_rules_from_play_text() -> None:
     card = _card(
         "[Auto] When this card is played, choose up to 2 of your opponent's Battle Cards with an energy cost of 5 or less and KO them. "

@@ -201,6 +201,9 @@ Resolved:
 - [x] implement sparking super-combo family (life<=4 or `Sparking N` drop threshold)
 - [x] implement owner-leader-attack search/add-to-hand family for Krillin-style leader autos
 - [ ] upgrade `[Limit X]` enforcement to match rules text:
+  - status: first runtime slice complete
+  - extracted effect rules now carry `limit_per_turn`
+  - pending auto resolution now enforces that limit across same-card-number registrations for the same skill family
   - across the same skill
   - across cards with the same card number
   - including `[Auto]` skills that can go pending multiple times but only resolve up to limit
@@ -227,6 +230,7 @@ Resolved:
 - [ ] implement Unison growth:
   - once per turn
   - same card number under existing Unison
+    - status: runtime now matches by `card_number` when available and falls back to `card_id` only when card-number metadata is missing
   - marker increase after growth
 - [ ] implement marker-skill-cost (`[X]`) rules for Unisons:
   - status: first slice complete
@@ -315,9 +319,56 @@ Resolved:
     - counter alternate-cost permanents now support:
       - `If your Leader is white, you can activate this card's [Counter] skill from your hand by switching 1 Hidden Mode card in your Battle Area to Rest Mode instead of paying its energy cost`
       - `[Permanent][Sparking 5] You can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost`
+      - generic extracted requirements now cover:
+        - `If your life is at N or less`
+        - `If there are N or more colors in your energy`
+        - `If you have a multicolor card in your energy`
+        - `If you have only black cards in your energy`
+        - leader-color gates such as `mono-black`
+        - leader trait / character gates such as `yellow ≪Fierce Foe≫` or `yellow <Vegito>`
+        - `all of your energy is in Rest Mode`
+        - `you have a ... card in play`
+        - `you have a ... card in your Battle Area`
+        - multicolor / card-type / minimum energy-cost board-state filters for those in-play checks
+      - typo-tolerant extraction now covers common DB wording errors such as:
+        - `[Permament]`
+        - `from our life o your hand`
+      - composite alternate costs now support:
+        - `add 1 card from your life to your hand and send N matching cards from your Drop to their owner's Warp instead of paying its energy cost`
+        - `send N matching cards from your Drop to their owner's Warp instead of paying its energy cost`
+        - `send all the cards in your Drop to their owner's Warp instead of paying its energy cost`
+        - `return 1 matching card from your Battle Area to your hand instead of paying its energy cost`
+        - `switch your matching Leader to Rest Mode instead of paying its energy cost`
+        - `pay (N) instead of its energy cost`
+        - `choose N of your Battle Cards and reduce their power by -X for the turn instead of paying its energy cost`
+      - explicit Z-Deck card state now exists:
+        - `PlayerState.z_deck` is modeled as structured cards, not raw ids
+        - face-up / face-down Z-Deck state is now tracked
+      - face-up Z-Deck alternate-cost requirements now support:
+        - `If you have N or more face-up ≪Trait≫ cards in your Z-Deck`
       - the legal-action path now treats those alternates as valid payment when normal energy payment is unavailable
       - extraction/catalog coverage now exists for these alternates under `counter_alternate_from_hand` in `dbdatabase/skill_cost_catalog.json`
+      - current catalog coverage now includes older counter families such as:
+        - `Support of the Dark Empire`
+        - `Whis, Angel of Universe 7`
+        - `Dimension Magic`
+        - `Focused Breakthrough`
+        - `Absolute Release Ball`
+        - `Super Kamehameha`
+        - `Mercenary Tao, Confrontation`
+        - `Marcarita, Caution`
+        - `Stop Laughing!`
+        - `Strongest Candy in the World`
+        - `SS Vegito, Power Release`
+        - `Bujin, Bringer of Chaos`
+        - `Bujin, Space Pirate Psychic`
+        - `Android 17, Guided by the Dragon Balls`
+        - `Dr. Uiro, Reckless Science`
+        - `Bardock, Destiny-Changing Willpower`
+        - `Flight of the Grand Eagle`
+        - `Beerus, Godly Power`
       - regression-covered with `BT28-138 Battles of the Gods of Destruction` / `BT29-138 Key to a God`-style tests in `tests/test_phase3_rule_fixes.py`
+      - regression coverage for the newer generic families now lives in `tests/test_skill_cost_rule_extractor.py`
     - Hidden Mode drop-trigger families now support:
       - `When this Hidden Mode card in a Battle Area is placed into its owner's Drop, choose up to N of your cards and it gets +power for the turn`
       - works on KO paths and non-KO drop paths driven by skill costs

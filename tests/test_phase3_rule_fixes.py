@@ -902,6 +902,28 @@ def test_unison_growth_adds_marker_once_per_turn_for_same_card_number() -> None:
     assert any(cp.name == "unison_growth" for cp in state.checkpoints)
 
 
+def test_unison_growth_accepts_matching_card_number_across_different_card_ids() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), shuffle_decks=False
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(instance_id=700078, card_id=175, owner_id=1, card_number="BT99-001", card_type="UNISON", markers=1)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=700079, card_id=275, owner_id=1, card_number="BT99-001", card_type="UNISON"),
+        CardInstance(instance_id=700080, card_id=276, owner_id=1, card_number="BT99-002", card_type="UNISON"),
+    ]
+
+    growth_actions = [a for a in engine.get_legal_actions(state, player_id=1) if a.action_type == ActionType.UNISON_GROWTH]
+    assert len(growth_actions) == 1
+    assert growth_actions[0].hand_index == 0
+    state = engine.apply_action(state, growth_actions[0])
+    assert state.players[1].unison_area[0].markers == 2
+    assert state.players[1].unison_area[0].stacked_card_ids == (275,)
+
+
 def test_unison_marker_cost_skill_locks_after_one_resolution() -> None:
     rules = {900101: {"activate_main": [{"kind": "remove_markers", "amount": 1}]}}
     engine = RulesEngine(skill_cost_rules=rules)
