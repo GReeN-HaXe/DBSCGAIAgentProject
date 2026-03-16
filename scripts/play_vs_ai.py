@@ -657,6 +657,8 @@ def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) ->
         if player is not None and 0 <= action.hand_index < len(player.hand):
             label = _card_brief_label(repo, player.hand[action.hand_index].card_id)
             verb = action_type.replace("_", " ")
+            if action_type == "play_card_from_hand" and action.effect_choice is not None:
+                return f"play [{action.hand_index}] {label} (effect {int(action.effect_choice) + 1})"
             return f"{verb} [{action.hand_index}] {label}"
     if action.action_type.value in {"activate_main_skill", "activate_battle_skill"}:
         source_card = None

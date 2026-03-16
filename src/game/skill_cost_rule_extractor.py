@@ -23,6 +23,15 @@ _ACTIVATE_MAIN_HIDDEN_BATTLE_OR_ENERGY_COST_RE = re.compile(
 _ACTIVATE_BATTLE_DROP_HIDDEN_MODE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,260}?choose 1 hidden mode card in your battle area and place it into (?:its|that card's) owner'?s drop:"
 )
+_PLAIN_MARKER_ACTIVATE_RE = re.compile(
+    r"\[\s*([+-]\d+)\s*\]\s*\[activate(?::)?\s*(main|battle|main/battle)\]"
+)
+_ACTIVATE_MAIN_Z_ENERGY_TO_DROP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:"
+)
+_ACTIVATE_MAIN_HAND_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?send (\d+) card from your hand to (?:its|their) owner'?s warp\s*:"
+)
 _COUNTER_ALT_REST_HIDDEN_BATTLE_RE = re.compile(
     r"activate this card's \[counter\] skill from your hand by switching 1 hidden mode card in your battle area to rest mode instead of paying its energy cost"
 )
@@ -316,6 +325,39 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_hidden_mode_battle_to_drop",
                 "amount": 1,
+            }
+        ]
+
+    for m_plain_marker_activate in _PLAIN_MARKER_ACTIVATE_RE.finditer(text):
+        delta = int(m_plain_marker_activate.group(1))
+        mode = str(m_plain_marker_activate.group(2) or "").strip().lower()
+        step = {
+            "kind": "add_markers" if delta > 0 else "remove_markers",
+            "amount": abs(delta),
+        }
+        contexts = (
+            ["activate_main_unison", "activate_battle_unison"]
+            if mode == "main/battle"
+            else [f"activate_{mode}_unison"]
+        )
+        for context in contexts:
+            rules[context] = [step]
+
+    m_activate_main_z_energy_to_drop = _ACTIVATE_MAIN_Z_ENERGY_TO_DROP_RE.search(text)
+    if m_activate_main_z_energy_to_drop:
+        rules["activate_main_warp"] = [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": int(m_activate_main_z_energy_to_drop.group(1)),
+            }
+        ]
+
+    m_activate_main_hand_to_warp = _ACTIVATE_MAIN_HAND_TO_WARP_RE.search(text)
+    if m_activate_main_hand_to_warp:
+        rules["activate_main_unison"] = [
+            {
+                "kind": "send_owner_hand_to_warp",
+                "amount": int(m_activate_main_hand_to_warp.group(1)),
             }
         ]
 

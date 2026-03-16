@@ -39,3 +39,4 @@ class Action:
     target_player_id: Optional[int] = None
     target_zone: Optional[str] = None
     target_index: Optional[int] = None
+    effect_choice: Optional[int] = None

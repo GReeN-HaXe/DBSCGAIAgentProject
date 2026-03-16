@@ -1,8 +1,266 @@
 {
   "catalog_kind": "dbs_effect_catalog_overrides",
   "schema_version": 1,
-  "override_count": 2,
+  "override_count": 27,
   "overrides": {
+    "6": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self_attack_restriction",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self_attack_restriction",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "21": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "48": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "93": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "384": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "685": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "689": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "1734": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "2409": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4265": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4276": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4362": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4440": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4468": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4533": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "5301": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_play",
+          "handler_id": "counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self",
+          "handler_params": {
+            "max_targets": 2,
+            "power_delta": -15000
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_play:counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "5429": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "5656": {
       "mode": "replace",
       "rules": [
@@ -19,6 +277,96 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "6072": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "6679": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "6999": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "7236": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "7334": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "7483": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
           "provenance": "manual_override"
         }
       ]
@@ -40,6 +388,36 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8316": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack_play_self",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8458": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
           "provenance": "manual_override"
         }
       ]

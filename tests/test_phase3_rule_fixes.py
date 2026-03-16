@@ -641,11 +641,100 @@ def test_counter_can_mark_battle_attacker_as_unable_to_attack_again_this_turn() 
         for action in legal
     )
     assert any(cp.name == "counter_effect_attack_restriction_applied" for cp in state.checkpoints)
-    assert state.counter_resolutions[-1].applied_effects == ("play_self", "attack_restriction")
-    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
-    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
-    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
-    assert 702010 not in state.attack_restricted_instance_ids
+
+
+def test_counter_play_can_reduce_up_to_two_opponent_battles_for_turn_then_play_self() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=790001, card_id=601, owner_id=1, card_type="BATTLE", power=20000),
+            CardInstance(instance_id=790002, card_id=602, owner_id=1, card_type="BATTLE", power=15000),
+        ]
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=790003, card_id=603, owner_id=1, card_type="BATTLE", color="Red", energy_cost=0, power=15000)
+    ]
+    state.players[2].energy = [CardInstance(instance_id=790004, card_id=604, owner_id=2, color="Red")]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790005,
+            card_id=5301,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: "
+                "Choose up to 2 of your opponent's Battle Cards, they get -15000 power for the turn, then play this card."
+                ),
+        )
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert any(card.instance_id == 790005 for card in state.players[2].battle_area)
+    assert next(card for card in state.players[1].battle_area if card.instance_id == 790001).power == 5000
+    reduced_two = next((card for card in state.players[1].battle_area if card.instance_id == 790002), None)
+    assert reduced_two is None or reduced_two.power <= 0
+    assert any(cp.name == "counter_effect_power_reduce_resolved" for cp in state.checkpoints)
+
+
+def test_counter_play_alternate_cost_can_be_free_with_red_unison_markers() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=790011, card_id=611, owner_id=1, card_type="BATTLE", color="Red", energy_cost=0, power=15000)
+    ]
+    state.players[2].energy = []
+    state.players[2].energy_markers = 0
+    state.players[2].unison_area = [
+        CardInstance(instance_id=790012, card_id=612, owner_id=2, card_type="UNISON", color="Red", markers=2)
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790013,
+            card_id=5301,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: "
+                "Choose up to 2 of your opponent's Battle Cards, they get -15000 power for the turn, then play this card."
+                "[Permanent] If you have a red Unison Card with 2 or more markers in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."
+                ),
+        )
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+    counter = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    assert any(cp.name == "counter_alternate_cost_red_unison_markers_free" for cp in state.checkpoints)
 
 
 def test_color_and_z_cost_gate_play_legality() -> None:

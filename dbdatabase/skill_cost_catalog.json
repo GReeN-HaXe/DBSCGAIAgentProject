@@ -1,4 +1,82 @@
 {
+  "10026": {
+    "activate_battle_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1003": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1004": {
+    "activate_main_unison": [
+      {
+        "amount": 6,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "10045": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "10091": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "10175": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "10182": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1032": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1033": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "1055": {
     "counter_alternate_from_hand": [
       {
@@ -9,12 +87,472 @@
       }
     ]
   },
+  "1080": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1105": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1126": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1129": {
+    "activate_main_unison": [
+      {
+        "amount": 6,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1147": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "115": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1167": {
+    "activate_battle_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1192": {
+    "activate_battle_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1197": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1335": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "138": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "139": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "1411": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "required_leader_traits": "lt android 13 gt"
+      }
+    ]
+  },
+  "1450": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1483": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1487": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1596": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "1621": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "1662": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "184": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "186": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "2202": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "226": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "240": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "2481": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "2506": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "2541": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "2571": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "2591": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "2604": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "2660": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "29": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "297": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "302": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "303": {
+    "activate_battle_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "328": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "329": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "352": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "36": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "361": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "362": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3716": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3723": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3733": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3755": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3763": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3769": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3786": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3796": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3802": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3808": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3813": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3819": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3820": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3822": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3830": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3836": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -28,12 +566,304 @@
       }
     ]
   },
+  "3841": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3854": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3856": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3870": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3878": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3890": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3891": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3905": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3910": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3917": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3922": {
+    "activate_main_unison": [
+      {
+        "amount": 6,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3951": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "3961": {
+    "activate_battle_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3962": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3969": {
+    "activate_battle_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3974": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3977": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3979": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "398": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "requires_energy_colors_at_least": 4
+      }
+    ]
+  },
+  "3980": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "3991": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4025": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "403": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4030": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4038": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4063": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4065": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4066": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4068": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4076": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4078": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4085": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4100": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4106": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "413": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "4138": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -68,6 +898,22 @@
       }
     ]
   },
+  "4337": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4361": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "4468": {
     "counter_alternate_from_hand": [
       {
@@ -88,12 +934,28 @@
       }
     ]
   },
+  "452": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "4533": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "requires_sparking": 5
+      }
+    ]
+  },
+  "4564": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
       }
     ]
   },
@@ -108,12 +970,194 @@
       }
     ]
   },
+  "4657": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "4895": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "4903": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "5026": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "5074": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "527": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "5282": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "5347": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "539": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "54": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "5429": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "requires_sparking": 5
+      }
+    ]
+  },
+  "5478": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "55": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "5630": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "5634": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "5660": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "570": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "575": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "603": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "604": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "605": {
+    "activate_battle_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "606": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "607": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -127,6 +1171,264 @@
       }
     ]
   },
+  "6082": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6093": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "628": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6338": {
+    "activate_battle_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6341": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6386": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "647": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "648": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6483": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "649": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "650": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "651": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "652": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6562": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6594": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6665": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6667": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "668": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6682": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6683": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6688": {
+    "activate_battle_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "669": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6722": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6749": {
+    "activate_battle_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6769": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6778": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6867": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6876": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6900": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6940": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
   "6948": {
     "counter_alternate_from_hand": [
       {
@@ -135,6 +1437,46 @@
         "required_leader_colors": "blue",
         "requires_life_at_most": 4,
         "requires_multicolor_in_energy": true
+      }
+    ]
+  },
+  "695": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6956": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "6959": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "696": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "6974": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -169,6 +1511,132 @@
       }
     ]
   },
+  "7004": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7017": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7043": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "705": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7086": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7118": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7161": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7216": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7224": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7239": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7268": {
+    "activate_battle_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ],
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7270": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7271": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7307": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7328": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "7334": {
     "counter_alternate_from_hand": [
       {
@@ -179,12 +1647,116 @@
       }
     ]
   },
+  "7359": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7366": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7404": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "7422": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "requires_sparking": 5
+      }
+    ]
+  },
+  "7444": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7452": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7764": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7766": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7786": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7798": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7803": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7827": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7847": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "7883": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -208,6 +1780,62 @@
       }
     ]
   },
+  "7906": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7907": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7908": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7909": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7910": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7911": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "7912": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "7940": {
     "counter_alternate_from_hand": [
       {
@@ -216,6 +1844,86 @@
         "required_leader_traits": "power wish",
         "required_traits": "power wish",
         "requires_life_at_most": 4
+      }
+    ]
+  },
+  "7950": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8036": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8049": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8071": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8088": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8102": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8134": {
+    "activate_main_warp": [
+      {
+        "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      }
+    ]
+  },
+  "8135": {
+    "activate_main_warp": [
+      {
+        "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      }
+    ]
+  },
+  "8136": {
+    "activate_main_warp": [
+      {
+        "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      }
+    ]
+  },
+  "8149": {
+    "activate_battle_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
       }
     ]
   },
@@ -252,6 +1960,22 @@
       }
     ]
   },
+  "8342": {
+    "activate_main_unison": [
+      {
+        "amount": 7,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8372": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
   "8377": {
     "counter_alternate_from_hand": [
       {
@@ -261,6 +1985,22 @@
         "owner_battle_area_required_card_types": "EXTRA",
         "owner_battle_area_requires_multicolor": true,
         "requires_owner_battle_area": true
+      }
+    ]
+  },
+  "8396": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8397": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -275,11 +2015,99 @@
       }
     ]
   },
+  "8430": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_warp"
+      }
+    ]
+  },
+  "8446": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8450": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8451": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8452": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8453": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      }
+    ]
+  },
   "8458": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "8476": {
+    "activate_main_unison": [
+      {
+        "amount": 3,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8484": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "86": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "87": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8858": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
       }
     ]
   },
@@ -328,6 +2156,22 @@
       }
     ]
   },
+  "8912": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "8916": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "8917": {
     "activate_main": [
       {
@@ -373,6 +2217,22 @@
       }
     ]
   },
+  "8949": {
+    "activate_main_unison": [
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8951": {
+    "activate_main_unison": [
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
   "8971": {
     "counter_alternate_from_hand": [
       {
@@ -407,12 +2267,34 @@
       }
     ]
   },
+  "9729": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_warp"
+      }
+    ],
+    "activate_main_warp": [
+      {
+        "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      }
+    ]
+  },
   "9775": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "requires_sparking": 5
+      }
+    ]
+  },
+  "9779": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_warp"
       }
     ]
   }

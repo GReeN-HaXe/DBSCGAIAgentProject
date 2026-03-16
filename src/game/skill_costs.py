@@ -366,6 +366,14 @@ class SkillCostDsl:
                 if len(available) < step.amount:
                     return False
                 continue
+            if step.kind == "send_owner_hand_to_warp":
+                if len(player.hand) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_owner_z_energy_to_drop":
+                if len(player.z_energy) < step.amount:
+                    return False
+                continue
             if step.kind == "send_other_battle_to_removed":
                 available = [c for c in player.battle_area if c.instance_id != source_card.instance_id]
                 if len(available) < step.amount:
@@ -498,6 +506,14 @@ class SkillCostDsl:
                         continue
                     player.warp.append(player.drop.pop(i))
                     moved += 1
+                continue
+            if step.kind == "send_owner_hand_to_warp":
+                for _ in range(min(step.amount, len(player.hand))):
+                    player.warp.append(player.hand.pop(0))
+                continue
+            if step.kind == "send_owner_z_energy_to_drop":
+                for _ in range(min(step.amount, len(player.z_energy))):
+                    player.drop.append(player.z_energy.pop(0))
                 continue
             if step.kind == "send_other_battle_to_removed":
                 moved = 0

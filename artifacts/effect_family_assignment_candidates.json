@@ -1,0 +1,9 @@
+{
+  "candidates": [],
+  "schema_version": "effect_family_assignment_candidates.v1",
+  "summary": {
+    "auto_apply_safe_count": 0,
+    "candidate_count": 0,
+    "reported_candidate_count": 0
+  }
+}

@@ -1,6 +1,95 @@
 {
   "families": [
     {
+      "card_count": 15,
+      "card_ids": [
+        1734,
+        2409,
+        384,
+        4265,
+        4276,
+        4362,
+        4440,
+        4468,
+        4533,
+        5429,
+        6072,
+        689,
+        6999,
+        7334,
+        8458
+      ],
+      "family_id": "counter_attack:counter_negate_attack",
+      "handlers": {
+        "counter_negate_attack": 15
+      },
+      "provenances": {
+        "manual_override": 15
+      },
+      "rule_count": 15,
+      "triggers": {
+        "counter_attack": 15
+      }
+    },
+    {
+      "card_count": 8,
+      "card_ids": [
+        21,
+        48,
+        6679,
+        685,
+        7236,
+        7483,
+        8316,
+        93
+      ],
+      "family_id": "counter_attack:counter_negate_attack_play_self",
+      "handlers": {
+        "counter_negate_attack_play_self": 8
+      },
+      "provenances": {
+        "manual_override": 8
+      },
+      "rule_count": 8,
+      "triggers": {
+        "counter_attack": 8
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        6
+      ],
+      "family_id": "counter_attack:counter_negate_attack_play_self_attack_restriction",
+      "handlers": {
+        "counter_negate_attack_play_self_attack_restriction": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        5301
+      ],
+      "family_id": "counter_play:counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self",
+      "handlers": {
+        "counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "counter_play": 1
+      }
+    },
+    {
       "card_count": 2,
       "card_ids": [
         372,
@@ -108,6 +197,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        1536
+      ],
+      "family_id": "owner_opponent_battle_attacks:auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack",
+      "handlers": {
+        "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_opponent_battle_attacks": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         56
       ],
       "family_id": "owner_opponent_skill_plays_overcost_battle:auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power",
@@ -140,7 +246,7 @@
       }
     },
     {
-      "card_count": 18,
+      "card_count": 19,
       "card_ids": [
         1058,
         1070,
@@ -156,6 +262,7 @@
         5343,
         5415,
         6519,
+        6688,
         7233,
         7811,
         8914,
@@ -163,14 +270,14 @@
       ],
       "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
       "handlers": {
-        "activate_gain_power_and_keyword_for_battle": 18
+        "activate_gain_power_and_keyword_for_battle": 19
       },
       "provenances": {
-        "extractor": 18
+        "extractor": 19
       },
-      "rule_count": 18,
+      "rule_count": 19,
       "triggers": {
-        "self_activate_battle": 18
+        "self_activate_battle": 19
       }
     },
     {
@@ -194,7 +301,7 @@
       }
     },
     {
-      "card_count": 77,
+      "card_count": 82,
       "card_ids": [
         10174,
         1115,
@@ -221,11 +328,13 @@
         300,
         325,
         355,
+        3713,
         377,
         3827,
         385,
         3983,
         423,
+        4236,
         426,
         4356,
         4459,
@@ -233,10 +342,13 @@
         6546,
         6565,
         6574,
+        6578,
         6704,
         6754,
+        6766,
         6994,
         7047,
+        7458,
         7792,
         7850,
         7852,
@@ -276,14 +388,69 @@
       ],
       "family_id": "self_activate_battle:auto_draw_n",
       "handlers": {
-        "auto_draw_n": 79
+        "auto_draw_n": 84
       },
       "provenances": {
-        "extractor": 79
+        "extractor": 84
       },
-      "rule_count": 79,
+      "rule_count": 84,
       "triggers": {
-        "self_activate_battle": 79
+        "self_activate_battle": 84
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        9657
+      ],
+      "family_id": "self_activate_extra_from_hand:activate_add_up_to_n_from_owner_deck_to_hand",
+      "handlers": {
+        "activate_add_up_to_n_from_owner_deck_to_hand": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        9657
+      ],
+      "family_id": "self_activate_extra_from_hand:activate_play_up_to_n_each_named_from_owner_deck_or_drop",
+      "handlers": {
+        "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "card_count": 5,
+      "card_ids": [
+        1011,
+        3723,
+        7328,
+        7912,
+        9729
+      ],
+      "family_id": "self_activate_main:activate_add_up_to_n_from_owner_warp_to_hand",
+      "handlers": {
+        "activate_add_up_to_n_from_owner_warp_to_hand": 5
+      },
+      "provenances": {
+        "extractor": 5
+      },
+      "rule_count": 5,
+      "triggers": {
+        "self_activate_main": 5
       }
     },
     {
@@ -347,6 +514,40 @@
       "family_id": "self_activate_main:activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn",
       "handlers": {
         "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        9629
+      ],
+      "family_id": "self_activate_main:activate_look_top_send_up_to_n_to_owner_warp",
+      "handlers": {
+        "activate_look_top_send_up_to_n_to_owner_warp": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        6688
+      ],
+      "family_id": "self_activate_main:activate_optional_send_owner_hand_to_warp_draw_n",
+      "handlers": {
+        "activate_optional_send_owner_hand_to_warp_draw_n": 1
       },
       "provenances": {
         "extractor": 1
@@ -1063,6 +1264,49 @@
       }
     },
     {
+      "card_count": 5,
+      "card_ids": [
+        9721,
+        9723,
+        9726,
+        9728,
+        9729
+      ],
+      "family_id": "self_activate_main:activate_play_self_from_warp",
+      "handlers": {
+        "activate_play_self_from_warp": 5
+      },
+      "provenances": {
+        "extractor": 5
+      },
+      "rule_count": 5,
+      "triggers": {
+        "self_activate_main": 5
+      }
+    },
+    {
+      "card_count": 6,
+      "card_ids": [
+        7761,
+        9721,
+        9723,
+        9724,
+        9725,
+        9728
+      ],
+      "family_id": "self_activate_main:activate_send_top_deck_to_owner_warp",
+      "handlers": {
+        "activate_send_top_deck_to_owner_warp": 6
+      },
+      "provenances": {
+        "extractor": 6
+      },
+      "rule_count": 6,
+      "triggers": {
+        "self_activate_main": 6
+      }
+    },
+    {
       "card_count": 14,
       "card_ids": [
         124,
@@ -1090,6 +1334,25 @@
       "rule_count": 14,
       "triggers": {
         "self_activate_main": 14
+      }
+    },
+    {
+      "card_count": 3,
+      "card_ids": [
+        3755,
+        4106,
+        5533
+      ],
+      "family_id": "self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp",
+      "handlers": {
+        "activate_send_up_to_n_opponent_drop_battle_to_warp": 3
+      },
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "triggers": {
+        "self_activate_main": 3
       }
     },
     {
@@ -1163,7 +1426,7 @@
       }
     },
     {
-      "card_count": 424,
+      "card_count": 471,
       "card_ids": [
         1001,
         10027,
@@ -1175,6 +1438,7 @@
         10043,
         10057,
         10058,
+        10059,
         10094,
         10095,
         10097,
@@ -1195,6 +1459,7 @@
         1101,
         1105,
         1115,
+        1136,
         1190,
         1346,
         1370,
@@ -1213,12 +1478,14 @@
         1652,
         1662,
         1686,
+        1689,
         1711,
         1752,
         1769,
         1790,
         1808,
         1811,
+        1839,
         186,
         1882,
         1886,
@@ -1233,6 +1500,7 @@
         2113,
         2137,
         2139,
+        2167,
         2172,
         2184,
         2187,
@@ -1242,14 +1510,18 @@
         2239,
         2245,
         2274,
+        2289,
         2313,
         2316,
         2318,
+        2331,
         2336,
+        2342,
         2343,
         2344,
         2357,
         2358,
+        2378,
         2382,
         2387,
         2388,
@@ -1264,6 +1536,7 @@
         2451,
         2467,
         2480,
+        2503,
         2504,
         2505,
         2510,
@@ -1274,6 +1547,7 @@
         2531,
         2539,
         2541,
+        2576,
         2577,
         2580,
         2581,
@@ -1286,17 +1560,22 @@
         297,
         301,
         302,
+        32,
         324,
         326,
         327,
         347,
+        351,
         352,
         359,
         362,
         3661,
         3687,
+        3713,
         3716,
         3738,
+        3755,
+        3763,
         3769,
         3779,
         3786,
@@ -1312,11 +1591,15 @@
         3924,
         3928,
         3937,
+        3951,
         3961,
         3962,
+        3969,
+        3980,
         3991,
         4024,
         4062,
+        4063,
         4074,
         4093,
         4138,
@@ -1327,7 +1610,10 @@
         4198,
         421,
         4228,
+        423,
+        4236,
         4264,
+        428,
         4305,
         4311,
         4313,
@@ -1341,10 +1627,12 @@
         4444,
         4475,
         451,
+        4512,
         4534,
         4549,
         4573,
         4615,
+        4625,
         4631,
         4643,
         4657,
@@ -1357,6 +1645,7 @@
         4988,
         5110,
         5138,
+        5224,
         5244,
         5249,
         526,
@@ -1397,6 +1686,8 @@
         6439,
         6442,
         6555,
+        6565,
+        6578,
         6592,
         6598,
         6641,
@@ -1406,6 +1697,7 @@
         6689,
         669,
         6720,
+        6766,
         6778,
         6833,
         6900,
@@ -1428,22 +1720,29 @@
         7270,
         7271,
         7322,
+        7359,
         7366,
         7374,
         7387,
         7388,
+        7393,
         7404,
+        7458,
         76,
         7758,
+        7760,
+        7763,
         7783,
         7787,
         7788,
         7793,
+        7802,
         7847,
         7850,
         7852,
         7862,
         7864,
+        7883,
         7890,
         7897,
         7899,
@@ -1454,6 +1753,8 @@
         7952,
         7965,
         7967,
+        8035,
+        8039,
         8041,
         8049,
         8069,
@@ -1462,6 +1763,7 @@
         8086,
         8088,
         8095,
+        8100,
         8102,
         8113,
         8114,
@@ -1485,6 +1787,7 @@
         8382,
         8387,
         8391,
+        8394,
         8399,
         8402,
         8403,
@@ -1497,9 +1800,11 @@
         8433,
         8441,
         8442,
+        8450,
         8454,
         8474,
         8475,
+        8481,
         8489,
         8585,
         8590,
@@ -1537,6 +1842,7 @@
         8939,
         8940,
         8941,
+        8947,
         8949,
         8955,
         8956,
@@ -1544,11 +1850,14 @@
         8961,
         8963,
         8964,
+        8976,
         8981,
         8984,
         8991,
         8996,
+        9625,
         9628,
+        9629,
         9631,
         9635,
         9641,
@@ -1587,19 +1896,20 @@
         9784,
         9785,
         9788,
+        9909,
         9910,
         998
       ],
       "family_id": "self_activate_main:auto_draw_n",
       "handlers": {
-        "auto_draw_n": 426
+        "auto_draw_n": 473
       },
       "provenances": {
-        "extractor": 426
+        "extractor": 473
       },
-      "rule_count": 426,
+      "rule_count": 473,
       "triggers": {
-        "self_activate_main": 426
+        "self_activate_main": 473
       }
     },
     {
@@ -2022,7 +2332,7 @@
       }
     },
     {
-      "card_count": 127,
+      "card_count": 192,
       "card_ids": [
         10037,
         10049,
@@ -2071,12 +2381,46 @@
         3,
         314,
         335,
+        3721,
+        3774,
         38,
+        3875,
+        4103,
         4148,
         416,
+        4211,
+        4285,
         4292,
         4296,
+        4568,
+        4569,
+        4644,
+        4710,
+        4725,
+        4726,
+        4747,
+        4762,
+        4772,
+        4782,
+        4787,
+        4807,
+        4808,
+        4843,
+        4869,
+        4899,
+        4922,
+        4972,
+        4992,
         5002,
+        5035,
+        5099,
+        5105,
+        5129,
+        5136,
+        5163,
+        5176,
+        5177,
+        5209,
         5254,
         5305,
         5323,
@@ -2084,6 +2428,7 @@
         5349,
         5376,
         5384,
+        5395,
         5433,
         5435,
         5444,
@@ -2095,6 +2440,7 @@
         5492,
         5498,
         5521,
+        5535,
         5557,
         5571,
         5583,
@@ -2103,23 +2449,52 @@
         5609,
         5622,
         5625,
+        5671,
+        5718,
+        5724,
+        5733,
+        5778,
+        5786,
+        5807,
+        5809,
         582,
+        5847,
+        5892,
+        5914,
+        5919,
+        5998,
         6077,
         609,
+        6186,
+        6390,
+        6411,
         6530,
         655,
         6586,
+        6613,
+        6630,
+        6637,
+        6644,
         6675,
         6729,
         676,
         6790,
+        6915,
+        6936,
         6955,
         6978,
+        6998,
+        7033,
+        7084,
+        7135,
+        7144,
+        7149,
         7168,
         7266,
         7272,
         7343,
         74,
+        7423,
         7449,
         7451,
         7464,
@@ -2154,14 +2529,14 @@
       ],
       "family_id": "self_comboed:auto_draw_n",
       "handlers": {
-        "auto_draw_n": 127
+        "auto_draw_n": 192
       },
       "provenances": {
-        "extractor": 127
+        "extractor": 192
       },
-      "rule_count": 127,
+      "rule_count": 192,
       "triggers": {
-        "self_comboed": 127
+        "self_comboed": 192
       }
     },
     {
@@ -4264,12 +4639,12 @@
   ],
   "schema_version": "effect_family_report.v1",
   "summary": {
-    "card_rule_count": 2630,
-    "effect_rule_count": 3357,
-    "family_count": 57,
+    "card_rule_count": 2760,
+    "effect_rule_count": 3524,
+    "family_count": 70,
     "provenance_counts": {
-      "extractor": 3355,
-      "manual_override": 2
+      "extractor": 3497,
+      "manual_override": 27
     }
   }
 }

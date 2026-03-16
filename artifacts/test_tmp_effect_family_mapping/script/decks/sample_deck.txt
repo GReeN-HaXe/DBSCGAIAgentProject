@@ -1,0 +1,5 @@
+Leader
+Mapped Leader [BT1-002]
+Deck
+4 Mapped Battle [BT1-001]
+1 Unmapped Trace Card [BT1-003]

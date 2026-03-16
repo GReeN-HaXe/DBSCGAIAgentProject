@@ -113,6 +113,45 @@ def test_extract_activate_battle_drop_hidden_mode_skill_cost_rule() -> None:
     }
 
 
+def test_extract_zamasu_scheme_activate_main_costs_are_source_zone_specific() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Empower Black 2] [Activate: Main][Limit 1] If your Leader is a black <Goku Black> card, "
+            "you have 2 or more energy, and you place 1 of your Z-Energy into its owner's Drop : "
+            "Play this card with 0 markers on it from your Warp. "
+            "[UNISON +1][Activate: Main] Send 1 card from your hand to its owner's Warp : "
+            "Add up to 1 black <Zamasu> card with an energy cost of 7 from your Warp to your hand."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_warp": [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": 1,
+            }
+        ],
+        "activate_main_unison": [
+            {
+                "kind": "send_owner_hand_to_warp",
+                "amount": 1,
+            }
+        ],
+    }
+
+
+def test_extract_plain_unison_marker_activate_costs_for_main_and_battle() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[+1][Activate: Main] You may choose 1 card in your hand and send it to your Warp. If you do, draw 1 card. "
+            "[-2][Activate: Battle] For each card in your Warp, this card gets +5000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main_unison"] == [{"kind": "add_markers", "amount": 1}]
+    assert rules["activate_battle_unison"] == [{"kind": "remove_markers", "amount": 2}]
+
+
 def test_extract_counter_alternate_rest_hidden_battle_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

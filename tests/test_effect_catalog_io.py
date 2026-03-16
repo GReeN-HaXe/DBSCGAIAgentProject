@@ -185,14 +185,43 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     if not OVERRIDES_PATH.exists():
         return
     loaded = load_effect_rule_overrides_json(OVERRIDES_PATH)
+    assert len(loaded) == 27
+    assert loaded[6][0] == "replace"
+    assert loaded[2409][0] == "replace"
     assert loaded[5656][0] == "replace"
+    assert loaded[7236][0] == "replace"
     assert loaded[8314][0] == "replace"
+    assert loaded[4265][0] == "replace"
+    assert loaded[5301][0] == "replace"
+    assert loaded[8458][0] == "replace"
+    assert loaded[6679][0] == "replace"
+    dyspo_rule = loaded[6][1][0]
+    explosive_rule = loaded[2409][1][0]
     cabba_rule = loaded[5656][1][0]
+    supreme_kai_rule = loaded[7236][1][0]
     mechikabura_rule = loaded[8314][1][0]
+    petrification_rule = loaded[4265][1][0]
+    yamcha_rule = loaded[5301][1][0]
+    final_battle_rule = loaded[8458][1][0]
+    toppo_rule = loaded[6679][1][0]
+    assert dyspo_rule.handler_id == "counter_negate_attack_play_self_attack_restriction"
+    assert dyspo_rule.trigger == "counter_attack"
+    assert explosive_rule.handler_id == "counter_negate_attack"
+    assert explosive_rule.trigger == "counter_attack"
     assert cabba_rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
     assert cabba_rule.trigger == "self_played"
+    assert supreme_kai_rule.handler_id == "counter_negate_attack_play_self"
+    assert supreme_kai_rule.trigger == "counter_attack"
     assert mechikabura_rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
     assert mechikabura_rule.trigger == "self_activate_main"
+    assert petrification_rule.handler_id == "counter_negate_attack"
+    assert petrification_rule.family_id == "counter_attack:counter_negate_attack"
+    assert yamcha_rule.handler_id == "counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self"
+    assert yamcha_rule.family_id == "counter_play:counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self"
+    assert final_battle_rule.handler_id == "counter_negate_attack"
+    assert final_battle_rule.family_id == "counter_attack:counter_negate_attack"
+    assert toppo_rule.handler_id == "counter_negate_attack_play_self"
+    assert toppo_rule.family_id == "counter_attack:counter_negate_attack_play_self"
 
 
 def test_engine_loads_effect_catalog_from_path() -> None:

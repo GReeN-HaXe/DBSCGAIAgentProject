@@ -1,4 +1,4 @@
-# Project Planning
+﻿# Project Planning
 
 ## Purpose
 
@@ -181,6 +181,10 @@ Resolved:
   - `artifacts/effect_support_audit.json`
 - Ranked implementation shortlist:
   - `artifacts/effect_family_shortlist.json`
+- Deck/trace family mapping report:
+  - `artifacts/effect_family_mapping_report.json`
+- High-confidence assignment candidates:
+  - `artifacts/effect_family_assignment_candidates.json`
 
 ## Priority Backlog
 
@@ -224,7 +228,108 @@ Resolved:
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
 - [ ] map high-frequency deck/trace cards to those effect families
+  - status: first mapping-report slice complete
+  - `scripts/build_effect_family_mapping_report.py` now emits:
+    - `artifacts/effect_family_mapping_report.json`
+  - the report joins:
+    - active DeckPlanet deck usage
+    - recent trace card usage
+    - effect catalog family assignments
+  - current report snapshot:
+    - priority cards: `266`
+    - mapped priority cards: `172`
+    - unmapped priority cards: `94`
+  - current counter-family override batch now maps:
+    - `BT14-019 Dyspo, Thwarting the Enemy`
+    - `BT13-135 Supreme Kai of Time, Time Labyrinth Unleashed`
+    - `BT23-033 Explosive Dance`
+    - plus the next `21` high-confidence counter-family assignments from the candidate report
+  - current condition-support slice now also maps:
+    - `BT5-012 Master Roshi, Martial Expert`
+      - via extracted `self_comboed:auto_draw_n`
+      - with explicit leader-color + `Sparking 5` / drop-threshold gating
+  - current black warp/search family slice now also maps:
+    - `BT29-086 Goku Black`
+      - via extracted `self_activate_main:activate_look_top_send_up_to_n_to_owner_warp`
+    - `BT29-088 SS Rosé Goku Black, Fearsome God`
+      - via extracted `self_activate_main:activate_send_top_deck_to_owner_warp`
+    - `BT29-091 Goku Black, Surprise Attack`
+      - via extracted `self_activate_main:activate_send_top_deck_to_owner_warp`
+    - `BT29-093 Zamasu, Dark Plans`
+      - via extracted `self_activate_main:activate_send_top_deck_to_owner_warp`
+  - current reactive black battle family slice now also maps:
+    - `BT19-147 Son Gohan, Hostile Saiyan Encounter`
+      - via extracted `owner_opponent_battle_attacks:auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack`
+      - runtime support now covers:
+        - public-zone registration from `drop` / `warp`
+        - life-to-hand and hand-to-bottom-deck payment
+        - playing self from `drop` / `warp` in Rest Mode
+        - negating the triggering battle-card attack
+  - current opponent-drop-to-warp unison family slice now also maps:
+    - `P-244 Piccolo, Savior From the Beyond`
+      - via extracted `self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp`
+      - runtime support now covers:
+        - sending up to `N` opponent Battle Cards from Drop to Warp
+        - unison marker delta handling from plain `[-N]` activate text
+  - current black warp/unison Zamasu family slice now also maps:
+    - `BT29-094 Zamasu, Scheme`
+      - via extracted `self_activate_main:activate_play_self_from_warp`
+      - via extracted `self_activate_main:activate_add_up_to_n_from_owner_warp_to_hand`
+      - source-zone-specific skill cost support now covers:
+        - `activate_main_warp` -> send `Z-Energy` to Drop
+        - `activate_main_unison` -> send `1` hand card to Warp
+      - runtime support now covers:
+        - warp-origin `Activate: Main` registration
+        - opening a second `Counter: Play` timing for `play from Warp`
+        - resolving `play_from_warp` with marker override support
+        - unison-origin warp-to-hand activation without cross-firing the warp-play family
+  - current Mira black warp/unison slice now also maps:
+    - `EX15-05 Mira, Dimensional Superpower`
+      - via extracted `self_activate_main:activate_optional_send_owner_hand_to_warp_draw_n`
+      - via extracted `self_activate_battle:activate_gain_power_and_keyword_for_battle`
+      - generic plain marker activate-cost extraction now covers:
+        - `[+1][Activate: Main]` -> `activate_main_unison:add_markers`
+        - `[-2][Activate: Battle]` -> `activate_battle_unison:remove_markers`
+      - runtime support now covers:
+        - optional hand-to-warp then draw on `Activate: Main`
+        - battle power scaling via `expr:owner_warp_count*5000`
+  - current red extra-from-hand multi-branch slice now also maps:
+    - `BT29-024 Stowaways`
+      - via extracted `self_activate_extra_from_hand:activate_play_up_to_n_each_named_from_owner_deck_or_drop`
+      - via extracted `self_activate_extra_from_hand:activate_add_up_to_n_from_owner_deck_to_hand`
+      - runtime support now covers:
+        - branch-select actions for hand Extras with multiple extracted activation families
+        - resolving only the selected Extra activation branch
+        - branch-specific pre-resolution discard cost handling
+        - searching a matching Extra from Deck to hand
+        - playing up to `1` each of named Battle Cards from Deck and/or Drop in Rest Mode
+      - catalog candidate scanning now includes:
+        - `[Activate: Main/Battle]`
+        - `[Activate Main/Battle]`
+  - current red `Counter: Play` pressure slice now also maps:
+    - `BT10-008 Yamcha, Merciless Barrage`
+      - via manual override family:
+        - `counter_play:counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self`
+      - runtime support now covers:
+        - reducing up to `2` opponent Battle Cards by `-15000` for the turn
+        - then playing self through the existing `Counter: Play` motion path
+        - alternate free counter activation when the owner has a red Unison with `2+` markers in play
+  - highest-frequency currently unmapped cards in active deck/trace usage include:
+    - `BT29-027 Tiny Golden Warrior`
+    - `TB1-023 Strategies of Universe 7`
+    - `EX06-36 A Crack in Spacetime`
+    - `BT29-150 SS Rosé Goku Black, Justice Enforcer`
+    - `BT15-096 Son Goku, Steadfast Assistance`
 - [ ] auto-assign cards to effect families where pattern confidence is high
+  - status: first high-confidence candidate-report slice complete
+  - `scripts/build_effect_family_assignment_candidates.py` now emits:
+    - `artifacts/effect_family_assignment_candidates.json`
+  - status: first auto-apply-safe batch complete
+  - status: first condition-support holdout slice complete
+  - current candidate report snapshot after applying the safe counter-family batch and Roshi condition-support fix:
+    - candidates: `0`
+    - auto-apply-safe candidates: `0`
+  - this means the current candidate heuristic has been exhausted, and the next mapping gains need broader family extraction/runtime support rather than more obvious override assignments
 - [x] keep manual overrides for edge cases and low-confidence pattern matches
 - [x] implement leader auto families used in current human traces
   - completed for current human-trace leaders:
@@ -536,7 +641,7 @@ Resolved:
         - `If you have a multicolor card in your energy`
         - `If you have only black cards in your energy`
         - leader-color gates such as `mono-black`
-        - leader trait / character gates such as `yellow ≪Fierce Foe≫` or `yellow <Vegito>`
+        - leader trait / character gates such as `yellow â‰ªFierce Foeâ‰«` or `yellow <Vegito>`
         - `all of your energy is in Rest Mode`
         - `you have a ... card in play`
         - `you have a ... card in your Battle Area`
@@ -556,7 +661,7 @@ Resolved:
         - `PlayerState.z_deck` is modeled as structured cards, not raw ids
         - face-up / face-down Z-Deck state is now tracked
       - face-up Z-Deck alternate-cost requirements now support:
-        - `If you have N or more face-up ≪Trait≫ cards in your Z-Deck`
+        - `If you have N or more face-up â‰ªTraitâ‰« cards in your Z-Deck`
       - the legal-action path now treats those alternates as valid payment when normal energy payment is unavailable
       - extraction/catalog coverage now exists for these alternates under `counter_alternate_from_hand` in `dbdatabase/skill_cost_catalog.json`
       - current catalog coverage now includes older counter families such as:
@@ -901,3 +1006,4 @@ When adding a new TODO:
 2. if it changes the recommended next work order, update that section too
 3. if it replaces a canonical artifact or baseline, update `Canonical Artifacts`
 4. if it resolves a blocker, move the old blocker out of `Current Known Gaps`
+

@@ -1,0 +1,22 @@
+{
+  "card_rule_count": 1,
+  "catalog_kind": "dbs_effect_catalog",
+  "effect_rule_count": 1,
+  "rules": {
+    "101": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ]
+  },
+  "schema_version": 1
+}

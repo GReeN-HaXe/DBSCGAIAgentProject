@@ -1,0 +1,7531 @@
+{
+  "priority_cards": [
+    {
+      "card_id": 9629,
+      "card_name": "Goku Black",
+      "card_number": "BT29-086",
+      "combined_count": 335,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_look_top_send_up_to_n_to_owner_warp",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_look_top_send_up_to_n_to_owner_warp": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 334,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 9623,
+      "card_name": "Krillin",
+      "card_number": "BT29-001",
+      "combined_count": 224,
+      "deck_count": 1,
+      "family_ids": [
+        "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 223,
+      "triggers": {
+        "owner_leader_attacks": 1
+      }
+    },
+    {
+      "card_id": 6,
+      "card_name": "Dyspo, Thwarting the Enemy",
+      "card_number": "BT14-019",
+      "combined_count": 60,
+      "deck_count": 5,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self_attack_restriction"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self_attack_restriction": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 55,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 52,
+      "card_name": "Son Goten",
+      "card_number": "BT15-001",
+      "combined_count": 52,
+      "deck_count": 0,
+      "family_ids": [
+        "self_attacks:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 52,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 7236,
+      "card_name": "Supreme Kai of Time, Time Labyrinth Unleashed",
+      "card_number": "BT13-135",
+      "combined_count": 49,
+      "deck_count": 4,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 45,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 9638,
+      "card_name": "Son Goten, Pursuit",
+      "card_number": "BT29-007",
+      "combined_count": 44,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 40,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 35,
+      "card_name": "Bardock",
+      "card_number": "EX19-20",
+      "combined_count": 43,
+      "deck_count": 1,
+      "family_ids": [
+        "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 42,
+      "triggers": {
+        "owner_leader_attacks": 1
+      }
+    },
+    {
+      "card_id": 9642,
+      "card_name": "Android 18, Demon Encounter",
+      "card_number": "BT29-011",
+      "combined_count": 43,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 40,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 9641,
+      "card_name": "Krillin, Assist",
+      "card_number": "BT29-010",
+      "combined_count": 42,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 39,
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 9635,
+      "card_name": "SS Son Goten & SS Trunks, Little Warriors",
+      "card_number": "BT29-005",
+      "combined_count": 41,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 37,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 1536,
+      "card_name": "Son Gohan, Hostile Saiyan Encounter",
+      "card_number": "BT19-147",
+      "combined_count": 37,
+      "deck_count": 4,
+      "family_ids": [
+        "owner_opponent_battle_attacks:auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack"
+      ],
+      "handlers": {
+        "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 33,
+      "triggers": {
+        "owner_opponent_battle_attacks": 1
+      }
+    },
+    {
+      "card_id": 5106,
+      "card_name": "Trunks, Time Regulator",
+      "card_number": "BT7-103",
+      "combined_count": 34,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 30,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 2409,
+      "card_name": "Explosive Dance",
+      "card_number": "BT23-033",
+      "combined_count": 33,
+      "deck_count": 6,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 27,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 4726,
+      "card_name": "Master Roshi, Martial Expert",
+      "card_number": "BT5-012",
+      "combined_count": 32,
+      "deck_count": 4,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 28,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 9721,
+      "card_name": "SS Ros\u00e9 Goku Black, Fearsome God",
+      "card_number": "BT29-088",
+      "combined_count": 32,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_warp",
+        "self_activate_main:activate_send_top_deck_to_owner_warp"
+      ],
+      "handlers": {
+        "activate_play_self_from_warp": 1,
+        "activate_send_top_deck_to_owner_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 28,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 5847,
+      "card_name": "Elegant Assistance Heles",
+      "card_number": "EX03-18",
+      "combined_count": 32,
+      "deck_count": 8,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 24,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 3755,
+      "card_name": "Piccolo, Savior From the Beyond",
+      "card_number": "P-244",
+      "combined_count": 28,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_send_up_to_n_opponent_drop_battle_to_warp": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 24,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 9637,
+      "card_name": "SS Son Goten, Demon Resistance",
+      "card_number": "BT29-006",
+      "combined_count": 27,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_draw_n",
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "auto_draw_n": 1,
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 24,
+      "triggers": {
+        "self_played": 2
+      }
+    },
+    {
+      "card_id": 9729,
+      "card_name": "Zamasu, Scheme",
+      "card_number": "BT29-094",
+      "combined_count": 27,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_add_up_to_n_from_owner_warp_to_hand",
+        "self_activate_main:activate_play_self_from_warp"
+      ],
+      "handlers": {
+        "activate_add_up_to_n_from_owner_warp_to_hand": 1,
+        "activate_play_self_from_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 23,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 9724,
+      "card_name": "Goku Black, Invasion From the Future",
+      "card_number": "BT29-090",
+      "combined_count": 25,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_send_top_deck_to_owner_warp",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_send_top_deck_to_owner_warp": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 6688,
+      "card_name": "Mira, Dimensional Superpower",
+      "card_number": "EX15-05",
+      "combined_count": 25,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "self_activate_main:activate_optional_send_owner_hand_to_warp_draw_n"
+      ],
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
+        "activate_optional_send_owner_hand_to_warp_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 9657,
+      "card_name": "Stowaways",
+      "card_number": "BT29-024",
+      "combined_count": 25,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_extra_from_hand:activate_add_up_to_n_from_owner_deck_to_hand",
+        "self_activate_extra_from_hand:activate_play_up_to_n_each_named_from_owner_deck_or_drop"
+      ],
+      "handlers": {
+        "activate_add_up_to_n_from_owner_deck_to_hand": 1,
+        "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_extra_from_hand": 2
+      }
+    },
+    {
+      "card_id": 9725,
+      "card_name": "Goku Black, Surprise Attack",
+      "card_number": "BT29-091",
+      "combined_count": 24,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_send_top_deck_to_owner_warp"
+      ],
+      "handlers": {
+        "activate_send_top_deck_to_owner_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 20,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 9728,
+      "card_name": "Zamasu, Dark Plans",
+      "card_number": "BT29-093",
+      "combined_count": 24,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_warp",
+        "self_activate_main:activate_send_top_deck_to_owner_warp"
+      ],
+      "handlers": {
+        "activate_play_self_from_warp": 1,
+        "activate_send_top_deck_to_owner_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 20,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 8630,
+      "card_name": "Beerus, Confrontation",
+      "card_number": "P-693",
+      "combined_count": 23,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 21,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 9660,
+      "card_name": "Tiny Golden Warrior",
+      "card_number": "BT29-027",
+      "combined_count": 23,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 20,
+      "triggers": {}
+    },
+    {
+      "card_id": 9737,
+      "card_name": "Fused Zamasu, Fearsome Plans",
+      "card_number": "BT29-101",
+      "combined_count": 21,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 18,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 9659,
+      "card_name": "Escape From a Monster",
+      "card_number": "BT29-026",
+      "combined_count": 20,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 16,
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 4265,
+      "card_name": "Petrification",
+      "card_number": "BT9-087",
+      "combined_count": 18,
+      "deck_count": 5,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 13,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8458,
+      "card_name": "Final Battle",
+      "card_number": "BT27-025",
+      "combined_count": 17,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 15,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 4440,
+      "card_name": "Protector of the People",
+      "card_number": "DB2-159",
+      "combined_count": 17,
+      "deck_count": 6,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 11,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 1785,
+      "card_name": "SS Son Gohan, Defeating the Demon",
+      "card_number": "P-479",
+      "combined_count": 17,
+      "deck_count": 8,
+      "family_ids": [
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 9,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 9661,
+      "card_name": "3-Man Kamehameha",
+      "card_number": "BT29-028",
+      "combined_count": 15,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 3
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 13,
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 9726,
+      "card_name": "Fused Zamasu, Fearsome God",
+      "card_number": "BT29-092",
+      "combined_count": 15,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_warp"
+      ],
+      "handlers": {
+        "activate_play_self_from_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 13,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 5,
+      "card_name": "Jiren, the Avenger",
+      "card_number": "BT14-018",
+      "combined_count": 14,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 14,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 9658,
+      "card_name": "Taunt",
+      "card_number": "BT29-025",
+      "combined_count": 14,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 3
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 11,
+      "triggers": {
+        "self_activate_battle": 2,
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 5301,
+      "card_name": "Yamcha, Merciless Barrage",
+      "card_number": "BT10-008",
+      "combined_count": 13,
+      "deck_count": 1,
+      "family_ids": [
+        "counter_play:counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self"
+      ],
+      "handlers": {
+        "counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 12,
+      "triggers": {
+        "counter_play": 1
+      }
+    },
+    {
+      "card_id": 74,
+      "card_name": "SS Broly, Awakened Attacker",
+      "card_number": "BT15-021",
+      "combined_count": 12,
+      "deck_count": 0,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 12,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 9649,
+      "card_name": "SS Broly, Indiscriminate Destroyer",
+      "card_number": "BT29-017",
+      "combined_count": 12,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2,
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 4
+      },
+      "rule_count": 4,
+      "trace_count": 9,
+      "triggers": {
+        "self_activate_main": 4
+      }
+    },
+    {
+      "card_id": 6999,
+      "card_name": "Testing the Opposition",
+      "card_number": "EB1-11",
+      "combined_count": 12,
+      "deck_count": 4,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 8,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 9736,
+      "card_name": "Fused Zamasu, Undying Absolute God",
+      "card_number": "BT29-100",
+      "combined_count": 11,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 9,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 3,
+      "card_name": "Tien Shinhan, Universe 7 Challenger",
+      "card_number": "BT14-010",
+      "combined_count": 10,
+      "deck_count": 0,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 10,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 69,
+      "card_name": "Coco, Dedicated to the Village",
+      "card_number": "BT15-017",
+      "combined_count": 8,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_add_up_to_n_from_owner_deck_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 8,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 17,
+      "card_name": "Quick Growing Saibaimen",
+      "card_number": "EX19-02",
+      "combined_count": 8,
+      "deck_count": 0,
+      "family_ids": [
+        "self_koed:auto_power_reduce_opponent_unison_on_self_ko"
+      ],
+      "handlers": {
+        "auto_power_reduce_opponent_unison_on_self_ko": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 8,
+      "triggers": {
+        "self_koed": 1
+      }
+    },
+    {
+      "card_id": 66,
+      "card_name": "Videl, Opposing the Demon",
+      "card_number": "BT15-015",
+      "combined_count": 8,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 8,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8456,
+      "card_name": "Jiren, Final Form",
+      "card_number": "BT27-021",
+      "combined_count": 8,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_attacks:auto_power_reduce_up_to_n_on_attack"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_power_reduce_up_to_n_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 7,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 7166,
+      "card_name": "Strategies of Universe 7",
+      "card_number": "TB1-023",
+      "combined_count": 8,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 7,
+      "triggers": {}
+    },
+    {
+      "card_id": 9723,
+      "card_name": "SS Ros\u00e9 Goku Black, Power of Despair",
+      "card_number": "BT29-089",
+      "combined_count": 8,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_warp",
+        "self_activate_main:activate_send_top_deck_to_owner_warp"
+      ],
+      "handlers": {
+        "activate_play_self_from_warp": 1,
+        "activate_send_top_deck_to_owner_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 6,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 2152,
+      "card_name": "SS Cumber, Assailant's Fury",
+      "card_number": "BT22-127",
+      "combined_count": 8,
+      "deck_count": 8,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 7179,
+      "card_name": "A Crack in Spacetime",
+      "card_number": "EX06-36",
+      "combined_count": 7,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 6,
+      "triggers": {}
+    },
+    {
+      "card_id": 9787,
+      "card_name": "SS Ros\u00e9 Goku Black, Justice Enforcer",
+      "card_number": "BT29-150",
+      "combined_count": 7,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 6,
+      "triggers": {}
+    },
+    {
+      "card_id": 75,
+      "card_name": "Broly, Slumbering Demon",
+      "card_number": "BT15-022",
+      "combined_count": 6,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 6,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 10,
+      "card_name": "Kettol, Warrior of Universe 11",
+      "card_number": "BT14-025",
+      "combined_count": 6,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 6,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 89,
+      "card_name": "Son Goku, Steadfast Assistance",
+      "card_number": "BT15-096",
+      "combined_count": 6,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 6,
+      "triggers": {}
+    },
+    {
+      "card_id": 7459,
+      "card_name": "Difference of Status",
+      "card_number": "BT14-029",
+      "combined_count": 6,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 5,
+      "triggers": {}
+    },
+    {
+      "card_id": 9732,
+      "card_name": "SS2 Trunks, Pursuit",
+      "card_number": "BT29-097",
+      "combined_count": 6,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 4,
+      "triggers": {}
+    },
+    {
+      "card_id": 8114,
+      "card_name": "Android 17 & Hell Fighter 17, Team of Evil",
+      "card_number": "BT26-019",
+      "combined_count": 6,
+      "deck_count": 6,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 8307,
+      "card_name": "SS4 Son Gohan, Journey Through Time",
+      "card_number": "P-658",
+      "combined_count": 5,
+      "deck_count": 5,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2140,
+      "card_name": "SS4 Son Goku, Cross-Dimensional Fighting Spirit",
+      "card_number": "BT22-116",
+      "combined_count": 5,
+      "deck_count": 5,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8440,
+      "card_name": "Son Goku, Unlimited Potential",
+      "card_number": "BT27-019",
+      "combined_count": 5,
+      "deck_count": 5,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 6679,
+      "card_name": "Toppo, Righteous Aid",
+      "card_number": "DB1-014",
+      "combined_count": 5,
+      "deck_count": 5,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 32,
+      "card_name": "Ginyu, Former Galactic Elite",
+      "card_number": "EX19-17",
+      "combined_count": 4,
+      "deck_count": 0,
+      "family_ids": [
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 4,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 11,
+      "card_name": "Kahseral, Warrior of Universe 11",
+      "card_number": "BT14-026",
+      "combined_count": 4,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 4,
+      "triggers": {}
+    },
+    {
+      "card_id": 8,
+      "card_name": "Kunshi, Warrior of Universe 11",
+      "card_number": "BT14-021",
+      "combined_count": 4,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 4,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 39,
+      "card_name": "SS4's Call",
+      "card_number": "EX19-24",
+      "combined_count": 4,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 8375,
+      "card_name": "Android 13, Military Terror Creation",
+      "card_number": "BT27-034",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 685,
+      "card_name": "Android 14, Inorganic Horror",
+      "card_number": "BT17-053",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8373,
+      "card_name": "Android 17, Military Terror Creation",
+      "card_number": "BT27-030",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8374,
+      "card_name": "Android 19, Military Terror Creation",
+      "card_number": "BT27-032",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8389,
+      "card_name": "Android 20, Military Terror Creation",
+      "card_number": "BT27-033",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8378,
+      "card_name": "Cell Max, Military Terror Creation",
+      "card_number": "BT27-041",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_up_to_n_owner_energy_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 8393,
+      "card_name": "Cell, Military Terror Creation",
+      "card_number": "BT27-133",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1,
+        "auto_play_self_from_combo_on_battle_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed_battle_end": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7942,
+      "card_name": "Cheelai, Guided by the Dragon Balls",
+      "card_number": "EX24-13",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n",
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_draw_n": 2,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 2
+      }
+    },
+    {
+      "card_id": 8379,
+      "card_name": "Clash",
+      "card_number": "BT27-043",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "card_id": 6955,
+      "card_name": "Counterblast Son Gohan",
+      "card_number": "BT10-100",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_comboed:auto_draw_n",
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_draw_n": 1,
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7483,
+      "card_name": "Dark Masked King, Spirit Boost Sovereign",
+      "card_number": "P-321",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 2250,
+      "card_name": "Demon God Putine & Demon God Gravy, Henchmen Strength",
+      "card_number": "EX23-40",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8318,
+      "card_name": "Demon God Putine, Scheming",
+      "card_number": "BT27-102",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1178,
+      "card_name": "Demon God Salsa, Dark Combination",
+      "card_number": "BT18-136",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 8320,
+      "card_name": "Demon God Towa, Scheming",
+      "card_number": "BT27-106",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7358,
+      "card_name": "Dormant Potential Unleashed",
+      "card_number": "BT10-088",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5337,
+      "card_name": "Dr. Uiro, Cybernetic Rebirth",
+      "card_number": "EX10-05",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8064,
+      "card_name": "Fused Zamasu, Cleansing Despair",
+      "card_number": "BT26-085",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_attacks:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 8061,
+      "card_name": "Fused Zamasu, Total God's Rage",
+      "card_number": "BT26-082",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8062,
+      "card_name": "Fused Zamasu, Unified Ultimate God",
+      "card_number": "BT26-083",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 8386,
+      "card_name": "Gamma 1 & Gamma 2, Military Terror Creations",
+      "card_number": "BT27-134",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7954,
+      "card_name": "Gamma 1 & Gamma 2, Stand-Up Heroes",
+      "card_number": "EX24-25",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8060,
+      "card_name": "Goku Black, Returning to Zero",
+      "card_number": "BT26-081",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 1081,
+      "card_name": "Great Ape Son Goku, the Aggressor",
+      "card_number": "BT18-008",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_attacks:auto_power_reduce_up_to_n_on_attack"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 8982,
+      "card_name": "Krillin, Guided by the Dragon Balls",
+      "card_number": "P-699",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7857,
+      "card_name": "Nuova Shenron, Blazing Blaster Meteor",
+      "card_number": "BT25-114",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5702,
+      "card_name": "Oceanus Shenron, Negative Energy Explosion",
+      "card_number": "BT14-135",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_top_deck_add_if_color_on_play"
+      ],
+      "handlers": {
+        "auto_top_deck_add_if_color_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7937,
+      "card_name": "Oolong, Guided by the Dragon Balls",
+      "card_number": "EX24-08",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7909,
+      "card_name": "Oolong, Split-Second Wish",
+      "card_number": "BT25-141",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7948,
+      "card_name": "Pan, Fighting Tomboy",
+      "card_number": "EX24-19",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_attacks:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 2222,
+      "card_name": "Pan, Grandfather's Strength",
+      "card_number": "EX23-09",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 672,
+      "card_name": "Red Ribbon Robot, Colossal Power",
+      "card_number": "BT17-038",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8325,
+      "card_name": "Robelu, Hotshot",
+      "card_number": "BT27-101",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7867,
+      "card_name": "SS Son Gohan, Final Battle",
+      "card_number": "BT25-132",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7869,
+      "card_name": "SS Son Goten, Stunning Combination",
+      "card_number": "BT25-135",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7870,
+      "card_name": "SS Trunks, Stunning Combination",
+      "card_number": "BT25-136",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7844,
+      "card_name": "SS4 Gogeta VS Omega Shenron, Clash With Ultimate Evil",
+      "card_number": "BT25-137",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 1121,
+      "card_name": "SS4 Gogeta, Indomitable Might",
+      "card_number": "BT18-143",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 48,
+      "card_name": "SS4 Son Gohan, Prismatic Burst",
+      "card_number": "EX19-33",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 7852,
+      "card_name": "SS4 Son Goku VS Nuova Shenron, Clash With a Soldier",
+      "card_number": "BT25-107",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n",
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 3
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 1065,
+      "card_name": "SS4 Son Goku, Defender of Life",
+      "card_number": "SD17-02",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7866,
+      "card_name": "SS4 Son Goku, Final Battle",
+      "card_number": "BT25-131",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7947,
+      "card_name": "SS4 Son Goku, Power of Family Bonds",
+      "card_number": "EX24-18",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_play_up_to_n_from_owner_drop_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_play_up_to_n_from_owner_drop_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 2272,
+      "card_name": "SS4 Son Goku, Prismatic Radiance",
+      "card_number": "EX23-51",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 2271,
+      "card_name": "SS4 Vegeta, Prismatic Radiance",
+      "card_number": "EX23-50",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7868,
+      "card_name": "SS4 Vegeta, Wild Power of Justice",
+      "card_number": "BT25-133",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8993,
+      "card_name": "Shenron, Guided Journey",
+      "card_number": "P-708",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_draw_n",
+        "self_played:auto_play_up_to_n_from_owner_drop_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1,
+        "auto_play_up_to_n_from_owner_drop_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 2
+      }
+    },
+    {
+      "card_id": 7843,
+      "card_name": "Vegeta, Final Battle",
+      "card_number": "BT25-134",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5332,
+      "card_name": "Whis, Celestial Moderator",
+      "card_number": "BT9-096",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8051,
+      "card_name": "Zamasu & Goku Black, Meeting in Despair",
+      "card_number": "BT26-066",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8314,
+      "card_name": "Mechikabura",
+      "card_number": "BT27-092",
+      "combined_count": 3,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 2264,
+      "card_name": "10x Kamehameha, Mighty Blast",
+      "card_number": "EX23-03",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "card_id": 7935,
+      "card_name": "Android 18, Guided by the Dragon Balls",
+      "card_number": "EX24-06",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 1408,
+      "card_name": "Android 20, Inherited Evil",
+      "card_number": "BT19-028",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 2097,
+      "card_name": "Cell Max, Return of Despair",
+      "card_number": "BT22-027",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_attacks:auto_power_reduce_up_to_n_on_attack"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_power_reduce_up_to_n_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 7912,
+      "card_name": "Cheelai, Wish for the Fighting to End",
+      "card_number": "BT25-144",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_add_up_to_n_from_owner_warp_to_hand"
+      ],
+      "handlers": {
+        "activate_add_up_to_n_from_owner_warp_to_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 2249,
+      "card_name": "Demigra, Tokitoki in Hand",
+      "card_number": "EX23-39",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 2268,
+      "card_name": "First Kamehameha, Mighty Blast",
+      "card_number": "EX23-38",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8050,
+      "card_name": "Gowasu, Instructor",
+      "card_number": "BT26-065",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7195,
+      "card_name": "Great Ape Son Goku, Saiyan Instincts",
+      "card_number": "DB1-064",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 9633,
+      "card_name": "Jaguar's Island, Challenge Stage",
+      "card_number": "BT29-003",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1603,
+      "card_name": "Majin Buu, Pure Destroyer",
+      "card_number": "P-473",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8239,
+      "card_name": "Mercenary Tao, On the Job",
+      "card_number": "P-648",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "card_id": 7943,
+      "card_name": "Pan, Miracle to Save the Universe",
+      "card_number": "EX24-14",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_play_up_to_n_from_owner_drop_on_play"
+      ],
+      "handlers": {
+        "auto_play_up_to_n_from_owner_drop_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 6299,
+      "card_name": "Piccolo Jr., Eradicator of Peace",
+      "card_number": "DB3-115",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7932,
+      "card_name": "Pilaf, Guided by the Dragon Balls",
+      "card_number": "EX24-03",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 4226,
+      "card_name": "Released from Evil",
+      "card_number": "BT10-123",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5531,
+      "card_name": "SS Bardock, the Tenacious",
+      "card_number": "BT11-132",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8059,
+      "card_name": "SS Rose Goku Black, Heightened Form",
+      "card_number": "BT26-080",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 37,
+      "card_name": "SS4 Gogeta, Prismatic Burst",
+      "card_number": "EX19-22",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 49,
+      "card_name": "SS4 Son Gohan, Prismatic Aegis",
+      "card_number": "EX19-34",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2269,
+      "card_name": "SS4 Son Goku & SS4 Vegeta, Radiant Fusion",
+      "card_number": "EX23-45",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 2541,
+      "card_name": "SSB Vegito, Union of Sparks",
+      "card_number": "BT24-113",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 7928,
+      "card_name": "Shenron, Final Wish",
+      "card_number": "P-616",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 8442,
+      "card_name": "Son Gohan, Unlimited Potential",
+      "card_number": "BT27-022",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n",
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 2,
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 4
+      },
+      "rule_count": 4,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2,
+        "self_played": 2
+      }
+    },
+    {
+      "card_id": 7813,
+      "card_name": "Son Goku",
+      "card_number": "BT25-010",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7805,
+      "card_name": "Son Goku, Attack to Save the World",
+      "card_number": "BT25-009",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8127,
+      "card_name": "Super 17, Ultimate Masterpiece",
+      "card_number": "BT26-022",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "card_id": 8324,
+      "card_name": "Supreme Kai of Time, Imprisoned Godly Spirit",
+      "card_number": "BT27-099",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "turn_end:auto_switch_self_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_self_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 8065,
+      "card_name": "Zamasu, Doubt in Man and God",
+      "card_number": "BT26-086",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8066,
+      "card_name": "Zamasu, Returning to Zero",
+      "card_number": "BT26-087",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 30,
+      "card_name": "Bardock, Resurrected Lineage",
+      "card_number": "EX19-15",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 27,
+      "card_name": "Broly, Omen of Evolution",
+      "card_number": "EX19-12",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 29,
+      "card_name": "Cheelai and Lemo, Allied Assistance",
+      "card_number": "EX19-14",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 82,
+      "card_name": "Demonic Playtime",
+      "card_number": "BT15-029",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_activate_battle:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "card_id": 83,
+      "card_name": "Gigantic Meteor",
+      "card_number": "BT15-030",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 23,
+      "card_name": "Goku Black, Works Undone",
+      "card_number": "EX19-08",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 96,
+      "card_name": "Hire-Dragon, Battle at the Tree",
+      "card_number": "BT15-103",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_comboed:auto_draw_n",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 2,
+      "triggers": {
+        "self_comboed": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 4,
+      "card_name": "Jiren, Thirst for Power",
+      "card_number": "BT14-017",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 20,
+      "card_name": "King Cold, Blessing of the Clan",
+      "card_number": "EX19-05",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 25,
+      "card_name": "Lord Slug, Conqueror's Claim",
+      "card_number": "EX19-10",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 70,
+      "card_name": "Natade Village Monster",
+      "card_number": "BT15-018",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 93,
+      "card_name": "Piccolo, Battle at the Tree",
+      "card_number": "BT15-100",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 18,
+      "card_name": "SS Son Goku, Might in the Making",
+      "card_number": "EX19-03",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_up_to_n_owner_energy_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 19,
+      "card_name": "SS Vegeta, Might in the Making",
+      "card_number": "EX19-04",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_play_up_to_n_from_owner_deck_on_play"
+      ],
+      "handlers": {
+        "auto_play_up_to_n_from_owner_deck_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 36,
+      "card_name": "SS4 Broly, Prismatic Burst",
+      "card_number": "EX19-21",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 22,
+      "card_name": "Shugesh, Power of Unity",
+      "card_number": "EX19-07",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_comboed:auto_play_up_to_n_from_owner_hand_on_self_combo"
+      ],
+      "handlers": {
+        "auto_play_up_to_n_from_owner_hand_on_self_combo": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 90,
+      "card_name": "Son Gohan, the Misadventure",
+      "card_number": "BT15-097",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 88,
+      "card_name": "Son Goku, A Gift from the Earth",
+      "card_number": "BT15-095",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 86,
+      "card_name": "Son Goku, Reclaiming Hope",
+      "card_number": "BT15-093",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 87,
+      "card_name": "Tree of Might, Divine Roots",
+      "card_number": "BT15-094",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "owner_leader_attacks:auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack"
+      ],
+      "handlers": {
+        "auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "owner_leader_attacks": 1
+      }
+    },
+    {
+      "card_id": 9,
+      "card_name": "Tupper, Warrior of Universe 11",
+      "card_number": "BT14-022",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 24,
+      "card_name": "Veku, Might in the Making",
+      "card_number": "EX19-09",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_koed:auto_add_n_life_to_hand_on_self_ko"
+      ],
+      "handlers": {
+        "auto_add_n_life_to_hand_on_self_ko": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_koed": 1
+      }
+    },
+    {
+      "card_id": 7,
+      "card_name": "Vuon, Warrior of Universe 11",
+      "card_number": "BT14-020",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 98,
+      "card_name": "Wilderness Monster",
+      "card_number": "BT15-105",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 95,
+      "card_name": "Yamcha, Battle at the Tree",
+      "card_number": "BT15-102",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 21,
+      "card_name": "Zamasu, Teamwork Undying",
+      "card_number": "EX19-06",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8388,
+      "card_name": "Android 16, Military Terror Creation",
+      "card_number": "BT27-031",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_switch_up_to_n_owner_energy_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 8387,
+      "card_name": "Android 18, Military Terror Creation",
+      "card_number": "BT27-029",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n",
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 8372,
+      "card_name": "Android 18, Unknown Threat",
+      "card_number": "BT27-028",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8316,
+      "card_name": "Bardock, Destiny-Changing Willpower",
+      "card_number": "BT27-095",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack_play_self"
+      ],
+      "handlers": {
+        "counter_negate_attack_play_self": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 1527,
+      "card_name": "Black Smoke Dragon, Accumulated Negativity",
+      "card_number": "BT19-140",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 1002,
+      "card_name": "Cell, Awakening of the Created",
+      "card_number": "BT18-034",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8170,
+      "card_name": "Cooler, Strongest Pride",
+      "card_number": "BT26-128",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "activate_send_up_to_n_opponent_battle_to_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 8317,
+      "card_name": "Demigra, Encroaching Shadow",
+      "card_number": "BT27-100",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8492,
+      "card_name": "Demon God Dabura, Counter",
+      "card_number": "P-680",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8326,
+      "card_name": "Demon God Shroom, Scheming",
+      "card_number": "BT27-103",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1442,
+      "card_name": "Evil Saiyan, Malice Made Flesh",
+      "card_number": "BT19-154",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 7334,
+      "card_name": "Frieza Army Reinforcements",
+      "card_number": "EB1-48",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8881,
+      "card_name": "Frieza, Unrestricted Power",
+      "card_number": "BT28-003",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 9720,
+      "card_name": "Fused Zamasu, God of Despair",
+      "card_number": "BT29-087",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8063,
+      "card_name": "Fused Zamasu, Ideal World Creation",
+      "card_number": "BT26-084",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1734,
+      "card_name": "Goku's Kamehameha Deflection",
+      "card_number": "BT20-082",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 6072,
+      "card_name": "Homicidal Clones",
+      "card_number": "EB1-37",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8385,
+      "card_name": "Justice Impact",
+      "card_number": "BT27-124",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2458,
+      "card_name": "King Piccolo, Aerial Battle",
+      "card_number": "P-561",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7386,
+      "card_name": "Koitsukai, Mechanical Courage",
+      "card_number": "DB2-143",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 4276,
+      "card_name": "Max Power Kamehameha",
+      "card_number": "EX13-34",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 7029,
+      "card_name": "Mira, Creator Absorbed",
+      "card_number": "BT4-108",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8896,
+      "card_name": "Nail, Planetary Guardian",
+      "card_number": "BT28-018",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7839,
+      "card_name": "No Challenge for the Strong",
+      "card_number": "BT25-103",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5429,
+      "card_name": "Power Burst",
+      "card_number": "BT5-115",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8058,
+      "card_name": "SS Rose Goku Black, Attack Wave",
+      "card_number": "BT26-079",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1969,
+      "card_name": "SS Son Goku & SS2 Son Gohan, Father-Son Solidarity",
+      "card_number": "BT21-079",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 1190,
+      "card_name": "SS Son Goku : Xeno, Reflexive Strike",
+      "card_number": "P-418",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:auto_draw_n",
+        "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_draw_n": 1,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 5487,
+      "card_name": "SS Vegeta, the Prince Strikes Back",
+      "card_number": "BT11-130",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 1632,
+      "card_name": "SS Vegito, Overwhelming Might",
+      "card_number": "BT20-099",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8233,
+      "card_name": "SS Vegito, Power Release",
+      "card_number": "P-643",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 41,
+      "card_name": "SS4 Bardock, Prismatic Aegis",
+      "card_number": "EX19-26",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2546,
+      "card_name": "SS4 Son Goku & SS4 Vegeta, Striking a Weak Point",
+      "card_number": "BT24-118",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 51,
+      "card_name": "SS4 Son Goku, Prismatic Aegis",
+      "card_number": "EX19-36",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 50,
+      "card_name": "SS4 Son Goku, Prismatic Burst",
+      "card_number": "EX19-35",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end"
+      ],
+      "handlers": {
+        "auto_play_self_from_combo_on_battle_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed_battle_end": 1
+      }
+    },
+    {
+      "card_id": 44,
+      "card_name": "SS4 Vegeta, Prismatic Aegis",
+      "card_number": "EX19-29",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 43,
+      "card_name": "SS4 Vegeta, Prismatic Burst",
+      "card_number": "EX19-28",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end"
+      ],
+      "handlers": {
+        "auto_play_self_from_combo_on_battle_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed_battle_end": 1
+      }
+    },
+    {
+      "card_id": 2550,
+      "card_name": "SS4 Vegito, Sparking Offense and Defense",
+      "card_number": "BT24-122",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "turn_end:auto_switch_self_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_self_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 7846,
+      "card_name": "SSB Gogeta, Next Level Power-Up",
+      "card_number": "BT25-100",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 895,
+      "card_name": "SSB Vegeta, Surmounting the Impossible",
+      "card_number": "P-427",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 689,
+      "card_name": "Sacrificial Strike",
+      "card_number": "BT17-057",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 1135,
+      "card_name": "Son Gohan, the Awakened",
+      "card_number": "SD17-03",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "turn_end:auto_switch_self_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_self_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 7907,
+      "card_name": "Son Goku Vs. Frieza, Final Battle Wish",
+      "card_number": "BT25-139",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_up_to_n_owner_energy_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 7906,
+      "card_name": "Son Goku, Accidental Wish",
+      "card_number": "BT25-138",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7811,
+      "card_name": "Son Goku, Non-stop Attack",
+      "card_number": "BT25-005",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 384,
+      "card_name": "Support of the Dark Empire",
+      "card_number": "BT16-124",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 38,
+      "card_name": "Supreme Kai of Time, Prism Bringer",
+      "card_number": "EX19-23",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_comboed:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "card_id": 5826,
+      "card_name": "Temporal Darkness Demigra",
+      "card_number": "BT4-105",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8930,
+      "card_name": "Zen-Oh, Apex of the Universe",
+      "card_number": "BT28-125",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 4949,
+      "card_name": "Almighty Resistance",
+      "card_number": "EX09-06",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7940,
+      "card_name": "Android 17, Guided by the Dragon Balls",
+      "card_number": "EX24-11",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1702,
+      "card_name": "Android 21, in the Name of Hunger",
+      "card_number": "BT20-028",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 9634,
+      "card_name": "Bio-Broly, Imposing Behemoth",
+      "card_number": "BT29-004",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7896,
+      "card_name": "Boujack, Arrogant Agent of Destruction",
+      "card_number": "BT25-075",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7786,
+      "card_name": "Dabura, Stone Transformation Nightmare",
+      "card_number": "BT25-044",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8323,
+      "card_name": "Demigra's Wormhole",
+      "card_number": "BT27-094",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7798,
+      "card_name": "Demigra, Wormhole Opened",
+      "card_number": "BT25-120",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7035,
+      "card_name": "Demon God Demigra, True Power Unleashed",
+      "card_number": "DB3-109",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 4362,
+      "card_name": "For the Greater Good",
+      "card_number": "BT7-073",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 6224,
+      "card_name": "Frieza, Charismatic Villain",
+      "card_number": "BT10-075",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_played:auto_ko_opponent_battle_on_play"
+      ],
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7934,
+      "card_name": "Frieza, Guided by the Dragon Balls",
+      "card_number": "EX24-05",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_draw_n_and_gain_keyword_for_turn",
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "activate_draw_n_and_gain_keyword_for_turn": 1,
+        "activate_play_self_from_hand": 1,
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 3
+      }
+    },
+    {
+      "card_id": 8371,
+      "card_name": "Gamma 2",
+      "card_number": "BT27-027",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_attacks:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 7848,
+      "card_name": "Haze Shenron, Great Dragon Quake",
+      "card_number": "BT25-102",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8448,
+      "card_name": "Jiren, Climactic Battle",
+      "card_number": "BT27-005",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6581,
+      "card_name": "King Vegeta's Imposing Presence",
+      "card_number": "BT13-030",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7908,
+      "card_name": "Krillin, Wish After Conflict",
+      "card_number": "BT25-140",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2266,
+      "card_name": "Limit Ultra Kamehameha, Mighty Blast",
+      "card_number": "EX23-21",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8122,
+      "card_name": "Metamorphic Android Cell",
+      "card_number": "BT26-139",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 6947,
+      "card_name": "Nappa, Demolition Man",
+      "card_number": "BT9-090",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 892,
+      "card_name": "Oolong, Greed is Good",
+      "card_number": "P-405",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1063,
+      "card_name": "Pan",
+      "card_number": "SD17-01",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 9786,
+      "card_name": "SS Broly, Cutthroat Warfare",
+      "card_number": "BT29-149",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_power_reduce_up_to_n_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 7941,
+      "card_name": "SS Broly, Guided by the Dragon Balls",
+      "card_number": "EX24-12",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand",
+        "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1,
+        "activate_send_up_to_n_opponent_battle_to_warp": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "card_id": 8425,
+      "card_name": "SS Broly, Vigor",
+      "card_number": "BT27-084",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7933,
+      "card_name": "SS Son Goku, Guided by the Dragon Balls",
+      "card_number": "EX24-04",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 6820,
+      "card_name": "SS3 Scramble - Raditz, Vegeta & Broly",
+      "card_number": "BT7-130",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 40,
+      "card_name": "SS4 Bardock, Prismatic Burst",
+      "card_number": "EX19-25",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8444,
+      "card_name": "SS4 Gogeta, Bold Arrival",
+      "card_number": "BT27-123",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6792,
+      "card_name": "SS4 Gogeta, Thwarting the Dark Empire",
+      "card_number": "BT14-129",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 7879,
+      "card_name": "SS4 Gogeta, Unrivaled Sparking",
+      "card_number": "BT25-147",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 7838,
+      "card_name": "SS4 Son Goku & SS4 Vegeta",
+      "card_number": "BT25-098",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_attacks:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_id": 8049,
+      "card_name": "SS4 Vegito, Attaining Greater Power",
+      "card_number": "BT26-064",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "self_activate_main:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_id": 8315,
+      "card_name": "SS4 Vegito, Barrage",
+      "card_number": "BT27-093",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1068,
+      "card_name": "SSB Vegito, Godly Spirit",
+      "card_number": "SD18-02",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "turn_end:auto_switch_self_active_on_turn_end"
+      ],
+      "handlers": {
+        "auto_switch_self_active_on_turn_end": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 1
+      }
+    },
+    {
+      "card_id": 2481,
+      "card_name": "SSG Son Goku, Crimson Guardian Deity",
+      "card_number": "BT24-004",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 4468,
+      "card_name": "Shocking Death Ball",
+      "card_number": "BT5-075",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 7929,
+      "card_name": "Son Goku",
+      "card_number": "EX24-01",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7878,
+      "card_name": "Son Goku, Fist of Fate",
+      "card_number": "BT25-145",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1480,
+      "card_name": "Son Goku, Stronger Together",
+      "card_number": "BT19-037",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2064,
+      "card_name": "Special Beam Cannon, Inherited Power",
+      "card_number": "BT22-007",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6997,
+      "card_name": "Super Kamehameha",
+      "card_number": "BT8-104",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 4533,
+      "card_name": "Time Magic",
+      "card_number": "BT5-101",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "card_id": 8047,
+      "card_name": "Zamasu",
+      "card_number": "BT26-061",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [
+        "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play"
+      ],
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 0,
+      "triggers": {
+        "owner_leader_attacks": 1
+      }
+    },
+    {
+      "card_id": 7910,
+      "card_name": "Zamasu, Scheme Wish",
+      "card_number": "BT25-142",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    }
+  ],
+  "schema_version": "effect_family_mapping_report.v1",
+  "sources": {
+    "deck_files": [
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\BlueGammas_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\GokuBlack_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\Krillin_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\Mechikabura_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\PowerWish_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\RainbowBardock_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\RedPan_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\SS4RainbowGogeta_deck.txt",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\deckplanet_decks\\ZamasuMill_deck.txt"
+    ],
+    "trace_files": [
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_026.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_027.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_028.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_029.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_030.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_031.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_032.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_033.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_034.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_035.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_036.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_037.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_038.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_039.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_040.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_041.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_042.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_043.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_044.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\ai_match_trace_045.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\human_vs_ai_summary_001.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\human_vs_ai_summary_krillin_vs_gokublack_001.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\human_vs_ai_summary_krillin_vs_mechikabura_001.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\human_vs_ai_trace_001.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\human_vs_ai_trace_krillin_vs_gokublack_001.json",
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_source\\human_vs_ai_trace_krillin_vs_mechikabura_001.json"
+    ]
+  },
+  "summary": {
+    "mapped_priority_card_count": 172,
+    "priority_card_count": 266,
+    "priority_family_count": 39,
+    "total_deck_mentions": 616,
+    "total_trace_mentions": 1636,
+    "unmapped_priority_card_count": 94
+  },
+  "top_priority_families": [
+    {
+      "combined_count": 605,
+      "deck_count": 70,
+      "family_id": "self_activate_main:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 26
+      },
+      "priority_card_count": 24,
+      "priority_card_ids": [
+        32,
+        1190,
+        2541,
+        3755,
+        7195,
+        7852,
+        7934,
+        7937,
+        7942,
+        8049,
+        8114,
+        8373,
+        8387,
+        8442,
+        9629,
+        9635,
+        9641,
+        9649,
+        9658,
+        9659,
+        9661,
+        9724,
+        9736,
+        9737
+      ],
+      "provenances": {
+        "extractor": 26
+      },
+      "trace_count": 535,
+      "triggers": {
+        "self_activate_main": 26
+      }
+    },
+    {
+      "combined_count": 335,
+      "deck_count": 1,
+      "family_id": "self_activate_main:activate_look_top_send_up_to_n_to_owner_warp",
+      "handlers": {
+        "activate_look_top_send_up_to_n_to_owner_warp": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9629
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 334,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 268,
+      "deck_count": 3,
+      "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 3
+      },
+      "priority_card_count": 3,
+      "priority_card_ids": [
+        35,
+        8047,
+        9623
+      ],
+      "provenances": {
+        "extractor": 3
+      },
+      "trace_count": 265,
+      "triggers": {
+        "owner_leader_attacks": 3
+      }
+    },
+    {
+      "combined_count": 204,
+      "deck_count": 76,
+      "family_id": "self_played:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 31
+      },
+      "priority_card_count": 31,
+      "priority_card_ids": [
+        5,
+        7,
+        8,
+        25,
+        32,
+        37,
+        44,
+        75,
+        96,
+        895,
+        1527,
+        2249,
+        2250,
+        2271,
+        2546,
+        5106,
+        7035,
+        7852,
+        7932,
+        7937,
+        7942,
+        8065,
+        8066,
+        8325,
+        8373,
+        8387,
+        8389,
+        8442,
+        8993,
+        9637,
+        9638
+      ],
+      "provenances": {
+        "extractor": 31
+      },
+      "trace_count": 128,
+      "triggers": {
+        "self_played": 31
+      }
+    },
+    {
+      "combined_count": 183,
+      "deck_count": 103,
+      "family_id": "self_activate_main:activate_play_self_from_hand",
+      "handlers": {
+        "activate_play_self_from_hand": 37
+      },
+      "priority_card_count": 36,
+      "priority_card_ids": [
+        37,
+        1121,
+        1442,
+        1969,
+        2097,
+        2152,
+        2222,
+        6792,
+        7805,
+        7867,
+        7879,
+        7928,
+        7933,
+        7934,
+        7935,
+        7941,
+        7947,
+        8059,
+        8062,
+        8065,
+        8114,
+        8122,
+        8170,
+        8373,
+        8387,
+        8388,
+        8440,
+        8442,
+        8456,
+        8930,
+        8993,
+        9635,
+        9649,
+        9736,
+        9737,
+        9786
+      ],
+      "provenances": {
+        "extractor": 37
+      },
+      "trace_count": 80,
+      "triggers": {
+        "self_activate_main": 37
+      }
+    },
+    {
+      "combined_count": 114,
+      "deck_count": 40,
+      "family_id": "counter_attack:counter_negate_attack",
+      "handlers": {
+        "counter_negate_attack": 15
+      },
+      "priority_card_count": 15,
+      "priority_card_ids": [
+        384,
+        689,
+        1734,
+        2409,
+        4265,
+        4276,
+        4362,
+        4440,
+        4468,
+        4533,
+        5429,
+        6072,
+        6999,
+        7334,
+        8458
+      ],
+      "provenances": {
+        "manual_override": 15
+      },
+      "trace_count": 74,
+      "triggers": {
+        "counter_attack": 15
+      }
+    },
+    {
+      "combined_count": 113,
+      "deck_count": 18,
+      "family_id": "self_activate_main:activate_send_top_deck_to_owner_warp",
+      "handlers": {
+        "activate_send_top_deck_to_owner_warp": 5
+      },
+      "priority_card_count": 5,
+      "priority_card_ids": [
+        9721,
+        9723,
+        9724,
+        9725,
+        9728
+      ],
+      "provenances": {
+        "extractor": 5
+      },
+      "trace_count": 95,
+      "triggers": {
+        "self_activate_main": 5
+      }
+    },
+    {
+      "combined_count": 110,
+      "deck_count": 29,
+      "family_id": "self_activate_battle:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 11
+      },
+      "priority_card_count": 10,
+      "priority_card_ids": [
+        82,
+        2264,
+        7852,
+        8127,
+        8239,
+        8379,
+        9641,
+        9658,
+        9659,
+        9661
+      ],
+      "provenances": {
+        "extractor": 11
+      },
+      "trace_count": 81,
+      "triggers": {
+        "self_activate_battle": 11
+      }
+    },
+    {
+      "combined_count": 106,
+      "deck_count": 16,
+      "family_id": "self_activate_main:activate_play_self_from_warp",
+      "handlers": {
+        "activate_play_self_from_warp": 5
+      },
+      "priority_card_count": 5,
+      "priority_card_ids": [
+        9721,
+        9723,
+        9726,
+        9728,
+        9729
+      ],
+      "provenances": {
+        "extractor": 5
+      },
+      "trace_count": 90,
+      "triggers": {
+        "self_activate_main": 5
+      }
+    },
+    {
+      "combined_count": 105,
+      "deck_count": 27,
+      "family_id": "self_comboed:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 11
+      },
+      "priority_card_count": 11,
+      "priority_card_ids": [
+        3,
+        38,
+        74,
+        95,
+        96,
+        1178,
+        1408,
+        4726,
+        5487,
+        5847,
+        6955
+      ],
+      "provenances": {
+        "extractor": 11
+      },
+      "trace_count": 78,
+      "triggers": {
+        "self_comboed": 11
+      }
+    },
+    {
+      "combined_count": 88,
+      "deck_count": 26,
+      "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_play": 10
+      },
+      "priority_card_count": 10,
+      "priority_card_ids": [
+        9,
+        10,
+        1121,
+        1785,
+        7867,
+        8442,
+        8630,
+        9634,
+        9637,
+        9786
+      ],
+      "provenances": {
+        "extractor": 10
+      },
+      "trace_count": 62,
+      "triggers": {
+        "self_played": 10
+      }
+    },
+    {
+      "combined_count": 72,
+      "deck_count": 22,
+      "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 8
+      },
+      "priority_card_count": 8,
+      "priority_card_ids": [
+        4,
+        66,
+        2272,
+        7935,
+        7942,
+        8060,
+        8374,
+        9642
+      ],
+      "provenances": {
+        "extractor": 8
+      },
+      "trace_count": 50,
+      "triggers": {
+        "self_played": 8
+      }
+    },
+    {
+      "combined_count": 72,
+      "deck_count": 23,
+      "family_id": "counter_attack:counter_negate_attack_play_self",
+      "handlers": {
+        "counter_negate_attack_play_self": 8
+      },
+      "priority_card_count": 8,
+      "priority_card_ids": [
+        21,
+        48,
+        93,
+        685,
+        6679,
+        7236,
+        7483,
+        8316
+      ],
+      "provenances": {
+        "manual_override": 8
+      },
+      "trace_count": 49,
+      "triggers": {
+        "counter_attack": 8
+      }
+    },
+    {
+      "combined_count": 62,
+      "deck_count": 10,
+      "family_id": "self_attacks:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 5
+      },
+      "priority_card_count": 5,
+      "priority_card_ids": [
+        52,
+        7838,
+        7948,
+        8064,
+        8371
+      ],
+      "provenances": {
+        "extractor": 5
+      },
+      "trace_count": 52,
+      "triggers": {
+        "self_attacks": 5
+      }
+    },
+    {
+      "combined_count": 60,
+      "deck_count": 5,
+      "family_id": "counter_attack:counter_negate_attack_play_self_attack_restriction",
+      "handlers": {
+        "counter_negate_attack_play_self_attack_restriction": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        6
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 55,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "combined_count": 37,
+      "deck_count": 4,
+      "family_id": "owner_opponent_battle_attacks:auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack",
+      "handlers": {
+        "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        1536
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 33,
+      "triggers": {
+        "owner_opponent_battle_attacks": 1
+      }
+    },
+    {
+      "combined_count": 35,
+      "deck_count": 33,
+      "family_id": "self_played:auto_ko_opponent_battle_on_play",
+      "handlers": {
+        "auto_ko_opponent_battle_on_play": 13
+      },
+      "priority_card_count": 13,
+      "priority_card_ids": [
+        30,
+        51,
+        2269,
+        2458,
+        6224,
+        6955,
+        7805,
+        7811,
+        7844,
+        7896,
+        8059,
+        8061,
+        8393
+      ],
+      "provenances": {
+        "extractor": 13
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 13
+      }
+    },
+    {
+      "combined_count": 30,
+      "deck_count": 7,
+      "family_id": "self_activate_main:activate_add_up_to_n_from_owner_warp_to_hand",
+      "handlers": {
+        "activate_add_up_to_n_from_owner_warp_to_hand": 2
+      },
+      "priority_card_count": 2,
+      "priority_card_ids": [
+        7912,
+        9729
+      ],
+      "provenances": {
+        "extractor": 2
+      },
+      "trace_count": 23,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "combined_count": 28,
+      "deck_count": 4,
+      "family_id": "self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp",
+      "handlers": {
+        "activate_send_up_to_n_opponent_drop_battle_to_warp": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        3755
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 24,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 27,
+      "deck_count": 6,
+      "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 2
+      },
+      "priority_card_count": 2,
+      "priority_card_ids": [
+        6688,
+        7811
+      ],
+      "provenances": {
+        "extractor": 2
+      },
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_battle": 2
+      }
+    },
+    {
+      "combined_count": 25,
+      "deck_count": 4,
+      "family_id": "self_activate_extra_from_hand:activate_add_up_to_n_from_owner_deck_to_hand",
+      "handlers": {
+        "activate_add_up_to_n_from_owner_deck_to_hand": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9657
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "combined_count": 25,
+      "deck_count": 4,
+      "family_id": "self_activate_extra_from_hand:activate_play_up_to_n_each_named_from_owner_deck_or_drop",
+      "handlers": {
+        "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9657
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "combined_count": 25,
+      "deck_count": 4,
+      "family_id": "self_activate_main:activate_optional_send_owner_hand_to_warp_draw_n",
+      "handlers": {
+        "activate_optional_send_owner_hand_to_warp_draw_n": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        6688
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 21,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 15,
+      "deck_count": 8,
+      "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_attack": 3
+      },
+      "priority_card_count": 3,
+      "priority_card_ids": [
+        1081,
+        2097,
+        8456
+      ],
+      "provenances": {
+        "extractor": 3
+      },
+      "trace_count": 7,
+      "triggers": {
+        "self_attacks": 3
+      }
+    },
+    {
+      "combined_count": 13,
+      "deck_count": 1,
+      "family_id": "counter_play:counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self",
+      "handlers": {
+        "counter_power_reduce_up_to_n_opponent_battle_for_turn_play_self": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        5301
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 12,
+      "triggers": {
+        "counter_play": 1
+      }
+    },
+    {
+      "combined_count": 11,
+      "deck_count": 5,
+      "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+      "handlers": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 4
+      },
+      "priority_card_count": 4,
+      "priority_card_ids": [
+        29,
+        39,
+        1190,
+        8314
+      ],
+      "provenances": {
+        "extractor": 3,
+        "manual_override": 1
+      },
+      "trace_count": 6,
+      "triggers": {
+        "self_activate_main": 4
+      }
+    },
+    {
+      "combined_count": 11,
+      "deck_count": 11,
+      "family_id": "self_played:auto_play_up_to_n_from_owner_drop_on_play",
+      "handlers": {
+        "auto_play_up_to_n_from_owner_drop_on_play": 3
+      },
+      "priority_card_count": 3,
+      "priority_card_ids": [
+        7943,
+        7947,
+        8993
+      ],
+      "provenances": {
+        "extractor": 3
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 3
+      }
+    },
+    {
+      "combined_count": 10,
+      "deck_count": 8,
+      "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
+      "handlers": {
+        "auto_switch_up_to_n_owner_energy_active_on_turn_end": 4
+      },
+      "priority_card_count": 4,
+      "priority_card_ids": [
+        18,
+        7907,
+        8378,
+        8388
+      ],
+      "provenances": {
+        "extractor": 4
+      },
+      "trace_count": 2,
+      "triggers": {
+        "turn_end": 4
+      }
+    },
+    {
+      "combined_count": 8,
+      "deck_count": 0,
+      "family_id": "self_koed:auto_power_reduce_opponent_unison_on_self_ko",
+      "handlers": {
+        "auto_power_reduce_opponent_unison_on_self_ko": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        17
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 8,
+      "triggers": {
+        "self_koed": 1
+      }
+    },
+    {
+      "combined_count": 8,
+      "deck_count": 0,
+      "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+      "handlers": {
+        "auto_add_up_to_n_from_owner_deck_to_hand_on_play": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        69
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 8,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "combined_count": 8,
+      "deck_count": 8,
+      "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+      "handlers": {
+        "auto_play_self_from_combo_on_battle_end": 3
+      },
+      "priority_card_count": 3,
+      "priority_card_ids": [
+        43,
+        50,
+        8393
+      ],
+      "provenances": {
+        "extractor": 3
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed_battle_end": 3
+      }
+    },
+    {
+      "combined_count": 8,
+      "deck_count": 8,
+      "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+      "handlers": {
+        "auto_switch_self_active_on_turn_end": 4
+      },
+      "priority_card_count": 4,
+      "priority_card_ids": [
+        1068,
+        1135,
+        2550,
+        8324
+      ],
+      "provenances": {
+        "extractor": 4
+      },
+      "trace_count": 0,
+      "triggers": {
+        "turn_end": 4
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "self_played:auto_top_deck_add_if_color_on_play",
+      "handlers": {
+        "auto_top_deck_add_if_color_on_play": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        5702
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+      "handlers": {
+        "activate_send_up_to_n_opponent_battle_to_warp": 2
+      },
+      "priority_card_count": 2,
+      "priority_card_ids": [
+        7941,
+        8170
+      ],
+      "provenances": {
+        "extractor": 2
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "owner_leader_attacks:auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack",
+      "handlers": {
+        "auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        87
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "owner_leader_attacks": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_comboed:auto_play_up_to_n_from_owner_hand_on_self_combo",
+      "handlers": {
+        "auto_play_up_to_n_from_owner_hand_on_self_combo": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        22
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_koed:auto_add_n_life_to_hand_on_self_ko",
+      "handlers": {
+        "auto_add_n_life_to_hand_on_self_ko": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        24
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_koed": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
+      "handlers": {
+        "auto_play_up_to_n_from_owner_deck_on_play": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        19
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_id": "self_activate_main:activate_draw_n_and_gain_keyword_for_turn",
+      "handlers": {
+        "activate_draw_n_and_gain_keyword_for_turn": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        7934
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    }
+  ],
+  "unmapped_priority_cards": [
+    {
+      "card_id": 9660,
+      "card_name": "Tiny Golden Warrior",
+      "card_number": "BT29-027",
+      "combined_count": 23,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 20,
+      "triggers": {}
+    },
+    {
+      "card_id": 7166,
+      "card_name": "Strategies of Universe 7",
+      "card_number": "TB1-023",
+      "combined_count": 8,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 7,
+      "triggers": {}
+    },
+    {
+      "card_id": 7179,
+      "card_name": "A Crack in Spacetime",
+      "card_number": "EX06-36",
+      "combined_count": 7,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 6,
+      "triggers": {}
+    },
+    {
+      "card_id": 9787,
+      "card_name": "SS Ros\u00e9 Goku Black, Justice Enforcer",
+      "card_number": "BT29-150",
+      "combined_count": 7,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 6,
+      "triggers": {}
+    },
+    {
+      "card_id": 89,
+      "card_name": "Son Goku, Steadfast Assistance",
+      "card_number": "BT15-096",
+      "combined_count": 6,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 6,
+      "triggers": {}
+    },
+    {
+      "card_id": 7459,
+      "card_name": "Difference of Status",
+      "card_number": "BT14-029",
+      "combined_count": 6,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 5,
+      "triggers": {}
+    },
+    {
+      "card_id": 9732,
+      "card_name": "SS2 Trunks, Pursuit",
+      "card_number": "BT29-097",
+      "combined_count": 6,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 4,
+      "triggers": {}
+    },
+    {
+      "card_id": 8307,
+      "card_name": "SS4 Son Gohan, Journey Through Time",
+      "card_number": "P-658",
+      "combined_count": 5,
+      "deck_count": 5,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2140,
+      "card_name": "SS4 Son Goku, Cross-Dimensional Fighting Spirit",
+      "card_number": "BT22-116",
+      "combined_count": 5,
+      "deck_count": 5,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 11,
+      "card_name": "Kahseral, Warrior of Universe 11",
+      "card_number": "BT14-026",
+      "combined_count": 4,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 4,
+      "triggers": {}
+    },
+    {
+      "card_id": 8375,
+      "card_name": "Android 13, Military Terror Creation",
+      "card_number": "BT27-034",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8318,
+      "card_name": "Demon God Putine, Scheming",
+      "card_number": "BT27-102",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8320,
+      "card_name": "Demon God Towa, Scheming",
+      "card_number": "BT27-106",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7358,
+      "card_name": "Dormant Potential Unleashed",
+      "card_number": "BT10-088",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5337,
+      "card_name": "Dr. Uiro, Cybernetic Rebirth",
+      "card_number": "EX10-05",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8386,
+      "card_name": "Gamma 1 & Gamma 2, Military Terror Creations",
+      "card_number": "BT27-134",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7954,
+      "card_name": "Gamma 1 & Gamma 2, Stand-Up Heroes",
+      "card_number": "EX24-25",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8982,
+      "card_name": "Krillin, Guided by the Dragon Balls",
+      "card_number": "P-699",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7857,
+      "card_name": "Nuova Shenron, Blazing Blaster Meteor",
+      "card_number": "BT25-114",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7909,
+      "card_name": "Oolong, Split-Second Wish",
+      "card_number": "BT25-141",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 672,
+      "card_name": "Red Ribbon Robot, Colossal Power",
+      "card_number": "BT17-038",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7869,
+      "card_name": "SS Son Goten, Stunning Combination",
+      "card_number": "BT25-135",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7870,
+      "card_name": "SS Trunks, Stunning Combination",
+      "card_number": "BT25-136",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1065,
+      "card_name": "SS4 Son Goku, Defender of Life",
+      "card_number": "SD17-02",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7866,
+      "card_name": "SS4 Son Goku, Final Battle",
+      "card_number": "BT25-131",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7868,
+      "card_name": "SS4 Vegeta, Wild Power of Justice",
+      "card_number": "BT25-133",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7843,
+      "card_name": "Vegeta, Final Battle",
+      "card_number": "BT25-134",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5332,
+      "card_name": "Whis, Celestial Moderator",
+      "card_number": "BT9-096",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8051,
+      "card_name": "Zamasu & Goku Black, Meeting in Despair",
+      "card_number": "BT26-066",
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2268,
+      "card_name": "First Kamehameha, Mighty Blast",
+      "card_number": "EX23-38",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8050,
+      "card_name": "Gowasu, Instructor",
+      "card_number": "BT26-065",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 9633,
+      "card_name": "Jaguar's Island, Challenge Stage",
+      "card_number": "BT29-003",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1603,
+      "card_name": "Majin Buu, Pure Destroyer",
+      "card_number": "P-473",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6299,
+      "card_name": "Piccolo Jr., Eradicator of Peace",
+      "card_number": "DB3-115",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 4226,
+      "card_name": "Released from Evil",
+      "card_number": "BT10-123",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5531,
+      "card_name": "SS Bardock, the Tenacious",
+      "card_number": "BT11-132",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 49,
+      "card_name": "SS4 Son Gohan, Prismatic Aegis",
+      "card_number": "EX19-34",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7813,
+      "card_name": "Son Goku",
+      "card_number": "BT25-010",
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 27,
+      "card_name": "Broly, Omen of Evolution",
+      "card_number": "EX19-12",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 83,
+      "card_name": "Gigantic Meteor",
+      "card_number": "BT15-030",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 23,
+      "card_name": "Goku Black, Works Undone",
+      "card_number": "EX19-08",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 20,
+      "card_name": "King Cold, Blessing of the Clan",
+      "card_number": "EX19-05",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 70,
+      "card_name": "Natade Village Monster",
+      "card_number": "BT15-018",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 36,
+      "card_name": "SS4 Broly, Prismatic Burst",
+      "card_number": "EX19-21",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 90,
+      "card_name": "Son Gohan, the Misadventure",
+      "card_number": "BT15-097",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 88,
+      "card_name": "Son Goku, A Gift from the Earth",
+      "card_number": "BT15-095",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 86,
+      "card_name": "Son Goku, Reclaiming Hope",
+      "card_number": "BT15-093",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 98,
+      "card_name": "Wilderness Monster",
+      "card_number": "BT15-105",
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 8372,
+      "card_name": "Android 18, Unknown Threat",
+      "card_number": "BT27-028",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1002,
+      "card_name": "Cell, Awakening of the Created",
+      "card_number": "BT18-034",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8317,
+      "card_name": "Demigra, Encroaching Shadow",
+      "card_number": "BT27-100",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8492,
+      "card_name": "Demon God Dabura, Counter",
+      "card_number": "P-680",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8326,
+      "card_name": "Demon God Shroom, Scheming",
+      "card_number": "BT27-103",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8881,
+      "card_name": "Frieza, Unrestricted Power",
+      "card_number": "BT28-003",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 9720,
+      "card_name": "Fused Zamasu, God of Despair",
+      "card_number": "BT29-087",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8063,
+      "card_name": "Fused Zamasu, Ideal World Creation",
+      "card_number": "BT26-084",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8385,
+      "card_name": "Justice Impact",
+      "card_number": "BT27-124",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7386,
+      "card_name": "Koitsukai, Mechanical Courage",
+      "card_number": "DB2-143",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7029,
+      "card_name": "Mira, Creator Absorbed",
+      "card_number": "BT4-108",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8896,
+      "card_name": "Nail, Planetary Guardian",
+      "card_number": "BT28-018",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7839,
+      "card_name": "No Challenge for the Strong",
+      "card_number": "BT25-103",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8058,
+      "card_name": "SS Rose Goku Black, Attack Wave",
+      "card_number": "BT26-079",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1632,
+      "card_name": "SS Vegito, Overwhelming Might",
+      "card_number": "BT20-099",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8233,
+      "card_name": "SS Vegito, Power Release",
+      "card_number": "P-643",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 41,
+      "card_name": "SS4 Bardock, Prismatic Aegis",
+      "card_number": "EX19-26",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7846,
+      "card_name": "SSB Gogeta, Next Level Power-Up",
+      "card_number": "BT25-100",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7906,
+      "card_name": "Son Goku, Accidental Wish",
+      "card_number": "BT25-138",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 5826,
+      "card_name": "Temporal Darkness Demigra",
+      "card_number": "BT4-105",
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 4949,
+      "card_name": "Almighty Resistance",
+      "card_number": "EX09-06",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7940,
+      "card_name": "Android 17, Guided by the Dragon Balls",
+      "card_number": "EX24-11",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1702,
+      "card_name": "Android 21, in the Name of Hunger",
+      "card_number": "BT20-028",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7786,
+      "card_name": "Dabura, Stone Transformation Nightmare",
+      "card_number": "BT25-044",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8323,
+      "card_name": "Demigra's Wormhole",
+      "card_number": "BT27-094",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7798,
+      "card_name": "Demigra, Wormhole Opened",
+      "card_number": "BT25-120",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7848,
+      "card_name": "Haze Shenron, Great Dragon Quake",
+      "card_number": "BT25-102",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8448,
+      "card_name": "Jiren, Climactic Battle",
+      "card_number": "BT27-005",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6581,
+      "card_name": "King Vegeta's Imposing Presence",
+      "card_number": "BT13-030",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7908,
+      "card_name": "Krillin, Wish After Conflict",
+      "card_number": "BT25-140",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2266,
+      "card_name": "Limit Ultra Kamehameha, Mighty Blast",
+      "card_number": "EX23-21",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6947,
+      "card_name": "Nappa, Demolition Man",
+      "card_number": "BT9-090",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 892,
+      "card_name": "Oolong, Greed is Good",
+      "card_number": "P-405",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1063,
+      "card_name": "Pan",
+      "card_number": "SD17-01",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8425,
+      "card_name": "SS Broly, Vigor",
+      "card_number": "BT27-084",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6820,
+      "card_name": "SS3 Scramble - Raditz, Vegeta & Broly",
+      "card_number": "BT7-130",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 40,
+      "card_name": "SS4 Bardock, Prismatic Burst",
+      "card_number": "EX19-25",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8444,
+      "card_name": "SS4 Gogeta, Bold Arrival",
+      "card_number": "BT27-123",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 8315,
+      "card_name": "SS4 Vegito, Barrage",
+      "card_number": "BT27-093",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2481,
+      "card_name": "SSG Son Goku, Crimson Guardian Deity",
+      "card_number": "BT24-004",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7929,
+      "card_name": "Son Goku",
+      "card_number": "EX24-01",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7878,
+      "card_name": "Son Goku, Fist of Fate",
+      "card_number": "BT25-145",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 1480,
+      "card_name": "Son Goku, Stronger Together",
+      "card_number": "BT19-037",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 2064,
+      "card_name": "Special Beam Cannon, Inherited Power",
+      "card_number": "BT22-007",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 6997,
+      "card_name": "Super Kamehameha",
+      "card_number": "BT8-104",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    },
+    {
+      "card_id": 7910,
+      "card_name": "Zamasu, Scheme Wish",
+      "card_number": "BT25-142",
+      "combined_count": 1,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 0,
+      "triggers": {}
+    }
+  ]
+}

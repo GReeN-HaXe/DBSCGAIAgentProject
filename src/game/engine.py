@@ -149,6 +149,7 @@ class RulesEngine:
             "auto_add_markers_per_n_multicolor_energy_on_play": self._handle_auto_add_markers_per_n_multicolor_energy_on_play,
             "auto_add_top_deck_to_energy_rest_on_play": self._handle_auto_add_top_deck_to_energy_rest_on_play,
             "auto_gain_wormhole_on_owner_black_battle_played_from_warp": self._handle_auto_gain_wormhole_on_owner_black_battle_played_from_warp,
+            "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": self._handle_auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack,
             "auto_top_deck_add_if_color_on_play": self._handle_auto_top_deck_add_if_color_on_play,
             "auto_switch_self_active_on_turn_end": self._handle_auto_switch_self_active_on_turn_end,
             "auto_switch_self_to_hidden_on_play": self._handle_auto_switch_self_to_hidden_on_play,
@@ -162,6 +163,8 @@ class RulesEngine:
             "auto_buff_up_to_n_owner_cards_on_hidden_drop": self._handle_auto_buff_up_to_n_owner_cards_on_hidden_drop,
             "auto_play_self_from_combo_on_battle_end": self._handle_auto_play_self_from_combo_on_battle_end,
             "activate_play_self_from_hand": self._handle_activate_play_self_from_hand,
+            "activate_play_self_from_warp": self._handle_activate_play_self_from_warp,
+            "activate_optional_send_owner_hand_to_warp_draw_n": self._handle_activate_optional_send_owner_hand_to_warp_draw_n,
             "activate_draw_n_and_gain_keyword_for_turn": self._handle_activate_draw_n_and_gain_keyword_for_turn,
             "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end": self._handle_activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end,
             "activate_gain_power_and_keyword_for_battle": self._handle_activate_gain_power_and_keyword_for_battle,
@@ -170,7 +173,13 @@ class RulesEngine:
             "activate_switch_self_to_hidden_mode": self._handle_activate_switch_self_to_hidden_mode,
             "activate_gain_power_by_hidden_cost_target_original_power_for_turn": self._handle_activate_gain_power_by_hidden_cost_target_original_power_for_turn,
             "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": self._handle_activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn,
+            "activate_look_top_send_up_to_n_to_owner_warp": self._handle_activate_look_top_send_up_to_n_to_owner_warp,
+            "activate_send_top_deck_to_owner_warp": self._handle_activate_send_top_deck_to_owner_warp,
             "activate_send_up_to_n_opponent_battle_to_warp": self._handle_activate_send_up_to_n_opponent_battle_to_warp,
+            "activate_send_up_to_n_opponent_drop_battle_to_warp": self._handle_activate_send_up_to_n_opponent_drop_battle_to_warp,
+            "activate_add_up_to_n_from_owner_warp_to_hand": self._handle_activate_add_up_to_n_from_owner_warp_to_hand,
+            "activate_add_up_to_n_from_owner_deck_to_hand": self._handle_activate_add_up_to_n_from_owner_deck_to_hand,
+            "activate_play_up_to_n_each_named_from_owner_deck_or_drop": self._handle_activate_play_up_to_n_each_named_from_owner_deck_or_drop,
             "activate_switch_owner_board_to_revealed_mode": self._handle_activate_switch_owner_board_to_revealed_mode,
             "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n": self._handle_activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n,
             "activate_drop_owner_hidden_mode_draw_n": self._handle_activate_drop_owner_hidden_mode_draw_n,
@@ -761,6 +770,30 @@ class RulesEngine:
                 specified_costs=dict(card.specified_costs),
                 z_cost=card.z_energy_cost or 0,
             ):
+                if card.card_type in {"EXTRA", "Z-EXTRA"}:
+                    effect_rules = [
+                        rule
+                        for rule in self._effect_rules.get(card.card_id, ())
+                        if str(rule.trigger or "") == "self_activate_extra_from_hand"
+                    ]
+                    if effect_rules:
+                        available_other_hand = max(len(player.hand) - 1, 0)
+                        choice_added = False
+                        for choice_index, rule in enumerate(effect_rules):
+                            discard_before = int(rule.handler_params.get("discard_from_hand_before", 0) or 0)
+                            if discard_before > available_other_hand:
+                                continue
+                            actions.append(
+                                Action(
+                                    action_type=ActionType.PLAY_CARD_FROM_HAND,
+                                    player_id=player_id,
+                                    hand_index=i,
+                                    effect_choice=choice_index,
+                                )
+                            )
+                            choice_added = True
+                        if choice_added:
+                            continue
                 actions.append(Action(action_type=ActionType.PLAY_CARD_FROM_HAND, player_id=player_id, hand_index=i))
         return actions
 
@@ -800,7 +833,7 @@ class RulesEngine:
                 specified_costs=dict(player.leader_area.specified_costs),
             )
             and not self._is_activate_limited_this_turn(state, player_id, "main", player.leader_area)
-            and self._can_pay_skill_cost(player, player.leader_area, "activate_main")
+            and self._can_pay_skill_cost(player, player.leader_area, "activate_main", source_zone="leader")
             and self._activate_effect_requirements_met(state, player_id=player_id, source=player.leader_area, source_zone="leader", source_kind="main")
         ):
             actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="leader"))
@@ -816,7 +849,7 @@ class RulesEngine:
                     specified_costs=dict(c.specified_costs),
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "main", c)
-                and self._can_pay_skill_cost(player, c, "activate_main")
+                and self._can_pay_skill_cost(player, c, "activate_main", source_zone="battle")
                 and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="battle", source_kind="main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="battle", source_index=i))
@@ -832,8 +865,8 @@ class RulesEngine:
                     specified_costs=dict(c.specified_costs),
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "main", c)
-                and not self._is_unison_marker_skill_limited_this_turn(state, c, "activate_main")
-                and self._can_pay_skill_cost(player, c, "activate_main")
+                and not self._is_unison_marker_skill_limited_this_turn(state, c, "activate_main", source_zone="unison")
+                and self._can_pay_skill_cost(player, c, "activate_main", source_zone="unison")
                 and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="unison", source_kind="main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="unison", source_index=i))
@@ -848,10 +881,25 @@ class RulesEngine:
                     specified_costs=dict(c.specified_costs),
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "main", c)
-                and self._can_pay_skill_cost(player, c, "activate_main")
+                and self._can_pay_skill_cost(player, c, "activate_main", source_zone="hand")
                 and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="hand", source_kind="main")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="hand", source_index=i))
+        for i, c in enumerate(player.warp):
+            if (
+                self._is_valid_skill_source_area(c, "warp")
+                and c.has_activate_main
+                and self._can_pay_energy_cost(
+                    player,
+                    c.energy_cost or 0,
+                    required_color=c.color,
+                    specified_costs=dict(c.specified_costs),
+                )
+                and not self._is_activate_limited_this_turn(state, player_id, "main", c)
+                and self._can_pay_skill_cost(player, c, "activate_main", source_zone="warp")
+                and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="warp", source_kind="main")
+            ):
+                actions.append(Action(action_type=ActionType.ACTIVATE_MAIN_SKILL, player_id=player_id, source_zone="warp", source_index=i))
         return actions
 
     def _legal_attack_actions(self, state: GameState, player_id: int) -> list[Action]:
@@ -899,7 +947,7 @@ class RulesEngine:
                 specified_costs=dict(player.leader_area.specified_costs),
             )
             and not self._is_activate_limited_this_turn(state, player_id, "battle", player.leader_area)
-            and self._can_pay_skill_cost(player, player.leader_area, "activate_battle")
+            and self._can_pay_skill_cost(player, player.leader_area, "activate_battle", source_zone="leader")
             and self._activate_effect_requirements_met(state, player_id=player_id, source=player.leader_area, source_zone="leader", source_kind="battle")
         ):
             actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="leader"))
@@ -915,7 +963,7 @@ class RulesEngine:
                     specified_costs=dict(c.specified_costs),
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "battle", c)
-                and self._can_pay_skill_cost(player, c, "activate_battle")
+                and self._can_pay_skill_cost(player, c, "activate_battle", source_zone="battle")
                 and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="battle", source_kind="battle")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="battle", source_index=i))
@@ -932,7 +980,7 @@ class RulesEngine:
                 )
                 and not self._is_activate_limited_this_turn(state, player_id, "battle", c)
                 and not self._is_unison_marker_skill_limited_this_turn(state, c, "activate_battle")
-                and self._can_pay_skill_cost(player, c, "activate_battle")
+                and self._can_pay_skill_cost(player, c, "activate_battle", source_zone="unison")
                 and self._activate_effect_requirements_met(state, player_id=player_id, source=c, source_zone="unison", source_kind="battle")
             ):
                 actions.append(Action(action_type=ActionType.ACTIVATE_BATTLE_SKILL, player_id=player_id, source_zone="unison", source_index=i))
@@ -1075,6 +1123,22 @@ class RulesEngine:
         if card.card_type in {"EXTRA", "Z-EXTRA"}:
             declared = player.hand.pop(action.hand_index)
             player.drop.append(declared)
+            self._register_card_effects(state, player_id=action.player_id, source_zone="drop", card=declared)
+            selected_effect_id: int | None = None
+            extra_effects = sorted(
+                [
+                    reg
+                    for reg in state.effect_registry
+                    if reg.source_instance_id == declared.instance_id
+                    and reg.source_zone == "drop"
+                    and reg.trigger == "self_activate_extra_from_hand"
+                ],
+                key=lambda row: int(row.effect_id),
+            )
+            if action.effect_choice is not None and 0 <= int(action.effect_choice) < len(extra_effects):
+                selected_effect_id = int(extra_effects[int(action.effect_choice)].effect_id)
+            elif len(extra_effects) == 1:
+                selected_effect_id = int(extra_effects[0].effect_id)
             self._open_counter_window(
                 state,
                 kind="activate_extra_from_hand",
@@ -1082,7 +1146,13 @@ class RulesEngine:
                 pending_action=PendingAction(
                     action_type="activate_extra_from_hand",
                     actor_player_id=action.player_id,
-                    payload={"card_instance_id": declared.instance_id},
+                    payload={
+                        "card_instance_id": declared.instance_id,
+                        "source_instance_id": declared.instance_id,
+                        "source_card_id": declared.card_id,
+                        "source_zone": "drop",
+                        "selected_effect_id": selected_effect_id,
+                    },
                 ),
             )
             self._checkpoint(state, "extra_moved_to_drop_on_declare")
@@ -1103,7 +1173,7 @@ class RulesEngine:
 
     def _declare_activate_skill(self, state: GameState, action: Action, *, source_kind: str) -> None:
         player = state.players[action.player_id]
-        if action.source_zone not in {"leader", "battle", "unison", "hand"}:
+        if action.source_zone not in {"leader", "battle", "unison", "hand", "warp"}:
             raise RulesViolation("Invalid source zone.")
         if action.source_zone == "leader":
             source = player.leader_area
@@ -1116,6 +1186,8 @@ class RulesEngine:
                 else player.unison_area
                 if action.source_zone == "unison"
                 else player.hand
+                if action.source_zone == "hand"
+                else player.warp
             )
             if not (0 <= action.source_index < len(zone)):
                 raise RulesViolation("Source index out of range.")
@@ -1126,11 +1198,11 @@ class RulesEngine:
             raise RulesViolation("No Activate: Battle.")
         if not self._is_valid_skill_source_area(source, action.source_zone):
             raise RulesViolation("Skill source is in an invalid area for its card type.")
-        if action.source_zone == "hand":
-            self._register_card_effects(state, player_id=action.player_id, source_zone="hand", card=source)
+        if action.source_zone in {"hand", "warp"}:
+            self._register_card_effects(state, player_id=action.player_id, source_zone=action.source_zone, card=source)
         if self._is_activate_limited_this_turn(state, action.player_id, source_kind, source):
             raise RulesViolation("Activate skill limit already used this turn.")
-        if self._is_unison_marker_skill_limited_this_turn(state, source, f"activate_{source_kind}"):
+        if self._is_unison_marker_skill_limited_this_turn(state, source, f"activate_{source_kind}", source_zone=action.source_zone):
             raise RulesViolation("This Unison already used a marker-cost skill this turn.")
         if not self._activate_effect_requirements_met(
             state,
@@ -1140,7 +1212,7 @@ class RulesEngine:
             source_kind=source_kind,
         ):
             raise RulesViolation("Activate skill requirements are not met.")
-        if not self._can_pay_skill_cost(player, source, f"activate_{source_kind}"):
+        if not self._can_pay_skill_cost(player, source, f"activate_{source_kind}", source_zone=action.source_zone):
             raise RulesViolation("Cannot pay skill cost.")
         energy_cost = source.energy_cost or 0
         if action.source_zone == "hand":
@@ -1151,7 +1223,7 @@ class RulesEngine:
             required_color=source.color,
             specified_costs=dict(source.specified_costs),
         )
-        skill_cost_payload = self._pay_skill_cost(state, player, source, f"activate_{source_kind}")
+        skill_cost_payload = self._pay_skill_cost(state, player, source, f"activate_{source_kind}", source_zone=action.source_zone)
         self._open_counter_window(
             state,
             kind=f"activate_{source_kind}",
@@ -1179,16 +1251,16 @@ class RulesEngine:
             return False
         return self._activate_usage_key(player_id, source_kind, source) in state.activate_skill_usage
 
-    def _skill_cost_spec_has_marker_adjustment(self, card_id: int, context: str) -> bool:
-        spec = self._resolve_skill_cost_spec(card_id, context)
+    def _skill_cost_spec_has_marker_adjustment(self, card_id: int, context: str, *, source_zone: str | None = None) -> bool:
+        spec = self._resolve_skill_cost_spec(card_id, context, source_zone=source_zone)
         if spec is None:
             return False
         return any(step.kind in {"remove_markers", "add_markers"} for step in spec.steps)
 
-    def _is_unison_marker_skill_limited_this_turn(self, state: GameState, source: CardInstance, context: str) -> bool:
+    def _is_unison_marker_skill_limited_this_turn(self, state: GameState, source: CardInstance, context: str, *, source_zone: str | None = None) -> bool:
         if source.card_type not in {"UNISON", "Z-UNISON"}:
             return False
-        if not self._skill_cost_spec_has_marker_adjustment(source.card_id, context):
+        if not self._skill_cost_spec_has_marker_adjustment(source.card_id, context, source_zone=source_zone):
             return False
         return source.instance_id in state.unison_marker_skill_usage
 
@@ -1656,6 +1728,17 @@ class RulesEngine:
         return "play this card" in text
 
     @staticmethod
+    def _parse_counter_power_reduce_opponent_battle_for_turn(card: CardInstance) -> tuple[int, int] | None:
+        text = str(card.skill_text_raw or "").lower()
+        match = re.search(
+            r"choose up to (\d+) of your opponent'?s battle cards?,\s*(?:it|they) get -\s*(\d+) power for the turn,\s*then play this card",
+            text,
+        )
+        if match is None:
+            return None
+        return int(match.group(1)), -int(match.group(2))
+
+    @staticmethod
     def _text_requires_play_self_in_rest(card: CardInstance) -> bool:
         text = str(card.skill_text_raw or "").lower()
         return "rest mode" in text or "in rest" in text
@@ -1719,6 +1802,14 @@ class RulesEngine:
         return "activate this card's [counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost" in text
 
     @staticmethod
+    def _text_counter_can_activate_for_free_with_red_unison_markers(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return (
+            "you can activate this card's [counter] skill from your hand without paying its energy cost" in text
+            and "red unison card with 2 or more markers in play" in text
+        )
+
+    @staticmethod
     def _owner_hidden_mode_count(player: PlayerState) -> int:
         return sum(
             1
@@ -1740,6 +1831,9 @@ class RulesEngine:
             return
         if pending.action_type == "play_from_hand":
             self._resolve_play_from_hand(state, pending, negated=negated)
+            return
+        if pending.action_type == "play_from_warp":
+            self._resolve_play_from_warp(state, pending, negated=negated)
             return
         if pending.action_type == "activate_extra_from_hand":
             self._resolve_extra_activation_from_hand(state, pending, negated=negated)
@@ -1765,6 +1859,7 @@ class RulesEngine:
                 and self._skill_cost_spec_has_marker_adjustment(
                     int(pending.payload.get("source_card_id") or getattr(source, "card_id", -1)),
                     pending.action_type,
+                    source_zone=source_zone,
                 )
             ):
                 state.unison_marker_skill_usage.add(int(pending.payload.get("source_instance_id") or source.instance_id))
@@ -1968,6 +2063,9 @@ class RulesEngine:
                 continue
             handled = False
             effect_tags: list[str] = []
+            if self._apply_counter_power_reduce_opponent_battle_family(state, player, card):
+                handled = True
+                effect_tags.append("power_reduce")
             if self._text_describes_counter_play_self(card):
                 effect_tags.extend(self._resolve_counter_play_self_family(state, player, card, motion.payload))
                 handled = True
@@ -1996,6 +2094,29 @@ class RulesEngine:
                     f"motion_id={motion.motion_id} effects={','.join(effect_tags)}"
                 )
         return effect_tags_by_motion
+
+    def _apply_counter_power_reduce_opponent_battle_family(self, state: GameState, player: PlayerState, card: CardInstance) -> bool:
+        parsed = self._parse_counter_power_reduce_opponent_battle_for_turn(card)
+        if parsed is None:
+            return False
+        max_targets, power_delta = parsed
+        if max_targets <= 0 or power_delta == 0:
+            return False
+        opponent = state.players.get(self._opponent_of(player.player_id))
+        if opponent is None or not opponent.battle_area:
+            return False
+        selected = list(opponent.battle_area[:max_targets])
+        if not selected:
+            return False
+        for target in selected:
+            self._apply_temporary_power_delta(
+                state,
+                card=target,
+                delta=power_delta,
+                reason="counter_effect_power_reduce",
+            )
+        self._checkpoint(state, "counter_effect_power_reduce_resolved")
+        return True
 
     def _resolve_counter_play_self_family(
         self,
@@ -2259,6 +2380,70 @@ class RulesEngine:
         player.drop.append(card)
         self._checkpoint(state, "main_play_extra")
 
+    def _resolve_play_from_warp(self, state: GameState, pending: PendingAction, *, negated: bool) -> None:
+        player = state.players[pending.actor_player_id]
+        target_id = int(pending.payload.get("card_instance_id") or -1)
+        idx = next((i for i, c in enumerate(player.warp) if c.instance_id == target_id), None)
+        if idx is None:
+            return
+        card = player.warp.pop(idx)
+        card.resting = bool(pending.payload.get("resting") or False)
+        delayed_keyword = str(pending.payload.get("grant_keyword_after_play") or "").strip()
+        keyword_clear_trigger_player_id = int(pending.payload.get("keyword_clear_trigger_player_id") or -1)
+        if negated:
+            player.drop.append(card)
+            self._checkpoint(state, "play_negated")
+            return
+        if card.card_type in {"BATTLE", "Z-BATTLE"}:
+            player.battle_area.append(card)
+            if delayed_keyword:
+                self._append_temporary_keyword(card, delayed_keyword, duration="delayed")
+                if keyword_clear_trigger_player_id > 0:
+                    state.delayed_keyword_clears.append(
+                        DelayedKeywordClear(
+                            owner_player_id=pending.actor_player_id,
+                            target_instance_id=card.instance_id,
+                            trigger_player_id=keyword_clear_trigger_player_id,
+                            keyword=delayed_keyword,
+                        )
+                    )
+            self._register_card_effects(state, player_id=pending.actor_player_id, source_zone="battle", card=card)
+            self._emit_effect_event(
+                state,
+                name="card_played",
+                actor_player_id=pending.actor_player_id,
+                payload={
+                    "source_instance_id": card.instance_id,
+                    "source_card_id": card.card_id,
+                    "source_zone": "battle",
+                    "played_from": "warp",
+                },
+            )
+            self._checkpoint(state, "main_play_battle")
+            return
+        if card.card_type in {"UNISON", "Z-UNISON"}:
+            marker_override = pending.payload.get("marker_count")
+            paid_energy = int(pending.payload.get("paid_energy_cards") or 0)
+            card.markers = max(int(marker_override) if marker_override is not None else paid_energy, 0)
+            self._replace_owner_unison_if_needed(state, player)
+            player.unison_area.append(card)
+            self._register_card_effects(state, player_id=pending.actor_player_id, source_zone="unison", card=card)
+            self._emit_effect_event(
+                state,
+                name="card_played",
+                actor_player_id=pending.actor_player_id,
+                payload={
+                    "source_instance_id": card.instance_id,
+                    "source_card_id": card.card_id,
+                    "source_zone": "unison",
+                    "played_from": "warp",
+                },
+            )
+            self._checkpoint(state, "main_play_unison")
+            return
+        player.drop.append(card)
+        self._checkpoint(state, "main_play_extra")
+
     def _resolve_extra_activation_from_hand(self, state: GameState, pending: PendingAction, *, negated: bool) -> None:
         player = state.players[pending.actor_player_id]
         target_id = int(pending.payload.get("card_instance_id") or -1)
@@ -2272,10 +2457,57 @@ class RulesEngine:
             source = next((c for c in player.drop if c.instance_id == target_id), None)
             if source is None:
                 return
+            selected_effect_id = int(pending.payload.get("selected_effect_id") or -1)
+            selected_effect = next(
+                (
+                    reg
+                    for reg in state.effect_registry
+                    if reg.source_instance_id == source.instance_id
+                    and reg.source_zone == "drop"
+                    and reg.trigger == "self_activate_extra_from_hand"
+                    and (selected_effect_id <= 0 or reg.effect_id == selected_effect_id)
+                ),
+                None,
+            )
+            discard_before = (
+                self._resolve_effect_int_param(state, selected_effect, "discard_from_hand_before", default=0)
+                if selected_effect is not None
+                else 0
+            )
+            if discard_before > 0:
+                if len(player.hand) < discard_before:
+                    self._checkpoint(state, "extra_activation_failed_selected_effect_cost")
+                    return
+                for _ in range(discard_before):
+                    player.drop.append(player.hand.pop(0))
             if not self._can_pay_skill_cost(player, source, "activate_extra_from_hand"):
                 self._checkpoint(state, "extra_activation_failed_skill_cost")
                 return
             self._pay_skill_cost(state, player, source, "activate_extra_from_hand")
+            self._emit_effect_event(
+                state,
+                name="skill_activated",
+                actor_player_id=pending.actor_player_id,
+                payload={
+                    "source_zone": "drop",
+                    "source_index": -1,
+                    "source_instance_id": int(source.instance_id),
+                    "source_card_id": int(source.card_id),
+                    "skill_kind": "activate_extra_from_hand",
+                    "selected_effect_id": selected_effect_id if selected_effect_id > 0 else None,
+                },
+            )
+            matching_registered_effect = any(
+                reg.source_instance_id == source.instance_id
+                and reg.trigger == "self_activate_extra_from_hand"
+                and (selected_effect_id <= 0 or reg.effect_id == selected_effect_id)
+                for reg in state.effect_registry
+            )
+            if not matching_registered_effect:
+                state.log.append(
+                    f"Unsupported skill activation: source_card_id={int(source.card_id)} kind=activate_extra_from_hand"
+                )
+                self._checkpoint(state, "skill_activation_no_registered_effect")
             if any(str(k).strip().lower() == "field" for k in (source.keywords or ())):
                 self._emit_effect_event(
                     state,
@@ -2312,12 +2544,22 @@ class RulesEngine:
         zone_cards = (
             player.hand
             if zone == "hand"
+            else player.life
+            if zone == "life"
+            else player.energy
+            if zone == "energy"
+            else player.z_energy
+            if zone == "z_energy"
             else player.battle_area
             if zone == "battle"
             else player.unison_area
             if zone == "unison"
             else player.combo_area
             if zone == "combo"
+            else player.drop
+            if zone == "drop"
+            else player.warp
+            if zone == "warp"
             else []
         )
         for c in zone_cards:
@@ -2484,6 +2726,12 @@ class RulesEngine:
                 "source_hidden_mode": bool(card.hidden_mode),
             },
         )
+        self._register_card_effects(state, player_id=owner_player_id, source_zone="drop", card=card)
+
+    def _append_to_owner_warp(self, state: GameState, *, owner_player_id: int, card: CardInstance) -> None:
+        owner = state.players[owner_player_id]
+        owner.warp.append(card)
+        self._register_card_effects(state, player_id=owner_player_id, source_zone="warp", card=card)
 
     def _replace_owner_unison_if_needed(self, state: GameState, player: PlayerState) -> CardInstance | None:
         if not player.unison_area:
@@ -2649,9 +2897,9 @@ class RulesEngine:
         card.power = new_power
         self._checkpoint(state, f"power_changed_{reason}")
 
-    def _can_pay_skill_cost(self, player: PlayerState, card: CardInstance, context: str) -> bool:
+    def _can_pay_skill_cost(self, player: PlayerState, card: CardInstance, context: str, *, source_zone: str | None = None) -> bool:
         if self._skill_cost_can_pay is None:
-            spec = self._resolve_skill_cost_spec(card.card_id, context)
+            spec = self._resolve_skill_cost_spec(card.card_id, context, source_zone=source_zone)
             if spec is None:
                 return True
             try:
@@ -2663,9 +2911,9 @@ class RulesEngine:
         except Exception:
             return False
 
-    def _pay_skill_cost(self, state: GameState, player: PlayerState, card: CardInstance, context: str) -> dict[str, int | str | None]:
+    def _pay_skill_cost(self, state: GameState, player: PlayerState, card: CardInstance, context: str, *, source_zone: str | None = None) -> dict[str, int | str | None]:
         if self._skill_cost_pay is None:
-            spec = self._resolve_skill_cost_spec(card.card_id, context)
+            spec = self._resolve_skill_cost_spec(card.card_id, context, source_zone=source_zone)
             if spec is None:
                 return {}
             try:
@@ -2712,11 +2960,15 @@ class RulesEngine:
         unison.markers -= amount
         self._checkpoint(state, f"marker_removed_{reason}")
 
-    def _resolve_skill_cost_spec(self, card_id: int, context: str) -> SkillCostSpec | None:
+    def _resolve_skill_cost_spec(self, card_id: int, context: str, *, source_zone: str | None = None) -> SkillCostSpec | None:
         card_rules = self._skill_cost_rules.get(card_id)
         if not card_rules:
             return None
-        raw = card_rules.get(context)
+        raw = None
+        if source_zone:
+            raw = card_rules.get(f"{context}_{str(source_zone).strip().lower()}")
+        if raw is None:
+            raw = card_rules.get(context)
         if raw is None:
             return None
         return SkillCostSpec.from_data(raw)
@@ -2729,6 +2981,8 @@ class RulesEngine:
             return False
         ctype = (card.card_type or "").upper()
         if zone == "hand":
+            return ctype in {"BATTLE", "UNISON", "Z-BATTLE", "Z-UNISON"}
+        if zone == "warp":
             return ctype in {"BATTLE", "UNISON", "Z-BATTLE", "Z-UNISON"}
         if zone == "battle":
             return "BATTLE" in ctype
@@ -2973,6 +3227,10 @@ class RulesEngine:
         normalized_zone = str(source_zone or "").strip().lower()
         if normalized_zone in {"hand", "life", "deck"}:
             return trigger in {"self_activate_main", "self_activate_battle"}
+        if normalized_zone == "drop":
+            return trigger in {"owner_opponent_battle_attacks", "self_activate_extra_from_hand"}
+        if normalized_zone == "warp":
+            return trigger in {"owner_opponent_battle_attacks", "self_activate_main", "self_activate_battle"}
         return True
 
     @staticmethod
@@ -3123,6 +3381,14 @@ class RulesEngine:
 
     @staticmethod
     def _effect_registration_matches_event(reg: EffectRegistration, event: EffectEvent) -> bool:
+        if reg.trigger == "self_activate_extra_from_hand":
+            if event.name != "skill_activated":
+                return False
+            if str(event.payload.get("skill_kind") or "") != "activate_extra_from_hand":
+                return False
+            selected_effect_id = int(event.payload.get("selected_effect_id") or -1)
+            if selected_effect_id > 0 and int(reg.effect_id) != selected_effect_id:
+                return False
         return RulesEngine._effect_trigger_matches_event(
             reg.trigger,
             source_instance_id=reg.source_instance_id,
@@ -3152,6 +3418,12 @@ class RulesEngine:
             if event.actor_player_id != owner_player_id:
                 return False
             return str(event.payload.get("attacker_zone") or "") == "leader"
+        if trigger == "owner_opponent_battle_attacks":
+            if event.name != "attack_declared":
+                return False
+            if event.actor_player_id in {None, owner_player_id}:
+                return False
+            return str(event.payload.get("attacker_zone") or "") == "battle"
         if trigger == "self_comboed":
             if event.name != "card_comboed":
                 return False
@@ -3182,6 +3454,12 @@ class RulesEngine:
             if event.name != "skill_activated":
                 return False
             if str(event.payload.get("skill_kind") or "") != "activate_battle":
+                return False
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_activate_extra_from_hand":
+            if event.name != "skill_activated":
+                return False
+            if str(event.payload.get("skill_kind") or "") != "activate_extra_from_hand":
                 return False
             return int(event.payload.get("source_instance_id") or -1) == source_instance_id
         if trigger == "self_koed":
@@ -3552,6 +3830,8 @@ class RulesEngine:
     def _handle_auto_draw_n(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name not in {"card_played", "attack_declared", "card_comboed", "skill_activated", "turn_start", "turn_end"}:
             return
+        if not self._effect_requirements_met(state, reg):
+            return
         amount = self._resolve_effect_int_param(state, reg, "amount", default=1)
         if amount <= 0:
             return
@@ -3672,6 +3952,58 @@ class RulesEngine:
             return
         state.log.append(f"effect:wormhole_gain:source={reg.source_instance_id}")
         self._checkpoint(state, "effect_auto_gain_wormhole_on_owner_black_battle_played_from_warp")
+
+    def _handle_auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "attack_declared":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None or reg.source_zone not in {"drop", "warp"}:
+            return
+        life_to_hand = self._resolve_effect_int_param(state, reg, "life_to_hand", default=0)
+        if life_to_hand > 0 and len(owner.life) < life_to_hand:
+            return
+        bottom_deck_from_hand = self._resolve_effect_int_param(state, reg, "bottom_deck_from_hand", default=0)
+        if bottom_deck_from_hand > 0 and len(owner.hand) < bottom_deck_from_hand:
+            return
+        for _ in range(life_to_hand):
+            owner.hand.append(owner.life.pop(0))
+        for _ in range(bottom_deck_from_hand):
+            owner.deck.append(owner.hand.pop(0).card_id)
+        zone_cards = owner.drop if reg.source_zone == "drop" else owner.warp
+        idx = next((i for i, card in enumerate(zone_cards) if card.instance_id == reg.source_instance_id), None)
+        if idx is None:
+            return
+        played = zone_cards.pop(idx)
+        played.resting = bool(reg.handler_params.get("resting", False))
+        owner.battle_area.append(played)
+        self._register_card_effects(state, player_id=reg.owner_player_id, source_zone="battle", card=played)
+        self._emit_effect_event(
+            state,
+            name="card_played",
+            actor_player_id=reg.owner_player_id,
+            payload={
+                "source_instance_id": played.instance_id,
+                "source_card_id": played.card_id,
+                "source_zone": "battle",
+                "played_from": reg.source_zone,
+            },
+        )
+        if bool(reg.handler_params.get("negate_attack", False)):
+            state.counter_window = None
+            state.attack_context = None
+            state.battle_step = BattleStep.BATTLE_END
+            self._checkpoint(state, "battle_end_step")
+        self._checkpoint(state, "effect_auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack")
 
     def _handle_auto_add_top_deck_to_energy_rest_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "card_played":
@@ -4133,6 +4465,71 @@ class RulesEngine:
         )
         self._checkpoint(state, "counter_timing_play_from_skill")
 
+    def _handle_activate_play_self_from_warp(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        if str(event.payload.get("source_zone") or "") != "warp":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, "warp", reg.source_instance_id)
+        if source is None:
+            return
+        self._open_counter_window(
+            state,
+            kind="play",
+            responder_player_id=self._opponent_of(reg.owner_player_id),
+            pending_action=PendingAction(
+                action_type="play_from_warp",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "card_instance_id": source.instance_id,
+                    "paid_energy_cards": 0,
+                    "resting": bool(reg.handler_params.get("resting", False)),
+                    "marker_count": int(reg.handler_params.get("markers", 0)) if "markers" in reg.handler_params else None,
+                    "declared_via_effect": "activate_play_self_from_warp",
+                    "declared_from_skill_kind": str(event.payload.get("skill_kind") or ""),
+                },
+            ),
+        )
+        self._checkpoint(state, "counter_timing_play_from_skill")
+
+    def _handle_activate_optional_send_owner_hand_to_warp_draw_n(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta != 0 and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
+        hand_to_warp = self._resolve_effect_int_param(state, reg, "hand_to_warp", default=1)
+        if hand_to_warp <= 0 or not owner.hand:
+            return
+        moved = 0
+        while moved < hand_to_warp and owner.hand:
+            card = owner.hand.pop(0)
+            self._append_to_owner_warp(state, owner_player_id=reg.owner_player_id, card=card)
+            moved += 1
+        if moved <= 0:
+            return
+        amount = self._resolve_effect_int_param(state, reg, "amount", default=1)
+        for _ in range(max(amount, 0)):
+            self._draw_one(state, reg.owner_player_id)
+        self._checkpoint(state, "effect_activate_optional_send_owner_hand_to_warp_draw_n")
+
     def _handle_activate_draw_n_and_gain_keyword_for_turn(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "skill_activated":
             return
@@ -4401,8 +4798,390 @@ class RulesEngine:
             if card.instance_id not in target_ids:
                 i += 1
                 continue
-            opponent.warp.append(opponent.battle_area.pop(i))
+            self._append_to_owner_warp(state, owner_player_id=opponent_id, card=opponent.battle_area.pop(i))
         self._checkpoint(state, "effect_activate_send_up_to_n_opponent_battle_to_warp")
+
+    def _handle_activate_look_top_send_up_to_n_to_owner_warp(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None or not owner.deck:
+            return
+        look_count = self._resolve_effect_int_param(state, reg, "look_count", default=0)
+        max_send = self._resolve_effect_int_param(state, reg, "max_send", default=0)
+        if look_count <= 0 or max_send <= 0:
+            return
+        top_n = min(look_count, len(owner.deck))
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        required_type = str(reg.handler_params.get("required_card_type", "")).strip().upper()
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        picked_indexes: list[int] = []
+        for i in range(top_n):
+            deck_card = owner.deck[i]
+            deck_card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            runtime = self._resolve_card_runtime_data(deck_card_id)
+            if required_type and required_type not in (runtime.card_type or "").upper():
+                continue
+            if max_cost >= 0:
+                cost = runtime.energy_cost
+                if cost is None or cost > max_cost:
+                    continue
+            if allowed_colors:
+                runtime_colors = {
+                    part.strip().lower()
+                    for part in str(runtime.color or "").replace("/", ",").split(",")
+                    if part.strip()
+                }
+                if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
+                    continue
+            if required_traits:
+                runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+                if runtime_traits.isdisjoint(required_traits):
+                    continue
+            if required_characters:
+                runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
+                if runtime_characters.isdisjoint(required_characters):
+                    continue
+            if required_name_contains:
+                runtime_name = str(runtime.card_name or "").upper()
+                if required_name_contains not in runtime_name:
+                    continue
+            picked_indexes.append(i)
+            if len(picked_indexes) >= max_send:
+                break
+        if not picked_indexes:
+            return
+        removed = 0
+        for idx in picked_indexes:
+            deck_card = owner.deck.pop(idx - removed)
+            removed += 1
+            card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=card_id, owner_id=reg.owner_player_id)
+            state.next_instance_id += 1
+            self._append_to_owner_warp(state, owner_player_id=reg.owner_player_id, card=card)
+        self._checkpoint(state, "effect_activate_look_top_send_up_to_n_to_owner_warp")
+
+    def _handle_activate_send_top_deck_to_owner_warp(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None or not owner.deck:
+            return
+        send_count = self._resolve_effect_int_param(state, reg, "send_count", default=0)
+        if send_count <= 0:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta != 0 and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
+        moved = 0
+        while owner.deck and moved < send_count:
+            deck_card = owner.deck.pop(0)
+            card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=card_id, owner_id=reg.owner_player_id)
+            state.next_instance_id += 1
+            self._append_to_owner_warp(state, owner_player_id=reg.owner_player_id, card=card)
+            moved += 1
+        if moved <= 0:
+            return
+        if bool(reg.handler_params.get("switch_self_active", False)):
+            source.resting = False
+        self._checkpoint(state, "effect_activate_send_top_deck_to_owner_warp")
+
+    def _handle_activate_send_up_to_n_opponent_drop_battle_to_warp(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if owner is None or opponent is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta != 0 and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        selected_ids: list[int] = []
+        for card in opponent.drop:
+            if "BATTLE" not in (card.card_type or "").upper():
+                continue
+            selected_ids.append(card.instance_id)
+            if len(selected_ids) >= max_targets:
+                break
+        if not selected_ids:
+            return
+        i = 0
+        selected_set = set(selected_ids)
+        while i < len(opponent.drop):
+            card = opponent.drop[i]
+            if card.instance_id not in selected_set:
+                i += 1
+                continue
+            self._append_to_owner_warp(state, owner_player_id=opponent_id, card=opponent.drop.pop(i))
+        self._checkpoint(state, "effect_activate_send_up_to_n_opponent_drop_battle_to_warp")
+
+    def _handle_activate_add_up_to_n_from_owner_warp_to_hand(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        if str(event.payload.get("source_zone") or "") != "unison":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None or not owner.warp:
+            return
+        max_add = self._resolve_effect_int_param(state, reg, "max_add", default=1)
+        if max_add <= 0:
+            return
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        required_type = str(reg.handler_params.get("required_card_type", "")).strip().upper()
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        picked_ids: list[int] = []
+        for card in owner.warp:
+            runtime = self._resolve_card_runtime_data(card.card_id)
+            if required_type and required_type not in (runtime.card_type or "").upper():
+                continue
+            if max_cost >= 0:
+                cost = runtime.energy_cost
+                if cost is None or cost > max_cost:
+                    continue
+            if allowed_colors:
+                runtime_colors = {
+                    part.strip().lower()
+                    for part in str(runtime.color or "").replace("/", ",").split(",")
+                    if part.strip()
+                }
+                if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
+                    continue
+            if required_traits:
+                runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+                if runtime_traits.isdisjoint(required_traits):
+                    continue
+            if required_characters:
+                runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
+                if runtime_characters.isdisjoint(required_characters):
+                    continue
+            if required_name_contains:
+                runtime_name = str(runtime.card_name or "").upper()
+                if required_name_contains not in runtime_name:
+                    continue
+            picked_ids.append(card.instance_id)
+            if len(picked_ids) >= max_add:
+                break
+        if not picked_ids:
+            return
+        picked_set = set(picked_ids)
+        i = 0
+        while i < len(owner.warp):
+            card = owner.warp[i]
+            if card.instance_id not in picked_set:
+                i += 1
+                continue
+            owner.hand.append(owner.warp.pop(i))
+        self._checkpoint(state, "effect_activate_add_up_to_n_from_owner_warp_to_hand")
+
+    def _handle_activate_add_up_to_n_from_owner_deck_to_hand(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        required_skill_kind = "activate_extra_from_hand" if reg.trigger == "self_activate_extra_from_hand" else "activate_main"
+        if str(event.payload.get("skill_kind") or "") != required_skill_kind:
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None or not owner.deck:
+            return
+        max_add = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_add <= 0:
+            return
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        required_type = str(reg.handler_params.get("required_card_type", "")).strip().upper()
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
+        chosen_indexes: list[int] = []
+        for i, deck_card in enumerate(owner.deck):
+            deck_card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            runtime = self._resolve_card_runtime_data(deck_card_id)
+            if required_type and required_type not in (runtime.card_type or "").upper():
+                continue
+            if max_cost >= 0 and (runtime.energy_cost is None or runtime.energy_cost > max_cost):
+                continue
+            if allowed_colors:
+                runtime_colors = {part.strip().lower() for part in str(runtime.color or "").replace("/", ",").split(",") if part.strip()}
+                if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
+                    continue
+            if required_traits:
+                runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+                if runtime_traits.isdisjoint(required_traits):
+                    continue
+            if required_characters:
+                runtime_characters = {part.strip().lower() for part in (runtime.characters or ()) if part.strip()}
+                if runtime_characters.isdisjoint(required_characters):
+                    continue
+            if required_name_contains:
+                runtime_name = str(runtime.card_name or "").upper()
+                if required_name_contains not in runtime_name:
+                    continue
+            chosen_indexes.append(i)
+            if len(chosen_indexes) >= max_add:
+                break
+        if not chosen_indexes:
+            return
+        removed = 0
+        for idx in chosen_indexes:
+            deck_card = owner.deck.pop(idx - removed)
+            removed += 1
+            card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+            card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=card_id, owner_id=reg.owner_player_id)
+            state.next_instance_id += 1
+            owner.hand.append(card)
+        self._checkpoint(state, "effect_activate_add_up_to_n_from_owner_deck_to_hand")
+
+    def _handle_activate_play_up_to_n_each_named_from_owner_deck_or_drop(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_extra_from_hand":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        raw_names = str(reg.handler_params.get("required_name_contains_each", "")).strip()
+        name_tokens = [part.strip().upper() for part in raw_names.replace(",", "|").split("|") if part.strip()]
+        if not name_tokens:
+            return
+        max_each = self._resolve_effect_int_param(state, reg, "max_each", default=1)
+        if max_each <= 0:
+            return
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
+        allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        required_type = str(reg.handler_params.get("required_card_type", "")).strip().upper()
+        rest_mode = bool(reg.handler_params.get("rest_mode", False))
+        played_any = False
+        for name_token in name_tokens:
+            played_for_name = 0
+            while played_for_name < max_each:
+                selected_from = ""
+                selected_drop_index: int | None = None
+                selected_deck_index: int | None = None
+                selected_card_id: int | None = None
+                for i, deck_card in enumerate(owner.deck):
+                    deck_card_id = deck_card.card_id if isinstance(deck_card, CardInstance) else int(deck_card)
+                    runtime = self._resolve_card_runtime_data(deck_card_id)
+                    if required_type and required_type not in (runtime.card_type or "").upper():
+                        continue
+                    if max_cost >= 0 and (runtime.energy_cost is None or runtime.energy_cost > max_cost):
+                        continue
+                    if allowed_colors:
+                        runtime_colors = {
+                            part.strip().lower()
+                            for part in str(runtime.color or "").replace("/", ",").split(",")
+                            if part.strip()
+                        }
+                        if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
+                            continue
+                    if name_token not in str(runtime.card_name or "").upper():
+                        continue
+                    selected_from = "deck"
+                    selected_deck_index = i
+                    selected_card_id = deck_card_id
+                    break
+                if not selected_from:
+                    for i, card in enumerate(owner.drop):
+                        runtime = self._resolve_card_runtime_data(card.card_id)
+                        if required_type and required_type not in (runtime.card_type or "").upper():
+                            continue
+                        if max_cost >= 0 and (runtime.energy_cost is None or runtime.energy_cost > max_cost):
+                            continue
+                        if allowed_colors:
+                            runtime_colors = {
+                                part.strip().lower()
+                                for part in str(runtime.color or "").replace("/", ",").split(",")
+                                if part.strip()
+                            }
+                            if runtime_colors and runtime_colors.isdisjoint(allowed_colors):
+                                continue
+                        if name_token not in str(runtime.card_name or "").upper():
+                            continue
+                        selected_from = "drop"
+                        selected_drop_index = i
+                        break
+                if not selected_from:
+                    break
+                if selected_from == "deck" and selected_deck_index is not None and selected_card_id is not None:
+                    owner.deck.pop(selected_deck_index)
+                    card = self._create_card_instance(
+                        next_instance_id=state.next_instance_id,
+                        card_id=selected_card_id,
+                        owner_id=reg.owner_player_id,
+                    )
+                    state.next_instance_id += 1
+                elif selected_from == "drop" and selected_drop_index is not None:
+                    card = owner.drop.pop(selected_drop_index)
+                else:
+                    break
+                card.resting = rest_mode
+                target_zone = "unison" if "UNISON" in (card.card_type or "").upper() else "battle"
+                if target_zone == "unison":
+                    self._replace_owner_unison_if_needed(state, owner)
+                    owner.unison_area.append(card)
+                else:
+                    owner.battle_area.append(card)
+                self._register_card_effects(state, player_id=reg.owner_player_id, source_zone=target_zone, card=card)
+                self._emit_effect_event(
+                    state,
+                    name="card_played",
+                    actor_player_id=reg.owner_player_id,
+                    payload={
+                        "source_instance_id": card.instance_id,
+                        "source_card_id": card.card_id,
+                        "source_zone": target_zone,
+                        "played_from": selected_from,
+                    },
+                )
+                played_any = True
+                played_for_name += 1
+        if played_any:
+            self._checkpoint(state, "effect_activate_play_up_to_n_each_named_from_owner_deck_or_drop")
 
     def _handle_activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn(
         self,
@@ -5411,6 +6190,9 @@ class RulesEngine:
         return [candidates[i] for i in indexes]
 
     def _effect_requirements_met(self, state: GameState, reg: EffectRegistration) -> bool:
+        required_source_zone = str(reg.handler_params.get("required_source_zone", "")).strip().lower()
+        if required_source_zone and str(reg.source_zone or "").strip().lower() != required_source_zone:
+            return False
         raw_req = reg.handler_params.get("requires_leader")
         leader_ok = True
         owner = state.players[reg.owner_player_id]
@@ -5429,6 +6211,15 @@ class RulesEngine:
                 leader_ok = False
             if "black" in req and leader_color != "black":
                 leader_ok = False
+            required_from_angle = {part.strip().lower() for part in re.findall(r"<([^>]+)>", req) if part.strip()}
+            required_from_guillemets = {part.strip().lower() for part in re.findall(r"≪([^≫]+)≫", req) if part.strip()}
+            if required_from_angle or required_from_guillemets:
+                leader_traits = {part.strip().lower() for part in (leader_runtime.traits or ()) if part.strip()}
+                leader_characters = {part.strip().lower() for part in (leader_runtime.characters or ()) if part.strip()}
+                if required_from_angle and (leader_traits | leader_characters).isdisjoint(required_from_angle):
+                    leader_ok = False
+                if required_from_guillemets and leader_traits.isdisjoint(required_from_guillemets):
+                    leader_ok = False
         if not leader_ok:
             return False
         required_leader_traits_raw = str(reg.handler_params.get("required_leader_traits", "")).strip().lower()
@@ -5443,6 +6234,12 @@ class RulesEngine:
                 return False
         min_owner_energy = self._resolve_effect_int_param(state, reg, "min_owner_energy", default=-1)
         if min_owner_energy >= 0 and len(owner.energy) < min_owner_energy:
+            return False
+        max_owner_life = self._resolve_effect_int_param(state, reg, "max_owner_life", default=-1)
+        if max_owner_life >= 0 and len(owner.life) > max_owner_life:
+            return False
+        min_owner_drop = self._resolve_effect_int_param(state, reg, "min_owner_drop", default=-1)
+        if min_owner_drop >= 0 and len(owner.drop) < min_owner_drop:
             return False
         min_owner_hidden_mode_battle = self._resolve_effect_int_param(state, reg, "min_owner_hidden_mode_battle", default=-1)
         if min_owner_hidden_mode_battle >= 0:
@@ -5564,6 +6361,12 @@ class RulesEngine:
             if sparking_threshold is not None and len(player.drop) < int(sparking_threshold):
                 return False
             return bool(player.life)
+        if self._text_counter_can_activate_for_free_with_red_unison_markers(card):
+            return any(
+                "red" in str(unison.color or "").lower()
+                and int(getattr(unison, "markers", 0) or 0) >= 2
+                for unison in player.unison_area
+            )
         return False
 
     def _pay_alternate_counter_hand_cost(self, state: GameState, player: PlayerState, card: CardInstance) -> bool:
@@ -5599,6 +6402,15 @@ class RulesEngine:
             chosen_index = self._choose_life_card_index(player, 0)
             player.hand.append(player.life.pop(chosen_index))
             self._checkpoint(state, "counter_alternate_cost_life_to_hand")
+            return True
+        if self._text_counter_can_activate_for_free_with_red_unison_markers(card):
+            if not any(
+                "red" in str(unison.color or "").lower()
+                and int(getattr(unison, "markers", 0) or 0) >= 2
+                for unison in player.unison_area
+            ):
+                return False
+            self._checkpoint(state, "counter_alternate_cost_red_unison_markers_free")
             return True
         return False
 
@@ -5732,6 +6544,7 @@ class RulesEngine:
             "owner_life_count": len(owner.life),
             "owner_battle_count": len(owner.battle_area),
             "owner_unison_count": len(owner.unison_area),
+            "owner_warp_count": len(owner.warp),
             "owner_energy_markers": int(owner.energy_markers),
             "owner_unison_markers_total": sum(max(c.markers, 0) for c in owner.unison_area),
             "opponent_battle_count": len(opponent.battle_area) if opponent is not None else 0,
@@ -5740,6 +6553,11 @@ class RulesEngine:
             "source_power": int(source.power) if source is not None else 0,
             "x": int(source.markers) if source is not None else 0,
         }
+        mult = re.fullmatch(r"([a-z_]+)\s*\*\s*(-?\d+)", expr)
+        if mult is not None:
+            left = int(values.get(mult.group(1), default))
+            right = int(mult.group(2))
+            return left * right
         return int(values.get(expr, default))
 
     def _choose_effect_target_index(
@@ -5831,6 +6649,12 @@ class RulesEngine:
             return any(c.instance_id == reg.source_instance_id for c in player.combo_area)
         if reg.source_zone == "hand":
             return any(c.instance_id == reg.source_instance_id for c in player.hand)
+        if reg.source_zone == "drop":
+            return any(c.instance_id == reg.source_instance_id for c in player.drop)
+        if reg.source_zone == "warp":
+            return any(c.instance_id == reg.source_instance_id for c in player.warp)
+        if reg.source_zone == "z_energy":
+            return any(c.instance_id == reg.source_instance_id for c in player.z_energy)
         return False
 
     def _checkpoint(self, state: GameState, name: str) -> None:

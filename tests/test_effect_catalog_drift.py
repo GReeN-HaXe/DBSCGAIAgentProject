@@ -29,6 +29,8 @@ def _candidate_card_ids(db_path: Path) -> list[int]:
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main/battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main/battle]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[counter:%' "
             ") "
             "ORDER BY id"

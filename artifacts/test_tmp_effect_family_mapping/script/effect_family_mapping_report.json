@@ -1,0 +1,122 @@
+{
+  "priority_cards": [
+    {
+      "card_id": 101,
+      "card_name": "Mapped Battle",
+      "card_number": "BT1-001",
+      "combined_count": 6,
+      "deck_count": 4,
+      "family_ids": [
+        "self_played:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_id": 303,
+      "card_name": "Unmapped Trace Card",
+      "card_number": "BT1-003",
+      "combined_count": 3,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 202,
+      "card_name": "Mapped Leader",
+      "card_number": "BT1-002",
+      "combined_count": 2,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 1,
+      "triggers": {}
+    }
+  ],
+  "schema_version": "effect_family_mapping_report.v1",
+  "sources": {
+    "deck_files": [
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\test_tmp_effect_family_mapping\\script\\decks\\sample_deck.txt"
+    ],
+    "trace_files": [
+      "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\test_tmp_effect_family_mapping\\script\\traces\\sample_trace.json"
+    ]
+  },
+  "summary": {
+    "mapped_priority_card_count": 1,
+    "priority_card_count": 3,
+    "priority_family_count": 1,
+    "total_deck_mentions": 6,
+    "total_trace_mentions": 5,
+    "unmapped_priority_card_count": 2
+  },
+  "top_priority_families": [
+    {
+      "combined_count": 6,
+      "deck_count": 4,
+      "family_id": "self_played:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        101
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    }
+  ],
+  "unmapped_priority_cards": [
+    {
+      "card_id": 303,
+      "card_name": "Unmapped Trace Card",
+      "card_number": "BT1-003",
+      "combined_count": 3,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 2,
+      "triggers": {}
+    },
+    {
+      "card_id": 202,
+      "card_name": "Mapped Leader",
+      "card_number": "BT1-002",
+      "combined_count": 2,
+      "deck_count": 1,
+      "family_ids": [],
+      "handlers": {},
+      "mapped": false,
+      "provenances": {},
+      "rule_count": 0,
+      "trace_count": 1,
+      "triggers": {}
+    }
+  ]
+}

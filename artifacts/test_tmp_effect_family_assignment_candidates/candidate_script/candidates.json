@@ -1,0 +1,27 @@
+{
+  "candidates": [
+    {
+      "auto_apply_safe": true,
+      "card_id": 6,
+      "card_name": "Dyspo, Thwarting the Enemy",
+      "card_number": "BT14-019",
+      "card_type": "BATTLE",
+      "combined_count": 10,
+      "confidence": 0.98,
+      "deck_count": 1,
+      "family_already_in_catalog": false,
+      "family_id": "counter_attack:counter_negate_attack_play_self",
+      "handler_id": "counter_negate_attack_play_self",
+      "reason": "Exact runtime-supported counter text match: negate the attack, then play this card.",
+      "suggested_override_mode": "replace",
+      "trace_count": 9,
+      "trigger": "counter_attack"
+    }
+  ],
+  "schema_version": "effect_family_assignment_candidates.v1",
+  "summary": {
+    "auto_apply_safe_count": 1,
+    "candidate_count": 1,
+    "reported_candidate_count": 1
+  }
+}
