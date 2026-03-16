@@ -4,11 +4,57 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+from collections import Counter
 from typing import Callable
 
 from src.agent.heuristic import HeuristicPolicy
 from src.game import Action, CardInstance, GameState, RulesEngine
 from src.game.state_io import load_game_state_json, save_game_state_json
+
+
+def _secret_auto_opportunity_export_rows(state: GameState) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for row in sorted(
+        list(state.secret_auto_opportunities or []),
+        key=lambda item: (int(item.event_id), int(item.opportunity_id)),
+    ):
+        rows.append(
+            {
+                "opportunity_id": int(row.opportunity_id),
+                "secret_auto_id": int(row.secret_auto_id),
+                "owner_player_id": int(row.owner_player_id),
+                "source_instance_id": int(row.source_instance_id),
+                "source_card_id": int(row.source_card_id),
+                "source_card_number": str(row.source_card_number),
+                "source_zone": str(row.source_zone),
+                "origin_zone": str(row.origin_zone or row.source_zone),
+                "trigger": str(row.trigger),
+                "handler_id": str(row.handler_id),
+                "event_id": int(row.event_id),
+                "event_name": str(row.event_name),
+                "created_turn_number": int(row.created_turn_number),
+                "created_phase": row.created_phase.value,
+                "status": str(row.status or "pending"),
+                "preblocked": bool(row.preblocked),
+                "once_per_turn": bool(row.once_per_turn),
+                "limit_per_turn": None if row.limit_per_turn is None else int(row.limit_per_turn),
+                "limit_scope": str(row.limit_scope),
+            }
+        )
+    return rows
+
+
+def _secret_auto_summary_for_export(state: GameState) -> dict[str, object]:
+    opportunities = _secret_auto_opportunity_export_rows(state)
+    status_counts = Counter(str(row.get("status", "pending")) for row in opportunities)
+    return {
+        "opportunity_count": len(opportunities),
+        "pending_count": int(status_counts.get("pending", 0)),
+        "preblocked_count": sum(1 for row in opportunities if bool(row.get("preblocked"))),
+        "blocked_count": sum(1 for row in opportunities if str(row.get("status", "")).startswith("blocked_")),
+        "status_counts": {status: int(count) for status, count in sorted(status_counts.items())},
+        "opportunities": opportunities,
+    }
 
 
 def snapshot_state_for_trace(state: GameState) -> dict[str, object]:
@@ -38,6 +84,7 @@ def snapshot_state_for_trace(state: GameState) -> dict[str, object]:
         "winner_id": state.winner_id,
         "counter_window_kind": None if state.counter_window is None else state.counter_window.kind,
         "players": players,
+        "secret_auto_summary": _secret_auto_summary_for_export(state),
     }
 
 
@@ -116,6 +163,39 @@ def _card_label(card: CardInstance | None, card_name_resolver: CardNameResolver 
     return f"card_id={card.card_id}"
 
 
+def _secret_auto_opportunity_lines(
+    state: GameState,
+    *,
+    card_name_resolver: CardNameResolver | None = None,
+) -> list[str]:
+    opportunities = sorted(
+        list(state.secret_auto_opportunities or []),
+        key=lambda row: (int(row.event_id), int(row.opportunity_id)),
+    )
+    if not opportunities:
+        return []
+    lines = ["Secret auto opportunities:"]
+    for row in opportunities:
+        source_card = CardInstance(
+            instance_id=int(row.source_instance_id),
+            card_id=int(row.source_card_id),
+            owner_id=int(row.owner_player_id),
+        )
+        origin_text = (
+            f" origin={row.origin_zone}"
+            if str(row.origin_zone or "") and str(row.origin_zone) != str(row.source_zone or "")
+            else ""
+        )
+        lines.append(
+            "  "
+            f"[{row.opportunity_id}] P{row.owner_player_id} status={row.status} "
+            f"trigger={row.trigger} event={row.event_name}#{row.event_id} "
+            f"card={_card_label(source_card, card_name_resolver)} "
+            f"zone={row.source_zone}{origin_text}"
+        )
+    return lines
+
+
 def describe_action(
     action: Action,
     *,
@@ -131,6 +211,7 @@ def describe_action(
                 None,
             )
             if opportunity is not None:
+                parts.append(f"status={opportunity.status}")
                 parts.append(f"source_zone={opportunity.source_zone}")
                 if str(opportunity.origin_zone or "") and str(opportunity.origin_zone) != str(opportunity.source_zone):
                     parts.append(f"origin_zone={opportunity.origin_zone}")
@@ -222,6 +303,7 @@ def summarize_state_for_cli(
                 lines.append(f"  [{index}] {_card_label(card, card_name_resolver)}")
         else:
             lines.append("  -")
+    lines.extend(_secret_auto_opportunity_lines(state, card_name_resolver=card_name_resolver))
     return "\n".join(lines)
 
 
@@ -261,6 +343,10 @@ def format_full_board_for_cli(
     _append_player_block(lines, 1)
     lines.append("")
     _append_player_block(lines, 2)
+    secret_lines = _secret_auto_opportunity_lines(state, card_name_resolver=card_name_resolver)
+    if secret_lines:
+        lines.append("")
+        lines.extend(secret_lines)
     return "\n".join(lines)
 
 
@@ -465,6 +551,8 @@ class HumanVsAiSession:
             "final_phase": self.state.phase.value,
             "human_player_id": int(self.human_player_id),
             "setup": dict(self.setup_metadata or {}),
+            "final_state_snapshot": snapshot_state_for_trace(self.state),
+            "secret_auto_summary": _secret_auto_summary_for_export(self.state),
             "actions": list(self.action_trace or []),
         }
 

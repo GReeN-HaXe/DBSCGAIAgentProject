@@ -204,6 +204,76 @@ Resolved:
   - status: first runtime slice complete
   - extracted effect rules now carry `limit_per_turn`
   - pending auto resolution now enforces that limit across same-card-number registrations for the same skill family
+  - status: shared once-per-turn accounting slice complete
+  - public pending effects and declared secret autos now share a source-based once-per-turn key
+  - repeated secret-auto declarations for the same hidden source now block correctly with `once_per_turn_used`
+  - public pending effects now count prior declared secret autos against the same once-per-turn key in the same turn
+  - blocked secret auto declarations now retain explicit blocked opportunity status instead of ending up as misleading `declared` records
+  - later secret trigger opportunities can now be created as preblocked records when the once-per-turn / limit-per-turn key is already exhausted
+  - preblocked opportunity creation now surfaces in:
+    - checkpoint `secret_auto_opportunity_preblocked`
+    - runtime log entries with blocked status
+  - CLI/history rendering now surfaces secret auto status and preblocked opportunities explicitly in:
+    - action descriptions
+    - state/full-board summaries
+    - history text rendering
+  - status: trace export / normalization slice complete
+  - raw human trace payloads now export:
+    - `final_state_snapshot`
+    - compact `secret_auto_summary` data at the top level
+    - compact `secret_auto_summary` data inside per-action and final state snapshots
+  - preblocked opportunity rows now carry explicit `preblocked=true` metadata instead of only relying on logs/checkpoints
+  - normalized human review/training artifacts now preserve secret-auto action metadata such as:
+    - `secret_auto_trigger`
+    - `secret_auto_event_name`
+    - `secret_auto_origin_zone`
+    - `secret_auto_status_before`
+  - status: compact summary / Phase 22 summary slice complete
+  - compact match summaries now include count-oriented `secret_auto_summary` data
+  - Phase 22 dataset and batch summaries now aggregate:
+    - traces with secret-auto opportunities
+    - total opportunity / pending / blocked / preblocked counts
+    - secret-auto status-count totals across included traces
+  - status: merged-benchmark / LO-MO summary slice complete
+  - Phase 22 dataset JSON artifacts now carry compact top-level `secret_auto_summary` data
+  - merged benchmark outputs now preserve and aggregate compact secret-auto counts from input datasets
+  - LO-MO summaries now surface:
+    - per-fold holdout secret-auto counts
+    - per-fold merged-train secret-auto counts
+    - overall holdout secret-auto totals across folds
+  - status: generalization / production / batch-eval summary slice complete
+  - Phase 22 production summaries now surface compact training-dataset secret-auto counts
+  - Phase 22 batch-eval outputs now surface:
+    - per-dataset secret-auto counts
+    - overall aggregated secret-auto counts across evaluated datasets
+  - Phase 22 generalization summaries now surface:
+    - train-dataset secret-auto counts
+    - production-side training-dataset secret-auto counts
+    - batch-eval aggregated secret-auto counts
+  - status: reporting layer slice complete
+  - Phase 22 batch-eval markdown reports now surface compact secret-auto counts
+  - Phase 22 closeout markdown reports now surface:
+    - generalized secret-auto counts
+    - LO-MO holdout secret-auto counts
+  - status: limit-scope runtime slice complete
+  - effect limit keys now honor:
+    - `card_number`
+    - `card_id`
+    - `source_instance`
+  - regression coverage now proves those scopes resolve differently at runtime instead of only carrying the label
+  - status: secret-area declaration counting slice complete
+  - declared secret autos now participate in the same per-turn limit accounting as public effect registrations
+  - secret auto declaration now blocks with:
+    - unresolved `EffectResolution.reason = "limit_per_turn_used"`
+    - checkpoint `secret_auto_declared_limit_blocked`
+  - public pending effects now also count previously declared secret autos against the same limit key in the same turn
+  - status: public limit-diagnostics slice complete
+  - public pending effects now surface explicit diagnostics when blocked by:
+    - once-per-turn
+    - limit-per-turn
+  - diagnostics now include:
+    - checkpoints `effect_once_per_turn_blocked` / `effect_limit_per_turn_blocked`
+    - runtime log summaries with effect id, source instance, trigger, handler, and limit metadata
   - across the same skill
   - across cards with the same card number
   - including `[Auto]` skills that can go pending multiple times but only resolve up to limit

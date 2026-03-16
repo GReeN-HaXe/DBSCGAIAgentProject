@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 from src.agent.phase14_torch import has_torch_support
+from src.agent.trace_summary import build_human_review_trace_payload, build_human_training_trace_rows
 
 
 def _write_review_trace(path: Path, action_types: list[str]) -> None:
@@ -217,6 +218,170 @@ def test_normalize_human_trace_batch_and_benchmark_builder(tmp_path: Path) -> No
     assert summary["included_count"] == 2
 
 
+def test_human_trace_summary_preserves_secret_auto_metadata() -> None:
+    payload = {
+        "trace": {
+            "schema_version": "human_trace.v1",
+            "winner_id": 1,
+            "final_turn_number": 4,
+            "final_phase": "main",
+            "human_player_id": 1,
+            "setup": {"mode": "fresh"},
+            "final_state_snapshot": {
+                "turn_number": 4,
+                "phase": "main",
+                "secret_auto_summary": {
+                    "opportunity_count": 1,
+                    "preblocked_count": 1,
+                    "blocked_count": 1,
+                    "status_counts": {"blocked_limit_per_turn": 1},
+                    "opportunities": [
+                        {
+                            "opportunity_id": 5,
+                            "status": "blocked_limit_per_turn",
+                            "preblocked": True,
+                        }
+                    ],
+                },
+            },
+            "secret_auto_summary": {
+                "opportunity_count": 1,
+                "preblocked_count": 1,
+                "blocked_count": 1,
+                "status_counts": {"blocked_limit_per_turn": 1},
+                "opportunities": [
+                    {
+                        "opportunity_id": 5,
+                        "status": "blocked_limit_per_turn",
+                        "preblocked": True,
+                    }
+                ],
+            },
+            "actions": [
+                {
+                    "player_id": 1,
+                    "actor_kind": "human",
+                    "turn_number": 3,
+                    "phase": "main",
+                    "action": "declare_secret_auto opportunity_id=5",
+                    "action_type": "declare_secret_auto",
+                    "secret_auto_id": 11,
+                    "secret_auto_trigger": "self_played",
+                    "secret_auto_event_id": 14,
+                    "secret_auto_event_name": "card_played",
+                    "secret_auto_origin_zone": "hand",
+                    "secret_auto_status_before": "blocked_limit_per_turn",
+                    "state_snapshot": {
+                        "turn_number": 3,
+                        "phase": "main",
+                        "secret_auto_summary": {
+                            "opportunity_count": 1,
+                            "preblocked_count": 1,
+                            "blocked_count": 1,
+                            "status_counts": {"blocked_limit_per_turn": 1},
+                            "opportunities": [
+                                {
+                                    "opportunity_id": 5,
+                                    "status": "blocked_limit_per_turn",
+                                    "preblocked": True,
+                                }
+                            ],
+                        },
+                    },
+                }
+            ],
+        }
+    }
+    review = build_human_review_trace_payload(payload)
+    training = build_human_training_trace_rows(payload)
+    assert review["final_state_snapshot"]["secret_auto_summary"]["preblocked_count"] == 1
+    assert review["secret_auto_summary"]["opportunities"][0]["preblocked"] is True
+    assert review["decision_trace"][0]["secret_auto_status_before"] == "blocked_limit_per_turn"
+    assert training[0]["secret_auto_status_before"] == "blocked_limit_per_turn"
+    assert training[0]["secret_auto_origin_zone"] == "hand"
+
+
+def test_phase22_benchmark_batch_summary_includes_secret_auto_counts(tmp_path: Path) -> None:
+    source_dir = tmp_path / "normalized_secret"
+    output_dir = tmp_path / "datasets_secret"
+    batch_summary = tmp_path / "batch_secret_summary.json"
+    source_dir.mkdir(parents=True, exist_ok=True)
+    (source_dir / "match_a_001_review.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "human_match_review_trace.v1",
+                "decision_trace": [
+                    {
+                        "step_index": 1,
+                        "actor_player_id": 1,
+                        "turn_number": 1,
+                        "phase": "charge",
+                        "chosen_action_type": "charge_from_hand",
+                        "chosen_action_text": "charge_from_hand",
+                        "state_snapshot": {"players": {}},
+                    },
+                    {
+                        "step_index": 2,
+                        "actor_player_id": 1,
+                        "turn_number": 1,
+                        "phase": "main",
+                        "chosen_action_type": "play_card_from_hand",
+                        "chosen_action_text": "play_card_from_hand",
+                        "state_snapshot": {"players": {}},
+                    },
+                    {
+                        "step_index": 3,
+                        "actor_player_id": 1,
+                        "turn_number": 1,
+                        "phase": "main",
+                        "chosen_action_type": "end_turn",
+                        "chosen_action_text": "end_turn",
+                        "state_snapshot": {"players": {}},
+                    },
+                ],
+                "final_state_snapshot": {
+                    "secret_auto_summary": {
+                        "opportunity_count": 1,
+                        "pending_count": 0,
+                        "blocked_count": 1,
+                        "preblocked_count": 1,
+                        "status_counts": {"blocked_limit_per_turn": 1},
+                    }
+                },
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/build_phase22_benchmark_batch.py",
+            "--group",
+            f"group_a={source_dir.as_posix()}/*_review.json",
+            "--output-dir",
+            str(output_dir),
+            "--summary-output",
+            str(batch_summary),
+            "--min-actions",
+            "3",
+            "--min-unique-action-types",
+            "2",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    dataset = json.loads((output_dir / "group_a.json").read_text(encoding="utf-8"))
+    group_summary = json.loads((output_dir / "group_a_summary.json").read_text(encoding="utf-8"))
+    assert dataset["secret_auto_summary"]["total_opportunity_count"] == 1
+    assert dataset["secret_auto_summary"]["total_preblocked_count"] == 1
+    assert group_summary["secret_auto_summary"]["total_opportunity_count"] == 1
+    assert group_summary["secret_auto_summary"]["total_preblocked_count"] == 1
+    assert group_summary["secret_auto_summary"]["status_counts"]["blocked_limit_per_turn"] == 1
+
+
 def test_build_phase22_merged_benchmark_script(tmp_path: Path) -> None:
     left = tmp_path / "left.json"
     right = tmp_path / "right.json"
@@ -230,6 +395,14 @@ def test_build_phase22_merged_benchmark_script(tmp_path: Path) -> None:
                 "trajectory_count": 1,
                 "sources": ["trace_a"],
                 "split_counts": {"train": 1, "validation": 1},
+                "secret_auto_summary": {
+                    "trace_count_with_secret_auto_opportunities": 1,
+                    "total_opportunity_count": 2,
+                    "total_pending_count": 0,
+                    "total_blocked_count": 2,
+                    "total_preblocked_count": 1,
+                    "status_counts": {"blocked_limit_per_turn": 2},
+                },
                 "trajectories": [{"source_name": "trace_a"}],
                 "examples": [{"split": "train"}, {"split": "validation"}],
             },
@@ -245,6 +418,14 @@ def test_build_phase22_merged_benchmark_script(tmp_path: Path) -> None:
                 "trajectory_count": 1,
                 "sources": ["trace_b"],
                 "split_counts": {"train": 2, "validation": 1},
+                "secret_auto_summary": {
+                    "trace_count_with_secret_auto_opportunities": 1,
+                    "total_opportunity_count": 1,
+                    "total_pending_count": 0,
+                    "total_blocked_count": 1,
+                    "total_preblocked_count": 0,
+                    "status_counts": {"blocked_once_per_turn": 1},
+                },
                 "trajectories": [{"source_name": "trace_b"}],
                 "examples": [{"split": "train"}, {"split": "train"}, {"split": "validation"}],
             },
@@ -276,8 +457,12 @@ def test_build_phase22_merged_benchmark_script(tmp_path: Path) -> None:
     assert merged["trajectory_count"] == 2
     assert merged["split_counts"]["train"] == 3
     assert merged["split_counts"]["validation"] == 2
+    assert merged["secret_auto_summary"]["total_opportunity_count"] == 3
+    assert merged["secret_auto_summary"]["total_preblocked_count"] == 1
     assert merged_summary["merged_example_count"] == 5
     assert merged_summary["input_count"] == 2
+    assert merged_summary["secret_auto_summary"]["status_counts"]["blocked_limit_per_turn"] == 2
+    assert merged_summary["secret_auto_summary"]["status_counts"]["blocked_once_per_turn"] == 1
 
 
 def test_run_phase22_lomo_pipeline_script(tmp_path: Path) -> None:
@@ -573,5 +758,9 @@ def test_run_phase22_lomo_pipeline_script(tmp_path: Path) -> None:
     assert result.returncode == 0, result.stderr
     payload = json.loads(summary.read_text(encoding="utf-8"))
     assert payload["schema_version"] == "phase22.lomo.v1"
+    assert "holdout_secret_auto_summary" in payload
+    assert payload["holdout_secret_auto_summary"]["total_opportunity_count"] == 0
+    assert "holdout_secret_auto_summary" in payload["folds"][0]
+    assert "train_secret_auto_summary" in payload["folds"][0]
     assert payload["dataset_count"] == 2
     assert len(payload["folds"]) == 2

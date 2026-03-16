@@ -276,6 +276,9 @@ def test_phase22_batch_eval_and_report_scripts(tmp_path: Path) -> None:
         text=True,
     )
     assert promote.returncode == 0, promote.stderr
+    production_summary_payload = json.loads(summary_path.read_text(encoding="utf-8"))
+    assert "training_dataset_secret_auto_summary" in production_summary_payload
+    assert production_summary_payload["training_dataset_secret_auto_summary"]["total_opportunity_count"] == 0
 
     batch_eval_path = production_dir / "phase22_batch_eval.json"
     batch_eval = subprocess.run(
@@ -296,8 +299,11 @@ def test_phase22_batch_eval_and_report_scripts(tmp_path: Path) -> None:
     assert batch_eval.returncode == 0, batch_eval.stderr
     batch_payload = json.loads(batch_eval_path.read_text(encoding="utf-8"))
     assert batch_payload["dataset_count"] == 1
+    assert "secret_auto_summary" in batch_payload
+    assert batch_payload["secret_auto_summary"]["total_opportunity_count"] == 0
     assert batch_payload["datasets"][0]["per_source"][0]["source_name"] == "trace_b"
     assert batch_payload["datasets"][0]["per_source"][0]["example_count"] == 2
+    assert batch_payload["datasets"][0]["secret_auto_summary"]["total_opportunity_count"] == 0
 
     report_path = production_dir / "phase22_batch_eval_report.md"
     report = subprocess.run(
@@ -317,6 +323,8 @@ def test_phase22_batch_eval_and_report_scripts(tmp_path: Path) -> None:
     markdown = report_path.read_text(encoding="utf-8")
     assert "Phase 22 Batch Evaluation" in markdown
     assert "trace_b" in markdown
+    assert "Secret Auto Summary" in markdown
+    assert "total_opportunity_count" in markdown
 
     error_path = production_dir / "phase22_error_analysis.json"
     error_run = subprocess.run(

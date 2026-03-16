@@ -84,6 +84,7 @@ def test_build_phase22_benchmark_dataset_script(tmp_path: Path) -> None:
     assert dataset["example_count"] == 3
     assert summary["included_count"] == 1
     assert summary["skipped_count"] == 1
+    assert dataset["secret_auto_summary"]["total_opportunity_count"] == 0
 
 
 def test_build_phase22_benchmark_dataset_accepts_review_traces(tmp_path: Path) -> None:
@@ -158,6 +159,76 @@ def test_build_phase22_benchmark_dataset_accepts_review_traces(tmp_path: Path) -
     dataset = json.loads(output_path.read_text(encoding="utf-8"))
     assert dataset["example_count"] == 2
     assert dataset["examples"][0]["action_signature"].startswith("charge_from_hand")
+
+
+def test_build_phase22_benchmark_dataset_summary_includes_secret_auto_counts(tmp_path: Path) -> None:
+    review_trace = tmp_path / "review_secret.json"
+    output_path = tmp_path / "dataset_secret.json"
+    summary_path = tmp_path / "summary_secret.json"
+    payload = {
+        "schema_version": "human_match_review_trace.v1",
+        "decision_trace": [
+            {
+                "step_index": 1,
+                "actor_player_id": 1,
+                "turn_number": 1,
+                "phase": "charge",
+                "chosen_action_type": "charge_from_hand",
+                "chosen_action_text": "charge_from_hand hand_index=0",
+                "state_snapshot": {"players": {}},
+            },
+            {
+                "step_index": 2,
+                "actor_player_id": 1,
+                "turn_number": 1,
+                "phase": "main",
+                "chosen_action_type": "play_card_from_hand",
+                "chosen_action_text": "play_card_from_hand hand_index=0",
+                "state_snapshot": {"players": {}},
+            },
+        ],
+        "final_state_snapshot": {
+            "secret_auto_summary": {
+                "opportunity_count": 2,
+                "pending_count": 0,
+                "blocked_count": 2,
+                "preblocked_count": 1,
+                "status_counts": {
+                    "blocked_limit_per_turn": 1,
+                    "blocked_once_per_turn": 1,
+                },
+            }
+        },
+    }
+    review_trace.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/build_phase22_benchmark_dataset.py",
+            "--input",
+            str(review_trace),
+            "--output",
+            str(output_path),
+            "--summary-output",
+            str(summary_path),
+            "--min-actions",
+            "2",
+            "--min-unique-action-types",
+            "2",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    dataset = json.loads(output_path.read_text(encoding="utf-8"))
+    assert dataset["secret_auto_summary"]["total_opportunity_count"] == 2
+    assert dataset["secret_auto_summary"]["total_preblocked_count"] == 1
+    assert summary["secret_auto_summary"]["trace_count_with_secret_auto_opportunities"] == 1
+    assert summary["secret_auto_summary"]["total_opportunity_count"] == 2
+    assert summary["secret_auto_summary"]["total_preblocked_count"] == 1
+    assert summary["secret_auto_summary"]["status_counts"]["blocked_limit_per_turn"] == 1
 
 
 def test_run_ai_match_batch_script_writes_seeded_outputs(tmp_path: Path) -> None:

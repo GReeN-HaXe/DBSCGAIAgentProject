@@ -5,6 +5,15 @@
 - overall_example_count: `264`
 - overall_top1_accuracy: `0.8484848484848485`
 
+## Secret Auto Summary
+
+- traces_with_secret_autos: `0`
+- total_opportunity_count: `0`
+- total_pending_count: `0`
+- total_blocked_count: `0`
+- total_preblocked_count: `0`
+- status_counts: `{}`
+
 ## Datasets
 
 ### `C:\Users\PC\Desktop\dbsAIAgent\artifacts\phase22_benchmark_batch\mechikabura_vs_krillin.json`
@@ -13,6 +22,15 @@
 - top1_accuracy: `0.8522727272727273`
 - top_k_accuracy: `{'1': 0.8522727272727273, '3': 1.0, '5': 1.0}`
 - identity_resolved_example_rate: `0.0`
+
+Secret auto summary
+
+- traces_with_secret_autos: `0`
+- total_opportunity_count: `0`
+- total_pending_count: `0`
+- total_blocked_count: `0`
+- total_preblocked_count: `0`
+- status_counts: `{}`
 
 Per-source:
 
@@ -26,6 +44,15 @@ Per-source:
 - top1_accuracy: `0.8076923076923077`
 - top_k_accuracy: `{'1': 0.8076923076923077, '3': 1.0, '5': 1.0}`
 - identity_resolved_example_rate: `0.0`
+
+Secret auto summary
+
+- traces_with_secret_autos: `0`
+- total_opportunity_count: `0`
+- total_pending_count: `0`
+- total_blocked_count: `0`
+- total_preblocked_count: `0`
+- status_counts: `{}`
 
 Per-source:
 
@@ -42,6 +69,15 @@ Per-source:
 - top_k_accuracy: `{'1': 1.0, '3': 1.0, '5': 1.0}`
 - identity_resolved_example_rate: `0.0`
 
+Secret auto summary
+
+- traces_with_secret_autos: `0`
+- total_opportunity_count: `0`
+- total_pending_count: `0`
+- total_blocked_count: `0`
+- total_preblocked_count: `0`
+- status_counts: `{}`
+
 Per-source:
 
 - `artifacts\phase22_normalized\red_pan_vs_krillin\ai_match_trace_020_review.json`: top1=`1.0` examples=`19`
@@ -52,6 +88,15 @@ Per-source:
 - top1_accuracy: `0.8481012658227848`
 - top_k_accuracy: `{'1': 0.8481012658227848, '3': 1.0, '5': 1.0}`
 - identity_resolved_example_rate: `0.0`
+
+Secret auto summary
+
+- traces_with_secret_autos: `0`
+- total_opportunity_count: `0`
+- total_pending_count: `0`
+- total_blocked_count: `0`
+- total_preblocked_count: `0`
+- status_counts: `{}`
 
 Per-source:
 

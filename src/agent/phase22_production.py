@@ -16,6 +16,29 @@ def _load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def _dataset_secret_auto_summary_from_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    summary = payload.get("secret_auto_summary", {})
+    if not isinstance(summary, dict):
+        return {
+            "trace_count_with_secret_auto_opportunities": 0,
+            "total_opportunity_count": 0,
+            "total_pending_count": 0,
+            "total_blocked_count": 0,
+            "total_preblocked_count": 0,
+            "status_counts": {},
+        }
+    status_counts_raw = summary.get("status_counts", {})
+    status_counts = dict(status_counts_raw) if isinstance(status_counts_raw, dict) else {}
+    return {
+        "trace_count_with_secret_auto_opportunities": int(summary.get("trace_count_with_secret_auto_opportunities", 0) or 0),
+        "total_opportunity_count": int(summary.get("total_opportunity_count", 0) or 0),
+        "total_pending_count": int(summary.get("total_pending_count", 0) or 0),
+        "total_blocked_count": int(summary.get("total_blocked_count", 0) or 0),
+        "total_preblocked_count": int(summary.get("total_preblocked_count", 0) or 0),
+        "status_counts": {str(key): int(value) for key, value in status_counts.items()},
+    }
+
+
 def build_phase22_production_summary(
     *,
     best_config_path: Path,
@@ -57,12 +80,25 @@ def build_phase22_production_summary(
             shutil.copy2(source, destination)
         copied[key] = str(destination)
 
+    dataset_path = Path(str(manifest.get("dataset_path", ""))).resolve() if str(manifest.get("dataset_path", "")).strip() else None
+    dataset_secret_auto_summary = {
+        "trace_count_with_secret_auto_opportunities": 0,
+        "total_opportunity_count": 0,
+        "total_pending_count": 0,
+        "total_blocked_count": 0,
+        "total_preblocked_count": 0,
+        "status_counts": {},
+    }
+    if dataset_path is not None and dataset_path.exists():
+        dataset_secret_auto_summary = _dataset_secret_auto_summary_from_payload(_load_json(dataset_path))
+
     summary = {
         "schema_version": PHASE22_PRODUCTION_SUMMARY_SCHEMA_VERSION,
         "best_config_path": str(best_config_path.resolve()),
         "source_manifest_path": str(manifest_path),
         "target_field": str(best_config.get("target_field", manifest.get("target_field", ""))),
         "metrics": manifest.get("metrics", {}),
+        "training_dataset_secret_auto_summary": dataset_secret_auto_summary,
         "production_paths": copied,
     }
     return summary

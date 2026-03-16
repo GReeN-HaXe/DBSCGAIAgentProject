@@ -626,6 +626,8 @@ def test_phase4_once_per_turn_pending_batch_resolves_only_once() -> None:
     rows = [r for r in state.effect_resolutions if r.effect_id == effect_id]
     assert any(r.resolved for r in rows)
     assert any((not r.resolved) and r.reason == "once_per_turn_used" for r in rows)
+    assert any(cp.name == "effect_once_per_turn_blocked" for cp in state.checkpoints)
+    assert any("Public effect blocked by once-per-turn" in row and f"effect_id={effect_id}" in row for row in state.log)
 
 
 def test_phase4_limit_one_pending_batch_resolves_only_once_across_same_card_number() -> None:
@@ -678,6 +680,116 @@ def test_phase4_limit_one_pending_batch_resolves_only_once_across_same_card_numb
     rows = [r for r in state.effect_resolutions if r.effect_id in effect_ids]
     assert sum(1 for r in rows if r.resolved and r.reason == "ok") == 1
     assert sum(1 for r in rows if (not r.resolved) and r.reason == "limit_per_turn_used") == 1
+    assert any(cp.name == "effect_limit_per_turn_blocked" for cp in state.checkpoints)
+    assert any("Public effect blocked by limit" in row and "limit_scope=card_number" in row for row in state.log)
+
+
+def test_phase4_limit_scope_card_id_allows_distinct_card_ids_with_same_card_number() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=8800381, card_id=381, owner_id=1, card_number="TEST-381", card_type="BATTLE", has_auto=True),
+            CardInstance(instance_id=8800382, card_id=382, owner_id=1, card_number="TEST-381", card_type="BATTLE", has_auto=True),
+        ]
+    )
+    state.effect_registry.extend(
+        [
+            EffectRegistration(
+                effect_id=state.next_effect_id,
+                owner_player_id=1,
+                source_instance_id=8800381,
+                source_card_id=381,
+                source_zone="battle",
+                trigger="turn_start",
+                handler_id="noop_auto",
+                source_card_number="TEST-381",
+                limit_per_turn=1,
+                limit_scope="card_id",
+            ),
+            EffectRegistration(
+                effect_id=state.next_effect_id + 1,
+                owner_player_id=1,
+                source_instance_id=8800382,
+                source_card_id=382,
+                source_zone="battle",
+                trigger="turn_start",
+                handler_id="noop_auto",
+                source_card_number="TEST-381",
+                limit_per_turn=1,
+                limit_scope="card_id",
+            ),
+        ]
+    )
+    effect_ids = {state.next_effect_id, state.next_effect_id + 1}
+    state.next_effect_id += 2
+
+    engine._emit_effect_event(state, name="turn_start", actor_player_id=1, payload={})
+    engine._resolve_pending_effects(state)
+
+    rows = [r for r in state.effect_resolutions if r.effect_id in effect_ids]
+    assert sum(1 for r in rows if r.resolved and r.reason == "ok") == 2
+    assert sum(1 for r in rows if (not r.resolved) and r.reason == "limit_per_turn_used") == 0
+
+
+def test_phase4_limit_scope_source_instance_allows_distinct_instances_same_card_id() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=8800391, card_id=391, owner_id=1, card_number="TEST-391", card_type="BATTLE", has_auto=True),
+            CardInstance(instance_id=8800392, card_id=391, owner_id=1, card_number="TEST-391", card_type="BATTLE", has_auto=True),
+        ]
+    )
+    state.effect_registry.extend(
+        [
+            EffectRegistration(
+                effect_id=state.next_effect_id,
+                owner_player_id=1,
+                source_instance_id=8800391,
+                source_card_id=391,
+                source_zone="battle",
+                trigger="turn_start",
+                handler_id="noop_auto",
+                source_card_number="TEST-391",
+                limit_per_turn=1,
+                limit_scope="source_instance",
+            ),
+            EffectRegistration(
+                effect_id=state.next_effect_id + 1,
+                owner_player_id=1,
+                source_instance_id=8800392,
+                source_card_id=391,
+                source_zone="battle",
+                trigger="turn_start",
+                handler_id="noop_auto",
+                source_card_number="TEST-391",
+                limit_per_turn=1,
+                limit_scope="source_instance",
+            ),
+        ]
+    )
+    effect_ids = {state.next_effect_id, state.next_effect_id + 1}
+    state.next_effect_id += 2
+
+    engine._emit_effect_event(state, name="turn_start", actor_player_id=1, payload={})
+    engine._resolve_pending_effects(state)
+
+    rows = [r for r in state.effect_resolutions if r.effect_id in effect_ids]
+    assert sum(1 for r in rows if r.resolved and r.reason == "ok") == 2
+    assert sum(1 for r in rows if (not r.resolved) and r.reason == "limit_per_turn_used") == 0
 
 
 def test_phase4_auto_draw_on_play_resolves_after_counter_timing() -> None:
@@ -997,6 +1109,279 @@ def test_phase4_secret_auto_opportunity_exposes_declare_ignore_actions_and_decla
     assert any(row.effect_id == -opportunity.secret_auto_id and row.resolved for row in state.effect_resolutions)
     assert any(cp.name == "secret_auto_declared" for cp in state.checkpoints)
     assert any("Secret-area auto declared" in row for row in state.log)
+
+
+def test_phase4_secret_auto_limit_one_declares_only_once_across_same_card_number() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            9900661: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "limit_per_turn": 1},
+            ],
+            9900662: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "limit_per_turn": 1},
+            ],
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card_a = CardInstance(instance_id=9900661, card_id=9900661, owner_id=1, card_type="BATTLE", card_number="TEST-990066", has_auto=True)
+    card_b = CardInstance(instance_id=9900662, card_id=9900662, owner_id=1, card_type="BATTLE", card_number="TEST-990066", has_auto=True)
+    state.players[1].hand = [card_a, card_b]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card_a)
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card_b)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 9900661, "source_card_id": 9900661, "source_zone": "battle", "played_from": "hand"},
+    )
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 9900662, "source_card_id": 9900662, "source_zone": "battle", "played_from": "hand"},
+    )
+
+    deck_before = len(state.players[1].deck)
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+
+    opportunity_ids = {row.secret_auto_id for row in state.secret_auto_opportunities if row.source_instance_id in {9900661, 9900662}}
+    rows = [r for r in state.effect_resolutions if r.effect_id in {-secret_auto_id for secret_auto_id in opportunity_ids}]
+    assert sum(1 for r in rows if r.resolved and r.reason == "ok") == 1
+    assert sum(1 for r in rows if (not r.resolved) and r.reason == "limit_per_turn_used") == 1
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "secret_auto_declared_limit_blocked" for cp in state.checkpoints)
+    assert any(row.status == "blocked_limit_per_turn" for row in state.secret_auto_opportunities if row.source_instance_id in {9900661, 9900662})
+
+
+def test_phase4_declared_secret_auto_counts_against_public_limit_key_same_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            9900663: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "limit_per_turn": 1},
+            ],
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    secret_card = CardInstance(instance_id=9900663, card_id=9900663, owner_id=1, card_type="BATTLE", card_number="TEST-990067", has_auto=True)
+    public_card = CardInstance(instance_id=9900664, card_id=9900664, owner_id=1, card_type="BATTLE", card_number="TEST-990067", has_auto=True)
+    state.players[1].hand = [secret_card]
+    state.players[1].battle_area.append(public_card)
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=secret_card)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 9900663, "source_card_id": 9900663, "source_zone": "battle", "played_from": "hand"},
+    )
+    declare = next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO)
+    state = engine.apply_action(state, declare)
+
+    public_effect_id = state.next_effect_id
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=public_effect_id,
+            owner_player_id=1,
+            source_instance_id=9900664,
+            source_card_id=9900664,
+                source_zone="battle",
+                trigger="self_played",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1, "limit_per_turn": 1, "limit_scope": "card_number"},
+                source_card_number="TEST-990067",
+                limit_per_turn=1,
+                limit_scope="card_number",
+        )
+    )
+    state.next_effect_id += 1
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 9900664, "source_card_id": 9900664, "source_zone": "battle", "played_from": "battle"},
+    )
+
+    engine._resolve_pending_effects(state)
+
+    row = next(r for r in state.effect_resolutions if r.effect_id == public_effect_id)
+    assert row.resolved is False
+    assert row.reason == "limit_per_turn_used"
+
+
+def test_phase4_secret_auto_opportunity_is_preblocked_after_limit_is_already_used() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            99006631: [
+                {"trigger": "owner_leader_attacks", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "limit_per_turn": 1},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=99006631, card_id=99006631, owner_id=1, card_type="BATTLE", has_auto=True)
+    state.players[1].hand = [card]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card)
+    event_payload = {"attacker_instance_id": state.players[1].leader_area.instance_id, "attacker_zone": "leader", "target_player_id": 2, "target_zone": "leader"}
+    engine._emit_effect_event(state, name="attack_declared", actor_player_id=1, payload=event_payload)
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+
+    engine._emit_effect_event(state, name="attack_declared", actor_player_id=1, payload=event_payload)
+
+    latest = state.secret_auto_opportunities[-1]
+    assert latest.source_instance_id == 99006631
+    assert latest.status == "blocked_limit_per_turn"
+    assert all(row.action_type != ActionType.DECLARE_SECRET_AUTO for row in engine.get_legal_actions(state, 1))
+    assert any(cp.name == "secret_auto_opportunity_preblocked" for cp in state.checkpoints)
+    assert any("Secret-area auto opportunity preblocked" in row and "blocked_limit_per_turn" in row for row in state.log)
+
+
+def test_phase4_secret_auto_once_per_turn_declares_only_once_for_same_source() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            9900671: [
+                {"trigger": "owner_leader_attacks", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "once_per_turn": True},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=9900671, card_id=9900671, owner_id=1, card_type="BATTLE", has_auto=True)
+    state.players[1].hand = [card]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card)
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": state.players[1].leader_area.instance_id, "attacker_zone": "leader", "target_player_id": 2, "target_zone": "leader"},
+    )
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": state.players[1].leader_area.instance_id, "attacker_zone": "leader", "target_player_id": 2, "target_zone": "leader"},
+    )
+
+    deck_before = len(state.players[1].deck)
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+
+    secret_auto_id = next(row.secret_auto_id for row in state.secret_auto_opportunities if row.source_instance_id == 9900671)
+    rows = [r for r in state.effect_resolutions if r.effect_id == -secret_auto_id]
+    assert sum(1 for r in rows if r.resolved and r.reason == "ok") == 1
+    assert sum(1 for r in rows if (not r.resolved) and r.reason == "once_per_turn_used") == 1
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "secret_auto_declared_once_per_turn_blocked" for cp in state.checkpoints)
+    assert any(row.status == "blocked_once_per_turn" for row in state.secret_auto_opportunities if row.source_instance_id == 9900671)
+
+
+def test_phase4_secret_auto_opportunity_is_preblocked_after_once_per_turn_is_already_used() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            99006711: [
+                {"trigger": "owner_leader_attacks", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "once_per_turn": True},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=99006711, card_id=99006711, owner_id=1, card_type="BATTLE", has_auto=True)
+    state.players[1].hand = [card]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card)
+    event_payload = {"attacker_instance_id": state.players[1].leader_area.instance_id, "attacker_zone": "leader", "target_player_id": 2, "target_zone": "leader"}
+    engine._emit_effect_event(state, name="attack_declared", actor_player_id=1, payload=event_payload)
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+
+    engine._emit_effect_event(state, name="attack_declared", actor_player_id=1, payload=event_payload)
+
+    latest = state.secret_auto_opportunities[-1]
+    assert latest.source_instance_id == 99006711
+    assert latest.status == "blocked_once_per_turn"
+    assert all(row.action_type != ActionType.DECLARE_SECRET_AUTO for row in engine.get_legal_actions(state, 1))
+    assert any(cp.name == "secret_auto_opportunity_preblocked" for cp in state.checkpoints)
+    assert any("Secret-area auto opportunity preblocked" in row and "blocked_once_per_turn" in row for row in state.log)
+
+
+def test_phase4_declared_secret_auto_counts_against_public_once_per_turn_same_source() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            9900672: [
+                {"trigger": "owner_leader_attacks", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "once_per_turn": True},
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    card = CardInstance(instance_id=9900672, card_id=9900672, owner_id=1, card_type="BATTLE", has_auto=True)
+    state.players[1].hand = [card]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=card)
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": state.players[1].leader_area.instance_id, "attacker_zone": "leader", "target_player_id": 2, "target_zone": "leader"},
+    )
+    state = engine.apply_action(state, next(row for row in engine.get_legal_actions(state, 1) if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+
+    public_effect_id = state.next_effect_id
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=public_effect_id,
+            owner_player_id=1,
+            source_instance_id=9900672,
+            source_card_id=9900672,
+            source_zone="hand",
+            trigger="owner_leader_attacks",
+            handler_id="auto_draw_n",
+            handler_params={"amount": 1},
+            source_card_number="",
+            once_per_turn=True,
+        )
+    )
+    state.next_effect_id += 1
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": state.players[1].leader_area.instance_id, "attacker_zone": "leader", "target_player_id": 2, "target_zone": "leader"},
+    )
+
+    engine._resolve_pending_effects(state)
+
+    row = next(r for r in state.effect_resolutions if r.effect_id == public_effect_id)
+    assert row.resolved is False
+    assert row.reason == "once_per_turn_used"
 
 
 def test_phase4_secret_auto_ignore_marks_status_without_resolving() -> None:

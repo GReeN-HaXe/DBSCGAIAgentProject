@@ -1,0 +1,12 @@
+{
+  "900305": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand",
+        "requires_life_at_most": 4,
+        "requires_multicolor_in_energy": true
+      }
+    ]
+  }
+}

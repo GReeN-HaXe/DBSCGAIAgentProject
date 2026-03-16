@@ -46,6 +46,29 @@ def _per_source_metrics(dataset: dict[str, Any], evaluation: dict[str, Any]) -> 
     return sorted(ranked, key=lambda item: (-float(item["top1_accuracy"]), item["source_name"]))
 
 
+def _dataset_secret_auto_summary(dataset: dict[str, Any]) -> dict[str, Any]:
+    summary = dataset.get("secret_auto_summary", {})
+    if not isinstance(summary, dict):
+        return {
+            "trace_count_with_secret_auto_opportunities": 0,
+            "total_opportunity_count": 0,
+            "total_pending_count": 0,
+            "total_blocked_count": 0,
+            "total_preblocked_count": 0,
+            "status_counts": {},
+        }
+    status_counts_raw = summary.get("status_counts", {})
+    status_counts = dict(status_counts_raw) if isinstance(status_counts_raw, dict) else {}
+    return {
+        "trace_count_with_secret_auto_opportunities": int(summary.get("trace_count_with_secret_auto_opportunities", 0) or 0),
+        "total_opportunity_count": int(summary.get("total_opportunity_count", 0) or 0),
+        "total_pending_count": int(summary.get("total_pending_count", 0) or 0),
+        "total_blocked_count": int(summary.get("total_blocked_count", 0) or 0),
+        "total_preblocked_count": int(summary.get("total_preblocked_count", 0) or 0),
+        "status_counts": {str(key): int(value) for key, value in status_counts.items()},
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Batch-evaluate the promoted Phase 22 production model across datasets.")
     parser.add_argument("--dataset", nargs="+", type=Path, required=True)
@@ -59,8 +82,15 @@ def main() -> None:
     args = parser.parse_args()
 
     dataset_rows: list[dict[str, Any]] = []
+    overall_secret_status_counts: dict[str, int] = {}
+    overall_secret_trace_count = 0
+    overall_secret_opportunity_count = 0
+    overall_secret_pending_count = 0
+    overall_secret_blocked_count = 0
+    overall_secret_preblocked_count = 0
     for dataset_path in args.dataset:
         dataset = _load_json(dataset_path)
+        dataset_secret_auto_summary = _dataset_secret_auto_summary(dataset)
         evaluation = evaluate_phase22_production(
             production_dir=args.production_dir,
             model_path=args.model,
@@ -80,8 +110,19 @@ def main() -> None:
                 else {},
                 "identity_resolved_example_rate": float(evaluation.get("identity_resolved_example_rate", 0.0) or 0.0),
                 "per_source": _per_source_metrics(dataset, evaluation),
+                "secret_auto_summary": dataset_secret_auto_summary,
             }
         )
+        overall_secret_trace_count += int(dataset_secret_auto_summary.get("trace_count_with_secret_auto_opportunities", 0) or 0)
+        overall_secret_opportunity_count += int(dataset_secret_auto_summary.get("total_opportunity_count", 0) or 0)
+        overall_secret_pending_count += int(dataset_secret_auto_summary.get("total_pending_count", 0) or 0)
+        overall_secret_blocked_count += int(dataset_secret_auto_summary.get("total_blocked_count", 0) or 0)
+        overall_secret_preblocked_count += int(dataset_secret_auto_summary.get("total_preblocked_count", 0) or 0)
+        status_counts = dataset_secret_auto_summary.get("status_counts", {})
+        if isinstance(status_counts, dict):
+            for status, count in status_counts.items():
+                label = str(status)
+                overall_secret_status_counts[label] = int(overall_secret_status_counts.get(label, 0)) + int(count)
 
     overall_example_count = sum(int(row["example_count"]) for row in dataset_rows)
     overall_top1 = (
@@ -96,6 +137,14 @@ def main() -> None:
         "dataset_count": len(dataset_rows),
         "overall_example_count": overall_example_count,
         "overall_top1_accuracy": overall_top1,
+        "secret_auto_summary": {
+            "trace_count_with_secret_auto_opportunities": int(overall_secret_trace_count),
+            "total_opportunity_count": int(overall_secret_opportunity_count),
+            "total_pending_count": int(overall_secret_pending_count),
+            "total_blocked_count": int(overall_secret_blocked_count),
+            "total_preblocked_count": int(overall_secret_preblocked_count),
+            "status_counts": {status: int(overall_secret_status_counts[status]) for status in sorted(overall_secret_status_counts)},
+        },
         "datasets": dataset_rows,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

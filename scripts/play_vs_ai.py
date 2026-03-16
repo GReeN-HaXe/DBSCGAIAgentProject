@@ -769,6 +769,9 @@ def _history_action_text(entry: dict[str, object], *, repo: SQLiteCardRepository
     trigger = entry.get("secret_auto_trigger")
     if trigger and "trigger=" not in text:
         text += f" trigger={trigger}"
+    status_before = entry.get("secret_auto_status_before")
+    if status_before and "status=" not in text:
+        text += f" status={status_before}"
     event_name = entry.get("secret_auto_event_name")
     event_id = entry.get("secret_auto_event_id")
     if event_name and "event=" not in text:

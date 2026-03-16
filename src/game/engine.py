@@ -524,6 +524,47 @@ class RulesEngine:
             limit_per_turn=opportunity.limit_per_turn,
             limit_scope=opportunity.limit_scope,
         )
+        regs_by_id = self._effect_registrations_for_limit_counting(state)
+        regs_by_id[temp_effect_id] = temp_reg
+        events_by_id = {evt.event_id: evt for evt in state.effect_events}
+        once_key = self._effect_once_per_turn_key(temp_reg)
+        resolved_once_per_turn_counts = self._current_effect_once_per_turn_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
+        if once_key is not None and resolved_once_per_turn_counts.get(once_key, 0) >= 1:
+            self._set_secret_auto_opportunity_status(
+                state,
+                opportunity_id=opportunity.opportunity_id,
+                status="blocked_once_per_turn",
+            )
+            state.effect_resolutions.append(
+                EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=False, reason="once_per_turn_used")
+            )
+            state.log.append(
+                "Secret-area auto declaration blocked by once-per-turn: "
+                f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id} "
+                f"trigger={temp_reg.trigger} handler={temp_reg.handler_id}"
+            )
+            self._checkpoint(state, "secret_auto_declared_once_per_turn_blocked")
+            self._checkpoint(state, "secret_auto_declared")
+            return
+        limit_key = self._effect_limit_key(temp_reg)
+        resolved_limit_counts = self._current_effect_limit_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
+        if limit_key is not None and resolved_limit_counts.get(limit_key, 0) >= int(temp_reg.limit_per_turn or 0):
+            self._set_secret_auto_opportunity_status(
+                state,
+                opportunity_id=opportunity.opportunity_id,
+                status="blocked_limit_per_turn",
+            )
+            state.effect_resolutions.append(
+                EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=False, reason="limit_per_turn_used")
+            )
+            state.log.append(
+                "Secret-area auto declaration blocked by limit: "
+                f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id} "
+                f"limit_scope={temp_reg.limit_scope} limit_per_turn={temp_reg.limit_per_turn}"
+            )
+            self._checkpoint(state, "secret_auto_declared_limit_blocked")
+            self._checkpoint(state, "secret_auto_declared")
+            return
         handler(state, event, temp_reg)
         state.effect_resolutions.append(
             EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=True, reason="ok")
@@ -3159,6 +3200,11 @@ class RulesEngine:
 
     def _record_secret_auto_opportunities(self, state: GameState, event: EffectEvent) -> None:
         created = False
+        preblocked = False
+        regs_by_id = self._effect_registrations_for_limit_counting(state)
+        events_by_id = {evt.event_id: evt for evt in state.effect_events}
+        resolved_once_per_turn_counts = self._current_effect_once_per_turn_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
+        resolved_limit_counts = self._current_effect_limit_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
         for row in state.deferred_secret_autos:
             if not self._effect_trigger_matches_event(
                 row.trigger,
@@ -3173,6 +3219,28 @@ class RulesEngine:
             )
             if exists:
                 continue
+            temp_reg = EffectRegistration(
+                effect_id=-int(row.secret_auto_id),
+                owner_player_id=row.owner_player_id,
+                source_instance_id=row.source_instance_id,
+                source_card_id=row.source_card_id,
+                source_zone=row.source_zone,
+                trigger=row.trigger,
+                handler_id=row.handler_id,
+                handler_params=dict(row.handler_params),
+                source_card_number=row.source_card_number,
+                once_per_turn=row.once_per_turn,
+                limit_per_turn=row.limit_per_turn,
+                limit_scope=row.limit_scope,
+            )
+            status = "pending"
+            once_key = self._effect_once_per_turn_key(temp_reg)
+            if once_key is not None and resolved_once_per_turn_counts.get(once_key, 0) >= 1:
+                status = "blocked_once_per_turn"
+            else:
+                limit_key = self._effect_limit_key(temp_reg)
+                if limit_key is not None and resolved_limit_counts.get(limit_key, 0) >= int(temp_reg.limit_per_turn or 0):
+                    status = "blocked_limit_per_turn"
             state.secret_auto_opportunities.append(
                 SecretAutoOpportunity(
                     opportunity_id=state.next_secret_auto_opportunity_id,
@@ -3193,16 +3261,27 @@ class RulesEngine:
                     once_per_turn=row.once_per_turn,
                     limit_per_turn=row.limit_per_turn,
                     limit_scope=row.limit_scope,
+                    status=status,
+                    preblocked=(status != "pending"),
                 )
             )
             state.next_secret_auto_opportunity_id += 1
-            state.log.append(
-                "Secret-area auto opportunity created: "
-                f"source_instance_id={row.source_instance_id} event_id={event.event_id} trigger={row.trigger}"
-            )
+            if status == "pending":
+                state.log.append(
+                    "Secret-area auto opportunity created: "
+                    f"source_instance_id={row.source_instance_id} event_id={event.event_id} trigger={row.trigger}"
+                )
+            else:
+                preblocked = True
+                state.log.append(
+                    "Secret-area auto opportunity preblocked: "
+                    f"source_instance_id={row.source_instance_id} event_id={event.event_id} trigger={row.trigger} status={status}"
+                )
             created = True
         if created:
             self._checkpoint(state, "secret_auto_opportunity_created")
+        if preblocked:
+            self._checkpoint(state, "secret_auto_opportunity_preblocked")
 
     def _reset_once_per_turn_effect_counters(self, state: GameState, *, player_id: int) -> None:
         updated: list[EffectRegistration] = []
@@ -3235,13 +3314,56 @@ class RulesEngine:
         return int(raw) if isinstance(raw, int) and raw > 0 else None
 
     @staticmethod
+    def _effect_once_per_turn_key(reg: EffectRegistration) -> tuple[object, ...] | None:
+        if not reg.once_per_turn:
+            return None
+        return (
+            reg.owner_player_id,
+            reg.source_instance_id,
+            reg.trigger,
+            reg.handler_id,
+            tuple(sorted(reg.handler_params.items())),
+        )
+
+    def _current_effect_once_per_turn_counts(
+        self,
+        state: GameState,
+        *,
+        regs_by_id: dict[int, EffectRegistration],
+        events_by_id: dict[int, EffectEvent],
+    ) -> dict[tuple[object, ...], int]:
+        counts: dict[tuple[object, ...], int] = {}
+        for row in state.effect_resolutions:
+            if not row.resolved:
+                continue
+            reg = regs_by_id.get(row.effect_id)
+            evt = events_by_id.get(row.event_id)
+            if reg is None or evt is None or evt.turn_number != state.turn_number:
+                continue
+            key = self._effect_once_per_turn_key(reg)
+            if key is None:
+                continue
+            counts[key] = counts.get(key, 0) + 1
+        return counts
+
+    @staticmethod
+    def _effect_limit_source_group(reg: EffectRegistration) -> str:
+        scope = str(reg.limit_scope or "card_number").strip() or "card_number"
+        if scope == "source_instance":
+            return f"instance:{reg.source_instance_id}"
+        if scope == "card_id":
+            return f"card_id:{reg.source_card_id}"
+        return str(reg.source_card_number or f"card_id:{reg.source_card_id}")
+
+    @staticmethod
     def _effect_limit_key(reg: EffectRegistration) -> tuple[object, ...] | None:
         if reg.limit_per_turn is None or reg.limit_per_turn <= 0:
             return None
-        source_group = str(reg.source_card_number or f"card_id:{reg.source_card_id}")
+        scope = str(reg.limit_scope or "card_number").strip() or "card_number"
+        source_group = RulesEngine._effect_limit_source_group(reg)
         return (
             reg.owner_player_id,
-            str(reg.limit_scope or "card_number"),
+            scope,
             source_group,
             reg.trigger,
             reg.handler_id,
@@ -3269,6 +3391,28 @@ class RulesEngine:
             counts[key] = counts.get(key, 0) + 1
         return counts
 
+    def _effect_registrations_for_limit_counting(self, state: GameState) -> dict[int, EffectRegistration]:
+        regs_by_id = {reg.effect_id: reg for reg in state.effect_registry}
+        for opportunity in state.secret_auto_opportunities:
+            if opportunity.status != "declared":
+                continue
+            effect_id = -int(opportunity.secret_auto_id)
+            regs_by_id[effect_id] = EffectRegistration(
+                effect_id=effect_id,
+                owner_player_id=opportunity.owner_player_id,
+                source_instance_id=opportunity.source_instance_id,
+                source_card_id=opportunity.source_card_id,
+                source_zone=opportunity.source_zone,
+                trigger=opportunity.trigger,
+                handler_id=opportunity.handler_id,
+                handler_params=dict(opportunity.handler_params),
+                source_card_number=opportunity.source_card_number,
+                once_per_turn=opportunity.once_per_turn,
+                limit_per_turn=opportunity.limit_per_turn,
+                limit_scope=opportunity.limit_scope,
+            )
+        return regs_by_id
+
     def _pop_next_pending_effect(self, state: GameState) -> PendingEffect | None:
         if not state.pending_effects:
             return None
@@ -3288,15 +3432,15 @@ class RulesEngine:
     def _resolve_pending_effects(self, state: GameState) -> None:
         if not state.pending_effects:
             return
-        resolved_once_per_turn_in_checkpoint: set[int] = set()
-        regs_by_id = {reg.effect_id: reg for reg in state.effect_registry}
+        regs_by_id = self._effect_registrations_for_limit_counting(state)
         events_by_id = {evt.event_id: evt for evt in state.effect_events}
+        resolved_once_per_turn_counts = self._current_effect_once_per_turn_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
         resolved_limit_counts = self._current_effect_limit_counts(state, regs_by_id=regs_by_id, events_by_id=events_by_id)
         while state.pending_effects:
             entry = self._pop_next_pending_effect(state)
             if entry is None:
                 break
-            regs_by_id = {reg.effect_id: reg for reg in state.effect_registry}
+            regs_by_id = self._effect_registrations_for_limit_counting(state)
             events_by_id = {evt.event_id: evt for evt in state.effect_events}
             reg = regs_by_id.get(entry.effect_id)
             evt = events_by_id.get(entry.event_id)
@@ -3305,16 +3449,30 @@ class RulesEngine:
                     EffectResolution(effect_id=entry.effect_id, event_id=entry.event_id, resolved=False, reason="missing_context")
                 )
                 continue
-            if reg.once_per_turn and (reg.triggers_this_turn > 0 or reg.effect_id in resolved_once_per_turn_in_checkpoint):
+            once_key = self._effect_once_per_turn_key(reg)
+            if once_key is not None and resolved_once_per_turn_counts.get(once_key, 0) >= 1:
                 state.effect_resolutions.append(
                     EffectResolution(effect_id=reg.effect_id, event_id=evt.event_id, resolved=False, reason="once_per_turn_used")
                 )
+                state.log.append(
+                    "Public effect blocked by once-per-turn: "
+                    f"effect_id={reg.effect_id} source_instance_id={reg.source_instance_id} "
+                    f"trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_once_per_turn_blocked")
                 continue
             limit_key = self._effect_limit_key(reg)
             if limit_key is not None and resolved_limit_counts.get(limit_key, 0) >= int(reg.limit_per_turn or 0):
                 state.effect_resolutions.append(
                     EffectResolution(effect_id=reg.effect_id, event_id=evt.event_id, resolved=False, reason="limit_per_turn_used")
                 )
+                state.log.append(
+                    "Public effect blocked by limit: "
+                    f"effect_id={reg.effect_id} source_instance_id={reg.source_instance_id} "
+                    f"limit_scope={reg.limit_scope} limit_per_turn={reg.limit_per_turn} "
+                    f"trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_limit_per_turn_blocked")
                 continue
             if not self._is_effect_source_active(state, reg):
                 state.effect_resolutions.append(
@@ -3344,8 +3502,8 @@ class RulesEngine:
                 triggers_this_turn=reg.triggers_this_turn + 1,
             )
             state.effect_registry = [next_reg if item.effect_id == reg.effect_id else item for item in state.effect_registry]
-            if reg.once_per_turn:
-                resolved_once_per_turn_in_checkpoint.add(reg.effect_id)
+            if once_key is not None:
+                resolved_once_per_turn_counts[once_key] = resolved_once_per_turn_counts.get(once_key, 0) + 1
             if limit_key is not None:
                 resolved_limit_counts[limit_key] = resolved_limit_counts.get(limit_key, 0) + 1
             state.effect_resolutions.append(

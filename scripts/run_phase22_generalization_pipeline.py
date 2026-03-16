@@ -25,6 +25,29 @@ def _load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def _dataset_secret_auto_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    summary = payload.get("secret_auto_summary", {})
+    if not isinstance(summary, dict):
+        return {
+            "trace_count_with_secret_auto_opportunities": 0,
+            "total_opportunity_count": 0,
+            "total_pending_count": 0,
+            "total_blocked_count": 0,
+            "total_preblocked_count": 0,
+            "status_counts": {},
+        }
+    status_counts_raw = summary.get("status_counts", {})
+    status_counts = dict(status_counts_raw) if isinstance(status_counts_raw, dict) else {}
+    return {
+        "trace_count_with_secret_auto_opportunities": int(summary.get("trace_count_with_secret_auto_opportunities", 0) or 0),
+        "total_opportunity_count": int(summary.get("total_opportunity_count", 0) or 0),
+        "total_pending_count": int(summary.get("total_pending_count", 0) or 0),
+        "total_blocked_count": int(summary.get("total_blocked_count", 0) or 0),
+        "total_preblocked_count": int(summary.get("total_preblocked_count", 0) or 0),
+        "status_counts": {str(key): int(value) for key, value in status_counts.items()},
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train a generalized Phase 22 model on a merged benchmark dataset and evaluate it across held-out benchmark datasets.")
     parser.add_argument("--train-dataset", type=Path, required=True, help="Merged Phase 22 benchmark dataset JSON path.")
@@ -142,6 +165,10 @@ def main() -> None:
     ]
     _run(batch_cmd)
 
+    train_dataset_payload = _load_json(args.train_dataset)
+    batch_eval_payload = _load_json(batch_eval_path)
+    production_summary_payload = _load_json(production_summary_path)
+
     summary = {
         "schema_version": "phase22.generalization.v1",
         "train_dataset": str(args.train_dataset.resolve()),
@@ -151,6 +178,13 @@ def main() -> None:
         "best_config": str(best_config_path.resolve()),
         "production_summary": str(production_summary_path.resolve()),
         "batch_eval": str(batch_eval_path.resolve()),
+        "train_dataset_secret_auto_summary": _dataset_secret_auto_summary(train_dataset_payload),
+        "production_training_secret_auto_summary": dict(production_summary_payload.get("training_dataset_secret_auto_summary", {}))
+        if isinstance(production_summary_payload.get("training_dataset_secret_auto_summary"), dict)
+        else {},
+        "batch_eval_secret_auto_summary": dict(batch_eval_payload.get("secret_auto_summary", {}))
+        if isinstance(batch_eval_payload.get("secret_auto_summary"), dict)
+        else {},
     }
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(f"wrote: {summary_path}")

@@ -12,6 +12,22 @@ def _load_json(path: Path) -> dict[str, object]:
     return payload
 
 
+def _secret_auto_lines(summary: object, *, heading: str) -> list[str]:
+    if not isinstance(summary, dict):
+        return []
+    return [
+        heading,
+        "",
+        f"- traces_with_secret_autos: `{summary.get('trace_count_with_secret_auto_opportunities', 0)}`",
+        f"- total_opportunity_count: `{summary.get('total_opportunity_count', 0)}`",
+        f"- total_pending_count: `{summary.get('total_pending_count', 0)}`",
+        f"- total_blocked_count: `{summary.get('total_blocked_count', 0)}`",
+        f"- total_preblocked_count: `{summary.get('total_preblocked_count', 0)}`",
+        f"- status_counts: `{summary.get('status_counts', {})}`",
+        "",
+    ]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render a Markdown report from a Phase 22 batch evaluation artifact.")
     parser.add_argument("--input", type=Path, required=True)
@@ -28,6 +44,7 @@ def main() -> None:
         f"- overall_top1_accuracy: `{payload.get('overall_top1_accuracy', 0.0)}`",
         "",
     ]
+    lines.extend(_secret_auto_lines(payload.get("secret_auto_summary", {}), heading="## Secret Auto Summary"))
     datasets = payload.get("datasets", [])
     if isinstance(datasets, list) and datasets:
         lines.extend(["## Datasets", ""])
@@ -45,6 +62,7 @@ def main() -> None:
                     "",
                 ]
             )
+            lines.extend(_secret_auto_lines(dataset.get("secret_auto_summary", {}), heading="Secret auto summary"))
             per_source = dataset.get("per_source", [])
             if isinstance(per_source, list) and per_source:
                 lines.extend(["Per-source:", ""])

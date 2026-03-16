@@ -407,6 +407,9 @@ def test_phase22_promote_production_and_runtime_scripts(tmp_path: Path) -> None:
         text=True,
     )
     assert promote.returncode == 0, promote.stderr
+    production_summary_payload = json.loads(production_summary.read_text(encoding="utf-8"))
+    assert "training_dataset_secret_auto_summary" in production_summary_payload
+    assert production_summary_payload["training_dataset_secret_auto_summary"]["total_opportunity_count"] == 0
 
     eval_output = production_dir / "phase22_production_eval.json"
     evaluate = subprocess.run(
@@ -453,3 +456,98 @@ def test_phase22_promote_production_and_runtime_scripts(tmp_path: Path) -> None:
     assert query.returncode == 0, query.stderr
     query_payload = json.loads(query_output.read_text(encoding="utf-8"))
     assert query_payload["row"]["decision_class"] == "play_development"
+
+
+def test_phase22_closeout_report_surfaces_secret_auto_counts(tmp_path: Path) -> None:
+    best_config = tmp_path / "best.json"
+    generalization = tmp_path / "generalization_batch_eval.json"
+    lomo = tmp_path / "lomo.json"
+    output = tmp_path / "closeout.md"
+
+    best_config.write_text(
+        json.dumps(
+            {
+                "target_field": "decision_class",
+                "best": {
+                    "config_name": "phase22_best",
+                    "hidden_dim": 128,
+                    "epochs": 20,
+                    "learning_rate": 0.001,
+                    "manifest_path": "artifacts/phase22_manifest.json",
+                },
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    generalization.write_text(
+        json.dumps(
+            {
+                "dataset_count": 2,
+                "overall_example_count": 10,
+                "overall_top1_accuracy": 0.75,
+                "datasets": [
+                    {"dataset_path": "a.json", "top1_accuracy": 0.8},
+                    {"dataset_path": "b.json", "top1_accuracy": 0.7},
+                ],
+                "secret_auto_summary": {
+                    "trace_count_with_secret_auto_opportunities": 2,
+                    "total_opportunity_count": 5,
+                    "total_pending_count": 0,
+                    "total_blocked_count": 4,
+                    "total_preblocked_count": 2,
+                    "status_counts": {"blocked_limit_per_turn": 3, "blocked_once_per_turn": 1},
+                },
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    lomo.write_text(
+        json.dumps(
+            {
+                "dataset_count": 2,
+                "overall_top1_accuracy_weighted": 0.73,
+                "overall_top1_accuracy_macro": 0.72,
+                "holdout_secret_auto_summary": {
+                    "trace_count_with_secret_auto_opportunities": 1,
+                    "total_opportunity_count": 2,
+                    "total_pending_count": 0,
+                    "total_blocked_count": 2,
+                    "total_preblocked_count": 1,
+                    "status_counts": {"blocked_limit_per_turn": 2},
+                },
+                "folds": [
+                    {"fold_name": "a", "top1_accuracy": 0.74},
+                    {"fold_name": "b", "top1_accuracy": 0.70},
+                ],
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/render_phase22_closeout_report.py",
+            "--best-config",
+            str(best_config),
+            "--generalization-batch-eval",
+            str(generalization),
+            "--lomo-summary",
+            str(lomo),
+            "--output",
+            str(output),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    markdown = output.read_text(encoding="utf-8")
+    assert "Phase 22 Closeout" in markdown
+    assert "generalized_secret_auto_summary" in markdown
+    assert "lomo_holdout_secret_auto_summary" in markdown
+    assert "total_opportunity_count: `5`" in markdown
+    assert "total_preblocked_count: `1`" in markdown

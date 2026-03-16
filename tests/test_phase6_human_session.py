@@ -14,7 +14,7 @@ from src.agent.session import (
 )
 from src.game import RulesEngine
 from src.game.actions import Action, ActionType
-from src.game.state import CardInstance, GameState, PlayerState, TurnPhase
+from src.game.state import CardInstance, GameState, PlayerState, SecretAutoOpportunity, TurnPhase
 from scripts.play_vs_ai import _history_action_text
 
 
@@ -140,8 +140,52 @@ def test_phase6_cli_helpers_render_secret_auto_actions_with_card_names() -> None
         card_name_resolver=lambda card_id: f"CARD-{card_id}",
     )
     assert "opportunity_id=" in action_text
+    assert "status=pending" in action_text
     assert "source_card=CARD-990501" in action_text
     assert "origin_zone=hand" in action_text
+
+
+def test_phase6_cli_helpers_render_blocked_secret_auto_opportunities_in_state_views() -> None:
+    state = GameState(
+        players={
+            1: PlayerState(player_id=1, leader_card_id=1, leader_area=CardInstance(instance_id=1, card_id=1, owner_id=1)),
+            2: PlayerState(player_id=2, leader_card_id=2, leader_area=CardInstance(instance_id=2, card_id=2, owner_id=2)),
+        },
+        active_player=1,
+        first_player_id=1,
+        phase=TurnPhase.MAIN,
+    )
+    state.secret_auto_opportunities = [
+        SimpleNamespace(
+            opportunity_id=7,
+            secret_auto_id=3,
+            owner_player_id=1,
+            source_instance_id=990777,
+            source_card_id=990777,
+            source_card_number="TEST-990777",
+            source_zone="hand",
+            trigger="owner_leader_attacks",
+            handler_id="auto_draw_n",
+            event_id=12,
+            event_name="attack_declared",
+            created_turn_number=1,
+            created_phase=TurnPhase.MAIN,
+            origin_zone="hand",
+            handler_params={"amount": 1},
+            once_per_turn=True,
+            limit_per_turn=None,
+            limit_scope="card_number",
+            status="blocked_once_per_turn",
+        )
+    ]
+
+    text = summarize_state_for_cli(state, card_name_resolver=lambda card_id: f"CARD-{card_id}", show_zone_details=False)
+    board = format_full_board_for_cli(state, card_name_resolver=lambda card_id: f"CARD-{card_id}")
+    assert "Secret auto opportunities:" in text
+    assert "status=blocked_once_per_turn" in text
+    assert "CARD-990777" in text
+    assert "Secret auto opportunities:" in board
+    assert "status=blocked_once_per_turn" in board
 
 
 def test_phase6_decision_owner_prefers_pending_secret_auto_opportunity_owner() -> None:
@@ -306,9 +350,12 @@ def test_phase6_session_trace_payload_collects_actions() -> None:
     assert len(payload["actions"]) == 1
     assert isinstance(payload["setup"], dict)
     assert payload["setup"]["seed"] == 123
+    assert isinstance(payload["final_state_snapshot"], dict)
+    assert isinstance(payload["secret_auto_summary"], dict)
     row = payload["actions"][0]
     assert isinstance(row["state_snapshot"], dict)
     assert row["state_snapshot"]["active_player"] == 1
+    assert isinstance(row["state_snapshot"]["secret_auto_summary"], dict)
 
 
 def test_phase6_session_current_player_uses_counter_window_responder() -> None:
@@ -352,6 +399,50 @@ def test_phase6_snapshot_state_for_trace_has_compact_zone_counts() -> None:
     assert players["1"]["hand_size"] == 6
     assert players["1"]["life_size"] == 8
     assert players["1"]["deck_size"] == 46
+    assert snapshot["secret_auto_summary"]["opportunity_count"] == 0
+
+
+def test_phase6_snapshot_state_for_trace_exports_preblocked_secret_auto_summary() -> None:
+    state = GameState(
+        players={
+            1: PlayerState(player_id=1, leader_card_id=1, leader_area=CardInstance(instance_id=1, card_id=1, owner_id=1), life=[], hand=[], deck=[]),
+            2: PlayerState(player_id=2, leader_card_id=2, leader_area=CardInstance(instance_id=2, card_id=2, owner_id=2), life=[], hand=[], deck=[]),
+        },
+        active_player=1,
+        first_player_id=1,
+        phase=TurnPhase.MAIN,
+    )
+    state.secret_auto_opportunities = [
+        SecretAutoOpportunity(
+            opportunity_id=7,
+            secret_auto_id=9,
+            owner_player_id=2,
+            source_instance_id=77,
+            source_card_id=9007,
+            source_card_number="BT99-007",
+            source_zone="battle",
+            trigger="self_played",
+            handler_id="auto_draw_n",
+            event_id=14,
+            event_name="card_played",
+            created_turn_number=3,
+            created_phase=TurnPhase.MAIN,
+            origin_zone="hand",
+            status="blocked_limit_per_turn",
+            preblocked=True,
+            limit_per_turn=1,
+            limit_scope="card_number",
+        )
+    ]
+    snapshot = snapshot_state_for_trace(state)
+    secret_summary = snapshot["secret_auto_summary"]
+    assert secret_summary["opportunity_count"] == 1
+    assert secret_summary["preblocked_count"] == 1
+    assert secret_summary["blocked_count"] == 1
+    first = secret_summary["opportunities"][0]
+    assert first["status"] == "blocked_limit_per_turn"
+    assert first["preblocked"] is True
+    assert first["origin_zone"] == "hand"
 
 
 def test_phase6_session_ai_loop_guard_prefers_fallback_action() -> None:
@@ -454,3 +545,16 @@ def test_phase6_history_action_text_renders_card_labels_from_cards_and_variants(
     assert "target_card=BT29-086 Goku Black" in text
     assert "card_id=6" not in text
     assert "card_id=9629" not in text
+
+
+def test_phase6_history_action_text_renders_secret_auto_status() -> None:
+    text = _history_action_text(
+        {
+            "action": "declare_secret_auto opportunity_id=7",
+            "secret_auto_trigger": "self_played",
+            "secret_auto_status_before": "blocked_limit_per_turn",
+        },
+        repo=None,
+    )
+    assert "trigger=self_played" in text
+    assert "status=blocked_limit_per_turn" in text

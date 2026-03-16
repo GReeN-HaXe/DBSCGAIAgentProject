@@ -58,6 +58,34 @@ def _trace_stats(payload: dict[str, object]) -> dict[str, object]:
     }
 
 
+def _trace_secret_auto_stats(payload: dict[str, object]) -> dict[str, object]:
+    summary: dict[str, object] = {}
+    if isinstance(payload.get("final_state_snapshot"), dict):
+        snapshot = payload["final_state_snapshot"]
+        if isinstance(snapshot, dict) and isinstance(snapshot.get("secret_auto_summary"), dict):
+            summary = dict(snapshot.get("secret_auto_summary", {}))
+    if not summary and isinstance(payload.get("secret_auto_summary"), dict):
+        summary = dict(payload.get("secret_auto_summary", {}))
+    if not summary and isinstance(payload.get("trace"), dict):
+        trace = payload["trace"]
+        if isinstance(trace, dict):
+            if isinstance(trace.get("final_state_snapshot"), dict):
+                snapshot = trace["final_state_snapshot"]
+                if isinstance(snapshot, dict) and isinstance(snapshot.get("secret_auto_summary"), dict):
+                    summary = dict(snapshot.get("secret_auto_summary", {}))
+            if not summary and isinstance(trace.get("secret_auto_summary"), dict):
+                summary = dict(trace.get("secret_auto_summary", {}))
+    status_counts_raw = summary.get("status_counts", {})
+    status_counts = dict(status_counts_raw) if isinstance(status_counts_raw, dict) else {}
+    return {
+        "opportunity_count": int(summary.get("opportunity_count", 0) or 0),
+        "pending_count": int(summary.get("pending_count", 0) or 0),
+        "blocked_count": int(summary.get("blocked_count", 0) or 0),
+        "preblocked_count": int(summary.get("preblocked_count", 0) or 0),
+        "status_counts": {str(key): int(value) for key, value in status_counts.items()},
+    }
+
+
 def _convert_to_phase7_compatible_artifact(payload: dict[str, object]) -> dict[str, object]:
     actions = _normalize_trace_actions(payload)
     if isinstance(payload.get("decision_trace"), list):
@@ -94,9 +122,11 @@ def main() -> None:
     for path in args.input:
         payload = _load_json(path)
         stats = _trace_stats(payload)
+        secret_auto_stats = _trace_secret_auto_stats(payload)
         row = {
             "path": str(path),
             **stats,
+            "secret_auto_summary": secret_auto_stats,
         }
         if int(stats["action_count"]) < int(args.min_actions) or int(stats["unique_action_type_count"]) < int(args.min_unique_action_types):
             skipped.append(row)
@@ -111,11 +141,52 @@ def main() -> None:
             f"min_actions={args.min_actions} min_unique_action_types={args.min_unique_action_types}"
         )
 
+    total_secret_status_counts: Counter[str] = Counter()
+    for row in included:
+        secret_summary = row.get("secret_auto_summary", {})
+        if not isinstance(secret_summary, dict):
+            continue
+        status_counts = secret_summary.get("status_counts", {})
+        if isinstance(status_counts, dict):
+            for status, count in status_counts.items():
+                total_secret_status_counts[str(status)] += int(count)
+
+    aggregated_secret_auto_summary = {
+        "trace_count_with_secret_auto_opportunities": sum(
+            1
+            for row in included
+            if isinstance(row.get("secret_auto_summary"), dict)
+            and int(row["secret_auto_summary"].get("opportunity_count", 0) or 0) > 0
+        ),
+        "total_opportunity_count": sum(
+            int(row["secret_auto_summary"].get("opportunity_count", 0) or 0)
+            for row in included
+            if isinstance(row.get("secret_auto_summary"), dict)
+        ),
+        "total_pending_count": sum(
+            int(row["secret_auto_summary"].get("pending_count", 0) or 0)
+            for row in included
+            if isinstance(row.get("secret_auto_summary"), dict)
+        ),
+        "total_blocked_count": sum(
+            int(row["secret_auto_summary"].get("blocked_count", 0) or 0)
+            for row in included
+            if isinstance(row.get("secret_auto_summary"), dict)
+        ),
+        "total_preblocked_count": sum(
+            int(row["secret_auto_summary"].get("preblocked_count", 0) or 0)
+            for row in included
+            if isinstance(row.get("secret_auto_summary"), dict)
+        ),
+        "status_counts": {status: int(count) for status, count in sorted(total_secret_status_counts.items())},
+    }
+
     dataset = build_phase7_dataset(
         artifacts,
         source_names=source_names,
         validation_ratio=float(args.validation_ratio),
     )
+    dataset["secret_auto_summary"] = aggregated_secret_auto_summary
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(dataset, indent=2), encoding="utf-8")
     print(f"wrote: {args.output}")
@@ -130,6 +201,7 @@ def main() -> None:
             "skipped_traces": skipped,
             "dataset_example_count": int(dataset.get("example_count", 0) or 0),
             "dataset_split_counts": dict(dataset.get("split_counts", {})) if isinstance(dataset.get("split_counts"), dict) else {},
+            "secret_auto_summary": aggregated_secret_auto_summary,
         }
         args.summary_output.parent.mkdir(parents=True, exist_ok=True)
         args.summary_output.write_text(json.dumps(summary, indent=2), encoding="utf-8")

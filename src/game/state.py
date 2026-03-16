@@ -255,6 +255,7 @@ class SecretAutoOpportunity:
     limit_per_turn: int | None = None
     limit_scope: str = "card_number"
     status: str = "pending"
+    preblocked: bool = False
 
 
 @dataclass(frozen=True)
