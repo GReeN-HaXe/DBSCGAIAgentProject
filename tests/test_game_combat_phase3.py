@@ -121,6 +121,64 @@ def test_battle_vs_rest_battle_kos_target_to_drop() -> None:
     assert state.players[2].drop[0].instance_id == 900002
 
 
+def test_blocker_redirects_leader_attack_to_battle_card() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_next_player_main(engine, state)  # P2 main, can attack.
+
+    p1 = state.players[1]
+    p2 = state.players[2]
+    blocker = CardInstance(
+        instance_id=900003,
+        card_id=33,
+        owner_id=1,
+        resting=False,
+        power=10000,
+        keywords=("Blocker",),
+    )
+    p1.battle_area.append(blocker)
+    p2.leader_area.power = 20000
+    target_life_before = len(p1.life)
+
+    state = engine.apply_action(
+        state,
+        Action(
+            action_type=ActionType.DECLARE_ATTACK,
+            player_id=2,
+            attacker_zone="leader",
+            target_player_id=1,
+            target_zone="leader",
+        ),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=2))
+
+    legal = engine.get_legal_actions(state, 1)
+    blocker_actions = [a for a in legal if a.action_type == ActionType.ACTIVATE_BLOCKER]
+    assert len(blocker_actions) == 1
+
+    state = engine.apply_action(state, blocker_actions[0])
+    assert state.attack_context is not None
+    assert state.attack_context.target_zone == "battle"
+    assert state.attack_context.target_instance_id == 900003
+    assert state.players[1].battle_area[0].resting is True
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=2))
+
+    assert len(state.players[1].life) == target_life_before
+    assert len(state.players[1].battle_area) == 0
+    assert len(state.players[1].drop) == 1
+    assert state.players[1].drop[0].instance_id == 900003
+
+
 def test_life_zero_sets_winner() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

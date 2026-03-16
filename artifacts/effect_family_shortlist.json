@@ -1,0 +1,396 @@
+{
+  "schema_version": "effect_family_shortlist.v1",
+  "summary": {
+    "candidate_family_count": 63,
+    "shortlist_count": 20,
+    "requested_top_n": 20
+  },
+  "shortlist": [
+    {
+      "rank": 1,
+      "template": "[blocker] (when one of your other card is attacked, you may switch this card to rest mode and change the target of the attack to this card)",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 1300,
+      "recommended_action": "implement_new_family",
+      "card_count": 13,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 3727,
+      "example_card_number": "",
+      "example_card_name": "",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 2,
+      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto][sparking <n>] (this skill takes effect when you have <n> or more card in your drop area.) when you combo with this card, if you...",
+      "sources": [
+        "global_unmatched",
+        "priority_family"
+      ],
+      "score": 1066,
+      "recommended_action": "implement_new_family",
+      "card_count": 6,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 4726,
+      "example_card_number": "BT5-012",
+      "example_card_name": "Master Roshi, Martial Expert",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 3,
+      "template": "[activate main][limit <n>] if you only have blue \u226apower wish\u226b <son goku> card in play in your battle area: play this card from your hand. [activate main][once per turn]{<n>}: draw <n> card, and this card gains [dual atta...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 7934,
+      "example_card_number": "EX24-05",
+      "example_card_name": "Frieza, Guided by the Dragon Balls",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 4,
+      "template": "[activate: battle] if your leader card is a black \u226asaiyan\u226b card, it gets +<n> power and [double strike] for the duration of the battle.",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 7179,
+      "example_card_number": "EX06-36",
+      "example_card_name": "A Crack in Spacetime",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 5,
+      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: choose up to <n> of your opponent's battle card with an energy cost of <n> or less and ko it, then choose up to <n> of your...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 2266,
+      "example_card_number": "EX23-21",
+      "example_card_name": "Limit Ultra Kamehameha, Mighty Blast",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 6,
+      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: place up to <n> black card from your warp in your drop, then choose up to <n> of your card and it gets +<n> power for the b...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 2268,
+      "example_card_number": "EX23-38",
+      "example_card_name": "First Kamehameha, Mighty Blast",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 7,
+      "template": "[activate: battle] place this card in its owner's drop area from your combo area: choose up to <n> battle card with a combo cost of <n> in your opponent's combo area and place it in its owner's drop area.",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 27,
+      "example_card_number": "EX19-12",
+      "example_card_name": "Broly, Omen of Evolution",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 8,
+      "template": "[activate: battle](red), your red &lt;son gohan: sh&gt; card is attacking and you remove this card from the game: choose up to <n> of your opponent's battle card with <n> power or less, ignoring [barrier], and ko it, the...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 2064,
+      "example_card_number": "BT22-007",
+      "example_card_name": "Special Beam Cannon, Inherited Power",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 9,
+      "template": "[activate: main/battle][limit <n>] if your leader card is a green &lt;cheelai: br&gt; card or yellow &lt;broly: br&gt; card, choose one?-. \u30fbchoose up to <n> of your opponent's skill-less battle card in rest mode, ko it,...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 28,
+      "example_card_number": "EX19-13",
+      "example_card_name": "Encountering the Unknown",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 10,
+      "template": "[activate: main/battle][limit <n>]{y}{y}, if your leader is yellow an your opponent has <n> or more energy: play this card from your hand, choose any number of your card nd switch them to rest mode, and for each card you...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 8425,
+      "example_card_number": "BT27-084",
+      "example_card_name": "SS Broly, Vigor",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 11,
+      "template": "[activate: main] choose all red \u226asaiyan\u226b card in your battle area. they gain [barrier] (they can't be chosen by the skills of your opponent's card) until the end of your opponent's next turn.",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 7166,
+      "example_card_number": "TB1-023",
+      "example_card_name": "Strategies of Universe 7",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 12,
+      "template": "[activate: main][limit <n>] if your leader card is a black &lt;bardock: xeno&gt; card or a \u226asaiyan\u226b card with {ss<n>} in its card name: look at up to <n> card from the top of your deck, add up to <n> black card with {ss<...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 39,
+      "example_card_number": "EX19-24",
+      "example_card_name": "SS4's Call",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 13,
+      "template": "[activate: main][limit <n>][burst <n>] if your leader card is a red &lt;broly&gt; card and you send this card from your drop area to your warp: add up to <n> card from your life to your hand.. [activate: battle] choose u...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 78,
+      "example_card_number": "BT15-025",
+      "example_card_name": "The Demon Awakens",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 14,
+      "template": "[activate: main][once per turn][burst <n>] add <n> card from your life to your hand: look at up to <n> card from the top of your deck, add up to <n> black \u226ademon realm race\u226b or \u226ademon god\u226b card to your hand, then shuffle...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 8314,
+      "example_card_number": "BT27-092",
+      "example_card_name": "Mechikabura",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 15,
+      "template": "[activate: main]\u2460, remove this card in your drop area from the game, then choose up to <n> card in your hand and place them at the bottom of your deck in any order: draw card equal to the number of card you placed at the...",
+      "sources": [
+        "priority_family"
+      ],
+      "score": 1011,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 1,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 7386,
+      "example_card_number": "DB2-143",
+      "example_card_name": "Koitsukai, Mechanical Courage",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 16,
+      "template": "[over realm <n>] (if you have at least <n> card in your drop area, you can play this card by sending all card in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [ov...",
+      "sources": [
+        "global_unmatched",
+        "priority_family"
+      ],
+      "score": 1000,
+      "recommended_action": "extend_existing_family",
+      "card_count": 11,
+      "priority_card_count": 1,
+      "implemented_card_count": 1,
+      "priority_implemented_card_count": 1,
+      "example_card_id": 4576,
+      "example_card_number": "BT3-110",
+      "example_card_name": "Awakened Warrior Bardock",
+      "handler_counts": {
+        "auto_draw_n": 1
+      },
+      "trigger_counts": {
+        "self_played": 1
+      },
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 17,
+      "template": "[critical] (when this card inflicts damage to your opponent's life, they place that many card in their drop area instead of their hand)",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 600,
+      "recommended_action": "implement_new_family",
+      "card_count": 6,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 3966,
+      "example_card_number": "",
+      "example_card_name": "",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 18,
+      "template": "[activate: main] if your leader card is a black \u226amachine mutant\u226b card and you choose <n> black battle card with energy costs between <n> and <n> in your drop area and place them at the bottom of your deck in any order: p...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 500,
+      "recommended_action": "implement_new_family",
+      "card_count": 5,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 5178,
+      "example_card_number": "",
+      "example_card_name": "",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 19,
+      "template": "[auto] when you play this card, look at up to <n> card from the top of your deck. choose up to <n> \u226auniverse <n>\u226b among them and add it to your hand. then, shuffle your deck.",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 400,
+      "recommended_action": "implement_new_family",
+      "card_count": 4,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 5656,
+      "example_card_number": "",
+      "example_card_name": "",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 20,
+      "template": "[barrier] (this card can't be chosen by the skills of your opponent's card)",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 400,
+      "recommended_action": "implement_new_family",
+      "card_count": 4,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 4636,
+      "example_card_number": "",
+      "example_card_name": "",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    }
+  ]
+}

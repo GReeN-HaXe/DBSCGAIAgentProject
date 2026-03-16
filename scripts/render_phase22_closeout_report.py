@@ -20,6 +20,20 @@ def _fmt_float(value: object) -> str:
         return "0.000000"
 
 
+def _secret_auto_lines(summary: object, *, heading: str) -> list[str]:
+    if not isinstance(summary, dict):
+        return []
+    return [
+        heading,
+        f"- traces_with_secret_autos: `{summary.get('trace_count_with_secret_auto_opportunities', 0)}`",
+        f"- total_opportunity_count: `{summary.get('total_opportunity_count', 0)}`",
+        f"- total_pending_count: `{summary.get('total_pending_count', 0)}`",
+        f"- total_blocked_count: `{summary.get('total_blocked_count', 0)}`",
+        f"- total_preblocked_count: `{summary.get('total_preblocked_count', 0)}`",
+        f"- status_counts: `{summary.get('status_counts', {})}`",
+    ]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render a Phase 22 closeout markdown report.")
     parser.add_argument("--best-config", type=Path, required=True, help="Phase 22 best-config JSON path.")
@@ -63,6 +77,7 @@ def main() -> None:
         f"- overall_example_count: `{generalization.get('overall_example_count', 0)}`",
         f"- overall_top1_accuracy: `{_fmt_float(generalization.get('overall_top1_accuracy', 0.0))}`",
     ]
+    lines.extend(_secret_auto_lines(generalization.get("secret_auto_summary", {}), heading="- generalized_secret_auto_summary"))
     if weakest_dataset is not None:
         lines.extend(
             [
@@ -80,6 +95,7 @@ def main() -> None:
             f"- overall_top1_accuracy_macro: `{_fmt_float(lomo.get('overall_top1_accuracy_macro', 0.0))}`",
         ]
     )
+    lines.extend(_secret_auto_lines(lomo.get("holdout_secret_auto_summary", {}), heading="- lomo_holdout_secret_auto_summary"))
     if weakest_fold is not None:
         lines.extend(
             [

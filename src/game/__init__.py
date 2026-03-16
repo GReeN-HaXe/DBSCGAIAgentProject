@@ -6,6 +6,7 @@ from src.game.effect_rule_extractor import (
     build_effect_rules_with_diagnostics,
     diagnose_unresolved_patterns,
     extract_effect_rules_from_card,
+    skill_template_signature,
 )
 from src.game.state import (
     AttackContext,
@@ -37,6 +38,7 @@ __all__ = [
     "build_effect_rules_with_diagnostics",
     "diagnose_unresolved_patterns",
     "extract_effect_rules_from_card",
+    "skill_template_signature",
     "EffectEvent",
     "EffectRegistration",
     "EffectResolution",

@@ -4,11 +4,57 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+from collections import Counter
 from typing import Callable
 
 from src.agent.heuristic import HeuristicPolicy
 from src.game import Action, CardInstance, GameState, RulesEngine
 from src.game.state_io import load_game_state_json, save_game_state_json
+
+
+def _secret_auto_opportunity_export_rows(state: GameState) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for row in sorted(
+        list(state.secret_auto_opportunities or []),
+        key=lambda item: (int(item.event_id), int(item.opportunity_id)),
+    ):
+        rows.append(
+            {
+                "opportunity_id": int(row.opportunity_id),
+                "secret_auto_id": int(row.secret_auto_id),
+                "owner_player_id": int(row.owner_player_id),
+                "source_instance_id": int(row.source_instance_id),
+                "source_card_id": int(row.source_card_id),
+                "source_card_number": str(row.source_card_number),
+                "source_zone": str(row.source_zone),
+                "origin_zone": str(row.origin_zone or row.source_zone),
+                "trigger": str(row.trigger),
+                "handler_id": str(row.handler_id),
+                "event_id": int(row.event_id),
+                "event_name": str(row.event_name),
+                "created_turn_number": int(row.created_turn_number),
+                "created_phase": row.created_phase.value,
+                "status": str(row.status or "pending"),
+                "preblocked": bool(row.preblocked),
+                "once_per_turn": bool(row.once_per_turn),
+                "limit_per_turn": None if row.limit_per_turn is None else int(row.limit_per_turn),
+                "limit_scope": str(row.limit_scope),
+            }
+        )
+    return rows
+
+
+def _secret_auto_summary_for_export(state: GameState) -> dict[str, object]:
+    opportunities = _secret_auto_opportunity_export_rows(state)
+    status_counts = Counter(str(row.get("status", "pending")) for row in opportunities)
+    return {
+        "opportunity_count": len(opportunities),
+        "pending_count": int(status_counts.get("pending", 0)),
+        "preblocked_count": sum(1 for row in opportunities if bool(row.get("preblocked"))),
+        "blocked_count": sum(1 for row in opportunities if str(row.get("status", "")).startswith("blocked_")),
+        "status_counts": {status: int(count) for status, count in sorted(status_counts.items())},
+        "opportunities": opportunities,
+    }
 
 
 def snapshot_state_for_trace(state: GameState) -> dict[str, object]:
@@ -38,6 +84,7 @@ def snapshot_state_for_trace(state: GameState) -> dict[str, object]:
         "winner_id": state.winner_id,
         "counter_window_kind": None if state.counter_window is None else state.counter_window.kind,
         "players": players,
+        "secret_auto_summary": _secret_auto_summary_for_export(state),
     }
 
 
@@ -54,7 +101,28 @@ def _zone_card_summary(cards: list[CardInstance], card_name_resolver: CardNameRe
     return ", ".join(rendered)
 
 
+def _zone_card_lines(
+    cards: list[CardInstance],
+    card_name_resolver: CardNameResolver | None = None,
+) -> list[str]:
+    if not cards:
+        return ["  -"]
+    lines: list[str] = []
+    for index, card in enumerate(cards):
+        mode = "R" if card.resting else "A"
+        lines.append(f"  [{index}] {_card_label(card, card_name_resolver)} ({mode})")
+    return lines
+
+
 def decision_owner_for_state(state: GameState) -> int:
+    pending_secret = [row for row in state.secret_auto_opportunities if str(row.status or "pending") == "pending"]
+    if pending_secret:
+        owner_order = [int(state.active_player), 1 if int(state.active_player) == 2 else 2]
+        for owner_id in owner_order:
+            owner_pending = [row for row in pending_secret if int(row.owner_player_id) == owner_id]
+            if owner_pending:
+                selected = min(owner_pending, key=lambda row: (int(row.event_id), int(row.opportunity_id)))
+                return int(selected.owner_player_id)
     if state.counter_window is not None:
         return int(state.counter_window.responder_player_id)
     if state.attack_context is not None and state.battle_step is not None:
@@ -95,6 +163,39 @@ def _card_label(card: CardInstance | None, card_name_resolver: CardNameResolver 
     return f"card_id={card.card_id}"
 
 
+def _secret_auto_opportunity_lines(
+    state: GameState,
+    *,
+    card_name_resolver: CardNameResolver | None = None,
+) -> list[str]:
+    opportunities = sorted(
+        list(state.secret_auto_opportunities or []),
+        key=lambda row: (int(row.event_id), int(row.opportunity_id)),
+    )
+    if not opportunities:
+        return []
+    lines = ["Secret auto opportunities:"]
+    for row in opportunities:
+        source_card = CardInstance(
+            instance_id=int(row.source_instance_id),
+            card_id=int(row.source_card_id),
+            owner_id=int(row.owner_player_id),
+        )
+        origin_text = (
+            f" origin={row.origin_zone}"
+            if str(row.origin_zone or "") and str(row.origin_zone) != str(row.source_zone or "")
+            else ""
+        )
+        lines.append(
+            "  "
+            f"[{row.opportunity_id}] P{row.owner_player_id} status={row.status} "
+            f"trigger={row.trigger} event={row.event_name}#{row.event_id} "
+            f"card={_card_label(source_card, card_name_resolver)} "
+            f"zone={row.source_zone}{origin_text}"
+        )
+    return lines
+
+
 def describe_action(
     action: Action,
     *,
@@ -102,6 +203,21 @@ def describe_action(
     card_name_resolver: CardNameResolver | None = None,
 ) -> str:
     parts = [action.action_type.value]
+    if action.opportunity_id is not None:
+        parts.append(f"opportunity_id={action.opportunity_id}")
+        if state is not None:
+            opportunity = next(
+                (row for row in state.secret_auto_opportunities if row.opportunity_id == action.opportunity_id),
+                None,
+            )
+            if opportunity is not None:
+                parts.append(f"status={opportunity.status}")
+                parts.append(f"source_zone={opportunity.source_zone}")
+                if str(opportunity.origin_zone or "") and str(opportunity.origin_zone) != str(opportunity.source_zone):
+                    parts.append(f"origin_zone={opportunity.origin_zone}")
+                parts.append(f"trigger={opportunity.trigger}")
+                parts.append(f"event={opportunity.event_name}#{opportunity.event_id}")
+                parts.append(f"source_card={_card_label(CardInstance(instance_id=opportunity.source_instance_id, card_id=opportunity.source_card_id, owner_id=opportunity.owner_player_id), card_name_resolver)}")
     if action.hand_index is not None:
         parts.append(f"hand_index={action.hand_index}")
         if state is not None:
@@ -163,18 +279,17 @@ def summarize_state_for_cli(
         f"P2 leader={_card_label(p2.leader_area, card_name_resolver)} ({'R' if p2.leader_area.resting else 'A'})",
     ]
     if show_zone_details:
-        if p1.energy:
-            lines.append(f"P1 energy_cards={_zone_card_summary(p1.energy, card_name_resolver)}")
-        if p2.energy:
-            lines.append(f"P2 energy_cards={_zone_card_summary(p2.energy, card_name_resolver)}")
-        if p1.battle_area:
-            lines.append(f"P1 battle_cards={_zone_card_summary(p1.battle_area, card_name_resolver)}")
-        if p2.battle_area:
-            lines.append(f"P2 battle_cards={_zone_card_summary(p2.battle_area, card_name_resolver)}")
-        if p1.unison_area:
-            lines.append(f"P1 unison_cards={_zone_card_summary(p1.unison_area, card_name_resolver)}")
-        if p2.unison_area:
-            lines.append(f"P2 unison_cards={_zone_card_summary(p2.unison_area, card_name_resolver)}")
+        def _append_player_zones(player_id: int, player) -> None:
+            lines.append(f"P{player_id} zones:")
+            lines.append(" Energy:")
+            lines.extend(_zone_card_lines(player.energy, card_name_resolver))
+            lines.append(" Battle:")
+            lines.extend(_zone_card_lines(player.battle_area, card_name_resolver))
+            lines.append(" Unison:")
+            lines.extend(_zone_card_lines(player.unison_area, card_name_resolver))
+
+        _append_player_zones(1, p1)
+        _append_player_zones(2, p2)
     players_to_reveal: list[int] = []
     if reveal_hand_player_ids is not None:
         players_to_reveal.extend(int(player_id) for player_id in reveal_hand_player_ids if player_id in state.players)
@@ -182,11 +297,56 @@ def summarize_state_for_cli(
         players_to_reveal.append(int(reveal_hand_player_id))
     for player_id in players_to_reveal:
         player = state.players[player_id]
-        rendered_hand = ", ".join(
-            f"[{index}] {_card_label(card, card_name_resolver)}"
-            for index, card in enumerate(player.hand)
+        lines.append(f"P{player_id} hand:")
+        if player.hand:
+            for index, card in enumerate(player.hand):
+                lines.append(f"  [{index}] {_card_label(card, card_name_resolver)}")
+        else:
+            lines.append("  -")
+    lines.extend(_secret_auto_opportunity_lines(state, card_name_resolver=card_name_resolver))
+    return "\n".join(lines)
+
+
+def format_full_board_for_cli(
+    state: GameState,
+    *,
+    card_name_resolver: CardNameResolver | None = None,
+    reveal_hand_player_ids: tuple[int, ...] = (),
+) -> str:
+    def _append_player_block(lines: list[str], player_id: int) -> None:
+        player = state.players[player_id]
+        lines.append(f"P{player_id}")
+        lines.append(f"  Leader: {_card_label(player.leader_area, card_name_resolver)} ({'R' if player.leader_area.resting else 'A'})")
+        lines.append(
+            "  Summary: "
+            f"life={len(player.life)} hand={len(player.hand)} energy={len(player.energy)} "
+            f"battle={len(player.battle_area)} unison={len(player.unison_area)}"
         )
-        lines.append(f"P{player_id} hand_cards={rendered_hand}")
+        lines.append("  Energy:")
+        lines.extend(_zone_card_lines(player.energy, card_name_resolver))
+        lines.append("  Battle:")
+        lines.extend(_zone_card_lines(player.battle_area, card_name_resolver))
+        lines.append("  Unison:")
+        lines.extend(_zone_card_lines(player.unison_area, card_name_resolver))
+        if player_id in reveal_hand_player_ids:
+            lines.append("  Hand:")
+            if player.hand:
+                for index, card in enumerate(player.hand):
+                    lines.append(f"    [{index}] {_card_label(card, card_name_resolver)}")
+            else:
+                lines.append("    -")
+
+    lines = [
+        f"Turn {state.turn_number} | Phase {state.phase.value} | Active P{state.active_player} | Winner {state.winner_id}",
+        "",
+    ]
+    _append_player_block(lines, 1)
+    lines.append("")
+    _append_player_block(lines, 2)
+    secret_lines = _secret_auto_opportunity_lines(state, card_name_resolver=card_name_resolver)
+    if secret_lines:
+        lines.append("")
+        lines.extend(secret_lines)
     return "\n".join(lines)
 
 
@@ -327,6 +487,17 @@ class HumanVsAiSession:
             zone=action.source_zone,
             index=action.source_index,
         )
+        if source_card is None and action.opportunity_id is not None:
+            opportunity = next(
+                (row for row in self.state.secret_auto_opportunities if row.opportunity_id == action.opportunity_id),
+                None,
+            )
+            if opportunity is not None:
+                source_card = CardInstance(
+                    instance_id=int(opportunity.source_instance_id),
+                    card_id=int(opportunity.source_card_id),
+                    owner_id=int(opportunity.owner_player_id),
+                )
         attacker_card = _resolve_zone_card_for_action(
             self.state,
             player_id=int(action.player_id),
@@ -341,6 +512,12 @@ class HumanVsAiSession:
                 zone=action.target_zone,
                 index=action.target_index,
             )
+        opportunity = None
+        if action.opportunity_id is not None:
+            opportunity = next(
+                (row for row in self.state.secret_auto_opportunities if row.opportunity_id == action.opportunity_id),
+                None,
+            )
         self.action_trace.append(
             {
                 "action_index": len(self.action_trace) + 1,
@@ -351,6 +528,13 @@ class HumanVsAiSession:
                 "phase": self.state.phase.value,
                 "action": describe_action(action, state=self.state),
                 "action_type": action.action_type.value,
+                "opportunity_id": None if action.opportunity_id is None else int(action.opportunity_id),
+                "secret_auto_id": None if opportunity is None else int(opportunity.secret_auto_id),
+                "secret_auto_trigger": None if opportunity is None else str(opportunity.trigger),
+                "secret_auto_event_id": None if opportunity is None else int(opportunity.event_id),
+                "secret_auto_event_name": None if opportunity is None else str(opportunity.event_name),
+                "secret_auto_origin_zone": None if opportunity is None else str(opportunity.origin_zone),
+                "secret_auto_status_before": None if opportunity is None else str(opportunity.status),
                 "hand_card_id": None if hand_card is None else int(hand_card.card_id),
                 "source_card_id": None if source_card is None else int(source_card.card_id),
                 "attacker_card_id": None if attacker_card is None else int(attacker_card.card_id),
@@ -367,6 +551,8 @@ class HumanVsAiSession:
             "final_phase": self.state.phase.value,
             "human_player_id": int(self.human_player_id),
             "setup": dict(self.setup_metadata or {}),
+            "final_state_snapshot": snapshot_state_for_trace(self.state),
+            "secret_auto_summary": _secret_auto_summary_for_export(self.state),
             "actions": list(self.action_trace or []),
         }
 

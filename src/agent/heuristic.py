@@ -17,6 +17,8 @@ class ScoredAction:
 
 @dataclass(frozen=True)
 class ActionWeights:
+    declare_secret_auto: float = 210.0
+    ignore_secret_auto: float = 15.0
     pass_counter: float = 200.0
     end_charge: float = 180.0
     charge_base: float = 205.0
@@ -114,6 +116,10 @@ class HeuristicPolicy(AgentPolicy):
     def score_action_with_reason(self, state: GameState, action: Action) -> tuple[float, str]:
         w = self._weights()
         score = 0.0
+        if action.action_type == ActionType.DECLARE_SECRET_AUTO:
+            return w.declare_secret_auto, "declare_secret_auto"
+        if action.action_type == ActionType.IGNORE_SECRET_AUTO:
+            return w.ignore_secret_auto, "ignore_secret_auto"
         if action.action_type == ActionType.PASS_COUNTER_WINDOW:
             return w.pass_counter, "pass_counter_window"
         if action.action_type == ActionType.END_CHARGE:

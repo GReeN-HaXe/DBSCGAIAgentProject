@@ -6,12 +6,16 @@ from typing import Optional
 
 
 class ActionType(str, Enum):
+    DECLARE_SECRET_AUTO = "declare_secret_auto"
+    IGNORE_SECRET_AUTO = "ignore_secret_auto"
     CHARGE_FROM_HAND = "charge_from_hand"
     END_CHARGE = "end_charge"
     PLAY_CARD_FROM_HAND = "play_card_from_hand"
+    UNISON_GROWTH = "unison_growth"
     AWAKEN = "awaken"
     ACTIVATE_MAIN_SKILL = "activate_main_skill"
     ACTIVATE_BATTLE_SKILL = "activate_battle_skill"
+    ACTIVATE_BLOCKER = "activate_blocker"
     COMBO_FROM_HAND = "combo_from_hand"
     END_OFFENSE_STEP = "end_offense_step"
     END_DEFENSE_STEP = "end_defense_step"
@@ -26,6 +30,7 @@ class ActionType(str, Enum):
 class Action:
     action_type: ActionType
     player_id: int
+    opportunity_id: Optional[int] = None
     hand_index: Optional[int] = None
     source_zone: Optional[str] = None
     source_index: Optional[int] = None

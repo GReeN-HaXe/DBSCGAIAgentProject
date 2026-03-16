@@ -5,6 +5,27 @@ from typing import Any
 from src.game import GameState
 
 
+def _compact_secret_auto_summary(state: GameState) -> dict[str, Any]:
+    opportunities = list(state.secret_auto_opportunities or [])
+    status_counts: dict[str, int] = {}
+    preblocked_count = 0
+    blocked_count = 0
+    for row in opportunities:
+        status = str(row.status or "pending")
+        status_counts[status] = int(status_counts.get(status, 0)) + 1
+        if bool(row.preblocked):
+            preblocked_count += 1
+        if status.startswith("blocked_"):
+            blocked_count += 1
+    return {
+        "opportunity_count": len(opportunities),
+        "pending_count": int(status_counts.get("pending", 0)),
+        "blocked_count": int(blocked_count),
+        "preblocked_count": int(preblocked_count),
+        "status_counts": {key: int(status_counts[key]) for key in sorted(status_counts)},
+    }
+
+
 def build_compact_match_summary(
     *,
     state: GameState,
@@ -28,6 +49,7 @@ def build_compact_match_summary(
         "checkpoint_tail": cp_names,
         "effect_resolution_count": len(state.effect_resolutions),
         "effect_unresolved_count": len(unresolved),
+        "secret_auto_summary": _compact_secret_auto_summary(state),
         "setup": dict(setup_metadata or {}),
     }
     if turn_history is not None:

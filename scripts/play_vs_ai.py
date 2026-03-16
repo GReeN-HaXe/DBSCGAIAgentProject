@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 
@@ -23,6 +24,7 @@ from src.agent import (
     compute_trace_hash,
     describe_action,
     evaluate_match_expectations,
+    format_full_board_for_cli,
     summarize_state_for_cli,
     validate_deck_legality,
 )
@@ -133,19 +135,26 @@ def _leader_id_from_player(state, player_id: int) -> int:
 def _card_brief_label(repo: SQLiteCardRepository | None, card_id: int) -> str:
     if repo is None:
         return f"card_id={card_id}"
-    try:
-        card = repo.get_by_id(int(card_id))
-        return f"{card.card_number} {card.card_name}"
-    except Exception:
-        return f"card_id={card_id}"
+    for source_table in ("cards", "variants"):
+        try:
+            card = repo.get_by_id(int(card_id), source_table=source_table)
+            return f"{card.card_number} {card.card_name}"
+        except Exception:
+            continue
+    return f"card_id={card_id}"
 
 
 def _card_detail_text(repo: SQLiteCardRepository | None, card_id: int) -> str:
     if repo is None:
         return f"card_id={card_id}"
-    try:
-        card = repo.get_by_id(int(card_id))
-    except Exception:
+    card = None
+    for source_table in ("cards", "variants"):
+        try:
+            card = repo.get_by_id(int(card_id), source_table=source_table)
+            break
+        except Exception:
+            continue
+    if card is None:
         return f"card_id={card_id}"
     tags: list[str] = []
     if card.card_type:
@@ -211,6 +220,12 @@ def _card_row(repo: SQLiteCardRepository | None, card_id: int) -> str:
     combo = card.combo_power_int if card.combo_power_int is not None else card.card_combo_power or "-"
     tag_suffix = f" {' '.join(tags)}" if tags else ""
     return f"{card.card_number} {name:<27} {cost}c {str(power):>5} {str(combo):>5}combo{tag_suffix}"
+
+
+def _secret_auto_opportunity(state, opportunity_id: int | None):
+    if opportunity_id is None:
+        return None
+    return next((row for row in state.secret_auto_opportunities if row.opportunity_id == int(opportunity_id)), None)
 
 
 def _compact_resolver(repo: SQLiteCardRepository | None):
@@ -433,6 +448,7 @@ def _selected_action_footer_lines(
         _style(f"Selected: {_truncate(compact, 110)}", "1;36", use_color=use_color),
         f"Recommendation: score={score:.2f} | reason={reason} | hints={hint_text}",
     ]
+    opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
     player = session.state.players.get(int(action.player_id))
     if (
         player is not None
@@ -447,6 +463,14 @@ def _selected_action_footer_lines(
                 if line.startswith("Skill: "):
                     lines.append(_truncate(line, 120))
                     break
+    elif opportunity is not None:
+        lines.append(f"Card: {_card_row(repo, int(opportunity.source_card_id))}")
+        origin_text = (
+            f" | origin={opportunity.origin_zone}"
+            if str(opportunity.origin_zone or "") and str(opportunity.origin_zone) != str(opportunity.source_zone)
+            else ""
+        )
+        lines.append(f"Trigger: {opportunity.trigger} | status={opportunity.status}{origin_text}")
     return lines
 
 
@@ -461,6 +485,16 @@ def _linked_hand_index(session: HumanVsAiSession, legal: list[object], action_se
             and 0 <= int(action.hand_index) < len(player.hand)
         ):
             return int(action.hand_index)
+        opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
+        if (
+            player is not None
+            and opportunity is not None
+            and int(action.player_id) == int(session.human_player_id)
+            and str(opportunity.source_zone) == "hand"
+        ):
+            for index, card in enumerate(player.hand):
+                if int(card.instance_id) == int(opportunity.source_instance_id):
+                    return index
     return fallback
 
 
@@ -477,15 +511,7 @@ def _show_board_entry_detail(
     label, detail = board_entries[entry_index]
     print(f"\n{label}:")
     print(detail)
-    print(
-        "\n"
-        + summarize_state_for_cli(
-            session.state,
-            card_name_resolver=_card_name_resolver(repo),
-            reveal_hand_player_ids=(),
-            show_zone_details=True,
-        )
-    )
+    print("\n" + format_full_board_for_cli(session.state, card_name_resolver=_card_name_resolver(repo)))
 
 
 def _render_tui_layout(
@@ -605,6 +631,13 @@ def _style_hint(hint: str, *, use_color: bool) -> str:
 
 def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) -> str:
     action_type = action.action_type.value
+    opportunity = _secret_auto_opportunity(state, action.opportunity_id)
+    if action_type == "declare_secret_auto":
+        label = _card_brief_label(repo, int(opportunity.source_card_id)) if opportunity is not None else "secret auto"
+        return f"Declare auto: {label}"
+    if action_type == "ignore_secret_auto":
+        label = _card_brief_label(repo, int(opportunity.source_card_id)) if opportunity is not None else "secret auto"
+        return f"Ignore auto: {label}"
     if action_type == "end_charge":
         return "End charge"
     if action_type == "end_turn":
@@ -664,6 +697,18 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
     score, reason = session.ai_policy.score_action_with_reason(session.state, action)
     print(f"\nHeuristic score: {score:.2f}")
     print(f"Heuristic reason: {reason}")
+    if action.opportunity_id is not None:
+        opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
+        if opportunity is not None:
+            print(
+                "\nSecret auto opportunity:"
+                f"\n  id={opportunity.opportunity_id}"
+                f"\n  trigger={opportunity.trigger}"
+                f"\n  status={opportunity.status}"
+                f"\n  event={opportunity.event_name}#{opportunity.event_id}"
+                f"\n  source_zone={opportunity.source_zone}"
+                f"\n  origin_zone={opportunity.origin_zone or opportunity.source_zone}"
+            )
     ranked = session.ai_policy.rank_actions(session.state, legal)
     top_ranked = ranked[:5]
     print("\nTop action ranking:")
@@ -674,6 +719,11 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
     if action.hand_index is not None:
         _show_hand_card_detail(session, repo=repo, hand_index=action.hand_index)
         return
+    if action.opportunity_id is not None:
+        opportunity = _secret_auto_opportunity(session.state, action.opportunity_id)
+        if opportunity is not None:
+            print("\n" + _card_detail_text(repo, int(opportunity.source_card_id)))
+            return
     if action.source_zone == "leader":
         print("\n" + _card_detail_text(repo, session.state.players[action.player_id].leader_area.card_id))
         return
@@ -690,6 +740,18 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
 
 def _history_action_text(entry: dict[str, object], *, repo: SQLiteCardRepository | None) -> str:
     text = str(entry.get("action", "unknown"))
+    for label in ("card", "source_card", "attacker_card", "target_card"):
+        pattern = rf"{label}=card_id=(\d+)"
+        text = re.sub(
+            pattern,
+            lambda match: f"{label}={_card_brief_label(repo, int(match.group(1)))}",
+            text,
+        )
+    text = re.sub(
+        r"\bcard_id=(\d+)\b",
+        lambda match: _card_brief_label(repo, int(match.group(1))),
+        text,
+    )
     for field, label in (
         ("hand_card_id", "card"),
         ("source_card_id", "source_card"),
@@ -704,6 +766,22 @@ def _history_action_text(entry: dict[str, object], *, repo: SQLiteCardRepository
         except Exception:
             rendered = f"card_id={value}"
         text += f" {label}={rendered}"
+    trigger = entry.get("secret_auto_trigger")
+    if trigger and "trigger=" not in text:
+        text += f" trigger={trigger}"
+    status_before = entry.get("secret_auto_status_before")
+    if status_before and "status=" not in text:
+        text += f" status={status_before}"
+    event_name = entry.get("secret_auto_event_name")
+    event_id = entry.get("secret_auto_event_id")
+    if event_name and "event=" not in text:
+        if event_id is None:
+            text += f" event={event_name}"
+        else:
+            text += f" event={event_name}#{event_id}"
+    origin_zone = entry.get("secret_auto_origin_zone")
+    if origin_zone and "origin_zone=" not in text:
+        text += f" origin_zone={origin_zone}"
     return text
 
 
@@ -883,11 +961,10 @@ def _interactive_action_picker(
         if key in {"b", "B"}:
             print(
                 "\n"
-                + summarize_state_for_cli(
+                + format_full_board_for_cli(
                     session.state,
                     card_name_resolver=card_name_resolver,
                     reveal_hand_player_ids=revealed_hand_players,
-                    show_zone_details=True,
                 )
             )
             print("\nPress any key to continue...")
@@ -992,6 +1069,7 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=None, help="Optional random seed used when shuffling decks.")
     parser.add_argument("--max-actions", type=int, default=300, help="Global action cap for the session.")
     parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")
     parser.add_argument("--p1-leader-id", type=int, default=None, help="Optional explicit P1 leader card id.")
     parser.add_argument("--p2-leader-id", type=int, default=None, help="Optional explicit P2 leader card id.")
@@ -1084,7 +1162,8 @@ def main() -> None:
 
     repo = SQLiteCardRepository(args.db_path) if args.db_path.exists() else None
     effect_catalog = args.effect_catalog if args.effect_catalog.exists() else None
-    engine = RulesEngine(card_repository=repo, effect_rules_path=effect_catalog)
+    skill_cost_catalog = args.skill_cost_catalog if args.skill_cost_catalog.exists() else None
+    engine = RulesEngine(card_repository=repo, skill_cost_rules_path=skill_cost_catalog, effect_rules_path=effect_catalog)
 
     if args.load_state_input is not None:
         if not args.load_state_input.exists():
@@ -1316,11 +1395,10 @@ def main() -> None:
             if raw in {"s", "b"}:
                 print(
                     "\n"
-                    + summarize_state_for_cli(
+                    + format_full_board_for_cli(
                         session.state,
                         card_name_resolver=card_name_resolver,
                         reveal_hand_player_ids=revealed_hand_players,
-                        show_zone_details=True,
                     )
                 )
                 continue

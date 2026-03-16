@@ -23,8 +23,11 @@ class CardInstance:
     instance_id: int
     card_id: int
     owner_id: int
+    card_number: str = ""
     resting: bool = False
+    hidden_mode: bool = False
     attacked_this_turn: bool = False
+    attack_count_this_turn: int = 0
     power: int = 15000
     card_type: str = "BATTLE"
     color: Optional[str] = None
@@ -56,6 +59,29 @@ class CardInstance:
     has_awaken: bool = False
     awakened: bool = False
     activate_limit_once_per_turn: bool = False
+    has_super_combo: bool = False
+    sparking_threshold: Optional[int] = None
+    temporary_keywords: Tuple[str, ...] = ()
+    temporary_power_delta: int = 0
+    battle_temporary_keywords: Tuple[str, ...] = ()
+    battle_temporary_power_delta: int = 0
+    delayed_temporary_keywords: Tuple[str, ...] = ()
+    stacked_card_ids: Tuple[int, ...] = ()
+    traits: Tuple[str, ...] = ()
+    characters: Tuple[str, ...] = ()
+
+
+@dataclass
+class ZDeckCard:
+    card_id: int
+    owner_id: int
+    face_up: bool = False
+    card_name: str = ""
+    card_type: str = "BATTLE"
+    color: Optional[str] = None
+    energy_cost: Optional[int] = None
+    traits: Tuple[str, ...] = ()
+    characters: Tuple[str, ...] = ()
 
 
 @dataclass
@@ -64,7 +90,7 @@ class PlayerState:
     leader_card_id: int
     leader_area: CardInstance
     deck: list[int] = field(default_factory=list)
-    z_deck: list[int] = field(default_factory=list)
+    z_deck: list[ZDeckCard] = field(default_factory=list)
     hand: list[CardInstance] = field(default_factory=list)
     life: list[CardInstance] = field(default_factory=list)
     energy: list[CardInstance] = field(default_factory=list)
@@ -118,14 +144,18 @@ class CounterMotion:
     player_id: int
     card_instance_id: int
     modes: Tuple[str, ...]
+    payload: dict[str, int | str | None] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
 class CounterResolution:
     motion_id: int
     player_id: int
+    pending_action_type: str
     resolved: bool
     negated_motion_id: int | None
+    resolution_order: int | None = None
+    applied_effects: Tuple[str, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -134,11 +164,14 @@ class CounterMotionTrace:
     turn_number: int
     phase: TurnPhase
     window_kind: str
+    pending_action_type: str
     player_id: int
     card_instance_id: int
     modes: Tuple[str, ...]
     resolved: bool | None = None
     negated_motion_id: int | None = None
+    resolution_order: int | None = None
+    applied_effects: Tuple[str, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -161,7 +194,10 @@ class EffectRegistration:
     trigger: str
     handler_id: str
     handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    source_card_number: str = ""
     once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
     triggers_this_turn: int = 0
 
 
@@ -177,6 +213,66 @@ class EffectResolution:
     event_id: int
     resolved: bool
     reason: str
+
+
+@dataclass(frozen=True)
+class DeferredSecretAuto:
+    secret_auto_id: int
+    owner_player_id: int
+    source_instance_id: int
+    source_card_id: int
+    source_card_number: str
+    source_zone: str
+    trigger: str
+    handler_id: str
+    deferred_turn_number: int
+    deferred_phase: TurnPhase
+    origin_zone: str = ""
+    handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
+
+
+@dataclass(frozen=True)
+class SecretAutoOpportunity:
+    opportunity_id: int
+    secret_auto_id: int
+    owner_player_id: int
+    source_instance_id: int
+    source_card_id: int
+    source_card_number: str
+    source_zone: str
+    trigger: str
+    handler_id: str
+    event_id: int
+    event_name: str
+    created_turn_number: int
+    created_phase: TurnPhase
+    origin_zone: str = ""
+    handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
+    status: str = "pending"
+    preblocked: bool = False
+
+
+@dataclass(frozen=True)
+class DelayedModeSwitch:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_kind: str
+    trigger_player_id: int
+    switch_to_hidden: bool
+
+
+@dataclass(frozen=True)
+class DelayedKeywordClear:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+    keyword: str
 
 
 @dataclass
@@ -198,10 +294,19 @@ class GameState:
     next_checkpoint_index: int = 1
     next_effect_id: int = 1
     next_effect_event_id: int = 1
+    next_secret_auto_id: int = 1
+    next_secret_auto_opportunity_id: int = 1
     log: list[str] = field(default_factory=list)
     checkpoints: list[CheckpointEvent] = field(default_factory=list)
     effect_registry: list[EffectRegistration] = field(default_factory=list)
     pending_effects: list[PendingEffect] = field(default_factory=list)
     effect_events: list[EffectEvent] = field(default_factory=list)
     effect_resolutions: list[EffectResolution] = field(default_factory=list)
+    deferred_secret_autos: list[DeferredSecretAuto] = field(default_factory=list)
+    secret_auto_opportunities: list[SecretAutoOpportunity] = field(default_factory=list)
+    delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
+    delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
+    attack_restricted_instance_ids: set[int] = field(default_factory=set)
+    unison_marker_skill_usage: set[int] = field(default_factory=set)
+    unison_growth_usage: set[int] = field(default_factory=set)

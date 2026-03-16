@@ -23,7 +23,15 @@ def _candidate_card_ids(db_path: Path, *, limit: int | None) -> list[int]:
         sql = (
             "SELECT id FROM cards "
             "WHERE COALESCE(card_skill_unstyled, '') != '' "
-            "AND (COALESCE(has_auto, 0) = 1 OR COALESCE(has_draw, 0) = 1) "
+            "AND ("
+            "COALESCE(has_auto, 0) = 1 "
+            "OR COALESCE(has_draw, 0) = 1 "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[auto]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[counter:%' "
+            ") "
             "ORDER BY id"
         )
         if limit is not None and limit > 0:

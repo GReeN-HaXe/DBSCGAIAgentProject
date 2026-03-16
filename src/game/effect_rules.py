@@ -11,6 +11,8 @@ class EffectRule:
     handler_id: str
     handler_params: dict[str, int | str | bool] = field(default_factory=dict)
     once_per_turn: bool = False
+    limit_per_turn: int | None = None
+    limit_scope: str = "card_number"
 
 
 def normalize_effect_rules(raw_rules: dict[int, list[dict[str, object]] | list[EffectRule]] | None) -> dict[int, tuple[EffectRule, ...]]:
@@ -40,6 +42,9 @@ def normalize_effect_rules(raw_rules: dict[int, list[dict[str, object]] | list[E
                     raise ValueError("handler_params values must be int/str/bool.")
                 handler_params[key] = value
             once_per_turn = bool(rule.get("once_per_turn", False))
+            raw_limit = rule.get("limit_per_turn")
+            limit_per_turn = int(raw_limit) if isinstance(raw_limit, int) else None
+            limit_scope = str(rule.get("limit_scope", "card_number") or "card_number").strip() or "card_number"
             if not trigger or not handler_id:
                 raise ValueError("Effect rule requires trigger and handler_id.")
             items.append(
@@ -48,6 +53,8 @@ def normalize_effect_rules(raw_rules: dict[int, list[dict[str, object]] | list[E
                     handler_id=handler_id,
                     handler_params=handler_params,
                     once_per_turn=once_per_turn,
+                    limit_per_turn=limit_per_turn,
+                    limit_scope=limit_scope,
                 )
             )
         normalized[int(card_id)] = tuple(items)
@@ -63,6 +70,8 @@ def serialize_effect_rules(rules: dict[int, list[EffectRule] | tuple[EffectRule,
                 "handler_id": rule.handler_id,
                 "handler_params": dict(rule.handler_params),
                 "once_per_turn": bool(rule.once_per_turn),
+                "limit_per_turn": int(rule.limit_per_turn) if rule.limit_per_turn is not None else None,
+                "limit_scope": str(rule.limit_scope or "card_number"),
             }
             for rule in entries
         ]
