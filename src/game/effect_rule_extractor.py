@@ -17,6 +17,9 @@ _COMBO_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when this card is used i
 _PLAY_OR_COMBO_DRAW_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card(?: in your hand)? is played or used in a combo.*?draw (\d+) card"
 )
+_ATTACK_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?when this card attacks(?:[^.\[]){0,200}?draw (\d+) card"
+)
 _ATTACK_PAY_LIFE_GAIN_POWER_AND_KEYWORD_RE = re.compile(
     r"add (\d+) cards? from your life to your hand:\s*when this card attacks, it gets \+(\d+) power(?: and \[([^\]]+)\])? for the turn"
 )
@@ -25,6 +28,15 @@ _OWNER_LEADER_ATTACK_ADD_FROM_HAND_TO_LIFE_RE = re.compile(
 )
 _OWNER_LEADER_ATTACK_LOOK_TOP_ADD_TO_HAND_RE = re.compile(
     r"when your leader card attacks, look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[-\u2014\u2015])to your hand"
+)
+_OWNER_LEADER_ATTACK_LOOK_TOP_ADD_DIRECT_TO_HAND_RE = re.compile(
+    r"when your leader card attacks, look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) to your hand"
+)
+_LEADER_SELF_ATTACK_LOOK_TOP_ADD_TO_HAND_RE = re.compile(
+    r"when this card attacks, look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) among them(?:[^.]{0,240})?(?:\s|[-\u2014\u2015])to your hand"
+)
+_LEADER_SELF_ATTACK_LOOK_TOP_ADD_DIRECT_TO_HAND_RE = re.compile(
+    r"when this card attacks, look at up to (\d+) cards? from (?:the )?top of your deck, add up to (\d+) (.+?) to your hand"
 )
 _COMBO_DRAW_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when this card is used in a combo.*?draw (\d+) card")
 _COMBO_BATTLE_END_PLAY_RE = re.compile(
@@ -303,15 +315,16 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
     if required_card_type:
         params["required_card_type"] = required_card_type
 
-    m_name_token = re.search(r"\{([^}]+)\}\s+in\s+(?:their\s+)?card\s+names?", descriptor_lc)
+    m_name_token = re.search(r"\{([^}]+)\}\s+in\s+(?:their|its)?\s*card\s+names?", descriptor_lc)
     if m_name_token:
         params["required_name_contains"] = m_name_token.group(1).strip().upper()
 
     cleaned = descriptor_lc
-    cleaned = re.sub(r"\{[^}]+\}\s+in\s+(?:their\s+)?card\s+names?", " ", cleaned)
+    cleaned = re.sub(r"\{[^}]+\}\s+in\s+(?:their|its)?\s*card\s+names?", " ", cleaned)
     cleaned = re.sub(r"\b(red|blue|green|yellow|black|white)\b", " ", cleaned)
     cleaned = re.sub(r"\b(z-battle|z battle|z-unison|z unison|battle|unison|extra|monster)\s+cards?\b", " ", cleaned)
     cleaned = re.sub(r"\bcards?\b", " ", cleaned)
+    cleaned = re.sub(r"\bwith\b", " ", cleaned)
     cleaned = re.sub(r"\bamong them\b", " ", cleaned)
     cleaned = re.sub(r"\bwith an energy costs? of \d+ or less\b", " ", cleaned)
     cleaned = re.sub(r"\bwith an energy cost of \d+ or less\b", " ", cleaned)
@@ -406,7 +419,7 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             )
 
         # [Auto] When this card attacks... draw X card(s)
-        m_attack_draw = re.search(r"(?:if [^:]{1,120}:\s*)?when this card attacks.*?draw (\d+) card", branch)
+        m_attack_draw = _ATTACK_DRAW_RE.search(branch)
         if m_attack_draw:
             amount = int(m_attack_draw.group(1))
             rules.append(
@@ -464,11 +477,13 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
 
         # [Auto] When your leader attacks... look at top N; add up to M matching cards to hand.
         m_owner_leader_attack_search = _OWNER_LEADER_ATTACK_LOOK_TOP_ADD_TO_HAND_RE.search(branch)
+        if m_owner_leader_attack_search is None:
+            m_owner_leader_attack_search = _OWNER_LEADER_ATTACK_LOOK_TOP_ADD_DIRECT_TO_HAND_RE.search(branch)
         if m_owner_leader_attack_search:
             look_count = int(m_owner_leader_attack_search.group(1))
             max_add = int(m_owner_leader_attack_search.group(2))
             descriptor = m_owner_leader_attack_search.group(3).lower()
-            extra = _extract_common_conditions(branch)
+            extra = _extract_common_conditions(m_owner_leader_attack_search.group(0))
             params = {
                 "look_count": look_count,
                 "max_add": max_add,
@@ -483,6 +498,31 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     once_per_turn=once,
                 )
             )
+
+        # Leader [Auto] When this card attacks... look at top N; add up to M matching cards to hand.
+        if (card.card_type or "").upper() == "LEADER":
+            m_leader_self_attack_search = _LEADER_SELF_ATTACK_LOOK_TOP_ADD_TO_HAND_RE.search(branch)
+            if m_leader_self_attack_search is None:
+                m_leader_self_attack_search = _LEADER_SELF_ATTACK_LOOK_TOP_ADD_DIRECT_TO_HAND_RE.search(branch)
+            if m_leader_self_attack_search:
+                look_count = int(m_leader_self_attack_search.group(1))
+                max_add = int(m_leader_self_attack_search.group(2))
+                descriptor = m_leader_self_attack_search.group(3).lower()
+                extra = _extract_common_conditions(m_leader_self_attack_search.group(0))
+                params = {
+                    "look_count": look_count,
+                    "max_add": max_add,
+                    **_descriptor_filters(descriptor, branch),
+                    **extra,
+                }
+                rules.append(
+                    EffectRule(
+                        trigger="owner_leader_attacks",
+                        handler_id="auto_look_top_add_up_to_one_to_hand_on_play",
+                        handler_params=params,
+                        once_per_turn=once,
+                    )
+                )
 
         # [Auto] When this card is used in a combo... draw X card(s)
         m_combo_draw = _COMBO_DRAW_RE.search(branch)
@@ -1557,8 +1597,17 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     if limit is not None:
         rules = [replace(rule, limit_per_turn=limit, limit_scope="card_number") for rule in rules]
 
+    rules = [
+        replace(
+            rule,
+            family_id=(rule.family_id or f"{rule.trigger}:{rule.handler_id}"),
+            provenance=(rule.provenance or "extractor"),
+        )
+        for rule in rules
+    ]
+
     # De-duplicate exact duplicates.
-    uniq: dict[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool, int | None, str], EffectRule] = {}
+    uniq: dict[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool, int | None, str, str, str], EffectRule] = {}
     for rule in rules:
         key = (
             rule.trigger,
@@ -1567,6 +1616,8 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             rule.once_per_turn,
             rule.limit_per_turn,
             rule.limit_scope,
+            rule.family_id,
+            rule.provenance,
         )
         uniq[key] = rule
     return list(uniq.values())
@@ -1594,7 +1645,7 @@ def diagnose_unresolved_patterns(card: CardData, rules: list[EffectRule]) -> lis
 
     if re.search(r"(?:if [^:]{1,120}:\s*)?when (?:this card is played(?: from your hand)?|you play this card).*?draw \d+ card", text) and not has_play_draw:
         notes.append("missed_play_draw")
-    if re.search(r"(?:if [^:]{1,120}:\s*)?when this card attacks.*?draw \d+ card", text) and not has_attack_draw:
+    if _ATTACK_DRAW_RE.search(text) and not has_attack_draw:
         notes.append("missed_attack_draw")
     if _COMBO_DRAW_RE.search(text) and not has_combo_draw:
         notes.append("missed_combo_draw")

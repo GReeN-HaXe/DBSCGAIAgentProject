@@ -33,6 +33,8 @@ def test_extract_draw_rules_on_play_and_attack() -> None:
     assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params["amount"] == 1 for r in rules)
     assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" and r.handler_params["amount"] == 1 for r in rules)
     assert all(r.once_per_turn for r in rules if r.handler_id == "auto_draw_n")
+    assert all(r.family_id == f"{r.trigger}:{r.handler_id}" for r in rules)
+    assert all(r.provenance == "extractor" for r in rules)
 
 
 def test_extract_limit_x_tracks_limit_count_on_effect_rules() -> None:
@@ -198,6 +200,51 @@ def test_extract_owner_leader_attack_look_top_add_to_hand_rule() -> None:
     assert rule.handler_params["max_add"] == 1
     assert rule.handler_params["allowed_colors"] == "red"
     assert rule.handler_params["required_traits"] == "Earthling"
+
+
+def test_extract_krillin_attack_search_does_not_false_match_awaken_draw() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
+        "add up to 1 red Earthling card among them to your hand, then shuffle your deck. "
+        "[Awaken] When your life is at 4 or less: You may draw 1 card, switch up to 1 of your energy to Active Mode, "
+        "and flip this card over."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    search = next(
+        r for r in rules if r.trigger == "owner_leader_attacks" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert search.handler_params["look_count"] == 5
+    assert search.handler_params["max_add"] == 1
+    assert search.handler_params["allowed_colors"] == "red"
+    assert search.handler_params["required_traits"] == "Earthling"
+    assert not any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in rules)
+
+
+def test_extract_bardock_attack_search_does_not_false_match_awaken_draw() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
+        "add up to 1 black card with {SS4} in its card name among them to your hand, then shuffle your deck. "
+        "[Awaken] When your life is at 4 or less: You may draw 2 cards and flip this card over."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    search = next(
+        r for r in rules if r.trigger == "owner_leader_attacks" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert search.handler_params["look_count"] == 5
+    assert search.handler_params["max_add"] == 1
+    assert search.handler_params["allowed_colors"] == "black"
+    assert search.handler_params["required_name_contains"] == "SS4"
+    assert not any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in rules)
+
+
+def test_extract_son_goten_attack_draw_still_matches_attack_draw() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, draw 1 card. "
+        "[Awaken] When your life is at 4 or less: Draw 1 card and flip this card over."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    draw = next(r for r in rules if r.trigger == "self_attacks" and r.handler_id == "auto_draw_n")
+    assert draw.handler_params["amount"] == 1
 
 
 def test_extract_play_from_hand_add_from_hand_to_life_rule() -> None:

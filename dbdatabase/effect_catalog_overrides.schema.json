@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dbs_effect_catalog_overrides.schema.json",
+  "title": "DBS Effect Catalog Overrides",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_kind",
+    "schema_version",
+    "override_count",
+    "overrides"
+  ],
+  "properties": {
+    "catalog_kind": {
+      "const": "dbs_effect_catalog_overrides"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "override_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "overrides": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[0-9]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode",
+          "rules"
+        ],
+        "properties": {
+          "mode": {
+            "enum": [
+              "append",
+              "replace"
+            ]
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "trigger",
+                "handler_id",
+                "handler_params",
+                "once_per_turn",
+                "limit_per_turn",
+                "limit_scope",
+                "family_id",
+                "provenance"
+              ],
+              "properties": {
+                "trigger": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "handler_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "handler_params": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "type": [
+                      "integer",
+                      "string",
+                      "boolean"
+                    ]
+                  }
+                },
+                "once_per_turn": {
+                  "type": "boolean"
+                },
+                "limit_per_turn": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "minimum": 1
+                },
+                "limit_scope": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "family_id": {
+                  "type": "string"
+                },
+                "provenance": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

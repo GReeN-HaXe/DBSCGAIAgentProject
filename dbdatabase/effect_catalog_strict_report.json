@@ -1,8 +1,8 @@
 {
   "candidates_scanned": 5710,
   "cards_with_diagnostics": 0,
-  "cards_with_rules": 2684,
-  "cards_without_rules": 3026,
+  "cards_with_rules": 2628,
+  "cards_without_rules": 3082,
   "coverage": {
     "by_handler": {
       "activate_draw_n_and_gain_keyword_for_turn": 2,
@@ -25,13 +25,13 @@
       "auto_buff_owner_leader_on_switch_until_opponent_turn_end": 1,
       "auto_buff_up_to_n_owner_cards_on_hidden_drop": 2,
       "auto_buff_up_to_n_owner_cards_on_switch": 4,
-      "auto_draw_n": 1713,
+      "auto_draw_n": 1580,
       "auto_gain_control_opponent_unison_on_play": 1,
       "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
       "auto_ko_opponent_battle_on_play": 297,
       "auto_ko_up_to_n_opponent_battle_on_play": 12,
       "auto_ko_up_to_n_opponent_battle_on_switch": 2,
-      "auto_look_top_add_up_to_one_to_hand_on_play": 259,
+      "auto_look_top_add_up_to_one_to_hand_on_play": 296,
       "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 17,
       "auto_play_self_from_combo_on_battle_end": 31,
       "auto_play_up_to_n_from_owner_deck_on_play": 1,
@@ -58,11 +58,11 @@
     "by_trigger": {
       "owner_battle_played_from_warp": 2,
       "owner_field_extra_placed": 1,
-      "owner_leader_attacks": 1,
+      "owner_leader_attacks": 38,
       "owner_opponent_skill_plays_overcost_battle": 2,
       "self_activate_battle": 101,
       "self_activate_main": 1192,
-      "self_attacks": 424,
+      "self_attacks": 291,
       "self_comboed": 128,
       "self_comboed_battle_end": 31,
       "self_hidden_battle_to_drop": 2,
@@ -75,7 +75,7 @@
   },
   "diagnostic_counts": {},
   "diagnostics": {},
-  "total_extracted_rules": 3451,
+  "total_extracted_rules": 3355,
   "unmatched_top_templates": [
     {
       "count": 6,
@@ -134,6 +134,11 @@
     },
     {
       "count": 2,
+      "example_card_id": 4212,
+      "template": "[auto] when this card attacks a leader card, you may choose <n> card in your life and add it to your hand. if you do so, draw <n> card.. [awaken] when your life is at <n> or less: choose up to <n> of your energy, switch..."
+    },
+    {
+      "count": 2,
       "example_card_id": 4254,
       "template": "[field] (place and activate this card in your battle area. it remains in your battle area until you activate another [field]. when you do, place this card in its owner's drop area.). [auto] when this card is placed in a..."
     },
@@ -141,6 +146,11 @@
       "count": 2,
       "example_card_id": 4402,
       "template": "[critical] (when this card inflicts damage to your opponent's life, they place that many card in their drop area instead of their hand). [activate: main] [once per turn] (green): during that turn, if an opponent's battle..."
+    },
+    {
+      "count": 2,
+      "example_card_id": 4472,
+      "template": "[auto] when this card attacks a leader card, you may choose <n> \u226auniverse <n>\u226b in your hand and place it in your drop area. if you do so, draw <n> card.. [awaken] when your life is at <n> or less: you may choose up to <n..."
     },
     {
       "count": 2,
@@ -166,16 +176,6 @@
       "count": 2,
       "example_card_id": 4787,
       "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.) . [auto] when you combo with this card, if your leader card is red and your life is at <n> or less, draw <n> card."
-    },
-    {
-      "count": 2,
-      "example_card_id": 4808,
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto] when you combo with this card, if your leader card is yellow and your life is at <n> or less, draw <n> card."
-    },
-    {
-      "count": 2,
-      "example_card_id": 4890,
-      "template": "[auto] when you play this card, choose up to <n> of your opponent's battle card with an energy cost of <n> or less and switch it to rest mode."
     }
   ]
 }

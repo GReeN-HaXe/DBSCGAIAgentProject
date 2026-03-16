@@ -1,0 +1,48 @@
+{
+  "catalog_kind": "dbs_effect_catalog_overrides",
+  "schema_version": 1,
+  "override_count": 2,
+  "overrides": {
+    "5656": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+          "handler_params": {
+            "look_count": 3,
+            "max_add": 1,
+            "max_cost": -1,
+            "required_traits": "Universe 6"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8314": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+          "handler_params": {
+            "look_count": 5,
+            "max_add": 1,
+            "max_cost": -1,
+            "allowed_colors": "black",
+            "required_traits": "Demon Realm Race,Demon God"
+          },
+          "once_per_turn": true,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    }
+  }
+}

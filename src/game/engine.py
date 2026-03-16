@@ -9,7 +9,14 @@ from typing import Any
 from pathlib import Path
 
 from src.game.actions import Action, ActionType
-from src.game.effect_rules import EffectRule, load_effect_rules_json, normalize_effect_rules
+from src.game.effect_rules import (
+    EffectRule,
+    load_effect_rule_overrides_json,
+    load_effect_rules_json,
+    merge_effect_rule_overrides,
+    normalize_effect_rule_overrides,
+    normalize_effect_rules,
+)
 from src.game.skill_costs import SkillCostDsl, SkillCostSpec, load_skill_cost_rules_json, normalize_skill_cost_rules
 from src.game.state import (
     AttackContext,
@@ -90,6 +97,8 @@ class RulesEngine:
         skill_cost_rules_path: str | Path | None = None,
         effect_rules: dict[int, list[dict[str, object]] | list[EffectRule]] | None = None,
         effect_rules_path: str | Path | None = None,
+        effect_rule_overrides: dict[int, object] | None = None,
+        effect_rule_overrides_path: str | Path | None = None,
         effect_handlers: dict[str, Any] | None = None,
         effect_target_chooser: Any | None = None,
         effect_multi_target_chooser: Any | None = None,
@@ -109,7 +118,12 @@ class RulesEngine:
         # Mapping: card_id -> tuple[EffectRule, ...]
         loaded_rules = load_effect_rules_json(effect_rules_path) if effect_rules_path is not None else {}
         provided_rules = normalize_effect_rules(effect_rules)
-        self._effect_rules = self._merge_effect_rule_maps(loaded_rules, provided_rules)
+        merged_rules = self._merge_effect_rule_maps(loaded_rules, provided_rules)
+        loaded_overrides = load_effect_rule_overrides_json(effect_rule_overrides_path) if effect_rule_overrides_path is not None else {}
+        provided_overrides = normalize_effect_rule_overrides(effect_rule_overrides)
+        override_map = dict(loaded_overrides)
+        override_map.update(provided_overrides)
+        self._effect_rules = merge_effect_rule_overrides(merged_rules, override_map)
         self._effect_handlers: dict[str, Any] = {
             "noop_auto": self._handle_noop_effect,
             "auto_draw_on_play": self._handle_auto_draw_on_play,
@@ -202,7 +216,7 @@ class RulesEngine:
         all_keys = set(base.keys()) | set(overlay.keys())
         for card_id in all_keys:
             items = list(base.get(card_id, ())) + list(overlay.get(card_id, ()))
-            seen: set[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool]] = set()
+            seen: set[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool, int | None, str, str, str]] = set()
             uniq: list[EffectRule] = []
             for r in items:
                 sig = (
@@ -212,6 +226,8 @@ class RulesEngine:
                     r.once_per_turn,
                     r.limit_per_turn,
                     r.limit_scope,
+                    r.family_id,
+                    r.provenance,
                 )
                 if sig in seen:
                     continue

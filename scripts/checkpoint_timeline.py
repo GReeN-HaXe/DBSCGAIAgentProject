@@ -48,6 +48,7 @@ def simulate(turns: int, db_path: Path) -> object:
         card_repository=repo,
         skill_cost_rules_path=SKILL_COST_CATALOG_PATH if SKILL_COST_CATALOG_PATH else None,
         effect_rules_path=EFFECT_CATALOG_PATH if EFFECT_CATALOG_PATH else None,
+        effect_rule_overrides_path=EFFECT_CATALOG_OVERRIDES_PATH if EFFECT_CATALOG_OVERRIDES_PATH else None,
     )
 
     if real_ids is None:
@@ -150,6 +151,12 @@ def main() -> None:
         help="Path to optional effect catalog JSON.",
     )
     parser.add_argument(
+        "--effect-catalog-overrides",
+        type=Path,
+        default=ROOT / "dbdatabase" / "effect_catalog_overrides.json",
+        help="Path to optional effect catalog overrides JSON.",
+    )
+    parser.add_argument(
         "--skill-cost-catalog",
         type=Path,
         default=ROOT / "dbdatabase" / "skill_cost_catalog.json",
@@ -160,14 +167,16 @@ def main() -> None:
     if args.turns < 1:
         raise ValueError("--turns must be >= 1")
 
-    global EFFECT_CATALOG_PATH, SKILL_COST_CATALOG_PATH
+    global EFFECT_CATALOG_PATH, EFFECT_CATALOG_OVERRIDES_PATH, SKILL_COST_CATALOG_PATH
     EFFECT_CATALOG_PATH = args.effect_catalog if args.effect_catalog.exists() else None
+    EFFECT_CATALOG_OVERRIDES_PATH = args.effect_catalog_overrides if args.effect_catalog_overrides.exists() else None
     SKILL_COST_CATALOG_PATH = args.skill_cost_catalog if args.skill_cost_catalog.exists() else None
     state = simulate(args.turns, args.db_path)
     print_timeline(state)
 
 
 EFFECT_CATALOG_PATH: Path | None = None
+EFFECT_CATALOG_OVERRIDES_PATH: Path | None = None
 SKILL_COST_CATALOG_PATH: Path | None = None
 
 

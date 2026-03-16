@@ -188,13 +188,50 @@ Resolved:
 
 - [x] implement batch/pattern-driven effect support audit
 - [ ] build and maintain an effect pattern catalog as the source of truth for reusable skill behavior
+  - status: first formal-catalog slice complete
+  - `effect_catalog.json` is now a versioned envelope with:
+    - `catalog_kind`
+    - `schema_version`
+    - `card_rule_count`
+    - `effect_rule_count`
+    - `rules`
+  - the loader is backward-compatible with the previous plain card-id map format
+  - the formal artifact contract is now checked in at `dbdatabase/effect_catalog.schema.json`
+  - status: rule provenance slice complete
+  - extracted catalog rules now carry:
+    - `family_id`
+    - `provenance`
+  - extractor-generated rules currently default to:
+    - `family_id = "<trigger>:<handler_id>"`
+    - `provenance = "extractor"`
+  - status: manual override layer slice complete
+  - effect catalog overrides now support per-card merge modes:
+    - `append`
+    - `replace`
+  - override contract is now checked in at `dbdatabase/effect_catalog_overrides.schema.json`
+  - builder and runtime scripts can now apply `effect_catalog_overrides.json` when present
+  - first checked-in override entries now cover:
+    - `TB1-011 Cabba, Universe Mediator`
+    - `BT27-092 Mechikabura`
+  - status: family-level report slice complete
+  - `scripts/build_effect_family_report.py` now emits `artifacts/effect_family_report.json`
+  - family reports group catalog rules by:
+    - `family_id`
+    - trigger
+    - handler
+    - provenance
 - [x] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
 - [ ] map high-frequency deck/trace cards to those effect families
 - [ ] auto-assign cards to effect families where pattern confidence is high
-- [ ] keep manual overrides for edge cases and low-confidence pattern matches
-- [ ] implement leader auto families used in current human traces
+- [x] keep manual overrides for edge cases and low-confidence pattern matches
+- [x] implement leader auto families used in current human traces
+  - completed for current human-trace leaders:
+    - `BT29-001 Krillin` owner-leader-attack search family
+    - `EX19-20 Bardock` owner-leader-attack `{SS4}` search family
+    - `BT15-001 Son Goten` leader on-attack draw family
+  - extractor hardening now prevents leader attack text from false-matching later `[Awaken] Draw ...` text
 - [x] implement counter families that negate / play self / apply attack restrictions
 - [x] add unsupported counter diagnostics similar to unsupported activate diagnostics
 - [x] implement first shortlisted family: generic `Blocker` redirection / target-change
