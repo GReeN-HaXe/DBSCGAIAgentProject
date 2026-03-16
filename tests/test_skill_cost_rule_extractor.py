@@ -152,6 +152,42 @@ def test_extract_plain_unison_marker_activate_costs_for_main_and_battle() -> Non
     assert rules["activate_battle_unison"] == [{"kind": "remove_markers", "amount": 2}]
 
 
+def test_extract_activate_main_discard_self_from_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card and you discard this card from your hand : "
+            "Add up to 1 red <Son Goten> card with an energy cost of 3 and [EX-Evolve] from your deck to your hand, then shuffle your deck."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_hand": [
+            {
+                "kind": "send_self_from_hand_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_remove_total_drop_and_warp_to_removed_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Once per turn] If you have 3 or more energy and you remove 10 total cards in your Drop and Warp from the game: "
+            "This card gets +10000 power and [Double Strike] for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_drop_and_warp_to_removed",
+                "amount": 10,
+            }
+        ]
+    }
+
+
 def test_extract_counter_alternate_rest_hidden_battle_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

@@ -185,20 +185,24 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     if not OVERRIDES_PATH.exists():
         return
     loaded = load_effect_rule_overrides_json(OVERRIDES_PATH)
-    assert len(loaded) == 27
+    assert len(loaded) == 29
     assert loaded[6][0] == "replace"
+    assert loaded[89][0] == "replace"
     assert loaded[2409][0] == "replace"
     assert loaded[5656][0] == "replace"
     assert loaded[7236][0] == "replace"
+    assert loaded[7459][0] == "replace"
     assert loaded[8314][0] == "replace"
     assert loaded[4265][0] == "replace"
     assert loaded[5301][0] == "replace"
     assert loaded[8458][0] == "replace"
     assert loaded[6679][0] == "replace"
     dyspo_rule = loaded[6][1][0]
+    steadfast_rule = loaded[89][1][0]
     explosive_rule = loaded[2409][1][0]
     cabba_rule = loaded[5656][1][0]
     supreme_kai_rule = loaded[7236][1][0]
+    difference_rule = loaded[7459][1][0]
     mechikabura_rule = loaded[8314][1][0]
     petrification_rule = loaded[4265][1][0]
     yamcha_rule = loaded[5301][1][0]
@@ -206,12 +210,16 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     toppo_rule = loaded[6679][1][0]
     assert dyspo_rule.handler_id == "counter_negate_attack_play_self_attack_restriction"
     assert dyspo_rule.trigger == "counter_attack"
+    assert steadfast_rule.handler_id == "counter_force_pending_play_rest_play_self_draw_n"
+    assert steadfast_rule.family_id == "counter_play:counter_force_pending_play_rest_play_self_draw_n"
     assert explosive_rule.handler_id == "counter_negate_attack"
     assert explosive_rule.trigger == "counter_attack"
     assert cabba_rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
     assert cabba_rule.trigger == "self_played"
     assert supreme_kai_rule.handler_id == "counter_negate_attack_play_self"
     assert supreme_kai_rule.trigger == "counter_attack"
+    assert difference_rule.handler_id == "counter_spirit_boost_power_reduce_opponent_cards"
+    assert difference_rule.family_id == "counter_attack:counter_spirit_boost_power_reduce_opponent_cards"
     assert mechikabura_rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
     assert mechikabura_rule.trigger == "self_activate_main"
     assert petrification_rule.handler_id == "counter_negate_attack"

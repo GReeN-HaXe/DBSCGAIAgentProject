@@ -1,7 +1,7 @@
 {
   "catalog_kind": "dbs_effect_catalog_overrides",
   "schema_version": 1,
-  "override_count": 27,
+  "override_count": 29,
   "overrides": {
     "6": {
       "mode": "replace",
@@ -63,6 +63,23 @@
         }
       ]
     },
+    "89": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_play",
+          "handler_id": "counter_force_pending_play_rest_play_self_draw_n",
+          "handler_params": {
+            "amount": 1
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_play:counter_force_pending_play_rest_play_self_draw_n",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "384": {
       "mode": "replace",
       "rules": [
@@ -104,6 +121,21 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "7459": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_spirit_boost_power_reduce_opponent_cards",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_spirit_boost_power_reduce_opponent_cards",
           "provenance": "manual_override"
         }
       ]

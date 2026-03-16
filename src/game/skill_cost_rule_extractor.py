@@ -32,6 +32,12 @@ _ACTIVATE_MAIN_Z_ENERGY_TO_DROP_RE = re.compile(
 _ACTIVATE_MAIN_HAND_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?send (\d+) card from your hand to (?:its|their) owner'?s warp\s*:"
 )
+_ACTIVATE_MAIN_DISCARD_SELF_FROM_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?discard this card from your hand\s*:"
+)
+_ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?remove (\d+) total cards? in your drop and warp from the game\s*:"
+)
 _COUNTER_ALT_REST_HIDDEN_BATTLE_RE = re.compile(
     r"activate this card's \[counter\] skill from your hand by switching 1 hidden mode card in your battle area to rest mode instead of paying its energy cost"
 )
@@ -358,6 +364,21 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_hand_to_warp",
                 "amount": int(m_activate_main_hand_to_warp.group(1)),
+            }
+        ]
+    if _ACTIVATE_MAIN_DISCARD_SELF_FROM_HAND_RE.search(text):
+        rules["activate_main_hand"] = [
+            {
+                "kind": "send_self_from_hand_to_drop",
+                "amount": 1,
+            }
+        ]
+    m_activate_main_remove_total_drop_and_warp = _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE.search(text)
+    if m_activate_main_remove_total_drop_and_warp:
+        rules["activate_main"] = [
+            {
+                "kind": "send_owner_drop_and_warp_to_removed",
+                "amount": int(m_activate_main_remove_total_drop_and_warp.group(1)),
             }
         ]
 

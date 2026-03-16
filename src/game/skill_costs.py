@@ -323,6 +323,28 @@ class SkillCostDsl:
         return False
 
     @staticmethod
+    def _remove_source_from_hand(
+        player: PlayerState,
+        source_card: CardInstance,
+        *,
+        destination: str,
+    ) -> bool:
+        for i, card in enumerate(player.hand):
+            if card.instance_id != source_card.instance_id:
+                continue
+            removed = player.hand.pop(i)
+            if destination == "drop":
+                player.drop.append(removed)
+            elif destination == "warp":
+                player.warp.append(removed)
+            elif destination == "removed":
+                player.removed_from_game.append(removed)
+            else:
+                raise ValueError(f"Unknown destination: {destination}")
+            return True
+        return False
+
+    @staticmethod
     def can_pay(player: PlayerState, source_card: CardInstance, spec: SkillCostSpec, *, opponent: PlayerState | None = None) -> bool:
         for step in spec.steps:
             if not SkillCostDsl._step_prereqs_met(player, step, opponent):
@@ -356,6 +378,12 @@ class SkillCostDsl:
                 if not SkillCostDsl._in_battle_or_unison(player, source_card):
                     return False
                 continue
+            if step.kind == "send_self_from_hand_to_drop":
+                if step.amount != 1:
+                    return False
+                if not any(card.instance_id == source_card.instance_id for card in player.hand):
+                    return False
+                continue
             if step.kind == "send_other_battle_to_warp":
                 available = [c for c in player.battle_area if c.instance_id != source_card.instance_id]
                 if len(available) < step.amount:
@@ -364,6 +392,10 @@ class SkillCostDsl:
             if step.kind == "send_owner_drop_to_warp":
                 available = SkillCostDsl._owner_drop_candidates(player, step)
                 if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_owner_drop_and_warp_to_removed":
+                if len(player.drop) + len(player.warp) < step.amount:
                     return False
                 continue
             if step.kind == "send_owner_hand_to_warp":
@@ -484,6 +516,13 @@ class SkillCostDsl:
                 if not SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="drop"):
                     raise ValueError("Source card not found in battle/unison area for send_self_to_drop.")
                 continue
+            if step.kind == "send_self_from_hand_to_drop":
+                if not SkillCostDsl._remove_source_from_hand(player, source_card, destination="drop"):
+                    raise ValueError("Source card not found in hand for send_self_from_hand_to_drop.")
+                metadata["cost_target_instance_id"] = source_card.instance_id
+                metadata["cost_target_card_id"] = source_card.card_id
+                metadata["cost_target_zone"] = "hand"
+                continue
             if step.kind == "send_other_battle_to_warp":
                 moved = 0
                 i = 0
@@ -505,6 +544,15 @@ class SkillCostDsl:
                         i += 1
                         continue
                     player.warp.append(player.drop.pop(i))
+                    moved += 1
+                continue
+            if step.kind == "send_owner_drop_and_warp_to_removed":
+                moved = 0
+                while player.drop and moved < step.amount:
+                    player.removed_from_game.append(player.drop.pop(0))
+                    moved += 1
+                while player.warp and moved < step.amount:
+                    player.removed_from_game.append(player.warp.pop(0))
                     moved += 1
                 continue
             if step.kind == "send_owner_hand_to_warp":

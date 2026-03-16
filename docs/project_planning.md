@@ -224,6 +224,12 @@ Resolved:
     - trigger
     - handler
     - provenance
+  - status: generated-catalog size concern added
+  - `dbdatabase/effect_catalog.json` is now large enough that repo ergonomics, diffs, and reviewability are becoming a real maintenance concern even though runtime loading is still acceptable
+  - next infra slice for this item:
+    - shard the generated catalog behind a manifest
+    - keep small human-maintained sources (`extractor`, `overrides`, schemas) as the real review surface
+    - preserve an optional merged runtime artifact if the engine/scripts still want a single-file load path
 - [x] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
@@ -237,8 +243,8 @@ Resolved:
     - effect catalog family assignments
   - current report snapshot:
     - priority cards: `266`
-    - mapped priority cards: `172`
-    - unmapped priority cards: `94`
+    - mapped priority cards: `185`
+    - unmapped priority cards: `81`
   - current counter-family override batch now maps:
     - `BT14-019 Dyspo, Thwarting the Enemy`
     - `BT13-135 Supreme Kai of Time, Time Labyrinth Unleashed`
@@ -314,12 +320,106 @@ Resolved:
         - reducing up to `2` opponent Battle Cards by `-15000` for the turn
         - then playing self through the existing `Counter: Play` motion path
         - alternate free counter activation when the owner has a red Unison with `2+` markers in play
-  - highest-frequency currently unmapped cards in active deck/trace usage include:
-    - `BT29-027 Tiny Golden Warrior`
+  - current red board-protection and black battle-buff slice now also maps:
     - `TB1-023 Strategies of Universe 7`
+      - via extracted `self_activate_extra_from_hand:activate_buff_owner_battle_cards`
+      - runtime support now covers:
+        - granting a keyword to all matching owner Battle Cards
+        - delayed keyword expiration at the end of the opponent's next turn
+        - filtering by owner-side color / trait descriptors such as `red ≪Saiyan≫`
     - `EX06-36 A Crack in Spacetime`
+      - via extracted `self_activate_extra_from_hand:activate_gain_power_and_keyword_for_battle`
+      - runtime support now covers:
+        - battle-step hand Extra activation
+        - owner-leader targeting for battle-only power / keyword buffs
+        - battle-only cleanup after the fight ends
+  - current black warp/unison follow-up slice now also maps:
     - `BT29-150 SS Rosé Goku Black, Justice Enforcer`
+      - via extracted `self_activate_main:activate_play_self_from_hand`
+      - via extracted `self_activate_main:activate_play_self_from_warp`
+      - via extracted `self_activate_battle:activate_switch_self_active_and_gain_power_for_turn`
+      - runtime support now covers:
+        - `Activate: Main` play-self-with-markers from hand or warp using source-zone-aware reuse of the existing play-self families
+        - reusable `min_opponent_energy` effect requirements from extracted text
+        - `Activate: Battle` self-switch-to-active plus turn-duration power gain for Unisons
+  - current yellow `Counter: Play` support slice now also maps:
     - `BT15-096 Son Goku, Steadfast Assistance`
+      - via manual override family:
+        - `counter_play:counter_force_pending_play_rest_play_self_draw_n`
+      - runtime support now covers:
+        - forcing the pending Battle Card being played to enter play in Rest Mode
+        - then playing the counter card through the existing `Counter: Play` motion path
+        - then drawing `1`
+        - dynamic hand cost reduction by counting matching yellow Extra Cards across:
+          - Battle Area
+          - Energy Area
+          - Drop Area
+  - current red `Spirit Boost` counter slice now also maps:
+    - `BT14-029 Difference of Status`
+      - via manual override family:
+        - `counter_attack:counter_spirit_boost_power_reduce_opponent_cards`
+      - current runtime slice now covers:
+        - reducing the current opposing attacker or first available opponent card by `-5000` for the turn
+        - removing `1` marker from a red Unison when available
+        - applying an additional `-5000` from that first Spirit Boost marker
+      - note:
+        - this is an intentionally conservative first Spirit Boost slice
+        - broader multi-marker / multi-choice Spirit Boost semantics remain open backlog work
+  - current black Trunks drop-or-warp follow-up slice now also maps:
+    - `BT29-097 SS2 Trunks, Pursuit`
+      - via extracted `self_in_hand_sent_to_drop_or_warp:auto_place_up_to_n_from_owner_deck_to_destination_zone`
+      - via extracted `self_activate_main:activate_play_self_from_warp`
+      - runtime support now covers:
+        - deferred secret-auto registration while the card is hidden in hand
+        - trigger-time opportunities when the card is moved from hand to Drop or Warp
+        - mirroring the destination by placing a matching black or white Battle Card from Deck into Drop or Warp
+        - plain battle-card `Activate: Main` play-self-from-Warp resolution through the existing second `Counter: Play` timing
+  - current first `EX-Evolve` runtime slice now also maps:
+    - `BT29-027 Tiny Golden Warrior`
+      - via extracted `self_activate_extra_from_hand:activate_grant_next_ex_evolve_from_owner_drop`
+      - runtime support now covers:
+        - a generic `EX_Evolve` main-phase action for Battle Cards in hand
+        - one-turn permissions that allow the next matching `EX-Evolve` to activate from Drop
+        - matching-target checks by color / character / base energy cost
+        - preserving the evolved-over card under the new card via `stacked_card_ids`
+        - consuming the one-shot Drop permission on the next matching `EX-Evolve`
+      - this first slice is intentionally conservative:
+        - it is focused on the current red `Krillin` package
+        - broader `EX-Evolve` variants and follow-up “played by [EX-Evolve]” families remain open backlog work
+  - current `EX-Evolve` follow-up slice now also maps:
+    - `BT29-007 Son Goten, Pursuit`
+      - via extracted `self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand`
+      - source-zone-specific skill cost support now covers:
+        - `activate_main_hand` -> discard this card from your hand
+      - runtime support now covers:
+        - resolving hand-origin `Activate: Main` effects after the source card discards itself as a legal cost
+        - explicit `requires_ex_evolve` filtering for deck search targets
+    - package-level reusable support now also covers:
+      - `When this card is played, draw 1 card and switch this card to Active Mode`
+      - this improves the red `EX-Evolve` follow-up bodies such as:
+        - `BT29-006 SS Son Goten, Demon Resistance`
+        - `BT29-008 SS Trunks, Demon Resistance`
+  - current black SS4 warp/buff slice now also maps:
+    - `BT22-116 SS4 Son Goku, Cross-Dimensional Fighting Spirit`
+      - via extracted `self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play`
+      - via extracted `self_activate_main:activate_gain_power_and_keyword_for_turn`
+      - skill-cost support now covers:
+        - `activate_main` -> remove `N` total cards across Drop and Warp from the game
+      - runtime support now covers:
+        - on-play selection of up to `N` opponent Battle Cards and sending them to Warp
+        - reusable `Activate: Main` self-buff effects that grant power plus a keyword for the turn
+        - paying a combined Drop+Warp removal cost into `removed_from_game`
+    - `P-658 SS4 Son Gohan, Journey Through Time`
+      - now also maps through the same reusable on-play family:
+        - `self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play`
+      - note:
+        - its attack-time Z-card/Z-Energy-cost scaling family still remains open backlog work
+  - highest-frequency currently unmapped cards in active deck/trace usage include:
+    - `BT14-026 Kahseral, Warrior of Universe 11`
+    - `BT27-034 Android 13, Military Terror Creation`
+    - `BT27-102 Demon God Putine, Scheming`
+    - `BT10-088 Dormant Potential Unleashed`
+    - `EX10-05 Dr. Uiro, Cybernetic Rebirth`
 - [ ] auto-assign cards to effect families where pattern confidence is high
   - status: first high-confidence candidate-report slice complete
   - `scripts/build_effect_family_assignment_candidates.py` now emits:

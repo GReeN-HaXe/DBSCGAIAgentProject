@@ -37,6 +37,14 @@
       }
     ]
   },
+  "10051": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "10091": {
     "activate_main_unison": [
       {
@@ -50,6 +58,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "10177": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -95,11 +111,27 @@
       }
     ]
   },
+  "1088": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "1105": {
     "activate_main_unison": [
       {
         "amount": 2,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "1122": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -135,6 +167,14 @@
       }
     ]
   },
+  "1151": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "1167": {
     "activate_battle_unison": [
       {
@@ -146,6 +186,22 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "1186": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1190": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -179,11 +235,35 @@
       }
     ]
   },
+  "1340": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1356": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "138": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "1380": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -228,11 +308,51 @@
       }
     ]
   },
+  "1512": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "153": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1542": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1549": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "1596": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "1599": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -268,6 +388,54 @@
       }
     ]
   },
+  "1889": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2004": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2011": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2133": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2140": {
+    "activate_main": [
+      {
+        "amount": 10,
+        "kind": "send_owner_drop_and_warp_to_removed"
+      }
+    ]
+  },
+  "2186": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "2202": {
     "activate_main_unison": [
       {
@@ -281,6 +449,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2396": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -305,6 +481,22 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2519": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2520": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -337,6 +529,22 @@
       {
         "amount": 2,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "2649": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2658": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -401,6 +609,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "358": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -934,6 +1150,14 @@
       }
     ]
   },
+  "451": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "452": {
     "activate_main_unison": [
       {
@@ -1034,6 +1258,14 @@
       }
     ]
   },
+  "5356": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "539": {
     "activate_main_unison": [
       {
@@ -1047,6 +1279,22 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "5417": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5424": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1067,11 +1315,43 @@
       }
     ]
   },
+  "5479": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5496": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "55": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5525": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5563": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1088,6 +1368,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5636": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1112,6 +1400,30 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5945": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5959": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5967": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1184,6 +1496,30 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "6248": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "6263": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "6266": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1359,6 +1695,14 @@
       }
     ]
   },
+  "6720": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "6722": {
     "activate_main_unison": [
       {
@@ -1394,6 +1738,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "686": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1551,6 +1903,14 @@
       }
     ]
   },
+  "7109": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "7118": {
     "activate_main_unison": [
       {
@@ -1621,6 +1981,14 @@
       }
     ]
   },
+  "7303": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "7307": {
     "activate_main_unison": [
       {
@@ -1629,11 +1997,27 @@
       }
     ]
   },
+  "7309": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "7328": {
     "activate_main_unison": [
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7330": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1652,6 +2036,14 @@
       {
         "amount": 2,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "7364": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1712,6 +2104,14 @@
       }
     ]
   },
+  "7772": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "7786": {
     "activate_main_unison": [
       {
@@ -1757,6 +2157,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7892": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -1855,6 +2263,14 @@
       }
     ]
   },
+  "7969": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "8036": {
     "activate_main_unison": [
       {
@@ -1868,6 +2284,14 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8052": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },
@@ -2095,6 +2519,14 @@
       }
     ]
   },
+  "8606": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
   "87": {
     "activate_main_unison": [
       {
@@ -2264,6 +2696,22 @@
         "allowed_colors": "white",
         "amount": 1,
         "kind": "switch_owner_battle_to_hidden"
+      }
+    ]
+  },
+  "9638": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "9640": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_drop"
       }
     ]
   },

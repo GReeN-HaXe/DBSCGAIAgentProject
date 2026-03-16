@@ -660,6 +660,18 @@ def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) ->
             if action_type == "play_card_from_hand" and action.effect_choice is not None:
                 return f"play [{action.hand_index}] {label} (effect {int(action.effect_choice) + 1})"
             return f"{verb} [{action.hand_index}] {label}"
+    if action.action_type.value == "ex_evolve":
+        source_label = action.source_zone or "source"
+        if action.source_zone in {"hand", "drop"} and action.source_index is not None:
+            zone = state.players[action.player_id].hand if action.source_zone == "hand" else state.players[action.player_id].drop
+            if 0 <= action.source_index < len(zone):
+                source_label = _card_brief_label(repo, zone[action.source_index].card_id)
+        target_label = "battle"
+        if action.target_zone == "battle" and action.target_index is not None:
+            zone = state.players[action.player_id].battle_area
+            if 0 <= action.target_index < len(zone):
+                target_label = _card_brief_label(repo, zone[action.target_index].card_id)
+        return f"EX-Evolve: {source_label} -> {target_label}"
     if action.action_type.value in {"activate_main_skill", "activate_battle_skill"}:
         source_card = None
         if action.source_zone == "leader":

@@ -275,6 +275,18 @@ class DelayedKeywordClear:
     keyword: str
 
 
+@dataclass(frozen=True)
+class ExEvolvePermission:
+    owner_player_id: int
+    created_turn_number: int
+    allowed_source_zones: Tuple[str, ...] = ("drop",)
+    allowed_colors: str = ""
+    required_traits: str = ""
+    required_characters: str = ""
+    required_name_contains: str = ""
+    uses_remaining: int = 1
+
+
 @dataclass
 class GameState:
     players: dict[int, PlayerState]
@@ -306,6 +318,7 @@ class GameState:
     secret_auto_opportunities: list[SecretAutoOpportunity] = field(default_factory=list)
     delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
     delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
+    ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
     unison_marker_skill_usage: set[int] = field(default_factory=set)

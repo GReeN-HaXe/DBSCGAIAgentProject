@@ -650,9 +650,10 @@ def test_counter_play_can_reduce_up_to_two_opponent_battles_for_turn_then_play_s
         p1_deck_card_ids=_deck(1000),
         p2_leader_card_id=2,
         p2_deck_card_ids=_deck(2000),
+        first_player=2,
         shuffle_decks=False,
     )
-    state = _to_main(engine, state)
+    state = _to_p2_main(engine, state)
     state.players[1].battle_area.extend(
         [
             CardInstance(instance_id=790001, card_id=601, owner_id=1, card_type="BATTLE", power=20000),
@@ -699,9 +700,10 @@ def test_counter_play_alternate_cost_can_be_free_with_red_unison_markers() -> No
         p1_deck_card_ids=_deck(1000),
         p2_leader_card_id=2,
         p2_deck_card_ids=_deck(2000),
+        first_player=2,
         shuffle_decks=False,
     )
-    state = _to_main(engine, state)
+    state = _to_p2_main(engine, state)
     state.players[1].hand = [
         CardInstance(instance_id=790011, card_id=611, owner_id=1, card_type="BATTLE", color="Red", energy_cost=0, power=15000)
     ]
@@ -735,6 +737,149 @@ def test_counter_play_alternate_cost_can_be_free_with_red_unison_markers() -> No
     counter = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
     state = engine.apply_action(state, counter)
     assert any(cp.name == "counter_alternate_cost_red_unison_markers_free" for cp in state.checkpoints)
+
+
+def test_counter_play_can_force_pending_battle_play_rest_then_play_self_and_draw() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=790021, card_id=621, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=0, power=15000)
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=790022, card_id=622, owner_id=2, color="Yellow", resting=False)
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790023,
+            card_id=89,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Blocker]"
+                "[Counter: Play] The Battle Card being played is played in Rest Mode, then play this card and draw 1 card."
+            ),
+        )
+    ]
+    deck_before = len(state.players[2].deck)
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    played = next(card for card in state.players[1].battle_area if card.instance_id == 790021)
+    assert played.resting is True
+    assert any(card.instance_id == 790023 for card in state.players[2].battle_area)
+    assert len(state.players[2].deck) == deck_before - 1
+    assert any(cp.name == "counter_effect_force_pending_play_rest_applied" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_play_self_draw_resolved" for cp in state.checkpoints)
+
+
+def test_counter_attack_spirit_boost_can_reduce_attacker_and_remove_red_unison_marker() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].energy = [
+        CardInstance(instance_id=790025, card_id=625, owner_id=2, color="Red", resting=False)
+    ]
+    state.players[2].unison_area = [
+        CardInstance(instance_id=790026, card_id=626, owner_id=2, card_type="UNISON", color="Red", markers=1)
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790027,
+            card_id=7459,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Red",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack][Spirit Boost X] If your Leader Card is mono-red: "
+                "Choose up to 1 of your opponent's cards and it gets -5000 power for the turn. "
+                "If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 of your opponent's cards "
+                "and it gets -5000 power for the turn for each marker you removed using this skill."
+            ),
+        )
+    ]
+    attack = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader")
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    attacker = state.players[1].leader_area
+    assert attacker.power == 5000
+    assert not state.players[2].unison_area
+    assert any(cp.name == "counter_effect_spirit_boost_power_reduce_resolved" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_spirit_boost_bonus_resolved" for cp in state.checkpoints)
+
+
+def test_hand_cost_reduction_counts_matching_cards_across_battle_energy_and_drop() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[2].energy = []
+    state.players[2].battle_area = [
+        CardInstance(instance_id=790031, card_id=107, owner_id=2, card_type="EXTRA", color="Yellow")
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=790032, card_id=108, owner_id=2, card_type="EXTRA", color="Yellow", resting=False)
+    ]
+    state.players[2].drop = [
+        CardInstance(instance_id=790033, card_id=109, owner_id=2, card_type="EXTRA", color="Yellow")
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790034,
+            card_id=89,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=3,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] The Battle Card being played is played in Rest Mode, then play this card and draw 1 card."
+                "[Permanent] When activating this card's [Counter] skill from your hand, "
+                "reduce this card's energy cost by 1 for each yellow Extra Card in your Battle Area, Energy Area, and Drop Area."
+            ),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(instance_id=790035, card_id=634, owner_id=1, card_type="BATTLE", color="Red", energy_cost=0, power=15000)
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
 
 
 def test_color_and_z_cost_gate_play_legality() -> None:
