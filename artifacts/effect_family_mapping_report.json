@@ -188,21 +188,24 @@
       "combined_count": 42,
       "deck_count": 3,
       "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
         "self_activate_battle:auto_draw_n",
+        "self_activate_main:activate_play_self_from_hand",
         "self_activate_main:auto_draw_n"
       ],
       "handlers": {
+        "activate_play_self_from_hand": 2,
         "auto_draw_n": 2
       },
       "mapped": true,
       "provenances": {
-        "extractor": 2
+        "extractor": 4
       },
-      "rule_count": 2,
+      "rule_count": 4,
       "trace_count": 39,
       "triggers": {
-        "self_activate_battle": 1,
-        "self_activate_main": 1
+        "self_activate_battle": 2,
+        "self_activate_main": 2
       }
     },
     {
@@ -444,20 +447,23 @@
       "combined_count": 25,
       "deck_count": 4,
       "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
         "self_activate_main:activate_send_top_deck_to_owner_warp",
         "self_activate_main:auto_draw_n"
       ],
       "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
         "activate_send_top_deck_to_owner_warp": 1,
         "auto_draw_n": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 2
+        "extractor": 3
       },
-      "rule_count": 2,
+      "rule_count": 3,
       "trace_count": 21,
       "triggers": {
+        "self_activate_battle": 1,
         "self_activate_main": 2
       }
     },
@@ -588,18 +594,21 @@
       "combined_count": 23,
       "deck_count": 3,
       "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
         "self_activate_extra_from_hand:activate_grant_next_ex_evolve_from_owner_drop"
       ],
       "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
         "activate_grant_next_ex_evolve_from_owner_drop": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 20,
       "triggers": {
+        "self_activate_battle": 1,
         "self_activate_extra_from_hand": 1
       }
     },
@@ -634,21 +643,24 @@
       "combined_count": 20,
       "deck_count": 4,
       "family_ids": [
+        "self_activate_battle:activate_buff_owner_battle_cards",
         "self_activate_battle:auto_draw_n",
+        "self_activate_main:activate_buff_owner_battle_cards",
         "self_activate_main:auto_draw_n"
       ],
       "handlers": {
+        "activate_buff_owner_battle_cards": 2,
         "auto_draw_n": 2
       },
       "mapped": true,
       "provenances": {
-        "extractor": 2
+        "extractor": 4
       },
-      "rule_count": 2,
+      "rule_count": 4,
       "trace_count": 16,
       "triggers": {
-        "self_activate_battle": 1,
-        "self_activate_main": 1
+        "self_activate_battle": 2,
+        "self_activate_main": 2
       }
     },
     {
@@ -1436,13 +1448,21 @@
       "card_number": "BT14-026",
       "combined_count": 4,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_switch_up_to_n_owner_battle_active"
+      ],
+      "handlers": {
+        "activate_switch_up_to_n_owner_battle_active": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 4,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1
+      }
     },
     {
       "card_id": 8,
@@ -1494,13 +1514,21 @@
       "card_number": "BT27-034",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle"
+      ],
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1
+      }
     },
     {
       "card_id": 685,
@@ -1674,19 +1702,21 @@
       "combined_count": 4,
       "deck_count": 4,
       "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
         "self_activate_battle:auto_draw_n"
       ],
       "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
         "auto_draw_n": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_activate_battle": 1
+        "self_activate_battle": 2
       }
     },
     {
@@ -1764,13 +1794,21 @@
       "card_number": "BT27-102",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "owner_other_battle_played_by_dark_over_realm:auto_draw_n"
+      ],
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "owner_other_battle_played_by_dark_over_realm": 1
+      }
     },
     {
       "card_id": 1178,
@@ -1822,13 +1860,21 @@
       "card_number": "BT10-088",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "counter_attack:counter_negate_attack"
+      ],
+      "handlers": {
+        "counter_negate_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "counter_attack": 1
+      }
     },
     {
       "card_id": 5337,
@@ -1836,13 +1882,21 @@
       "card_number": "EX10-05",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_in_hand_sent_to_drop_or_warp:auto_play_self_from_drop_on_hand_drop"
+      ],
+      "handlers": {
+        "auto_play_self_from_drop_on_hand_drop": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_in_hand_sent_to_drop_or_warp": 1
+      }
     },
     {
       "card_id": 8064,
@@ -1873,19 +1927,21 @@
       "combined_count": 4,
       "deck_count": 4,
       "family_ids": [
-        "self_played:auto_ko_opponent_battle_on_play"
+        "self_played:auto_ko_opponent_battle_on_play",
+        "self_played:auto_self_gain_power_for_turn_on_play"
       ],
       "handlers": {
-        "auto_ko_opponent_battle_on_play": 1
+        "auto_ko_opponent_battle_on_play": 1,
+        "auto_self_gain_power_for_turn_on_play": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_played": 1
+        "self_played": 2
       }
     },
     {
@@ -1916,13 +1972,26 @@
       "card_number": "BT27-134",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_buff_owner_battle_cards",
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_buff_owner_battle_cards",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_buff_owner_battle_cards": 2,
+        "activate_play_self_from_hand": 3
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 5
+      },
+      "rule_count": 5,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 3,
+        "self_activate_main": 2
+      }
     },
     {
       "card_id": 7954,
@@ -1930,13 +1999,26 @@
       "card_number": "EX24-25",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand",
+        "self_played:auto_buff_up_to_n_owner_battles_on_play"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2,
+        "auto_buff_up_to_n_owner_battles_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_id": 8060,
@@ -1988,13 +2070,23 @@
       "card_number": "P-699",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7857,
@@ -2002,13 +2094,24 @@
       "card_number": "BT25-114",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+        "self_koed:auto_play_up_to_n_named_from_owner_drop_on_self_ko"
+      ],
+      "handlers": {
+        "auto_ko_up_to_n_opponent_battle_on_attack": 1,
+        "auto_play_up_to_n_named_from_owner_drop_on_self_ko": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_attacks": 1,
+        "self_koed": 1
+      }
     },
     {
       "card_id": 5702,
@@ -2062,13 +2165,21 @@
       "card_number": "BT25-141",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_opponent_discards_n_from_hand"
+      ],
+      "handlers": {
+        "activate_opponent_discards_n_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7948,
@@ -2120,13 +2231,21 @@
       "card_number": "BT17-038",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_gain_power_and_keyword_for_turn"
+      ],
+      "handlers": {
+        "activate_gain_power_and_keyword_for_turn": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 8325,
@@ -2181,13 +2300,23 @@
       "card_number": "BT25-135",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7870,
@@ -2195,13 +2324,23 @@
       "card_number": "BT25-136",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7844,
@@ -2326,13 +2465,23 @@
       "card_number": "BT25-131",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7947,
@@ -2409,13 +2558,23 @@
       "card_number": "BT25-133",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 8993,
@@ -2450,13 +2609,23 @@
       "card_number": "BT25-134",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 5332,
@@ -2464,13 +2633,21 @@
       "card_number": "BT9-096",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_comboed:auto_power_reduce_up_to_n_on_combo"
+      ],
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_combo": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_comboed": 1
+      }
     },
     {
       "card_id": 8051,
@@ -2478,13 +2655,21 @@
       "card_number": "BT26-066",
       "combined_count": 4,
       "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_played:auto_self_gain_power_for_turn_on_play"
+      ],
+      "handlers": {
+        "auto_self_gain_power_for_turn_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_played": 1
+      }
     },
     {
       "card_id": 8314,
@@ -2515,19 +2700,21 @@
       "combined_count": 3,
       "deck_count": 3,
       "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
         "self_activate_battle:auto_draw_n"
       ],
       "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
         "auto_draw_n": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_activate_battle": 1
+        "self_activate_battle": 2
       }
     },
     {
@@ -2652,13 +2839,21 @@
       "card_number": "EX23-38",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle"
+      ],
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1
+      }
     },
     {
       "card_id": 8050,
@@ -2666,13 +2861,21 @@
       "card_number": "BT26-065",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_play_up_to_n_from_owner_z_deck_or_z_energy"
+      ],
+      "handlers": {
+        "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7195,
@@ -2702,13 +2905,26 @@
       "card_number": "BT29-003",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "owner_activate_extra_from_hand:auto_add_markers_on_owner_activate_extra_from_hand",
+        "self_activate_battle:activate_reduce_next_matching_extra_skill_cost_from_hand",
+        "self_activate_main:activate_reduce_next_matching_extra_skill_cost_from_hand"
+      ],
+      "handlers": {
+        "activate_reduce_next_matching_extra_skill_cost_from_hand": 2,
+        "auto_add_markers_on_owner_activate_extra_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 3
+      },
+      "rule_count": 3,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "owner_activate_extra_from_hand": 1,
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 1603,
@@ -2716,13 +2932,21 @@
       "card_number": "P-473",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed"
+      ],
+      "handlers": {
+        "activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 8239,
@@ -2731,19 +2955,21 @@
       "combined_count": 3,
       "deck_count": 3,
       "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
         "self_activate_battle:auto_draw_n"
       ],
       "handlers": {
+        "activate_play_self_from_hand": 1,
         "auto_draw_n": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_activate_battle": 1
+        "self_activate_battle": 2
       }
     },
     {
@@ -2753,19 +2979,21 @@
       "combined_count": 3,
       "deck_count": 3,
       "family_ids": [
-        "self_played:auto_play_up_to_n_from_owner_drop_on_play"
+        "self_played:auto_play_up_to_n_from_owner_drop_on_play",
+        "self_played:auto_self_gain_power_for_turn_on_play"
       ],
       "handlers": {
-        "auto_play_up_to_n_from_owner_drop_on_play": 1
+        "auto_play_up_to_n_from_owner_drop_on_play": 1,
+        "auto_self_gain_power_for_turn_on_play": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_played": 1
+        "self_played": 2
       }
     },
     {
@@ -2810,13 +3038,21 @@
       "card_number": "BT10-123",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "counter_attack:counter_negate_attacker_skills_and_prevent_switch_active"
+      ],
+      "handlers": {
+        "counter_negate_attacker_skills_and_prevent_switch_active": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "counter_attack": 1
+      }
     },
     {
       "card_id": 5531,
@@ -2824,13 +3060,21 @@
       "card_number": "BT11-132",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_played:auto_restrict_self_copies_from_hand_next_turn_on_play"
+      ],
+      "handlers": {
+        "auto_restrict_self_copies_from_hand_next_turn_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_played": 1
+      }
     },
     {
       "card_id": 8059,
@@ -2888,13 +3132,21 @@
       "card_number": "EX19-34",
       "combined_count": 3,
       "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play"
+      ],
+      "handlers": {
+        "auto_send_up_to_n_opponent_battle_to_warp_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_played": 1
+      }
     },
     {
       "card_id": 2269,
@@ -3036,19 +3288,21 @@
       "combined_count": 3,
       "deck_count": 3,
       "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
         "self_activate_battle:auto_draw_n"
       ],
       "handlers": {
+        "activate_play_self_from_hand": 1,
         "auto_draw_n": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_activate_battle": 1
+        "self_activate_battle": 2
       }
     },
     {
@@ -3127,19 +3381,21 @@
       "combined_count": 2,
       "deck_count": 0,
       "family_ids": [
-        "self_played:auto_ko_opponent_battle_on_play"
+        "self_played:auto_ko_opponent_battle_on_play",
+        "self_played:auto_self_gain_power_for_turn_on_play"
       ],
       "handlers": {
-        "auto_ko_opponent_battle_on_play": 1
+        "auto_ko_opponent_battle_on_play": 1,
+        "auto_self_gain_power_for_turn_on_play": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 2,
       "triggers": {
-        "self_played": 1
+        "self_played": 2
       }
     },
     {
@@ -3148,13 +3404,21 @@
       "card_number": "EX19-12",
       "combined_count": 2,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_send_up_to_n_opponent_combo_to_drop"
+      ],
+      "handlers": {
+        "activate_send_up_to_n_opponent_combo_to_drop": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 2,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1
+      }
     },
     {
       "card_id": 29,
@@ -3185,19 +3449,21 @@
       "combined_count": 2,
       "deck_count": 0,
       "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle",
         "self_activate_battle:auto_draw_n"
       ],
       "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1,
         "auto_draw_n": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 2,
       "triggers": {
-        "self_activate_battle": 1
+        "self_activate_battle": 2
       }
     },
     {
@@ -3206,13 +3472,21 @@
       "card_number": "BT15-030",
       "combined_count": 2,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_extra_from_hand:activate_ko_opponent_battles_up_to_total_power"
+      ],
+      "handlers": {
+        "activate_ko_opponent_battles_up_to_total_power": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 2,
-      "triggers": {}
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
     },
     {
       "card_id": 23,
@@ -3280,13 +3554,21 @@
       "card_number": "EX19-05",
       "combined_count": 2,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo"
+      ],
+      "handlers": {
+        "auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 2,
-      "triggers": {}
+      "triggers": {
+        "self_comboed": 1
+      }
     },
     {
       "card_id": 25,
@@ -3396,13 +3678,24 @@
       "card_number": "EX19-21",
       "combined_count": 2,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "self_played:auto_add_markers_per_n_multicolor_energy_on_play"
+      ],
+      "handlers": {
+        "activate_send_up_to_n_opponent_battle_to_warp": 1,
+        "auto_add_markers_per_n_multicolor_energy_on_play": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 2
+      },
+      "rule_count": 2,
       "trace_count": 2,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_id": 22,
@@ -3432,13 +3725,21 @@
       "card_number": "BT15-097",
       "combined_count": 2,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "owner_field_extra_placed_into_drop:auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest"
+      ],
+      "handlers": {
+        "auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 2,
-      "triggers": {}
+      "triggers": {
+        "owner_field_extra_placed_into_drop": 1
+      }
     },
     {
       "card_id": 88,
@@ -3468,13 +3769,24 @@
       "card_number": "BT15-093",
       "combined_count": 2,
       "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end",
+        "self_blocker_activated:auto_rest_owner_battle_on_self_blocker_activated_switch_self_active"
+      ],
+      "handlers": {
+        "activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end": 1,
+        "auto_rest_owner_battle_on_self_blocker_activated_switch_self_active": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 2
+      },
+      "rule_count": 2,
       "trace_count": 2,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1,
+        "self_blocker_activated": 1
+      }
     },
     {
       "card_id": 87,
@@ -3657,21 +3969,23 @@
       "combined_count": 2,
       "deck_count": 2,
       "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
         "self_activate_main:activate_play_self_from_hand",
         "self_activate_main:auto_draw_n",
         "self_played:auto_draw_n"
       ],
       "handlers": {
-        "activate_play_self_from_hand": 1,
+        "activate_play_self_from_hand": 2,
         "auto_draw_n": 2
       },
       "mapped": true,
       "provenances": {
-        "extractor": 3
+        "extractor": 4
       },
-      "rule_count": 3,
+      "rule_count": 4,
       "trace_count": 0,
       "triggers": {
+        "self_activate_battle": 1,
         "self_activate_main": 2,
         "self_played": 1
       }
@@ -3682,13 +3996,26 @@
       "card_number": "BT27-028",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
+        "self_activate_main:activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end",
+        "self_attacks:auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack"
+      ],
+      "handlers": {
+        "activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end": 1,
+        "activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end": 1,
+        "auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 3
+      },
+      "rule_count": 3,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 2,
+        "self_attacks": 1
+      }
     },
     {
       "card_id": 8316,
@@ -3756,20 +4083,23 @@
       "deck_count": 2,
       "family_ids": [
         "self_activate_main:activate_play_self_from_hand",
-        "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp"
+        "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "self_played:auto_self_gain_power_for_turn_on_play"
       ],
       "handlers": {
         "activate_play_self_from_hand": 1,
-        "activate_send_up_to_n_opponent_battle_to_warp": 1
+        "activate_send_up_to_n_opponent_battle_to_warp": 1,
+        "auto_self_gain_power_for_turn_on_play": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 2
+        "extractor": 3
       },
-      "rule_count": 2,
+      "rule_count": 3,
       "trace_count": 0,
       "triggers": {
-        "self_activate_main": 2
+        "self_activate_main": 2,
+        "self_played": 1
       }
     },
     {
@@ -3806,13 +4136,21 @@
       "card_number": "BT27-103",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack"
+      ],
+      "handlers": {
+        "auto_combo_up_to_n_from_owner_zone_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_attacks": 1
+      }
     },
     {
       "card_id": 1442,
@@ -3864,13 +4202,21 @@
       "card_number": "BT28-003",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn"
+      ],
+      "handlers": {
+        "activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 9720,
@@ -3878,13 +4224,21 @@
       "card_number": "BT29-087",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_switch_self_active_and_gain_power_for_turn"
+      ],
+      "handlers": {
+        "activate_switch_self_active_and_gain_power_for_turn": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 8063,
@@ -3892,13 +4246,21 @@
       "card_number": "BT26-084",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack"
+      ],
+      "handlers": {
+        "auto_ko_up_to_n_opponent_battle_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_attacks": 1
+      }
     },
     {
       "card_id": 1734,
@@ -3950,13 +4312,24 @@
       "card_number": "BT27-124",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_main:activate_remove_self_and_ko_all_opponent_battles",
+        "self_field_extra_placed:auto_switch_up_to_n_owner_leader_active_on_field_extra_placed"
+      ],
+      "handlers": {
+        "activate_remove_self_and_ko_all_opponent_battles": 1,
+        "auto_switch_up_to_n_owner_leader_active_on_field_extra_placed": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_main": 1,
+        "self_field_extra_placed": 1
+      }
     },
     {
       "card_id": 2458,
@@ -4022,13 +4395,21 @@
       "card_number": "BT4-108",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_attacks:auto_self_gain_power_for_turn_on_attack"
+      ],
+      "handlers": {
+        "auto_self_gain_power_for_turn_on_attack": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_attacks": 1
+      }
     },
     {
       "card_id": 8896,
@@ -4036,13 +4417,21 @@
       "card_number": "BT28-018",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "counter_attack:counter_play_self_buff_owner_cards_for_battle"
+      ],
+      "handlers": {
+        "counter_play_self_buff_owner_cards_for_battle": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "counter_attack": 1
+      }
     },
     {
       "card_id": 7839,
@@ -4086,13 +4475,23 @@
       "card_number": "BT26-079",
       "combined_count": 2,
       "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 1969,
@@ -4101,19 +4500,22 @@
       "combined_count": 2,
       "deck_count": 2,
       "family_ids": [
-        "self_activate_main:activate_play_self_from_hand"
+        "self_activate_main:activate_play_self_from_hand",
+        "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack"
       ],
       "handlers": {
-        "activate_play_self_from_hand": 1
+        "activate_play_self_from_hand": 1,
+        "auto_ko_up_to_n_opponent_battle_on_attack": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_activate_main": 1
+        "self_activate_main": 1,
+        "self_attacks": 1
       }
     },
     {
@@ -4863,13 +5265,21 @@
       "card_number": "EX23-21",
       "combined_count": 1,
       "deck_count": 1,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_gain_power_and_keyword_for_battle"
+      ],
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1
+      }
     },
     {
       "card_id": 8122,
@@ -4990,13 +5400,23 @@
       "card_number": "BT27-084",
       "combined_count": 1,
       "deck_count": 1,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand",
+        "self_activate_main:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 2
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 2
+      },
+      "rule_count": 2,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_id": 7933,
@@ -5135,19 +5555,22 @@
       "combined_count": 1,
       "deck_count": 1,
       "family_ids": [
-        "self_activate_main:auto_draw_n"
+        "self_activate_main:auto_draw_n",
+        "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack"
       ],
       "handlers": {
-        "auto_draw_n": 1
+        "auto_draw_n": 1,
+        "auto_ko_up_to_n_opponent_battle_on_attack": 1
       },
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 2
       },
-      "rule_count": 1,
+      "rule_count": 2,
       "trace_count": 0,
       "triggers": {
-        "self_activate_main": 1
+        "self_activate_main": 1,
+        "self_attacks": 1
       }
     },
     {
@@ -5250,13 +5673,21 @@
       "card_number": "BT25-145",
       "combined_count": 1,
       "deck_count": 1,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
+      "family_ids": [
+        "self_activate_battle:activate_play_self_from_hand"
+      ],
+      "handlers": {
+        "activate_play_self_from_hand": 1
+      },
+      "mapped": true,
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
       "trace_count": 0,
-      "triggers": {}
+      "triggers": {
+        "self_activate_battle": 1
+      }
     },
     {
       "card_id": 1480,
@@ -5402,12 +5833,12 @@
     ]
   },
   "summary": {
-    "mapped_priority_card_count": 185,
+    "mapped_priority_card_count": 228,
     "priority_card_count": 266,
-    "priority_family_count": 50,
+    "priority_family_count": 86,
     "total_deck_mentions": 616,
     "total_trace_mentions": 1636,
-    "unmapped_priority_card_count": 81
+    "unmapped_priority_card_count": 38
   },
   "top_priority_families": [
     {
@@ -5493,6 +5924,72 @@
       }
     },
     {
+      "combined_count": 267,
+      "deck_count": 142,
+      "family_id": "self_activate_main:activate_play_self_from_hand",
+      "handlers": {
+        "activate_play_self_from_hand": 49
+      },
+      "priority_card_count": 48,
+      "priority_card_ids": [
+        37,
+        1121,
+        1442,
+        1969,
+        2097,
+        2152,
+        2222,
+        6792,
+        7805,
+        7843,
+        7866,
+        7867,
+        7868,
+        7869,
+        7870,
+        7879,
+        7928,
+        7933,
+        7934,
+        7935,
+        7941,
+        7947,
+        7954,
+        8058,
+        8059,
+        8062,
+        8065,
+        8114,
+        8122,
+        8170,
+        8373,
+        8386,
+        8387,
+        8388,
+        8425,
+        8440,
+        8442,
+        8456,
+        8930,
+        8982,
+        8993,
+        9635,
+        9641,
+        9649,
+        9736,
+        9737,
+        9786,
+        9787
+      ],
+      "provenances": {
+        "extractor": 49
+      },
+      "trace_count": 125,
+      "triggers": {
+        "self_activate_main": 49
+      }
+    },
+    {
       "combined_count": 204,
       "deck_count": 76,
       "family_id": "self_played:auto_draw_n",
@@ -5542,61 +6039,6 @@
       }
     },
     {
-      "combined_count": 190,
-      "deck_count": 104,
-      "family_id": "self_activate_main:activate_play_self_from_hand",
-      "handlers": {
-        "activate_play_self_from_hand": 38
-      },
-      "priority_card_count": 37,
-      "priority_card_ids": [
-        37,
-        1121,
-        1442,
-        1969,
-        2097,
-        2152,
-        2222,
-        6792,
-        7805,
-        7867,
-        7879,
-        7928,
-        7933,
-        7934,
-        7935,
-        7941,
-        7947,
-        8059,
-        8062,
-        8065,
-        8114,
-        8122,
-        8170,
-        8373,
-        8387,
-        8388,
-        8440,
-        8442,
-        8456,
-        8930,
-        8993,
-        9635,
-        9649,
-        9736,
-        9737,
-        9786,
-        9787
-      ],
-      "provenances": {
-        "extractor": 38
-      },
-      "trace_count": 86,
-      "triggers": {
-        "self_activate_main": 38
-      }
-    },
-    {
       "combined_count": 119,
       "deck_count": 19,
       "family_id": "self_activate_main:activate_play_self_from_warp",
@@ -5622,13 +6064,13 @@
       }
     },
     {
-      "combined_count": 114,
-      "deck_count": 40,
+      "combined_count": 118,
+      "deck_count": 44,
       "family_id": "counter_attack:counter_negate_attack",
       "handlers": {
-        "counter_negate_attack": 15
+        "counter_negate_attack": 16
       },
-      "priority_card_count": 15,
+      "priority_card_count": 16,
       "priority_card_ids": [
         384,
         689,
@@ -5644,14 +6086,15 @@
         6072,
         6999,
         7334,
+        7358,
         8458
       ],
       "provenances": {
-        "manual_override": 15
+        "manual_override": 16
       },
       "trace_count": 74,
       "triggers": {
-        "counter_attack": 15
+        "counter_attack": 16
       }
     },
     {
@@ -5735,6 +6178,34 @@
       }
     },
     {
+      "combined_count": 92,
+      "deck_count": 28,
+      "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+      "handlers": {
+        "activate_gain_power_and_keyword_for_battle": 10
+      },
+      "priority_card_count": 10,
+      "priority_card_ids": [
+        82,
+        2264,
+        2266,
+        2268,
+        6688,
+        7811,
+        8375,
+        8379,
+        9660,
+        9724
+      ],
+      "provenances": {
+        "extractor": 10
+      },
+      "trace_count": 64,
+      "triggers": {
+        "self_activate_battle": 10
+      }
+    },
+    {
       "combined_count": 88,
       "deck_count": 26,
       "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
@@ -5760,6 +6231,39 @@
       "trace_count": 62,
       "triggers": {
         "self_played": 10
+      }
+    },
+    {
+      "combined_count": 86,
+      "deck_count": 47,
+      "family_id": "self_activate_battle:activate_play_self_from_hand",
+      "handlers": {
+        "activate_play_self_from_hand": 16
+      },
+      "priority_card_count": 15,
+      "priority_card_ids": [
+        7843,
+        7866,
+        7868,
+        7869,
+        7870,
+        7878,
+        7954,
+        8058,
+        8127,
+        8239,
+        8386,
+        8387,
+        8425,
+        8982,
+        9641
+      ],
+      "provenances": {
+        "extractor": 16
+      },
+      "trace_count": 39,
+      "triggers": {
+        "self_activate_battle": 16
       }
     },
     {
@@ -5879,14 +6383,15 @@
       }
     },
     {
-      "combined_count": 39,
-      "deck_count": 19,
+      "combined_count": 42,
+      "deck_count": 22,
       "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
       "handlers": {
-        "auto_send_up_to_n_opponent_battle_to_warp_on_play": 5
+        "auto_send_up_to_n_opponent_battle_to_warp_on_play": 6
       },
-      "priority_card_count": 5,
+      "priority_card_count": 6,
       "priority_card_ids": [
+        49,
         2140,
         7035,
         8307,
@@ -5894,11 +6399,12 @@
         9725
       ],
       "provenances": {
-        "extractor": 5
+        "extractor": 5,
+        "manual_override": 1
       },
       "trace_count": 20,
       "triggers": {
-        "self_played": 5
+        "self_played": 6
       }
     },
     {
@@ -6010,26 +6516,6 @@
       }
     },
     {
-      "combined_count": 27,
-      "deck_count": 6,
-      "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
-      "handlers": {
-        "activate_gain_power_and_keyword_for_battle": 2
-      },
-      "priority_card_count": 2,
-      "priority_card_ids": [
-        6688,
-        7811
-      ],
-      "provenances": {
-        "extractor": 2
-      },
-      "trace_count": 21,
-      "triggers": {
-        "self_activate_battle": 2
-      }
-    },
-    {
       "combined_count": 25,
       "deck_count": 4,
       "family_id": "self_activate_extra_from_hand:activate_add_up_to_n_from_owner_deck_to_hand",
@@ -6087,6 +6573,46 @@
       }
     },
     {
+      "combined_count": 24,
+      "deck_count": 8,
+      "family_id": "self_activate_battle:activate_buff_owner_battle_cards",
+      "handlers": {
+        "activate_buff_owner_battle_cards": 2
+      },
+      "priority_card_count": 2,
+      "priority_card_ids": [
+        8386,
+        9659
+      ],
+      "provenances": {
+        "extractor": 2
+      },
+      "trace_count": 16,
+      "triggers": {
+        "self_activate_battle": 2
+      }
+    },
+    {
+      "combined_count": 24,
+      "deck_count": 8,
+      "family_id": "self_activate_main:activate_buff_owner_battle_cards",
+      "handlers": {
+        "activate_buff_owner_battle_cards": 2
+      },
+      "priority_card_count": 2,
+      "priority_card_ids": [
+        8386,
+        9659
+      ],
+      "provenances": {
+        "extractor": 2
+      },
+      "trace_count": 16,
+      "triggers": {
+        "self_activate_main": 2
+      }
+    },
+    {
       "combined_count": 23,
       "deck_count": 3,
       "family_id": "self_activate_extra_from_hand:activate_grant_next_ex_evolve_from_owner_drop",
@@ -6124,6 +6650,51 @@
       "trace_count": 7,
       "triggers": {
         "self_attacks": 3
+      }
+    },
+    {
+      "combined_count": 15,
+      "deck_count": 13,
+      "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+      "handlers": {
+        "activate_gain_power_and_keyword_for_turn": 4
+      },
+      "priority_card_count": 4,
+      "priority_card_ids": [
+        88,
+        672,
+        1065,
+        2140
+      ],
+      "provenances": {
+        "extractor": 4
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_main": 4
+      }
+    },
+    {
+      "combined_count": 15,
+      "deck_count": 13,
+      "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
+      "handlers": {
+        "auto_self_gain_power_for_turn_on_play": 5
+      },
+      "priority_card_count": 5,
+      "priority_card_ids": [
+        30,
+        7943,
+        8051,
+        8061,
+        8170
+      ],
+      "provenances": {
+        "extractor": 5
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 5
       }
     },
     {
@@ -6170,27 +6741,6 @@
     },
     {
       "combined_count": 11,
-      "deck_count": 9,
-      "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
-      "handlers": {
-        "activate_gain_power_and_keyword_for_turn": 3
-      },
-      "priority_card_count": 3,
-      "priority_card_ids": [
-        88,
-        1065,
-        2140
-      ],
-      "provenances": {
-        "extractor": 3
-      },
-      "trace_count": 2,
-      "triggers": {
-        "self_activate_main": 3
-      }
-    },
-    {
-      "combined_count": 11,
       "deck_count": 11,
       "family_id": "self_played:auto_play_up_to_n_from_owner_drop_on_play",
       "handlers": {
@@ -6230,6 +6780,28 @@
       "trace_count": 2,
       "triggers": {
         "turn_end": 4
+      }
+    },
+    {
+      "combined_count": 9,
+      "deck_count": 9,
+      "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+      "handlers": {
+        "auto_ko_up_to_n_opponent_battle_on_attack": 4
+      },
+      "priority_card_count": 4,
+      "priority_card_ids": [
+        1969,
+        7857,
+        8049,
+        8063
+      ],
+      "provenances": {
+        "extractor": 4
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 4
       }
     },
     {
@@ -6428,6 +7000,161 @@
       }
     },
     {
+      "combined_count": 5,
+      "deck_count": 3,
+      "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+      "handlers": {
+        "activate_send_up_to_n_opponent_battle_to_warp": 3
+      },
+      "priority_card_count": 3,
+      "priority_card_ids": [
+        36,
+        7941,
+        8170
+      ],
+      "provenances": {
+        "extractor": 2,
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_main": 3
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 0,
+      "family_id": "self_activate_battle:activate_switch_up_to_n_owner_battle_active",
+      "handlers": {
+        "activate_switch_up_to_n_owner_battle_active": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        11
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 4,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "owner_other_battle_played_by_dark_over_realm:auto_draw_n",
+      "handlers": {
+        "auto_draw_n": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8318
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "owner_other_battle_played_by_dark_over_realm": 1
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "self_activate_main:activate_opponent_discards_n_from_hand",
+      "handlers": {
+        "activate_opponent_discards_n_from_hand": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        7909
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "self_comboed:auto_power_reduce_up_to_n_on_combo",
+      "handlers": {
+        "auto_power_reduce_up_to_n_on_combo": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        5332
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "self_in_hand_sent_to_drop_or_warp:auto_play_self_from_drop_on_hand_drop",
+      "handlers": {
+        "auto_play_self_from_drop_on_hand_drop": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        5337
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_in_hand_sent_to_drop_or_warp": 1
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "self_koed:auto_play_up_to_n_named_from_owner_drop_on_self_ko",
+      "handlers": {
+        "auto_play_up_to_n_named_from_owner_drop_on_self_ko": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        7857
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_koed": 1
+      }
+    },
+    {
+      "combined_count": 4,
+      "deck_count": 4,
+      "family_id": "self_played:auto_buff_up_to_n_owner_battles_on_play",
+      "handlers": {
+        "auto_buff_up_to_n_owner_battles_on_play": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        7954
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
       "combined_count": 4,
       "deck_count": 4,
       "family_id": "self_played:auto_top_deck_add_if_color_on_play",
@@ -6449,21 +7176,153 @@
     {
       "combined_count": 3,
       "deck_count": 3,
-      "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+      "family_id": "counter_attack:counter_negate_attacker_skills_and_prevent_switch_active",
       "handlers": {
-        "activate_send_up_to_n_opponent_battle_to_warp": 2
+        "counter_negate_attacker_skills_and_prevent_switch_active": 1
       },
-      "priority_card_count": 2,
+      "priority_card_count": 1,
       "priority_card_ids": [
-        7941,
-        8170
+        4226
       ],
       "provenances": {
-        "extractor": 2
+        "manual_override": 1
       },
       "trace_count": 0,
       "triggers": {
-        "self_activate_main": 2
+        "counter_attack": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "owner_activate_extra_from_hand:auto_add_markers_on_owner_activate_extra_from_hand",
+      "handlers": {
+        "auto_add_markers_on_owner_activate_extra_from_hand": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9633
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "owner_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_activate_battle:activate_reduce_next_matching_extra_skill_cost_from_hand",
+      "handlers": {
+        "activate_reduce_next_matching_extra_skill_cost_from_hand": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9633
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed",
+      "handlers": {
+        "activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        1603
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_activate_main:activate_play_up_to_n_from_owner_z_deck_or_z_energy",
+      "handlers": {
+        "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8050
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_activate_main:activate_reduce_next_matching_extra_skill_cost_from_hand",
+      "handlers": {
+        "activate_reduce_next_matching_extra_skill_cost_from_hand": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9633
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_played:auto_restrict_self_copies_from_hand_next_turn_on_play",
+      "handlers": {
+        "auto_restrict_self_copies_from_hand_next_turn_on_play": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        5531
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "owner_field_extra_placed_into_drop:auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest",
+      "handlers": {
+        "auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        90
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "owner_field_extra_placed_into_drop": 1
       }
     },
     {
@@ -6488,6 +7347,82 @@
     {
       "combined_count": 2,
       "deck_count": 0,
+      "family_id": "self_activate_battle:activate_send_up_to_n_opponent_combo_to_drop",
+      "handlers": {
+        "activate_send_up_to_n_opponent_combo_to_drop": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        27
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_battle": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_activate_extra_from_hand:activate_ko_opponent_battles_up_to_total_power",
+      "handlers": {
+        "activate_ko_opponent_battles_up_to_total_power": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        83
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_activate_main:activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end",
+      "handlers": {
+        "activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        86
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_blocker_activated:auto_rest_owner_battle_on_self_blocker_activated_switch_self_active",
+      "handlers": {
+        "auto_rest_owner_battle_on_self_blocker_activated_switch_self_active": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        86
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_blocker_activated": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
       "family_id": "self_comboed:auto_play_up_to_n_from_owner_hand_on_self_combo",
       "handlers": {
         "auto_play_up_to_n_from_owner_hand_on_self_combo": 1
@@ -6498,6 +7433,25 @@
       ],
       "provenances": {
         "extractor": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_comboed": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
+      "family_id": "self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo",
+      "handlers": {
+        "auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        20
+      ],
+      "provenances": {
+        "manual_override": 1
       },
       "trace_count": 2,
       "triggers": {
@@ -6526,6 +7480,25 @@
     {
       "combined_count": 2,
       "deck_count": 0,
+      "family_id": "self_played:auto_add_markers_per_n_multicolor_energy_on_play",
+      "handlers": {
+        "auto_add_markers_per_n_multicolor_energy_on_play": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        36
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 2,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 0,
       "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
       "handlers": {
         "auto_play_up_to_n_from_owner_deck_on_play": 1
@@ -6540,6 +7513,196 @@
       "trace_count": 2,
       "triggers": {
         "self_played": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "counter_attack:counter_play_self_buff_owner_cards_for_battle",
+      "handlers": {
+        "counter_play_self_buff_owner_cards_for_battle": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8896
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "counter_attack": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
+      "handlers": {
+        "activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8372
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_activate_main:activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end",
+      "handlers": {
+        "activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8372
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_activate_main:activate_remove_self_and_ko_all_opponent_battles",
+      "handlers": {
+        "activate_remove_self_and_ko_all_opponent_battles": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8385
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_activate_main:activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn",
+      "handlers": {
+        "activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8881
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_activate_main:activate_switch_self_active_and_gain_power_for_turn",
+      "handlers": {
+        "activate_switch_self_active_and_gain_power_for_turn": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        9720
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_attacks:auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack",
+      "handlers": {
+        "auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8372
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
+      "handlers": {
+        "auto_combo_up_to_n_from_owner_zone_on_attack": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8326
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_attacks:auto_self_gain_power_for_turn_on_attack",
+      "handlers": {
+        "auto_self_gain_power_for_turn_on_attack": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        7029
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "combined_count": 2,
+      "deck_count": 2,
+      "family_id": "self_field_extra_placed:auto_switch_up_to_n_owner_leader_active_on_field_extra_placed",
+      "handlers": {
+        "auto_switch_up_to_n_owner_leader_active_on_field_extra_placed": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        8385
+      ],
+      "provenances": {
+        "manual_override": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_field_extra_placed": 1
       }
     },
     {
@@ -6564,359 +7727,9 @@
   ],
   "unmapped_priority_cards": [
     {
-      "card_id": 11,
-      "card_name": "Kahseral, Warrior of Universe 11",
-      "card_number": "BT14-026",
-      "combined_count": 4,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 4,
-      "triggers": {}
-    },
-    {
-      "card_id": 8375,
-      "card_name": "Android 13, Military Terror Creation",
-      "card_number": "BT27-034",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8318,
-      "card_name": "Demon God Putine, Scheming",
-      "card_number": "BT27-102",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7358,
-      "card_name": "Dormant Potential Unleashed",
-      "card_number": "BT10-088",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 5337,
-      "card_name": "Dr. Uiro, Cybernetic Rebirth",
-      "card_number": "EX10-05",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8386,
-      "card_name": "Gamma 1 & Gamma 2, Military Terror Creations",
-      "card_number": "BT27-134",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7954,
-      "card_name": "Gamma 1 & Gamma 2, Stand-Up Heroes",
-      "card_number": "EX24-25",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8982,
-      "card_name": "Krillin, Guided by the Dragon Balls",
-      "card_number": "P-699",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7857,
-      "card_name": "Nuova Shenron, Blazing Blaster Meteor",
-      "card_number": "BT25-114",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7909,
-      "card_name": "Oolong, Split-Second Wish",
-      "card_number": "BT25-141",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 672,
-      "card_name": "Red Ribbon Robot, Colossal Power",
-      "card_number": "BT17-038",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7869,
-      "card_name": "SS Son Goten, Stunning Combination",
-      "card_number": "BT25-135",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7870,
-      "card_name": "SS Trunks, Stunning Combination",
-      "card_number": "BT25-136",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7866,
-      "card_name": "SS4 Son Goku, Final Battle",
-      "card_number": "BT25-131",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7868,
-      "card_name": "SS4 Vegeta, Wild Power of Justice",
-      "card_number": "BT25-133",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7843,
-      "card_name": "Vegeta, Final Battle",
-      "card_number": "BT25-134",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 5332,
-      "card_name": "Whis, Celestial Moderator",
-      "card_number": "BT9-096",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8051,
-      "card_name": "Zamasu & Goku Black, Meeting in Despair",
-      "card_number": "BT26-066",
-      "combined_count": 4,
-      "deck_count": 4,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 2268,
-      "card_name": "First Kamehameha, Mighty Blast",
-      "card_number": "EX23-38",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8050,
-      "card_name": "Gowasu, Instructor",
-      "card_number": "BT26-065",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 9633,
-      "card_name": "Jaguar's Island, Challenge Stage",
-      "card_number": "BT29-003",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 1603,
-      "card_name": "Majin Buu, Pure Destroyer",
-      "card_number": "P-473",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
       "card_id": 6299,
       "card_name": "Piccolo Jr., Eradicator of Peace",
       "card_number": "DB3-115",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 4226,
-      "card_name": "Released from Evil",
-      "card_number": "BT10-123",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 5531,
-      "card_name": "SS Bardock, the Tenacious",
-      "card_number": "BT11-132",
-      "combined_count": 3,
-      "deck_count": 3,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 49,
-      "card_name": "SS4 Son Gohan, Prismatic Aegis",
-      "card_number": "EX19-34",
       "combined_count": 3,
       "deck_count": 3,
       "family_ids": [],
@@ -6942,51 +7755,9 @@
       "triggers": {}
     },
     {
-      "card_id": 27,
-      "card_name": "Broly, Omen of Evolution",
-      "card_number": "EX19-12",
-      "combined_count": 2,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 2,
-      "triggers": {}
-    },
-    {
-      "card_id": 83,
-      "card_name": "Gigantic Meteor",
-      "card_number": "BT15-030",
-      "combined_count": 2,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 2,
-      "triggers": {}
-    },
-    {
       "card_id": 23,
       "card_name": "Goku Black, Works Undone",
       "card_number": "EX19-08",
-      "combined_count": 2,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 2,
-      "triggers": {}
-    },
-    {
-      "card_id": 20,
-      "card_name": "King Cold, Blessing of the Clan",
-      "card_number": "EX19-05",
       "combined_count": 2,
       "deck_count": 0,
       "family_ids": [],
@@ -7012,48 +7783,6 @@
       "triggers": {}
     },
     {
-      "card_id": 36,
-      "card_name": "SS4 Broly, Prismatic Burst",
-      "card_number": "EX19-21",
-      "combined_count": 2,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 2,
-      "triggers": {}
-    },
-    {
-      "card_id": 90,
-      "card_name": "Son Gohan, the Misadventure",
-      "card_number": "BT15-097",
-      "combined_count": 2,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 2,
-      "triggers": {}
-    },
-    {
-      "card_id": 86,
-      "card_name": "Son Goku, Reclaiming Hope",
-      "card_number": "BT15-093",
-      "combined_count": 2,
-      "deck_count": 0,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 2,
-      "triggers": {}
-    },
-    {
       "card_id": 98,
       "card_name": "Wilderness Monster",
       "card_number": "BT15-105",
@@ -7065,20 +7794,6 @@
       "provenances": {},
       "rule_count": 0,
       "trace_count": 2,
-      "triggers": {}
-    },
-    {
-      "card_id": 8372,
-      "card_name": "Android 18, Unknown Threat",
-      "card_number": "BT27-028",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
       "triggers": {}
     },
     {
@@ -7124,76 +7839,6 @@
       "triggers": {}
     },
     {
-      "card_id": 8326,
-      "card_name": "Demon God Shroom, Scheming",
-      "card_number": "BT27-103",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8881,
-      "card_name": "Frieza, Unrestricted Power",
-      "card_number": "BT28-003",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 9720,
-      "card_name": "Fused Zamasu, God of Despair",
-      "card_number": "BT29-087",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8063,
-      "card_name": "Fused Zamasu, Ideal World Creation",
-      "card_number": "BT26-084",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8385,
-      "card_name": "Justice Impact",
-      "card_number": "BT27-124",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
       "card_id": 7386,
       "card_name": "Koitsukai, Mechanical Courage",
       "card_number": "DB2-143",
@@ -7208,51 +7853,9 @@
       "triggers": {}
     },
     {
-      "card_id": 7029,
-      "card_name": "Mira, Creator Absorbed",
-      "card_number": "BT4-108",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8896,
-      "card_name": "Nail, Planetary Guardian",
-      "card_number": "BT28-018",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
       "card_id": 7839,
       "card_name": "No Challenge for the Strong",
       "card_number": "BT25-103",
-      "combined_count": 2,
-      "deck_count": 2,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8058,
-      "card_name": "SS Rose Goku Black, Attack Wave",
-      "card_number": "BT26-079",
       "combined_count": 2,
       "deck_count": 2,
       "family_ids": [],
@@ -7488,20 +8091,6 @@
       "triggers": {}
     },
     {
-      "card_id": 2266,
-      "card_name": "Limit Ultra Kamehameha, Mighty Blast",
-      "card_number": "EX23-21",
-      "combined_count": 1,
-      "deck_count": 1,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
       "card_id": 6947,
       "card_name": "Nappa, Demolition Man",
       "card_number": "BT9-090",
@@ -7533,20 +8122,6 @@
       "card_id": 1063,
       "card_name": "Pan",
       "card_number": "SD17-01",
-      "combined_count": 1,
-      "deck_count": 1,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 8425,
-      "card_name": "SS Broly, Vigor",
-      "card_number": "BT27-084",
       "combined_count": 1,
       "deck_count": 1,
       "family_ids": [],
@@ -7617,20 +8192,6 @@
       "card_id": 2481,
       "card_name": "SSG Son Goku, Crimson Guardian Deity",
       "card_number": "BT24-004",
-      "combined_count": 1,
-      "deck_count": 1,
-      "family_ids": [],
-      "handlers": {},
-      "mapped": false,
-      "provenances": {},
-      "rule_count": 0,
-      "trace_count": 0,
-      "triggers": {}
-    },
-    {
-      "card_id": 7878,
-      "card_name": "Son Goku, Fist of Fate",
-      "card_number": "BT25-145",
       "combined_count": 1,
       "deck_count": 1,
       "family_ids": [],

@@ -66,6 +66,8 @@ class CardInstance:
     battle_temporary_keywords: Tuple[str, ...] = ()
     battle_temporary_power_delta: int = 0
     delayed_temporary_keywords: Tuple[str, ...] = ()
+    temporary_skills_negated: bool = False
+    temporary_cannot_switch_active: bool = False
     stacked_card_ids: Tuple[int, ...] = ()
     traits: Tuple[str, ...] = ()
     characters: Tuple[str, ...] = ()
@@ -276,6 +278,13 @@ class DelayedKeywordClear:
 
 
 @dataclass(frozen=True)
+class DelayedActiveSwitch:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+
+
+@dataclass(frozen=True)
 class ExEvolvePermission:
     owner_player_id: int
     created_turn_number: int
@@ -285,6 +294,33 @@ class ExEvolvePermission:
     required_characters: str = ""
     required_name_contains: str = ""
     uses_remaining: int = 1
+
+
+@dataclass(frozen=True)
+class ActivateExtraCostReduction:
+    owner_player_id: int
+    created_turn_number: int
+    amount: int = 1
+    required_card_type: str = "EXTRA"
+    max_energy_cost: int = -1
+    require_mono_color: bool = False
+    allowed_colors: str = ""
+    required_traits: str = ""
+    required_characters: str = ""
+    required_name_contains: str = ""
+    uses_remaining: int = 1
+
+
+@dataclass(frozen=True)
+class DelayedCardPlayRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+
+
+@dataclass(frozen=True)
+class ScheduledAttackRestriction:
+    active_player_id: int
+    target_instance_id: int
 
 
 @dataclass
@@ -318,8 +354,14 @@ class GameState:
     secret_auto_opportunities: list[SecretAutoOpportunity] = field(default_factory=list)
     delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
     delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
+    delayed_active_switches: list[DelayedActiveSwitch] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
+    activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
+    scheduled_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
+    active_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
+    scheduled_attack_restrictions: list[ScheduledAttackRestriction] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
+    remaining_attack_declarations: dict[int, int] = field(default_factory=dict)
     unison_marker_skill_usage: set[int] = field(default_factory=set)
     unison_growth_usage: set[int] = field(default_factory=set)

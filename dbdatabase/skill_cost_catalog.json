@@ -16,6 +16,10 @@
   "1003": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -24,6 +28,10 @@
   "1004": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 6,
         "kind": "remove_markers"
       }
@@ -31,6 +39,10 @@
   },
   "10045": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -46,10 +58,28 @@
     ]
   },
   "10091": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ],
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "10092": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -77,8 +107,20 @@
       }
     ]
   },
+  "10186": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
   "1032": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -87,6 +129,10 @@
   },
   "1033": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 1,
         "kind": "remove_markers"
@@ -124,6 +170,10 @@
       {
         "amount": 2,
         "kind": "add_markers"
+      },
+      {
+        "amount": 2,
+        "kind": "add_markers"
       }
     ]
   },
@@ -146,6 +196,10 @@
   "1129": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 6,
         "kind": "remove_markers"
       }
@@ -161,6 +215,10 @@
   },
   "115": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 1,
         "kind": "remove_markers"
@@ -197,6 +255,14 @@
       }
     ]
   },
+  "119": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "1190": {
     "activate_main_hand": [
       {
@@ -222,8 +288,20 @@
   "1197": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "1198": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -251,8 +329,20 @@
       }
     ]
   },
+  "1358": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
   "138": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 1,
         "kind": "remove_markers"
@@ -270,6 +360,10 @@
   "139": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -281,6 +375,14 @@
         "amount": 1,
         "kind": "add_life_to_hand",
         "required_leader_traits": "lt android 13 gt"
+      }
+    ]
+  },
+  "1433": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -359,6 +461,10 @@
   "1621": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -366,6 +472,10 @@
   },
   "1662": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -384,6 +494,10 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
       }
     ]
@@ -393,6 +507,22 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1972": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
+  "1977": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
       }
     ]
   },
@@ -409,6 +539,14 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "2039": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -436,8 +574,20 @@
       }
     ]
   },
+  "2197": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "2202": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -447,8 +597,24 @@
   "226": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2384": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -471,13 +637,29 @@
   "2481": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "remove_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
     ]
   },
+  "2504": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "2506": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -524,6 +706,22 @@
       }
     ]
   },
+  "2594": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "2595": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "2604": {
     "activate_main_unison": [
       {
@@ -567,6 +765,10 @@
   "297": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -607,6 +809,10 @@
   "352": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -644,6 +850,14 @@
       }
     ]
   },
+  "370": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "3716": {
     "activate_main_unison": [
       {
@@ -654,6 +868,10 @@
   },
   "3723": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -671,6 +889,14 @@
   "3755": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -679,6 +905,10 @@
   "3763": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -686,6 +916,10 @@
   },
   "3769": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -703,6 +937,10 @@
   "3796": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -719,13 +957,29 @@
   "3808": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
     ]
   },
+  "381": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "3813": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -735,6 +989,10 @@
   "3819": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
@@ -742,6 +1000,10 @@
   },
   "3820": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -767,6 +1029,14 @@
   "3836": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
       }
@@ -785,6 +1055,10 @@
   "3841": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
       }
@@ -792,6 +1066,10 @@
   },
   "3854": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -817,6 +1095,10 @@
   "3878": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -825,6 +1107,10 @@
   "3890": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "remove_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -832,6 +1118,10 @@
   },
   "3891": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -865,6 +1155,10 @@
   "3922": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 6,
         "kind": "remove_markers"
       }
@@ -887,6 +1181,10 @@
     ],
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
@@ -894,6 +1192,10 @@
   },
   "3962": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -910,12 +1212,20 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
       }
     ]
   },
   "3974": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "remove_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -924,6 +1234,10 @@
   },
   "3977": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -950,6 +1264,10 @@
   "3980": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -958,6 +1276,10 @@
   "3991": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
@@ -965,6 +1287,10 @@
   },
   "4025": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -982,6 +1308,10 @@
   "4030": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
       }
@@ -998,6 +1328,10 @@
   "4063": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -1005,6 +1339,10 @@
   },
   "4065": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -1022,6 +1360,10 @@
   "4068": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -1029,6 +1371,10 @@
   },
   "4076": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -1039,12 +1385,20 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
       }
     ]
   },
   "4085": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -1053,6 +1407,10 @@
   },
   "4100": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -1079,7 +1437,29 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "4147": {
+    "activate_main": [
+      {
+        "allowed_colors": "red",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
+  "415": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
       }
     ]
   },
@@ -1091,6 +1471,15 @@
         "required_leader_colors": "yellow",
         "requires_life_at_most": 4,
         "requires_multicolor_in_energy": true
+      }
+    ]
+  },
+  "4207": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_card_types": "BATTLE"
       }
     ]
   },
@@ -1114,11 +1503,31 @@
       }
     ]
   },
+  "424": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_other_battle_to_drop"
+      }
+    ]
+  },
   "4337": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "434": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
       }
     ]
   },
@@ -1161,6 +1570,10 @@
   "452": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
@@ -1183,6 +1596,14 @@
       }
     ]
   },
+  "4607": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "4613": {
     "counter_alternate_from_hand": [
       {
@@ -1202,6 +1623,22 @@
       }
     ]
   },
+  "4672": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "4691": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "4895": {
     "activate_main_unison": [
       {
@@ -1212,6 +1649,10 @@
   },
   "4903": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -1234,6 +1675,23 @@
       }
     ]
   },
+  "5171": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "5232": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
   "527": {
     "activate_main_unison": [
       {
@@ -1245,8 +1703,20 @@
   "5282": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5340": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
       }
     ]
   },
@@ -1276,6 +1746,10 @@
   },
   "54": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -1307,8 +1781,32 @@
       }
     ]
   },
+  "543": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "544": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "5478": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -1355,6 +1853,16 @@
       }
     ]
   },
+  "5618": {
+    "activate_main": [
+      {
+        "allowed_colors": "black",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_card_types": "UNISON"
+      }
+    ]
+  },
   "5630": {
     "activate_main_unison": [
       {
@@ -1379,11 +1887,43 @@
       }
     ]
   },
+  "5642": {
+    "activate_main": [
+      {
+        "allowed_colors": "black",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_card_types": "UNISON"
+      }
+    ]
+  },
+  "565": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "5660": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "567": {
+    "activate_main": [
+      {
+        "allowed_colors": "red",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_traits": "red ribbon army"
       }
     ]
   },
@@ -1400,6 +1940,10 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "add_markers"
       }
     ]
   },
@@ -1408,6 +1952,14 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5949": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
       }
     ]
   },
@@ -1429,6 +1981,10 @@
   },
   "603": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -1468,6 +2024,10 @@
   "607": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -1486,6 +2046,10 @@
   "6082": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -1493,6 +2057,10 @@
   },
   "6093": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -1581,6 +2149,10 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
       }
     ]
@@ -1602,7 +2174,17 @@
     ]
   },
   "651": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ],
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -1625,8 +2207,22 @@
       }
     ]
   },
+  "6566": {
+    "activate_main": [
+      {
+        "allowed_colors": "yellow",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
   "6594": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -1635,6 +2231,10 @@
   },
   "6665": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -1660,6 +2260,10 @@
   "6682": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -1667,6 +2271,10 @@
   },
   "6683": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -1690,8 +2298,32 @@
   "669": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "671": {
+    "activate_main": [
+      {
+        "allowed_colors": "red",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_traits": "red ribbon army"
+      }
+    ]
+  },
+  "672": {
+    "activate_main": [
+      {
+        "allowed_colors": "red",
+        "amount": 1,
+        "kind": "send_other_battle_to_drop",
+        "required_traits": "red ribbon army"
       }
     ]
   },
@@ -1721,12 +2353,20 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
       }
     ]
   },
   "6769": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 5,
         "kind": "remove_markers"
@@ -1768,6 +2408,10 @@
   "6900": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -1804,6 +2448,10 @@
     "activate_main_unison": [
       {
         "amount": 1,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 1,
         "kind": "remove_markers"
       }
     ]
@@ -1817,6 +2465,12 @@
     ]
   },
   "696": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 1,
@@ -1826,6 +2480,10 @@
   },
   "6974": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 5,
         "kind": "remove_markers"
@@ -1874,6 +2532,10 @@
   "7017": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
@@ -1881,6 +2543,10 @@
   },
   "7043": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -1895,8 +2561,28 @@
       }
     ]
   },
+  "7053": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "7061": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "7086": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 2,
         "kind": "remove_markers"
@@ -1919,8 +2605,20 @@
       }
     ]
   },
+  "7150": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "7161": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -1947,6 +2645,10 @@
     "activate_main_unison": [
       {
         "amount": 2,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 2,
         "kind": "remove_markers"
       }
     ]
@@ -1968,6 +2670,10 @@
   "7270": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
       }
@@ -1975,6 +2681,10 @@
   },
   "7271": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -2008,6 +2718,10 @@
   "7328": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -2031,6 +2745,14 @@
       }
     ]
   },
+  "7346": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "7359": {
     "activate_main_unison": [
       {
@@ -2039,7 +2761,29 @@
       }
     ]
   },
+  "7360": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "7363": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "7364": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ],
     "activate_main_hand": [
       {
         "amount": 1,
@@ -2050,13 +2794,53 @@
   "7366": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
     ]
   },
+  "7373": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "7374": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "7375": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "7383": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "7404": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -2075,6 +2859,10 @@
   "7444": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -2088,8 +2876,20 @@
       }
     ]
   },
+  "7760": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
   "7764": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 1,
         "kind": "remove_markers"
@@ -2098,6 +2898,10 @@
   },
   "7766": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -2123,8 +2927,20 @@
   "7798": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7800": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -2138,6 +2954,10 @@
   },
   "7827": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -2154,6 +2974,10 @@
   },
   "7883": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 3,
         "kind": "remove_markers"
@@ -2191,6 +3015,10 @@
   "7906": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -2198,6 +3026,10 @@
   },
   "7907": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -2207,6 +3039,10 @@
   "7908": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -2214,6 +3050,10 @@
   },
   "7909": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -2223,6 +3063,10 @@
   "7910": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -2231,6 +3075,10 @@
   "7911": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 7,
         "kind": "remove_markers"
       }
@@ -2238,6 +3086,10 @@
   },
   "7912": {
     "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      },
       {
         "amount": 7,
         "kind": "remove_markers"
@@ -2252,6 +3104,15 @@
         "required_leader_traits": "power wish",
         "required_traits": "power wish",
         "requires_life_at_most": 4
+      }
+    ]
+  },
+  "7941": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_owner_drop_to_warp",
+        "required_traits": "power wish"
       }
     ]
   },
@@ -2282,6 +3143,10 @@
   "8049": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 2,
         "kind": "remove_markers"
       }
@@ -2296,6 +3161,12 @@
     ]
   },
   "8071": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 1,
@@ -2306,13 +3177,29 @@
   "8088": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
     ]
   },
+  "8098": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "8102": {
     "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
       {
         "amount": 4,
         "kind": "remove_markers"
@@ -2340,6 +3227,22 @@
       {
         "amount": 1,
         "kind": "send_owner_z_energy_to_drop"
+      }
+    ]
+  },
+  "8143": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
+  "8144": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -2400,6 +3303,14 @@
       }
     ]
   },
+  "8373": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ]
+  },
   "8377": {
     "counter_alternate_from_hand": [
       {
@@ -2409,6 +3320,42 @@
         "owner_battle_area_required_card_types": "EXTRA",
         "owner_battle_area_requires_multicolor": true,
         "requires_owner_battle_area": true
+      }
+    ]
+  },
+  "8378": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ]
+  },
+  "8385": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ]
+  },
+  "8387": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
       }
     ]
   },
@@ -2498,6 +3445,10 @@
   "8476": {
     "activate_main_unison": [
       {
+        "amount": 1,
+        "kind": "add_markers"
+      },
+      {
         "amount": 3,
         "kind": "remove_markers"
       }
@@ -2508,6 +3459,26 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "8585": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 4,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8595": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -2527,6 +3498,26 @@
       }
     ]
   },
+  "8608": {
+    "activate_main_unison": [
+      {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
+        "amount": 5,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "8619": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
   "87": {
     "activate_main_unison": [
       {
@@ -2535,11 +3526,47 @@
       }
     ]
   },
+  "88": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "8827": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
   "8858": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8880": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
+  "8881": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -2599,6 +3626,10 @@
   "8916": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -2652,6 +3683,10 @@
   "8949": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 4,
         "kind": "remove_markers"
       }
@@ -2660,8 +3695,20 @@
   "8951": {
     "activate_main_unison": [
       {
+        "amount": 2,
+        "kind": "add_markers"
+      },
+      {
         "amount": 5,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8957": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
       }
     ]
   },
@@ -2690,12 +3737,28 @@
       }
     ]
   },
+  "9628": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
   "9631": {
     "activate_main": [
       {
         "allowed_colors": "white",
         "amount": 1,
         "kind": "switch_owner_battle_to_hidden"
+      }
+    ]
+  },
+  "9637": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
       }
     ]
   },
@@ -2707,11 +3770,95 @@
       }
     ]
   },
+  "9639": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "9640": {
     "activate_main_hand": [
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "9681": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "9683": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "9692": {
+    "activate_battle_unison": [
+      {
+        "amount": 1,
+        "kind": "remove_markers"
+      }
+    ]
+  },
+  "9694": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
+  "9720": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      },
+      {
+        "amount": 3,
+        "kind": "send_owner_drop_to_warp"
+      }
+    ]
+  },
+  "9721": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "9724": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "9725": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
+      }
+    ]
+  },
+  "9728": {
+    "activate_main_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
       }
     ]
   },
@@ -2729,6 +3876,31 @@
       }
     ]
   },
+  "9730": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "discard_hand"
+      }
+    ]
+  },
+  "9736": {
+    "activate_main": [
+      {
+        "allowed_colors": "black",
+        "amount": 2,
+        "kind": "send_owner_drop_to_warp"
+      }
+    ]
+  },
+  "9738": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
   "9775": {
     "counter_alternate_from_hand": [
       {
@@ -2743,6 +3915,14 @@
       {
         "amount": 1,
         "kind": "send_owner_hand_to_warp"
+      }
+    ]
+  },
+  "9787": {
+    "activate_battle_unison": [
+      {
+        "amount": 1,
+        "kind": "add_markers"
       }
     ]
   }

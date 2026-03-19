@@ -593,6 +593,47 @@ def test_counter_negate_attack_can_play_self_in_rest_mode() -> None:
     assert any("Counter motion effects applied" in row and "effects=play_self" in row for row in state.log)
 
 
+def test_counter_attack_can_play_self_and_buff_owner_card_for_battle() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].leader_area.color = "Red"
+    state.players[2].leader_area.traits = ("Earthling",)
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=702006,
+            card_id=8896,
+            owner_id=2,
+            has_counter=True,
+            counter_modes=("Counter: Attack",),
+            energy_cost=1,
+            skill_text_raw=(
+                "[Counter: Attack] Play this card, then choose up to 1 of your cards and it gets +20000 power for the battle. "
+                "[Permanent] If your Leader is a red ≪Earthling≫, ≪Namekian≫, or ≪Shenron≫ card, you can activate this card's [Counter] skill "
+                "from your hand by adding 1 card from your life to your hand instead of paying its energy cost."
+            ),
+        )
+    )
+    starting_life = len(state.players[2].life)
+    starting_leader_power = state.players[2].leader_area.power
+
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 1))
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert len(state.players[2].life) == starting_life - 1
+    assert any(card.instance_id == 702006 for card in state.players[2].battle_area)
+    assert state.players[2].leader_area.power == starting_leader_power + 20000
+    assert state.players[2].leader_area.battle_temporary_power_delta == 20000
+    assert any(cp.name == "counter_effect_play_self_battle_buff_resolved" for cp in state.checkpoints)
+    assert state.counter_resolutions[-1].applied_effects == ("play_self", "battle_buff")
+
+
 def test_counter_can_mark_battle_attacker_as_unable_to_attack_again_this_turn() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(
@@ -737,6 +778,186 @@ def test_counter_play_alternate_cost_can_be_free_with_red_unison_markers() -> No
     counter = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
     state = engine.apply_action(state, counter)
     assert any(cp.name == "counter_alternate_cost_red_unison_markers_free" for cp in state.checkpoints)
+
+
+def test_counter_attack_can_ko_opponent_battles_up_to_total_cost_and_limit_future_attacks() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(instance_id=790014, card_id=614, owner_id=1, card_type="BATTLE", color="Green", energy_cost=1, power=5000),
+        CardInstance(instance_id=790015, card_id=615, owner_id=1, card_type="BATTLE", color="Green", energy_cost=1, power=5000),
+        CardInstance(instance_id=790016, card_id=616, owner_id=1, card_type="BATTLE", color="Green", energy_cost=1, power=5000),
+    ]
+    state.players[1].leader_area.resting = True
+    state.players[2].energy = [
+        CardInstance(instance_id=790017, card_id=617, owner_id=2, color="Green", resting=False),
+    ]
+    state.players[2].hand = [
+        CardInstance(instance_id=790018, card_id=618, owner_id=2, card_type="BATTLE", color="Green", energy_cost=0, power=5000),
+        CardInstance(
+            instance_id=790019,
+            card_id=7358,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Green",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] If your Leader Card is mono-green: Choose any number of your opponent's Battle Cards "
+                "that add up to a total energy cost of 2 or less and KO them. Additionally, you may choose 1 green card "
+                "in your hand and discard it. If you do, your opponent can only attack once more this turn."
+            ),
+        ),
+    ]
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0
+    )
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert len(state.players[1].battle_area) == 1
+    assert len(state.players[1].drop) == 2
+    assert len(state.players[2].hand) == 0
+    assert state.remaining_attack_declarations.get(1) == 1
+    assert any(cp.name == "counter_effect_ko_total_cost_resolved" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_attack_limit_applied" for cp in state.checkpoints)
+
+
+def test_counter_attack_alternate_cost_can_be_free_with_green_unison_in_play() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(instance_id=790024, card_id=624, owner_id=1, card_type="BATTLE", color="Green", energy_cost=1, power=5000),
+    ]
+    state.players[2].energy = []
+    state.players[2].unison_area = [
+        CardInstance(instance_id=790025, card_id=625, owner_id=2, card_type="UNISON", color="Green", markers=1),
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790026,
+            card_id=7358,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Green",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] If your Leader Card is mono-green: Choose any number of your opponent's Battle Cards "
+                "that add up to a total energy cost of 2 or less and KO them. Additionally, you may choose 1 green card "
+                "in your hand and discard it. If you do, your opponent can only attack once more this turn."
+                "[Permanent] If you have a green Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."
+            ),
+        ),
+    ]
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0
+    )
+    state = engine.apply_action(state, attack)
+    legal = engine.get_legal_actions(state, 2)
+    counter = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    assert any(cp.name == "counter_alternate_cost_green_unison_free" for cp in state.checkpoints)
+
+
+def test_counter_attack_can_negate_attacker_skills_and_prevent_switch_active_with_yellow_unison_free_cost() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=790027,
+            card_id=626,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=2,
+            power=20000,
+            keywords=("Dual Attack",),
+            has_barrier=True,
+            has_activate_battle=True,
+        )
+    ]
+    state.players[2].energy = []
+    state.players[2].leader_area.color = "Yellow"
+    state.players[2].unison_area = [
+        CardInstance(instance_id=790028, card_id=627, owner_id=2, card_type="UNISON", color="Yellow", markers=1)
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790029,
+            card_id=4226,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Yellow",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] If your Leader Card is mono-yellow: Choose the attacking card, ignoring [Barrier], "
+                "negate its skills for the turn, and it can't be switched to Active Mode until the start of your next turn."
+                "[Permanent] If you have a yellow Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."
+            ),
+        )
+    ]
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0
+    )
+    state = engine.apply_action(state, attack)
+    legal_counter = engine.get_legal_actions(state, 2)
+    counter = next(a for a in legal_counter if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    assert any(cp.name == "counter_alternate_cost_yellow_unison_free" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    attacker = state.players[1].battle_area[0]
+    assert attacker.temporary_skills_negated is True
+    assert attacker.temporary_cannot_switch_active is True
+    offense_actions = engine.get_legal_actions(state, 1)
+    assert not any(
+        a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "battle" and a.source_index == 0
+        for a in offense_actions
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    assert state.players[1].battle_area[0].resting is True
+    assert any(cp.name == "counter_effect_attacker_skills_negated" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_attacker_cannot_switch_active" for cp in state.checkpoints)
 
 
 def test_counter_play_can_force_pending_battle_play_rest_then_play_self_and_draw() -> None:

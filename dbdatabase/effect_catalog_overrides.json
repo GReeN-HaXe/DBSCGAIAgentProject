@@ -1,8 +1,33 @@
 {
   "catalog_kind": "dbs_effect_catalog_overrides",
   "schema_version": 1,
-  "override_count": 29,
+  "override_count": 45,
   "overrides": {
+    "20": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_comboed",
+          "handler_id": "auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo",
+          "handler_params": {
+            "amount": 1,
+            "required_card_type": "EXTRA",
+            "max_energy_cost": 3,
+            "require_mono_color": true,
+            "allowed_colors": "red",
+            "requires_leader": "red <Frieza: Br>",
+            "max_owner_life": 3,
+            "requires_opponent_turn": true,
+            "uses_remaining": 1
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "6": {
       "mode": "replace",
       "rules": [
@@ -33,6 +58,57 @@
         }
       ]
     },
+    "27": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_battle",
+          "handler_id": "activate_send_up_to_n_opponent_combo_to_drop",
+          "handler_params": {
+            "max_targets": 1,
+            "max_combo_cost": 0,
+            "target_policy": "first"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_battle:activate_send_up_to_n_opponent_combo_to_drop",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "36": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_add_markers_per_n_multicolor_energy_on_play",
+          "handler_params": {
+            "per_n_energy": 2,
+            "min_source_markers": 1
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_add_markers_per_n_multicolor_energy_on_play",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+          "handler_params": {
+            "max_targets": 1,
+            "target_policy": "first",
+            "requires_cost_greater_than_opponent_current_energy": true
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "48": {
       "mode": "replace",
       "rules": [
@@ -59,6 +135,64 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "1603": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed",
+          "handler_params": {
+            "amount": 2,
+            "required_leader_back_name_contains": "MAJIN BUU, LEADER OF THE AGENTS OF DESTRUCTION",
+            "requires_leader_front_side_up": true,
+            "max_owner_life": 6,
+            "min_owner_energy": 2
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "49": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+          "handler_params": {
+            "max_targets": 1,
+            "max_cost": 4,
+            "requires_played_from": "hand"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "83": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_extra_from_hand",
+          "handler_id": "activate_ko_opponent_battles_up_to_total_power",
+          "handler_params": {
+            "max_total_power": 30000,
+            "requires_owner_turn": true
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_extra_from_hand:activate_ko_opponent_battles_up_to_total_power",
           "provenance": "manual_override"
         }
       ]
@@ -166,6 +300,21 @@
           "limit_per_turn": 1,
           "limit_scope": "card_number",
           "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "4226": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attacker_skills_and_prevent_switch_active",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attacker_skills_and_prevent_switch_active",
           "provenance": "manual_override"
         }
       ]
@@ -293,6 +442,23 @@
         }
       ]
     },
+    "5531": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_restrict_self_copies_from_hand_next_turn_on_play",
+          "handler_params": {
+            "restricted_card_id": 5531
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_restrict_self_copies_from_hand_next_turn_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "5656": {
       "mode": "replace",
       "rules": [
@@ -388,6 +554,21 @@
         }
       ]
     },
+    "7358": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_negate_attack",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "7483": {
       "mode": "replace",
       "rules": [
@@ -450,6 +631,191 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "counter_attack:counter_negate_attack",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "90": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "owner_field_extra_placed_into_drop",
+          "handler_id": "auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest",
+          "handler_params": {
+            "max_targets": 1,
+            "ignores_barrier": true,
+            "target_policy": "first",
+            "requires_leader": "yellow"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "owner_field_extra_placed_into_drop:auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "86": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end",
+          "handler_params": {
+            "max_targets": 1,
+            "marker_delta": 1,
+            "requires_cost_greater_or_equal_opponent_current_energy": true,
+            "target_policy": "first"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_blocker_activated",
+          "handler_id": "auto_rest_owner_battle_on_self_blocker_activated_switch_self_active",
+          "handler_params": {
+            "rest_owner_battle_count": 1,
+            "target_policy": "first"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_blocker_activated:auto_rest_owner_battle_on_self_blocker_activated_switch_self_active",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8372": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_attacks",
+          "handler_id": "auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack",
+          "handler_params": {
+            "max_targets": 1,
+            "allowed_colors": "blue",
+            "required_characters": "Android",
+            "requires_leader": "blue <Android>",
+            "target_policy": "first"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_attacks:auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
+          "handler_params": {
+            "max_targets": 1,
+            "marker_delta": 1,
+            "target_policy": "first"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end",
+          "handler_params": {
+            "opponent_bottom_deck_from_hand": 1,
+            "max_targets": 1,
+            "allowed_colors": "blue"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8385": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_field_extra_placed",
+          "handler_id": "auto_switch_up_to_n_owner_leader_active_on_field_extra_placed",
+          "handler_params": {
+            "max_targets": 1,
+            "allowed_colors": "blue",
+            "required_traits": "red ribbon army"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_field_extra_placed:auto_switch_up_to_n_owner_leader_active_on_field_extra_placed",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_remove_self_and_ko_all_opponent_battles",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_remove_self_and_ko_all_opponent_battles",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8881": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn",
+          "handler_params": {
+            "self_power_delta": 10000,
+            "target_power_delta": -20000,
+            "max_targets": 1,
+            "target_policy": "first"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "8896": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "counter_attack",
+          "handler_id": "counter_play_self_buff_owner_cards_for_battle",
+          "handler_params": {
+            "max_targets": 1,
+            "power_delta": 20000,
+            "target_scope": "owner_cards"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "counter_attack:counter_play_self_buff_owner_cards_for_battle",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "9720": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_switch_self_active_and_gain_power_for_turn",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_switch_self_active_and_gain_power_for_turn",
           "provenance": "manual_override"
         }
       ]

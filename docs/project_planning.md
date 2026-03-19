@@ -243,8 +243,8 @@ Resolved:
     - effect catalog family assignments
   - current report snapshot:
     - priority cards: `266`
-    - mapped priority cards: `185`
-    - unmapped priority cards: `81`
+    - mapped priority cards: `228`
+    - unmapped priority cards: `38`
   - current counter-family override batch now maps:
     - `BT14-019 Dyspo, Thwarting the Enemy`
     - `BT13-135 Supreme Kai of Time, Time Labyrinth Unleashed`
@@ -253,7 +253,44 @@ Resolved:
   - current condition-support slice now also maps:
     - `BT5-012 Master Roshi, Martial Expert`
       - via extracted `self_comboed:auto_draw_n`
+  - current Jaguar's Island stage-support slice now maps:
+    - `BT29-003 Jaguar's Island, Challenge Stage`
+      - via extracted:
+        - `owner_activate_extra_from_hand:auto_add_markers_on_owner_activate_extra_from_hand`
+        - `self_activate_main:activate_reduce_next_matching_extra_skill_cost_from_hand`
+        - `self_activate_battle:activate_reduce_next_matching_extra_skill_cost_from_hand`
+      - generic support now covers:
+        - owner-side trigger matching for `Activate` of matching Extras from hand
+        - temporary “next matching Extra from hand costs less” permissions
+        - combined Unison marker + Drop-to-bottom-deck skill costs for `[Activate: Main/Battle]`
       - with explicit leader-color + `Sparking 5` / drop-threshold gating
+  - current yellow counter-control slice now also maps:
+    - `BT10-123 Released from Evil`
+      - via maintained manual override:
+        - `counter_attack:counter_negate_attacker_skills_and_prevent_switch_active`
+      - generic support now covers:
+        - yellow-Unison free alternate counter activation
+        - attacker skill negation for the turn
+        - attacker “can't be switched to Active Mode” lock for the remainder of the turn
+        - blocking `Dual Attack` re-stand and future skill activation from that attacker during the same turn
+  - current next-three cleanup slice now also maps:
+    - `BT11-132 SS Bardock, the Tenacious`
+      - via maintained manual override:
+        - `self_played:auto_restrict_self_copies_from_hand_next_turn_on_play`
+      - generic support now covers:
+        - delayed “you can't play copies of this card from your hand during your next turn” restrictions
+    - `EX19-34 SS4 Son Gohan, Prismatic Aegis`
+      - via maintained manual override:
+        - `self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play`
+      - current conservative slice covers the on-play hand-to-warp line
+      - note:
+        - the hand/energy-triggered opponent-Unison marker removal line remains open
+    - `EX19-05 King Cold, Blessing of the Clan`
+      - via maintained manual override:
+        - `self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo`
+      - generic support now covers:
+        - combo-triggered “next matching Extra from hand costs less this turn” permissions
+        - matching by card type, mono-color requirement, color, and maximum original energy cost
   - current black warp/search family slice now also maps:
     - `BT29-086 Goku Black`
       - via extracted `self_activate_main:activate_look_top_send_up_to_n_to_owner_warp`
@@ -414,12 +451,227 @@ Resolved:
         - `self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play`
       - note:
         - its attack-time Z-card/Z-Energy-cost scaling family still remains open backlog work
-  - highest-frequency currently unmapped cards in active deck/trace usage include:
+  - current Universe 11 activate-battle support slice now also maps:
     - `BT14-026 Kahseral, Warrior of Universe 11`
+      - via extracted `self_activate_battle:activate_switch_up_to_n_owner_battle_active`
+      - runtime support now covers:
+        - choosing up to `2` matching owner Battle Cards
+        - filtering by owner-side color, trait, max energy cost, and max power
+        - switching those cards to Active Mode during battle
+      - engine correction included in the same slice:
+        - `Activate: Main` / `Activate: Battle` on public in-play cards no longer incorrectly inherit the card's printed play cost as an implicit activation cost
+      - note:
+        - Kahseral's permanent life-replacement text is still open backlog work
+  - current Red Ribbon battle-buff support slice now also maps:
     - `BT27-034 Android 13, Military Terror Creation`
-    - `BT27-102 Demon God Putine, Scheming`
+      - via extracted `self_activate_battle:activate_gain_power_and_keyword_for_battle`
+      - generic skill-cost support now covers:
+        - `activate_battle` -> place `N` of your energy into its owner's Drop
+      - runtime support now covers:
+        - owner-card battle buffs that can target leader, battle, or unison cards
+        - owner-side color / trait / character filtered selection for battle-only power buffs
+      - this same reusable family slice also picked up:
+        - `BT27-043 Clash`
+  - current green control-counter slice now also maps:
     - `BT10-088 Dormant Potential Unleashed`
+      - via manual override family:
+        - `counter_attack:counter_negate_attack`
+      - runtime support now covers:
+        - KO'ing opponent Battle Cards whose total energy cost fits within a reusable budget
+        - optional discard of a green hand card to limit the opponent to one more attack that turn
+        - free counter activation when the owner has a green Unison in play
+      - note:
+        - the KO and discard choices are currently deterministic rather than interactive
+  - current Dark Over Realm trigger slice now also maps:
+    - `BT27-102 Demon God Putine, Scheming`
+      - via extracted `owner_other_battle_played_by_dark_over_realm:auto_draw_n`
+      - runtime support now covers:
+        - owner-side trigger matching when another Battle Card is played by a `[Dark Over Realm]` skill
+        - preserving `Limit 1` on the resulting draw trigger
+      - note:
+        - the summon-side `[Dark Over Realm]` action itself remains a broader backlog seam
+  - current black combo/counter cleanup slice now also maps:
+    - `BT27-103 Demon God Shroom, Scheming`
+      - via extracted `self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack`
+      - runtime support now covers:
+        - attack-time use of up to `N` matching cards from `Warp` or `Drop` in a combo
+        - filtering by color, card type, combo power, trait, character, and source zone
+        - moving those cards into the owner's Combo Area with their skills negated
+    - `BT4-108 Mira, Creator Absorbed`
+      - via extracted `self_attacks:auto_self_gain_power_for_turn_on_attack`
+      - runtime support now covers:
+        - attack-time self power scaling from reusable expression-backed counts such as `owner_warp_count`
+    - `BT28-018 Nail, Planetary Guardian`
+      - via maintained manual override:
+        - `counter_attack:counter_play_self_buff_owner_cards_for_battle`
+      - counter runtime support now covers:
+        - `Counter: Attack` cards that simply play themselves without negating the attack
+        - then choose up to `N` owner cards and grant battle-only power
+        - life-to-hand alternate counter payment remains covered by the existing cataloged counter-cost family
+  - current hand-to-drop self-play slice now also maps:
     - `EX10-05 Dr. Uiro, Cybernetic Rebirth`
+      - via extracted `self_in_hand_sent_to_drop_or_warp:auto_play_self_from_drop_on_hand_drop`
+      - runtime support now covers:
+        - hand-origin secret auto declaration when the source is placed into `Drop`
+        - cause-gated self-play from `Drop` for:
+          - `opponent_skill`
+          - `revive`
+      - note:
+        - this is the first conservative slice of this family and does not yet model broader cause taxonomies beyond the explicitly extracted values
+  - current Gamma hand-origin activate-battle slice now also maps:
+    - `BT27-134 Gamma 1 & Gamma 2, Military Terror Creations`
+      - via extracted `self_activate_main:activate_buff_owner_battle_cards`
+      - via extracted `self_activate_battle:activate_buff_owner_battle_cards`
+      - via extracted `self_activate_battle:activate_play_self_from_hand`
+      - generic extractor / runtime support now covers:
+        - `Activate: Main/Battle` owner-card buffs that grant power for the turn
+        - `Activate: Main/Battle` energy-to-Drop costs across both timing contexts
+        - hand-origin `Activate: Battle` actions for Battle Cards
+        - optional post-play opponent discard after a hand-origin `Activate: Battle` self-play resolves
+      - note:
+        - the same reusable hand-origin `Activate: Battle` play-self support also picked up several lower-usage cards outside the current top unmapped cluster
+  - current `Activate: Main/Battle` hand-self-play and SH on-play buff slice now also maps:
+    - `EX24-25 Gamma 1 & Gamma 2, Stand-Up Heroes`
+      - via extracted `self_played:auto_buff_up_to_n_owner_battles_on_play`
+      - via extracted `self_activate_main:activate_play_self_from_hand`
+      - via extracted `self_activate_battle:activate_play_self_from_hand`
+      - generic support now covers:
+        - `[Activate: Main/Battle] ... Play this card from your hand`
+        - `you or your opponent has N or more energy` requirement gating
+        - on-play owner Battle Card keyword grants with:
+          - minimum character-count filtering
+          - required included character token filtering
+          - delayed expiration at the end of the opponent's turn
+      - note:
+        - this reusable `Activate: Main/Battle` self-play family produced a larger mapping jump because it picked up multiple existing priority cards beyond the Gamma package
+  - current Shadow Dragon / wish-control slice now also maps:
+    - `BT25-114 Nuova Shenron, Blazing Blaster Meteor`
+      - via extracted `self_attacks:auto_ko_up_to_n_opponent_battle_on_attack`
+      - via extracted `self_koed:auto_play_up_to_n_named_from_owner_drop_on_self_ko`
+      - generic support now covers:
+        - on-attack KO of up to `N` opponent Battle Cards
+        - self-KO trigger that plays a named card from the owner's Drop
+    - `BT25-141 Oolong, Split-Second Wish`
+      - via extracted `self_activate_main:activate_opponent_discards_n_from_hand`
+      - generic support now covers:
+        - `Activate: Main` effects that force the opponent to discard from hand
+      - note:
+        - Oolong's delayed opponent-next-turn draw-replacement effect is still open backlog work
+  - current combo-trigger power-reduction slice now also maps:
+    - `BT9-096 Whis, Celestial Moderator`
+      - via extracted `self_comboed:auto_power_reduce_up_to_n_on_combo`
+      - generic support now covers:
+        - combo-triggered opponent Battle Card power reduction for the turn
+        - leader-color gating with `or` color requirements such as `red or yellow`
+      - engine requirement handling now uses color-set intersection instead of impossible exact-match logic for multi-color / `or` leader requirements
+  - current opponent-drop threshold self-buff slice now also maps:
+    - `BT26-066 Zamasu & Goku Black, Meeting in Despair`
+      - via extracted `self_played:auto_self_gain_power_for_turn_on_play`
+      - generic support now covers:
+        - on-play self power gain for the turn
+        - opponent-drop-count requirement gating such as `if your opponent has 20 or more cards in their Drop`
+  - current Gowasu Z-resource deployment slice now also maps:
+    - `BT26-065 Gowasu, Instructor`
+      - via extracted `self_activate_main:activate_play_up_to_n_from_owner_z_deck_or_z_energy`
+      - generic support now covers:
+        - `Activate: Main` play of filtered cards from face-up `Z-Deck` or `Z-Energy`
+        - deterministic source preference of `Z-Deck` before `Z-Energy`
+        - entering play with skills negated for the game
+      - note:
+        - Gowasu's marker-gain auto and `[-3]` attack-response auto remain open backlog work
+  - current Red Ribbon Robot conservative slice now also maps:
+    - `BT17-038 Red Ribbon Robot, Colossal Power`
+      - via extracted `self_activate_main:activate_gain_power_and_keyword_for_turn`
+      - generic support now covers:
+        - `Activate: Main` self-buffs that grant multiple keywords for the turn
+        - filtered `send_other_battle_to_drop` activate-main skill costs
+        - skill-cost drop events that preserve `drop_cause="skill"`
+      - note:
+        - the two auto lines on this card remain open backlog work because they depend on broader hand-auto lifecycle and explicit auto-cost handling
+  - current Broly / Meteor slice now also maps:
+    - `EX19-12 Broly, Omen of Evolution`
+      - via maintained `self_activate_battle:activate_send_up_to_n_opponent_combo_to_drop`
+      - generic support now covers:
+        - combo-area `Activate: Battle` source handling
+        - `activate_battle_combo` skill-cost specs
+        - `send_self_from_combo_to_drop`
+        - opponent combo-area target selection and drop placement
+    - `BT15-030 Gigantic Meteor`
+      - via maintained `self_activate_extra_from_hand:activate_ko_opponent_battles_up_to_total_power`
+      - generic support now covers:
+        - total-power-budget KO selection for activated effects
+      - note:
+        - this is the first conservative slice for the card
+        - the second choose-one branch (`+15000`, skill negation for the battle, and the extra `<Broly>` bonus) remains open backlog work
+    - `EX19-21 SS4 Broly, Prismatic Burst`
+      - now maps through maintained family assignments for:
+        - `self_played:auto_add_markers_per_n_multicolor_energy_on_play`
+        - `self_activate_main:activate_send_up_to_n_opponent_battle_to_warp`
+  - current Majin Buu conservative slice now also maps:
+    - `P-473 Majin Buu, Pure Destroyer`
+      - via maintained `self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed`
+      - generic support now covers:
+        - activate legality gated by the leader's named back side
+        - explicit `front side is facing up` style gating
+        - flip owner leader to back side
+        - draw `N`
+        - remove source card from the game on resolution
+      - note:
+        - the second activate line remains open backlog work because it needs a broader `place under this card` representation and delayed power until end of opponent turn
+  - current yellow trace/deck cleanup slice now also maps:
+    - `BT15-097 Son Gohan, the Misadventure`
+      - via maintained `owner_field_extra_placed_into_drop:auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest`
+      - generic support now covers:
+        - owner-side trigger matching when a `[Field]` Extra in the Battle Area is placed into Drop
+        - secret-hand auto declaration into play-self-from-hand
+        - switching up to `1` opponent Battle or Unison card to Rest Mode while ignoring `[Barrier]`
+    - `BT15-093 Son Goku, Reclaiming Hope`
+      - via maintained:
+        - `self_activate_main:activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end`
+        - `self_blocker_activated:auto_rest_owner_battle_on_self_blocker_activated_switch_self_active`
+      - generic support now covers:
+        - scheduling attack restrictions that activate on the opponent's next turn
+        - blocker-triggered self re-stand after resting an owner Battle Card
+    - `BT27-028 Android 18, Unknown Threat`
+      - via maintained:
+        - `self_attacks:auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack`
+        - `self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end`
+        - `self_activate_main:activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end`
+      - generic support now covers:
+        - attack-time add-to-hand from matching energy
+        - delayed switch-to-Active at end of turn for Unisons and Energy
+        - branch-select activate actions for public `Activate: Main` sources with multiple registered effect families
+  - current Frieza / Justice Impact / black Z-Battle cleanup slice now also maps:
+    - `BT28-003 Frieza, Unrestricted Power`
+      - via maintained:
+        - `self_activate_main:activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn`
+      - generic support now covers:
+        - `Activate: Main` discard-from-hand skill costs on public in-play cards
+        - self power gain plus opponent Battle Card power reduction for the turn in one reusable activate family
+    - `BT29-087 Fused Zamasu, God of Despair`
+      - via maintained:
+        - `self_activate_main:activate_switch_self_active_and_gain_power_for_turn`
+      - generic skill-cost support now covers:
+        - owner-side `Spirit Boost N` style marker payment from Unisons in play
+        - `Activate: Main` send `N` cards from Drop to Warp costs
+      - runtime support now covers:
+        - public `Activate: Main` restand on a Z-Battle after paying Unison-marker and Drop-to-Warp costs
+        - zero-marker Unison cleanup after spending the last marker via Spirit Boost
+    - `BT27-124 Justice Impact`
+      - via maintained:
+        - `self_field_extra_placed:auto_switch_up_to_n_owner_leader_active_on_field_extra_placed`
+        - `self_activate_main:activate_remove_self_and_ko_all_opponent_battles`
+      - generic support now covers:
+        - source-specific Field Extra placement triggers
+        - using `[Field]` Extras in the Battle Area as valid public activate sources
+        - `Activate: Main` energy-to-Drop skill costs on public in-play cards
+        - removing the source card from the game and KOing all opponent Battle Cards in one reusable activate family
+  - highest-frequency currently unmapped cards in active deck/trace usage include:
+    - `DB3-115 Piccolo Jr., Eradicator of Peace`
+    - `BT25-010 Son Goku`
+    - `EX19-08 Goku Black, Works Undone`
+    - `BT15-018 Natade Village Monster`
+    - `BT15-105 Wilderness Monster`
 - [ ] auto-assign cards to effect families where pattern confidence is high
   - status: first high-confidence candidate-report slice complete
   - `scripts/build_effect_family_assignment_candidates.py` now emits:

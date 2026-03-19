@@ -1,0 +1,14 @@
+{
+  "900309": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand",
+        "owner_battle_area_allowed_colors": "blue,red",
+        "owner_battle_area_required_card_types": "EXTRA",
+        "owner_battle_area_requires_multicolor": true,
+        "requires_owner_battle_area": true
+      }
+    ]
+  }
+}

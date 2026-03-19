@@ -361,14 +361,23 @@ class SkillCostDsl:
                 if player.leader_area.resting:
                     return False
                 continue
+            if step.kind == "send_owner_energy_to_drop":
+                if len(player.energy) < step.amount:
+                    return False
+                continue
             if step.kind == "add_markers":
                 continue
             if step.kind == "remove_markers":
                 if source_card.markers < step.amount:
                     return False
                 continue
+            if step.kind == "remove_owner_unison_markers":
+                total_markers = sum(max(int(card.markers), 0) for card in player.unison_area)
+                if total_markers < step.amount:
+                    return False
+                continue
             if step.kind == "send_other_battle_to_drop":
-                available = [c for c in player.battle_area if c.instance_id != source_card.instance_id]
+                available = SkillCostDsl._owner_battle_return_candidates(player, source_card, step)
                 if len(available) < step.amount:
                     return False
                 continue
@@ -384,12 +393,23 @@ class SkillCostDsl:
                 if not any(card.instance_id == source_card.instance_id for card in player.hand):
                     return False
                 continue
+            if step.kind == "send_self_from_combo_to_drop":
+                if step.amount != 1:
+                    return False
+                if not any(card.instance_id == source_card.instance_id for card in player.combo_area):
+                    return False
+                continue
             if step.kind == "send_other_battle_to_warp":
                 available = [c for c in player.battle_area if c.instance_id != source_card.instance_id]
                 if len(available) < step.amount:
                     return False
                 continue
             if step.kind == "send_owner_drop_to_warp":
+                available = SkillCostDsl._owner_drop_candidates(player, step)
+                if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_owner_drop_to_bottom_deck":
                 available = SkillCostDsl._owner_drop_candidates(player, step)
                 if len(available) < step.amount:
                     return False
@@ -495,22 +515,47 @@ class SkillCostDsl:
                 player.leader_area.resting = True
                 metadata["alternate_cost_kind"] = "rest_owner_leader"
                 continue
+            if step.kind == "send_owner_energy_to_drop":
+                for _ in range(min(step.amount, len(player.energy))):
+                    player.drop.append(player.energy.pop(0))
+                metadata["alternate_cost_kind"] = "send_owner_energy_to_drop"
+                continue
             if step.kind == "add_markers":
                 source_card.markers += step.amount
                 continue
             if step.kind == "remove_markers":
                 source_card.markers -= step.amount
                 continue
+            if step.kind == "remove_owner_unison_markers":
+                remaining = step.amount
+                for card in player.unison_area:
+                    if remaining <= 0:
+                        break
+                    removable = min(max(int(card.markers), 0), remaining)
+                    if removable <= 0:
+                        continue
+                    card.markers -= removable
+                    remaining -= removable
+                metadata["alternate_cost_kind"] = "remove_owner_unison_markers"
+                continue
             if step.kind == "send_other_battle_to_drop":
                 moved = 0
+                candidate_ids = {
+                    card.instance_id for card in SkillCostDsl._owner_battle_return_candidates(player, source_card, step)[: step.amount]
+                }
                 i = 0
                 while i < len(player.battle_area) and moved < step.amount:
                     card = player.battle_area[i]
-                    if card.instance_id == source_card.instance_id:
+                    if card.instance_id not in candidate_ids:
                         i += 1
                         continue
-                    player.drop.append(player.battle_area.pop(i))
+                    removed = player.battle_area.pop(i)
+                    player.drop.append(removed)
                     moved += 1
+                    if moved == 1:
+                        metadata["cost_target_instance_id"] = int(removed.instance_id)
+                        metadata["cost_target_card_id"] = int(removed.card_id)
+                        metadata["cost_target_zone"] = "battle"
                 continue
             if step.kind == "send_self_to_drop":
                 if not SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="drop"):
@@ -522,6 +567,20 @@ class SkillCostDsl:
                 metadata["cost_target_instance_id"] = source_card.instance_id
                 metadata["cost_target_card_id"] = source_card.card_id
                 metadata["cost_target_zone"] = "hand"
+                continue
+            if step.kind == "send_self_from_combo_to_drop":
+                removed = False
+                for i, card in enumerate(player.combo_area):
+                    if card.instance_id != source_card.instance_id:
+                        continue
+                    player.drop.append(player.combo_area.pop(i))
+                    removed = True
+                    break
+                if not removed:
+                    raise ValueError("Source card not found in combo area for send_self_from_combo_to_drop.")
+                metadata["cost_target_instance_id"] = source_card.instance_id
+                metadata["cost_target_card_id"] = source_card.card_id
+                metadata["cost_target_zone"] = "combo"
                 continue
             if step.kind == "send_other_battle_to_warp":
                 moved = 0
@@ -544,6 +603,18 @@ class SkillCostDsl:
                         i += 1
                         continue
                     player.warp.append(player.drop.pop(i))
+                    moved += 1
+                continue
+            if step.kind == "send_owner_drop_to_bottom_deck":
+                candidate_ids = {card.instance_id for card in SkillCostDsl._owner_drop_candidates(player, step)[: step.amount]}
+                moved = 0
+                i = 0
+                while i < len(player.drop) and moved < step.amount:
+                    card = player.drop[i]
+                    if card.instance_id not in candidate_ids:
+                        i += 1
+                        continue
+                    player.deck.append(player.drop.pop(i))
                     moved += 1
                 continue
             if step.kind == "send_owner_drop_and_warp_to_removed":

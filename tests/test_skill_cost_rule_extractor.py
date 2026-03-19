@@ -113,6 +113,54 @@ def test_extract_activate_battle_drop_hidden_mode_skill_cost_rule() -> None:
     }
 
 
+def test_extract_activate_battle_send_self_from_combo_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle] Place this card in its owner's Drop Area from your Combo Area: "
+            "Choose up to 1 Battle Card with a combo cost of 0 in your opponent's Combo Area and place it in its owner's Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle_combo": [
+            {
+                "kind": "send_self_from_combo_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_battle_energy_to_drop_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
+            "Choose up to 1 of your blue â‰ªAndroidâ‰« cards and it gets +10000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_choose_owner_battle_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Once per turn] Choose 1 of your ?Red Ribbon Army? cards and place it in its owner's Drop Area: "
+            "This card gains [Critical] and [Double Strike] for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"][0]["kind"] == "send_other_battle_to_drop"
+    assert rules["activate_main"][0]["amount"] == 1
+
+
 def test_extract_zamasu_scheme_activate_main_costs_are_source_zone_specific() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -152,6 +200,39 @@ def test_extract_plain_unison_marker_activate_costs_for_main_and_battle() -> Non
     assert rules["activate_battle_unison"] == [{"kind": "remove_markers", "amount": 2}]
 
 
+def test_extract_jaguars_island_challenge_stage_unison_costs() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] When you activate a red ≪Earthling≫ Extra from your hand, add 1 marker to this card. "
+            "[UNISON -3][Activate: Main/Battle] If your Leader is a red <Krillin> card and you place 4 red ≪Earthling≫ Extras from your Drop at the bottom of their owner's deck : "
+            "The next time you activate an [Activate] skill on a red Extra from your hand during this turn, reduce the skill cost by {1}."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_unison": [
+            {"kind": "remove_markers", "amount": 3},
+            {
+                "kind": "send_owner_drop_to_bottom_deck",
+                "amount": 4,
+                "allowed_colors": "red",
+                "required_traits": "earthling",
+                "required_card_types": "EXTRA",
+            },
+        ],
+        "activate_battle_unison": [
+            {"kind": "remove_markers", "amount": 3},
+            {
+                "kind": "send_owner_drop_to_bottom_deck",
+                "amount": 4,
+                "allowed_colors": "red",
+                "required_traits": "earthling",
+                "required_card_types": "EXTRA",
+            },
+        ],
+    }
+
+
 def test_extract_activate_main_discard_self_from_hand_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -166,6 +247,88 @@ def test_extract_activate_main_discard_self_from_hand_cost_rule() -> None:
                 "kind": "send_self_from_hand_to_drop",
                 "amount": 1,
             }
+        ]
+    }
+
+
+def test_extract_activate_main_battle_energy_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main/Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
+            "Choose up to 1 of your blue ≪Red Ribbon Army≫ cards and it gets +5000 power for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+            }
+        ],
+        "activate_battle": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+            }
+        ],
+    }
+
+
+def test_extract_activate_main_energy_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Place 2 of your energy into its owner's Drop and remove this card from the game: "
+            "Choose all of your opponent's Battle Cards and KO them."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 2,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_discard_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Discard 1 card from your hand: This card gets +10000 power for the turn. "
+            "Choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "discard_hand",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_spirit_boost_and_drop_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1][Spirit Boost 1] Send 3 cards from your Drop to their owner's Warp : "
+            "Switch this card to Active Mode."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
+            },
+            {
+                "kind": "send_owner_drop_to_warp",
+                "amount": 3,
+            },
         ]
     }
 

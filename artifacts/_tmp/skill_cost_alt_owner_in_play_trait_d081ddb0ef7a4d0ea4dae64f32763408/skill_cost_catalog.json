@@ -1,0 +1,13 @@
+{
+  "900307": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand",
+        "owner_in_play_allowed_colors": "yellow",
+        "owner_in_play_required_traits": "heroic",
+        "requires_owner_in_play": true
+      }
+    ]
+  }
+}

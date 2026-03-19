@@ -42,10 +42,19 @@ _COMBO_DRAW_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when (?:this card is used i
 _COMBO_BATTLE_END_PLAY_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?at the end of a battle in which this card was used in a combo(?: from your (?:hand|life|energy|drop area))?.*?play this card from (?:your )?drop"
 )
+_ATTACK_COMBO_FROM_OWNER_ZONE_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?(?:whe|when) this card attacks,\s*use up to (\d+) (.+?) from your (drop|warp) in a combo(?:,?\s*and (?:it|they) get -(\d+) combo power)? with (?:its|their) skills? negated for the turn"
+)
+_ATTACK_SELF_GAIN_POWER_PER_OWNER_WARP_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?when this card attacks,\s*this card gains \+(\d+) power for each card in your warp"
+)
 _TURN_END_SWITCH_ACTIVE_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?at the end of your turn, switch this card to active mode")
 _ACTIVATE_MAIN_DRAW_RE = re.compile(r"\[activate(?::)?\s*main\][^.]{0,200}?(?::\s*)?draw (\d+) card")
 _ACTIVATE_BATTLE_DRAW_RE = re.compile(r"\[activate(?::)?\s*battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
 _ACTIVATE_MAIN_BATTLE_DRAW_RE = re.compile(r"\[activate(?::)?\s*main/battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
+_ACTIVATE_MAIN_BATTLE_CHOOSE_OWNER_CARDS_GAIN_POWER_FOR_TURN_RE = re.compile(
+    r"\[activate(?::)?\s*main/battle\].{0,340}?choose up to (\d+) of your(?: (.+?))? cards? and (?:it gets|they get) \+(\d+) power for the turn"
+)
 _ACTIVATE_EXTRA_MAIN_BATTLE_PLAY_UP_TO_N_EACH_OF_TWO_FROM_OWNER_DECK_OR_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main/battle\].{0,360}?play up to (\d+) each of <([^>]+)> and <([^>]+)> cards?-both (red|blue|green|yellow|black|white) and with an energy cost of (\d+)-from your deck and/or drop(?: area)?(?: in rest mode)?"
 )
@@ -58,11 +67,20 @@ _ACTIVATE_MAIN_IF_DO_DRAW_RE = re.compile(
 _ACTIVATE_MAIN_OPTIONAL_SEND_HAND_TO_WARP_DRAW_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,280}?you may choose (\d+) card in your hand and send it to your warp\.\s*if you do, draw (\d+) card"
 )
+_ACTIVATE_MAIN_OPPONENT_DISCARDS_N_FROM_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?your opponent discards (\d+) card(?:s)? (?:from )?(?:their|his or her) hand"
+)
+_ACTIVATE_MAIN_PLAY_UP_TO_N_FROM_OWNER_Z_DECK_OR_Z_ENERGY_RE = re.compile(
+    r"\[(?:\+|-)?\d+\]\s*\[activate(?::)?\s*main\].{0,360}?play up to (\d+) (.+?) from your z-deck or z-energy(?: with (?:its|their) skills negated for the game)?"
+)
 _ACTIVATE_BATTLE_SELF_GAIN_POWER_AND_KEYWORD_FOR_BATTLE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?this card gets \+(\d+) power and \[([^\]]+)\] for (?:the|this) battle"
 )
 _ACTIVATE_BATTLE_OWNER_LEADER_GAIN_POWER_AND_KEYWORD_FOR_BATTLE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?if your leader(?: card)? is .{0,140}?, it gets \+(\d+) power and \[([^\]]+)\] for (?:the|this|the duration of the) battle"
+)
+_ACTIVATE_BATTLE_CHOOSE_OWNER_CARDS_GAIN_POWER_FOR_BATTLE_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,320}?choose up to (\d+) of your(?: (.+?))? cards? and (?:it gets|they get) \+(\d+) power for (?:the|this) battle"
 )
 _ACTIVATE_BATTLE_SELF_GAIN_POWER_PER_OWNER_WARP_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?for each card in your warp,\s*this card gets \+(\d+) power for the battle"
@@ -70,11 +88,17 @@ _ACTIVATE_BATTLE_SELF_GAIN_POWER_PER_OWNER_WARP_RE = re.compile(
 _ACTIVATE_BATTLE_SWITCH_SELF_ACTIVE_AND_GAIN_POWER_FOR_TURN_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,240}?switch this card to active mode and it gets \+(\d+) power for the turn"
 )
+_ACTIVATE_BATTLE_SWITCH_UP_TO_N_OWNER_BATTLE_ACTIVE_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,340}?choose up to (\d+) of your (.+?) cards? with energy costs? of (\d+) and (\d+) power or less in your battle area and switch (?:it|them) to active mode"
+)
 _ACTIVATE_MAIN_CHOOSE_ALL_OWNER_BATTLE_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,300}?choose all (.+?) cards? in your battle area\.\s*they gain \[([^\]]+)\].{0,160}?until the end of your opponent'?s next turn"
 )
 _ACTIVATE_MAIN_GRANT_NEXT_EX_EVOLVE_FROM_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,320}?the next time you activate \[ex-evolve\] on your (.+?) card during this turn,\s*it can also activate from (?:its|their) owner'?s drop"
+)
+_ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_EXTRA_SKILL_COST_RE = re.compile(
+    r"\[activate(?::)?\s*main/battle\].{0,360}?the next time you activate an? \[activate\] skill on an? (.+?) extra from your hand during this turn,\s*reduce the skill cost by \{?(\d+)\}?"
 )
 _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?choose up to (\d+) of your opponent'?s battle cards?\s*(?:,|and|then)?\s*ko (?:it|them)"
@@ -91,6 +115,15 @@ _ACTIVATE_MAIN_LOOK_TOP_SEND_DIRECT_TO_OWNER_WARP_RE = re.compile(
 _ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,240}?play this card from your hand"
 )
+_ACTIVATE_MAIN_BATTLE_PLAY_SELF_FROM_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*main/battle\].{0,320}?play this card from your hand"
+)
+_AUTO_OWNER_ACTIVATE_EXTRA_FROM_HAND_ADD_MARKERS_RE = re.compile(
+    r"\[auto\].{0,220}?when you activate an? (.+?) extra from your hand,\s*add (\d+) marker(?:s)? to this card"
+)
+_ACTIVATE_BATTLE_PLAY_SELF_FROM_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,320}?play this card from your hand(?:,\s*then your opponent discards (\d+) card from their hand)?"
+)
 _ACTIVATE_MAIN_PLAY_SELF_FROM_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,240}?play this card from your warp"
 )
@@ -105,6 +138,9 @@ _ACTIVATE_MAIN_DRAW_GAIN_KEYWORD_RE = re.compile(
 )
 _ACTIVATE_MAIN_SELF_GAIN_POWER_AND_KEYWORD_FOR_TURN_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,280}?this card gets \+(\d+) power and \[([^\]]+)\] for the turn"
+)
+_ACTIVATE_MAIN_SELF_GAIN_KEYWORDS_FOR_TURN_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,280}?this card gains \[([^\]]+)\](?: and \[([^\]]+)\])(?: and \[([^\]]+)\])? for the turn"
 )
 _ACTIVATE_MAIN_DRAW_PLAY_SELF_AND_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,360}?draw (\d+) card(?:s)?[,;]?\s*play this card from your hand[,;]?\s*and this card gains \[([^\]]+)\] until the end of your opponent'?s turn"
@@ -160,6 +196,9 @@ _PLAY_SWITCH_UP_TO_N_ANY_PLAYER_BOARD_TO_REVEALED_RE = re.compile(
 _PLAY_SWITCH_UP_TO_N_OWNER_BATTLE_TO_HIDDEN_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,200})?choose up to (\d+) (?:(?:of your )?(.*?) )?cards?(?: in your battle area)? and switch (?:it|them) to hidden mode"
 )
+_PLAY_BUFF_UP_TO_N_OWNER_BATTLE_WITH_MIN_CHAR_NAMES_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
+    r"when this card is played(?: from your hand)?(?:[^.]{0,220})?choose up to (\d+) of your battle cards with (\d+) or more character names including <([^>]+)> and (?:it|they) gain(?:s)? \[([^\]]+)\] until the end of your opponent'?s turn"
+)
 _PLAY_DRAW_AND_SWITCH_SELF_TO_HIDDEN_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,120})?draw (\d+) card(?:s)? and switch this card to hidden mode"
 )
@@ -194,12 +233,18 @@ _PLAY_TOP_IF_COLOR_ADD_HAND_RE = re.compile(
 _OWNER_BLACK_BATTLE_PLAYED_FROM_WARP_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when a black battle card is played from your warp.*?this card gains \[wormhole\] for the turn"
 )
+_OWNER_OTHER_BATTLE_PLAYED_BY_DARK_OVER_REALM_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,180}:\s*)?when your battle card other than this card is played by a \[dark over realm\] skill,\s*draw (\d+) card"
+)
 _OWNER_OPP_BATTLE_ATTACKS_PLAY_SELF_FROM_DROP_OR_WARP_NEGATE_RE = re.compile(
     r"(?:if [^:]{1,260}:\s*)?when your opponent attacks with a battle card.*?play this card from your drop or warp in rest mode and negate the attack"
 )
 _HAND_TO_DROP_OR_WARP_PLACE_UP_TO_N_FROM_DECK_TO_SAME_DEST_RE = re.compile(
     r"(?:if [^:]{1,220}:\s*)?when this card in your hand is placed into its owner'?s drop or sent to its owner'?s warp,\s*"
     r"place up to (\d+) (.+?) card with (\d+) power or less from your deck into its owner'?s drop or send it to its owner'?s warp"
+)
+_HAND_TO_DROP_BY_CAUSE_PLAY_SELF_RE = re.compile(
+    r"(?:if [^:]{1,180}:\s*)?when this card is placed in your drop area from your hand by an opponent'?s skill or by your \[revive\] skill,\s*you may play this card"
 )
 _PLAY_ADD_TOP_DECK_TO_ENERGY_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is played.*?add the top card of your deck to your energy in rest mode"
@@ -221,6 +266,9 @@ _SELF_KO_UNISON_POWER_REDUCE_RE = re.compile(
 )
 _SELF_REMOVED_OR_KO_ADD_LIFE_RE = re.compile(
     r"when this card is removed from your battle area by a skill or ko['â€™]?d.*?add (\d+) card from your life to your hand"
+)
+_SELF_REMOVED_OR_KO_PLAY_UP_TO_N_NAMED_FROM_DROP_RE = re.compile(
+    r"when this card is removed from a battle area by an opponent'?s skill or ko['â€™]?d,\s*play up to (\d+) \{([^}]+)\} from your drop"
 )
 _PLAY_FROM_HAND_PLAY_FROM_DECK_RE = re.compile(
     r"when this card is played from your hand, choose up to (\d+) (.+?) from your deck, play it"
@@ -323,6 +371,9 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
     m_sparking = re.search(r"\[\s*sparking\s+(\d+)\s*\]", text)
     if m_sparking:
         params["min_owner_drop"] = int(m_sparking.group(1))
+    m_opponent_drop = re.search(r"if your opponent has (\d+) or more cards in (?:their|their own) drop", text)
+    if m_opponent_drop:
+        params["min_opponent_drop"] = int(m_opponent_drop.group(1))
     m_leader = re.search(r"(if your leader[^:]{0,200}):", text)
     if m_leader:
         params["requires_leader"] = m_leader.group(1).strip()
@@ -342,6 +393,9 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
     m_opponent_energy = re.search(r"your opponent has (\d+) or more energy", text)
     if m_opponent_energy:
         params["min_opponent_energy"] = int(m_opponent_energy.group(1))
+    m_any_energy = re.search(r"you or your opponent has (\d+) or more energy", text)
+    if m_any_energy:
+        params["min_any_player_energy"] = int(m_any_energy.group(1))
     m_life = re.search(r"your life is at (\d+) or less", text)
     if m_life:
         params["max_owner_life"] = int(m_life.group(1))
@@ -381,6 +435,14 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
 def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | bool]:
     descriptor_lc = descriptor.lower()
     params: dict[str, int | str | bool] = {}
+    raw_required_traits = sorted(
+        {
+            match.strip().title()
+            for match in re.findall(r"(?:≪|â‰ª)\s*([^≫]+?)\s*(?:≫|â‰«)", descriptor, re.IGNORECASE)
+            if match.strip()
+        }
+    )
+    raw_required_characters = sorted({match.strip().title() for match in re.findall(r"<([^>]+)>", descriptor) if match.strip()})
     m_cost = re.search(r"energy costs? of (\d+) or less", descriptor_lc)
     if m_cost is None:
         m_cost = re.search(r"energy cost of (\d+) or less", descriptor_lc)
@@ -398,9 +460,13 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
         m_cost = re.search(r"energy cost of (\d+)\b", text)
     params["max_cost"] = int(m_cost.group(1)) if m_cost else -1
 
-    colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black|white)\b", descriptor_lc)))
+    color_scan_text = re.sub(r"(?:≪|â‰ª)\s*([^≫]+?)\s*(?:≫|â‰«)", " ", descriptor_lc)
+    color_scan_text = re.sub(r"<[^>]+>", " ", color_scan_text)
+    colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black|white)\b", color_scan_text)))
     if colors:
         params["allowed_colors"] = ",".join(colors)
+    if raw_required_traits:
+        params["required_traits"] = ",".join(raw_required_traits)
     if "[ex-evolve]" in descriptor_lc or " ex-evolve" in descriptor_lc:
         params["requires_ex_evolve"] = True
 
@@ -436,22 +502,33 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
     cleaned = re.sub(r"\band\s+\[?ex-evolve\]?\b", " ", cleaned)
     cleaned = re.sub(r"\[?ex-evolve\]?", " ", cleaned)
     cleaned = re.sub(r"\bfrom your (?:warp|drop(?: area)?|deck|hand)\b", " ", cleaned)
+    cleaned = re.sub(r"(?:≪|â‰ª)\s*([^≫]+?)\s*(?:≫|â‰«)", " ", cleaned)
+    cleaned = re.sub(r"<[^>]+>", " ", cleaned)
     cleaned = cleaned.replace("<", " ").replace(">", " ").replace("≪", " ").replace("≫", " ")
     cleaned = re.sub(r"[^0-9a-z ,/.-]", " ", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,.-")
+
+    if raw_required_characters and raw_required_traits:
+        params["required_characters"] = ",".join(raw_required_characters + raw_required_traits)
+    elif len(raw_required_characters) > 1:
+        params["required_characters"] = ",".join(raw_required_characters)
+    elif raw_required_characters and "energy cost" in descriptor_lc:
+        params["required_characters"] = ",".join(raw_required_characters)
+    elif raw_required_characters:
+        params.setdefault("required_traits", ",".join(raw_required_characters))
 
     if cleaned:
         parts = [part.strip().title() for part in re.split(r"\bor\b|/|,", cleaned) if part.strip()]
         tokens = [t for t in cleaned.split() if t]
         if len(parts) > 1:
-            params["required_characters"] = ",".join(parts)
+            params.setdefault("required_characters", ",".join(parts))
         elif len(tokens) == 1 and tokens[0] not in {"red", "blue", "green", "yellow", "black", "white"}:
             if "<" in descriptor and "energy cost" in descriptor_lc:
-                params["required_characters"] = cleaned.title()
+                params.setdefault("required_characters", cleaned.title())
             else:
-                params["required_traits"] = cleaned.title()
+                params.setdefault("required_traits", cleaned.title())
         elif len(tokens) > 0:
-            params["required_characters"] = cleaned.title()
+            params.setdefault("required_characters", cleaned.title())
 
     return params
 
@@ -661,6 +738,20 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_owner_other_battle_dor_draw = _OWNER_OTHER_BATTLE_PLAYED_BY_DARK_OVER_REALM_DRAW_RE.search(branch)
+        if m_owner_other_battle_dor_draw:
+            amount = int(m_owner_other_battle_dor_draw.group(1))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_other_battle_played_by_dark_over_realm",
+                    handler_id="auto_draw_n",
+                    handler_params={"amount": amount, **extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         if _OWNER_OPP_BATTLE_ATTACKS_PLAY_SELF_FROM_DROP_OR_WARP_NEGATE_RE.search(branch):
             extra = _extract_common_conditions(branch)
             params: dict[str, int | str | bool] = {
@@ -700,6 +791,22 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_in_hand_sent_to_drop_or_warp",
                     handler_id="auto_place_up_to_n_from_owner_deck_to_destination_zone",
                     handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        if _HAND_TO_DROP_BY_CAUSE_PLAY_SELF_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_in_hand_sent_to_drop_or_warp",
+                    handler_id="auto_play_self_from_drop_on_hand_drop",
+                    handler_params={
+                        "required_destination_zone": "drop",
+                        "required_drop_causes": "opponent_skill,revive",
+                        **extra,
+                    },
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )
@@ -746,6 +853,41 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 EffectRule(
                     trigger="self_activate_main",
                     handler_id="activate_optional_send_owner_hand_to_warp_draw_n",
+                    handler_params=params,
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_main_opponent_discards = _ACTIVATE_MAIN_OPPONENT_DISCARDS_N_FROM_HAND_RE.search(branch)
+        if m_activate_main_opponent_discards:
+            amount = int(m_activate_main_opponent_discards.group(1))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_opponent_discards_n_from_hand",
+                    handler_params={"amount": amount, **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_main_play_z_deck_or_z_energy = _ACTIVATE_MAIN_PLAY_UP_TO_N_FROM_OWNER_Z_DECK_OR_Z_ENERGY_RE.search(branch)
+        if m_activate_main_play_z_deck_or_z_energy:
+            max_targets = int(m_activate_main_play_z_deck_or_z_energy.group(1))
+            descriptor = str(m_activate_main_play_z_deck_or_z_energy.group(2) or "").strip().lower()
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "source_pool": "z_deck_or_z_energy",
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            if "with its skills negated for the game" in branch or "with their skills negated for the game" in branch:
+                params["negate_skills"] = True
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_play_up_to_n_from_owner_z_deck_or_z_energy",
                     handler_params=params,
                     once_per_turn=once,
                 )
@@ -812,6 +954,28 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_activate_battle_owner_cards_power = _ACTIVATE_BATTLE_CHOOSE_OWNER_CARDS_GAIN_POWER_FOR_BATTLE_RE.search(branch)
+        if m_activate_battle_owner_cards_power:
+            max_targets = int(m_activate_battle_owner_cards_power.group(1))
+            descriptor = str(m_activate_battle_owner_cards_power.group(2) or "").strip().lower()
+            power_delta = int(m_activate_battle_owner_cards_power.group(3))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_gain_power_and_keyword_for_battle",
+                    handler_params={
+                        "power_delta": power_delta,
+                        "max_targets": max_targets,
+                        "target_scope": "owner_cards",
+                        "target_policy": "first",
+                        **_descriptor_filters(descriptor, branch),
+                        **extra,
+                    },
+                    once_per_turn=once,
+                )
+            )
+
         m_activate_battle_power_per_warp = _ACTIVATE_BATTLE_SELF_GAIN_POWER_PER_OWNER_WARP_RE.search(branch)
         if m_activate_battle_power_per_warp:
             power_per_card = int(m_activate_battle_power_per_warp.group(1))
@@ -833,6 +997,29 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_activate_battle",
                     handler_id="activate_switch_self_active_and_gain_power_for_turn",
                     handler_params={"power_delta": int(m_activate_battle_switch_active_power.group(1)), **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_activate_battle_switch_owner_battle_active = _ACTIVATE_BATTLE_SWITCH_UP_TO_N_OWNER_BATTLE_ACTIVE_RE.search(branch)
+        if m_activate_battle_switch_owner_battle_active:
+            max_targets = int(m_activate_battle_switch_owner_battle_active.group(1))
+            descriptor = m_activate_battle_switch_owner_battle_active.group(2).lower()
+            max_cost = int(m_activate_battle_switch_owner_battle_active.group(3))
+            max_power = int(m_activate_battle_switch_owner_battle_active.group(4))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_switch_up_to_n_owner_battle_active",
+                    handler_params={
+                        "max_targets": max_targets,
+                        "max_cost": max_cost,
+                        "max_power": max_power,
+                        "target_policy": "first",
+                        **_descriptor_filters(descriptor, branch),
+                        **extra,
+                    },
                     once_per_turn=once,
                 )
             )
@@ -878,6 +1065,37 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_activate_main_battle_reduce_next_extra_skill_cost = _ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_EXTRA_SKILL_COST_RE.search(branch)
+        if m_activate_main_battle_reduce_next_extra_skill_cost:
+            descriptor = m_activate_main_battle_reduce_next_extra_skill_cost.group(1).strip().lower()
+            amount = int(m_activate_main_battle_reduce_next_extra_skill_cost.group(2))
+            extra = _extract_common_conditions(branch)
+            params = {
+                "amount": amount,
+                "uses_remaining": 1,
+                "required_card_type": "EXTRA",
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_reduce_next_matching_extra_skill_cost_from_hand",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_reduce_next_matching_extra_skill_cost_from_hand",
+                    handler_params=dict(params),
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         m_activate_battle_ko = _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE.search(branch)
         if m_activate_battle_ko:
             max_targets = int(m_activate_battle_ko.group(1))
@@ -910,6 +1128,39 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     handler_id="auto_draw_n",
                     handler_params={"amount": amount, **extra},
                     once_per_turn=once,
+                )
+            )
+
+        m_activate_main_battle_owner_cards_power = _ACTIVATE_MAIN_BATTLE_CHOOSE_OWNER_CARDS_GAIN_POWER_FOR_TURN_RE.search(branch)
+        if m_activate_main_battle_owner_cards_power:
+            max_targets = int(m_activate_main_battle_owner_cards_power.group(1))
+            descriptor = str(m_activate_main_battle_owner_cards_power.group(2) or "").strip().lower()
+            power_delta = int(m_activate_main_battle_owner_cards_power.group(3))
+            extra = _extract_common_conditions(branch)
+            params = {
+                "target_policy": "first",
+                "target_scope": "owner_cards",
+                "max_targets": max_targets,
+                "power_delta": power_delta,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_buff_owner_battle_cards",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_buff_owner_battle_cards",
+                    handler_params=dict(params),
+                    once_per_turn=once,
+                    limit_per_turn=limit,
                 )
             )
 
@@ -1041,6 +1292,26 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_activate_main_self_gain_keywords = _ACTIVATE_MAIN_SELF_GAIN_KEYWORDS_FOR_TURN_RE.search(branch)
+        if m_activate_main_self_gain_keywords:
+            keywords = [
+                " ".join(part.capitalize() for part in str(raw or "").replace("-", " ").split())
+                for raw in m_activate_main_self_gain_keywords.groups()
+                if str(raw or "").strip()
+            ]
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_gain_power_and_keyword_for_turn",
+                    handler_params={
+                        "grant_keywords": ",".join(keywords),
+                        **extra,
+                    },
+                    once_per_turn=once,
+                )
+            )
+
         if _ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE.search(branch):
             extra = _extract_common_conditions(branch)
             params: dict[str, int | str | bool] = {**extra}
@@ -1052,6 +1323,47 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     handler_id="activate_play_self_from_hand",
                     handler_params=params,
                     once_per_turn=once,
+                )
+            )
+
+        if _ACTIVATE_MAIN_BATTLE_PLAY_SELF_FROM_HAND_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            params = {**extra}
+            if "rest mode" in branch:
+                params["resting"] = True
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_play_self_from_hand",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_play_self_from_hand",
+                    handler_params=dict(params),
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_activate_battle_play_self_from_hand = _ACTIVATE_BATTLE_PLAY_SELF_FROM_HAND_RE.search(branch)
+        if m_activate_battle_play_self_from_hand:
+            extra = _extract_common_conditions(branch)
+            params = {**extra}
+            discard_after_play = m_activate_battle_play_self_from_hand.group(1)
+            if discard_after_play:
+                params["opponent_discards_after_play"] = int(discard_after_play)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_play_self_from_hand",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
                 )
             )
 
@@ -1428,6 +1740,30 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_play_owner_buff_keyword = _PLAY_BUFF_UP_TO_N_OWNER_BATTLE_WITH_MIN_CHAR_NAMES_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE.search(branch)
+        if m_play_owner_buff_keyword:
+            max_targets = int(m_play_owner_buff_keyword.group(1))
+            min_character_count = int(m_play_owner_buff_keyword.group(2))
+            required_character = str(m_play_owner_buff_keyword.group(3) or "").strip().title()
+            grant_keyword = " ".join(part.capitalize() for part in m_play_owner_buff_keyword.group(4).replace("-", " ").split())
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_buff_up_to_n_owner_battles_on_play",
+                    handler_params={
+                        "max_targets": max_targets,
+                        "min_character_count": min_character_count,
+                        "required_characters": required_character,
+                        "grant_keyword": grant_keyword,
+                        "keyword_duration": "opponent_turn",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         m_play_draw_self_hidden = _PLAY_DRAW_AND_SWITCH_SELF_TO_HIDDEN_RE.search(branch)
         if m_play_draw_self_hidden:
             rules.append(
@@ -1708,6 +2044,25 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     handler_id="auto_add_n_life_to_hand_on_self_ko",
                     handler_params={"amount": amount, **extra},
                     once_per_turn=once,
+                )
+            )
+
+        m_play_named_from_drop_on_self_ko = _SELF_REMOVED_OR_KO_PLAY_UP_TO_N_NAMED_FROM_DROP_RE.search(branch)
+        if m_play_named_from_drop_on_self_ko:
+            max_targets = int(m_play_named_from_drop_on_self_ko.group(1))
+            required_name = str(m_play_named_from_drop_on_self_ko.group(2) or "").strip().upper()
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_koed",
+                    handler_id="auto_play_up_to_n_named_from_owner_drop_on_self_ko",
+                    handler_params={
+                        "max_targets": max_targets,
+                        "required_name_contains": required_name,
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
                 )
             )
 
@@ -2009,6 +2364,26 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_auto_owner_activate_extra_from_hand_add_markers = _AUTO_OWNER_ACTIVATE_EXTRA_FROM_HAND_ADD_MARKERS_RE.search(branch)
+        if m_auto_owner_activate_extra_from_hand_add_markers:
+            descriptor = m_auto_owner_activate_extra_from_hand_add_markers.group(1).strip().lower()
+            amount = int(m_auto_owner_activate_extra_from_hand_add_markers.group(2))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_activate_extra_from_hand",
+                    handler_id="auto_add_markers_on_owner_activate_extra_from_hand",
+                    handler_params={
+                        "amount": amount,
+                        "required_card_type": "EXTRA",
+                        **_descriptor_filters(descriptor, branch),
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         # [Auto] When this card is played... add marker(s) based on multicolor energy count.
         m_marker_per_energy = _PLAY_ADD_MARKER_PER_N_MULTICOLOR_ENERGY_RE.search(branch)
         if m_marker_per_energy:
@@ -2119,6 +2494,106 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                         once_per_turn=once,
                     )
                 )
+
+        # [Auto] When this card is played, it gets +X power for the turn.
+        if _PLAY_TRIGGER_RE.search(branch) and ("this card gets +" in branch or "it gets +" in branch) and "power for the turn" in branch:
+            m_self_power = re.search(r"(?:this card|it) gets \+\s*(\d+) power for the turn", branch)
+            if m_self_power:
+                extra = _extract_common_conditions(branch)
+                rules.append(
+                    EffectRule(
+                        trigger="self_played",
+                        handler_id="auto_self_gain_power_for_turn_on_play",
+                        handler_params={"power_delta": int(m_self_power.group(1)), **extra},
+                        once_per_turn=once,
+                        limit_per_turn=limit,
+                    )
+                )
+
+        # [Auto] When this card is used in a combo... choose up to N opponent Battle Card(s)... gets -X power ...
+        if _COMBO_TRIGGER_RE.search(branch) and ("get -" in branch or "gets -" in branch) and "opponent" in branch and "battle card" in branch:
+            max_targets = _extract_max_targets(branch)
+            m_cost = re.search(r"energy cost of (\d+) or less", branch)
+            max_cost = int(m_cost.group(1)) if m_cost else -1
+            m_power = re.search(r"get[s]? -\s*(\d+) power", branch)
+            if m_power:
+                extra = _extract_common_conditions(branch)
+                rules.append(
+                    EffectRule(
+                        trigger="self_comboed",
+                        handler_id="auto_power_reduce_up_to_n_on_combo",
+                        handler_params={
+                            "max_targets": max_targets,
+                            "max_cost": max_cost,
+                            "target_policy": "first",
+                            "power_delta": -int(m_power.group(1)),
+                            **extra,
+                        },
+                        once_per_turn=once,
+                    )
+                )
+
+        # [Auto] When this card attacks, use up to N ... from your Drop/Warp in a combo with its skills negated for the turn.
+        m_attack_combo = _ATTACK_COMBO_FROM_OWNER_ZONE_RE.search(branch)
+        if m_attack_combo:
+            max_targets = int(m_attack_combo.group(1))
+            descriptor = m_attack_combo.group(2).strip()
+            source_zone = str(m_attack_combo.group(3)).strip().lower()
+            m_combo_power = re.search(r"with (\d+) combo power", descriptor, re.IGNORECASE)
+            combo_power = int(m_combo_power.group(1)) if m_combo_power else -1
+            combo_descriptor = re.sub(r"with \d+ combo power", " ", descriptor, flags=re.IGNORECASE)
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "source_zone": source_zone,
+                "target_policy": "first",
+                "negate_skills": True,
+                **_descriptor_filters(combo_descriptor, branch),
+                **extra,
+            }
+            if combo_power >= 0:
+                params["exact_combo_power"] = combo_power
+            rules.append(
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_combo_up_to_n_from_owner_zone_on_attack",
+                    handler_params=params,
+                    once_per_turn=once,
+                )
+            )
+
+        # [Auto] When this card attacks, this card gains +X power for each card in your Warp.
+        m_attack_self_power_per_warp = _ATTACK_SELF_GAIN_POWER_PER_OWNER_WARP_RE.search(branch)
+        if m_attack_self_power_per_warp:
+            power_per_card = int(m_attack_self_power_per_warp.group(1))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_self_gain_power_for_turn_on_attack",
+                    handler_params={"power_delta": f"expr:owner_warp_count*{power_per_card}", **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        if _ATTACK_TRIGGER_RE.search(branch) and "opponent" in branch and "battle card" in branch and "ko it" in branch.lower():
+            max_targets = _extract_max_targets(branch)
+            m_cost = re.search(r"energy cost of (\d+) or less", branch)
+            max_cost = int(m_cost.group(1)) if m_cost else -1
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_ko_up_to_n_opponent_battle_on_attack",
+                    handler_params={
+                        "max_targets": max_targets,
+                        "max_cost": max_cost,
+                        "target_policy": "first",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                )
+            )
 
     if limit is not None:
         rules = [replace(rule, limit_per_turn=limit, limit_scope="card_number") for rule in rules]

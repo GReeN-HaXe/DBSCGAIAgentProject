@@ -185,11 +185,22 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     if not OVERRIDES_PATH.exists():
         return
     loaded = load_effect_rule_overrides_json(OVERRIDES_PATH)
-    assert len(loaded) == 29
+    assert len(loaded) == 45
+    assert loaded[86][0] == "replace"
+    assert loaded[90][0] == "replace"
+    assert loaded[8372][0] == "replace"
+    assert loaded[20][0] == "replace"
+    assert loaded[27][0] == "replace"
+    assert loaded[36][0] == "replace"
     assert loaded[6][0] == "replace"
-    assert loaded[89][0] == "replace"
+    assert loaded[49][0] == "replace"
+    assert loaded[83][0] == "replace"
+    assert loaded[1603][0] == "replace"
     assert loaded[2409][0] == "replace"
+    assert loaded[4226][0] == "replace"
     assert loaded[5656][0] == "replace"
+    assert loaded[5531][0] == "replace"
+    assert loaded[7358][0] == "replace"
     assert loaded[7236][0] == "replace"
     assert loaded[7459][0] == "replace"
     assert loaded[8314][0] == "replace"
@@ -197,10 +208,24 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert loaded[5301][0] == "replace"
     assert loaded[8458][0] == "replace"
     assert loaded[6679][0] == "replace"
+    assert loaded[8385][0] == "replace"
+    assert loaded[8881][0] == "replace"
+    assert loaded[8896][0] == "replace"
+    assert loaded[9720][0] == "replace"
+    king_cold_rule = loaded[20][1][0]
+    broly_combo_rule = loaded[27][1][0]
+    prismatic_broly_auto = loaded[36][1][0]
+    prismatic_broly_activate = loaded[36][1][1]
     dyspo_rule = loaded[6][1][0]
+    majin_buu_rule = loaded[1603][1][0]
+    prismatic_gohan_rule = loaded[49][1][0]
+    gigantic_rule = loaded[83][1][0]
     steadfast_rule = loaded[89][1][0]
     explosive_rule = loaded[2409][1][0]
+    released_rule = loaded[4226][1][0]
     cabba_rule = loaded[5656][1][0]
+    bardock_rule = loaded[5531][1][0]
+    dormant_rule = loaded[7358][1][0]
     supreme_kai_rule = loaded[7236][1][0]
     difference_rule = loaded[7459][1][0]
     mechikabura_rule = loaded[8314][1][0]
@@ -208,14 +233,45 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     yamcha_rule = loaded[5301][1][0]
     final_battle_rule = loaded[8458][1][0]
     toppo_rule = loaded[6679][1][0]
+    reclaiming_hope_activate = loaded[86][1][0]
+    reclaiming_hope_auto = loaded[86][1][1]
+    misadventure_rule = loaded[90][1][0]
+    android_attack_rule = loaded[8372][1][0]
+    android_plus_rule = loaded[8372][1][1]
+    android_zero_rule = loaded[8372][1][2]
+    justice_impact_auto = loaded[8385][1][0]
+    justice_impact_activate = loaded[8385][1][1]
+    frieza_rule = loaded[8881][1][0]
+    nail_rule = loaded[8896][1][0]
+    fused_zamasu_rule = loaded[9720][1][0]
+    assert king_cold_rule.handler_id == "auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo"
+    assert king_cold_rule.family_id == "self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo"
+    assert broly_combo_rule.handler_id == "activate_send_up_to_n_opponent_combo_to_drop"
+    assert broly_combo_rule.family_id == "self_activate_battle:activate_send_up_to_n_opponent_combo_to_drop"
+    assert prismatic_broly_auto.handler_id == "auto_add_markers_per_n_multicolor_energy_on_play"
+    assert prismatic_broly_auto.family_id == "self_played:auto_add_markers_per_n_multicolor_energy_on_play"
+    assert prismatic_broly_activate.handler_id == "activate_send_up_to_n_opponent_battle_to_warp"
+    assert prismatic_broly_activate.family_id == "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp"
     assert dyspo_rule.handler_id == "counter_negate_attack_play_self_attack_restriction"
     assert dyspo_rule.trigger == "counter_attack"
+    assert majin_buu_rule.handler_id == "activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed"
+    assert majin_buu_rule.family_id == "self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed"
+    assert prismatic_gohan_rule.handler_id == "auto_send_up_to_n_opponent_battle_to_warp_on_play"
+    assert prismatic_gohan_rule.family_id == "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play"
+    assert gigantic_rule.handler_id == "activate_ko_opponent_battles_up_to_total_power"
+    assert gigantic_rule.family_id == "self_activate_extra_from_hand:activate_ko_opponent_battles_up_to_total_power"
     assert steadfast_rule.handler_id == "counter_force_pending_play_rest_play_self_draw_n"
     assert steadfast_rule.family_id == "counter_play:counter_force_pending_play_rest_play_self_draw_n"
     assert explosive_rule.handler_id == "counter_negate_attack"
     assert explosive_rule.trigger == "counter_attack"
+    assert released_rule.handler_id == "counter_negate_attacker_skills_and_prevent_switch_active"
+    assert released_rule.family_id == "counter_attack:counter_negate_attacker_skills_and_prevent_switch_active"
     assert cabba_rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
     assert cabba_rule.trigger == "self_played"
+    assert bardock_rule.handler_id == "auto_restrict_self_copies_from_hand_next_turn_on_play"
+    assert bardock_rule.family_id == "self_played:auto_restrict_self_copies_from_hand_next_turn_on_play"
+    assert dormant_rule.handler_id == "counter_negate_attack"
+    assert dormant_rule.family_id == "counter_attack:counter_negate_attack"
     assert supreme_kai_rule.handler_id == "counter_negate_attack_play_self"
     assert supreme_kai_rule.trigger == "counter_attack"
     assert difference_rule.handler_id == "counter_spirit_boost_power_reduce_opponent_cards"
@@ -230,6 +286,18 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert final_battle_rule.family_id == "counter_attack:counter_negate_attack"
     assert toppo_rule.handler_id == "counter_negate_attack_play_self"
     assert toppo_rule.family_id == "counter_attack:counter_negate_attack_play_self"
+    assert reclaiming_hope_activate.handler_id == "activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end"
+    assert reclaiming_hope_auto.handler_id == "auto_rest_owner_battle_on_self_blocker_activated_switch_self_active"
+    assert misadventure_rule.handler_id == "auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest"
+    assert android_attack_rule.handler_id == "auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack"
+    assert android_plus_rule.handler_id == "activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end"
+    assert android_zero_rule.handler_id == "activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end"
+    assert justice_impact_auto.handler_id == "auto_switch_up_to_n_owner_leader_active_on_field_extra_placed"
+    assert justice_impact_activate.handler_id == "activate_remove_self_and_ko_all_opponent_battles"
+    assert frieza_rule.handler_id == "activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn"
+    assert nail_rule.handler_id == "counter_play_self_buff_owner_cards_for_battle"
+    assert nail_rule.family_id == "counter_attack:counter_play_self_buff_owner_cards_for_battle"
+    assert fused_zamasu_rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn"
 
 
 def test_engine_loads_effect_catalog_from_path() -> None:

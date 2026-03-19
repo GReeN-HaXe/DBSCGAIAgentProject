@@ -680,6 +680,10 @@ def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) ->
             battle = state.players[action.player_id].battle_area
             if 0 <= action.source_index < len(battle):
                 source_card = battle[action.source_index]
+        elif action.source_zone == "combo" and action.source_index is not None:
+            combo = state.players[action.player_id].combo_area
+            if 0 <= action.source_index < len(combo):
+                source_card = combo[action.source_index]
         elif action.source_zone == "unison" and action.source_index is not None:
             zone = state.players[action.player_id].unison_area
             if 0 <= action.source_index < len(zone):
@@ -743,6 +747,11 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
         return
     if action.source_zone == "battle" and action.source_index is not None:
         zone = session.state.players[action.player_id].battle_area
+        if 0 <= action.source_index < len(zone):
+            print("\n" + _card_detail_text(repo, zone[action.source_index].card_id))
+            return
+    if action.source_zone == "combo" and action.source_index is not None:
+        zone = session.state.players[action.player_id].combo_area
         if 0 <= action.source_index < len(zone):
             print("\n" + _card_detail_text(repo, zone[action.source_index].card_id))
             return
