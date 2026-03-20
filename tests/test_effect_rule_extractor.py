@@ -37,6 +37,20 @@ def test_extract_draw_rules_on_play_and_attack() -> None:
     assert all(r.provenance == "extractor" for r in rules)
 
 
+def test_extract_source_text_tracks_individual_auto_lines() -> None:
+    card = _card(
+        "[Auto] When this card is played, draw 1 card."
+        "<br>[Auto] When this card attacks, draw 1 card, and you can't activate copies of this card for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    played = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_draw_n")
+    attacks = next(r for r in rules if r.trigger == "self_attacks" and r.handler_id == "auto_draw_n")
+    assert "when this card is played" in played.source_text.lower()
+    assert "when this card attacks" in attacks.source_text.lower()
+    assert "copies of this card for the turn" not in played.source_text.lower()
+    assert "copies of this card for the turn" in attacks.source_text.lower()
+
+
 def test_extract_limit_x_tracks_limit_count_on_effect_rules() -> None:
     card = _card("[Auto][Limit 2] When this card attacks, draw 1 card.")
     rules = extract_effect_rules_from_card(card)

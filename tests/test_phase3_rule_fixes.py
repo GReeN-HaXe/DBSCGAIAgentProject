@@ -2940,6 +2940,144 @@ def test_counter_can_permanently_restrict_hand_copies_for_game() -> None:
     assert not any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal_counter)
 
 
+def test_counter_can_permanently_restrict_hand_copies_for_game_with_generic_wording() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].battle_area = [
+        CardInstance(instance_id=780112, card_id=9811, owner_id=2, card_type="BATTLE", color="Blue", power=20000),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=780113,
+            card_id=6591,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. "
+                "You can't activate copies of this card for the game."
+            ),
+        ),
+        CardInstance(
+            instance_id=780114,
+            card_id=6591,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. "
+                "You can't activate copies of this card for the game."
+            ),
+        ),
+    ]
+
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="battle", attacker_index=0, target_player_id=1, target_zone="leader"),
+    )
+    counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert len(state.permanent_skill_activation_restrictions) == 1
+    assert any(cp.name == "counter_effect_permanent_copy_counter_restriction_applied" for cp in state.checkpoints)
+    assert engine._is_counter_hand_activation_restricted(state, player_id=1, card=state.players[1].hand[0])
+
+
+def test_counter_can_temporarily_restrict_hand_copies_for_turn_with_generic_wording() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].battle_area = [
+        CardInstance(instance_id=780212, card_id=9811, owner_id=2, card_type="BATTLE", color="Blue", power=20000),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=780213,
+            card_id=6591,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. "
+                "You can't activate copies of this card for the turn."
+            ),
+        ),
+        CardInstance(
+            instance_id=780214,
+            card_id=6591,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. "
+                "You can't activate copies of this card for the turn."
+            ),
+        ),
+    ]
+
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="battle", attacker_index=0, target_player_id=1, target_zone="leader"),
+    )
+    counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert any(
+        row.owner_player_id == 1 and row.restricted_card_id == 6591 and not row.restricted_mode
+        for row in state.active_counter_hand_restrictions
+    )
+    assert any(cp.name == "counter_effect_copy_counter_restriction_applied" for cp in state.checkpoints)
+    assert engine._is_counter_hand_activation_restricted(state, player_id=1, card=state.players[1].hand[0])
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_main(engine, state)
+    state.attack_context = None
+    state.battle_step = None
+    state.players[2].leader_area.resting = False
+    engine._declare_attack(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="leader", target_player_id=1, target_zone="leader"),
+    )
+
+    legal_counter = engine.get_legal_actions(state, 1)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal_counter)
+
+
 def test_prismatic_burst_counter_play_can_replace_small_pending_play_with_drop() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(

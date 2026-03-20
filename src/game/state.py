@@ -197,6 +197,7 @@ class EffectRegistration:
     trigger: str
     handler_id: str
     handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    source_skill_text: str = ""
     source_card_number: str = ""
     once_per_turn: bool = False
     limit_per_turn: int | None = None
@@ -235,6 +236,7 @@ class DeferredSecretAuto:
     once_per_turn: bool = False
     limit_per_turn: int | None = None
     limit_scope: str = "card_number"
+    source_skill_text: str = ""
 
 
 @dataclass(frozen=True)
@@ -257,6 +259,7 @@ class SecretAutoOpportunity:
     once_per_turn: bool = False
     limit_per_turn: int | None = None
     limit_scope: str = "card_number"
+    source_skill_text: str = ""
     status: str = "pending"
     preblocked: bool = False
 
@@ -316,6 +319,19 @@ class ActivateExtraCostReduction:
 class DelayedCardPlayRestriction:
     owner_player_id: int
     restricted_card_id: int
+
+
+@dataclass(frozen=True)
+class PermanentCardRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+
+
+@dataclass(frozen=True)
+class TemporaryComboRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+    expires_on_turn_end_player_id: int = 1
 
 
 @dataclass(frozen=True)
@@ -439,6 +455,9 @@ class GameState:
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     scheduled_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
     active_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
+    permanent_card_play_restrictions: list[PermanentCardRestriction] = field(default_factory=list)
+    active_combo_restrictions: list[TemporaryComboRestriction] = field(default_factory=list)
+    permanent_combo_restrictions: list[PermanentCardRestriction] = field(default_factory=list)
     scheduled_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     active_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     scheduled_attack_restrictions: list[ScheduledAttackRestriction] = field(default_factory=list)

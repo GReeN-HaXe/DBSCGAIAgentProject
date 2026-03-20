@@ -369,6 +369,26 @@ def _split_choose_one_branches(text: str) -> list[str]:
     return [f"{prefix} {part}".strip() for part in parts]
 
 
+def _split_effect_branches(raw: str | None) -> list[str]:
+    text = str(raw or "")
+    if not text.strip():
+        return []
+    normalized = text.replace("<br>", "\n").replace("[br]", "\n").replace("\r\n", "\n").replace("\r", "\n")
+    bullets = ("ãƒ»", "・", "•")
+    lines = [line.strip() for line in normalized.split("\n") if line.strip()]
+    merged: list[str] = []
+    for line in lines:
+        if merged and any(line.startswith(bullet) for bullet in bullets):
+            merged[-1] = f"{merged[-1]} {line}"
+        else:
+            merged.append(line)
+    branches: list[str] = []
+    for line in merged:
+        normalized_line = _normalize_text(line)
+        branches.extend(_split_choose_one_branches(normalized_line))
+    return [branch for branch in branches if branch]
+
+
 def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
     params: dict[str, int | str | bool] = {}
     m_sparking = re.search(r"\[\s*sparking\s+(\d+)\s*\]", text)
@@ -565,7 +585,8 @@ def _extract_max_targets(text: str) -> int | str:
 
 def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     text = _normalize_text(card.card_skill_unstyled)
-    if not text:
+    branches = _split_effect_branches(card.card_skill_unstyled)
+    if not branches:
         return []
 
     card_type = str(getattr(card, "card_type", "") or "").upper()
@@ -573,7 +594,8 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     rules: list[EffectRule] = []
     once = _once_per_turn(text)
     limit = _limit_per_turn(text)
-    for branch in _split_choose_one_branches(text):
+    for branch in branches:
+        branch_start = len(rules)
         consumed_play_draw = False
         consumed_combo_draw = False
         m_play_or_combo_draw = _PLAY_OR_COMBO_DRAW_RE.search(branch)
@@ -585,6 +607,7 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_played",
                     handler_id="auto_draw_n",
                     handler_params={"amount": amount, **extra},
+                    source_text=branch,
                     once_per_turn=once,
                 )
             )
@@ -593,6 +616,7 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_comboed",
                     handler_id="auto_draw_n",
                     handler_params={"amount": amount, **extra},
+                    source_text=branch,
                     once_per_turn=once,
                 )
             )
@@ -2621,6 +2645,9 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        if len(rules) > branch_start:
+            rules[branch_start:] = [replace(rule, source_text=(rule.source_text or branch)) for rule in rules[branch_start:]]
+
     if limit is not None:
         rules = [replace(rule, limit_per_turn=limit, limit_scope="card_number") for rule in rules]
 
@@ -2634,12 +2661,13 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     ]
 
     # De-duplicate exact duplicates.
-    uniq: dict[tuple[str, str, tuple[tuple[str, int | str | bool], ...], bool, int | None, str, str, str], EffectRule] = {}
+    uniq: dict[tuple[str, str, tuple[tuple[str, int | str | bool], ...], str, bool, int | None, str, str, str], EffectRule] = {}
     for rule in rules:
         key = (
             rule.trigger,
             rule.handler_id,
             tuple(sorted(rule.handler_params.items())),
+            rule.source_text,
             rule.once_per_turn,
             rule.limit_per_turn,
             rule.limit_scope,

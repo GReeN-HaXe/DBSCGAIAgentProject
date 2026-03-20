@@ -41,8 +41,10 @@ from src.game.state import (
     LowPowerBattlePlayHandWarpPenalty,
     NonLeaderAttackRestTax,
     PermanentSkillActivationRestriction,
+    PermanentCardRestriction,
     PermanentlyNegatedSkill,
     SecretAutoOpportunity,
+    TemporaryComboRestriction,
     TemporarySkillActivationRestriction,
     CounterMotion,
     CounterMotionTrace,
@@ -561,6 +563,7 @@ class RulesEngine:
                     source_zone=row.source_zone,
                     trigger=row.trigger,
                     handler_id=row.handler_id,
+                    source_skill_text=row.source_skill_text,
                     event_id=row.event_id,
                     event_name=row.event_name,
                     created_turn_number=row.created_turn_number,
@@ -636,6 +639,7 @@ class RulesEngine:
             trigger=opportunity.trigger,
             handler_id=opportunity.handler_id,
             handler_params=dict(opportunity.handler_params),
+            source_skill_text=opportunity.source_skill_text,
             source_card_number=opportunity.source_card_number,
             once_per_turn=opportunity.once_per_turn,
             limit_per_turn=opportunity.limit_per_turn,
@@ -886,6 +890,11 @@ class RulesEngine:
         state.active_card_play_restrictions = [
             row for row in state.active_card_play_restrictions if row.owner_player_id != ending_player
         ]
+        state.active_combo_restrictions = [
+            row
+            for row in state.active_combo_restrictions
+            if int(row.expires_on_turn_end_player_id) != int(ending_player)
+        ]
         state.active_activate_skill_restrictions = [
             row for row in state.active_activate_skill_restrictions if row.owner_player_id != ending_player
         ]
@@ -1009,6 +1018,20 @@ class RulesEngine:
         return any(
             row.owner_player_id == player_id and int(row.restricted_card_id) == int(card_id)
             for row in state.active_card_play_restrictions
+        ) or any(
+            int(row.owner_player_id) == int(player_id) and int(row.restricted_card_id) == int(card_id)
+            for row in state.permanent_card_play_restrictions
+        )
+
+    def _is_combo_restricted(self, state: GameState, *, player_id: int, card_id: int) -> bool:
+        return any(
+            int(row.owner_player_id) == int(player_id)
+            and int(row.restricted_card_id) == int(card_id)
+            for row in state.active_combo_restrictions
+        ) or any(
+            int(row.owner_player_id) == int(player_id)
+            and int(row.restricted_card_id) == int(card_id)
+            for row in state.permanent_combo_restrictions
         )
 
     def _counter_hand_restriction_matches(self, row: CounterHandActivationRestriction, *, player_id: int, card: CardInstance) -> bool:
@@ -1096,7 +1119,7 @@ class RulesEngine:
         return any(
             int(row.owner_player_id) == int(player_id)
             and int(row.restricted_card_id) == int(card_id)
-            and str(row.scope) == str(scope)
+            and str(row.scope) in {str(scope), "any"}
             and (not str(row.trigger) or str(row.trigger) == str(trigger))
             and (not str(row.handler_id) or str(row.handler_id) == str(handler_id))
             and (not tuple(row.handler_params_signature) or tuple(row.handler_params_signature) == tuple(handler_params_signature))
@@ -1117,7 +1140,7 @@ class RulesEngine:
         return any(
             int(row.owner_player_id) == int(player_id)
             and int(row.restricted_card_id) == int(card_id)
-            and str(row.scope) == str(scope)
+            and str(row.scope) in {str(scope), "any"}
             and (not str(row.trigger) or str(row.trigger) == str(trigger))
             and (not str(row.handler_id) or str(row.handler_id) == str(handler_id))
             and (not tuple(row.handler_params_signature) or tuple(row.handler_params_signature) == tuple(handler_params_signature))
@@ -2222,6 +2245,8 @@ class RulesEngine:
         self._checkpoint(state, "ex_evolve")
 
     def _can_combo_card(self, state: GameState, player_id: int, card: CardInstance) -> bool:
+        if self._is_combo_restricted(state, player_id=player_id, card_id=card.card_id):
+            return False
         if not card.has_super_combo:
             return True
         player = state.players[player_id]
@@ -2845,7 +2870,20 @@ class RulesEngine:
     @staticmethod
     def _text_counter_restricts_copies_for_game(card: CardInstance) -> bool:
         text = str(card.skill_text_raw or "").lower()
-        return "copies of this card for the game" in text and ("[counter" in text or "counter skill" in text)
+        return "copies of this card for the game" in text and (
+            "[counter" in text
+            or "counter skill" in text
+            or "can't activate copies of this card for the game" in text
+        )
+
+    @staticmethod
+    def _text_counter_restricts_copies_for_turn(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "copies of this card for the turn" in text and (
+            "[counter" in text
+            or "counter skill" in text
+            or "can't activate copies of this card for the turn" in text
+        )
 
     @staticmethod
     def _parse_counter_restricted_other_counter_mode_for_turn(card: CardInstance) -> str | None:
@@ -2863,17 +2901,27 @@ class RulesEngine:
     @staticmethod
     def _text_auto_restricts_copies_for_game(text: str) -> bool:
         normalized = str(text or "").lower()
-        return "copies of this card for the game" in normalized and ("[auto] skill" in normalized or "[auto] skills" in normalized)
+        return "copies of this card for the game" in normalized and (
+            "[auto] skill" in normalized
+            or "[auto] skills" in normalized
+            or "can't activate copies of this card for the game" in normalized
+        )
 
     @staticmethod
     def _text_auto_restricts_copies_for_turn(text: str) -> bool:
         normalized = str(text or "").lower()
-        return "copies of this card for the turn" in normalized and ("[auto] skill" in normalized or "[auto] skills" in normalized)
+        return "copies of this card for the turn" in normalized and (
+            "[auto] skill" in normalized
+            or "[auto] skills" in normalized
+            or "can't activate copies of this card for the turn" in normalized
+        )
 
     @staticmethod
     def _text_activate_restricts_copies_for_turn(text: str, *, skill_kind: str) -> bool:
         normalized = str(text or "").lower()
         if "copies of this card for the turn" not in normalized:
+            return False
+        if "activate skills on copies of this card for the turn" in normalized:
             return False
         if "can't activate copies of this card for the turn" in normalized:
             return True
@@ -2882,6 +2930,73 @@ class RulesEngine:
         if skill_kind == "activate_battle":
             return "[activate: battle]" in normalized and "skill" in normalized
         return False
+
+    @staticmethod
+    def _text_activate_restricts_copies_for_game(text: str, *, skill_kind: str) -> bool:
+        normalized = str(text or "").lower()
+        if "copies of this card for the game" not in normalized:
+            return False
+        if "activate skills on copies of this card for the game" in normalized:
+            return False
+        if "can't activate copies of this card for the game" in normalized:
+            return True
+        if skill_kind == "activate_main":
+            return "[activate: main]" in normalized and "skill" in normalized
+        if skill_kind == "activate_battle":
+            return "[activate: battle]" in normalized and "skill" in normalized
+        return False
+
+    @staticmethod
+    def _text_all_skills_restricts_copies_for_game(text: str) -> bool:
+        normalized = str(text or "").lower()
+        if "can't play copies of this card" in normalized or "can't use copies of this card" in normalized:
+            return False
+        return (
+            "copies of this card for the game" in normalized
+            and (
+                "can't activate skills on copies of this card for the game" in normalized
+                or "can't activate skill on copies of this card for the game" in normalized
+            )
+        )
+
+    @staticmethod
+    def _text_all_skills_restricts_copies_for_turn(text: str) -> bool:
+        normalized = str(text or "").lower()
+        if "can't play copies of this card" in normalized or "can't use copies of this card" in normalized:
+            return False
+        return (
+            "copies of this card for the turn" in normalized
+            and (
+                "can't activate skills on copies of this card for the turn" in normalized
+                or "can't activate skill on copies of this card for the turn" in normalized
+            )
+        )
+
+    @staticmethod
+    def _text_play_restricts_copies_for_turn(text: str) -> bool:
+        normalized = str(text or "").lower()
+        return "can't play copies of this card" in normalized and "for the turn" in normalized
+
+    @staticmethod
+    def _text_play_restricts_copies_for_game(text: str) -> bool:
+        normalized = str(text or "").lower()
+        return "can't play copies of this card" in normalized and "for the game" in normalized
+
+    @staticmethod
+    def _text_combo_restricts_copies_for_turn(text: str) -> bool:
+        normalized = str(text or "").lower()
+        return (
+            ("can't use copies of this card in a combo" in normalized and "for the turn" in normalized)
+            or ("can't combo with copies of this card" in normalized and "for the turn" in normalized)
+        )
+
+    @staticmethod
+    def _text_combo_restricts_copies_for_game(text: str) -> bool:
+        normalized = str(text or "").lower()
+        return (
+            ("can't use copies of this card in a combo" in normalized and "for the game" in normalized)
+            or ("can't combo with copies of this card" in normalized and "for the game" in normalized)
+        )
 
     @staticmethod
     def _parse_counter_power_reduce_opponent_battle_for_turn(card: CardInstance) -> tuple[int, int] | None:
@@ -3345,6 +3460,9 @@ class RulesEngine:
             if self._apply_counter_reduce_attacker_and_attack_power_tax_family(state, player, card):
                 handled = True
                 effect_tags.append("attacker_reduce_attack_tax")
+            if self._apply_counter_copy_hand_restriction_for_turn_family(state, player, card):
+                handled = True
+                effect_tags.append("copy_counter_restriction")
             if self._apply_counter_other_mode_hand_restriction_for_turn_family(state, player, card):
                 handled = True
                 effect_tags.append("other_counter_mode_restriction")
@@ -3651,6 +3769,38 @@ class RulesEngine:
             f"player_id={player.player_id} card_id={card.card_id}"
         )
         self._checkpoint(state, "counter_effect_permanent_copy_counter_restriction_applied")
+        return True
+
+    def _apply_counter_copy_hand_restriction_for_turn_family(
+        self,
+        state: GameState,
+        player: PlayerState,
+        card: CardInstance,
+    ) -> bool:
+        if not self._text_counter_restricts_copies_for_turn(card):
+            return False
+        restricted_card_id = int(card.card_id)
+        exists = any(
+            int(row.owner_player_id) == int(player.player_id)
+            and int(getattr(row, "restricted_card_id", 0) or 0) == restricted_card_id
+            and not str(getattr(row, "restricted_mode", "") or "").strip()
+            and int(getattr(row, "expires_on_turn_end_player_id", 0)) == int(state.active_player)
+            for row in state.active_counter_hand_restrictions
+        )
+        if exists:
+            return False
+        state.active_counter_hand_restrictions.append(
+            CounterHandActivationRestriction(
+                owner_player_id=player.player_id,
+                restricted_card_id=restricted_card_id,
+                expires_on_turn_end_player_id=state.active_player,
+            )
+        )
+        state.log.append(
+            "Counter copies restricted for the turn: "
+            f"player_id={player.player_id} card_id={card.card_id}"
+        )
+        self._checkpoint(state, "counter_effect_copy_counter_restriction_applied")
         return True
 
     def _apply_counter_other_mode_hand_restriction_for_turn_family(
@@ -4408,6 +4558,8 @@ class RulesEngine:
         return True
 
     def _registration_source_skill_text(self, state: GameState, reg: EffectRegistration) -> str:
+        if str(getattr(reg, "source_skill_text", "") or "").strip():
+            return str(getattr(reg, "source_skill_text", "") or "")
         found = self._find_card_anywhere_by_instance(
             state,
             owner_player_id=reg.owner_player_id,
@@ -4420,6 +4572,106 @@ class RulesEngine:
         return str(self._resolve_card_runtime_data(reg.source_card_id).skill_text_raw or "")
 
     def _apply_post_resolution_registration_effects(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        text = self._registration_source_skill_text(state, reg)
+        if self._text_play_restricts_copies_for_game(text):
+            exists = any(
+                int(row.owner_player_id) == int(reg.owner_player_id)
+                and int(row.restricted_card_id) == int(reg.source_card_id)
+                for row in state.permanent_card_play_restrictions
+            )
+            if not exists:
+                state.permanent_card_play_restrictions.append(
+                    PermanentCardRestriction(
+                        owner_player_id=reg.owner_player_id,
+                        restricted_card_id=reg.source_card_id,
+                    )
+                )
+                state.log.append(
+                    "Card plays on copies permanently restricted for the game: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_play_copies_restricted_for_game")
+        if self._text_combo_restricts_copies_for_game(text):
+            exists = any(
+                int(row.owner_player_id) == int(reg.owner_player_id)
+                and int(row.restricted_card_id) == int(reg.source_card_id)
+                for row in state.permanent_combo_restrictions
+            )
+            if not exists:
+                state.permanent_combo_restrictions.append(
+                    PermanentCardRestriction(
+                        owner_player_id=reg.owner_player_id,
+                        restricted_card_id=reg.source_card_id,
+                    )
+                )
+                state.log.append(
+                    "Card combos on copies permanently restricted for the game: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_combo_copies_restricted_for_game")
+        if self._text_play_restricts_copies_for_turn(text):
+            exists = any(
+                int(row.owner_player_id) == int(reg.owner_player_id)
+                and int(row.restricted_card_id) == int(reg.source_card_id)
+                for row in state.active_card_play_restrictions
+            )
+            if not exists:
+                state.active_card_play_restrictions.append(
+                    DelayedCardPlayRestriction(
+                        owner_player_id=reg.owner_player_id,
+                        restricted_card_id=reg.source_card_id,
+                    )
+                )
+                state.log.append(
+                    "Card plays on copies temporarily restricted for the turn: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_play_copies_restricted_for_turn")
+        if self._text_combo_restricts_copies_for_turn(text):
+            exists = any(
+                int(row.owner_player_id) == int(reg.owner_player_id)
+                and int(row.restricted_card_id) == int(reg.source_card_id)
+                and int(row.expires_on_turn_end_player_id) == int(state.active_player)
+                for row in state.active_combo_restrictions
+            )
+            if not exists:
+                state.active_combo_restrictions.append(
+                    TemporaryComboRestriction(
+                        owner_player_id=reg.owner_player_id,
+                        restricted_card_id=reg.source_card_id,
+                        expires_on_turn_end_player_id=state.active_player,
+                    )
+                )
+                state.log.append(
+                    "Card combos on copies temporarily restricted for the turn: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_combo_copies_restricted_for_turn")
+        if self._text_all_skills_restricts_copies_for_turn(text):
+            if self._add_temporary_skill_activation_restriction(
+                state,
+                owner_player_id=reg.owner_player_id,
+                restricted_card_id=reg.source_card_id,
+                scope="any",
+                expires_on_turn_end_player_id=state.active_player,
+            ):
+                state.log.append(
+                    "All skills on copies temporarily restricted for the turn: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_all_skill_copies_restricted_for_turn")
+        if self._text_all_skills_restricts_copies_for_game(text):
+            if self._add_permanent_skill_activation_restriction(
+                state,
+                owner_player_id=reg.owner_player_id,
+                restricted_card_id=reg.source_card_id,
+                scope="any",
+            ):
+                state.log.append(
+                    "All skills on copies permanently restricted for the game: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_all_skill_copies_restricted_for_game")
         if event.name == "skill_activated" and bool(reg.handler_params.get("negate_self_skill_for_game", False)):
             if self._permanently_negate_registration_skill(state, reg):
                 state.log.append(
@@ -4429,7 +4681,24 @@ class RulesEngine:
                 self._checkpoint(state, "effect_skill_negated_for_game")
         if event.name == "skill_activated":
             skill_kind = str(event.payload.get("skill_kind") or "")
-            text = self._registration_source_skill_text(state, reg)
+            if (
+                str(reg.trigger) in {"self_activate_main", "self_activate_battle", "self_activate_extra_from_hand"}
+                and self._text_activate_restricts_copies_for_game(text, skill_kind=skill_kind)
+                and self._add_permanent_skill_activation_restriction(
+                    state,
+                    owner_player_id=reg.owner_player_id,
+                    restricted_card_id=reg.source_card_id,
+                    scope="activate",
+                    trigger=str(reg.trigger),
+                    handler_id=str(reg.handler_id),
+                    handler_params_signature=self._handler_params_signature(reg.handler_params),
+                )
+            ):
+                state.log.append(
+                    "Activate copies permanently restricted for the game: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_activate_copies_restricted_for_game")
             if (
                 str(reg.trigger) in {"self_activate_main", "self_activate_battle", "self_activate_extra_from_hand"}
                 and self._text_activate_restricts_copies_for_turn(text, skill_kind=skill_kind)
@@ -4450,7 +4719,6 @@ class RulesEngine:
                 )
                 self._checkpoint(state, "effect_activate_copies_restricted_for_turn")
             return
-        text = self._registration_source_skill_text(state, reg)
         if self._text_auto_restricts_copies_for_game(text):
             if self._add_permanent_skill_activation_restriction(
                 state,
@@ -5410,7 +5678,7 @@ class RulesEngine:
         return paid_energy, paid_z
 
     def _register_card_effects(self, state: GameState, *, player_id: int, source_zone: str, card: CardInstance) -> None:
-        candidates: list[tuple[str, str, bool | None, dict[str, int | str | bool]]] = []
+        candidates: list[tuple[str, str, bool | None, dict[str, int | str | bool], str]] = []
         deferred_secret_auto = False
         if not self._is_secret_zone(source_zone):
             self._promote_deferred_secret_autos_to_public_zone(
@@ -5420,13 +5688,13 @@ class RulesEngine:
             )
         if card.has_auto:
             if source_zone in {"battle", "unison"}:
-                candidates.append(("self_played", "noop_auto", None, {}))
+                candidates.append(("self_played", "noop_auto", None, {}, ""))
                 if card.auto_draw_on_play:
-                    candidates.append(("self_played", "auto_draw_on_play", None, {}))
+                    candidates.append(("self_played", "auto_draw_on_play", None, {}, ""))
             if source_zone in {"leader", "battle", "unison"}:
-                candidates.append(("self_attacks", "noop_auto", None, {}))
+                candidates.append(("self_attacks", "noop_auto", None, {}, ""))
                 if card.auto_draw_on_attack:
-                    candidates.append(("self_attacks", "auto_draw_on_attack", None, {}))
+                    candidates.append(("self_attacks", "auto_draw_on_attack", None, {}, ""))
 
         for rule in self._effect_rules.get(card.card_id, ()):
             params = dict(rule.handler_params)
@@ -5444,6 +5712,7 @@ class RulesEngine:
                         trigger=rule.trigger,
                         handler_id=rule.handler_id,
                         handler_params=params,
+                        source_skill_text=str(rule.source_text or ""),
                         once_per_turn=bool(rule.once_per_turn),
                         limit_per_turn=rule.limit_per_turn,
                         limit_scope=str(rule.limit_scope or "card_number"),
@@ -5453,15 +5722,16 @@ class RulesEngine:
                         f"source_instance_id={card.instance_id} zone={source_zone} trigger={rule.trigger}"
                     )
                 continue
-            candidates.append((rule.trigger, rule.handler_id, rule.once_per_turn, params))
+            candidates.append((rule.trigger, rule.handler_id, rule.once_per_turn, params, str(rule.source_text or "")))
 
-        for trigger, handler_id, once_per_turn_override, handler_params in candidates:
+        for trigger, handler_id, once_per_turn_override, handler_params, source_skill_text in candidates:
             linked_secret = self._find_linked_deferred_secret_auto(
                 state,
                 source_instance_id=card.instance_id,
                 trigger=trigger,
                 handler_id=handler_id,
                 handler_params=handler_params,
+                source_skill_text=source_skill_text,
             )
             if linked_secret is not None and self._preserve_secret_auto_provenance_on_public_registration(
                 linked_secret,
@@ -5473,6 +5743,7 @@ class RulesEngine:
                 and reg.source_zone == source_zone
                 and reg.trigger == trigger
                 and reg.handler_id == handler_id
+                and str(reg.source_skill_text or "") == str(source_skill_text or "")
                 for reg in state.effect_registry
             )
             if exists:
@@ -5487,6 +5758,7 @@ class RulesEngine:
                     trigger=trigger,
                     handler_id=handler_id,
                     handler_params=dict(handler_params),
+                    source_skill_text=source_skill_text,
                     source_card_number=str(card.card_number or ""),
                     once_per_turn=card.auto_once_per_turn if once_per_turn_override is None else bool(once_per_turn_override),
                     limit_per_turn=self._resolve_effect_limit_per_turn(handler_params),
@@ -5538,6 +5810,7 @@ class RulesEngine:
                     source_zone=source_zone,
                     trigger=row.trigger,
                     handler_id=row.handler_id,
+                    source_skill_text=row.source_skill_text,
                     deferred_turn_number=row.deferred_turn_number,
                     deferred_phase=row.deferred_phase,
                     origin_zone=str(row.origin_zone or row.source_zone),
@@ -5557,6 +5830,7 @@ class RulesEngine:
         trigger: str,
         handler_id: str,
         handler_params: dict[str, int | str | bool],
+        source_skill_text: str,
     ) -> DeferredSecretAuto | None:
         return next(
             (
@@ -5566,6 +5840,7 @@ class RulesEngine:
                 and row.trigger == trigger
                 and row.handler_id == handler_id
                 and dict(row.handler_params) == dict(handler_params)
+                and str(row.source_skill_text or "") == str(source_skill_text or "")
             ),
             None,
         )
@@ -5595,6 +5870,7 @@ class RulesEngine:
         trigger: str,
         handler_id: str,
         handler_params: dict[str, int | str | bool],
+        source_skill_text: str,
         once_per_turn: bool,
         limit_per_turn: int | None,
         limit_scope: str,
@@ -5606,6 +5882,7 @@ class RulesEngine:
             and row.trigger == trigger
             and row.handler_id == handler_id
             and dict(row.handler_params) == dict(handler_params)
+            and str(row.source_skill_text or "") == str(source_skill_text or "")
             for row in state.deferred_secret_autos
         )
         if exists:
@@ -5620,6 +5897,7 @@ class RulesEngine:
                 source_zone=source_zone,
                 trigger=trigger,
                 handler_id=handler_id,
+                source_skill_text=str(source_skill_text or ""),
                 deferred_turn_number=state.turn_number,
                 deferred_phase=state.phase,
                 origin_zone=source_zone,
@@ -5919,6 +6197,7 @@ class RulesEngine:
                 trigger=row.trigger,
                 handler_id=row.handler_id,
                 handler_params=dict(row.handler_params),
+                source_skill_text=row.source_skill_text,
                 source_card_number=row.source_card_number,
                 once_per_turn=row.once_per_turn,
                 limit_per_turn=row.limit_per_turn,
@@ -5948,6 +6227,7 @@ class RulesEngine:
                     source_zone=row.source_zone,
                     trigger=row.trigger,
                     handler_id=row.handler_id,
+                    source_skill_text=row.source_skill_text,
                     event_id=event.event_id,
                     event_name=event.name,
                     created_turn_number=state.turn_number,

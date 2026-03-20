@@ -334,6 +334,7 @@ Resolved:
         - `counter_from_hand`
       - example family text:
         - `You can't activate the [Counter: Attack] skill on copies of this card for the game`
+        - `You can't activate copies of this card for the game`
     - permanent copy-wide auto activation locks for the game
       - resolved autos can now apply a persistent copy restriction keyed to:
         - player
@@ -345,6 +346,39 @@ Resolved:
       - matching deferred secret autos are created as preblocked opportunities
       - example family text:
         - `You can't activate the [Auto] skill on copies of this card for the game`
+    - generic all-skill copy locks for the game now use the same permanent restriction model
+      - resolved skills can now apply a scope-wide copy restriction with:
+        - `scope = any`
+      - current covered wording:
+        - `You can't activate skills on copies of this card for the game`
+      - this now blocks matching future:
+        - autos
+        - activates
+        - counters from hand
+    - generic all-skill copy locks for the turn now use the same temporary restriction model
+      - resolved skills can now apply a scope-wide temporary copy restriction with:
+        - `scope = any`
+      - current covered wording:
+        - `You can't activate skills on copies of this card for the turn`
+      - this now blocks matching same-turn:
+        - autos
+        - activates
+        - counters from hand
+      - and it expires correctly on the next turn cycle
+      - detector refinement:
+        - generic activation-copy wording is now explicitly kept separate from non-activation text like:
+          - `You can't play copies of this card ...`
+          - `You can't use copies of this card ...`
+      - conservative adjacent support is now in place too:
+        - `You can't play copies of this card for the turn`
+          - blocks same-card hand plays for the turn
+        - `You can't use copies of this card in a combo for the turn`
+          - blocks same-card hand combos for the turn
+      - permanent adjacent support is now in place too:
+        - `You can't play copies of this card for the game`
+          - blocks same-card hand plays for the game
+        - `You can't use copies of this card in a combo for the game`
+          - blocks same-card hand combos for the game
     - temporary copy-wide activate restrictions are now registration-aware
       - next-turn / turn-scoped activate-copy locks now preserve:
         - player
@@ -359,6 +393,8 @@ Resolved:
         - `You can't activate the [Counter: Play] skills of other cards for the turn`
         - `You can't activate the [Counter: Attack] skills of other cards for the turn`
       - this lives on the same temporary hand-counter restriction state used for copy locks
+      - generic same-card wording is now covered too:
+        - `You can't activate copies of this card for the turn`
     - temporary copy-wide auto activation locks now use the same precise registration model
       - resolved autos can now apply a turn-scoped restriction keyed to:
         - player
@@ -366,9 +402,13 @@ Resolved:
         - trigger
         - handler
         - handler params
+        - source skill line text
       - future matching public autos are blocked for the rest of the turn
       - matching deferred secret autos are created as preblocked opportunities for the rest of the turn
-      - current scope is strongest for cards whose restricted auto line is the card's only matching auto family in that window
+      - line-level source-text provenance now keeps mixed multi-auto cards from leaking restriction text across unrelated auto lines
+      - generic wording is now covered too:
+        - `You can't activate copies of this card for the turn`
+        - `You can't activate copies of this card for the game`
     - text-driven `Activate: Main` / `Activate: Battle` copy locks for the turn now use the same temporary restriction model
       - successful public activates can now apply a turn-scoped activate restriction keyed to:
         - player
@@ -376,7 +416,10 @@ Resolved:
         - trigger
         - handler
         - handler params
+        - source skill line text
       - matching activate copies are blocked for the rest of the turn and become legal again next turn
+      - permanent generic wording is now covered too:
+        - `You can't activate copies of this card for the game`
       - this complements the older scheduled next-turn activate-copy restriction path instead of replacing it
       - deferred later:
         - broader long-lived control / skill-negation generalization beyond the current battle-card exchange slice
