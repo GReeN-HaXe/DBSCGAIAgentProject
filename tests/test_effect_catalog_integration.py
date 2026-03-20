@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
-
 import pytest
 
 from src.game import Action, ActionType, CardInstance, RulesEngine, TurnPhase
+from src.game.effect_rules import default_effect_catalog_path, load_effect_rules_json, serialize_effect_catalog
 
 
-CATALOG_PATH = Path("dbdatabase/effect_catalog.json")
+CATALOG_PATH = default_effect_catalog_path()
 
 
 def _deck(seed: int, size: int = 60) -> list[int]:
@@ -24,14 +23,11 @@ def _to_main(engine: RulesEngine, state):
 def _load_catalog() -> dict[str, list[dict[str, object]]]:
     if not CATALOG_PATH.exists():
         pytest.skip(f"catalog file not found: {CATALOG_PATH}")
-    payload = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
-    if isinstance(payload, dict) and "rules" in payload:
-        rules = payload.get("rules")
-        if isinstance(rules, dict):
-            return rules
-    if isinstance(payload, dict):
-        return payload
-    raise AssertionError("effect catalog payload must be a JSON object")
+    payload = serialize_effect_catalog(load_effect_rules_json(CATALOG_PATH))
+    rules = payload.get("rules")
+    if isinstance(rules, dict):
+        return rules
+    raise AssertionError("effect catalog payload must expose serialized rules")
 
 
 def test_generated_catalog_self_played_draw_rule_executes_end_to_end() -> None:
@@ -83,7 +79,8 @@ def test_generated_catalog_self_played_ko_rule_executes_end_to_end() -> None:
                 if not isinstance(params, dict):
                     continue
                 # Pick a simple non-gated KO rule for deterministic integration.
-                if "requires_leader" in params or bool(params.get("rest_mode_only", False)):
+                allowed_keys = {"max_cost", "ignores_barrier"}
+                if any(key not in allowed_keys for key in params.keys()) or bool(params.get("rest_mode_only", False)):
                     continue
                 selected_card_id = int(key)
                 raw = params.get("max_cost", -1)

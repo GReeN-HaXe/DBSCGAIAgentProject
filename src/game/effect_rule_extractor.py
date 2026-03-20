@@ -279,6 +279,9 @@ _COMBO_FROM_HAND_PLAY_FROM_HAND_RE = re.compile(
 _PLAY_GAIN_CONTROL_OPP_UNISON_RE = re.compile(
     r"when this card is played from your hand, choose (?:up to )?(\d+) of your opponent'?s unison cards? and gain control of it"
 )
+_PLAY_GAIN_CONTROL_OPP_BATTLE_RE = re.compile(
+    r"when (?:you play this card|this card is played(?: from your hand)?),?\s*choose up to (\d+) of (?:the )?battle cards? in your opponent'?s battle area with an energy cost of (\d+) or less and gain control of it"
+)
 _PLAY_FROM_HAND_PLAY_FROM_HAND_WITH_MARKERS_RE = re.compile(
     r"when this card is played from your hand, choose up to (\d+) (.+?) in your hand and play it with (?:a|(\d+)) markers? on it(?: in rest mode)?"
 )
@@ -487,6 +490,8 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
     m_name_token = re.search(r"\{([^}]+)\}\s+in\s+(?:their|its)?\s*card\s+names?", descriptor_lc)
     if m_name_token:
         params["required_name_contains"] = m_name_token.group(1).strip().upper()
+    elif re.fullmatch(r"\{([^}]+)\}", descriptor.strip()):
+        params["required_name_contains"] = descriptor.strip()[1:-1].strip().upper()
 
     cleaned = descriptor_lc
     cleaned = re.sub(r"\{[^}]+\}\s+in\s+(?:their|its)?\s*card\s+names?", " ", cleaned)
@@ -1262,15 +1267,18 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             max_targets = int(m_activate_main_add_from_deck.group(1))
             descriptor = m_activate_main_add_from_deck.group(2).lower()
             extra = _extract_common_conditions(branch)
+            params = {
+                "max_targets": max_targets,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            if "negate this skill for the game" in branch:
+                params["negate_self_skill_for_game"] = True
             rules.append(
                 EffectRule(
                     trigger="self_activate_main",
                     handler_id="activate_add_up_to_n_from_owner_deck_to_hand",
-                    handler_params={
-                        "max_targets": max_targets,
-                        **_descriptor_filters(descriptor, branch),
-                        **extra,
-                    },
+                    handler_params=params,
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )
@@ -2128,6 +2136,20 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_played",
                     handler_id="auto_gain_control_opponent_unison_on_play",
                     handler_params={"max_targets": max_targets, "target_policy": "first", **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_gain_battle = _PLAY_GAIN_CONTROL_OPP_BATTLE_RE.search(branch)
+        if m_gain_battle:
+            max_targets = int(m_gain_battle.group(1))
+            max_cost = int(m_gain_battle.group(2))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_gain_control_opponent_battle_on_play",
+                    handler_params={"max_targets": max_targets, "max_cost": max_cost, "target_policy": "first", **extra},
                     once_per_turn=once,
                 )
             )

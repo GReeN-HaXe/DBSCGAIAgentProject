@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DBS Source Text Patches",
+  "type": "object",
+  "required": ["catalog_kind", "schema_version", "patches"],
+  "properties": {
+    "catalog_kind": {
+      "const": "dbs_source_text_patches"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "patches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["card_number", "fields"],
+        "properties": {
+          "card_number": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fields": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": ["string", "number", "boolean", "null"]
+            }
+          },
+          "reason": {
+            "type": "string"
+          },
+          "apply_to_variants": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

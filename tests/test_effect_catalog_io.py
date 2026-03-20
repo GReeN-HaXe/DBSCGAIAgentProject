@@ -7,14 +7,20 @@ import uuid
 
 from src.game import Action, ActionType, CardInstance, RulesEngine, TurnPhase
 from src.game.effect_rules import (
+    DEFAULT_EFFECT_CATALOG_RELATIVE_PATH,
+    DEFAULT_EFFECT_CATALOG_SHARD_RELATIVE_DIR,
     EFFECT_CATALOG_KIND,
+    EFFECT_CATALOG_MANIFEST_KIND,
+    EFFECT_CATALOG_MANIFEST_SCHEMA_VERSION,
     EFFECT_CATALOG_OVERRIDE_KIND,
     EFFECT_CATALOG_OVERRIDE_SCHEMA_VERSION,
     EFFECT_CATALOG_SCHEMA_VERSION,
     EffectRule,
+    default_effect_catalog_path,
     load_effect_rule_overrides_json,
     load_effect_rules_json,
     merge_effect_rule_overrides,
+    save_effect_rules_sharded_json,
     save_effect_rule_overrides_json,
     save_effect_rules_json,
 )
@@ -115,6 +121,54 @@ def test_effect_catalog_loader_accepts_legacy_plain_rule_map() -> None:
         shutil.rmtree(scratch, ignore_errors=True)
 
 
+def test_default_effect_catalog_path_prefers_shards_and_falls_back_to_merged() -> None:
+    scratch = _scratch_dir()
+    try:
+        merged_path = scratch / DEFAULT_EFFECT_CATALOG_RELATIVE_PATH
+        shard_dir = scratch / DEFAULT_EFFECT_CATALOG_SHARD_RELATIVE_DIR
+        merged_path.parent.mkdir(parents=True, exist_ok=True)
+        merged_path.write_text("{}", encoding="utf-8")
+        assert default_effect_catalog_path(scratch) == merged_path
+        shard_dir.mkdir(parents=True, exist_ok=True)
+        assert default_effect_catalog_path(scratch) == shard_dir
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
+
+
+def test_effect_catalog_sharded_roundtrip_and_directory_load() -> None:
+    source = {
+        card_id: (
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_draw_n",
+                handler_params={"amount": card_id % 3 + 1},
+                family_id="self_played:auto_draw_n",
+                provenance="sharded-test",
+            ),
+        )
+        for card_id in range(100, 107)
+    }
+    scratch = _scratch_dir()
+    try:
+        shard_dir = scratch / "catalog_shards"
+        manifest_path = save_effect_rules_sharded_json(shard_dir, source, shard_size=3)
+        raw_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        assert raw_manifest["catalog_kind"] == EFFECT_CATALOG_MANIFEST_KIND
+        assert raw_manifest["schema_version"] == EFFECT_CATALOG_MANIFEST_SCHEMA_VERSION
+        assert raw_manifest["card_rule_count"] == len(source)
+        assert raw_manifest["effect_rule_count"] == len(source)
+        assert raw_manifest["shard_count"] == 3
+        assert len(list(shard_dir.glob("shard_*.json"))) == 3
+
+        loaded_from_manifest = load_effect_rules_json(manifest_path)
+        loaded_from_dir = load_effect_rules_json(shard_dir)
+        assert set(loaded_from_manifest.keys()) == set(source.keys())
+        assert loaded_from_manifest == loaded_from_dir
+        assert loaded_from_dir[100][0].provenance == "sharded-test"
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
+
+
 def test_effect_catalog_override_json_roundtrip_and_merge_modes() -> None:
     overrides = {
         101: (
@@ -185,7 +239,7 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     if not OVERRIDES_PATH.exists():
         return
     loaded = load_effect_rule_overrides_json(OVERRIDES_PATH)
-    assert len(loaded) == 79
+    assert len(loaded) == 82
     assert loaded[86][0] == "replace"
     assert loaded[90][0] == "replace"
     assert loaded[8372][0] == "replace"
@@ -216,6 +270,7 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert loaded[5301][0] == "replace"
     assert loaded[8458][0] == "replace"
     assert loaded[6679][0] == "replace"
+    assert loaded[6733][0] == "replace"
     assert loaded[7386][0] == "replace"
     assert loaded[23][0] == "replace"
     assert loaded[1002][0] == "replace"
@@ -238,9 +293,11 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert loaded[6820][0] == "replace"
     assert loaded[8444][0] == "replace"
     assert loaded[1480][0] == "replace"
+    assert loaded[1509][0] == "replace"
     assert loaded[4949][0] == "replace"
     assert loaded[7906][0] == "replace"
     assert loaded[7940][0] == "replace"
+    assert loaded[2461][0] == "replace"
     assert loaded[6997][0] == "replace"
     assert loaded[7910][0] == "replace"
     king_cold_rule = loaded[20][1][0]
@@ -280,6 +337,8 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     yamcha_rule = loaded[5301][1][0]
     final_battle_rule = loaded[8458][1][0]
     toppo_rule = loaded[6679][1][0]
+    veku_turn_start_rule = loaded[6733][1][0]
+    veku_turn_end_rule = loaded[6733][1][1]
     koitsukai_rule = loaded[7386][1][0]
     works_undone_rule = loaded[23][1][0]
     cell_auto_rule = loaded[1002][1][0]
@@ -302,14 +361,20 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     bold_arrival_rule = loaded[8444][1][0]
     stronger_together_play_rule = loaded[1480][1][0]
     stronger_together_activate_rule = loaded[1480][1][1]
+    pan_glimpse_draw_rule = loaded[1509][1][0]
+    pan_glimpse_activate_rule = loaded[1509][1][1]
     special_beam_rule = loaded[2064][1][0]
+    paragus_draw_rule = loaded[2461][1][0]
+    paragus_play_rule = loaded[2461][1][1]
+    paragus_transfer_rule = loaded[2461][1][2]
     crimson_guardian_rule = loaded[2481][1][0]
     almighty_rule = loaded[4949][1][0]
     vegito_barrage_rule = loaded[8315][1][0]
     accidental_wish_rule = loaded[7906][1][0]
     guided_android_rule = loaded[7940][1][0]
     super_kamehameha_rule = loaded[6997][1][0]
-    scheme_wish_rule = loaded[7910][1][0]
+    scheme_wish_plus_rule = loaded[7910][1][0]
+    scheme_wish_minus_rule = loaded[7910][1][1]
     reclaiming_hope_activate = loaded[86][1][0]
     reclaiming_hope_auto = loaded[86][1][1]
     misadventure_rule = loaded[90][1][0]
@@ -409,6 +474,10 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert final_battle_rule.family_id == "counter_attack:counter_negate_attack"
     assert toppo_rule.handler_id == "counter_negate_attack_play_self"
     assert toppo_rule.family_id == "counter_attack:counter_negate_attack_play_self"
+    assert veku_turn_start_rule.handler_id == "auto_transfer_self_control_to_opponent"
+    assert veku_turn_start_rule.family_id == "turn_start:auto_transfer_self_control_to_opponent"
+    assert veku_turn_end_rule.handler_id == "auto_transfer_self_control_to_opponent"
+    assert veku_turn_end_rule.family_id == "turn_end:auto_transfer_self_control_to_opponent"
     assert reclaiming_hope_activate.handler_id == "activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end"
     assert reclaiming_hope_auto.handler_id == "auto_rest_owner_battle_on_self_blocker_activated_switch_self_active"
     assert misadventure_rule.handler_id == "auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest"
@@ -448,8 +517,18 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert stronger_together_play_rule.family_id == "self_played:auto_opponent_bottom_decks_from_hand_until_n_on_play"
     assert stronger_together_activate_rule.handler_id == "activate_gain_power_and_keyword_for_battle"
     assert stronger_together_activate_rule.family_id == "self_activate_battle:activate_gain_power_and_keyword_for_battle"
+    assert pan_glimpse_draw_rule.handler_id == "auto_draw_n"
+    assert pan_glimpse_draw_rule.family_id == "self_played:auto_draw_n"
+    assert pan_glimpse_activate_rule.handler_id == "activate_transfer_self_control_to_opponent"
+    assert pan_glimpse_activate_rule.family_id == "self_activate_main:activate_transfer_self_control_to_opponent"
     assert special_beam_rule.handler_id == "activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle"
     assert special_beam_rule.family_id == "self_activate_extra_from_hand:activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle"
+    assert paragus_draw_rule.handler_id == "auto_draw_n"
+    assert paragus_draw_rule.family_id == "self_played:auto_draw_n"
+    assert paragus_play_rule.handler_id == "auto_play_up_to_n_from_owner_deck_on_play"
+    assert paragus_play_rule.family_id == "self_played:auto_play_up_to_n_from_owner_deck_on_play"
+    assert paragus_transfer_rule.handler_id == "auto_transfer_self_control_to_opponent_on_play"
+    assert paragus_transfer_rule.family_id == "self_played:auto_transfer_self_control_to_opponent_on_play"
     assert crimson_guardian_rule.handler_id == "activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn"
     assert crimson_guardian_rule.family_id == "self_activate_main:activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn"
     assert vegito_barrage_rule.trigger == "self_permanent"
@@ -462,8 +541,10 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert guided_android_rule.family_id == "self_played:auto_switch_up_to_n_opponent_battle_rest_on_play"
     assert super_kamehameha_rule.handler_id == "counter_place_pending_played_battle_to_warp_if_cost_at_most"
     assert super_kamehameha_rule.family_id == "counter_play:counter_place_pending_played_battle_to_warp_if_cost_at_most"
-    assert scheme_wish_rule.handler_id == "activate_buff_owner_battle_cards"
-    assert scheme_wish_rule.family_id == "self_activate_main:activate_buff_owner_battle_cards"
+    assert scheme_wish_plus_rule.handler_id == "activate_exchange_control_of_battle_cards_for_game"
+    assert scheme_wish_plus_rule.family_id == "self_activate_main:activate_exchange_control_of_battle_cards_for_game"
+    assert scheme_wish_minus_rule.handler_id == "activate_buff_owner_battle_cards"
+    assert scheme_wish_minus_rule.family_id == "self_activate_main:activate_buff_owner_battle_cards"
 
 
 def test_engine_loads_effect_catalog_from_path() -> None:
@@ -502,6 +583,42 @@ def test_engine_loads_effect_catalog_from_path() -> None:
         state = engine.apply_action(state, play)
         state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
         assert len(state.players[1].deck) == deck_before - 1
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
+
+
+def test_engine_loads_sharded_effect_catalog_from_directory() -> None:
+    scratch = _scratch_dir()
+    try:
+        catalog_dir = scratch / "effect_catalog_shards"
+        save_effect_rules_sharded_json(
+            catalog_dir,
+            {
+                101: (
+                    EffectRule(
+                        trigger="self_played",
+                        handler_id="auto_draw_n",
+                        handler_params={"amount": 2},
+                        family_id="self_played:auto_draw_n",
+                        provenance="test",
+                    ),
+                ),
+                202: (
+                    EffectRule(
+                        trigger="self_attacks",
+                        handler_id="auto_draw_n",
+                        handler_params={"amount": 1},
+                        family_id="self_attacks:auto_draw_n",
+                        provenance="test",
+                    ),
+                ),
+            },
+            shard_size=1,
+        )
+        engine = RulesEngine(effect_rules_path=catalog_dir)
+        assert 101 in engine._effect_rules
+        assert engine._effect_rules[101][0].handler_id == "auto_draw_n"
+        assert engine._effect_rules[202][0].family_id == "self_attacks:auto_draw_n"
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
 

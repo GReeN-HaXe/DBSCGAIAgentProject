@@ -356,6 +356,53 @@
         }
       ]
     },
+    "2461": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_draw_n",
+          "handler_params": {
+            "amount": 1,
+            "requires_played_from": "hand",
+            "requires_leader": "<Paragus: Br>"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_draw_n",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_play_up_to_n_from_owner_deck_on_play",
+          "handler_params": {
+            "max_targets": 1,
+            "required_name_contains": "ENERGY BARRAGE FRIEZA",
+            "requires_played_from": "hand",
+            "requires_leader": "<Paragus: Br>"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_transfer_self_control_to_opponent_on_play",
+          "handler_params": {
+            "requires_played_from": "hand",
+            "requires_leader": "<Paragus: Br>"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_transfer_self_control_to_opponent_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "4226": {
       "mode": "replace",
       "rules": [
@@ -557,6 +604,31 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "counter_attack:counter_negate_attack_play_self",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "6733": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "turn_start",
+          "handler_id": "auto_transfer_self_control_to_opponent",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "turn_start:auto_transfer_self_control_to_opponent",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "turn_end",
+          "handler_id": "auto_transfer_self_control_to_opponent",
+          "handler_params": {},
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "turn_end:auto_transfer_self_control_to_opponent",
           "provenance": "manual_override"
         }
       ]
@@ -1607,6 +1679,35 @@
         }
       ]
     },
+    "1509": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_draw_n",
+          "handler_params": {
+            "amount": 1
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_draw_n",
+          "provenance": "manual_override"
+        },
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_transfer_self_control_to_opponent",
+          "handler_params": {
+            "requires_leader": "blue <Son Gohan: SH>"
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_transfer_self_control_to_opponent",
+          "provenance": "manual_override"
+        }
+      ]
+    },
     "6997": {
       "mode": "replace",
       "rules": [
@@ -1629,6 +1730,22 @@
     "7910": {
       "mode": "replace",
       "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_exchange_control_of_battle_cards_for_game",
+          "handler_params": {
+            "owner_target_max_cost": 3,
+            "owner_max_targets": 1,
+            "opponent_max_targets": 1,
+            "negate_owner_target_skills_for_game": true,
+            "marker_delta": 1
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_exchange_control_of_battle_cards_for_game",
+          "provenance": "manual_override"
+        },
         {
           "trigger": "self_activate_main",
           "handler_id": "activate_buff_owner_battle_cards",

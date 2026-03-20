@@ -2,66 +2,128 @@
   "coverage": {
     "db": {
       "cards_with_diagnostics": 0,
-      "cards_with_rules": 2211,
-      "cards_without_rules": 3790
+      "cards_with_rules": 2971,
+      "cards_without_rules": 3030
     },
     "priority": {
       "cards_with_diagnostics": 0,
-      "cards_with_rules": 122,
-      "cards_without_rules": 165
+      "cards_with_rules": 0,
+      "cards_without_rules": 0,
+      "intentionally_skipped_cards": 0
     }
   },
   "extractor_report": {
     "candidates_scanned": 6001,
     "cards_with_diagnostics": 0,
-    "cards_with_rules": 2211,
-    "cards_without_rules": 3790,
+    "cards_with_rules": 2971,
+    "cards_without_rules": 3030,
     "coverage": {
       "by_handler": {
+        "activate_add_up_to_n_from_owner_deck_to_hand": 38,
+        "activate_add_up_to_n_from_owner_warp_to_hand": 5,
+        "activate_buff_owner_battle_cards": 17,
+        "activate_draw_n_and_gain_keyword_for_turn": 2,
+        "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end": 2,
+        "activate_gain_power_and_keyword_for_battle": 90,
+        "activate_gain_power_and_keyword_for_turn": 33,
+        "activate_gain_power_by_hidden_cost_target_original_power_for_turn": 1,
+        "activate_grant_next_ex_evolve_from_owner_drop": 1,
+        "activate_ko_up_to_n_opponent_battle": 4,
+        "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1,
+        "activate_look_top_send_up_to_n_to_owner_warp": 1,
+        "activate_opponent_discards_n_from_hand": 13,
+        "activate_optional_send_owner_hand_to_warp_draw_n": 1,
+        "activate_play_self_from_hand": 846,
+        "activate_play_self_from_warp": 21,
+        "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1,
+        "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1,
+        "activate_reduce_next_matching_extra_skill_cost_from_hand": 2,
+        "activate_send_top_deck_to_owner_warp": 6,
+        "activate_send_up_to_n_opponent_battle_to_warp": 14,
+        "activate_send_up_to_n_opponent_drop_battle_to_warp": 3,
+        "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n": 1,
+        "activate_switch_owner_battle_to_hidden_mode": 3,
+        "activate_switch_owner_board_to_revealed_mode": 1,
+        "activate_switch_self_active_and_gain_power_for_turn": 2,
+        "activate_switch_self_to_hidden_mode": 1,
+        "activate_switch_up_to_n_owner_battle_active": 1,
+        "auto_add_markers_on_owner_activate_extra_from_hand": 1,
         "auto_add_n_life_to_hand_on_self_ko": 1,
         "auto_add_top_deck_to_energy_rest_on_play": 5,
         "auto_add_up_to_n_from_owner_deck_to_hand_on_play": 47,
         "auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack": 1,
         "auto_add_up_to_n_from_owner_hand_to_life_on_play": 1,
-        "auto_draw_n": 1706,
+        "auto_buff_owner_leader_on_switch_until_opponent_turn_end": 1,
+        "auto_buff_up_to_n_owner_battles_on_play": 1,
+        "auto_buff_up_to_n_owner_cards_on_hidden_drop": 2,
+        "auto_buff_up_to_n_owner_cards_on_switch": 4,
+        "auto_combo_up_to_n_from_owner_zone_on_attack": 27,
+        "auto_draw_n": 1705,
+        "auto_gain_control_opponent_battle_on_play": 1,
         "auto_gain_control_opponent_unison_on_play": 1,
         "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
         "auto_ko_opponent_battle_on_play": 297,
+        "auto_ko_up_to_n_opponent_battle_on_attack": 82,
         "auto_ko_up_to_n_opponent_battle_on_play": 12,
-        "auto_look_top_add_up_to_one_to_hand_on_play": 148,
+        "auto_ko_up_to_n_opponent_battle_on_switch": 2,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 296,
+        "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1,
         "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 17,
+        "auto_place_up_to_n_from_owner_deck_to_destination_zone": 1,
         "auto_play_self_from_combo_on_battle_end": 31,
+        "auto_play_self_from_drop_on_hand_drop": 1,
         "auto_play_up_to_n_from_owner_deck_on_play": 1,
         "auto_play_up_to_n_from_owner_drop_on_play": 42,
         "auto_play_up_to_n_from_owner_hand_on_self_combo": 1,
         "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play": 1,
+        "auto_play_up_to_n_named_from_owner_drop_on_self_ko": 5,
         "auto_power_reduce_opponent_unison_on_self_ko": 1,
         "auto_power_reduce_up_to_n_on_attack": 39,
+        "auto_power_reduce_up_to_n_on_combo": 9,
         "auto_power_reduce_up_to_n_on_play": 122,
         "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power": 1,
         "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_switch_target_rest": 1,
+        "auto_self_gain_power_and_keyword_for_turn_on_switch": 1,
+        "auto_self_gain_power_for_turn_on_attack": 1,
+        "auto_self_gain_power_for_turn_on_play": 84,
+        "auto_send_up_to_n_opponent_battle_to_warp_on_play": 22,
+        "auto_switch_self_active_on_play": 6,
         "auto_switch_self_active_on_turn_end": 48,
+        "auto_switch_self_to_hidden_on_play": 2,
+        "auto_switch_up_to_n_any_player_board_to_revealed_on_play": 1,
+        "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end": 1,
+        "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end": 1,
+        "auto_switch_up_to_n_owner_battle_to_hidden_on_play": 4,
+        "auto_switch_up_to_n_owner_board_to_revealed_on_play": 3,
         "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed": 1,
         "auto_switch_up_to_n_owner_energy_active_on_turn_end": 26,
         "auto_top_deck_add_if_color_on_play": 16
       },
       "by_trigger": {
+        "owner_activate_extra_from_hand": 1,
         "owner_battle_played_from_warp": 2,
         "owner_field_extra_placed": 1,
-        "owner_leader_attacks": 1,
+        "owner_leader_attacks": 38,
+        "owner_opponent_battle_attacks": 1,
         "owner_opponent_skill_plays_overcost_battle": 2,
-        "self_activate_battle": 82,
-        "self_activate_main": 451,
-        "self_attacks": 424,
-        "self_comboed": 129,
+        "owner_other_battle_played_by_dark_over_realm": 1,
+        "self_activate_battle": 308,
+        "self_activate_extra_from_hand": 5,
+        "self_activate_main": 1403,
+        "self_attacks": 401,
+        "self_comboed": 203,
         "self_comboed_battle_end": 31,
-        "self_koed": 2,
-        "self_played": 1370,
+        "self_hidden_battle_to_drop": 2,
+        "self_in_hand_sent_to_drop_or_warp": 2,
+        "self_koed": 7,
+        "self_played": 1602,
+        "self_switched_hidden": 4,
+        "self_switched_revealed": 4,
         "turn_end": 74
       }
     },
     "diagnostic_counts": {},
-    "total_extracted_rules": 2569,
+    "total_extracted_rules": 4092,
     "unmatched_top_templates": [
       {
         "count": 13,
@@ -79,24 +141,9 @@
         "template": "[critical] (when this card inflicts damage to your opponent's life, they place that many card in their drop area instead of their hand)"
       },
       {
-        "count": 6,
-        "example_card_id": 4726,
-        "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto][sparking <n>] (this skill takes effect when you have <n> or more card in your drop area.) when you combo with this card, if you..."
-      },
-      {
-        "count": 5,
-        "example_card_id": 5178,
-        "template": "[activate: main] if your leader card is a black \u226amachine mutant\u226b card and you choose <n> black battle card with energy costs between <n> and <n> in your drop area and place them at the bottom of your deck in any order: p..."
-      },
-      {
         "count": 4,
         "example_card_id": 644,
         "template": "[permanent] you can include as many copies of this card in your deck as you like."
-      },
-      {
-        "count": 4,
-        "example_card_id": 3875,
-        "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck). [auto] when you combo with this card, if your leader card is \u226auniverse <n>\u226b and you have <n> or less life, draw <n> card and this card..."
       },
       {
         "count": 4,
@@ -150,16 +197,6 @@
       },
       {
         "count": 2,
-        "example_card_id": 531,
-        "template": "[unique]. [union absorb][limit <n>] if your leader card is a &lt;cell&gt; card and you place <n> &lt;android <n>&gt; card from your hand or drop area under this card: play up to <n> multicolor &lt;cell&gt; card with an e..."
-      },
-      {
-        "count": 2,
-        "example_card_id": 1935,
-        "template": "[union absorb][limit <n>] if your leader is a blue &lt;uub&gt;, your opponent has <n> or more z-energy, and you place <n> blue &lt;mr. buu&gt; from your drop under this card: play up to <n> blue &lt;uub&gt; with an energ..."
-      },
-      {
-        "count": 2,
         "example_card_id": 2161,
         "template": "[activate: main/battle][limit <n>] if your leader is a &lt;janemba&gt; card, you have a blue &lt;janemba&gt; card with an energy cost of <n> or more in play, and you remove this card from the game: place up to <n> {demon..."
       },
@@ -185,6 +222,11 @@
       },
       {
         "count": 2,
+        "example_card_id": 4212,
+        "template": "[auto] when this card attacks a leader card, you may choose <n> card in your life and add it to your hand. if you do so, draw <n> card.. [awaken] when your life is at <n> or less: choose up to <n> of your energy, switch..."
+      },
+      {
+        "count": 2,
         "example_card_id": 4254,
         "template": "[field] (place and activate this card in your battle area. it remains in your battle area until you activate another [field]. when you do, place this card in its owner's drop area.). [auto] when this card is placed in a..."
       },
@@ -192,6 +234,11 @@
         "count": 2,
         "example_card_id": 4402,
         "template": "[critical] (when this card inflicts damage to your opponent's life, they place that many card in their drop area instead of their hand). [activate: main] [once per turn] (green): during that turn, if an opponent's battle..."
+      },
+      {
+        "count": 2,
+        "example_card_id": 4472,
+        "template": "[auto] when this card attacks a leader card, you may choose <n> \u226auniverse <n>\u226b in your hand and place it in your drop area. if you do so, draw <n> card.. [awaken] when your life is at <n> or less: you may choose up to <n..."
       },
       {
         "count": 2,
@@ -215,28 +262,8 @@
       },
       {
         "count": 2,
-        "example_card_id": 4787,
-        "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.) . [auto] when you combo with this card, if your leader card is red and your life is at <n> or less, draw <n> card."
-      },
-      {
-        "count": 2,
-        "example_card_id": 4808,
-        "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto] when you combo with this card, if your leader card is yellow and your life is at <n> or less, draw <n> card."
-      },
-      {
-        "count": 2,
-        "example_card_id": 4867,
-        "template": "[double strike]. [permanent] during battles where this card is attacking, your opponent can't activate [counter] skills with energy costs of <n> or more.. [activate: battle][once per turn] choose <n> card from your hand..."
-      },
-      {
-        "count": 2,
         "example_card_id": 4890,
         "template": "[auto] when you play this card, choose up to <n> of your opponent's battle card with an energy cost of <n> or less and switch it to rest mode."
-      },
-      {
-        "count": 2,
-        "example_card_id": 4899,
-        "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.) . [auto] when you combo with this card, if your leader card is green and your life is at <n> or less, draw <n> card."
       },
       {
         "count": 2,
@@ -262,11 +289,6 @@
         "count": 2,
         "example_card_id": 5488,
         "template": "[permanent] this card gains \u226adark dragon ball\u226b in all areas.. [activate: battle] choose <n> of your card and it gets +<n> power for the battle.. [activate: main] if your opponent has <n> or more energy and you choose <n>..."
-      },
-      {
-        "count": 2,
-        "example_card_id": 5520,
-        "template": "[unique]. [activate: main] if your leader card is a &lt;dark broly&gt; card and you send <n> black battle card other than this card from your drop area to your warp: play this card from your drop area.. [auto] when this..."
       },
       {
         "count": 2,
@@ -312,1105 +334,133 @@
         "count": 2,
         "example_card_id": 7063,
         "template": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.. [activate: main/battle] choose <n> of your black battle card with an energy c..."
+      },
+      {
+        "count": 2,
+        "example_card_id": 7318,
+        "template": "[dual attack] (once per turn, when this card attacks, switch this card to active mode after the battle.)"
+      },
+      {
+        "count": 2,
+        "example_card_id": 9675,
+        "template": "[field] if your leader is a blue <cooler> card : [permanent] the [field] skill on this card in your hand can also be activated at [activate: battle] timings. [auto] when this card is placed in a battle area, choose up to..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 6,
+        "template": "[counter: attack][limit <n>] if your leader card is red: negate the attack, then play this card in rest mode. if you negated a leader card's attack with this skill, your opponent can't attack with their leader card for t..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 12,
+        "template": "[counter: attack][spirit boost <x>] (remove <x> markers from your unison card to activate this skill.) if your leader card is a red \u226auniverse <n>\u226b card: negate the attack, add up to <n> red &lt;jiren&gt; card with an [ev..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 13,
+        "template": "[ultimate][dual attack]. [permanent] you can't play this card from any area using skills, and if you have <n> or more mono-red energy, reduce the energy cost of this card in your hand by <n>.. [permanent] this card can't..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 15,
+        "template": "[ultimate][deflect][critical]. [counter: play] play this card, then choose up to <n> of your opponent's battle card in rest mode, ignoring [barrier], and place it under this card. the played battle card has its skills ne..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 16,
+        "template": "[unique][barrier]. [auto][limit <n>] if your leader card is a red \u226aearthling\u226b-only card with <n> power or less: when a card in your life is flipped face up by one of your red card skills, you may play this card from your..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 20,
+        "template": "[super combo]. [permanent] if this card would leave your combo area, remove it from the game instead.. [auto][limit <n>] if your leader card is a red &lt;frieza: br&gt; card, your life is at <n> or less, and it's your op..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 21,
+        "template": "[blocker]. [counter: attack][spirit boost <n>] blue unison card: negate the attack, then play this card with <n> markers on it.. [activate: main](blue)(blue), if there's a &lt;goku black&gt; card under this card and you..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 23,
+        "template": "[permanent] when choosing card in your life using the [activate: main] skill on your blue &lt;goku black&gt;-only card, you may choose this card in your battle area instead.. [auto][limit <n>] choose <n> card in your han..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 27,
+        "template": "[activate: battle] place this card in its owner's drop area from your combo area: choose up to <n> battle card with a combo cost of <n> in your opponent's combo area and place it in its owner's drop area."
+      },
+      {
+        "count": 1,
+        "example_card_id": 28,
+        "template": "[activate: main/battle][limit <n>] if your leader card is a green &lt;cheelai: br&gt; card or yellow &lt;broly: br&gt; card, choose one?-. \u30fbchoose up to <n> of your opponent's skill-less battle card in rest mode, ko it,..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 33,
+        "template": "[deflect][critical][blocker]. [auto] if your leader card is a yellow \u226auniverse <n>\u226b card: when this card is played from your hand, choose one-. \u30fbif you don't have a unison card in play, choose up to <n> {vegeta, unison o..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 36,
+        "template": "[permanent] for each marker on this card, it gets +<n> power during your turn.. [auto][limit <n>] if this card has <n> marker: when this card is played, add a marker to it for every <n> multicolor card in your energy.. [..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 40,
+        "template": "[energy-exhaust]. [counter: play] play this card, and if the battle card being played has <n> power or less, place it in its owner's drop area instead.. [permanent] if you have <n> or more black multicolor energy, you ma..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 41,
+        "template": "[energy-exhaust][unique][barrier]. [permanent] if your leader card is a &lt;bardock: xeno&gt; card, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is a &lt;bardock: xeno&gt; card and..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 47,
+        "template": "[super combo][energy-exhaust]. [auto] if your leader card is green, yellow, or a \u226aheroine\u226b card: when this card is used in a combo from your hand, choose one-. \u30fbchoose up to <n> of your opponent's leader card or unison c..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 48,
+        "template": "[energy-exhaust]. [counter: attack] negate the attack and play this card. when this card is played, you may choose <n> card in your hand and discard it. if you do, your opponent can only attack with battle card and uniso..."
       }
     ]
   },
   "inputs": {
-    "db_path": "dbdatabase\\dbs_masters.db",
-    "deckplanet_globs": [
-      "artifacts/deckplanet_decks/*.txt"
-    ],
+    "db_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\dbdatabase\\dbs_masters.db",
+    "deckplanet_globs": [],
     "scan_limit": 0,
-    "trace_globs": [
-      "artifacts/phase22_source/*.json"
-    ]
+    "trace_globs": []
   },
+  "intentionally_skipped_priority_cards": [],
   "priority_diagnostic_cards": [],
   "priority_sources": {
     "deckplanet": {
-      "deck_file_count": 9,
-      "files": [
-        "artifacts\\deckplanet_decks\\BlueGammas_deck.txt",
-        "artifacts\\deckplanet_decks\\GokuBlack_deck.txt",
-        "artifacts\\deckplanet_decks\\Krillin_deck.txt",
-        "artifacts\\deckplanet_decks\\Mechikabura_deck.txt",
-        "artifacts\\deckplanet_decks\\PowerWish_deck.txt",
-        "artifacts\\deckplanet_decks\\RainbowBardock_deck.txt",
-        "artifacts\\deckplanet_decks\\RedPan_deck.txt",
-        "artifacts\\deckplanet_decks\\SS4RainbowGogeta_deck.txt",
-        "artifacts\\deckplanet_decks\\ZamasuMill_deck.txt"
-      ],
-      "unique_card_id_count": 227,
+      "deck_file_count": 0,
+      "files": [],
+      "unique_card_id_count": 0,
       "unresolved_by_file": {}
     },
     "traces": {
-      "files": [
-        "artifacts\\phase22_source\\ai_match_batch_summary.json",
-        "artifacts\\phase22_source\\ai_match_batch_summary_v2.json",
-        "artifacts\\phase22_source\\ai_match_trace_001.json",
-        "artifacts\\phase22_source\\ai_match_trace_002.json",
-        "artifacts\\phase22_source\\ai_match_trace_003.json",
-        "artifacts\\phase22_source\\ai_match_trace_004.json",
-        "artifacts\\phase22_source\\ai_match_trace_005.json",
-        "artifacts\\phase22_source\\ai_match_trace_005_review.json",
-        "artifacts\\phase22_source\\ai_match_trace_006.json",
-        "artifacts\\phase22_source\\ai_match_trace_007.json",
-        "artifacts\\phase22_source\\ai_match_trace_008.json",
-        "artifacts\\phase22_source\\ai_match_trace_009.json",
-        "artifacts\\phase22_source\\ai_match_trace_010.json",
-        "artifacts\\phase22_source\\ai_match_trace_011.json",
-        "artifacts\\phase22_source\\ai_match_trace_012.json",
-        "artifacts\\phase22_source\\ai_match_trace_013.json",
-        "artifacts\\phase22_source\\ai_match_trace_014.json",
-        "artifacts\\phase22_source\\ai_match_trace_015.json",
-        "artifacts\\phase22_source\\ai_match_trace_016.json",
-        "artifacts\\phase22_source\\ai_match_trace_017.json",
-        "artifacts\\phase22_source\\ai_match_trace_018.json",
-        "artifacts\\phase22_source\\ai_match_trace_019.json",
-        "artifacts\\phase22_source\\ai_match_trace_020.json",
-        "artifacts\\phase22_source\\ai_match_trace_021.json",
-        "artifacts\\phase22_source\\ai_match_trace_022.json",
-        "artifacts\\phase22_source\\ai_match_trace_023.json",
-        "artifacts\\phase22_source\\ai_match_trace_024.json",
-        "artifacts\\phase22_source\\ai_match_trace_025.json",
-        "artifacts\\phase22_source\\ai_match_trace_026.json",
-        "artifacts\\phase22_source\\ai_match_trace_027.json",
-        "artifacts\\phase22_source\\ai_match_trace_028.json",
-        "artifacts\\phase22_source\\ai_match_trace_029.json",
-        "artifacts\\phase22_source\\ai_match_trace_030.json",
-        "artifacts\\phase22_source\\ai_match_trace_031.json",
-        "artifacts\\phase22_source\\ai_match_trace_032.json",
-        "artifacts\\phase22_source\\ai_match_trace_033.json",
-        "artifacts\\phase22_source\\ai_match_trace_034.json",
-        "artifacts\\phase22_source\\ai_match_trace_035.json",
-        "artifacts\\phase22_source\\ai_match_trace_036.json",
-        "artifacts\\phase22_source\\ai_match_trace_037.json",
-        "artifacts\\phase22_source\\ai_match_trace_038.json",
-        "artifacts\\phase22_source\\ai_match_trace_039.json",
-        "artifacts\\phase22_source\\ai_match_trace_040.json",
-        "artifacts\\phase22_source\\ai_match_trace_041.json",
-        "artifacts\\phase22_source\\ai_match_trace_042.json",
-        "artifacts\\phase22_source\\ai_match_trace_043.json",
-        "artifacts\\phase22_source\\ai_match_trace_044.json",
-        "artifacts\\phase22_source\\ai_match_trace_045.json",
-        "artifacts\\phase22_source\\ai_trace_normalization_summary.json",
-        "artifacts\\phase22_source\\human_vs_ai_state_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_state_krillin_vs_gokublack_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_state_krillin_vs_mechikabura_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_summary_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_summary_krillin_vs_gokublack_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_summary_krillin_vs_mechikabura_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_trace_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_trace_krillin_vs_gokublack_001.json",
-        "artifacts\\phase22_source\\human_vs_ai_trace_krillin_vs_mechikabura_001.json"
-      ],
-      "trace_file_count": 58,
-      "unique_card_id_count": 119
+      "files": [],
+      "trace_file_count": 0,
+      "unique_card_id_count": 0
     }
   },
-  "priority_unimplemented_cards": [
-    {
-      "card_id": 6,
-      "card_name": "Dyspo, Thwarting the Enemy",
-      "card_number": "BT14-019",
-      "template": "[counter: attack][limit <n>] if your leader card is red: negate the attack, then play this card in rest mode. if you negated a leader card's attack with this skill, your opponent can't attack with their leader card for t..."
-    },
-    {
-      "card_id": 11,
-      "card_name": "Kahseral, Warrior of Universe 11",
-      "card_number": "BT14-026",
-      "template": "[deflect][blocker]. [permanent] if this card would be removed from your battle area by an opponent's skill, you may add <n> card from your life to your hand instead.. [activate: battle][once per turn] if your leader card..."
-    },
-    {
-      "card_id": 12,
-      "card_name": "Source of Power",
-      "card_number": "BT14-030",
-      "template": "[counter: attack][spirit boost <x>] (remove <x> markers from your unison card to activate this skill.) if your leader card is a red \u226auniverse <n>\u226b card: negate the attack, add up to <n> red &lt;jiren&gt; card with an [ev..."
-    },
-    {
-      "card_id": 13,
-      "card_name": "SS Son Goku & Frieza, Miraculous Conclusion",
-      "card_number": "BT14-152",
-      "template": "[ultimate][dual attack]. [permanent] you can't play this card from any area using skills, and if you have <n> or more mono-red energy, reduce the energy cost of this card in your hand by <n>.. [permanent] this card can't..."
-    },
-    {
-      "card_id": 15,
-      "card_name": "Super 17, Sibling Absorbed",
-      "card_number": "BT14-154",
-      "template": "[ultimate][deflect][critical]. [counter: play] play this card, then choose up to <n> of your opponent's battle card in rest mode, ignoring [barrier], and place it under this card. the played battle card has its skills ne..."
-    },
-    {
-      "card_id": 16,
-      "card_name": "Bulma, to Incite a Sneeze",
-      "card_number": "EX19-01",
-      "template": "[unique][barrier]. [auto][limit <n>] if your leader card is a red \u226aearthling\u226b-only card with <n> power or less: when a card in your life is flipped face up by one of your red card skills, you may play this card from your..."
-    },
-    {
-      "card_id": 20,
-      "card_name": "King Cold, Blessing of the Clan",
-      "card_number": "EX19-05",
-      "template": "[super combo]. [permanent] if this card would leave your combo area, remove it from the game instead.. [auto][limit <n>] if your leader card is a red &lt;frieza: br&gt; card, your life is at <n> or less, and it's your op..."
-    },
-    {
-      "card_id": 21,
-      "card_name": "Zamasu, Teamwork Undying",
-      "card_number": "EX19-06",
-      "template": "[blocker]. [counter: attack][spirit boost <n>] blue unison card: negate the attack, then play this card with <n> markers on it.. [activate: main](blue)(blue), if there's a &lt;goku black&gt; card under this card and you..."
-    },
-    {
-      "card_id": 23,
-      "card_name": "Goku Black, Works Undone",
-      "card_number": "EX19-08",
-      "template": "[permanent] when choosing card in your life using the [activate: main] skill on your blue &lt;goku black&gt;-only card, you may choose this card in your battle area instead.. [auto][limit <n>] choose <n> card in your han..."
-    },
-    {
-      "card_id": 27,
-      "card_name": "Broly, Omen of Evolution",
-      "card_number": "EX19-12",
-      "template": "[activate: battle] place this card in its owner's drop area from your combo area: choose up to <n> battle card with a combo cost of <n> in your opponent's combo area and place it in its owner's drop area."
-    },
-    {
-      "card_id": 28,
-      "card_name": "Encountering the Unknown",
-      "card_number": "EX19-13",
-      "template": "[activate: main/battle][limit <n>] if your leader card is a green &lt;cheelai: br&gt; card or yellow &lt;broly: br&gt; card, choose one?-. \u30fbchoose up to <n> of your opponent's skill-less battle card in rest mode, ko it,..."
-    },
-    {
-      "card_id": 33,
-      "card_name": "God of Destruction Toppo, Skillbreaker",
-      "card_number": "EX19-18",
-      "template": "[deflect][critical][blocker]. [auto] if your leader card is a yellow \u226auniverse <n>\u226b card: when this card is played from your hand, choose one-. \u30fbif you don't have a unison card in play, choose up to <n> {vegeta, unison o..."
-    },
-    {
-      "card_id": 36,
-      "card_name": "SS4 Broly, Prismatic Burst",
-      "card_number": "EX19-21",
-      "template": "[permanent] for each marker on this card, it gets +<n> power during your turn.. [auto][limit <n>] if this card has <n> marker: when this card is played, add a marker to it for every <n> multicolor card in your energy.. [..."
-    },
-    {
-      "card_id": 39,
-      "card_name": "SS4's Call",
-      "card_number": "EX19-24",
-      "template": "[activate: main][limit <n>] if your leader card is a black &lt;bardock: xeno&gt; card or a \u226asaiyan\u226b card with {ss<n>} in its card name: look at up to <n> card from the top of your deck, add up to <n> black card with {ss<..."
-    },
-    {
-      "card_id": 40,
-      "card_name": "SS4 Bardock, Prismatic Burst",
-      "card_number": "EX19-25",
-      "template": "[energy-exhaust]. [counter: play] play this card, and if the battle card being played has <n> power or less, place it in its owner's drop area instead.. [permanent] if you have <n> or more black multicolor energy, you ma..."
-    },
-    {
-      "card_id": 41,
-      "card_name": "SS4 Bardock, Prismatic Aegis",
-      "card_number": "EX19-26",
-      "template": "[energy-exhaust][unique][barrier]. [permanent] if your leader card is a &lt;bardock: xeno&gt; card, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is a &lt;bardock: xeno&gt; card and..."
-    },
-    {
-      "card_id": 48,
-      "card_name": "SS4 Son Gohan, Prismatic Burst",
-      "card_number": "EX19-33",
-      "template": "[energy-exhaust]. [counter: attack] negate the attack and play this card. when this card is played, you may choose <n> card in your hand and discard it. if you do, your opponent can only attack with battle card and uniso..."
-    },
-    {
-      "card_id": 49,
-      "card_name": "SS4 Son Gohan, Prismatic Aegis",
-      "card_number": "EX19-34",
-      "template": "[energy-exhaust][double strike]. [auto] if your leader card is a &lt;bardock: xeno&gt; card and you have a black multicolor card in your energy other than this card: when this card in your hand is played or placed in you..."
-    },
-    {
-      "card_id": 71,
-      "card_name": "SS Broly, Brutality Beyond Measure",
-      "card_number": "BT15-019",
-      "template": "[deflect][double strike]. [permanent] if your opponent has <n> or more energy and you have <n> or more red extra card in your drop area, reduce the energy cost of this card in your hand by <n>.. [auto][once per turn] cho..."
-    },
-    {
-      "card_id": 78,
-      "card_name": "The Demon Awakens",
-      "card_number": "BT15-025",
-      "template": "[activate: main][limit <n>][burst <n>] if your leader card is a red &lt;broly&gt; card and you send this card from your drop area to your warp: add up to <n> card from your life to your hand.. [activate: battle] choose u..."
-    },
-    {
-      "card_id": 79,
-      "card_name": "Monstrous Encounter",
-      "card_number": "BT15-026",
-      "template": "[counter: attack] choose up to <n> skill-less \u226amonster\u226b card in your hand with an energy cost of <n> or less and play it in rest mode. if you played a card, it becomes the target of attack."
-    },
-    {
-      "card_id": 80,
-      "card_name": "Demonic Blitz",
-      "card_number": "BT15-027",
-      "template": "[counter: attack][limit <n>] negate the attack, then choose up to <n> of your opponent's battle card and it gets -<n> power for the turn.. [permanent] if your leader card is a red &lt;broly&gt; card, reduce the energy co..."
-    },
-    {
-      "card_id": 81,
-      "card_name": "Demonic Barrier",
-      "card_number": "BT15-028",
-      "template": "[permanent] if your leader card is a red &lt;broly&gt; card, reduce the energy cost of this card in your hand by <n>.. [activate: battle] if your leader card has <n> power or less: choose up to <n> of your card and it ge..."
-    },
-    {
-      "card_id": 83,
-      "card_name": "Gigantic Meteor",
-      "card_number": "BT15-030",
-      "template": "[permanent] if your leader card is a mono-red \u226asaiyan\u226b card, reduce the energy cost of this card in your hand by <n>.. [activate: battle][limit <n>] choose one-. \u30fbif it's your turn, choose any number of your opponent's b..."
-    },
-    {
-      "card_id": 86,
-      "card_name": "Son Goku, Reclaiming Hope",
-      "card_number": "BT15-093",
-      "template": "[blocker]. [+<n>][activate: main] choose up to <n> of your opponent's battle card with an energy cost greater than or equal to their current energy, and it can't attack until the end of your opponent's next turn.. [<n>][..."
-    },
-    {
-      "card_id": 88,
-      "card_name": "Son Goku, A Gift from the Earth",
-      "card_number": "BT15-095",
-      "template": "[deflect][blocker]. [permanent] for each marker on unison card in play, reduce the energy cost of this card in your hand by <n>.. [activate: main][once per turn] choose <n> of your opponent's unison card with <n> or more..."
-    },
-    {
-      "card_id": 89,
-      "card_name": "Son Goku, Steadfast Assistance",
-      "card_number": "BT15-096",
-      "template": "[blocker]. [counter: play] the battle card being played is played in rest mode, then play this card and draw <n> card.. [permanent] when activating this card's [counter] skill from your hand, reduce this card's energy co..."
-    },
-    {
-      "card_id": 90,
-      "card_name": "Son Gohan, the Misadventure",
-      "card_number": "BT15-097",
-      "template": "[blocker]. [permanent] if this card in your battle area would be placed in its owner's drop area by one of your skills, it's sent to its owner's warp instead.. [auto](yellow), if your leader card is yellow: when a yellow..."
-    },
-    {
-      "card_id": 92,
-      "card_name": "Krillin, Battle at the Tree",
-      "card_number": "BT15-099",
-      "template": "[permanent] if you have a [field] extra card in your battle area, this card gains [blocker].. [auto] if you don't have a [field] extra card in your battle area: when this card is played from your hand, activate up to <n>..."
-    },
-    {
-      "card_id": 93,
-      "card_name": "Piccolo, Battle at the Tree",
-      "card_number": "BT15-100",
-      "template": "[blocker]. [counter: attack] negate the attack, play this card, and you can't activate [counter: attack] skills for the turn.. [permanent] when activating this card's [counter] skill from your hand, if your leader card i..."
-    },
-    {
-      "card_id": 99,
-      "card_name": "Turles, Great Ape Manipulator",
-      "card_number": "BT15-106",
-      "template": "[permanent] if you have a [field] extra card in your battle area, this card gains [blocker].. [auto] if your leader card is a yellow \u226aturles crusher corps\u226b card: when this card is played from your hand, flip up to <n> ca..."
-    },
-    {
-      "card_id": 384,
-      "card_name": "Support of the Dark Empire",
-      "card_number": "BT16-124",
-      "template": "[counter: attack] if your leader card is mono-black: negate the attack, then play <n> demon realm soldier token and it gains [blocker] for the turn. (demon realm soldier tokens have <n> power, <n> combo cost, and <n> com..."
-    },
-    {
-      "card_id": 672,
-      "card_name": "Red Ribbon Robot, Colossal Power",
-      "card_number": "BT17-038",
-      "template": "[dual attack][blocker] [auto](blue)(blue)(<n>): when one of your \u226ared ribbon army\u226b card is removed from your battle area by a skill, play this card from your hand. [auto] when one of your \u226ared ribbon army\u226b card is remove..."
-    },
-    {
-      "card_id": 685,
-      "card_name": "Android 14, Inorganic Horror",
-      "card_number": "BT17-053",
-      "template": "[counter: attack] if your leader card is a blue \u226ared ribbon army\u226b \u226aandroid\u226b card and you discard another card from your hand: negate the attack and play this card. [auto] if it's your opponent's turn: when this card is p..."
-    },
-    {
-      "card_id": 689,
-      "card_name": "Sacrificial Strike",
-      "card_number": "BT17-057",
-      "template": "[counter: attack] negate the attack. [activate: battle] choose <n> of your blue \u226ared ribbon army\u226b card and it gets +<n> power for the battle. additionally, you may choose <n> \u226ared ribbon army\u226b card in your battle area an..."
-    },
-    {
-      "card_id": 892,
-      "card_name": "Oolong, Greed is Good",
-      "card_number": "P-405",
-      "template": "[unique]. [activate: main][once per turn] choose up to <n> battle card in play, ignoring [barrier]. this card's power becomes the chosen card's power at the time you chose it with this skill, and at the start of your opp..."
-    },
-    {
-      "card_id": 1002,
-      "card_name": "Cell, Awakening of the Created",
-      "card_number": "BT18-034",
-      "template": "[deflect][critical]. [auto] when this card is played, choose all of your opponent's battle card with energy costs of <n> or less and place them under this card.. [activate: main][once per turn] if <n> or more card are un..."
-    },
-    {
-      "card_id": 1063,
-      "card_name": "Pan",
-      "card_number": "SD17-01",
-      "template": "[auto][once per turn] when you play a battle card, choose it, and it gets +<n> power for the turn. if this raises that card's power to <n> or more, draw <n> card.. [awaken] when your life is at <n> or less or you have <n..."
-    },
-    {
-      "card_id": 1065,
-      "card_name": "SS4 Son Goku, Defender of Life",
-      "card_number": "SD17-02",
-      "template": "[deflect][double strike]. [auto] when this card is played, place up to <n> \u226asaiyan\u226b card from your drop under this card, and this card gains [barrier] for the turn. additionally, if your opponent has <n> or more life, de..."
-    },
-    {
-      "card_id": 1442,
-      "card_name": "Evil Saiyan, Malice Made Flesh",
-      "card_number": "BT19-154",
-      "template": "[ultimate]. [auto] if your opponent's life is at <n> or more: when this card is played, look through your opponent's life and send up to <n> card with an energy cost of <n> or less from it to your opponent's warp, your o..."
-    },
-    {
-      "card_id": 1480,
-      "card_name": "Son Goku, Stronger Together",
-      "card_number": "BT19-037",
-      "template": "[deflect][barrier]. [auto] if your leader is mono-blue: when this card is played, if your opponent has <n> or more card in their hand, they place card from their hand at the bottom of their deck in any order until they h..."
-    },
-    {
-      "card_id": 1536,
-      "card_name": "Son Gohan, Hostile Saiyan Encounter",
-      "card_number": "BT19-147",
-      "template": "[permanent] when this card would be removed from a battle area, remove it from the game instead.. [auto][limit <n>] if your leader is black or a \u226amaster's teachings\u226b card, your life is at <n> or less, and you add <n> car..."
-    },
-    {
-      "card_id": 1603,
-      "card_name": "Majin Buu, Pure Destroyer",
-      "card_number": "P-473",
-      "template": "[blocker]. [activate: main] if your leader's back side is a {majin buu, leader of the agents of destruction}, its front side is facing up, you have <n> or less life, and you have <n> or more energy: flip <n> of your lead..."
-    },
-    {
-      "card_id": 1632,
-      "card_name": "SS Vegito, Overwhelming Might",
-      "card_number": "BT20-099",
-      "template": "[blocker]. [counter: play] play this card.. [permanent] during your opponent's turn, while your leader is yellow, your opponent has <n> or more energy, and you have <n> or more z-energy, reduce the energy cost of this ca..."
-    },
-    {
-      "card_id": 1702,
-      "card_name": "Android 21, in the Name of Hunger",
-      "card_number": "BT20-028",
-      "template": "[unique][blocker]. [z-stack <n>] battle card.. [permanent] you may choose up to <n> of your opponent's battle card when choosing card for this card's [z-stack] conditions.. [auto] when this card is played, you may place..."
-    },
-    {
-      "card_id": 1734,
-      "card_name": "Goku's Kamehameha Deflection",
-      "card_number": "BT20-082",
-      "template": "[counter: attack][limit <n>] negate the attack and choose up to <n> of your opponent's battle card with an energy cost of <n> or less and ko it.. [permanent] if your leader is a green &lt;son goku: gt&gt; z-leader, you c..."
-    },
-    {
-      "card_id": 1969,
-      "card_name": "SS Son Goku & SS2 Son Gohan, Father-Son Solidarity",
-      "card_number": "BT21-079",
-      "template": "[deflect][double strike]. [auto] when this card attacks, choose up to <n> of your opponent's battle card, ignoring [barrier], ko it, then your opponent places <n> card from their hand into their drop.. [auto][once per tu..."
-    },
-    {
-      "card_id": 2064,
-      "card_name": "Special Beam Cannon, Inherited Power",
-      "card_number": "BT22-007",
-      "template": "[activate: battle](red), your red &lt;son gohan: sh&gt; card is attacking and you remove this card from the game: choose up to <n> of your opponent's battle card with <n> power or less, ignoring [barrier], and ko it, the..."
-    },
-    {
-      "card_id": 2140,
-      "card_name": "SS4 Son Goku, Cross-Dimensional Fighting Spirit",
-      "card_number": "BT22-116",
-      "template": "[auto] when this card is played, choose up to <n> of your opponent's battle card and send it to its owner's warp.. [activate: main][once per turn] if you have <n> or more energy and you remove <n> total card in your drop..."
-    },
-    {
-      "card_id": 2152,
-      "card_name": "SS Cumber, Assailant's Fury",
-      "card_number": "BT22-127",
-      "template": "[auto] when this card is played, choose up to <n> of your opponent's battle card with an energy cost less than or equal to the number of card in your z-deck, ignoring [barrier], and send it to its owner's warp.. [auto] i..."
-    },
-    {
-      "card_id": 2222,
-      "card_name": "Pan, Grandfather's Strength",
-      "card_number": "EX23-09",
-      "template": "[auto][limit <n>] when your card's power is increased by one of your skills, draw <n> card, then choose up to <n> of your opponent's battle card and it gets -<n> power for the turn.. [activate: main](red), if your leader..."
-    },
-    {
-      "card_id": 2266,
-      "card_name": "Limit Ultra Kamehameha, Mighty Blast",
-      "card_number": "EX23-21",
-      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: choose up to <n> of your opponent's battle card with an energy cost of <n> or less and ko it, then choose up to <n> of your..."
-    },
-    {
-      "card_id": 2268,
-      "card_name": "First Kamehameha, Mighty Blast",
-      "card_number": "EX23-38",
-      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: place up to <n> black card from your warp in your drop, then choose up to <n> of your card and it gets +<n> power for the b..."
-    },
-    {
-      "card_id": 2272,
-      "card_name": "SS4 Son Goku, Prismatic Radiance",
-      "card_number": "EX23-51",
-      "template": "[energy-exhaust]. [permanent] if your leader is a &lt;bardock: xeno&gt; card, reduce the energy cost of this card in your hand by (yellow).. [auto] when this card is played, look at up to <n> card from the top of your de..."
-    },
-    {
-      "card_id": 2409,
-      "card_name": "Explosive Dance",
-      "card_number": "BT23-033",
-      "template": "[counter: attack][limit <n>] if your leader is red: negate the attack. additionally, if your life is at <n> or less and you have a z-extra in your battle area, when your opponent attacks with a non-leader card during tha..."
-    },
-    {
-      "card_id": 2481,
-      "card_name": "SSG Son Goku, Crimson Guardian Deity",
-      "card_number": "BT24-004",
-      "template": "[double strike][barrier]. [auto] when a player attacks, you may use <n> battle card from under this card in a combo with its skills negated for the turn. if you do, negate this skill for the turn.. [-<n>][activate: main]..."
-    },
-    {
-      "card_id": 3755,
-      "card_name": "Piccolo, Savior From the Beyond",
-      "card_number": "P-244",
-      "template": "[permanent] during your turn, this card gets +<n> power for every <n> markers on it.. [+<n>][activate: main] choose <n> card in your hand and discard it.. [+<n>][activate: main] you may choose <n> card in your hand and d..."
-    },
-    {
-      "card_id": 4226,
-      "card_name": "Released from Evil",
-      "card_number": "BT10-123",
-      "template": "[counter: attack] if your leader card is mono-yellow: choose the attacking card, ignoring [barrier], negate its skills for the turn, and it can't be switched to active mode until the start of your next turn.. [permanent]..."
-    },
-    {
-      "card_id": 4265,
-      "card_name": "Petrification",
-      "card_number": "BT9-087",
-      "template": "[counter: attack] if your leader card is black: negate the attack, and you may choose <n> card from your hand and place it in your drop area. if you placed a card in your drop area, choose up to <n> of your opponent's ba..."
-    },
-    {
-      "card_id": 4276,
-      "card_name": "Max Power Kamehameha",
-      "card_number": "EX13-34",
-      "template": "[counter: attack] negate the attack. you may send <n> card from your drop area to your warp. if you do, return this card from your drop area to your hand, and you can't activate copies of this card for the turn.. [activa..."
-    },
-    {
-      "card_id": 4362,
-      "card_name": "For the Greater Good",
-      "card_number": "BT7-073",
-      "template": "[counter: attack] if your leader card is green: negate the attack, then choose up to <n> of your opponent's battle card with an energy cost of <n> and ko it.. [permanent] if this card is in your drop area, you can activa..."
-    },
-    {
-      "card_id": 4440,
-      "card_name": "Protector of the People",
-      "card_number": "DB2-159",
-      "template": "[counter: attack] negate the attack, then you may choose <n> card in your hand and place it in your drop area. if you do, choose <n> of your leader card and it gains the following effect for the turn:. \u30fb when this card i..."
-    },
-    {
-      "card_id": 4468,
-      "card_name": "Shocking Death Ball",
-      "card_number": "BT5-075",
-      "template": "[counter: attack] your leader card is green: negate the attack, then choose up to <n> of your opponent's battle card with an energy cost of <n> or less and ko it.. [permanent][sparking <n>] (this skill takes effect when..."
-    },
-    {
-      "card_id": 4533,
-      "card_name": "Time Magic",
-      "card_number": "BT5-101",
-      "template": "[counter: attack] your leader card is yellow: negate the attack, then choose up to <n> of your opponent's battle card in rest mode ignoring [barrier]. it can't switch to active mode until the start of your next turn.. [p..."
-    },
-    {
-      "card_id": 4726,
-      "card_name": "Master Roshi, Martial Expert",
-      "card_number": "BT5-012",
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto][sparking <n>] (this skill takes effect when you have <n> or more card in your drop area.) when you combo with this card, if you..."
-    },
-    {
-      "card_id": 4949,
-      "card_name": "Almighty Resistance",
-      "card_number": "EX09-06",
-      "template": "[energy-exhaust]. [counter: counter] if your leader card is red and you choose <n> yellow card in your hand and place it in your drop area: negate the [counter: attack] skill."
-    },
-    {
-      "card_id": 5301,
-      "card_name": "Yamcha, Merciless Barrage",
-      "card_number": "BT10-008",
-      "template": "[counter: play] you can't activate the [counter: play] skills of other card for the turn: choose up to <n> of your opponent's battle card, they get -<n> power for the turn, then play this card.. [permanent] if you have a..."
-    },
-    {
-      "card_id": 5332,
-      "card_name": "Whis, Celestial Moderator",
-      "card_number": "BT9-096",
-      "template": "[super combo]. [energy-exhaust]. [auto] if your leader card is red or yellow: when you combo with this card from your hand, choose up to <n> of your opponent's battle card and it gets -<n> power for the duration of the t..."
-    },
-    {
-      "card_id": 5337,
-      "card_name": "Dr. Uiro, Cybernetic Rebirth",
-      "card_number": "EX10-05",
-      "template": "[blocker]. [energy-exhaust]. [auto] when this card is placed in your drop area from your hand by an opponent's skill or by your [revive] skill, you may play this card."
-    },
-    {
-      "card_id": 5429,
-      "card_name": "Power Burst",
-      "card_number": "BT5-115",
-      "template": "[counter: attack] your leader card is black: negate the attack, then choose up to <n> black battle card from your drop area or warp with an energy cost of <n> and add it to your hand.. [permanent][sparking <n>] (this ski..."
-    },
-    {
-      "card_id": 5531,
-      "card_name": "SS Bardock, the Tenacious",
-      "card_number": "BT11-132",
-      "template": "[over realm <n>](black). [auto] when this card is played using [over realm], your opponent can only attack with battle card once during their next turn.. [auto] when this card is played, you can't play copies of this car..."
-    },
-    {
-      "card_id": 5826,
-      "card_name": "Temporal Darkness Demigra",
-      "card_number": "BT4-105",
-      "template": "[dark over realm <n>] \u2463 (if you have at least <n> black card in your drop area, you can play this card by sending all card in your drop area to your warp. [over realm] and [dark over realm] can only be activated once per..."
-    },
-    {
-      "card_id": 5847,
-      "card_name": "Elegant Assistance Heles",
-      "card_number": "EX03-18",
-      "template": "[super combo] \uff08you can only include up to <n> card with [super combo] in your deck\uff09. [auto] when you combo with this card, if your leader card is a \u226agod\u226b or \u226auniverse <n>\u226b and you\uff52 life is at <n> or less, you may place <..."
-    },
-    {
-      "card_id": 6072,
-      "card_name": "Homicidal Clones",
-      "card_number": "EB1-37",
-      "template": "[counter: attack] if your leader card is mono-green: negate the attack, then play <n> meda token. (meda tokens have <n> power, <n> combo cost, and <n> combo power.) that token gains [blocker] for the turn.. [permanent] w..."
-    },
-    {
-      "card_id": 6299,
-      "card_name": "Piccolo Jr., Eradicator of Peace",
-      "card_number": "DB3-115",
-      "template": "[energy-exhaust][double strike]. [alliance red/green] if your leader card is red: this card gains power equal to the total power of the card switched to rest mode by this skill for the battle; draw <n> card, and if your..."
-    },
-    {
-      "card_id": 6581,
-      "card_name": "King Vegeta's Imposing Presence",
-      "card_number": "BT13-030",
-      "template": "[counter: attack] if your leader card is a mono-red \u226asaiyan\u226b card: you may choose the attacking card, ignoring [barrier], and it gets -<n> power for the turn; your opponent can't attack with card for the turn unless they..."
-    },
-    {
-      "card_id": 6679,
-      "card_name": "Toppo, Righteous Aid",
-      "card_number": "DB1-014",
-      "template": "[counter: attack] choose <n> other card in your hand and place it in your drop area, then negate the attack and play this card. ([counter] is activated from your hand by paying the card's energy cost.). [permanent] if it..."
-    },
-    {
-      "card_id": 6688,
-      "card_name": "Mira, Dimensional Superpower",
-      "card_number": "EX15-05",
-      "template": "[permanent] this card can't attack if it has <n> or fewer markers on it.. [+<n>][activate: main] you may choose <n> card in your hand and send it to your warp. if you do, draw <n> card.. [-<n>][activate: battle] for each..."
-    },
-    {
-      "card_id": 6792,
-      "card_name": "SS4 Gogeta, Thwarting the Dark Empire",
-      "card_number": "BT14-129",
-      "template": "[triple attack][blocker]. [permanent] while this card is in rest mode, it can't be ko'd by your opponent's skills.. [auto][once per turn] when this card attacks, your opponent chooses <n> card in their hand and <n> of th..."
-    },
-    {
-      "card_id": 6820,
-      "card_name": "SS3 Scramble - Raditz, Vegeta & Broly",
-      "card_number": "BT7-130",
-      "template": "[ultimate]. [arrival red/green] (red)(red)(red)(green)(green). [energy-exhaust] . [auto] when you play this card, choose <n> card in your life and place it in your drop area, then deal <n> damage to your opponent.. [auto..."
-    },
-    {
-      "card_id": 6947,
-      "card_name": "Nappa, Demolition Man",
-      "card_number": "BT9-090",
-      "template": "[super combo]. [energy-exhaust]. [auto] if your leader card is red or green: at the end of a battle in which you combo with this card from your hand, play this card."
-    },
-    {
-      "card_id": 6997,
-      "card_name": "Super Kamehameha",
-      "card_number": "BT8-104",
-      "template": "[counter: play] if your leader card is black and your life is at <n> or less: if the battle card being played has an energy cost of <n> or less, it is sent to its owner's warp instead of being played.. [permanent] if you..."
-    },
-    {
-      "card_id": 6999,
-      "card_name": "Testing the Opposition",
-      "card_number": "EB1-11",
-      "template": "[counter: attack] if your leader card is mono-red: negate the attack, then play <n> saibaiman token. (saibaiman tokens have <n> power, <n> combo cost, and <n> combo power.) that token gains [blocker] for the turn.. [perm..."
-    },
-    {
-      "card_id": 7029,
-      "card_name": "Mira, Creator Absorbed",
-      "card_number": "BT4-108",
-      "template": "[over realm <n>] \u2460. [deflect] (this card isn't affected by [counter: play] skills). [auto] when you play this card using [union], your opponent chooses <n> card from their hand and sends them to their warp, and this card..."
-    },
-    {
-      "card_id": 7166,
-      "card_name": "Strategies of Universe 7",
-      "card_number": "TB1-023",
-      "template": "[activate: main] choose all red \u226asaiyan\u226b card in your battle area. they gain [barrier] (they can't be chosen by the skills of your opponent's card) until the end of your opponent's next turn."
-    },
-    {
-      "card_id": 7179,
-      "card_name": "A Crack in Spacetime",
-      "card_number": "EX06-36",
-      "template": "[activate: battle] if your leader card is a black \u226asaiyan\u226b card, it gets +<n> power and [double strike] for the duration of the battle."
-    },
-    {
-      "card_id": 7236,
-      "card_name": "Supreme Kai of Time, Time Labyrinth Unleashed",
-      "card_number": "BT13-135",
-      "template": "[counter: attack] negate the attack and play this card.. [permanent] if you or your opponent have <n> or more card in their warp, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is bl..."
-    },
-    {
-      "card_id": 7334,
-      "card_name": "Frieza Army Reinforcements",
-      "card_number": "EB1-48",
-      "template": "[counter: attack] if your leader card is mono-yellow: negate the attack, then play <n> frieza's army token with <n> power and it gains [blocker] for the turn.. [permanent] if your life is at <n> or less, you can activate..."
-    },
-    {
-      "card_id": 7358,
-      "card_name": "Dormant Potential Unleashed",
-      "card_number": "BT10-088",
-      "template": "[counter: attack] if your leader card is mono-green: choose any number of your opponent's battle card that add up to a total energy cost of <n> or less and ko them. additionally, you may choose <n> green card in your han..."
-    },
-    {
-      "card_id": 7386,
-      "card_name": "Koitsukai, Mechanical Courage",
-      "card_number": "DB2-143",
-      "template": "[activate: main]\u2460, remove this card in your drop area from the game, then choose up to <n> card in your hand and place them at the bottom of your deck in any order: draw card equal to the number of card you placed at the..."
-    },
-    {
-      "card_id": 7459,
-      "card_name": "Difference of Status",
-      "card_number": "BT14-029",
-      "template": "[counter: attack][spirit boost <x>] if your leader card is mono-red: choose up to <n> of your opponent's card and it gets -<n> power for the turn. if you removed a marker from one of your red unison card using this skill..."
-    },
-    {
-      "card_id": 7483,
-      "card_name": "Dark Masked King, Spirit Boost Sovereign",
-      "card_number": "P-321",
-      "template": "[counter: attack][spirit boost <n>] negate the attack, play this card, and your opponent can only attack with battle card one more time for the turn.. [permanent] if your leader card is a \u226asaiyan\u226b card, treat this card i..."
-    },
-    {
-      "card_id": 7786,
-      "card_name": "Dabura, Stone Transformation Nightmare",
-      "card_number": "BT25-044",
-      "template": "[dual attack][blocker] . [-<n>][auto] when one of your opponent's card attacks, choose up to <n> of your opponent's battle card, negate its skills for the turn, and it can't attack for the turn. . [-<n>][activate: main]..."
-    },
-    {
-      "card_id": 7798,
-      "card_name": "Demigra, Wormhole Opened",
-      "card_number": "BT25-120",
-      "template": "[auto][once per turn] when your battle card is played by an [over realm] skill, draw <n> card and discard <n> card from your hand. . [+<n>][activate: main] if your leader is black: place up to <n> black battle card from..."
-    },
-    {
-      "card_id": 7839,
-      "card_name": "No Challenge for the Strong",
-      "card_number": "BT25-103",
-      "template": "[permanent] if your leader is a yellow <gogeta: gt> card, reduce the combo cost by <n> and negate the [energy-exhaust] skill of multicolor <pan> card and multicolor battle card with <gt> in their character names in all o..."
-    },
-    {
-      "card_id": 7843,
-      "card_name": "Vegeta, Final Battle",
-      "card_number": "BT25-134",
-      "template": "[energy-exhaust][revive blue/green] . [activate: main/battle][limit <n>](<n>), if your leader's back side is a yellow <gogeta: gt> card and you have a total of <n> or more multicolor <pan> card and/or multicolor card wit..."
-    },
-    {
-      "card_id": 7846,
-      "card_name": "SSB Gogeta, Next Level Power-Up",
-      "card_number": "BT25-100",
-      "template": "[blocker] . [permanent] if this card has <n> or fewer markers on it, it can't attack or activate the [blocker] skill. . [permanent] if you have a multicolor <pan> card or multicolor battle card with <gt> in its character..."
-    },
-    {
-      "card_id": 7848,
-      "card_name": "Haze Shenron, Great Dragon Quake",
-      "card_number": "BT25-102",
-      "template": "[deflect] . [auto] when this card is played or attacks, choose up to <n> of your opponent's battle card or unisons and switch it to rest mode. . [auto][limit <n>] if your leader is a yellow <nuova shenron> card: when you..."
-    },
-    {
-      "card_id": 7857,
-      "card_name": "Nuova Shenron, Blazing Blaster Meteor",
-      "card_number": "BT25-114",
-      "template": "[ex-evolve]{y}, draw <n> card: <nuova shenron> card with an energy cost of <n>. . [auto][once per turn] when this card attacks, choose up to <n> of your opponent's battle card and ko it. . [auto] when this card is remove..."
-    },
-    {
-      "card_id": 7866,
-      "card_name": "SS4 Son Goku, Final Battle",
-      "card_number": "BT25-131",
-      "template": "[energy-exhaust] . [offering][spirit boost <n>] . [permanent] you can't place card on top of this card. . [activate: main/battle][limit <n>](<n>), if your leader's back side is a yellow <gogeta: gt> card and you have a t..."
-    },
-    {
-      "card_id": 7868,
-      "card_name": "SS4 Vegeta, Wild Power of Justice",
-      "card_number": "BT25-133",
-      "template": "[energy-exhaust][blocker] . [revive blue/green] if your leader's back side is a yellow <gogeta: gt> card: . [permanent] if you have a multicolor card in your energy reduce the combo cost of this card in your hand by <n>...."
-    },
-    {
-      "card_id": 7869,
-      "card_name": "SS Son Goten, Stunning Combination",
-      "card_number": "BT25-135",
-      "template": "[energy-exhaust][blocker] . [aegis blue/yellow][once per turn] . [auto] when this card is played, choose up to <n> of your opponent's rest mode battle card and it can't switch to active mode until the end of your opponen..."
-    },
-    {
-      "card_id": 7870,
-      "card_name": "SS Trunks, Stunning Combination",
-      "card_number": "BT25-136",
-      "template": "[energy-exhaust] . [aegis blue/yellow][once per turn] . [auto] when this card is played, choose up to <n> of your opponent's battle card and negate its skills for the turn. . [activate: main/battle][limit <n>](<n>), if y..."
-    },
-    {
-      "card_id": 7878,
-      "card_name": "Son Goku, Fist of Fate",
-      "card_number": "BT25-145",
-      "template": "[ultimate][triple strike] . [permanent] when this card is in a battle, this card can't be removed from a battle area by your opponent's skills. . [activate: battle]{r}{r}{r}, if your leader is red and your red battle car..."
-    },
-    {
-      "card_id": 7879,
-      "card_name": "SS4 Gogeta, Unrivaled Sparking",
-      "card_number": "BT25-147",
-      "template": "[ultimate][quadruple strike] . [activate: main](<n>), if your leader is yellow and your life is at <n> or less: play this card from your hand, place <n> energy marker in your energy area for each of your opponent's rest..."
-    },
-    {
-      "card_id": 7906,
-      "card_name": "Son Goku, Accidental Wish",
-      "card_number": "BT25-138",
-      "template": "[permanent] this card can't attack and gains \u226ashenron\u226b in all areas. . [+<n>][activate: main] choose up to <n> of your opponent's battle card and it gets -<n> power for the turn. . [-<n>][activate: main] during your oppo..."
-    },
-    {
-      "card_id": 7908,
-      "card_name": "Krillin, Wish After Conflict",
-      "card_number": "BT25-140",
-      "template": "[permanent] this card can't attack and gains \u226ashenron\u226b in all areas. . [+<n>][activate: main] choose up to <n> of your opponent's battle card with an energy cost of <n> or less and place it at the bottom of its owner's d..."
-    },
-    {
-      "card_id": 7909,
-      "card_name": "Oolong, Split-Second Wish",
-      "card_number": "BT25-141",
-      "template": "[permanent] this card can't attack and gains \u226ashenron\u226b in all areas. . [+<n>][activate: main] your opponent discards <n> card their hand. . [-<n>][activate: main] during your opponent's next turn, if your opponent would..."
-    },
-    {
-      "card_id": 7910,
-      "card_name": "Zamasu, Scheme Wish",
-      "card_number": "BT25-142",
-      "template": "[permanent] this card can't attack and gains \u226ashenron\u226b in all areas. . [+<n>][activate: main] choose <n> of your battle card with an energy cost of <n> or less, negate its skills for the game, and your opponent gains con..."
-    },
-    {
-      "card_id": 7912,
-      "card_name": "Cheelai, Wish for the Fighting to End",
-      "card_number": "BT25-144",
-      "template": "[permanent] this card can't attack and gains \u226ashenron\u226b in all areas. . [+<n>][activate: main] look at up to <n> card from the top of your deck, place up to <n> battle card in its owner's drop or send it to its owner's wa..."
-    },
-    {
-      "card_id": 7928,
-      "card_name": "Shenron, Final Wish",
-      "card_number": "P-616",
-      "template": "[energy-exhaust] . [permanent] this card can't attack. . [activate: main][limit <n>] if you have a total of <n> or more card with <gt> in their character names among all card in your energy, z-energy, battle area, and/or..."
-    },
-    {
-      "card_id": 7929,
-      "card_name": "Son Goku",
-      "card_number": "EX24-01",
-      "template": "[permanent] you can only include z-unisons in your z-deck. [activate main] switch this card to rest mode: add up to <n> \u226apower wish\u226b card from your deck to your hand, then shuffle your deck. [wish] if you have a total of..."
-    },
-    {
-      "card_id": 7933,
-      "card_name": "SS Son Goku, Guided by the Dragon Balls",
-      "card_number": "EX24-04",
-      "template": "[deflect][double strike] [auto][spirit boost <x>] when this card attacks, it gets +<n> power multiplied by <x> for the battle. additionally, if <x> is <n> or greater, this card gains [barrier] for the turn. [activate mai..."
-    },
-    {
-      "card_id": 7934,
-      "card_name": "Frieza, Guided by the Dragon Balls",
-      "card_number": "EX24-05",
-      "template": "[activate main][limit <n>] if you only have blue \u226apower wish\u226b <son goku> card in play in your battle area: play this card from your hand. [activate main][once per turn]{<n>}: draw <n> card, and this card gains [dual atta..."
-    },
-    {
-      "card_id": 7935,
-      "card_name": "Android 18, Guided by the Dragon Balls",
-      "card_number": "EX24-06",
-      "template": "[deflect] [auto][once per turn] when this card is played or attacks, look at up to <n> card from the top of your deck, add up to <n> \u226apower wish\u226b card to your hand, then shuffle your deck. [activate main][limit <n>]{<n>}..."
-    },
-    {
-      "card_id": 7940,
-      "card_name": "Android 17, Guided by the Dragon Balls",
-      "card_number": "EX24-11",
-      "template": "[counter: play][limit <n>] if your leader is a \u226apower wish\u226b card: play this card. [permanent] if your life is at <n> or less, you can activate this card's [counter] skill from your hand by sending <n> \u226apower wish\u226b card f..."
-    },
-    {
-      "card_id": 7941,
-      "card_name": "SS Broly, Guided by the Dragon Balls",
-      "card_number": "EX24-12",
-      "template": "[deflect][triple strike] [activate main][limit <n>]{<n>}, if your leader is a \u226apower wish\u226b card, you have <n> or more energy, and you send <n> \u226apower wish\u226b card from your drop to its owner's warp: play this card from you..."
-    },
-    {
-      "card_id": 7954,
-      "card_name": "Gamma 1 & Gamma 2, Stand-Up Heroes",
-      "card_number": "EX24-25",
-      "template": "[deflect][dual attack] [permanent] you can use your rest mode battle card with <sh> in their character names in combos. [auto] when this card is played, choose up to <n> of your battle card with <n> or more character nam..."
-    },
-    {
-      "card_id": 8050,
-      "card_name": "Gowasu, Instructor",
-      "card_number": "BT26-065",
-      "template": "[auto][once per turn] when a card is placed in your opponent's drop from the top of their deck by one of your skills, add <n> marker to this card. . [<n>] [activate: main] if your leader is {fused zamasu, insanity from j..."
-    },
-    {
-      "card_id": 8051,
-      "card_name": "Zamasu & Goku Black, Meeting in Despair",
-      "card_number": "BT26-066",
-      "template": "[critical][dual attack] . [auto][limit <n>] if your opponent has <n> or more card in their drop: when this card is played, it gets +<n> power for the turn."
-    },
-    {
-      "card_id": 8058,
-      "card_name": "SS Rose Goku Black, Attack Wave",
-      "card_number": "BT26-079",
-      "template": "[auto] when this card is played, play <n> shadow token, and that card gets +<n> power and [blocker] until the end of your opponent's turn. [em](shadow tokens have <n> power, <n> combo power, and <n> combo power)[/em] . [..."
-    },
-    {
-      "card_id": 8060,
-      "card_name": "Goku Black, Returning to Zero",
-      "card_number": "BT26-081",
-      "template": "[auto] when this card is played, look at up to <n> card from the top of your deck, add up to <n> green \u226agod\u226b card with an energy cost of <n> or less to your hand, then shuffle your deck. . [activate: main] [limit <n>] if..."
-    },
-    {
-      "card_id": 8062,
-      "card_name": "Fused Zamasu, Unified Ultimate God",
-      "card_number": "BT26-083",
-      "template": "[indestructible] . [union-potara](<n>), draw <n> card: green <zamasu> card and green <goku black> card. . [activate: main][limit <n>](<n>), if your leader is green or a \u226agod\u226b card, you have <n> or more energy, and you ch..."
-    },
-    {
-      "card_id": 8063,
-      "card_name": "Fused Zamasu, Ideal World Creation",
-      "card_number": "BT26-084",
-      "template": "[indestructible] . [union-potara]{g} if your leader is a green <zamasu> card, you draw <n> card, and place the top card of your opponent's deck into its owner's drop: green <zamasu> card and green <goku black> card. . [a..."
-    },
-    {
-      "card_id": 8122,
-      "card_name": "Metamorphic Android Cell",
-      "card_number": "BT26-139",
-      "template": "[ultimate] . [auto] if you have <n> or more energy: when this card is played, choose up to <n> of your opponent's battle card, ignoring [barrier], place it under this card, play <n> cell jr. tokens, and those card get +<..."
-    },
-    {
-      "card_id": 8170,
-      "card_name": "Cooler, Strongest Pride",
-      "card_number": "BT26-128",
-      "template": "[auto] when this card is played, place up to <n> of your black battle card from your warp into their owner's drop, then choose up to <n> of your black card and it gets +<n> power for the turn. . [activate: main][limit <n..."
-    },
-    {
-      "card_id": 8233,
-      "card_name": "SS Vegito, Power Release",
-      "card_number": "P-643",
-      "template": "[blocker]. [counter: attack][limit <n>] play this card, then choose up to <n> of your card and it gets +<n> power for the battle.. [permanent] if your leader is red, you can activate this card's [counter] skill from your..."
-    },
-    {
-      "card_id": 8307,
-      "card_name": "SS4 Son Gohan, Journey Through Time",
-      "card_number": "P-658",
-      "template": "[deflect][double strike][barrier] . [auto] if your leader is black: when this card is played, choose up to <n> of your opponent's battle card with an energy cost greater than their current energy, ignoring [barrier], and..."
-    },
-    {
-      "card_id": 8314,
-      "card_name": "Mechikabura",
-      "card_number": "BT27-092",
-      "template": "[activate: main][once per turn][burst <n>] add <n> card from your life to your hand: look at up to <n> card from the top of your deck, add up to <n> black \u226ademon realm race\u226b or \u226ademon god\u226b card to your hand, then shuffle..."
-    },
-    {
-      "card_id": 8315,
-      "card_name": "SS4 Vegito, Barrage",
-      "card_number": "BT27-093",
-      "template": "[deflect][triple attack] . [permanent] if you have a battle card with an [over realm] or [dark over realm] skill in play, reduce the energy cost of this card in your z-deck by <n>."
-    },
-    {
-      "card_id": 8316,
-      "card_name": "Bardock, Destiny-Changing Willpower",
-      "card_number": "BT27-095",
-      "template": "[counter: attack][limit <n>] if your leader is black: negate the attack and play this card. . [permanent] if your life is at <n> or less and you have <n> or more card in your drop, you can activate this card's [counter]..."
-    },
-    {
-      "card_id": 8317,
-      "card_name": "Demigra, Encroaching Shadow",
-      "card_number": "BT27-100",
-      "template": "[wormhole] . [dark over realm <n>]{b}, if your leader is a <mechikabura> card and you draw <n> card:"
-    },
-    {
-      "card_id": 8318,
-      "card_name": "Demon God Putine, Scheming",
-      "card_number": "BT27-102",
-      "template": "[dark over realm <n>]{b}, if your leader is a <mechikabura> card and you draw <n> card: . [auto][limit <n>] when your battle card other than this card is played by a [dark over realm] skill, draw <n> card."
-    },
-    {
-      "card_id": 8320,
-      "card_name": "Demon God Towa, Scheming",
-      "card_number": "BT27-106",
-      "template": "[double strike] . [dark over realm <n>]{b}, if your leader is a <mechikabura> card: . [auto] when this card is played, place up to <n> of your black battle card from your warp into their owner's drop, then choose up to <..."
-    },
-    {
-      "card_id": 8323,
-      "card_name": "Demigra's Wormhole",
-      "card_number": "BT27-094",
-      "template": "[auto] if your leader is black: when this card is placed in a battle area or removed from the game, place up to <n> card from the top of your deck into their owner's drop. . [activate: main][limit <n>] if your battle car..."
-    },
-    {
-      "card_id": 8326,
-      "card_name": "Demon God Shroom, Scheming",
-      "card_number": "BT27-103",
-      "template": "[dual attack] . [dark over realm <n>]{b}, if your leader is a <mechikabura> card : . [auto] whe this card attacks, use up to <n> black battle card with <n> combo power from your warp in a combo with its skill negated for..."
-    },
-    {
-      "card_id": 8372,
-      "card_name": "Android 18, Unknown Threat",
-      "card_number": "BT27-028",
-      "template": "[double strike][blocker] . [auto] if your leader is a blue \u226aandroid\u226b card: when this card attacks, add up to <n> blue \u226aandroid\u226b card from your energy to your hand. . [+<n>] [activate: main] choose up to <n> of your oppon..."
-    },
-    {
-      "card_id": 8374,
-      "card_name": "Android 19, Military Terror Creation",
-      "card_number": "BT27-032",
-      "template": "[auto] when this card is played, look at up to <n> card from the top of your deck, add up to <n> blue \u226aandroid\u226b card with an energy cost of <n> or less to your hand, then shuffle your deck. . [auto] if your leader's back..."
-    },
-    {
-      "card_id": 8375,
-      "card_name": "Android 13, Military Terror Creation",
-      "card_number": "BT27-034",
-      "template": "[deflect] . [auto][limit <n>]{u}, if your leader's back side is {gamma <n> & gamma <n>, justice}: when this crd ins your energy is placed into its owner's drop by the skill of a blue \u226ared ribbon army\u226b card in any area, d..."
-    },
-    {
-      "card_id": 8385,
-      "card_name": "Justice Impact",
-      "card_number": "BT27-124",
-      "template": "[permanent] negate the [energy-exhaust] skills on blue/green multicolor \u226ared ribbon army\u226b card in all of your areas. . [auto] when this card is placed in a batte area, switch up to <n> of your blue \u226ared ribbon army\u226b lead..."
-    },
-    {
-      "card_id": 8386,
-      "card_name": "Gamma 1 & Gamma 2, Military Terror Creations",
-      "card_number": "BT27-134",
-      "template": "[energy-exhaust][dual attack][blocker] . [activate: main/battle][once per turn] place <n> of your energy into its owner's drop: choose up to <n> of your blue \u226ared ribbon army\u226b card and it gets +<n> power for the turn. ...."
-    },
-    {
-      "card_id": 8425,
-      "card_name": "SS Broly, Vigor",
-      "card_number": "BT27-084",
-      "template": "[activate: main/battle][limit <n>]{y}{y}, if your leader is yellow an your opponent has <n> or more energy: play this card from your hand, choose any number of your card nd switch them to rest mode, and for each card you..."
-    },
-    {
-      "card_id": 8440,
-      "card_name": "Son Goku, Unlimited Potential",
-      "card_number": "BT27-019",
-      "template": "[barrier][blocker] . [auto][once per turn] when you use a card in a combo, switch this card to active mode. . [activate: main][limit <n>]{r}, if your leader is red and you have <n> or more energy: play this card from you..."
-    },
-    {
-      "card_id": 8444,
-      "card_name": "SS4 Gogeta, Bold Arrival",
-      "card_number": "BT27-123",
-      "template": "[deflect] . [permanent] reduce the energy cost of this card in your z-deck by {b}, for each \u226asaiyan\u226b card in your warp. . [auto][once per turn] send <n> \u226asaiyan\u226b card from your drop to its owner's warp: when this card or..."
-    },
-    {
-      "card_id": 8448,
-      "card_name": "Jiren, Climactic Battle",
-      "card_number": "BT27-005",
-      "template": "[empower red <n>][barrier][dual attack] . [permanent] for each marker on this card, this card gets +<n> power during your turn. . [-<n>][auto] when one of your opponent's card attacks, negate the attack."
-    },
-    {
-      "card_id": 8458,
-      "card_name": "Final Battle",
-      "card_number": "BT27-025",
-      "template": "[counter: attack][limit <n>][spirit boost <n>] red z-unison: negate the attack, draw <n> card, then choose up to <n> of your red \u226afierce foe\u226b card and it gets +<n> power for the turn. . [permanent] you can activate this..."
-    },
-    {
-      "card_id": 8492,
-      "card_name": "Demon God Dabura, Counter",
-      "card_number": "P-680",
-      "template": "[dark over realm <n>] [blocker] . [permanent] skills on your battle card can't be negated by your opponent's skills. . [permanent] your card can't be switched to rest mode by your opponent's skills."
-    },
-    {
-      "card_id": 8881,
-      "card_name": "Frieza, Unrestricted Power",
-      "card_number": "BT28-003",
-      "template": "[deflect] . [permanent] if this card has <n> power or more, it gains [critical] and [barrier] . [activate: main] discard <n> card from your hand: this card gets +<n> power for the turn. choose up to <n> of your opponent'..."
-    },
-    {
-      "card_id": 8896,
-      "card_name": "Nail, Planetary Guardian",
-      "card_number": "BT28-018",
-      "template": "[blocker][revenge] . [counter: attack] play this card, then choose up to <n> of your card and it gets +<n> power for the battle. . [permanent] if your leader is a red \u226aearthling\u226b, \u226anamekian\u226b, or \u226ashenron\u226b card, you can a..."
-    },
-    {
-      "card_id": 8930,
-      "card_name": "Zen-Oh, Apex of the Universe",
-      "card_number": "BT28-125",
-      "template": "[auto](<n>): when this card is played, choose all of your opponent's battle card and place them into their owner's drop. . [activate: main][limit <n>](<n>), choose <n> card in your or your opponent's battle area and swit..."
-    },
-    {
-      "card_id": 8982,
-      "card_name": "Krillin, Guided by the Dragon Balls",
-      "card_number": "P-699",
-      "template": "[blocker]<br/>[auto][once per turn][spirit boost <n>] when this card is played or activates the [blocker] skill, choose up to <n> of your \u226apower wish\u226b card and switch it to active mode.<br/>[auto] when this card is remov..."
-    },
-    {
-      "card_id": 9629,
-      "card_name": "Goku Black",
-      "card_number": "BT29-086",
-      "template": "[permanent] having <n> card in your deck does not caues you to lose the game. . [activate main][once per turn] look at up to <n> card from the top of your deck, send up to <n> black card to its owner's warp, then shuffle..."
-    },
-    {
-      "card_id": 9633,
-      "card_name": "Jaguar's Island, Challenge Stage",
-      "card_number": "BT29-003",
-      "template": "[barrier] [permanent] this card can't attack. [auto] when you activate a red \u226aearthling\u226b extra from your hand, add <n> marker to this card. [unison -<n>][activate: main/battle] if your leader is a red <krillin> card and..."
-    },
-    {
-      "card_id": 9642,
-      "card_name": "Android 18, Demon Encounter",
-      "card_number": "BT29-011",
-      "template": "[auto] when this card is played, look at up to <n> card from the top of your deck, add up to <n> red \u226aearthling\u226b card with an energy cost of <n> or less to your hand, then shuffle your deck. [auto][once per turn] when yo..."
-    },
-    {
-      "card_id": 9657,
-      "card_name": "Stowaways",
-      "card_number": "BT29-024",
-      "template": "[permanent] this card gains \u226aearthling\u226b in all areas. [activate: main/battle]{<n>}, if your leader is a red <krillin> card and you discard <n> card from your hand : play up to <n> each of <son goten> and <trunks : youth>..."
-    },
-    {
-      "card_id": 9660,
-      "card_name": "Tiny Golden Warrior",
-      "card_number": "BT29-027",
-      "template": "[permanent] this card gains \u226aearthling\u226b in all areas. [activate: main][limit <n>] if your leader is a red <krillin> card : the next time you activate [ex-evolve] on your red <son goten> or <trunks : youth> card during th..."
-    },
-    {
-      "card_id": 9720,
-      "card_name": "Fused Zamasu, God of Despair",
-      "card_number": "BT29-087",
-      "template": "[deflect][unique][double strike][indestructible] [permanent] if you have <n> or more energy and a black unison in play, reduce the energy cost of this card in your z-deck by <n>. [activate: main][limit <n>][spirit boost..."
-    },
-    {
-      "card_id": 9721,
-      "card_name": "SS Ros\u00e9 Goku Black, Fearsome God",
-      "card_number": "BT29-088",
-      "template": "[empower black <n>][blocker] [activate: main][limit <n>]{b}, if your leader is a black <goku black> card : play this card with <n> marker on it from your warp. [unison +<n>][activate: main] send up to <n> card from the t..."
-    },
-    {
-      "card_id": 9723,
-      "card_name": "SS Ros\u00e9 Goku Black, Power of Despair",
-      "card_number": "BT29-089",
-      "template": "[empower black <n>][critical] [activate: main][limit <n>]{b}, if your leader is black : play this card with <n> marker on it from your warp. [unison <n>][activate: main] send up to <n> card from the top of your deck to t..."
-    },
-    {
-      "card_id": 9725,
-      "card_name": "Goku Black, Surprise Attack",
-      "card_number": "BT29-091",
-      "template": "[empower black <n>] [auto] if this card has <n> or more markers on it : when this card is played, choose up to <n> of your opponent's battle card and send it to its owner's warp. [activate: battle][limit <n>]{b}, if your..."
-    },
-    {
-      "card_id": 9726,
-      "card_name": "Fused Zamasu, Fearsome God",
-      "card_number": "BT29-092",
-      "template": "[empower black <n>] [auto] if this card has <n> or more markers on it : when this card is played, choose all of your opponent's battle card and send them to their owner's warp. [activate: main][limit <n>]{b}{b}, if your..."
-    },
-    {
-      "card_id": 9728,
-      "card_name": "Zamasu, Dark Plans",
-      "card_number": "BT29-093",
-      "template": "[empower black <n>] [activate: main][limit <n>] if your leader is a black <goku black> card, you have <n> or more energy, and you add <n> card from your hand to your z-energy : play this card with <n> markers on it from..."
-    },
-    {
-      "card_id": 9729,
-      "card_name": "Zamasu, Scheme",
-      "card_number": "BT29-094",
-      "template": "[empower black <n>] [activate: main][limit <n>] if your leader is a black <goku black> card, you have <n> or more energy, and you place <n> of your z-energy into its owner's drop : play this card with <n> markers on it f..."
-    },
-    {
-      "card_id": 9732,
-      "card_name": "SS2 Trunks, Pursuit",
-      "card_number": "BT29-097",
-      "template": "[critical] [permanent] if this card would leave the battle area, remove it from the game instead. [auto][limit <n>] when this card in your hand is placed into its owner's drop or sent to its owner's warp, place up to <n>..."
-    },
-    {
-      "card_id": 9787,
-      "card_name": "SS Ros\u00e9 Goku Black, Justice Enforcer",
-      "card_number": "BT29-150",
-      "template": "[ultimate][empower black <n>][critical][barrier][blocker][revenge] [auto] when this card is removed from a unison area, both players send card from their hands to their owners' warps until both hands have <n> card. [acti..."
-    }
-  ],
+  "priority_unimplemented_cards": [],
   "schema_version": "effect_support_audit.v1",
   "summary": {
     "cards_with_diagnostics": 0,
-    "cards_with_rules": 2211,
-    "cards_without_rules": 3790,
+    "cards_with_rules": 2971,
+    "cards_without_rules": 3030,
     "family_count": 5770,
-    "priority_card_count": 291,
+    "priority_card_count": 0,
     "priority_cards_with_diagnostics": 0,
-    "priority_cards_with_rules": 122,
-    "priority_cards_without_rules": 165,
-    "priority_skill_card_count": 287,
+    "priority_cards_with_rules": 0,
+    "priority_cards_without_rules": 0,
+    "priority_intentionally_skipped_cards": 0,
+    "priority_skill_card_count": 0,
     "skill_card_count": 6001
   },
   "top_global_families": [
@@ -1464,10 +514,10 @@
       },
       "implemented_card_count": 1,
       "implemented_rate": 0.09090909090909091,
-      "priority_card_count": 1,
+      "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
       "template": "[over realm <n>] (if you have at least <n> card in your drop area, you can play this card by sending all card in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [ov...",
       "trigger_counts": {
         "self_played": 1
@@ -1539,15 +589,19 @@
       "example_card_id": 4726,
       "example_card_name": "Master Roshi, Martial Expert",
       "example_card_number": "BT5-012",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
+      "handler_counts": {
+        "auto_draw_n": 6
+      },
+      "implemented_card_count": 6,
+      "implemented_rate": 1.0,
+      "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto][sparking <n>] (this skill takes effect when you have <n> or more card in your drop area.) when you combo with this card, if you...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_comboed": 6
+      }
     },
     {
       "card_count": 6,
@@ -1598,15 +652,19 @@
       "example_card_id": 5178,
       "example_card_name": "Frieza, Ghost Warrior",
       "example_card_number": "BT8-094",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_self_from_hand": 5
+      },
+      "implemented_card_count": 5,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main] if your leader card is a black \u226amachine mutant\u226b card and you choose <n> black battle card with energy costs between <n> and <n> in your drop area and place them at the bottom of your deck in any order: p...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 5
+      }
     },
     {
       "card_count": 5,
@@ -1683,10 +741,10 @@
       },
       "implemented_card_count": 5,
       "implemented_rate": 1.0,
-      "priority_card_count": 1,
+      "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
       "template": "[super combo]. [auto] if your leader card is yellow and your life is at <n> or less: when this card is used in a combo, draw <n> card.",
       "trigger_counts": {
         "self_comboed": 5
@@ -1792,15 +850,19 @@
       "example_card_id": 3875,
       "example_card_name": "Sorrel, The Small Warrior",
       "example_card_number": "TB1-044",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_draw_n": 4
+      },
+      "implemented_card_count": 4,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck). [auto] when you combo with this card, if your leader card is \u226auniverse <n>\u226b and you have <n> or less life, draw <n> card and this card...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_comboed": 4
+      }
     },
     {
       "card_count": 4,
@@ -1835,10 +897,10 @@
       },
       "implemented_card_count": 4,
       "implemented_rate": 1.0,
-      "priority_card_count": 1,
+      "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
       "template": "[super combo]. [auto] if your leader card is red and your life is at <n> or less: when this card is used in a combo, draw <n> card.",
       "trigger_counts": {
         "self_comboed": 4
@@ -1898,477 +960,105 @@
       "trigger_counts": {
         "self_activate_main": 3
       }
+    },
+    {
+      "card_count": 3,
+      "diagnostic_card_count": 0,
+      "diagnostic_counts": {},
+      "example_card_id": 64,
+      "example_card_name": "Trunks, Journey's Beginning",
+      "example_card_number": "BT15-013",
+      "handler_counts": {
+        "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 3
+      },
+      "implemented_card_count": 3,
+      "implemented_rate": 1.0,
+      "priority_card_count": 0,
+      "priority_diagnostic_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
+      "template": "[auto] add <n> card from your life to your hand: when this card attacks, it gets +<n> power and [double strike] for the turn.",
+      "trigger_counts": {
+        "self_attacks": 3
+      }
+    },
+    {
+      "card_count": 3,
+      "diagnostic_card_count": 0,
+      "diagnostic_counts": {},
+      "example_card_id": 126,
+      "example_card_name": "Eis Shenron, Power of Darkness",
+      "example_card_number": "BT15-133",
+      "handler_counts": {
+        "auto_top_deck_add_if_color_on_play": 3
+      },
+      "implemented_card_count": 3,
+      "implemented_rate": 1.0,
+      "priority_card_count": 0,
+      "priority_diagnostic_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
+      "template": "[auto] if your leader card is a \u226ashadow dragon\u226b card: when this card is played from your hand or discarded by a \u226ashadow dragon\u226b card's skill, you may look at the top card of your deck; if it's a black \u226ashadow dragon\u226b car...",
+      "trigger_counts": {
+        "self_played": 3
+      }
+    },
+    {
+      "card_count": 3,
+      "diagnostic_card_count": 0,
+      "diagnostic_counts": {},
+      "example_card_id": 2400,
+      "example_card_name": "Android 17, Perpetual Motion Machine",
+      "example_card_number": "BT23-024",
+      "handler_counts": {
+        "auto_draw_n": 1,
+        "auto_power_reduce_up_to_n_on_play": 1
+      },
+      "implemented_card_count": 2,
+      "implemented_rate": 0.6666666666666666,
+      "priority_card_count": 0,
+      "priority_diagnostic_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
+      "template": "[auto][limit <n>](red), if your leader is a red \u226aandroid\u226b card: at the end of a battle in which your red &lt;android <n>&gt; battle card attacked, play this card from under a {destroyed west city} in your battle area.. [...",
+      "trigger_counts": {
+        "self_played": 2
+      }
+    },
+    {
+      "card_count": 3,
+      "diagnostic_card_count": 0,
+      "diagnostic_counts": {},
+      "example_card_id": 561,
+      "example_card_name": "Ba, Friend From Planet Vampa",
+      "example_card_number": "BT17-027",
+      "handler_counts": {},
+      "implemented_card_count": 0,
+      "implemented_rate": 0.0,
+      "priority_card_count": 0,
+      "priority_diagnostic_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
+      "template": "[blocker]",
+      "trigger_counts": {}
+    },
+    {
+      "card_count": 3,
+      "diagnostic_card_count": 0,
+      "diagnostic_counts": {},
+      "example_card_id": 4712,
+      "example_card_name": "Ready Stance Son Goku",
+      "example_card_number": "BT5-028",
+      "handler_counts": {},
+      "implemented_card_count": 0,
+      "implemented_rate": 0.0,
+      "priority_card_count": 0,
+      "priority_diagnostic_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "priority_implemented_rate": 0.0,
+      "template": "[blocker] (when one of your other card is attacked, you may switch this card to rest mode and change the target of the attack to this card.). [barrier] (this card can't be chosen by the skills of your opponent's card.)",
+      "trigger_counts": {}
     }
   ],
-  "top_priority_families": [
-    {
-      "card_count": 2,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 43,
-      "example_card_name": "SS4 Vegeta, Prismatic Burst",
-      "example_card_number": "EX19-28",
-      "handler_counts": {
-        "auto_play_self_from_combo_on_battle_end": 2
-      },
-      "implemented_card_count": 2,
-      "implemented_rate": 1.0,
-      "priority_card_count": 2,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 2,
-      "priority_implemented_rate": 1.0,
-      "template": "[energy-exhaust]. [auto](black), if your leader card is a black \u226asaiyan\u226b card and there's a total of <n> or more energy between you and your opponent: at the end of a battle in which this card was used in a combo from yo...",
-      "trigger_counts": {
-        "self_comboed_battle_end": 2
-      }
-    },
-    {
-      "card_count": 11,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 4576,
-      "example_card_name": "Awakened Warrior Bardock",
-      "example_card_number": "BT3-110",
-      "handler_counts": {
-        "auto_draw_n": 1
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 0.09090909090909091,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[over realm <n>] (if you have at least <n> card in your drop area, you can play this card by sending all card in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [ov...",
-      "trigger_counts": {
-        "self_played": 1
-      }
-    },
-    {
-      "card_count": 6,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 4726,
-      "example_card_name": "Master Roshi, Martial Expert",
-      "example_card_number": "BT5-012",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto][sparking <n>] (this skill takes effect when you have <n> or more card in your drop area.) when you combo with this card, if you...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 5,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 95,
-      "example_card_name": "Yamcha, Battle at the Tree",
-      "example_card_number": "BT15-102",
-      "handler_counts": {
-        "auto_draw_n": 5
-      },
-      "implemented_card_count": 5,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[super combo]. [auto] if your leader card is yellow and your life is at <n> or less: when this card is used in a combo, draw <n> card.",
-      "trigger_counts": {
-        "self_comboed": 5
-      }
-    },
-    {
-      "card_count": 4,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 3,
-      "example_card_name": "Tien Shinhan, Universe 7 Challenger",
-      "example_card_number": "BT14-010",
-      "handler_counts": {
-        "auto_draw_n": 4
-      },
-      "implemented_card_count": 4,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[super combo]. [auto] if your leader card is red and your life is at <n> or less: when this card is used in a combo, draw <n> card.",
-      "trigger_counts": {
-        "self_comboed": 4
-      }
-    },
-    {
-      "card_count": 2,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 1178,
-      "example_card_name": "Demon God Salsa, Dark Combination",
-      "example_card_number": "BT18-136",
-      "handler_counts": {
-        "auto_draw_n": 2
-      },
-      "implemented_card_count": 2,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[super combo]. [auto] if your leader is black and your life is at <n> or less: when this card is used in a combo, draw <n> card.",
-      "trigger_counts": {
-        "self_comboed": 2
-      }
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 7934,
-      "example_card_name": "Frieza, Guided by the Dragon Balls",
-      "example_card_number": "EX24-05",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate main][limit <n>] if you only have blue \u226apower wish\u226b <son goku> card in play in your battle area: play this card from your hand. [activate main][once per turn]{<n>}: draw <n> card, and this card gains [dual atta...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 7179,
-      "example_card_name": "A Crack in Spacetime",
-      "example_card_number": "EX06-36",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: battle] if your leader card is a black \u226asaiyan\u226b card, it gets +<n> power and [double strike] for the duration of the battle.",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 2264,
-      "example_card_name": "10x Kamehameha, Mighty Blast",
-      "example_card_number": "EX23-03",
-      "handler_counts": {
-        "auto_draw_n": 1
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: choose up to <n> of your card and it gets +<n> power for the battle.. [activate: battle](red), if your leader is red, you p...",
-      "trigger_counts": {
-        "self_activate_battle": 1
-      }
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 2266,
-      "example_card_name": "Limit Ultra Kamehameha, Mighty Blast",
-      "example_card_number": "EX23-21",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: choose up to <n> of your opponent's battle card with an energy cost of <n> or less and ko it, then choose up to <n> of your...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 2268,
-      "example_card_name": "First Kamehameha, Mighty Blast",
-      "example_card_number": "EX23-38",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: battle] place <n> of your z-energy in your drop, then remove this card from the game: place up to <n> black card from your warp in your drop, then choose up to <n> of your card and it gets +<n> power for the b...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 27,
-      "example_card_name": "Broly, Omen of Evolution",
-      "example_card_number": "EX19-12",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: battle] place this card in its owner's drop area from your combo area: choose up to <n> battle card with a combo cost of <n> in your opponent's combo area and place it in its owner's drop area.",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 2064,
-      "example_card_name": "Special Beam Cannon, Inherited Power",
-      "example_card_number": "BT22-007",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: battle](red), your red &lt;son gohan: sh&gt; card is attacking and you remove this card from the game: choose up to <n> of your opponent's battle card with <n> power or less, ignoring [barrier], and ko it, the...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 28,
-      "example_card_name": "Encountering the Unknown",
-      "example_card_number": "EX19-13",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main/battle][limit <n>] if your leader card is a green &lt;cheelai: br&gt; card or yellow &lt;broly: br&gt; card, choose one?-. \u30fbchoose up to <n> of your opponent's skill-less battle card in rest mode, ko it,...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 8425,
-      "example_card_name": "SS Broly, Vigor",
-      "example_card_number": "BT27-084",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main/battle][limit <n>]{y}{y}, if your leader is yellow an your opponent has <n> or more energy: play this card from your hand, choose any number of your card nd switch them to rest mode, and for each card you...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 7195,
-      "example_card_name": "Great Ape Son Goku, Saiyan Instincts",
-      "example_card_number": "DB1-064",
-      "handler_counts": {
-        "auto_draw_n": 1
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[activate: main] (<n>), send this card from your drop area to your warp: draw <n> card.",
-      "trigger_counts": {
-        "self_activate_main": 1
-      }
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 7166,
-      "example_card_name": "Strategies of Universe 7",
-      "example_card_number": "TB1-023",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main] choose all red \u226asaiyan\u226b card in your battle area. they gain [barrier] (they can't be chosen by the skills of your opponent's card) until the end of your opponent's next turn.",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 76,
-      "example_card_name": "The Demon Cometh",
-      "example_card_number": "BT15-023",
-      "handler_counts": {
-        "auto_draw_n": 1
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[activate: main] if your leader card is a mono-red \u226asaiyan\u226b card and you choose <n> red extra card in your hand and discard it: draw <n> card.. [activate: main][limit <n>] if your leader card is a red &lt;broly&gt; card,...",
-      "trigger_counts": {
-        "self_activate_main": 1
-      }
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 39,
-      "example_card_name": "SS4's Call",
-      "example_card_number": "EX19-24",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main][limit <n>] if your leader card is a black &lt;bardock: xeno&gt; card or a \u226asaiyan\u226b card with {ss<n>} in its card name: look at up to <n> card from the top of your deck, add up to <n> black card with {ss<...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 78,
-      "example_card_name": "The Demon Awakens",
-      "example_card_number": "BT15-025",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main][limit <n>][burst <n>] if your leader card is a red &lt;broly&gt; card and you send this card from your drop area to your warp: add up to <n> card from your life to your hand.. [activate: battle] choose u...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 9649,
-      "example_card_name": "SS Broly, Indiscriminate Destroyer",
-      "example_card_number": "BT29-017",
-      "handler_counts": {
-        "auto_draw_n": 2
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[activate: main][limit <n>]{r}{r}, if your opponent has <n> or more energy : draw <n> card, play this card from your hand, place up to <n> red extras from your drop under this card, then choose up to <n> of your opponent...",
-      "trigger_counts": {
-        "self_activate_main": 2
-      }
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 2541,
-      "example_card_name": "SSB Vegito, Union of Sparks",
-      "example_card_number": "BT24-113",
-      "handler_counts": {
-        "auto_draw_n": 1
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[activate: main][once per turn] place <n> card from under this card into its owner's drop: draw <n> card.. [+<n>][auto] when this card or one of your black card with a [union] skill attacks or activates the [blocker] ski...",
-      "trigger_counts": {
-        "self_activate_main": 1
-      }
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 8314,
-      "example_card_name": "Mechikabura",
-      "example_card_number": "BT27-092",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main][once per turn][burst <n>] add <n> card from your life to your hand: look at up to <n> card from the top of your deck, add up to <n> black \u226ademon realm race\u226b or \u226ademon god\u226b card to your hand, then shuffle...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 7386,
-      "example_card_name": "Koitsukai, Mechanical Courage",
-      "example_card_number": "DB2-143",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "priority_implemented_rate": 0.0,
-      "template": "[activate: main]\u2460, remove this card in your drop area from the game, then choose up to <n> card in your hand and place them at the bottom of your deck in any order: draw card equal to the number of card you placed at the...",
-      "trigger_counts": {}
-    },
-    {
-      "card_count": 1,
-      "diagnostic_card_count": 0,
-      "diagnostic_counts": {},
-      "example_card_id": 31,
-      "example_card_name": "Meta-Cooler, Maddening Multiplication",
-      "example_card_number": "EX19-16",
-      "handler_counts": {
-        "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play": 1
-      },
-      "implemented_card_count": 1,
-      "implemented_rate": 1.0,
-      "priority_card_count": 1,
-      "priority_diagnostic_card_count": 0,
-      "priority_implemented_card_count": 1,
-      "priority_implemented_rate": 1.0,
-      "template": "[auto] if your leader card is a &lt;meta-cooler&gt; or &lt;meta-cooler core&gt; card, you have <n> or more energy, and you don't have a unison card in play: when this card is played from your hand, choose up to <n> {meta...",
-      "trigger_counts": {
-        "self_played": 1
-      }
-    }
-  ]
+  "top_priority_families": []
 }

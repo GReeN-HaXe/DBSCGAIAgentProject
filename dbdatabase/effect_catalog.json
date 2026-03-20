@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3045,
+  "card_rule_count": 3049,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 4184,
+  "effect_rule_count": 4193,
   "rules": {
     "10": [
       {
@@ -332,6 +332,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "min_opponent_energy": 3,
+          "required_name_contains": "SPIRIT",
           "required_traits": "Spirit",
           "requires_leader": "if your leader is {super saiyans united} and your opponent has 3 or more energy"
         },
@@ -379,6 +380,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "min_owner_energy": 2,
+          "required_name_contains": "SPIRIT",
           "required_traits": "Spirit",
           "requires_leader": "if your leader's back side is {super saiyans united} and you have 2 or more energy"
         },
@@ -608,6 +610,7 @@
           "max_owner_life": 4,
           "max_targets": 1,
           "min_owner_energy": 2,
+          "required_name_contains": "ABSORPTION",
           "required_traits": "Absorption"
         },
         "limit_per_turn": null,
@@ -4235,7 +4238,8 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Four-Star Ball,Parasitic Darkness"
+          "required_characters": "Four-Star Ball,Parasitic Darkness",
+          "required_name_contains": "FOUR-STAR BALL, PARASITIC DARKNESS"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -4251,8 +4255,10 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
+          "negate_self_skill_for_game": true,
           "required_characters": "Hero S Mafuba",
           "required_leader_traits": "\u226aWorld Tournament\u226b",
+          "required_name_contains": "HERO'S MAFUBA",
           "requires_leader": "if your leader is a \u226aworld tournament\u226b card"
         },
         "limit_per_turn": 1,
@@ -7345,8 +7351,20 @@
         "limit_per_turn": null,
         "limit_scope": "card_number",
         "once_per_turn": false,
-        "provenance": "extractor",
+        "provenance": "manual_override",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_transfer_self_control_to_opponent",
+        "handler_id": "activate_transfer_self_control_to_opponent",
+        "handler_params": {
+          "requires_leader": "blue <Son Gohan: SH>"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "self_activate_main"
       }
     ],
     "1511": [
@@ -11531,6 +11549,7 @@
           "max_cost": 1,
           "max_targets": 1,
           "required_characters": "Garlic Jr. S Ambition",
+          "required_name_contains": "GARLIC JR.'S AMBITION",
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -11675,6 +11694,7 @@
           "max_add": 1,
           "max_cost": 7,
           "required_characters": "The Return Of The Army Of Terror",
+          "required_name_contains": "THE RETURN OF THE ARMY OF TERROR",
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -13926,6 +13946,7 @@
           "max_owner_life": 4,
           "max_targets": 1,
           "min_owner_energy": 2,
+          "negate_self_skill_for_game": true,
           "required_characters": "Lt Broly Gt,Lt Paragus Gt - Both And"
         },
         "limit_per_turn": null,
@@ -15104,6 +15125,7 @@
           "max_targets": 1,
           "required_characters": "Crystal Gazing",
           "required_leader_traits": "&Lt;Fortuneteller Baba&Gt;",
+          "required_name_contains": "CRYSTAL GAZING",
           "requires_leader": "if your leader is a &lt;fortuneteller baba&gt; card"
         },
         "limit_per_turn": null,
@@ -15193,6 +15215,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "required_characters": "Hire-Dragon S Home",
+          "required_name_contains": "HIRE-DRAGON'S HOME",
           "requires_leader": "if your leader is a yellow \u226agreat ape\u226b &lt;son gohan"
         },
         "limit_per_turn": 1,
@@ -18744,6 +18767,7 @@
           "max_owner_life": 4,
           "max_targets": 1,
           "min_owner_energy": 2,
+          "negate_self_skill_for_game": true,
           "required_characters": "Lt Android 20 Gt"
         },
         "limit_per_turn": null,
@@ -20178,13 +20202,41 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "min_opponent_energy": 3,
-          "requires_leader": "if your leader is a &lt;paragus"
+          "requires_leader": "<Paragus: Br>",
+          "requires_played_from": "hand"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
-        "provenance": "extractor",
+        "provenance": "manual_override",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
+        "handler_id": "auto_play_up_to_n_from_owner_deck_on_play",
+        "handler_params": {
+          "max_targets": 1,
+          "required_name_contains": "ENERGY BARRAGE FRIEZA",
+          "requires_leader": "<Paragus: Br>",
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_transfer_self_control_to_opponent_on_play",
+        "handler_id": "auto_transfer_self_control_to_opponent_on_play",
+        "handler_params": {
+          "requires_leader": "<Paragus: Br>",
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
         "trigger": "self_played"
       }
     ],
@@ -26892,6 +26944,7 @@
           "max_cost": 1,
           "max_owner_life": 4,
           "max_targets": 1,
+          "negate_self_skill_for_game": true,
           "required_card_type": "EXTRA"
         },
         "limit_per_turn": null,
@@ -28900,7 +28953,9 @@
           "max_cost": -1,
           "max_owner_life": 4,
           "max_targets": 1,
-          "required_characters": "Piccolo,Savior From The Beyond"
+          "negate_self_skill_for_game": true,
+          "required_characters": "Piccolo,Savior From The Beyond",
+          "required_name_contains": "PICCOLO, SAVIOR FROM THE BEYOND"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -29421,6 +29476,22 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "trigger": "self_comboed"
+      }
+    ],
+    "4715": [
+      {
+        "family_id": "self_played:auto_gain_control_opponent_battle_on_play",
+        "handler_id": "auto_gain_control_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
       }
     ],
     "4724": [
@@ -31259,6 +31330,20 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "5221": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -33441,6 +33526,7 @@
           "max_targets": 1,
           "required_characters": "Makyo Star",
           "required_leader_traits": "Yellow \u226aDemon Clan\u226b",
+          "required_name_contains": "MAKYO STAR",
           "requires_leader": "if your leader card is a yellow \u226ademon clan\u226b card and you discard this card from your hand"
         },
         "limit_per_turn": null,
@@ -41211,6 +41297,28 @@
         "trigger": "self_attacks"
       }
     ],
+    "6733": [
+      {
+        "family_id": "turn_start:auto_transfer_self_control_to_opponent",
+        "handler_id": "auto_transfer_self_control_to_opponent",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "turn_start"
+      },
+      {
+        "family_id": "turn_end:auto_transfer_self_control_to_opponent",
+        "handler_id": "auto_transfer_self_control_to_opponent",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "turn_end"
+      }
+    ],
     "6738": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -41894,6 +42002,7 @@
           "max_cost": -1,
           "max_owner_life": 4,
           "max_targets": 1,
+          "negate_self_skill_for_game": true,
           "required_characters": "Lt Chiaotzu Gt 5000 Power,Less"
         },
         "limit_per_turn": null,
@@ -44475,6 +44584,22 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "trigger": "self_activate_main"
+      }
+    ],
+    "7232": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
       }
     ],
     "7233": [
@@ -48616,6 +48741,7 @@
           "max_targets": 1,
           "required_characters": "Vegito,Fusion In The Future",
           "required_leader_traits": "Green",
+          "required_name_contains": "VEGITO, FUSION IN THE FUTURE",
           "requires_leader": "if your leader is a green card with both <trunks"
         },
         "limit_per_turn": 1,
@@ -48923,6 +49049,22 @@
       }
     ],
     "7910": [
+      {
+        "family_id": "self_activate_main:activate_exchange_control_of_battle_cards_for_game",
+        "handler_id": "activate_exchange_control_of_battle_cards_for_game",
+        "handler_params": {
+          "marker_delta": 1,
+          "negate_owner_target_skills_for_game": true,
+          "opponent_max_targets": 1,
+          "owner_max_targets": 1,
+          "owner_target_max_cost": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "self_activate_main"
+      },
       {
         "family_id": "self_activate_main:activate_buff_owner_battle_cards",
         "handler_id": "activate_buff_owner_battle_cards",
@@ -50169,6 +50311,7 @@
           "max_owner_life": 4,
           "max_targets": 1,
           "min_owner_energy": 2,
+          "negate_self_skill_for_game": true,
           "required_characters": "To Your Hand,Then Shuffle Your Deck. . Activate Main Add Up To 1 Potara",
           "required_traits": "Saiyan"
         },
@@ -57588,6 +57731,7 @@
           "max_cost": 2,
           "max_targets": 1,
           "min_owner_energy": 2,
+          "negate_self_skill_for_game": true,
           "required_characters": "5000 Power,Less",
           "required_traits": "Chiaotzu"
         },
@@ -59617,7 +59761,9 @@
           "max_owner_life": 4,
           "max_targets": 1,
           "min_owner_energy": 2,
-          "required_characters": "Stop You Fiend"
+          "negate_self_skill_for_game": true,
+          "required_characters": "Stop You Fiend",
+          "required_name_contains": "STOP YOU FIEND!"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -60841,7 +60987,9 @@
           "max_cost": -1,
           "max_targets": 1,
           "min_owner_energy": 2,
-          "required_characters": "Yes,Time To Die"
+          "negate_self_skill_for_game": true,
+          "required_characters": "Yes,Time To Die",
+          "required_name_contains": "YES, TIME TO DIE!"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",

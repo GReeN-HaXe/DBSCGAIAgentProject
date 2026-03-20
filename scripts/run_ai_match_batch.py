@@ -20,6 +20,7 @@ from src.agent.deck_legality import validate_deck_legality
 from src.agent.simulator import simulation_result_to_dict
 from src.db import SQLiteCardRepository
 from src.game import RulesEngine
+from src.game.effect_rules import default_effect_catalog_path
 
 
 def _build_deck(seed: int, size: int = 60) -> list[int]:
@@ -133,7 +134,7 @@ def main() -> None:
     parser.add_argument("--first-player", type=int, choices=[1, 2], default=1, help="Base starting player id.")
     parser.add_argument("--shuffle-decks", action=argparse.BooleanOptionalAction, default=True, help="Shuffle decks before opening draws.")
     parser.add_argument("--seed", type=int, default=1, help="Base random seed used when shuffling decks.")
-    parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--effect-catalog", type=Path, default=default_effect_catalog_path(ROOT), help="Path to effect catalog merged JSON, shard manifest JSON, or shard directory.")
     parser.add_argument("--effect-catalog-overrides", type=Path, default=Path("dbdatabase/effect_catalog_overrides.json"), help="Optional path to effect catalog overrides JSON.")
     parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")

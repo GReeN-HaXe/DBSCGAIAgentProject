@@ -1,0 +1,4040 @@
+{
+  "card_rule_count": 250,
+  "catalog_kind": "dbs_effect_catalog",
+  "effect_rule_count": 274,
+  "rules": {
+    "3726": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3733": [
+      {
+        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
+        "handler_id": "auto_power_reduce_up_to_n_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -5000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3734": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -4000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3738": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3747": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3751": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3755": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_drop_battle_to_warp",
+        "handler_params": {
+          "marker_delta": 2,
+          "max_targets": 2,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3760": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3763": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3767": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3769": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3774": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "3777": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "min_owner_energy": 5
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3779": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3785": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3786": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 3,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Triple Attack",
+          "power_delta": 15000,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3796": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Dual Attack",
+          "power_delta": 20000,
+          "required_leader_traits": "Black \u226aSaiyan\u226b",
+          "requires_leader": "if your leader card is a black \u226asaiyan\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3798": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3800": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3801": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3802": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
+        "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "3805": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3806": [
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_opponent_energy": 4,
+          "requires_leader": "if your leader card is blue, all of your energy is mono-blue, and your opponent has 4 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "3807": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3808": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_traits": "Great Ape",
+          "requires_leader": "if your leader card is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3809": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3813": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3818": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3819": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3821": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3824": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Android"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "3826": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3827": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "&Lt;Zamasu&Gt;",
+          "requires_leader": "if your leader card is a &lt;zamasu&gt; card and it's your opponent's turn",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "3832": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "Black &Lt;Supreme Kai Of Time&Gt;",
+          "requires_leader": "if your leader card is a black &lt;supreme kai of time&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3833": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3835": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3836": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3840": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3855": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3858": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3863": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3865": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3870": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Bardock'S Crew"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3871": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 7,
+          "requires_leader": "if your leader card is green or a \u226aheroine\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3875": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is \u226auniverse 9\u226b and you have 5 or less life"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "3877": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3879": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3885": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3889": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3890": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3898": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3900": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3903": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3918": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3919": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3924": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3925": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "3927": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3928": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3936": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3937": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3941": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aHeroine\u226b",
+          "requires_leader": "if your leader card is a \u226aheroine\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "3951": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3953": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Shadow Dragon"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "3958": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3961": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Triple Strike",
+          "power_delta": 15000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3962": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3969": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3980": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Dual Attack",
+          "power_delta": 16000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3983": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "3985": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "look_count": 2,
+          "max_add": 1,
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "3990": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3991": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3998": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4002": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4004": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4005": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 5
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4013": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4019": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4024": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 6
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4025": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Triple Attack",
+          "power_delta": 5000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4027": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4029": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4030": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "requires_leader": "if your leader card is an \u226aevil wizard\u226b card or all of your energy is mono-green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
+        "handler_id": "auto_self_gain_power_for_turn_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "power_delta": 5000,
+          "requires_leader": "if your leader card is an \u226aevil wizard\u226b card or all of your energy is mono-green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4034": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4038": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4040": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4045": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "look_count": 2,
+          "max_add": 1,
+          "max_cost": 3,
+          "required_traits": "Mono"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "4056": [
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "allowed_colors": "red",
+          "max_cost": 1,
+          "max_owner_life": 4,
+          "max_targets": 1,
+          "negate_self_skill_for_game": true,
+          "required_card_type": "EXTRA"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4062": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4063": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is mono-green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4074": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4083": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4090": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 2,
+          "max_add": 2,
+          "max_cost": -1,
+          "required_name_contains": "AGENT OF DESTRUCTION"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4093": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4095": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4097": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4103": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is red and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4106": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_drop_battle_to_warp",
+        "handler_params": {
+          "marker_delta": -4,
+          "max_targets": 1,
+          "required_leader_traits": "Black \u226aDemon Realm Race\u226b",
+          "requires_leader": "if your leader card is a black \u226ademon realm race\u226b card",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4123": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4127": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4138": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4140": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 3,
+          "required_card_type": "UNISON",
+          "required_characters": "A Specified Cost Of 2,1",
+          "required_traits": "Saiyan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4141": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 4,
+          "required_leader_traits": "\u226aShadow Dragon\u226b",
+          "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4143": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4146": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4148": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is green and your life is at 4 or less"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4150": [
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -10000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4151": [
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4170": [
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": 2,
+          "max_targets": 1,
+          "power_delta": -5000,
+          "requires_leader": "if your leader card is black",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4171": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4175": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4177": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4178": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4195": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4196": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_opponent_energy": 3,
+          "required_leader_traits": "Red \u226aFrieza'S Army\u226b",
+          "requires_leader": "if your leader card is a red \u226afrieza's army\u226b card and your opponent has 3 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4198": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aShenron\u226b",
+          "requires_leader": "if your leader card is a \u226ashenron\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4211": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4226": [
+      {
+        "family_id": "counter_attack:counter_negate_attacker_skills_and_prevent_switch_active",
+        "handler_id": "counter_negate_attacker_skills_and_prevent_switch_active",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4228": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4236": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4252": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4261": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4263": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4264": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4265": [
+      {
+        "family_id": "counter_attack:counter_negate_attack",
+        "handler_id": "counter_negate_attack",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4268": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": 2,
+          "requires_leader": "if your leader card is green",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4275": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4276": [
+      {
+        "family_id": "counter_attack:counter_negate_attack",
+        "handler_id": "counter_negate_attack",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4285": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is \u226aworld tournament\u226b and your life is 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4290": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4291": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_opponent_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "min_opponent_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4292": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is green and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4293": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4296": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4298": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3,
+          "requires_leader": "if your leader card is green",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4305": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4310": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4311": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4313": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is an \u226aandroid\u226b"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4325": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "required_leader_traits": "Blue &Lt;Paikuhan&Gt;",
+          "requires_leader": "if your leader card is a blue &lt;paikuhan&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4343": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4344": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4349": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4351": [
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -20000,
+          "requires_leader": "if your leader card is red",
+          "requires_opponent_turn": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4353": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4356": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aUniverse 6\u226b",
+          "requires_leader": "if your leader card is a \u226auniverse 6\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4358": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4359": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "4361": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Triple Strike",
+          "ignores_barrier": true,
+          "power_delta": 15000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -25000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4362": [
+      {
+        "family_id": "counter_attack:counter_negate_attack",
+        "handler_id": "counter_negate_attack",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4364": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4395": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is &lt;vegito&gt;"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4399": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "4401": [
+      {
+        "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
+        "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "4405": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4407": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4425": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4440": [
+      {
+        "family_id": "counter_attack:counter_negate_attack",
+        "handler_id": "counter_negate_attack",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4441": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4442": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4444": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4448": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4449": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4455": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4459": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is &lt;uub&gt;"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4464": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 10000,
+          "required_traits": "Mono",
+          "requires_opponent_turn": true,
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4465": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4466": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4468": [
+      {
+        "family_id": "counter_attack:counter_negate_attack",
+        "handler_id": "counter_negate_attack",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4475": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4504": [
+      {
+        "family_id": "self_played:auto_ko_up_to_n_opponent_battle_on_play",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 2,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4512": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4533": [
+      {
+        "family_id": "counter_attack:counter_negate_attack",
+        "handler_id": "counter_negate_attack",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "trigger": "counter_attack"
+      }
+    ],
+    "4534": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aShenron\u226b",
+          "requires_leader": "if your leader card is a \u226ashenron\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4545": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_cost": -1,
+          "max_owner_life": 4,
+          "max_targets": 1,
+          "negate_self_skill_for_game": true,
+          "required_characters": "Piccolo,Savior From The Beyond",
+          "required_name_contains": "PICCOLO, SAVIOR FROM THE BEYOND"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4549": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 4,
+          "required_leader_traits": "\u226aShenron\u226b",
+          "requires_leader": "if your leader card is a \u226ashenron\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4553": [
+      {
+        "family_id": "self_comboed:auto_power_reduce_up_to_n_on_combo",
+        "handler_id": "auto_power_reduce_up_to_n_on_combo",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -5000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4556": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4559": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 4,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4568": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4569": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 5,
+          "required_leader_traits": "Yellow \u226aNamekian\u226b",
+          "requires_leader": "if your leader card is a yellow \u226anamekian\u226b card and your life is at 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4573": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "ignores_barrier": true,
+          "requires_leader": "if your leader card is blue"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4590": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4605": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4607": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4610": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4614": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "Red \u226aMachine Mutant\u226b,Draw 1",
+          "requires_leader": "if your leader card is a red \u226amachine mutant\u226b"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4615": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_mono_energy": "yellow",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4623": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4625": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is black, all of your energy is black, and you send this card from your drop area to your warp"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4627": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4628": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4631": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4633": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4643": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4644": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "required_leader_traits": "\u226aPhantom Demon\u226b And Your Life Is At 4,Less,You May Place 1",
+          "requires_leader": "if your leader card is a \u226aphantom demon\u226b and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4646": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 10000,
+          "required_characters": "Leader,Unison",
+          "requires_leader": "if your leader card is a mono-blue &lt;trunks",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4656": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "requires_leader": "if your leader card is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4657": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4667": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4676": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4687": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4688": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4691": [
+      {
+        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_card_type": "UNISON"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4695": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4707": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4710": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is red and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4715": [
+      {
+        "family_id": "self_played:auto_gain_control_opponent_battle_on_play",
+        "handler_id": "auto_gain_control_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4724": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_leader_traits": "\u226aTurles Crusher Corps\u226b",
+          "required_traits": "Turles Crusher Corps",
+          "requires_leader": "if your leader card is a \u226aturles crusher corps\u226b card and this card was used in a combo from your deck or hand",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4725": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4726": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4741": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "required_leader_traits": "\u226aShenron\u226b",
+          "requires_leader": "if your leader card is a \u226ashenron\u226b card and {oolong's wish} is in your drop area"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4743": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "min_owner_drop": 5
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4747": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4759": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4762": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4763": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4764": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4765": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4766": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4772": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is green and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4782": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4785": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "required_leader_traits": "Green \u226aShenron\u226b",
+          "requires_leader": "if your leader card is a green \u226ashenron\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4787": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is red and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4797": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4799": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4807": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4808": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is yellow and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4813": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4819": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4824": [
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -5000,
+          "requires_leader": "if your leader card is red",
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4834": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4843": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is blue"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4867": [
+      {
+        "family_id": "self_activate_battle:activate_ko_up_to_n_opponent_battle",
+        "handler_id": "activate_ko_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4869": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is blue"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4873": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "4878": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4880": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4895": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Double Strike",
+          "power_delta": 15000,
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4897": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "4899": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is green and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4903": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "ignores_barrier": true,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4904": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_card_type": "UNISON",
+          "required_characters": "A Specified Cost Of 2,1",
+          "required_leader_traits": "Green &Lt;Frieza&Gt;",
+          "required_traits": "Frieza'S Army",
+          "requires_leader": "if your leader card is a green &lt;frieza&gt; card, you have a green unison card in play, and you send this card from your drop area to your warp"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4907": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4908": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "4913": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "turn_end"
+      }
+    ],
+    "4917": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "4918": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keywords": "Double Strike,Dual Attack",
+          "ignores_barrier": true,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4922": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is yellow and your life is 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ]
+  },
+  "schema_version": 1
+}

@@ -3,9 +3,10 @@
 
 import re
 import sqlite3
+from pathlib import Path
 from typing import Optional, Tuple
 
-DB_PATH = "dbs_masters.db"
+DB_PATH = str(Path(__file__).resolve().parent / "dbs_masters.db")
 
 # --- helpers -------------------------------------------------
 
@@ -90,13 +91,13 @@ def tag_table(conn: sqlite3.Connection, table: str) -> None:
     cur = conn.cursor()
 
     # fetch in batches to keep memory stable
-    cur.execute(f"SELECT id, card_skill_unstyled, card_back_skill_unstyled FROM {table};")
+    rows = cur.execute(f"SELECT id, card_skill_unstyled, card_back_skill_unstyled FROM {table};").fetchall()
 
     updates = []
     batch = 1000
     count = 0
 
-    for row in cur:
+    for row in rows:
         card_id = row[0]
         front = row[1]
         back = row[2]
@@ -198,7 +199,7 @@ def main() -> None:
     tag_table(conn, "variants")
 
     conn.close()
-    print("✅ Done. Skill parsing columns added and populated.")
+    print("Done. Skill parsing columns added and populated.")
 
 if __name__ == "__main__":
     main()

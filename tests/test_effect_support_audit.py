@@ -80,6 +80,11 @@ def _make_db(path: Path) -> None:
                 "[Activate: Main] Choose 1 card in your hand and discard it.", "", "[]", "[]", "[]", "[]", "", 0, 0, 0, "", "", "", "", "[]", "[]", "[]",
                 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             ),
+            (
+                4, "TEST-004", "Skillless Four", "", "", "BATTLE", "Black", 1, 0, 5000, 5000, "", "", "", "",
+                "-", "", "[]", "[]", "[]", "[]", "", 0, 0, 0, "", "", "", "", "[]", "[]", "[]",
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            ),
         ]
         conn.executemany(
             "INSERT INTO cards VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -100,9 +105,26 @@ def test_build_effect_support_audit_prioritizes_unimplemented_family(tmp_path: P
     assert payload["schema_version"] == "effect_support_audit.v1"
     assert payload["summary"]["priority_card_count"] == 1
     assert payload["summary"]["priority_cards_without_rules"] == 1
+    assert payload["summary"]["priority_intentionally_skipped_cards"] == 0
     assert payload["top_global_families"][0]["card_count"] >= 1
     assert payload["top_priority_families"][0]["priority_card_count"] == 1
     assert payload["priority_unimplemented_cards"][0]["card_id"] == 3
+
+
+def test_build_effect_support_audit_separates_skillless_skips_from_priority_unimplemented(tmp_path: Path) -> None:
+    db_path = tmp_path / "cards.db"
+    _make_db(db_path)
+    repo = SQLiteCardRepository(db_path)
+
+    payload = build_effect_support_audit(repo, [1, 2, 3, 4], priority_card_ids=[3, 4], top_families=5)
+
+    assert payload["summary"]["priority_card_count"] == 2
+    assert payload["summary"]["priority_cards_without_rules"] == 1
+    assert payload["summary"]["priority_intentionally_skipped_cards"] == 1
+    assert payload["coverage"]["priority"]["cards_without_rules"] == 1
+    assert payload["coverage"]["priority"]["intentionally_skipped_cards"] == 1
+    assert [row["card_id"] for row in payload["priority_unimplemented_cards"]] == [3]
+    assert [row["card_id"] for row in payload["intentionally_skipped_priority_cards"]] == [4]
 
 
 def test_run_effect_support_audit_script_collects_decks_and_traces(tmp_path: Path) -> None:

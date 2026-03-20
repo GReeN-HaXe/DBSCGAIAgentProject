@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.game.effect_catalog_report import build_effect_family_report
-from src.game.effect_rules import load_effect_rules_json
+from src.game.effect_rules import default_effect_catalog_path, load_effect_rules_json
 
 
 def main() -> None:
@@ -18,8 +18,8 @@ def main() -> None:
     parser.add_argument(
         "--input",
         type=Path,
-        default=ROOT / "dbdatabase" / "effect_catalog.json",
-        help="Path to effect catalog JSON.",
+        default=default_effect_catalog_path(ROOT),
+        help="Path to effect catalog merged JSON, shard manifest JSON, or shard directory.",
     )
     parser.add_argument(
         "--output",

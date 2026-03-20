@@ -1,0 +1,1080 @@
+{
+  "card_rule_count": 49,
+  "catalog_kind": "dbs_effect_catalog",
+  "effect_rule_count": 68,
+  "rules": {
+    "10036": [
+      {
+        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "requires_leader": "if your leader is {super saiyans united}"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10037": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is red, your life is at 4 or less, and all of your energy is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "10039": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader is {super saiyans united} and this card is under a <son goku> battle card, the card on top of this card gets +10000 power. . [activate main] if your leader's back side is {super saiyans united}"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10040": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 6
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10041": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "10043": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "min_owner_energy": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_cost": -1,
+          "max_owner_life": 4,
+          "max_targets": 1,
+          "min_owner_energy": 2,
+          "required_name_contains": "ABSORPTION",
+          "required_traits": "Absorption"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10044": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Demon Realm"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "10046": [
+      {
+        "family_id": "self_played:auto_ko_up_to_n_opponent_battle_on_play",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "max_targets": 2,
+          "min_owner_energy": 3,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10047": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "min_opponent_energy": 2,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "min_opponent_energy": 2,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "10048": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10049": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "10051": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Demon Realm"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10053": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10057": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "min_owner_energy": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10058": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10059": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 5
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10091": [
+      {
+        "family_id": "self_activate_main:activate_opponent_discards_n_from_hand",
+        "handler_id": "activate_opponent_discards_n_from_hand",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "Green <Majin Buu>",
+          "requires_leader": "if your leader is a green <majin buu> card",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10092": [
+      {
+        "family_id": "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
+        "handler_id": "auto_combo_up_to_n_from_owner_zone_on_attack",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": 2,
+          "max_targets": 1,
+          "negate_skills": true,
+          "required_traits": "Earthling",
+          "requires_leader": "if your leader is a green <son gohan",
+          "source_zone": "drop",
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      }
+    ],
+    "10093": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 1000,
+          "requires_leader": "if your leader is green",
+          "rest_mode_only": true,
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "10094": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 3,
+          "requires_leader": "if your leader is yellow and you have 3 or more energy",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3,
+          "requires_leader": "if your leader is yellow and you have 3 or more energy",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10095": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10096": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Earthling",
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10097": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10098": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 6,
+          "required_traits": "Earthling",
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10159": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is a green <son gohan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10160": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is green, your life is at 4 or less, and all of your energy is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "10163": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_targets": 2,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10164": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "min_opponent_energy": 2,
+          "power_delta": 5000,
+          "required_traits": "Maiden Squadron",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "10165": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 3,
+          "required_leader_traits": "\u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a \u226auniverse 7\u226b card, you have 3 or more energy, and you place 1 card from your warp into its owner's drop"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3,
+          "required_leader_traits": "\u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a \u226auniverse 7\u226b card, you have 3 or more energy, and you place 1 card from your warp into its owner's drop"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10166": [
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card, you have 2 or more energy, and it's your turn"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "10167": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 2,
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10168": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10169": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10171": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aUniverse 2\u226b",
+          "requires_leader": "if your leader is a \u226auniverse 2\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10172": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "ignores_barrier": true,
+          "min_owner_energy": 3,
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "min_owner_energy": 3,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10174": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_opponent_energy": 2
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "red",
+          "max_cost": -1,
+          "max_targets": 1,
+          "min_opponent_energy": 2,
+          "power_delta": 10000,
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "10176": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader has both <vegeta> and <nappa>",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader has both <vegeta> and <nappa>",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "10177": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader is a blue <gogeta"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10179": [
+      {
+        "family_id": "self_played:auto_play_up_to_n_from_owner_drop_on_play",
+        "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_opponent_energy": 2,
+          "requires_leader": "if your leader is a green <lemo"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10180": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "required_leader_traits": "Green \u226aShenron\u226b",
+          "requires_leader": "if your leader is a green \u226ashenron\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10182": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 7,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Or Up To 1 Unison",
+          "required_traits": "Son Goku"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10183": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader's back side is {ss son goku, fearless fighter}"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader's back side is {ss son goku, fearless fighter}"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader's back side is {ss son goku, fearless fighter}"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10184": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_leader_traits": "Yellow <Meta-Cooler Core>",
+          "requires_leader": "if your leader is a yellow <meta-cooler core> card",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "required_leader_traits": "Yellow <Meta-Cooler Core>",
+          "requires_leader": "if your leader is a yellow <meta-cooler core> card",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10193": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10194": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "black",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "required_traits": "Universe 7",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you discard 1 card from your hand"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10195": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10196": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is black, your life is at 4 or less, and all of your energy is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_comboed"
+      }
+    ],
+    "10201": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aUniverse 2\u226b",
+          "requires_leader": "if your leader is a \u226auniverse 2\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ],
+    "10204": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "\u226aUniverse 2\u226b",
+          "requires_leader": "if your leader is a \u226auniverse 2\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "trigger": "self_played"
+      }
+    ]
+  },
+  "schema_version": 1
+}

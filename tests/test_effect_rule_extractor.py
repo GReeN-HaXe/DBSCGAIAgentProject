@@ -382,6 +382,20 @@ def test_extract_pursuit_activate_main_search_rule() -> None:
     assert "krillin" in str(search_rule.handler_params.get("requires_leader", "")).lower()
 
 
+def test_extract_activate_main_search_rule_can_negate_itself_for_game() -> None:
+    card = _card(
+        "[Activate: Main] Add up to 1 {Potara} from your deck to your hand, shuffle your deck, and negate this skill for the game."
+    )
+    rules = extract_effect_rules_from_card(card)
+    search_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand"
+    )
+    assert search_rule.handler_params["max_targets"] == 1
+    assert search_rule.handler_params["required_name_contains"] == "POTARA"
+    assert search_rule.handler_params["negate_self_skill_for_game"] is True
+
+
 def test_extract_cross_dimensional_fighting_spirit_families() -> None:
     card = _card(
         "[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp. "
@@ -1076,6 +1090,17 @@ def test_extract_play_gain_control_opponent_unison_rule() -> None:
     rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_unison_on_play")
     assert rule.trigger == "self_played"
     assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_play_gain_control_opponent_battle_rule() -> None:
+    card = _card(
+        "[Auto] When you play this card, choose up to 1 of the Battle Cards in your opponent's Battle Area with an energy cost of 3 or less and gain control of it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_battle_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 3
 
 
 def test_extract_play_switch_owner_board_to_revealed_rule() -> None:

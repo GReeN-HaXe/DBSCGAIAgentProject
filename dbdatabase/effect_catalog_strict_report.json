@@ -1,8 +1,8 @@
 {
-  "candidates_scanned": 5750,
+  "candidates_scanned": 5766,
   "cards_with_diagnostics": 0,
-  "cards_with_rules": 2968,
-  "cards_without_rules": 2782,
+  "cards_with_rules": 2971,
+  "cards_without_rules": 2795,
   "coverage": {
     "by_handler": {
       "activate_add_up_to_n_from_owner_deck_to_hand": 38,
@@ -44,7 +44,8 @@
       "auto_buff_up_to_n_owner_cards_on_hidden_drop": 2,
       "auto_buff_up_to_n_owner_cards_on_switch": 4,
       "auto_combo_up_to_n_from_owner_zone_on_attack": 27,
-      "auto_draw_n": 1703,
+      "auto_draw_n": 1705,
+      "auto_gain_control_opponent_battle_on_play": 1,
       "auto_gain_control_opponent_unison_on_play": 1,
       "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
       "auto_ko_opponent_battle_on_play": 297,
@@ -96,12 +97,12 @@
       "self_activate_extra_from_hand": 5,
       "self_activate_main": 1403,
       "self_attacks": 401,
-      "self_comboed": 202,
+      "self_comboed": 203,
       "self_comboed_battle_end": 31,
       "self_hidden_battle_to_drop": 2,
       "self_in_hand_sent_to_drop_or_warp": 2,
       "self_koed": 7,
-      "self_played": 1600,
+      "self_played": 1602,
       "self_switched_hidden": 4,
       "self_switched_revealed": 4,
       "turn_end": 74
@@ -109,7 +110,7 @@
   },
   "diagnostic_counts": {},
   "diagnostics": {},
-  "total_extracted_rules": 4089,
+  "total_extracted_rules": 4092,
   "unmatched_top_templates": [
     {
       "count": 6,

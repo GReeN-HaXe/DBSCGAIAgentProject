@@ -837,6 +837,100 @@ def test_counter_play_can_reduce_up_to_two_opponent_battles_for_turn_then_play_s
     assert any(cp.name == "counter_effect_power_reduce_resolved" for cp in state.checkpoints)
 
 
+def test_counter_play_can_restrict_other_counter_play_skills_for_the_turn() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=790101, card_id=701, owner_id=1, card_type="BATTLE", color="Red", energy_cost=0, power=15000),
+        CardInstance(instance_id=790102, card_id=702, owner_id=1, card_type="BATTLE", color="Red", energy_cost=0, power=15000),
+    ]
+    state.players[2].energy = []
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790103,
+            card_id=5301,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: "
+                "Choose up to 2 of your opponent's Battle Cards, they get -15000 power for the turn, then play this card."
+            ),
+        ),
+        CardInstance(
+            instance_id=790104,
+            card_id=703,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Red",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw="[Counter: Play] Play this card.",
+        ),
+        CardInstance(
+            instance_id=790105,
+            card_id=704,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw="[Counter: Attack] Negate the attack.",
+        ),
+    ]
+
+    first_play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, first_play)
+    first_counter = next(
+        a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND and a.hand_index == 0
+    )
+    state = engine.apply_action(state, first_counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert any(cp.name == "counter_effect_other_counter_mode_restriction_applied" for cp in state.checkpoints)
+    assert any(
+        row.owner_player_id == 2 and row.restricted_mode == "Counter: Play" for row in state.active_counter_hand_restrictions
+    )
+
+    second_play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, second_play)
+    legal_play_window = engine.get_legal_actions(state, 2)
+    assert not any(
+        a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND and state.players[2].hand[a.hand_index].instance_id == 790104
+        for a in legal_play_window
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    state.players[1].leader_area.resting = False
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    legal_attack_window = engine.get_legal_actions(state, 2)
+    assert any(
+        a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND and state.players[2].hand[a.hand_index].instance_id == 790105
+        for a in legal_attack_window
+    )
+
+
 def test_counter_play_alternate_cost_can_be_free_with_red_unison_markers() -> None:
     engine = RulesEngine()
     state = engine.initialize_game(
@@ -2767,6 +2861,81 @@ def test_king_vegeta_counter_applies_attack_power_tax_and_restricts_hand_copies_
     second_attacker = state.players[2].leader_area
     assert second_attacker.temporary_power_delta == -5000
     assert any(cp.name == "attack_power_tax_applied" for cp in state.checkpoints)
+    legal_counter = engine.get_legal_actions(state, 1)
+    assert not any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal_counter)
+
+
+def test_counter_can_permanently_restrict_hand_copies_for_game() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].battle_area = [
+        CardInstance(instance_id=780011, card_id=9811, owner_id=2, card_type="BATTLE", color="Blue", power=20000),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=780012,
+            card_id=6591,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. "
+                "You can't activate the [Counter: Attack] skill on copies of this card for the game."
+            ),
+        ),
+        CardInstance(
+            instance_id=780013,
+            card_id=6591,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Blue",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] Negate the attack. "
+                "You can't activate the [Counter: Attack] skill on copies of this card for the game."
+            ),
+        ),
+    ]
+
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="battle", attacker_index=0, target_player_id=1, target_zone="leader"),
+    )
+    counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert len(state.permanent_skill_activation_restrictions) == 1
+    assert any(cp.name == "counter_effect_permanent_copy_counter_restriction_applied" for cp in state.checkpoints)
+    assert engine._is_counter_hand_activation_restricted(state, player_id=1, card=state.players[1].hand[0])
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_main(engine, state)
+    state.attack_context = None
+    state.battle_step = None
+    state.players[2].leader_area.resting = False
+    engine._declare_attack(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="leader", target_player_id=1, target_zone="leader"),
+    )
+
     legal_counter = engine.get_legal_actions(state, 1)
     assert not any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal_counter)
 

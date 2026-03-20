@@ -11,6 +11,7 @@ if str(ROOT) not in sys.path:
 
 from src.db import SQLiteCardRepository
 from src.game import Action, ActionType, RulesEngine, TurnPhase
+from src.game.effect_rules import default_effect_catalog_path
 
 
 def _build_deck(seed: int, size: int = 60) -> list[int]:
@@ -147,8 +148,8 @@ def main() -> None:
     parser.add_argument(
         "--effect-catalog",
         type=Path,
-        default=ROOT / "dbdatabase" / "effect_catalog.json",
-        help="Path to optional effect catalog JSON.",
+        default=default_effect_catalog_path(ROOT),
+        help="Path to optional effect catalog merged JSON, shard manifest JSON, or shard directory.",
     )
     parser.add_argument(
         "--effect-catalog-overrides",

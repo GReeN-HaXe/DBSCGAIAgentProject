@@ -40,7 +40,10 @@ from src.game.state import (
     EffectResolution,
     LowPowerBattlePlayHandWarpPenalty,
     NonLeaderAttackRestTax,
+    PermanentSkillActivationRestriction,
+    PermanentlyNegatedSkill,
     SecretAutoOpportunity,
+    TemporarySkillActivationRestriction,
     CounterMotion,
     CounterMotionTrace,
     CounterResolution,
@@ -153,6 +156,9 @@ class RulesEngine:
             "auto_play_up_to_n_from_owner_hand_on_self_combo": self._handle_auto_play_up_to_n_from_owner_hand_on_self_combo,
             "auto_play_up_to_n_named_from_owner_drop_on_self_ko": self._handle_auto_play_up_to_n_named_from_owner_drop_on_self_ko,
             "auto_play_self_from_drop_on_hand_drop": self._handle_auto_play_self_from_drop_on_hand_drop,
+            "auto_gain_control_opponent_battle_on_play": self._handle_auto_gain_control_opponent_battle_on_play,
+            "auto_transfer_self_control_to_opponent_on_play": self._handle_auto_transfer_self_control_to_opponent_on_play,
+            "auto_transfer_self_control_to_opponent": self._handle_auto_transfer_self_control_to_opponent,
             "auto_play_up_to_n_from_owner_deck_on_play": self._handle_auto_play_up_to_n_from_owner_deck_on_play,
             "auto_switch_up_to_n_owner_energy_active_on_turn_end": self._handle_auto_switch_up_to_n_owner_energy_active_on_turn_end,
             "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed": self._handle_auto_switch_up_to_n_owner_energy_active_on_field_extra_placed,
@@ -257,6 +263,8 @@ class RulesEngine:
             "activate_add_marker_to_matching_owner_unison_and_place_self_under_it": self._handle_activate_add_marker_to_matching_owner_unison_and_place_self_under_it,
             "activate_gain_keyword_from_under_self_until_opponent_turn_end": self._handle_activate_gain_keyword_from_under_self_until_opponent_turn_end,
             "activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n": self._handle_activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n,
+            "activate_exchange_control_of_battle_cards_for_game": self._handle_activate_exchange_control_of_battle_cards_for_game,
+            "activate_transfer_self_control_to_opponent": self._handle_activate_transfer_self_control_to_opponent,
             "activate_switch_owner_board_to_revealed_mode": self._handle_activate_switch_owner_board_to_revealed_mode,
             "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n": self._handle_activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n,
             "activate_drop_owner_hidden_mode_draw_n": self._handle_activate_drop_owner_hidden_mode_draw_n,
@@ -633,6 +641,50 @@ class RulesEngine:
             limit_per_turn=opportunity.limit_per_turn,
             limit_scope=opportunity.limit_scope,
         )
+        if self._is_registration_temporarily_activation_restricted(state, temp_reg):
+            self._set_secret_auto_opportunity_status(
+                state,
+                opportunity_id=opportunity.opportunity_id,
+                status="blocked_temporary_restriction",
+            )
+            state.effect_resolutions.append(
+                EffectResolution(
+                    effect_id=temp_effect_id,
+                    event_id=event.event_id,
+                    resolved=False,
+                    reason="temporary_skill_activation_restricted",
+                )
+            )
+            state.log.append(
+                "Secret-area auto declaration blocked by temporary activation restriction: "
+                f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id} "
+                f"trigger={temp_reg.trigger} handler={temp_reg.handler_id}"
+            )
+            self._checkpoint(state, "secret_auto_declared_temporary_restriction_blocked")
+            self._checkpoint(state, "secret_auto_declared")
+            return
+        if self._is_registration_permanently_activation_restricted(state, temp_reg):
+            self._set_secret_auto_opportunity_status(
+                state,
+                opportunity_id=opportunity.opportunity_id,
+                status="blocked_permanent_restriction",
+            )
+            state.effect_resolutions.append(
+                EffectResolution(
+                    effect_id=temp_effect_id,
+                    event_id=event.event_id,
+                    resolved=False,
+                    reason="permanent_skill_activation_restricted",
+                )
+            )
+            state.log.append(
+                "Secret-area auto declaration blocked by permanent activation restriction: "
+                f"opportunity_id={opportunity.opportunity_id} source_instance_id={opportunity.source_instance_id} "
+                f"trigger={temp_reg.trigger} handler={temp_reg.handler_id}"
+            )
+            self._checkpoint(state, "secret_auto_declared_permanent_restriction_blocked")
+            self._checkpoint(state, "secret_auto_declared")
+            return
         regs_by_id = self._effect_registrations_for_limit_counting(state)
         regs_by_id[temp_effect_id] = temp_reg
         events_by_id = {evt.event_id: evt for evt in state.effect_events}
@@ -675,6 +727,7 @@ class RulesEngine:
             self._checkpoint(state, "secret_auto_declared")
             return
         handler(state, event, temp_reg)
+        self._apply_post_resolution_registration_effects(state, event, temp_reg)
         state.effect_resolutions.append(
             EffectResolution(effect_id=temp_effect_id, event_id=event.event_id, resolved=True, reason="ok")
         )
@@ -856,6 +909,11 @@ class RulesEngine:
         state.active_counter_hand_restrictions = [
             row for row in state.active_counter_hand_restrictions if int(row.expires_on_turn_end_player_id) != int(ending_player)
         ]
+        state.active_temporary_skill_activation_restrictions = [
+            row
+            for row in state.active_temporary_skill_activation_restrictions
+            if int(row.expires_on_turn_end_player_id) != int(ending_player)
+        ]
         state.negate_opponent_strike_for_player_ids.clear()
         state.active_player = self._opponent_of(ending_player)
         state.turn_number += 1
@@ -953,16 +1011,117 @@ class RulesEngine:
             for row in state.active_card_play_restrictions
         )
 
-    def _is_counter_hand_activation_restricted(self, state: GameState, *, player_id: int, card_id: int) -> bool:
+    def _counter_hand_restriction_matches(self, row: CounterHandActivationRestriction, *, player_id: int, card: CardInstance) -> bool:
+        if int(row.owner_player_id) != int(player_id):
+            return False
+        restricted_card_id = int(getattr(row, "restricted_card_id", 0) or 0)
+        if restricted_card_id > 0 and int(card.card_id) != restricted_card_id:
+            return False
+        restricted_mode = str(getattr(row, "restricted_mode", "") or "").strip()
+        if restricted_mode:
+            modes = {str(item).strip() for item in tuple(card.counter_modes or ()) if str(item).strip()}
+            if restricted_mode not in modes:
+                return False
+        return restricted_card_id > 0 or bool(restricted_mode)
+
+    def _is_counter_hand_activation_restricted(self, state: GameState, *, player_id: int, card: CardInstance) -> bool:
         return any(
-            row.owner_player_id == player_id and int(row.restricted_card_id) == int(card_id)
+            self._counter_hand_restriction_matches(row, player_id=player_id, card=card)
             for row in state.active_counter_hand_restrictions
+        ) or self._is_permanent_skill_activation_restricted(
+            state,
+            player_id=player_id,
+            card_id=card.card_id,
+            scope="counter_from_hand",
         )
 
     def _is_activate_skill_restricted(self, state: GameState, *, player_id: int, card_id: int) -> bool:
         return any(
             row.owner_player_id == player_id and int(row.restricted_card_id) == int(card_id)
             for row in state.active_activate_skill_restrictions
+        ) or self._is_permanent_skill_activation_restricted(
+            state,
+            player_id=player_id,
+            card_id=card_id,
+            scope="activate",
+        )
+
+    def _is_registration_activate_skill_restricted(self, state: GameState, reg: EffectRegistration) -> bool:
+        signature = self._handler_params_signature(reg.handler_params)
+        temporary_blocked = self._is_temporary_skill_activation_restricted(
+            state,
+            player_id=reg.owner_player_id,
+            card_id=reg.source_card_id,
+            scope="activate",
+            trigger=str(reg.trigger),
+            handler_id=str(reg.handler_id),
+            handler_params_signature=signature,
+        )
+        if temporary_blocked:
+            return True
+        active_blocked = any(
+            int(row.owner_player_id) == int(reg.owner_player_id)
+            and int(row.restricted_card_id) == int(reg.source_card_id)
+            and (not str(row.trigger) or str(row.trigger) == str(reg.trigger))
+            and (not str(row.handler_id) or str(row.handler_id) == str(reg.handler_id))
+            and (
+                not tuple(row.handler_params_signature)
+                or tuple(row.handler_params_signature) == tuple(signature)
+            )
+            for row in state.active_activate_skill_restrictions
+        )
+        if active_blocked:
+            return True
+        return self._is_permanent_skill_activation_restricted(
+            state,
+            player_id=reg.owner_player_id,
+            card_id=reg.source_card_id,
+            scope="activate",
+            trigger=str(reg.trigger),
+            handler_id=str(reg.handler_id),
+            handler_params_signature=signature,
+        )
+
+    @staticmethod
+    def _is_temporary_skill_activation_restricted(
+        state: GameState,
+        *,
+        player_id: int,
+        card_id: int,
+        scope: str,
+        trigger: str = "",
+        handler_id: str = "",
+        handler_params_signature: tuple[tuple[str, str], ...] = (),
+    ) -> bool:
+        return any(
+            int(row.owner_player_id) == int(player_id)
+            and int(row.restricted_card_id) == int(card_id)
+            and str(row.scope) == str(scope)
+            and (not str(row.trigger) or str(row.trigger) == str(trigger))
+            and (not str(row.handler_id) or str(row.handler_id) == str(handler_id))
+            and (not tuple(row.handler_params_signature) or tuple(row.handler_params_signature) == tuple(handler_params_signature))
+            for row in state.active_temporary_skill_activation_restrictions
+        )
+
+    @staticmethod
+    def _is_permanent_skill_activation_restricted(
+        state: GameState,
+        *,
+        player_id: int,
+        card_id: int,
+        scope: str,
+        trigger: str = "",
+        handler_id: str = "",
+        handler_params_signature: tuple[tuple[str, str], ...] = (),
+    ) -> bool:
+        return any(
+            int(row.owner_player_id) == int(player_id)
+            and int(row.restricted_card_id) == int(card_id)
+            and str(row.scope) == str(scope)
+            and (not str(row.trigger) or str(row.trigger) == str(trigger))
+            and (not str(row.handler_id) or str(row.handler_id) == str(handler_id))
+            and (not tuple(row.handler_params_signature) or tuple(row.handler_params_signature) == tuple(handler_params_signature))
+            for row in state.permanent_skill_activation_restrictions
         )
 
     @staticmethod
@@ -1644,7 +1803,7 @@ class RulesEngine:
         for i, c in enumerate(player.hand):
             if not c.has_counter:
                 continue
-            if self._is_counter_hand_activation_restricted(state, player_id=player_id, card_id=c.card_id):
+            if self._is_counter_hand_activation_restricted(state, player_id=player_id, card=c):
                 continue
             if allowed_modes and not self._card_matches_counter_window(c, allowed_modes):
                 continue
@@ -2252,6 +2411,8 @@ class RulesEngine:
             )
         ):
             raise RulesViolation("Counter: Counter card can only negate Counter: Attack here.")
+        if self._is_counter_hand_activation_restricted(state, player_id=action.player_id, card=card):
+            raise RulesViolation("This counter skill is currently restricted.")
         if not self._can_pay_skill_cost(player, card, "counter_from_hand"):
             raise RulesViolation("Cannot pay counter skill cost.")
         closed_pending_counter_ids = self._other_pending_counter_hand_instance_ids(
@@ -2405,8 +2566,12 @@ class RulesEngine:
         return False
 
     @staticmethod
+    def _card_skills_are_negated(card: CardInstance) -> bool:
+        return bool(getattr(card, "temporary_skills_negated", False) or getattr(card, "permanent_skills_negated", False))
+
+    @staticmethod
     def _card_has_keyword(card: CardInstance, keyword: str) -> bool:
-        if bool(getattr(card, "temporary_skills_negated", False)):
+        if RulesEngine._card_skills_are_negated(card):
             return False
         needle = str(keyword).strip().lower()
         return any(
@@ -2466,6 +2631,26 @@ class RulesEngine:
                 return True
         return False
 
+    def _controller_player_id_for_card(self, state: GameState, card: CardInstance) -> int:
+        for player_id, player in state.players.items():
+            if player.leader_area.instance_id == card.instance_id:
+                return player_id
+            for zone_cards in (
+                player.hand,
+                player.life,
+                player.energy,
+                player.z_energy,
+                player.battle_area,
+                player.unison_area,
+                player.combo_area,
+                player.drop,
+                player.warp,
+                player.removed_from_game,
+            ):
+                if any(item.instance_id == card.instance_id for item in zone_cards):
+                    return player_id
+        return int(getattr(card, "owner_id", 0) or 0)
+
     def _opponent_skill_can_negate_battle_card_skills(
         self,
         state: GameState,
@@ -2473,11 +2658,12 @@ class RulesEngine:
         acting_player_id: int | None,
         target_card: CardInstance,
     ) -> bool:
-        if acting_player_id is None or int(acting_player_id) == int(target_card.owner_id):
+        controlled_by = self._controller_player_id_for_card(state, target_card)
+        if acting_player_id is None or int(acting_player_id) == controlled_by:
             return True
         if str(target_card.card_type or "").strip().upper() not in {"BATTLE", "Z-BATTLE"}:
             return True
-        return not self._owner_has_battle_skill_negation_protection(state, player_id=target_card.owner_id)
+        return not self._owner_has_battle_skill_negation_protection(state, player_id=controlled_by)
 
     def _opponent_skill_can_switch_card_to_rest(
         self,
@@ -2486,9 +2672,10 @@ class RulesEngine:
         acting_player_id: int | None,
         target_card: CardInstance,
     ) -> bool:
-        if acting_player_id is None or int(acting_player_id) == int(target_card.owner_id):
+        controlled_by = self._controller_player_id_for_card(state, target_card)
+        if acting_player_id is None or int(acting_player_id) == controlled_by:
             return True
-        return not self._owner_has_rest_protection_against_opponent_skills(state, player_id=target_card.owner_id)
+        return not self._owner_has_rest_protection_against_opponent_skills(state, player_id=controlled_by)
 
     def _required_non_leader_attack_rest_count(
         self,
@@ -2551,7 +2738,7 @@ class RulesEngine:
 
     @staticmethod
     def _card_currently_has_barrier(card: CardInstance) -> bool:
-        if bool(getattr(card, "temporary_skills_negated", False)):
+        if RulesEngine._card_skills_are_negated(card):
             return False
         return bool(getattr(card, "has_barrier", False))
 
@@ -2654,6 +2841,47 @@ class RulesEngine:
     def _text_counter_counter_negates_only_attack(card: CardInstance) -> bool:
         text = str(card.skill_text_raw or "").lower()
         return "negate the [counter: attack] skill" in text or "negate the counter: attack skill" in text
+
+    @staticmethod
+    def _text_counter_restricts_copies_for_game(card: CardInstance) -> bool:
+        text = str(card.skill_text_raw or "").lower()
+        return "copies of this card for the game" in text and ("[counter" in text or "counter skill" in text)
+
+    @staticmethod
+    def _parse_counter_restricted_other_counter_mode_for_turn(card: CardInstance) -> str | None:
+        text = str(card.skill_text_raw or "").lower()
+        match = re.search(r"you can't activate the \[(counter:\s*[^\]]+)\] skills? of other cards for the turn", text)
+        if match is None:
+            return None
+        raw_mode = " ".join(match.group(1).split())
+        normalized = raw_mode.replace("counter:", "Counter: ").strip()
+        parts = [part.capitalize() for part in normalized.split(": ", 1)[1].split()] if ": " in normalized else []
+        if parts:
+            return f"Counter: {' '.join(parts)}"
+        return normalized
+
+    @staticmethod
+    def _text_auto_restricts_copies_for_game(text: str) -> bool:
+        normalized = str(text or "").lower()
+        return "copies of this card for the game" in normalized and ("[auto] skill" in normalized or "[auto] skills" in normalized)
+
+    @staticmethod
+    def _text_auto_restricts_copies_for_turn(text: str) -> bool:
+        normalized = str(text or "").lower()
+        return "copies of this card for the turn" in normalized and ("[auto] skill" in normalized or "[auto] skills" in normalized)
+
+    @staticmethod
+    def _text_activate_restricts_copies_for_turn(text: str, *, skill_kind: str) -> bool:
+        normalized = str(text or "").lower()
+        if "copies of this card for the turn" not in normalized:
+            return False
+        if "can't activate copies of this card for the turn" in normalized:
+            return True
+        if skill_kind == "activate_main":
+            return "[activate: main]" in normalized and "skill" in normalized
+        if skill_kind == "activate_battle":
+            return "[activate: battle]" in normalized and "skill" in normalized
+        return False
 
     @staticmethod
     def _parse_counter_power_reduce_opponent_battle_for_turn(card: CardInstance) -> tuple[int, int] | None:
@@ -3117,6 +3345,12 @@ class RulesEngine:
             if self._apply_counter_reduce_attacker_and_attack_power_tax_family(state, player, card):
                 handled = True
                 effect_tags.append("attacker_reduce_attack_tax")
+            if self._apply_counter_other_mode_hand_restriction_for_turn_family(state, player, card):
+                handled = True
+                effect_tags.append("other_counter_mode_restriction")
+            if self._apply_counter_permanent_copy_hand_restriction_family(state, player, card):
+                handled = True
+                effect_tags.append("permanent_copy_counter_restriction")
             if self._text_describes_counter_play_self(card):
                 effect_tags.extend(self._resolve_counter_play_self_family(state, player, card, motion.payload))
                 handled = True
@@ -3395,6 +3629,59 @@ class RulesEngine:
             )
         )
         self._checkpoint(state, "counter_effect_hand_counter_restriction_applied")
+        return True
+
+    def _apply_counter_permanent_copy_hand_restriction_family(
+        self,
+        state: GameState,
+        player: PlayerState,
+        card: CardInstance,
+    ) -> bool:
+        if not self._text_counter_restricts_copies_for_game(card):
+            return False
+        if not self._add_permanent_skill_activation_restriction(
+            state,
+            owner_player_id=player.player_id,
+            restricted_card_id=int(card.card_id),
+            scope="counter_from_hand",
+        ):
+            return False
+        state.log.append(
+            "Counter copies permanently restricted for the game: "
+            f"player_id={player.player_id} card_id={card.card_id}"
+        )
+        self._checkpoint(state, "counter_effect_permanent_copy_counter_restriction_applied")
+        return True
+
+    def _apply_counter_other_mode_hand_restriction_for_turn_family(
+        self,
+        state: GameState,
+        player: PlayerState,
+        card: CardInstance,
+    ) -> bool:
+        restricted_mode = self._parse_counter_restricted_other_counter_mode_for_turn(card)
+        if not restricted_mode:
+            return False
+        exists = any(
+            int(row.owner_player_id) == int(player.player_id)
+            and str(getattr(row, "restricted_mode", "") or "") == restricted_mode
+            and int(getattr(row, "expires_on_turn_end_player_id", 0)) == int(state.active_player)
+            for row in state.active_counter_hand_restrictions
+        )
+        if exists:
+            return False
+        state.active_counter_hand_restrictions.append(
+            CounterHandActivationRestriction(
+                owner_player_id=player.player_id,
+                restricted_mode=restricted_mode,
+                expires_on_turn_end_player_id=state.active_player,
+            )
+        )
+        state.log.append(
+            "Counter mode restricted for the turn: "
+            f"player_id={player.player_id} mode={restricted_mode}"
+        )
+        self._checkpoint(state, "counter_effect_other_counter_mode_restriction_applied")
         return True
 
     def _resolve_counter_play_self_family(
@@ -3977,6 +4264,344 @@ class RulesEngine:
                 return card
         return None
 
+    @staticmethod
+    def _clear_effect_state_for_source_instance(state: GameState, *, source_instance_id: int) -> None:
+        removed_effect_ids = {
+            reg.effect_id
+            for reg in state.effect_registry
+            if int(reg.source_instance_id) == int(source_instance_id)
+        }
+        if removed_effect_ids:
+            state.effect_registry = [
+                reg
+                for reg in state.effect_registry
+                if int(reg.source_instance_id) != int(source_instance_id)
+            ]
+            state.pending_effects = [
+                row for row in state.pending_effects if int(row.effect_id) not in removed_effect_ids
+            ]
+            state.effect_resolutions = [
+                row for row in state.effect_resolutions if int(row.effect_id) not in removed_effect_ids
+            ]
+
+    @staticmethod
+    def _handler_params_signature(handler_params: dict[str, int | str | bool]) -> tuple[tuple[str, str], ...]:
+        return tuple(sorted((str(key), str(value)) for key, value in dict(handler_params).items()))
+
+    def _registration_matches_permanently_negated_skill(
+        self,
+        reg: EffectRegistration,
+        row: PermanentlyNegatedSkill,
+    ) -> bool:
+        return (
+            int(reg.source_instance_id) == int(row.source_instance_id)
+            and str(reg.trigger) == str(row.trigger)
+            and str(reg.handler_id) == str(row.handler_id)
+            and self._handler_params_signature(reg.handler_params) == tuple(row.handler_params_signature)
+        )
+
+    def _is_registration_permanently_negated(self, state: GameState, reg: EffectRegistration) -> bool:
+        return any(self._registration_matches_permanently_negated_skill(reg, row) for row in state.permanently_negated_skills)
+
+    def _permanently_negate_registration_skill(self, state: GameState, reg: EffectRegistration) -> bool:
+        row = PermanentlyNegatedSkill(
+            source_instance_id=reg.source_instance_id,
+            trigger=str(reg.trigger),
+            handler_id=str(reg.handler_id),
+            handler_params_signature=self._handler_params_signature(reg.handler_params),
+        )
+        if any(self._registration_matches_permanently_negated_skill(reg, existing) for existing in state.permanently_negated_skills):
+            return False
+        state.permanently_negated_skills.append(row)
+        return True
+
+    @staticmethod
+    def _add_permanent_skill_activation_restriction(
+        state: GameState,
+        *,
+        owner_player_id: int,
+        restricted_card_id: int,
+        scope: str,
+        trigger: str = "",
+        handler_id: str = "",
+        handler_params_signature: tuple[tuple[str, str], ...] = (),
+    ) -> bool:
+        if any(
+            int(row.owner_player_id) == int(owner_player_id)
+            and int(row.restricted_card_id) == int(restricted_card_id)
+            and str(row.scope) == str(scope)
+            and str(row.trigger) == str(trigger)
+            and str(row.handler_id) == str(handler_id)
+            and tuple(row.handler_params_signature) == tuple(handler_params_signature)
+            for row in state.permanent_skill_activation_restrictions
+        ):
+            return False
+        state.permanent_skill_activation_restrictions.append(
+            PermanentSkillActivationRestriction(
+                owner_player_id=int(owner_player_id),
+                restricted_card_id=int(restricted_card_id),
+                scope=str(scope),
+                trigger=str(trigger),
+                handler_id=str(handler_id),
+                handler_params_signature=tuple(handler_params_signature),
+            )
+        )
+        return True
+
+    def _is_registration_permanently_activation_restricted(self, state: GameState, reg: EffectRegistration) -> bool:
+        scope = "activate" if str(reg.trigger) in {"self_activate_main", "self_activate_battle", "self_activate_extra_from_hand"} else "auto"
+        return self._is_permanent_skill_activation_restricted(
+            state,
+            player_id=reg.owner_player_id,
+            card_id=reg.source_card_id,
+            scope=scope,
+            trigger=str(reg.trigger),
+            handler_id=str(reg.handler_id),
+            handler_params_signature=self._handler_params_signature(reg.handler_params),
+        )
+
+    def _is_registration_temporarily_activation_restricted(self, state: GameState, reg: EffectRegistration) -> bool:
+        scope = "activate" if str(reg.trigger) in {"self_activate_main", "self_activate_battle", "self_activate_extra_from_hand"} else "auto"
+        return self._is_temporary_skill_activation_restricted(
+            state,
+            player_id=reg.owner_player_id,
+            card_id=reg.source_card_id,
+            scope=scope,
+            trigger=str(reg.trigger),
+            handler_id=str(reg.handler_id),
+            handler_params_signature=self._handler_params_signature(reg.handler_params),
+        )
+
+    def _add_temporary_skill_activation_restriction(
+        self,
+        state: GameState,
+        *,
+        owner_player_id: int,
+        restricted_card_id: int,
+        scope: str,
+        expires_on_turn_end_player_id: int,
+        trigger: str = "",
+        handler_id: str = "",
+        handler_params_signature: tuple[tuple[str, str], ...] = (),
+    ) -> bool:
+        if self._is_temporary_skill_activation_restricted(
+            state,
+            player_id=owner_player_id,
+            card_id=restricted_card_id,
+            scope=scope,
+            trigger=trigger,
+            handler_id=handler_id,
+            handler_params_signature=handler_params_signature,
+        ):
+            return False
+        state.active_temporary_skill_activation_restrictions.append(
+            TemporarySkillActivationRestriction(
+                owner_player_id=owner_player_id,
+                restricted_card_id=restricted_card_id,
+                scope=scope,
+                trigger=trigger,
+                handler_id=handler_id,
+                handler_params_signature=handler_params_signature,
+                expires_on_turn_end_player_id=expires_on_turn_end_player_id,
+            )
+        )
+        return True
+
+    def _registration_source_skill_text(self, state: GameState, reg: EffectRegistration) -> str:
+        found = self._find_card_anywhere_by_instance(
+            state,
+            owner_player_id=reg.owner_player_id,
+            instance_id=reg.source_instance_id,
+        )
+        if found is not None:
+            _zone, card = found
+            if str(card.skill_text_raw or "").strip():
+                return str(card.skill_text_raw or "")
+        return str(self._resolve_card_runtime_data(reg.source_card_id).skill_text_raw or "")
+
+    def _apply_post_resolution_registration_effects(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name == "skill_activated" and bool(reg.handler_params.get("negate_self_skill_for_game", False)):
+            if self._permanently_negate_registration_skill(state, reg):
+                state.log.append(
+                    "Skill permanently negated for the game: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_skill_negated_for_game")
+        if event.name == "skill_activated":
+            skill_kind = str(event.payload.get("skill_kind") or "")
+            text = self._registration_source_skill_text(state, reg)
+            if (
+                str(reg.trigger) in {"self_activate_main", "self_activate_battle", "self_activate_extra_from_hand"}
+                and self._text_activate_restricts_copies_for_turn(text, skill_kind=skill_kind)
+                and self._add_temporary_skill_activation_restriction(
+                    state,
+                    owner_player_id=reg.owner_player_id,
+                    restricted_card_id=reg.source_card_id,
+                    scope="activate",
+                    expires_on_turn_end_player_id=state.active_player,
+                    trigger=str(reg.trigger),
+                    handler_id=str(reg.handler_id),
+                    handler_params_signature=self._handler_params_signature(reg.handler_params),
+                )
+            ):
+                state.log.append(
+                    "Activate copies temporarily restricted for the turn: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_activate_copies_restricted_for_turn")
+            return
+        text = self._registration_source_skill_text(state, reg)
+        if self._text_auto_restricts_copies_for_game(text):
+            if self._add_permanent_skill_activation_restriction(
+                state,
+                owner_player_id=reg.owner_player_id,
+                restricted_card_id=reg.source_card_id,
+                scope="auto",
+                trigger=str(reg.trigger),
+                handler_id=str(reg.handler_id),
+                handler_params_signature=self._handler_params_signature(reg.handler_params),
+            ):
+                state.log.append(
+                    "Auto copies permanently restricted for the game: "
+                    f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+                )
+                self._checkpoint(state, "effect_auto_copies_restricted_for_game")
+            return
+        if not self._text_auto_restricts_copies_for_turn(text):
+            return
+        if self._add_temporary_skill_activation_restriction(
+            state,
+            owner_player_id=reg.owner_player_id,
+            restricted_card_id=reg.source_card_id,
+            scope="auto",
+            expires_on_turn_end_player_id=state.active_player,
+            trigger=str(reg.trigger),
+            handler_id=str(reg.handler_id),
+            handler_params_signature=self._handler_params_signature(reg.handler_params),
+        ):
+            state.log.append(
+                "Auto copies temporarily restricted for the turn: "
+                f"source_instance_id={reg.source_instance_id} trigger={reg.trigger} handler={reg.handler_id}"
+            )
+            self._checkpoint(state, "effect_auto_copies_restricted_for_turn")
+
+    @staticmethod
+    def _strip_card_skill_flags(card: CardInstance) -> None:
+        card.keywords = ()
+        card.counter_modes = ()
+        card.temporary_keywords = ()
+        card.battle_temporary_keywords = ()
+        card.delayed_temporary_keywords = ()
+        card.has_counter = False
+        card.has_counter_attack = False
+        card.has_counter_battle_card_attack = False
+        card.has_counter_play = False
+        card.has_counter_counter = False
+        card.has_activate_main = False
+        card.has_activate_battle = False
+        card.has_auto = False
+        card.has_permanent = False
+        card.has_draw = False
+        card.max_draw = None
+        card.auto_once_per_turn = False
+        card.auto_draw_on_play = False
+        card.auto_draw_on_attack = False
+        card.has_barrier = False
+
+    def _negate_card_skills_for_game(self, state: GameState, *, card: CardInstance) -> None:
+        self._clear_effect_state_for_source_instance(state, source_instance_id=card.instance_id)
+        self._strip_card_skill_flags(card)
+        card.temporary_skills_negated = False
+        card.permanent_skills_negated = True
+
+    def _transfer_board_card_control(
+        self,
+        state: GameState,
+        *,
+        from_player_id: int,
+        to_player_id: int,
+        zone: str,
+        instance_id: int,
+        negate_skills_for_game: bool = False,
+    ) -> CardInstance | None:
+        if int(from_player_id) == int(to_player_id):
+            player = state.players.get(from_player_id)
+            if player is None:
+                return None
+            return self._find_by_instance(player, zone, instance_id)
+        from_player = state.players.get(from_player_id)
+        to_player = state.players.get(to_player_id)
+        if from_player is None or to_player is None:
+            return None
+        if zone == "unison":
+            source_zone = from_player.unison_area
+            dest_zone = to_player.unison_area
+        else:
+            source_zone = from_player.battle_area
+            dest_zone = to_player.battle_area
+        idx = next((i for i, card in enumerate(source_zone) if int(card.instance_id) == int(instance_id)), -1)
+        if idx < 0:
+            return None
+        moved = source_zone.pop(idx)
+        self._clear_effect_state_for_source_instance(state, source_instance_id=moved.instance_id)
+        if zone == "unison":
+            self._replace_owner_unison_if_needed(state, to_player)
+        dest_zone.append(moved)
+        if negate_skills_for_game:
+            self._negate_card_skills_for_game(state, card=moved)
+        else:
+            self._register_card_effects(state, player_id=to_player_id, source_zone=zone, card=moved)
+        return moved
+
+    def _send_board_card_to_owner_out_of_play(
+        self,
+        state: GameState,
+        *,
+        controller_player_id: int,
+        zone: str,
+        instance_id: int,
+        destination: str,
+        source_zone_for_event: str | None = None,
+        emit_removed_event: bool = False,
+    ) -> CardInstance | None:
+        controller = state.players.get(controller_player_id)
+        if controller is None:
+            return None
+        zone_cards = controller.unison_area if zone == "unison" else controller.battle_area
+        idx = next((i for i, card in enumerate(zone_cards) if int(card.instance_id) == int(instance_id)), -1)
+        if idx < 0:
+            return None
+        removed = zone_cards.pop(idx)
+        owner_player_id = int(getattr(removed, "owner_id", controller_player_id) or controller_player_id)
+        owner = state.players.get(owner_player_id)
+        if owner is None:
+            return None
+        if destination == "removed":
+            owner.removed_from_game.append(removed)
+            if emit_removed_event:
+                self._emit_card_removed_from_game(
+                    state,
+                    owner_player_id=owner_player_id,
+                    card=removed,
+                    source_zone=source_zone_for_event or zone,
+                )
+        elif destination == "warp":
+            self._append_to_owner_warp(
+                state,
+                owner_player_id=owner_player_id,
+                card=removed,
+                source_zone=source_zone_for_event or zone,
+            )
+        else:
+            owner.drop.append(removed)
+            self._emit_board_card_placed_into_drop(
+                state,
+                owner_player_id=owner_player_id,
+                card=removed,
+                source_zone=source_zone_for_event or zone,
+            )
+        return removed
+
     def _schedule_delayed_mode_switch(
         self,
         state: GameState,
@@ -4184,12 +4809,15 @@ class RulesEngine:
         zone_cards = player.battle_area if zone == "battle" else player.unison_area
         for i, c in enumerate(zone_cards):
             if c.instance_id == instance_id:
-                removed = zone_cards.pop(i)
-                if removed.card_type.startswith("Z-"):
-                    player.removed_from_game.append(removed)
-                else:
-                    player.drop.append(removed)
-                    self._emit_board_card_placed_into_drop(state, owner_player_id=player_id, card=removed, source_zone=zone)
+                removed = self._send_board_card_to_owner_out_of_play(
+                    state,
+                    controller_player_id=player_id,
+                    zone=zone,
+                    instance_id=instance_id,
+                    destination="removed" if c.card_type.startswith("Z-") else "drop",
+                )
+                if removed is None:
+                    return
                 self._emit_effect_event(
                     state,
                     name="card_koed",
@@ -4198,7 +4826,7 @@ class RulesEngine:
                         "source_instance_id": removed.instance_id,
                         "source_card_id": removed.card_id,
                         "source_zone": zone,
-                        "owner_player_id": player_id,
+                        "owner_player_id": removed.owner_id,
                     },
                 )
                 self._checkpoint(state, "ko_processing")
@@ -4412,9 +5040,13 @@ class RulesEngine:
             i = 0
             while i < len(player.battle_area):
                 if player.battle_area[i].power <= 0:
-                    removed = player.battle_area.pop(i)
-                    player.drop.append(removed)
-                    self._emit_board_card_placed_into_drop(state, owner_player_id=player.player_id, card=removed, source_zone="battle")
+                    self._send_board_card_to_owner_out_of_play(
+                        state,
+                        controller_player_id=player.player_id,
+                        zone="battle",
+                        instance_id=player.battle_area[i].instance_id,
+                        destination="drop",
+                    )
                     self._checkpoint(state, "rule_battle_power_zero")
                     continue
                 i += 1
@@ -4428,11 +5060,13 @@ class RulesEngine:
                 if unison.power <= 0:
                     self._remove_unison_markers(state, unison=unison, amount=1, reason="rule_power_zero")
                 if unison.markers <= 0:
-                    removed = player.unison_area.pop(i)
-                    if removed.card_type.startswith("Z-"):
-                        player.removed_from_game.append(removed)
-                    else:
-                        player.drop.append(removed)
+                    self._send_board_card_to_owner_out_of_play(
+                        state,
+                        controller_player_id=player.player_id,
+                        zone="unison",
+                        instance_id=unison.instance_id,
+                        destination="removed" if unison.card_type.startswith("Z-") else "drop",
+                    )
                     self._checkpoint(state, "rule_unison_zero_markers")
                     continue
                 if unison.power <= 0:
@@ -4598,7 +5232,7 @@ class RulesEngine:
 
     @staticmethod
     def _is_valid_skill_source_area(card: CardInstance, zone: str | None) -> bool:
-        if bool(getattr(card, "temporary_skills_negated", False)):
+        if RulesEngine._card_skills_are_negated(card):
             return False
         if zone == "leader":
             return True
@@ -5017,6 +5651,38 @@ class RulesEngine:
         state.effect_events.append(event)
         for reg in state.effect_registry:
             if self._effect_registration_matches_event(reg, event):
+                if self._is_registration_temporarily_activation_restricted(state, reg):
+                    state.effect_resolutions.append(
+                        EffectResolution(
+                            effect_id=reg.effect_id,
+                            event_id=event.event_id,
+                            resolved=False,
+                            reason="temporary_skill_activation_restricted",
+                        )
+                    )
+                    state.log.append(
+                        "Public effect blocked by temporary activation restriction: "
+                        f"effect_id={reg.effect_id} source_instance_id={reg.source_instance_id} "
+                        f"trigger={reg.trigger} handler={reg.handler_id}"
+                    )
+                    self._checkpoint(state, "effect_temporary_skill_activation_restricted")
+                    continue
+                if self._is_registration_permanently_activation_restricted(state, reg):
+                    state.effect_resolutions.append(
+                        EffectResolution(
+                            effect_id=reg.effect_id,
+                            event_id=event.event_id,
+                            resolved=False,
+                            reason="permanent_skill_activation_restricted",
+                        )
+                    )
+                    state.log.append(
+                        "Public effect blocked by permanent activation restriction: "
+                        f"effect_id={reg.effect_id} source_instance_id={reg.source_instance_id} "
+                        f"trigger={reg.trigger} handler={reg.handler_id}"
+                    )
+                    self._checkpoint(state, "effect_permanent_skill_activation_restricted")
+                    continue
                 state.pending_effects.append(PendingEffect(effect_id=reg.effect_id, event_id=event.event_id))
         self._record_secret_auto_opportunities(state, event)
         self._apply_active_low_power_battle_play_hand_warp_penalties(state, event)
@@ -5259,13 +5925,18 @@ class RulesEngine:
                 limit_scope=row.limit_scope,
             )
             status = "pending"
-            once_key = self._effect_once_per_turn_key(temp_reg)
-            if once_key is not None and resolved_once_per_turn_counts.get(once_key, 0) >= 1:
-                status = "blocked_once_per_turn"
+            if self._is_registration_temporarily_activation_restricted(state, temp_reg):
+                status = "blocked_temporary_restriction"
+            elif self._is_registration_permanently_activation_restricted(state, temp_reg):
+                status = "blocked_permanent_restriction"
             else:
-                limit_key = self._effect_limit_key(temp_reg)
-                if limit_key is not None and resolved_limit_counts.get(limit_key, 0) >= int(temp_reg.limit_per_turn or 0):
-                    status = "blocked_limit_per_turn"
+                once_key = self._effect_once_per_turn_key(temp_reg)
+                if once_key is not None and resolved_once_per_turn_counts.get(once_key, 0) >= 1:
+                    status = "blocked_once_per_turn"
+                else:
+                    limit_key = self._effect_limit_key(temp_reg)
+                    if limit_key is not None and resolved_limit_counts.get(limit_key, 0) >= int(temp_reg.limit_per_turn or 0):
+                        status = "blocked_limit_per_turn"
             state.secret_auto_opportunities.append(
                 SecretAutoOpportunity(
                     opportunity_id=state.next_secret_auto_opportunity_id,
@@ -5549,6 +6220,7 @@ class RulesEngine:
                 )
                 continue
             handler(state, evt, reg)
+            self._apply_post_resolution_registration_effects(state, evt, reg)
             next_reg = EffectRegistration(
                 effect_id=reg.effect_id,
                 owner_player_id=reg.owner_player_id,
@@ -6985,13 +7657,101 @@ class RulesEngine:
         indexes = self._choose_effect_target_indexes(state, reg, list(opponent.unison_area), max_targets, policy)
         if not indexes:
             return
-        # Current engine model allows one Unison in play; mirror play replacement semantics.
-        self._replace_owner_unison_if_needed(state, owner)
         idx = sorted(indexes)[0]
-        taken = opponent.unison_area.pop(idx)
-        taken.owner_id = reg.owner_player_id
-        owner.unison_area.append(taken)
-        self._checkpoint(state, "effect_auto_gain_control_opponent_unison_on_play")
+        taken = list(opponent.unison_area)[idx]
+        if self._transfer_board_card_control(
+            state,
+            from_player_id=opponent_id,
+            to_player_id=reg.owner_player_id,
+            zone="unison",
+            instance_id=taken.instance_id,
+        ) is not None:
+            self._checkpoint(state, "effect_auto_gain_control_opponent_unison_on_play")
+
+    def _handle_auto_gain_control_opponent_battle_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if opponent is None or not opponent.battle_area:
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        max_cost = self._resolve_effect_int_param(state, reg, "max_cost", default=-1)
+        candidates = [
+            card
+            for card in opponent.battle_area
+            if max_cost < 0 or int(getattr(card, "energy_cost", -1) or -1) <= max_cost
+        ]
+        if not candidates:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, policy)
+        if not indexes:
+            return
+        moved_any = False
+        for idx in indexes:
+            moved = self._transfer_board_card_control(
+                state,
+                from_player_id=opponent_id,
+                to_player_id=reg.owner_player_id,
+                zone="battle",
+                instance_id=candidates[idx].instance_id,
+            )
+            moved_any = moved_any or moved is not None
+        if moved_any:
+            self._checkpoint(state, "effect_auto_gain_control_opponent_battle_on_play")
+
+    def _handle_auto_transfer_self_control_to_opponent_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name != "card_played":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        zone = str(reg.source_zone or "").strip().lower()
+        if zone not in {"battle", "unison"}:
+            return
+        if self._find_by_instance(owner, zone, reg.source_instance_id) is None:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        moved = self._transfer_board_card_control(
+            state,
+            from_player_id=reg.owner_player_id,
+            to_player_id=opponent_id,
+            zone=zone,
+            instance_id=reg.source_instance_id,
+        )
+        if moved is not None:
+            self._checkpoint(state, "effect_auto_transfer_self_control_to_opponent_on_play")
+
+    def _handle_auto_transfer_self_control_to_opponent(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
+        if event.name not in {"turn_start", "turn_end"}:
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        zone = str(reg.source_zone or "").strip().lower()
+        if zone not in {"battle", "unison"}:
+            return
+        if self._find_by_instance(owner, zone, reg.source_instance_id) is None:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        moved = self._transfer_board_card_control(
+            state,
+            from_player_id=reg.owner_player_id,
+            to_player_id=opponent_id,
+            zone=zone,
+            instance_id=reg.source_instance_id,
+        )
+        if moved is not None:
+            self._checkpoint(state, "effect_auto_transfer_self_control_to_opponent")
 
     def _handle_auto_add_n_life_to_hand_on_self_ko(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "card_koed":
@@ -7843,6 +8603,9 @@ class RulesEngine:
                 DelayedActivateSkillRestriction(
                     owner_player_id=reg.owner_player_id,
                     restricted_card_id=reg.source_card_id,
+                    trigger=str(reg.trigger),
+                    handler_id=str(reg.handler_id),
+                    handler_params_signature=self._handler_params_signature(reg.handler_params),
                 )
             )
         self._checkpoint(state, "effect_activate_buff_owner_battle_cards")
@@ -8645,6 +9408,116 @@ class RulesEngine:
             )
         )
         self._checkpoint(state, "effect_activate_gain_keyword_from_under_self_until_opponent_turn_end")
+
+    def _handle_activate_exchange_control_of_battle_cards_for_game(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if owner is None or opponent is None:
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta != 0 and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
+        owner_target_max_cost = self._resolve_effect_int_param(state, reg, "owner_target_max_cost", default=-1)
+        owner_candidates = [
+            card
+            for card in owner.battle_area
+            if self._card_matches_effect_filters(
+                card,
+                allowed_colors=set(),
+                required_traits=set(),
+                required_characters=set(),
+                required_name_contains="",
+            )
+            and (owner_target_max_cost < 0 or int(getattr(card, "energy_cost", -1) or -1) <= owner_target_max_cost)
+        ]
+        if not owner_candidates:
+            return
+        owner_indexes = self._choose_effect_target_indexes(
+            state,
+            reg,
+            owner_candidates,
+            self._resolve_effect_int_param(state, reg, "owner_max_targets", default=1),
+            str(reg.handler_params.get("owner_target_policy", "first")),
+        )
+        if not owner_indexes:
+            return
+        moved_any = False
+        for idx in owner_indexes:
+            moved = self._transfer_board_card_control(
+                state,
+                from_player_id=reg.owner_player_id,
+                to_player_id=opponent_id,
+                zone="battle",
+                instance_id=owner_candidates[idx].instance_id,
+                negate_skills_for_game=bool(reg.handler_params.get("negate_owner_target_skills_for_game", False)),
+            )
+            moved_any = moved_any or moved is not None
+        opponent_candidates = list(opponent.battle_area)
+        if opponent_candidates:
+            opponent_indexes = self._choose_effect_target_indexes(
+                state,
+                reg,
+                opponent_candidates,
+                self._resolve_effect_int_param(state, reg, "opponent_max_targets", default=1),
+                str(reg.handler_params.get("opponent_target_policy", "first")),
+            )
+            for idx in opponent_indexes:
+                moved = self._transfer_board_card_control(
+                    state,
+                    from_player_id=opponent_id,
+                    to_player_id=reg.owner_player_id,
+                    zone="battle",
+                    instance_id=opponent_candidates[idx].instance_id,
+                )
+                moved_any = moved_any or moved is not None
+        if moved_any:
+            self._checkpoint(state, "effect_activate_exchange_control_of_battle_cards_for_game")
+
+    def _handle_activate_transfer_self_control_to_opponent(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        zone = str(reg.source_zone or "").strip().lower()
+        if zone not in {"battle", "unison"}:
+            return
+        if self._find_by_instance(owner, zone, reg.source_instance_id) is None:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        moved = self._transfer_board_card_control(
+            state,
+            from_player_id=reg.owner_player_id,
+            to_player_id=opponent_id,
+            zone=zone,
+            instance_id=reg.source_instance_id,
+        )
+        if moved is not None:
+            self._checkpoint(state, "effect_activate_transfer_self_control_to_opponent")
 
     def _handle_activate_remove_self_and_ko_all_opponent_battles(
         self,
@@ -10297,18 +11170,38 @@ class RulesEngine:
         max_power = self._resolve_effect_int_param(state, reg, "max_power", default=-1)
         raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
         allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
+        raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
+        required_traits = {t.strip() for t in raw_traits.replace("|", ",").split(",") if t.strip()}
+        raw_characters = str(reg.handler_params.get("required_characters", "")).strip().lower()
+        required_characters = {t.strip() for t in raw_characters.replace("|", ",").split(",") if t.strip()}
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "")).strip().upper()
         rest_mode = bool(reg.handler_params.get("rest_mode", False))
         chosen_indexes: list[int] = []
         for i, card_id in enumerate(owner.deck):
             runtime = self._resolve_card_runtime_data(card_id)
-            if "BATTLE" not in (runtime.card_type or "").upper():
+            temp_card = CardInstance(
+                instance_id=0,
+                card_id=card_id,
+                owner_id=reg.owner_player_id,
+                card_type=str(runtime.card_type or ""),
+                color=str(runtime.color or ""),
+                power=int(runtime.power or 0),
+                traits=tuple(runtime.traits or ()),
+                characters=tuple(runtime.characters or ()),
+                skill_text_raw=str(runtime.skill_text_raw or ""),
+            )
+            if not self._card_matches_effect_filters(
+                temp_card,
+                allowed_colors=allowed_colors,
+                required_traits=required_traits,
+                required_characters=required_characters,
+                required_name_contains=required_name_contains,
+                required_card_types={"BATTLE"},
+                min_power=-1,
+            ):
                 continue
-            if max_power >= 0 and runtime.power > max_power:
+            if max_power >= 0 and int(runtime.power or 0) > max_power:
                 continue
-            if allowed_colors:
-                card_colors = {p.strip().lower() for p in str(runtime.color or "").replace("/", ",").split(",") if p.strip()}
-                if card_colors and card_colors.isdisjoint(allowed_colors):
-                    continue
             chosen_indexes.append(i)
             if len(chosen_indexes) >= max_targets:
                 break
@@ -10997,7 +11890,7 @@ class RulesEngine:
     def _effect_requirements_met(self, state: GameState, reg: EffectRegistration) -> bool:
         owner = state.players[reg.owner_player_id]
         source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
-        if source is not None and bool(getattr(source, "temporary_skills_negated", False)):
+        if source is not None and self._card_skills_are_negated(source):
             return False
         required_source_zone = str(reg.handler_params.get("required_source_zone", "")).strip().lower()
         if required_source_zone and str(reg.source_zone or "").strip().lower() != required_source_zone:
@@ -11218,12 +12111,10 @@ class RulesEngine:
         source_zone: str,
         source_kind: str,
     ) -> bool:
-        if self._is_activate_skill_restricted(state, player_id=player_id, card_id=source.card_id):
-            return False
         trigger = f"self_activate_{source_kind}"
         rules = [rule for rule in self._effect_rules.get(source.card_id, ()) if rule.trigger == trigger]
         if not rules:
-            return True
+            return not self._is_activate_skill_restricted(state, player_id=player_id, card_id=source.card_id)
         for rule in rules:
             reg = EffectRegistration(
                 effect_id=0,
@@ -11239,6 +12130,10 @@ class RulesEngine:
                 limit_per_turn=rule.limit_per_turn,
                 limit_scope=rule.limit_scope,
             )
+            if self._is_registration_permanently_negated(state, reg):
+                continue
+            if self._is_registration_activate_skill_restricted(state, reg):
+                continue
             if self._effect_requirements_met(state, reg):
                 return True
         return False
@@ -11261,6 +12156,8 @@ class RulesEngine:
                 and reg.source_instance_id == source.instance_id
                 and reg.source_zone == source_zone
                 and reg.trigger == trigger
+                and not self._is_registration_permanently_negated(state, reg)
+                and not self._is_registration_activate_skill_restricted(state, reg)
                 and self._effect_requirements_met(state, reg)
             ],
             key=lambda row: int(row.effect_id),
@@ -11297,6 +12194,40 @@ class RulesEngine:
             rule
             for rule in self._effect_rules.get(source.card_id, ())
             if rule.trigger == trigger
+            and not self._is_registration_permanently_negated(
+                state,
+                EffectRegistration(
+                    effect_id=0,
+                    owner_player_id=player_id,
+                    source_instance_id=source.instance_id,
+                    source_card_id=source.card_id,
+                    source_zone=source_zone,
+                    trigger=rule.trigger,
+                    handler_id=rule.handler_id,
+                    handler_params=dict(rule.handler_params),
+                    source_card_number=str(source.card_number or ""),
+                    once_per_turn=rule.once_per_turn,
+                    limit_per_turn=rule.limit_per_turn,
+                    limit_scope=rule.limit_scope,
+                ),
+            )
+            and not self._is_registration_activate_skill_restricted(
+                state,
+                EffectRegistration(
+                    effect_id=0,
+                    owner_player_id=player_id,
+                    source_instance_id=source.instance_id,
+                    source_card_id=source.card_id,
+                    source_zone=source_zone,
+                    trigger=rule.trigger,
+                    handler_id=rule.handler_id,
+                    handler_params=dict(rule.handler_params),
+                    source_card_number=str(source.card_number or ""),
+                    once_per_turn=rule.once_per_turn,
+                    limit_per_turn=rule.limit_per_turn,
+                    limit_scope=rule.limit_scope,
+                ),
+            )
             and self._effect_requirements_met(
                 state,
                 EffectRegistration(

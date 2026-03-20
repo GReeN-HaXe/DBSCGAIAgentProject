@@ -13,6 +13,11 @@ from src.game.effect_rules import EffectRule
 
 EFFECT_FAMILY_MAPPING_REPORT_SCHEMA_VERSION = "effect_family_mapping_report.v1"
 _CARD_ID_RE = re.compile(r"\bcard_id=(\d+)\b")
+_INTENTIONALLY_SKIPPED_CARD_NUMBERS = {
+    "BT25-010",
+    "BT15-018",
+    "BT15-105",
+}
 
 
 def _fetch_card_metadata(db_path: Path, card_ids: Iterable[int]) -> dict[int, dict[str, object]]:
@@ -26,7 +31,7 @@ def _fetch_card_metadata(db_path: Path, card_ids: Iterable[int]) -> dict[int, di
             batch = resolved_ids[offset : offset + 900]
             placeholders = ", ".join("?" for _ in batch)
             rows = conn.execute(
-                f"SELECT id, card_number, card_name FROM cards WHERE id IN ({placeholders})",
+                f"SELECT id, card_number, card_name, card_skill_unstyled FROM cards WHERE id IN ({placeholders})",
                 [int(card_id) for card_id in batch],
             ).fetchall()
             for row in rows:
@@ -34,10 +39,17 @@ def _fetch_card_metadata(db_path: Path, card_ids: Iterable[int]) -> dict[int, di
                     "card_id": int(row[0]),
                     "card_number": str(row[1] or ""),
                     "card_name": str(row[2] or ""),
+                    "card_skill_unstyled": str(row[3] or ""),
                 }
     finally:
         conn.close()
     return metadata
+
+
+def _is_intentionally_skipped_skillless(card_metadata: dict[str, object]) -> bool:
+    if str(card_metadata.get("card_number", "") or "").strip().upper() in _INTENTIONALLY_SKIPPED_CARD_NUMBERS:
+        return True
+    return str(card_metadata.get("card_skill_unstyled", "") or "").strip() == "-"
 
 
 def collect_deck_card_counts(*, db_path: Path, deck_paths: Iterable[Path]) -> tuple[Counter[int], list[str]]:
@@ -113,6 +125,7 @@ def build_effect_family_mapping_report(
     family_rows: dict[str, dict[str, object]] = {}
     card_rows: list[dict[str, object]] = []
     mapped_card_count = 0
+    intentionally_skipped_card_count = 0
 
     for card_id in priority_card_ids:
         entries = list(rules.get(int(card_id), ()))
@@ -125,8 +138,11 @@ def build_effect_family_mapping_report(
         trace_count = int(trace_counts.get(int(card_id), 0))
         combined_count = deck_count + trace_count
         mapped = bool(families)
+        intentionally_skipped = (not mapped) and _is_intentionally_skipped_skillless(metadata)
         if mapped:
             mapped_card_count += 1
+        elif intentionally_skipped:
+            intentionally_skipped_card_count += 1
         row = {
             "card_id": int(card_id),
             "card_number": str(metadata.get("card_number", "")),
@@ -135,6 +151,8 @@ def build_effect_family_mapping_report(
             "trace_count": trace_count,
             "combined_count": combined_count,
             "mapped": mapped,
+            "intentionally_skipped": intentionally_skipped,
+            "skip_reason": "skillless" if intentionally_skipped else "",
             "family_ids": families,
             "rule_count": len(entries),
             "triggers": dict(sorted(triggers.items())),
@@ -205,13 +223,17 @@ def build_effect_family_mapping_report(
         )
     )
 
-    unmapped_cards = [row for row in card_rows if not bool(row["mapped"])]
+    raw_unmapped_cards = [row for row in card_rows if not bool(row["mapped"])]
+    intentionally_skipped_cards = [row for row in raw_unmapped_cards if bool(row.get("intentionally_skipped"))]
+    unmapped_cards = [row for row in raw_unmapped_cards if not bool(row.get("intentionally_skipped"))]
     return {
         "schema_version": EFFECT_FAMILY_MAPPING_REPORT_SCHEMA_VERSION,
         "summary": {
             "priority_card_count": len(priority_card_ids),
             "mapped_priority_card_count": mapped_card_count,
             "unmapped_priority_card_count": len(unmapped_cards),
+            "raw_unmapped_priority_card_count": len(raw_unmapped_cards),
+            "intentionally_skipped_priority_card_count": intentionally_skipped_card_count,
             "priority_family_count": len(serialized_families),
             "total_deck_mentions": sum(deck_counts.values()),
             "total_trace_mentions": sum(trace_counts.values()),
@@ -219,6 +241,7 @@ def build_effect_family_mapping_report(
         "priority_cards": card_rows,
         "top_priority_families": serialized_families,
         "unmapped_priority_cards": unmapped_cards,
+        "intentionally_skipped_priority_cards": intentionally_skipped_cards,
     }
 
 

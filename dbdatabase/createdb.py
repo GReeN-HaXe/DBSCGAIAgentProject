@@ -17,10 +17,20 @@
 import json
 import sqlite3
 from pathlib import Path
+import sys
 from typing import Any, Optional
 
-INPUT_JSON = "dbs_masters_full.json"
-OUTPUT_DB = "dbs_masters.db"
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from dbdatabase.source_text_patches import DEFAULT_PATCH_PATH, apply_source_text_patches_to_export_payload, load_source_text_patches_json
+
+DB_DIR = Path(__file__).resolve().parent
+INPUT_JSON = str(DB_DIR / "dbs_masters_full.json")
+OUTPUT_DB = str(DB_DIR / "dbs_masters.db")
+MISSING_CARDS_PATCH_SQL = ROOT / "artifacts" / "deckplanet_missing_cards_patch.sql"
+MISSING_CARDS_PATCH_SUMMARY = ROOT / "artifacts" / "deckplanet_missing_cards_patch_summary.json"
 
 
 def norm_str(x: Any) -> Optional[str]:
@@ -57,10 +67,30 @@ def to_json_text(x: Any) -> str:
     return json.dumps([x], ensure_ascii=False, separators=(",", ":"))
 
 
+def apply_missing_cards_patch(conn: sqlite3.Connection) -> dict[str, Any] | None:
+    if not MISSING_CARDS_PATCH_SQL.exists():
+        return None
+
+    conn.commit()
+    sql_text = MISSING_CARDS_PATCH_SQL.read_text(encoding="utf-8")
+    conn.executescript(sql_text)
+    conn.commit()
+
+    if not MISSING_CARDS_PATCH_SUMMARY.exists():
+        return {}
+    summary = json.loads(MISSING_CARDS_PATCH_SUMMARY.read_text(encoding="utf-8"))
+    if isinstance(summary, dict):
+        return summary
+    return {}
+
+
 def main() -> None:
     # Load dataset
     data_text = Path(INPUT_JSON).read_text(encoding="utf-8")
     cards = json.loads(data_text)
+    if Path(DEFAULT_PATCH_PATH).exists():
+        patches = load_source_text_patches_json(DEFAULT_PATCH_PATH)
+        cards, _ = apply_source_text_patches_to_export_payload(cards, patches)
 
     conn = sqlite3.connect(OUTPUT_DB)
     cur = conn.cursor()
@@ -324,11 +354,18 @@ def main() -> None:
             print(f"Inserted {base_count} base cards... variants so far: {variant_count}")
 
     conn.commit()
+    missing_cards_summary = apply_missing_cards_patch(conn)
     conn.close()
 
-    print("\n✅ Database build complete.")
+    print("\nDatabase build complete.")
     print(f"Base cards inserted: {base_count}")
     print(f"Variants inserted:  {variant_count}")
+    if missing_cards_summary is not None:
+        print(
+            "Missing-cards patch applied: "
+            f"base_cards_in_patch={int(missing_cards_summary.get('base_cards_in_patch', 0) or 0)} "
+            f"variants_in_patch={int(missing_cards_summary.get('variants_in_patch', 0) or 0)}"
+        )
     if skipped_variant_refs:
         print(f"Skipped variant id references (non-dict entries): {skipped_variant_refs}")
     print(f"Output DB: {OUTPUT_DB}")

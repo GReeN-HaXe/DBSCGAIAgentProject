@@ -1,0 +1,18 @@
+{
+  "schema_version": "dbs.source_text_patch_summary.v1",
+  "patch_count": 1,
+  "json_summary": {
+    "patch_count": 1,
+    "cards_touched": 0,
+    "fields_applied": 0,
+    "touched_card_numbers": []
+  },
+  "sqlite_summary": {
+    "patch_count": 1,
+    "cards_touched": 1,
+    "fields_applied": 2,
+    "touched_card_numbers": [
+      "BT27-100"
+    ]
+  }
+}

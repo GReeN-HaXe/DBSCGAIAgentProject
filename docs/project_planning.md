@@ -177,6 +177,10 @@ Resolved:
 
 ### Effect Support
 
+- Primary effect catalog artifact:
+  - `dbdatabase/effect_catalog_shards/manifest.json`
+- Compatibility merged effect catalog:
+  - `dbdatabase/effect_catalog.json`
 - Audit artifact:
   - `artifacts/effect_support_audit.json`
 - Ranked implementation shortlist:
@@ -226,10 +230,38 @@ Resolved:
     - provenance
   - status: generated-catalog size concern added
   - `dbdatabase/effect_catalog.json` is now large enough that repo ergonomics, diffs, and reviewability are becoming a real maintenance concern even though runtime loading is still acceptable
-  - next infra slice for this item:
-    - shard the generated catalog behind a manifest
+  - status: first catalog-sharding slice complete
+  - `scripts/build_effect_catalog.py` now writes:
+    - merged runtime artifact:
+      - `dbdatabase/effect_catalog.json`
+    - manifest-based shard set:
+      - `dbdatabase/effect_catalog_shards/manifest.json`
+      - `dbdatabase/effect_catalog_shards/shard_*.json`
+  - loader/runtime support:
+    - `load_effect_rules_json(...)` now accepts:
+      - the merged catalog JSON
+      - a shard manifest JSON
+      - a shard directory containing `manifest.json`
+  - status: shard-default consumer slice complete
+  - reporting/runtime scripts now prefer the shard directory by default when it exists:
+    - `scripts/build_effect_family_report.py`
+    - `scripts/build_effect_family_mapping_report.py`
+    - `scripts/play_vs_ai.py`
+    - `scripts/run_ai_match.py`
+    - `scripts/run_ai_match_batch.py`
+    - `scripts/run_profile_matchups.py`
+    - `scripts/checkpoint_timeline.py`
+    - `scripts/generate_phase8_self_play_dataset.py`
+  - merged-file fallback remains in place through `default_effect_catalog_path(...)`, so older environments that only have `dbdatabase/effect_catalog.json` still work without extra setup
+  - current artifact posture:
+    - primary catalog artifact for repo workflows:
+      - `dbdatabase/effect_catalog_shards/manifest.json`
+    - merged JSON remains a compatibility output for older tooling and direct one-file inspection
+  - manifest contract is now checked in at:
+    - `dbdatabase/effect_catalog_manifest.schema.json`
+  - current sharding direction:
     - keep small human-maintained sources (`extractor`, `overrides`, schemas) as the real review surface
-    - preserve an optional merged runtime artifact if the engine/scripts still want a single-file load path
+    - preserve the merged runtime artifact for backward compatibility while the repo transitions toward sharded review ergonomics
 - [x] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
@@ -244,7 +276,8 @@ Resolved:
   - current report snapshot:
     - priority cards: `266`
     - mapped priority cards: `263`
-    - unmapped priority cards: `3`
+    - actionable unmapped priority cards: `0`
+    - intentionally skipped priority cards: `3`
   - backlog hygiene note:
     - cards with intentionally blank / `"-"` skill text are treated as `skillless` for this mapping pass and can be skipped here
     - exception:
@@ -260,16 +293,96 @@ Resolved:
           - `life is at 4 or less`
         - pending-play replacement to `Warp` without incorrectly treating the play as fully negated
     - `BT25-142 Zamasu, Scheme Wish`
-      - via maintained conservative slice:
+      - via maintained slices:
+        - `self_activate_main:activate_exchange_control_of_battle_cards_for_game`
         - `self_activate_main:activate_buff_owner_battle_cards`
       - generic support now covers:
+        - battle-card control transfer across players while preserving the card’s original `owner_id`
+        - permanent skill negation for the game on transferred cards
+        - permanent per-skill activate negation for the game on public cards
+        - effect re-registration on controlled public cards after control changes
+        - owner-correct out-of-play routing for controlled board cards on KO / zero-power / zero-marker cleanup
+        - the `+1` control-swap line
         - next-turn scheduled activate-skill restrictions on copies of the source card
         - `Indestructible` until the end of the opponent's turn through the existing owner-battle buff family
+  - current long-lived control / skill-negation generalization slice now also covers:
+    - simple on-play opponent Battle Card control gain
+      - `self_played:auto_gain_control_opponent_battle_on_play`
+      - example family text:
+        - `When you play this card, choose up to 1 of the Battle Cards in your opponent's Battle Area with an energy cost of 3 or less and gain control of it`
+    - self-transfer control families on public cards
+      - `self_played:auto_transfer_self_control_to_opponent_on_play`
+      - `self_activate_main:activate_transfer_self_control_to_opponent`
+      - `turn_start:auto_transfer_self_control_to_opponent`
+      - `turn_end:auto_transfer_self_control_to_opponent`
+      - maintained first-card coverage now includes:
+        - `BT19-055 Pan, Glimpse of Talent`
+        - `P-564 Paragus, Cunning Father`
+        - `P-277 Veku, the Unpredictable`
+      - this slice also hardened the existing deck-play family so maintained named targets are respected:
+        - `auto_play_up_to_n_from_owner_deck_on_play` now honors `required_name_contains`
+    - one-shot public activate skills that negate themselves for the game after resolution
+      - shared post-resolution engine support now applies `negate_self_skill_for_game` across activate families instead of only inside the deck-search handler
+      - existing activate families now covered include:
+        - `activate_add_up_to_n_from_owner_deck_to_hand`
+        - `activate_switch_self_active_and_gain_power_for_turn`
+      - example family text:
+        - `Add up to 1 {Potara} from your deck to your hand, shuffle your deck, and negate this skill for the game`
+    - permanent copy-wide counter activation locks for the game
+      - resolved hand counters can now apply a persistent copy restriction keyed by player + card id
+      - current reusable scope covered:
+        - `counter_from_hand`
+      - example family text:
+        - `You can't activate the [Counter: Attack] skill on copies of this card for the game`
+    - permanent copy-wide auto activation locks for the game
+      - resolved autos can now apply a persistent copy restriction keyed to:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+      - future matching public autos are blocked before entering pending resolution
+      - matching deferred secret autos are created as preblocked opportunities
+      - example family text:
+        - `You can't activate the [Auto] skill on copies of this card for the game`
+    - temporary copy-wide activate restrictions are now registration-aware
+      - next-turn / turn-scoped activate-copy locks now preserve:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+      - public multi-activate cards can now keep unrelated activate lines legal while only the matching restricted line is blocked
+    - temporary hand-counter restrictions now also support mode-wide turn locks
+      - resolved hand counters can now restrict a specific counter mode on other cards for the turn
+      - current reusable examples include:
+        - `You can't activate the [Counter: Play] skills of other cards for the turn`
+        - `You can't activate the [Counter: Attack] skills of other cards for the turn`
+      - this lives on the same temporary hand-counter restriction state used for copy locks
+    - temporary copy-wide auto activation locks now use the same precise registration model
+      - resolved autos can now apply a turn-scoped restriction keyed to:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+      - future matching public autos are blocked for the rest of the turn
+      - matching deferred secret autos are created as preblocked opportunities for the rest of the turn
+      - current scope is strongest for cards whose restricted auto line is the card's only matching auto family in that window
+    - text-driven `Activate: Main` / `Activate: Battle` copy locks for the turn now use the same temporary restriction model
+      - successful public activates can now apply a turn-scoped activate restriction keyed to:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+      - matching activate copies are blocked for the rest of the turn and become legal again next turn
+      - this complements the older scheduled next-turn activate-copy restriction path instead of replacing it
       - deferred later:
-        - the `+1` control-swap line
-        - fuller “for the game” control / skill-negation semantics
+        - broader long-lived control / skill-negation generalization beyond the current battle-card exchange slice
+        - non-auto, non-counter copy-wide activation locks for the game
   - actionable deck/trace mapping queue is now exhausted
-  - remaining unmapped priority cards are all intentionally skipped in this pass:
+  - remaining raw unmapped priority cards are all intentionally skipped in this pass:
     - `BT25-010 Son Goku`
     - `BT15-018 Natade Village Monster`
     - `BT15-105 Wilderness Monster`
@@ -279,6 +392,19 @@ Resolved:
         - `[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card`
       - extractor now maps it through:
         - `self_played:auto_draw_n`
+  - status: formal source-text patch layer complete
+  - checked-in source patch inputs now live at:
+    - `dbdatabase/source_text_patches.json`
+    - `dbdatabase/source_text_patches.schema.json`
+    - `dbdatabase/source_text_patches.py`
+  - source patch application and verification now live at:
+    - `scripts/apply_source_text_patches.py`
+    - `tests/test_source_text_patches.py`
+    - `artifacts/source_text_patch_summary.json`
+  - rebuild-path hardening:
+    - `dbdatabase/createdb.py` now reapplies checked-in source-text patches during DB rebuild
+    - the rebuild path also reapplies the existing DeckPlanet missing-cards SQL patch before downstream tagging/catalog generation
+    - this preserves the prior DB/catalog coverage instead of silently shrinking the database when rebuilding from the raw export
   - current counter-family override batch now maps:
     - `BT14-019 Dyspo, Thwarting the Enemy`
     - `BT13-135 Supreme Kai of Time, Time Labyrinth Unleashed`
@@ -350,7 +476,7 @@ Resolved:
         - dropping all cards from under the source to their owner's Drop
         - restanding the source and granting a keyword if a threshold was released
   - current data-gap note:
-    - `BT15-018 Natade Village Monster` remains unmapped because the DB source text is `"-"`, so this is a source-data gap rather than a missing effect-family implementation
+    - `BT15-018 Natade Village Monster` remains intentionally skipped because it is a skillless card, not because of a missing effect-family implementation
   - current Prismatic / Demigra cleanup slice now also maps:
     - `EX19-26 SS4 Bardock, Prismatic Aegis`
       - via maintained manual overrides:
