@@ -8,10 +8,11 @@ import pytest
 
 from src.db import SQLiteCardRepository
 from src.game.effect_rule_extractor import build_effect_rules_for_cards
-from src.game.effect_rules import serialize_effect_rules
+from src.game.effect_rules import load_effect_rule_overrides_json, merge_effect_rule_overrides, serialize_effect_catalog
 
 
 CATALOG_PATH = Path("dbdatabase/effect_catalog.json")
+OVERRIDES_PATH = Path("dbdatabase/effect_catalog_overrides.json")
 DB_PATH = Path("dbdatabase/dbs_masters.db")
 
 
@@ -28,6 +29,8 @@ def _candidate_card_ids(db_path: Path) -> list[int]:
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main/battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main/battle]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[counter:%' "
             ") "
             "ORDER BY id"
@@ -46,7 +49,9 @@ def test_effect_catalog_matches_current_extractor_output() -> None:
     repo = SQLiteCardRepository(DB_PATH)
     card_ids = _candidate_card_ids(DB_PATH)
     rebuilt = build_effect_rules_for_cards(repo, card_ids)
-    rebuilt_payload = serialize_effect_rules(rebuilt)
+    if OVERRIDES_PATH.exists():
+        rebuilt = merge_effect_rule_overrides(rebuilt, load_effect_rule_overrides_json(OVERRIDES_PATH))
+    rebuilt_payload = serialize_effect_catalog(rebuilt)
     existing_payload = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
     assert rebuilt_payload == existing_payload, (
         "effect catalog drift detected; regenerate with "

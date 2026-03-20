@@ -1,0 +1,11 @@
+{
+  "900302": {
+    "counter_from_hand": [
+      {
+        "allowed_colors": "white",
+        "amount": 1,
+        "kind": "switch_owner_battle_to_hidden"
+      }
+    ]
+  }
+}

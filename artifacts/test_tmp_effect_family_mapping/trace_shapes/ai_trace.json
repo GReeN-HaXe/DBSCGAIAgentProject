@@ -1,0 +1,10 @@
+{
+  "setup": {
+    "p1_leader_id": 202
+  },
+  "decision_trace": [
+    {
+      "chosen_action_text": "declare_attack attacker_card=card_id=101 target_card=card_id=303"
+    }
+  ]
+}

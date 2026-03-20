@@ -147,6 +147,14 @@ def _resolve_zone_card_for_action(state: GameState, *, player_id: int, zone: str
         return player.battle_area[index]
     if zone == "unison" and index is not None and 0 <= index < len(player.unison_area):
         return player.unison_area[index]
+    if zone == "combo" and index is not None and 0 <= index < len(player.combo_area):
+        return player.combo_area[index]
+    if zone == "hand" and index is not None and 0 <= index < len(player.hand):
+        return player.hand[index]
+    if zone == "drop" and index is not None and 0 <= index < len(player.drop):
+        return player.drop[index]
+    if zone == "warp" and index is not None and 0 <= index < len(player.warp):
+        return player.warp[index]
     return None
 
 
@@ -222,8 +230,10 @@ def describe_action(
         parts.append(f"hand_index={action.hand_index}")
         if state is not None:
             player = state.players.get(action.player_id)
-            if player is not None and 0 <= action.hand_index < len(player.hand):
+            if player is not None and action.hand_index is not None and 0 <= action.hand_index < len(player.hand):
                 parts.append(f"card={_card_label(player.hand[action.hand_index], card_name_resolver)}")
+    if action.effect_choice is not None:
+        parts.append(f"effect_choice={action.effect_choice}")
     if action.source_zone is not None:
         parts.append(f"source_zone={action.source_zone}")
     if action.source_index is not None:

@@ -1,0 +1,16 @@
+{
+  "trace": {
+    "setup": {
+      "p1_leader_id": 202
+    },
+    "actions": [
+      {
+        "action": "declare_attack attacker_card=card_id=101 target_card=card_id=303",
+        "hand_card_id": null,
+        "source_card_id": null,
+        "attacker_card_id": 101,
+        "target_card_id": 303
+      }
+    ]
+  }
+}

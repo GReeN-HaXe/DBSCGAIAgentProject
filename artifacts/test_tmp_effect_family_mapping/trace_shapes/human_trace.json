@@ -1,0 +1,17 @@
+{
+  "trace": {
+    "setup": {
+      "p1_leader_id": 202,
+      "p2_leader_id": 303
+    },
+    "actions": [
+      {
+        "action": "play_card_from_hand hand_index=0 card=card_id=101",
+        "hand_card_id": 101,
+        "source_card_id": null,
+        "attacker_card_id": null,
+        "target_card_id": null
+      }
+    ]
+  }
+}

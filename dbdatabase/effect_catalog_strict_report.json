@@ -1,49 +1,78 @@
 {
-  "candidates_scanned": 5710,
+  "candidates_scanned": 5750,
   "cards_with_diagnostics": 0,
-  "cards_with_rules": 2684,
-  "cards_without_rules": 3026,
+  "cards_with_rules": 2968,
+  "cards_without_rules": 2782,
   "coverage": {
     "by_handler": {
+      "activate_add_up_to_n_from_owner_deck_to_hand": 38,
+      "activate_add_up_to_n_from_owner_warp_to_hand": 5,
+      "activate_buff_owner_battle_cards": 17,
       "activate_draw_n_and_gain_keyword_for_turn": 2,
       "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end": 2,
-      "activate_gain_power_and_keyword_for_battle": 18,
+      "activate_gain_power_and_keyword_for_battle": 90,
+      "activate_gain_power_and_keyword_for_turn": 33,
       "activate_gain_power_by_hidden_cost_target_original_power_for_turn": 1,
+      "activate_grant_next_ex_evolve_from_owner_drop": 1,
       "activate_ko_up_to_n_opponent_battle": 4,
       "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1,
-      "activate_play_self_from_hand": 694,
+      "activate_look_top_send_up_to_n_to_owner_warp": 1,
+      "activate_opponent_discards_n_from_hand": 13,
+      "activate_optional_send_owner_hand_to_warp_draw_n": 1,
+      "activate_play_self_from_hand": 846,
+      "activate_play_self_from_warp": 21,
+      "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1,
+      "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1,
+      "activate_reduce_next_matching_extra_skill_cost_from_hand": 2,
+      "activate_send_top_deck_to_owner_warp": 6,
       "activate_send_up_to_n_opponent_battle_to_warp": 14,
+      "activate_send_up_to_n_opponent_drop_battle_to_warp": 3,
       "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n": 1,
       "activate_switch_owner_battle_to_hidden_mode": 3,
       "activate_switch_owner_board_to_revealed_mode": 1,
+      "activate_switch_self_active_and_gain_power_for_turn": 2,
       "activate_switch_self_to_hidden_mode": 1,
+      "activate_switch_up_to_n_owner_battle_active": 1,
+      "auto_add_markers_on_owner_activate_extra_from_hand": 1,
       "auto_add_n_life_to_hand_on_self_ko": 1,
       "auto_add_top_deck_to_energy_rest_on_play": 5,
       "auto_add_up_to_n_from_owner_deck_to_hand_on_play": 47,
       "auto_add_up_to_n_from_owner_hand_to_life_on_owner_leader_attack": 1,
       "auto_add_up_to_n_from_owner_hand_to_life_on_play": 1,
       "auto_buff_owner_leader_on_switch_until_opponent_turn_end": 1,
+      "auto_buff_up_to_n_owner_battles_on_play": 1,
       "auto_buff_up_to_n_owner_cards_on_hidden_drop": 2,
       "auto_buff_up_to_n_owner_cards_on_switch": 4,
-      "auto_draw_n": 1713,
+      "auto_combo_up_to_n_from_owner_zone_on_attack": 27,
+      "auto_draw_n": 1703,
       "auto_gain_control_opponent_unison_on_play": 1,
       "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
       "auto_ko_opponent_battle_on_play": 297,
+      "auto_ko_up_to_n_opponent_battle_on_attack": 82,
       "auto_ko_up_to_n_opponent_battle_on_play": 12,
       "auto_ko_up_to_n_opponent_battle_on_switch": 2,
-      "auto_look_top_add_up_to_one_to_hand_on_play": 259,
+      "auto_look_top_add_up_to_one_to_hand_on_play": 296,
+      "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1,
       "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 17,
+      "auto_place_up_to_n_from_owner_deck_to_destination_zone": 1,
       "auto_play_self_from_combo_on_battle_end": 31,
+      "auto_play_self_from_drop_on_hand_drop": 1,
       "auto_play_up_to_n_from_owner_deck_on_play": 1,
       "auto_play_up_to_n_from_owner_drop_on_play": 42,
       "auto_play_up_to_n_from_owner_hand_on_self_combo": 1,
       "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play": 1,
+      "auto_play_up_to_n_named_from_owner_drop_on_self_ko": 5,
       "auto_power_reduce_opponent_unison_on_self_ko": 1,
       "auto_power_reduce_up_to_n_on_attack": 39,
+      "auto_power_reduce_up_to_n_on_combo": 9,
       "auto_power_reduce_up_to_n_on_play": 122,
       "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power": 1,
       "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_switch_target_rest": 1,
       "auto_self_gain_power_and_keyword_for_turn_on_switch": 1,
+      "auto_self_gain_power_for_turn_on_attack": 1,
+      "auto_self_gain_power_for_turn_on_play": 84,
+      "auto_send_up_to_n_opponent_battle_to_warp_on_play": 22,
+      "auto_switch_self_active_on_play": 6,
       "auto_switch_self_active_on_turn_end": 48,
       "auto_switch_self_to_hidden_on_play": 2,
       "auto_switch_up_to_n_any_player_board_to_revealed_on_play": 1,
@@ -56,18 +85,23 @@
       "auto_top_deck_add_if_color_on_play": 16
     },
     "by_trigger": {
+      "owner_activate_extra_from_hand": 1,
       "owner_battle_played_from_warp": 2,
       "owner_field_extra_placed": 1,
-      "owner_leader_attacks": 1,
+      "owner_leader_attacks": 38,
+      "owner_opponent_battle_attacks": 1,
       "owner_opponent_skill_plays_overcost_battle": 2,
-      "self_activate_battle": 101,
-      "self_activate_main": 1192,
-      "self_attacks": 424,
-      "self_comboed": 128,
+      "owner_other_battle_played_by_dark_over_realm": 1,
+      "self_activate_battle": 308,
+      "self_activate_extra_from_hand": 5,
+      "self_activate_main": 1403,
+      "self_attacks": 401,
+      "self_comboed": 202,
       "self_comboed_battle_end": 31,
       "self_hidden_battle_to_drop": 2,
-      "self_koed": 2,
-      "self_played": 1483,
+      "self_in_hand_sent_to_drop_or_warp": 2,
+      "self_koed": 7,
+      "self_played": 1600,
       "self_switched_hidden": 4,
       "self_switched_revealed": 4,
       "turn_end": 74
@@ -75,7 +109,7 @@
   },
   "diagnostic_counts": {},
   "diagnostics": {},
-  "total_extracted_rules": 3451,
+  "total_extracted_rules": 4089,
   "unmatched_top_templates": [
     {
       "count": 6,
@@ -83,19 +117,14 @@
       "template": "[over realm <n>] (if you have at least <n> card in your drop area, you can play this card by sending all card in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [ov..."
     },
     {
-      "count": 6,
-      "example_card_id": 4726,
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto][sparking <n>] (this skill takes effect when you have <n> or more card in your drop area.) when you combo with this card, if you..."
-    },
-    {
-      "count": 4,
-      "example_card_id": 3875,
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck). [auto] when you combo with this card, if your leader card is \u226auniverse <n>\u226b and you have <n> or less life, draw <n> card and this card..."
-    },
-    {
       "count": 4,
       "example_card_id": 5656,
       "template": "[auto] when you play this card, look at up to <n> card from the top of your deck. choose up to <n> \u226auniverse <n>\u226b among them and add it to your hand. then, shuffle your deck."
+    },
+    {
+      "count": 3,
+      "example_card_id": 1432,
+      "template": "[permanent] if your leader is a green &lt;broly: br&gt; card and this card is under a &lt;broly: br&gt; card, you can activate this card's [activate] skill under the same conditions as if it were in your hand.. [activate..."
     },
     {
       "count": 3,
@@ -114,8 +143,8 @@
     },
     {
       "count": 2,
-      "example_card_id": 1440,
-      "template": "[permanent] if your leader is a green &lt;broly: br&gt; card and this card is under a &lt;broly: br&gt; card, you can activate this card's [activate] skill under the same conditions as if it were in your hand.. [activate..."
+      "example_card_id": 2161,
+      "template": "[activate: main/battle][limit <n>] if your leader is a &lt;janemba&gt; card, you have a blue &lt;janemba&gt; card with an energy cost of <n> or more in play, and you remove this card from the game: place up to <n> {demon..."
     },
     {
       "count": 2,
@@ -134,6 +163,11 @@
     },
     {
       "count": 2,
+      "example_card_id": 4212,
+      "template": "[auto] when this card attacks a leader card, you may choose <n> card in your life and add it to your hand. if you do so, draw <n> card.. [awaken] when your life is at <n> or less: choose up to <n> of your energy, switch..."
+    },
+    {
+      "count": 2,
       "example_card_id": 4254,
       "template": "[field] (place and activate this card in your battle area. it remains in your battle area until you activate another [field]. when you do, place this card in its owner's drop area.). [auto] when this card is placed in a..."
     },
@@ -141,6 +175,11 @@
       "count": 2,
       "example_card_id": 4402,
       "template": "[critical] (when this card inflicts damage to your opponent's life, they place that many card in their drop area instead of their hand). [activate: main] [once per turn] (green): during that turn, if an opponent's battle..."
+    },
+    {
+      "count": 2,
+      "example_card_id": 4472,
+      "template": "[auto] when this card attacks a leader card, you may choose <n> \u226auniverse <n>\u226b in your hand and place it in your drop area. if you do so, draw <n> card.. [awaken] when your life is at <n> or less: you may choose up to <n..."
     },
     {
       "count": 2,
@@ -164,18 +203,13 @@
     },
     {
       "count": 2,
-      "example_card_id": 4787,
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.) . [auto] when you combo with this card, if your leader card is red and your life is at <n> or less, draw <n> card."
-    },
-    {
-      "count": 2,
-      "example_card_id": 4808,
-      "template": "[super combo] (you can only include up to <n> card with [super combo] in your deck.). [auto] when you combo with this card, if your leader card is yellow and your life is at <n> or less, draw <n> card."
-    },
-    {
-      "count": 2,
       "example_card_id": 4890,
       "template": "[auto] when you play this card, choose up to <n> of your opponent's battle card with an energy cost of <n> or less and switch it to rest mode."
+    },
+    {
+      "count": 2,
+      "example_card_id": 4915,
+      "template": "[permanent] during your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, you may place it in your energy in rest mode instead. if you do, draw <n>..."
     }
   ]
 }

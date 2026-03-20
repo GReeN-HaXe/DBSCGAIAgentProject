@@ -33,6 +33,8 @@ def test_extract_draw_rules_on_play_and_attack() -> None:
     assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params["amount"] == 1 for r in rules)
     assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" and r.handler_params["amount"] == 1 for r in rules)
     assert all(r.once_per_turn for r in rules if r.handler_id == "auto_draw_n")
+    assert all(r.family_id == f"{r.trigger}:{r.handler_id}" for r in rules)
+    assert all(r.provenance == "extractor" for r in rules)
 
 
 def test_extract_limit_x_tracks_limit_count_on_effect_rules() -> None:
@@ -163,6 +165,15 @@ def test_extract_combo_draw_rule_with_leader_condition() -> None:
     assert "green" in str(combo_draw.handler_params.get("requires_leader", "")).lower()
 
 
+def test_extract_combo_draw_rule_with_sparking_and_leader_condition() -> None:
+    card = _card("[Super Combo][Auto][Sparking 5] When you combo with this card, if your Leader Card is red, draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    combo_draw = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_draw_n")
+    assert combo_draw.handler_params["amount"] == 1
+    assert combo_draw.handler_params["min_owner_drop"] == 5
+    assert "red" in str(combo_draw.handler_params.get("requires_leader", "")).lower()
+
+
 def test_extract_attack_pay_life_gain_power_and_keyword_rule() -> None:
     card = _card(
         "[Auto] Add 1 card from your life to your hand: When this card attacks, it gets +15000 power and [Double Strike] for the turn."
@@ -198,6 +209,305 @@ def test_extract_owner_leader_attack_look_top_add_to_hand_rule() -> None:
     assert rule.handler_params["max_add"] == 1
     assert rule.handler_params["allowed_colors"] == "red"
     assert rule.handler_params["required_traits"] == "Earthling"
+
+
+def test_extract_krillin_attack_search_does_not_false_match_awaken_draw() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
+        "add up to 1 red Earthling card among them to your hand, then shuffle your deck. "
+        "[Awaken] When your life is at 4 or less: You may draw 1 card, switch up to 1 of your energy to Active Mode, "
+        "and flip this card over."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    search = next(
+        r for r in rules if r.trigger == "owner_leader_attacks" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert search.handler_params["look_count"] == 5
+    assert search.handler_params["max_add"] == 1
+    assert search.handler_params["allowed_colors"] == "red"
+    assert search.handler_params["required_traits"] == "Earthling"
+    assert not any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in rules)
+
+
+def test_extract_bardock_attack_search_does_not_false_match_awaken_draw() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
+        "add up to 1 black card with {SS4} in its card name among them to your hand, then shuffle your deck. "
+        "[Awaken] When your life is at 4 or less: You may draw 2 cards and flip this card over."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    search = next(
+        r for r in rules if r.trigger == "owner_leader_attacks" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert search.handler_params["look_count"] == 5
+    assert search.handler_params["max_add"] == 1
+    assert search.handler_params["allowed_colors"] == "black"
+    assert search.handler_params["required_name_contains"] == "SS4"
+    assert not any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in rules)
+
+
+def test_extract_zamasu_scheme_activate_main_warp_and_unison_families() -> None:
+    card = replace(_card(
+        "[Empower Black 2] [Activate: Main][Limit 1] If your Leader is a black <Goku Black> card, "
+        "you have 2 or more energy, and you place 1 of your Z-Energy into its owner's Drop : "
+        "Play this card with 0 markers on it from your Warp. "
+        "[UNISON +1][Activate: Main] Send 1 card from your hand to its owner's Warp : "
+        "Add up to 1 black <Zamasu> card with an energy cost of 7 from your Warp to your hand."
+    ), card_type="UNISON")
+    rules = extract_effect_rules_from_card(card)
+    play_self = next(r for r in rules if r.handler_id == "activate_play_self_from_warp")
+    assert play_self.trigger == "self_activate_main"
+    assert play_self.handler_params["markers"] == 0
+    assert play_self.handler_params["required_source_zone"] == "warp"
+    assert play_self.handler_params["min_owner_energy"] == 2
+    assert "black" in str(play_self.handler_params.get("requires_leader", "")).lower()
+
+    add_from_warp = next(r for r in rules if r.handler_id == "activate_add_up_to_n_from_owner_warp_to_hand")
+    assert add_from_warp.trigger == "self_activate_main"
+    assert add_from_warp.handler_params["required_source_zone"] == "unison"
+    assert add_from_warp.handler_params["max_add"] == 1
+    assert add_from_warp.handler_params["max_cost"] == 7
+    assert add_from_warp.handler_params["allowed_colors"] == "black"
+    assert add_from_warp.handler_params["required_characters"] == "Zamasu"
+
+
+def test_extract_ss2_trunks_pursuit_hand_to_drop_or_warp_and_play_from_warp_rules() -> None:
+    card = _card(
+        "[Critical] [Permanent] If this card would leave the Battle Area, remove it from the game instead. "
+        "[Auto][Limit 1] When this card in your hand is placed into its owner's Drop or sent to its owner's Warp, "
+        "place up to 1 black or white card with 15000 power or less from your deck into its owner's Drop or send it to its owner's Warp, then shuffle your deck. "
+        "[Activate: Main]{b}, if your Leader is black and you have 3 or more energy : Play this card from your Warp."
+    )
+    rules = extract_effect_rules_from_card(card)
+
+    trigger_rule = next(
+        r for r in rules if r.trigger == "self_in_hand_sent_to_drop_or_warp"
+        and r.handler_id == "auto_place_up_to_n_from_owner_deck_to_destination_zone"
+    )
+    assert trigger_rule.limit_per_turn == 1
+    assert trigger_rule.handler_params["max_targets"] == 1
+    assert trigger_rule.handler_params["max_power"] == 15000
+    assert trigger_rule.handler_params["required_card_type"] == "BATTLE"
+    assert trigger_rule.handler_params["mirror_destination_zone"] is True
+    assert trigger_rule.handler_params["allowed_colors"] == "black,white"
+
+    play_self = next(r for r in rules if r.handler_id == "activate_play_self_from_warp")
+    assert play_self.trigger == "self_activate_main"
+    assert play_self.handler_params["required_source_zone"] == "warp"
+    assert play_self.handler_params["min_owner_energy"] == 3
+    assert "black" in str(play_self.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_tiny_golden_warrior_next_ex_evolve_from_drop_rule() -> None:
+    card = replace(
+        _card(
+            "[Permanent] This card gains ≪Earthling≫ in all areas. "
+            "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card : "
+            "The next time you activate [EX-Evolve] on your red <Son Goten> or <Trunks : Youth> card during this turn, "
+            "it can also activate from its owner's Drop."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_grant_next_ex_evolve_from_owner_drop")
+    assert rule.trigger == "self_activate_extra_from_hand"
+    assert rule.limit_per_turn == 1
+    assert rule.handler_params["uses_remaining"] == 1
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert "krillin" in str(rule.handler_params.get("requires_leader", "")).lower() or "krillin" in str(rule.handler_params.get("required_leader_traits", "")).lower()
+    assert "Son Goten" in str(rule.handler_params.get("required_characters", ""))
+    assert "Trunks" in str(rule.handler_params.get("required_characters", ""))
+
+
+def test_extract_jaguars_island_challenge_stage_rules() -> None:
+    card = replace(
+        _card(
+            "[Barrier] "
+            "[Permanent] This card can't attack. "
+            "[Auto] When you activate a red ≪Earthling≫ Extra from your hand, add 1 marker to this card. "
+            "[UNISON -3][Activate: Main/Battle] If your Leader is a red <Krillin> card and you place 4 red ≪Earthling≫ Extras from your Drop at the bottom of their owner's deck : "
+            "The next time you activate an [Activate] skill on a red Extra from your hand during this turn, reduce the skill cost by {1}."
+        ),
+        card_type="Z-UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    auto_rule = next(r for r in rules if r.handler_id == "auto_add_markers_on_owner_activate_extra_from_hand")
+    assert auto_rule.trigger == "owner_activate_extra_from_hand"
+    assert auto_rule.handler_params["amount"] == 1
+    assert auto_rule.handler_params["allowed_colors"] == "red"
+    assert auto_rule.handler_params["required_traits"] == "Earthling"
+    assert auto_rule.handler_params["required_card_type"] == "EXTRA"
+
+    reduce_rules = [r for r in rules if r.handler_id == "activate_reduce_next_matching_extra_skill_cost_from_hand"]
+    assert {r.trigger for r in reduce_rules} == {"self_activate_main", "self_activate_battle"}
+    assert all(r.handler_params["amount"] == 1 for r in reduce_rules)
+    assert all(r.handler_params["required_card_type"] == "EXTRA" for r in reduce_rules)
+    assert all(r.handler_params["allowed_colors"] == "red" for r in reduce_rules)
+    assert any("krillin" in str(r.handler_params.get("required_leader_traits", "")).lower() for r in reduce_rules)
+
+
+def test_extract_ex_evolve_followup_draw_and_switch_self_active_rules() -> None:
+    card = _card(
+        "[Deflect][Double Strike] "
+        "[EX-Evolve][Limit 1]{r} : Red <Son Goten> card with an energy cost of 1. "
+        "[Auto] When this card is played, draw 1 card and switch this card to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_draw_n"
+        and rule.handler_params.get("amount") == 1
+        for rule in rules
+    )
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_switch_self_active_on_play" for rule in rules)
+
+
+def test_extract_pursuit_activate_main_search_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played, draw 1 card. "
+        "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card and you discard this card from your hand : "
+        "Add up to 1 red <Son Goten> card with an energy cost of 3 and [EX-Evolve] from your deck to your hand, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    search_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand"
+    )
+    assert search_rule.limit_per_turn == 1
+    assert search_rule.handler_params["max_targets"] == 1
+    assert search_rule.handler_params["allowed_colors"] == "red"
+    assert search_rule.handler_params["required_characters"] == "Son Goten"
+    assert search_rule.handler_params["max_cost"] == 3
+    assert search_rule.handler_params["requires_ex_evolve"] is True
+    assert "krillin" in str(search_rule.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_cross_dimensional_fighting_spirit_families() -> None:
+    card = _card(
+        "[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp. "
+        "[Activate: Main][Once per turn] If you have 3 or more energy and you remove 10 total cards in your Drop and Warp from the game: "
+        "This card gets +10000 power and [Double Strike] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(rule for rule in rules if rule.handler_id == "auto_send_up_to_n_opponent_battle_to_warp_on_play")
+    assert play_rule.trigger == "self_played"
+    assert play_rule.handler_params["max_targets"] == 1
+    activate_rule = next(rule for rule in rules if rule.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert activate_rule.trigger == "self_activate_main"
+    assert activate_rule.once_per_turn is True
+    assert activate_rule.handler_params["power_delta"] == 10000
+    assert activate_rule.handler_params["grant_keyword"] == "Double Strike"
+    assert activate_rule.handler_params["min_owner_energy"] == 3
+
+
+def test_extract_kahseral_activate_battle_switch_owner_battle_active_rule() -> None:
+    card = _card(
+        "[Deflect][Blocker] "
+        "[Activate: Battle][Once per turn] If your Leader Card is a red ≪Universe 11≫ card: "
+        "Choose up to 2 of your red ≪Universe 11≫ cards with energy costs of 1 and 10000 power or less in your Battle Area and switch them to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(rule for rule in rules if rule.handler_id == "activate_switch_up_to_n_owner_battle_active")
+    assert rule.trigger == "self_activate_battle"
+    assert rule.once_per_turn is True
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["max_cost"] == 1
+    assert rule.handler_params["max_power"] == 10000
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Universe 11"
+
+
+def test_extract_mira_dimensional_superpower_activate_families() -> None:
+    card = replace(_card(
+        "[Permanent] This card can't attack if it has 2 or fewer markers on it. "
+        "[+1][Activate: Main] You may choose 1 card in your hand and send it to your Warp. If you do, draw 1 card. "
+        "[-2][Activate: Battle] For each card in your Warp, this card gets +5000 power for the battle."
+    ), card_type="UNISON")
+    rules = extract_effect_rules_from_card(card)
+    activate_main = next(r for r in rules if r.handler_id == "activate_optional_send_owner_hand_to_warp_draw_n")
+    assert activate_main.trigger == "self_activate_main"
+    assert activate_main.handler_params["hand_to_warp"] == 1
+    assert activate_main.handler_params["amount"] == 1
+    assert activate_main.handler_params["marker_delta"] == 1
+
+    activate_battle = next(r for r in rules if r.trigger == "self_activate_battle" and r.handler_id == "activate_gain_power_and_keyword_for_battle")
+    assert activate_battle.handler_params["power_delta"] == "expr:owner_warp_count*5000"
+
+
+def test_extract_son_goten_attack_draw_still_matches_attack_draw() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, draw 1 card. "
+        "[Awaken] When your life is at 4 or less: Draw 1 card and flip this card over."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    draw = next(r for r in rules if r.trigger == "self_attacks" and r.handler_id == "auto_draw_n")
+    assert draw.handler_params["amount"] == 1
+
+
+def test_extract_activate_main_look_top_send_matching_to_owner_warp_rule() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main][Once per turn] Look at up to 7 cards from the top of your deck, "
+            "send up to 1 black card to its owner's Warp, then shuffle your deck."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_look_top_send_up_to_n_to_owner_warp")
+    assert rule.handler_params["look_count"] == 7
+    assert rule.handler_params["max_send"] == 1
+    assert rule.handler_params["allowed_colors"] == "black"
+    assert rule.once_per_turn is True
+
+
+def test_extract_unison_plus_activate_main_send_top_deck_to_owner_warp_and_switch_active() -> None:
+    card = replace(
+        _card(
+            "[UNISON +1][Activate: Main] Send up to 2 cards from the top of your deck to their owner's Warp and switch this card to Active Mode."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_send_top_deck_to_owner_warp")
+    assert rule.handler_params["send_count"] == 2
+    assert rule.handler_params["switch_self_active"] is True
+    assert rule.handler_params["marker_delta"] == 1
+
+
+def test_extract_owner_opponent_battle_attack_play_self_from_drop_or_warp_negate_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your Leader is black or a <<Master's Teachings>> card, your life is at 4 or less, "
+        "and you add 1 card from your life to your hand and place 1 card from your hand at the bottom of your deck: "
+        "When your opponent attacks with a Battle Card, you may play this card from your Drop or Warp in Rest Mode and negate the attack."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_opponent_battle_attacks"
+        and r.handler_id == "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack"
+    )
+    assert rule.limit_per_turn == 1
+    assert rule.handler_params["life_to_hand"] == 1
+    assert rule.handler_params["bottom_deck_from_hand"] == 1
+    assert rule.handler_params["max_owner_life"] == 4
+    assert rule.handler_params["resting"] is True
+    assert rule.handler_params["negate_attack"] is True
+
+
+def test_extract_unison_minus_activate_main_send_opponent_drop_battle_to_warp_rule() -> None:
+    card = replace(
+        _card(
+            "[-3][Activate: Main] Send up to 2 Battle Cards from your opponent's Drop Area to their Warp."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_send_up_to_n_opponent_drop_battle_to_warp"
+    )
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["marker_delta"] == -3
 
 
 def test_extract_play_from_hand_add_from_hand_to_life_rule() -> None:
@@ -285,11 +595,64 @@ def test_extract_activate_main_draw_rule() -> None:
     assert rule.handler_params["amount"] == 1
 
 
+def test_extract_activate_main_opponent_discards_n_from_hand_rule() -> None:
+    card = replace(_card("[+1][Activate: Main] Your opponent discards 1 card their hand."), card_type="UNISON")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_opponent_discards_n_from_hand")
+    assert rule.handler_params["amount"] == 1
+
+
 def test_extract_activate_battle_draw_rule() -> None:
     card = _card("[Activate: Battle] If your leader is red: Draw 1 card.")
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.trigger == "self_activate_battle" and r.handler_id == "auto_draw_n")
     assert rule.handler_params["amount"] == 1
+
+
+def test_extract_combo_can_reduce_opponent_battle_power_rule() -> None:
+    card = _card(
+        "[Super Combo][Auto] If your Leader Card is red or yellow: "
+        "When you combo with this card from your hand, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_power_reduce_up_to_n_on_combo")
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == -10000
+    assert rule.handler_params["requires_leader"] == "if your leader card is red or yellow"
+
+
+def test_extract_play_self_gain_power_for_turn_with_opponent_drop_requirement_rule() -> None:
+    card = _card("[Auto][Limit 1] If your opponent has 20 or more cards in their Drop: When this card is played, it gets +15000 power for the turn.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_self_gain_power_for_turn_on_play")
+    assert rule.handler_params["power_delta"] == 15000
+    assert rule.handler_params["min_opponent_drop"] == 20
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_activate_main_can_play_from_owner_z_deck_or_z_energy_rule() -> None:
+    card = replace(
+        _card(
+            "[0] [Activate: Main] If your Leader is {Fused Zamasu, Insanity From Justice}: "
+            "Play up to 1 <Zamasu> or <Goku Black> card -- both green and with an energy cost of 1 -- "
+            "from your Z-Deck or Z-Energy with its skills negated for the game."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_play_up_to_n_from_owner_z_deck_or_z_energy")
+    assert rule.handler_params["source_pool"] == "z_deck_or_z_energy"
+    assert rule.handler_params["negate_skills"] is True
+    assert rule.handler_params["max_targets"] == 1
+    assert "zamasu" in str(rule.handler_params.get("required_characters", "")).lower()
+    assert "goku black" in str(rule.handler_params.get("required_characters", "")).lower()
+
+
+def test_extract_activate_main_self_gain_multiple_keywords_for_turn_rule() -> None:
+    card = _card("[Activate: Main][Once per turn] This card gains [Critical] and [Double Strike] for the turn.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert rule.handler_params["grant_keywords"] == "Critical,Double Strike"
 
 
 def test_extract_activate_main_battle_draw_rule_emits_both_triggers() -> None:
@@ -441,6 +804,28 @@ def test_extract_activate_main_look_top_add_to_hand_with_discard_rule() -> None:
     assert rule.handler_params["discard_after_add"] == 1
 
 
+def test_extract_owner_other_battle_played_by_dark_over_realm_draw_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] When your Battle Card other than this card is played by a [Dark Over Realm] skill, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "owner_other_battle_played_by_dark_over_realm"
+    assert rule.handler_params["amount"] == 1
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_hand_to_drop_by_opponent_skill_or_revive_can_play_self_rule() -> None:
+    card = _card(
+        "[Blocker][Energy-Exhaust][Auto] When this card is placed in your Drop Area from your hand by an opponent's skill or by your [Revive] skill, you may play this card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_self_from_drop_on_hand_drop")
+    assert rule.trigger == "self_in_hand_sent_to_drop_or_warp"
+    assert rule.handler_params["required_destination_zone"] == "drop"
+    assert rule.handler_params["required_drop_causes"] == "opponent_skill,revive"
+
+
 def test_extract_activate_main_ss4_call_style_search_rule() -> None:
     card = _card(
         "[Activate: Main][Limit 1] If your Leader Card is a black Bardock: Xeno card or a Saiyan card with {SS4} in its card name: "
@@ -496,6 +881,38 @@ def test_extract_activate_battle_gain_power_and_keyword_for_battle_rule() -> Non
     assert rule.once_per_turn is True
 
 
+def test_extract_activate_battle_owner_leader_gain_power_and_keyword_for_battle_rule() -> None:
+    card = replace(
+        _card(
+            "[Activate: Battle] If your Leader Card is a black ≪Saiyan≫ card, it gets +15000 power and [Double Strike] for the duration of the battle."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_gain_power_and_keyword_for_battle")
+    assert rule.trigger == "self_activate_extra_from_hand"
+    assert rule.handler_params["power_delta"] == 15000
+    assert rule.handler_params["grant_keyword"] == "Double Strike"
+    assert rule.handler_params["target_scope"] == "owner_leader"
+    assert "black" in str(rule.handler_params["requires_leader"]).lower()
+    assert "saiyan" in str(rule.handler_params["required_leader_traits"]).lower()
+
+
+def test_extract_activate_battle_choose_owner_cards_gain_power_for_battle_rule() -> None:
+    card = _card(
+        "[Activate: Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
+        "Choose up to 1 of your blue â‰ªAndroidâ‰« cards and it gets +10000 power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_gain_power_and_keyword_for_battle")
+    assert rule.trigger == "self_activate_battle"
+    assert rule.handler_params["target_scope"] == "owner_cards"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == 10000
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["required_traits"] == "Android"
+
+
 def test_extract_activate_battle_ko_up_to_n_opponent_battle_rule() -> None:
     card = _card(
         "[Activate: Battle][Limit 1] Choose 1 Hidden Mode card in your Battle Area and place it into its owner's Drop: "
@@ -522,6 +939,135 @@ def test_extract_activate_main_draw_play_self_and_gain_keyword_until_opponent_tu
     assert rule.handler_params["amount"] == 1
     assert rule.handler_params["grant_keyword"] == "Barrier"
     assert rule.handler_params["min_owner_hidden_mode_battle"] == 2
+
+
+def test_extract_activate_main_choose_all_owner_battle_gain_keyword_until_opponent_turn_end_rule() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] Choose all red ≪Saiyan≫ cards in your Battle Area. "
+            "They gain [Barrier] until the end of your opponent's next turn."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_buff_owner_battle_cards")
+    assert rule.trigger == "self_activate_extra_from_hand"
+    assert rule.handler_params["target_policy"] == "all"
+    assert rule.handler_params["target_scope"] == "owner_battle"
+    assert rule.handler_params["grant_keyword"] == "Barrier"
+    assert rule.handler_params["keyword_duration"] == "opponent_turn"
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Saiyan"
+
+
+def test_extract_activate_main_battle_choose_owner_cards_gain_power_for_turn_rule() -> None:
+    card = _card(
+        "[Activate: Main/Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
+        "Choose up to 1 of your blue ≪Red Ribbon Army≫ cards and it gets +5000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    matching = [r for r in rules if r.handler_id == "activate_buff_owner_battle_cards"]
+    assert {r.trigger for r in matching} == {"self_activate_main", "self_activate_battle"}
+    assert all(r.handler_params["target_scope"] == "owner_cards" for r in matching)
+    assert all(r.handler_params["max_targets"] == 1 for r in matching)
+    assert all(r.handler_params["power_delta"] == 5000 for r in matching)
+    assert all(r.handler_params["allowed_colors"] == "blue" for r in matching)
+    assert all(r.handler_params["required_traits"] == "Red Ribbon Army" for r in matching)
+
+
+def test_extract_activate_main_can_play_self_with_markers_from_hand_or_warp_rule() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main]{b}{b}, if your opponent has 3 or more energy : "
+            "Play this card with 2 markers on it from your hand or Warp."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    hand_rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_play_self_from_hand" and r.handler_params.get("required_source_zone") == "hand"
+    )
+    warp_rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_play_self_from_warp" and r.handler_params.get("required_source_zone") == "warp"
+    )
+    assert hand_rule.trigger == "self_activate_main"
+    assert warp_rule.trigger == "self_activate_main"
+    assert hand_rule.handler_params["markers"] == 2
+    assert warp_rule.handler_params["markers"] == 2
+    assert hand_rule.handler_params["min_opponent_energy"] == 3
+
+
+def test_extract_activate_battle_can_play_self_from_hand_then_opponent_discards_rule() -> None:
+    card = _card(
+        "[Activate: Battle][Limit 1]{u}, if your Leader is {Gamma 1 & Gamma 2, Justice} and your opponent has 2 or more energy: "
+        "Play this card from your hand, then your opponent discards 1 card from their hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_battle" and r.handler_id == "activate_play_self_from_hand")
+    assert rule.handler_params["opponent_discards_after_play"] == 1
+    assert rule.handler_params["min_opponent_energy"] == 2
+
+
+def test_extract_play_can_buff_owner_battles_with_min_character_count_until_opponent_turn_end_rule() -> None:
+    card = _card(
+        "[Auto] When this card is played, choose up to 2 of your Battle Cards with 2 or more character names including <SH> and they gain [Barrier] until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_battles_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["min_character_count"] == 2
+    assert rule.handler_params["required_characters"] == "Sh"
+    assert rule.handler_params["grant_keyword"] == "Barrier"
+    assert rule.handler_params["keyword_duration"] == "opponent_turn"
+
+
+def test_extract_attack_can_ko_up_to_n_opponent_battle_rule() -> None:
+    card = _card(
+        "[Auto][Once per turn] When this card attacks, choose up to 1 of your opponent's Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_ko_up_to_n_opponent_battle_on_attack")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.once_per_turn is True
+
+
+def test_extract_self_ko_can_play_up_to_n_named_from_owner_drop_rule() -> None:
+    card = _card(
+        "[Auto] When this card is removed from a Battle Area by an opponent's skill or KO'd, play up to 1 {Negative Energy Four-Star Ball} from your Drop."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_named_from_owner_drop_on_self_ko")
+    assert rule.trigger == "self_koed"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "NEGATIVE ENERGY FOUR-STAR BALL"
+
+
+def test_extract_activate_main_battle_can_play_self_from_hand_rule() -> None:
+    card = _card(
+        "[Activate: Main/Battle][Limit 1]{1}, if your Leader is a card with <SH> in its character name and you or your opponent has 3 or more energy: Play this card from your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    matching = [r for r in rules if r.handler_id == "activate_play_self_from_hand"]
+    assert {r.trigger for r in matching} == {"self_activate_main", "self_activate_battle"}
+    assert all(r.limit_per_turn == 1 for r in matching)
+    assert all(r.handler_params["min_any_player_energy"] == 3 for r in matching)
+
+
+def test_extract_activate_battle_switch_self_active_and_gain_power_for_turn_rule() -> None:
+    card = replace(
+        _card("[UNISON +1][Activate: Battle] Switch this card to Active Mode and it gets +15000 power for the turn."),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_switch_self_active_and_gain_power_for_turn")
+    assert rule.trigger == "self_activate_battle"
+    assert rule.handler_params["power_delta"] == 15000
 
 
 def test_extract_play_gain_control_opponent_unison_rule() -> None:
@@ -834,6 +1380,69 @@ def test_extract_play_up_to_n_from_drop_with_negate_and_discard_rule() -> None:
     assert rule.handler_params["rest_mode"] is True
     assert rule.handler_params["negate_skills"] is True
     assert rule.handler_params["discard_from_hand_before"] == 1
+
+
+def test_extract_stowaways_activate_extra_from_hand_rules() -> None:
+    card = replace(
+        _card(
+            "[Permanent] This card gains Earthling in all areas. "
+            "[Activate: Main/Battle]{1}, if your Leader is a red <Krillin> card and you discard 1 card from your hand : "
+            "Play up to 1 each of <Son Goten> and <Trunks : Youth> cards-both red and with an energy cost of 1-from your deck and/or Drop in Rest Mode, then shuffle your deck. "
+            "[Activate: Main/Battle][Limit 1] If your Leader is a red <Krillin> card : "
+            "Add up to 1 red Extra with an energy cost of 1 or less from your deck to your hand, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    extra_rules = [rule for rule in rules if rule.trigger == "self_activate_extra_from_hand"]
+    assert len(extra_rules) == 2
+    play_rule = next(rule for rule in extra_rules if rule.handler_id == "activate_play_up_to_n_each_named_from_owner_deck_or_drop")
+    assert play_rule.handler_params["required_name_contains_each"] == "SON GOTEN|TRUNKS : YOUTH"
+    assert play_rule.handler_params["allowed_colors"] == "red"
+    assert play_rule.handler_params["max_cost"] == 1
+    assert play_rule.handler_params["rest_mode"] is True
+    assert play_rule.handler_params["discard_from_hand_before"] == 1
+    search_rule = next(rule for rule in extra_rules if rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand")
+    assert search_rule.limit_per_turn == 1
+    assert search_rule.handler_params["max_targets"] == 1
+    assert search_rule.handler_params["allowed_colors"] == "red"
+    assert search_rule.handler_params["required_traits"] == "Extra"
+    assert search_rule.handler_params["max_cost"] == 1
+
+
+def test_extract_attack_combo_from_owner_warp_rule() -> None:
+    card = _card(
+        "[Dual Attack] "
+        "[Dark Over Realm 4]{b}, if your Leader is a <Mechikabura> card : "
+        "[Auto] Whe this card attacks, use up to 1 black Battle Card with 5000 combo power from your Warp in a combo with its skill negated for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_combo_up_to_n_from_owner_zone_on_attack")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["source_zone"] == "warp"
+    assert rule.handler_params["allowed_colors"] == "black"
+    assert rule.handler_params["required_card_type"] == "BATTLE"
+    assert rule.handler_params["exact_combo_power"] == 5000
+    assert rule.handler_params["negate_skills"] is True
+
+
+def test_extract_attack_self_gain_power_per_owner_warp_rule() -> None:
+    card = _card("[Auto] When this card attacks, this card gains +5000 power for each card in your Warp.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_self_gain_power_for_turn_on_attack")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["power_delta"] == "expr:owner_warp_count*5000"
+
+
+def test_extract_dark_over_realm_on_play_draw_rule() -> None:
+    card = _card("[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["amount"] == 1
+    assert "mechikabura" in str(rule.handler_params.get("requires_leader", "")).lower()
+    assert "Mechikabura" in str(rule.handler_params["required_leader_traits"])
 
 
 def test_build_effect_rules_with_diagnostics_and_report_counts_coverage() -> None:

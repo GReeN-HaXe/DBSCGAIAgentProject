@@ -24,7 +24,14 @@ def _to_main(engine: RulesEngine, state):
 def _load_catalog() -> dict[str, list[dict[str, object]]]:
     if not CATALOG_PATH.exists():
         pytest.skip(f"catalog file not found: {CATALOG_PATH}")
-    return json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    payload = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
+    if isinstance(payload, dict) and "rules" in payload:
+        rules = payload.get("rules")
+        if isinstance(rules, dict):
+            return rules
+    if isinstance(payload, dict):
+        return payload
+    raise AssertionError("effect catalog payload must be a JSON object")
 
 
 def test_generated_catalog_self_played_draw_rule_executes_end_to_end() -> None:

@@ -15,6 +15,7 @@ from src.game.effect_rule_extractor import (
     build_effect_rules_with_diagnostics_and_report,
 )
 from src.game.effect_rules import save_effect_rules_json
+from src.game.effect_rules import load_effect_rule_overrides_json, merge_effect_rule_overrides
 
 
 def _candidate_card_ids(db_path: Path, *, limit: int | None) -> list[int]:
@@ -30,6 +31,9 @@ def _candidate_card_ids(db_path: Path, *, limit: int | None) -> list[int]:
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main]%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate: main/battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[activate main/battle]%' "
+            "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%on play%' "
             "OR LOWER(COALESCE(card_skill_unstyled, '')) LIKE '%[counter:%' "
             ") "
             "ORDER BY id"
@@ -64,6 +68,12 @@ def main() -> None:
         help="Path to optional diagnostics report JSON (set to empty string to skip).",
     )
     parser.add_argument(
+        "--overrides",
+        type=Path,
+        default=ROOT / "dbdatabase" / "effect_catalog_overrides.json",
+        help="Optional path to effect catalog overrides JSON.",
+    )
+    parser.add_argument(
         "--top-unmatched",
         type=int,
         default=20,
@@ -81,6 +91,8 @@ def main() -> None:
         card_ids,
         top_unmatched=args.top_unmatched,
     )
+    if args.overrides.exists():
+        rules = merge_effect_rule_overrides(rules, load_effect_rule_overrides_json(args.overrides))
     save_effect_rules_json(args.output, rules)
 
     strict_report_raw = str(args.strict_report).strip()
@@ -96,6 +108,8 @@ def main() -> None:
     print(f"Cards with extracted rules: {len(rules)}")
     print(f"Total extracted rules: {total_rules}")
     print(f"Wrote catalog: {args.output}")
+    if args.overrides.exists():
+        print(f"Applied overrides: {args.overrides}")
     if strict_report_path is not None:
         print(f"Wrote strict report: {strict_report_path}")
 

@@ -1,0 +1,11 @@
+{
+  "900303": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "rest_owner_hidden_mode_battle",
+        "required_leader_colors": "white"
+      }
+    ]
+  }
+}

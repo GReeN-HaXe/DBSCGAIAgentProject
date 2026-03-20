@@ -1,0 +1,11 @@
+{
+  "900314": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "rest_owner_leader",
+        "required_leader_traits": "scientist"
+      }
+    ]
+  }
+}

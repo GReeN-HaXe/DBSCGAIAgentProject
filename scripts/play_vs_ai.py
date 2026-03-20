@@ -657,7 +657,21 @@ def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) ->
         if player is not None and 0 <= action.hand_index < len(player.hand):
             label = _card_brief_label(repo, player.hand[action.hand_index].card_id)
             verb = action_type.replace("_", " ")
+            if action_type == "play_card_from_hand" and action.effect_choice is not None:
+                return f"play [{action.hand_index}] {label} (effect {int(action.effect_choice) + 1})"
             return f"{verb} [{action.hand_index}] {label}"
+    if action.action_type.value == "ex_evolve":
+        source_label = action.source_zone or "source"
+        if action.source_zone in {"hand", "drop"} and action.source_index is not None:
+            zone = state.players[action.player_id].hand if action.source_zone == "hand" else state.players[action.player_id].drop
+            if 0 <= action.source_index < len(zone):
+                source_label = _card_brief_label(repo, zone[action.source_index].card_id)
+        target_label = "battle"
+        if action.target_zone == "battle" and action.target_index is not None:
+            zone = state.players[action.player_id].battle_area
+            if 0 <= action.target_index < len(zone):
+                target_label = _card_brief_label(repo, zone[action.target_index].card_id)
+        return f"EX-Evolve: {source_label} -> {target_label}"
     if action.action_type.value in {"activate_main_skill", "activate_battle_skill"}:
         source_card = None
         if action.source_zone == "leader":
@@ -666,6 +680,10 @@ def _compact_action_text(action, *, state, repo: SQLiteCardRepository | None) ->
             battle = state.players[action.player_id].battle_area
             if 0 <= action.source_index < len(battle):
                 source_card = battle[action.source_index]
+        elif action.source_zone == "combo" and action.source_index is not None:
+            combo = state.players[action.player_id].combo_area
+            if 0 <= action.source_index < len(combo):
+                source_card = combo[action.source_index]
         elif action.source_zone == "unison" and action.source_index is not None:
             zone = state.players[action.player_id].unison_area
             if 0 <= action.source_index < len(zone):
@@ -729,6 +747,11 @@ def _show_action_detail(session: HumanVsAiSession, *, repo: SQLiteCardRepository
         return
     if action.source_zone == "battle" and action.source_index is not None:
         zone = session.state.players[action.player_id].battle_area
+        if 0 <= action.source_index < len(zone):
+            print("\n" + _card_detail_text(repo, zone[action.source_index].card_id))
+            return
+    if action.source_zone == "combo" and action.source_index is not None:
+        zone = session.state.players[action.player_id].combo_area
         if 0 <= action.source_index < len(zone):
             print("\n" + _card_detail_text(repo, zone[action.source_index].card_id))
             return
@@ -1069,6 +1092,7 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=None, help="Optional random seed used when shuffling decks.")
     parser.add_argument("--max-actions", type=int, default=300, help="Global action cap for the session.")
     parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--effect-catalog-overrides", type=Path, default=Path("dbdatabase/effect_catalog_overrides.json"), help="Optional path to effect catalog overrides JSON.")
     parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")
     parser.add_argument("--p1-leader-id", type=int, default=None, help="Optional explicit P1 leader card id.")
@@ -1162,8 +1186,14 @@ def main() -> None:
 
     repo = SQLiteCardRepository(args.db_path) if args.db_path.exists() else None
     effect_catalog = args.effect_catalog if args.effect_catalog.exists() else None
+    effect_catalog_overrides = args.effect_catalog_overrides if args.effect_catalog_overrides.exists() else None
     skill_cost_catalog = args.skill_cost_catalog if args.skill_cost_catalog.exists() else None
-    engine = RulesEngine(card_repository=repo, skill_cost_rules_path=skill_cost_catalog, effect_rules_path=effect_catalog)
+    engine = RulesEngine(
+        card_repository=repo,
+        skill_cost_rules_path=skill_cost_catalog,
+        effect_rules_path=effect_catalog,
+        effect_rule_overrides_path=effect_catalog_overrides,
+    )
 
     if args.load_state_input is not None:
         if not args.load_state_input.exists():

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from src.game import Action, ActionType, CardInstance, EffectRegistration, RulesEngine, TurnPhase
+from src.game import Action, ActionType, AttackContext, BattleStep, CardInstance, EffectRegistration, RulesEngine, TurnPhase
+from src.game.effect_rules import EffectRule
+from src.game.engine import CardRuntimeData
 
 
 def _deck(seed: int, size: int = 60) -> list[int]:
@@ -20,6 +22,1091 @@ def _to_p1_main_where_attacks_are_legal(engine: RulesEngine, state):
     state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=state.active_player))
     state = _to_main(engine, state)
     return state
+
+
+def test_phase4_bardock_the_tenacious_restricts_self_copies_from_hand_next_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            5531: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_restrict_self_copies_from_hand_next_turn_on_play",
+                    handler_params={"restricted_card_id": 5531},
+                    family_id="self_played:auto_restrict_self_copies_from_hand_next_turn_on_play",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=990001, card_id=5531, owner_id=1, card_type="BATTLE", color="Black", energy_cost=0, power=20000),
+        CardInstance(instance_id=990002, card_id=5531, owner_id=1, card_type="BATTLE", color="Black", energy_cost=0, power=20000),
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(cp.name == "effect_auto_restrict_self_copies_from_hand_next_turn_on_play" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    legal = engine.get_legal_actions(state, 1)
+    assert any(cp.name == "scheduled_card_play_restrictions_activated" for cp in state.checkpoints)
+    assert not any(a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0 for a in legal)
+
+
+def test_phase4_prismatic_aegis_can_warp_opponent_battle_on_play_from_hand() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            49: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_send_up_to_n_opponent_battle_to_warp_on_play",
+                    handler_params={"max_targets": 1, "max_cost": 4, "requires_played_from": "hand"},
+                    family_id="self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=990010, card_id=49, owner_id=1, card_type="BATTLE", color="Green/Black", energy_cost=0, power=20000)
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=990011, card_id=701, owner_id=2, card_type="BATTLE", color="Red", energy_cost=4, power=15000),
+        CardInstance(instance_id=990012, card_id=702, owner_id=2, card_type="BATTLE", color="Red", energy_cost=5, power=15000),
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.instance_id == 990011 for card in state.players[2].warp)
+    assert any(card.instance_id == 990012 for card in state.players[2].battle_area)
+    assert any(cp.name == "effect_auto_send_up_to_n_opponent_battle_to_warp_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_prismatic_bardock_can_reduce_opponent_unison_for_turn_on_play() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            41: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_power_reduce_up_to_n_opponent_cards_for_turn_on_play",
+                    handler_params={
+                        "max_targets": 1,
+                        "target_scope": "battle_or_unison",
+                        "power_delta": "expr:owner_energy_color_count*-2000",
+                        "requires_played_from": "hand",
+                        "min_owner_matching_energy": 1,
+                        "required_energy_colors": "black",
+                        "requires_multicolor_energy": True,
+                    },
+                    family_id="self_played:auto_power_reduce_up_to_n_opponent_cards_for_turn_on_play",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=990013, card_id=801, owner_id=1, card_type="ENERGY", color="Black/Blue"),
+        CardInstance(instance_id=990014, card_id=802, owner_id=1, card_type="ENERGY", color="Yellow"),
+    ]
+    target = CardInstance(instance_id=990015, card_id=803, owner_id=2, card_type="UNISON", color="Red", power=20000, markers=2)
+    state.players[2].unison_area = [target]
+    state.players[1].hand = [
+        CardInstance(instance_id=990016, card_id=41, owner_id=1, card_type="BATTLE", color="Black/Red", energy_cost=0, power=20000)
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    reduced = state.players[2].unison_area[0]
+    assert reduced.power == 14000
+    assert reduced.temporary_power_delta == -6000
+    assert any(cp.name == "effect_auto_power_reduce_up_to_n_opponent_cards_for_turn_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_prismatic_bardock_can_activate_battle_to_reduce_opponent_battle_for_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            41: (
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_power_reduce_up_to_n_opponent_battle_for_turn",
+                    handler_params={"max_targets": 1, "power_delta": -5000},
+                    family_id="self_activate_battle:activate_power_reduce_up_to_n_opponent_battle_for_turn",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=990017,
+        card_id=41,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Black/Red",
+        power=20000,
+        has_activate_battle=True,
+    )
+    target = CardInstance(instance_id=990018, card_id=804, owner_id=2, card_type="BATTLE", color="Red", power=15000)
+    state.players[1].battle_area.append(source)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    state.battle_step = BattleStep.OFFENSE
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[1].leader_area.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "battle"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    reduced = state.players[2].battle_area[0]
+    assert reduced.power == 10000
+    assert reduced.temporary_power_delta == -5000
+    assert any(cp.name == "effect_activate_power_reduce_up_to_n_opponent_battle_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_next_level_gogeta_can_gain_marker_life_and_leader_power_when_other_matching_battle_is_played() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            7846: (
+                EffectRule(
+                    trigger="owner_other_battle_played",
+                    handler_id="auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played",
+                    handler_params={"marker_delta": 1},
+                    family_id="owner_other_battle_played:auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990019, card_id=7846, owner_id=1, card_type="UNISON", color="Blue/Yellow", markers=2)
+    state.players[1].unison_area.append(source)
+    state.players[1].life = [
+        CardInstance(instance_id=990020, card_id=805, owner_id=1, card_type="BATTLE", color="Blue", power=5000)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    played = CardInstance(
+        instance_id=990021,
+        card_id=806,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red/Blue",
+        power=15000,
+        characters=("GT",),
+    )
+    state.players[1].battle_area.append(played)
+    baseline = state.players[1].leader_area.power
+    hand_before = len(state.players[1].hand)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": played.instance_id,
+            "source_card_id": played.card_id,
+            "source_zone": "battle",
+            "played_from": "hand",
+        },
+    )
+    engine._resolve_pending_effects(state)
+    assert state.players[1].unison_area[0].markers == 3
+    assert len(state.players[1].hand) == hand_before + 1
+    assert state.players[1].leader_area.power == baseline + 5000
+    assert state.players[1].leader_area.temporary_power_delta == 5000
+    assert any(cp.name == "effect_auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played" for cp in state.checkpoints)
+
+
+def test_phase4_temporal_darkness_demigra_can_warp_opponent_battle_and_play_from_warp() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            5826: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_send_up_to_n_opponent_battle_to_warp_and_play_up_to_n_from_owner_warp_on_play",
+                    handler_params={"max_targets": 1, "play_count": 1, "max_play_cost": 4, "target_policy": "first"},
+                    family_id="self_played:auto_send_up_to_n_opponent_battle_to_warp_and_play_up_to_n_from_owner_warp_on_play",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=990022, card_id=5826, owner_id=1, card_type="BATTLE", color="Black", energy_cost=0, power=15000)
+    ]
+    state.players[1].warp = [
+        CardInstance(instance_id=990023, card_id=807, owner_id=1, card_type="BATTLE", color="Black", energy_cost=5, power=30000),
+        CardInstance(instance_id=990024, card_id=808, owner_id=1, card_type="BATTLE", color="Black", energy_cost=4, power=20000),
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=990025, card_id=809, owner_id=2, card_type="BATTLE", color="Red", energy_cost=3, power=15000)
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.instance_id == 990025 for card in state.players[2].warp)
+    assert any(card.instance_id == 990024 for card in state.players[1].battle_area)
+    assert any(card.instance_id == 990023 for card in state.players[1].warp)
+    assert any(cp.name == "effect_auto_send_up_to_n_opponent_battle_to_warp_and_play_up_to_n_from_owner_warp_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_accidental_wish_plus_two_can_reduce_opponent_battle_for_turn_and_gain_markers() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            7906: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_power_reduce_up_to_n_opponent_battle_for_turn",
+                    handler_params={"max_targets": 1, "power_delta": -20000, "marker_delta": 2},
+                    family_id="self_activate_main:activate_power_reduce_up_to_n_opponent_battle_for_turn",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=990026,
+        card_id=7906,
+        owner_id=1,
+        card_type="Z-UNISON",
+        color="Blue/Yellow",
+        markers=3,
+        has_activate_main=True,
+    )
+    target = CardInstance(instance_id=990027, card_id=810, owner_id=2, card_type="BATTLE", color="Red", power=25000)
+    state.players[1].unison_area.append(source)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].unison_area[0].markers == 5
+    assert state.players[2].battle_area[0].temporary_power_delta == -20000
+    assert state.players[2].battle_area[0].power == 5000
+    assert any(cp.name == "effect_activate_power_reduce_up_to_n_opponent_battle_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_guided_android_can_counter_play_with_power_wish_cost_and_rest_opponent_battle() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            7940: {
+                "counter_alternate_from_hand": [
+                    {
+                        "kind": "send_owner_drop_to_warp",
+                        "amount": 2,
+                        "required_leader_traits": "power wish",
+                        "requires_life_at_most": 4,
+                        "required_traits": "power wish",
+                    }
+                ]
+            }
+        },
+        effect_rules={
+            7940: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_switch_up_to_n_opponent_battle_rest_on_play",
+                    handler_params={"max_targets": 1, "max_cost": 6},
+                    family_id="self_played:auto_switch_up_to_n_opponent_battle_rest_on_play",
+                    provenance="test",
+                    limit_per_turn=1,
+                ),
+            )
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state.players[2].leader_area.traits = ("Power Wish",)
+    state = _to_main(engine, state)
+    while len(state.players[2].life) > 4:
+        state.players[2].hand.append(state.players[2].life.pop(0))
+    state.players[1].hand = [CardInstance(instance_id=990028, card_id=811, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=990029,
+            card_id=7940,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=4,
+            power=15000,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw="[Counter: Play][Limit 1] If your Leader is a ≪Power Wish≫ card: Play this card.",
+        )
+    )
+    state.players[2].drop.extend(
+        [
+            CardInstance(instance_id=990030, card_id=812, owner_id=2, card_type="BATTLE", traits=("Power Wish",)),
+            CardInstance(instance_id=990031, card_id=813, owner_id=2, card_type="BATTLE", traits=("Power Wish",)),
+        ]
+    )
+    state.players[1].battle_area = [
+        CardInstance(instance_id=990032, card_id=814, owner_id=1, card_type="BATTLE", color="Red", energy_cost=6, power=20000)
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    assert len(state.players[2].warp) == 2
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    assert any(card.card_id == 7940 for card in state.players[2].battle_area)
+    assert state.players[1].battle_area[0].resting is True
+    assert any(cp.name == "effect_auto_switch_up_to_n_opponent_battle_rest_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_broly_omen_of_evolution_can_activate_from_combo_and_drop_opponent_combo() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            27: (
+                EffectRule(
+                    trigger="self_activate_battle",
+                    handler_id="activate_send_up_to_n_opponent_combo_to_drop",
+                    handler_params={"max_targets": 1, "max_combo_cost": 0, "target_policy": "first"},
+                    family_id="self_activate_battle:activate_send_up_to_n_opponent_combo_to_drop",
+                    provenance="test",
+                ),
+            )
+        },
+        skill_cost_rules={
+            27: {
+                "activate_battle_combo": [
+                    {"kind": "send_self_from_combo_to_drop", "amount": 1},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    combo_broly = CardInstance(
+        instance_id=990041,
+        card_id=27,
+        owner_id=1,
+        card_number="EX19-12",
+        card_type="BATTLE",
+        color="Green",
+        combo_cost=1,
+        combo_power=10000,
+        has_activate_battle=True,
+    )
+    target_combo = CardInstance(
+        instance_id=990042,
+        card_id=900102,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Red",
+        combo_cost=0,
+        combo_power=5000,
+    )
+    untouched_combo = CardInstance(
+        instance_id=990043,
+        card_id=900103,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Red",
+        combo_cost=1,
+        combo_power=10000,
+    )
+    state.players[1].combo_area.append(combo_broly)
+    state.players[2].combo_area.extend([target_combo, untouched_combo])
+    engine._register_card_effects(state, player_id=1, source_zone="combo", card=combo_broly)
+    state.battle_step = BattleStep.OFFENSE
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[1].leader_area.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "combo"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.instance_id == 990041 for card in state.players[1].drop)
+    assert any(card.instance_id == 990042 for card in state.players[2].drop)
+    assert all(card.instance_id != 990042 for card in state.players[2].combo_area)
+    assert any(card.instance_id == 990043 for card in state.players[2].combo_area)
+    assert any(cp.name == "effect_activate_send_up_to_n_opponent_combo_to_drop" for cp in state.checkpoints)
+
+
+def test_phase4_koitsukai_can_activate_from_drop_and_punish_low_power_battle_play() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            7386: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play",
+                    handler_params={
+                        "required_source_zone": "drop",
+                        "activate_total_cost": 1,
+                        "max_bottom_deck_from_hand": 2,
+                        "low_power_threshold": 20000,
+                        "opponent_hand_to_warp": 2,
+                    },
+                    family_id="self_activate_main:activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=990044, card_id=900104, owner_id=1, card_type="ENERGY", color="Black", resting=False)
+    ]
+    state.players[1].drop = [
+        CardInstance(
+            instance_id=990045,
+            card_id=7386,
+            owner_id=1,
+            card_number="DB2-143",
+            card_type="BATTLE",
+            color="Black",
+            power=5000,
+            has_activate_main=True,
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(instance_id=990046, card_id=900105, owner_id=1, card_type="BATTLE", color="Black", power=5000),
+        CardInstance(instance_id=990047, card_id=900106, owner_id=1, card_type="BATTLE", color="Black", power=5000),
+        CardInstance(instance_id=990048, card_id=900107, owner_id=1, card_type="BATTLE", color="Black", power=5000),
+    ]
+    state.players[2].hand = [
+        CardInstance(instance_id=990049, card_id=900108, owner_id=2, card_type="BATTLE", color="Red", power=5000),
+        CardInstance(instance_id=990140, card_id=900109, owner_id=2, card_type="BATTLE", color="Red", power=5000),
+        CardInstance(instance_id=990141, card_id=900110, owner_id=2, card_type="BATTLE", color="Red", power=5000),
+    ]
+    activate = next(
+        action
+        for action in engine.get_legal_actions(state, 1)
+        if action.action_type == ActionType.ACTIVATE_MAIN_SKILL and action.source_zone == "drop"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].energy[0].resting is True
+    assert any(card.instance_id == 990045 for card in state.players[1].removed_from_game)
+    assert len(state.players[1].hand) == 3
+    assert len(state.low_power_battle_play_hand_warp_penalties) == 1
+    played = CardInstance(
+        instance_id=990142,
+        card_id=900111,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Red",
+        power=15000,
+    )
+    state.players[2].battle_area.append(played)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=2,
+        payload={
+            "source_instance_id": played.instance_id,
+            "source_card_id": played.card_id,
+            "source_zone": "battle",
+            "played_from": "hand",
+        },
+    )
+    assert len(state.players[2].hand) == 1
+    assert len(state.players[2].warp) == 2
+    assert any(cp.name == "effect_activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play" for cp in state.checkpoints)
+    assert any(cp.name == "low_power_battle_play_hand_warp_penalty_applied" for cp in state.checkpoints)
+
+
+def test_phase4_piccolo_jr_alliance_rests_matching_owner_battles_and_applies_attack_payoff() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            6299: (
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_alliance_rest_matching_owner_battles_gain_power_draw_n_and_deal_damage",
+                    handler_params={
+                        "requires_leader": "red",
+                        "alliance_allowed_colors": "red,green",
+                        "draw_count": 2,
+                        "min_opponent_life_for_damage": 3,
+                    },
+                    family_id="self_attacks:auto_alliance_rest_matching_owner_battles_gain_power_draw_n_and_deal_damage",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Red"
+    piccolo = CardInstance(instance_id=990150, card_id=6299, owner_id=1, card_type="BATTLE", color="Red/Green", power=16000)
+    ally_red = CardInstance(instance_id=990151, card_id=900150, owner_id=1, card_type="BATTLE", color="Red", power=5000, resting=False)
+    ally_green = CardInstance(instance_id=990152, card_id=900151, owner_id=1, card_type="BATTLE", color="Green", power=10000, resting=False)
+    ally_blue = CardInstance(instance_id=990153, card_id=900152, owner_id=1, card_type="BATTLE", color="Blue", power=15000, resting=False)
+    state.players[1].battle_area = [piccolo, ally_red, ally_green, ally_blue]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=piccolo)
+    owner_hand_before = len(state.players[1].hand)
+    opp_life_before = len(state.players[2].life)
+    opp_hand_before = len(state.players[2].hand)
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={
+            "attacker_instance_id": piccolo.instance_id,
+            "attacker_zone": "battle",
+            "target_player_id": 2,
+            "target_zone": "leader",
+        },
+    )
+    engine._resolve_pending_effects(state)
+    assert ally_red.resting is True
+    assert ally_green.resting is True
+    assert ally_blue.resting is False
+    assert piccolo.battle_temporary_power_delta == 15000
+    assert len(state.players[1].hand) == owner_hand_before + 2
+    assert len(state.players[2].life) == opp_life_before - 1
+    assert len(state.players[2].hand) == opp_hand_before + 1
+    assert any(cp.name == "effect_auto_alliance_rest_matching_owner_battles_gain_power_draw_n_and_deal_damage" for cp in state.checkpoints)
+
+
+def test_phase4_goku_black_works_undone_can_add_marker_and_place_self_under_matching_unison() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            23: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_add_marker_to_matching_owner_unison_and_place_self_under_it",
+                    handler_params={
+                        "required_source_zone": "battle",
+                        "requires_leader": "blue",
+                        "target_card_id": 21,
+                        "target_required_name_contains": "ZAMASU, TEAMWORK UNDYING",
+                    },
+                    limit_per_turn=1,
+                    family_id="self_activate_main:activate_add_marker_to_matching_owner_unison_and_place_self_under_it",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Blue"
+    source = CardInstance(instance_id=990160, card_id=23, owner_id=1, card_type="BATTLE", color="Blue", has_activate_main=True)
+    target_unison = CardInstance(instance_id=990161, card_id=21, owner_id=1, card_type="UNISON", color="Blue", markers=2, has_activate_main=True)
+    state.players[1].battle_area = [source]
+    state.players[1].unison_area = [target_unison]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    activate = next(
+        action
+        for action in engine.get_legal_actions(state, 1)
+        if action.action_type == ActionType.ACTIVATE_MAIN_SKILL and action.source_zone == "battle"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].battle_area) == 0
+    assert state.players[1].unison_area[0].markers == 3
+    assert state.players[1].unison_area[0].stacked_card_ids == (23,)
+    assert any(cp.name == "effect_activate_add_marker_to_matching_owner_unison_and_place_self_under_it" for cp in state.checkpoints)
+
+
+def test_phase4_cell_can_capture_opponent_battles_under_self_then_drop_them_for_restand_and_keyword() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            1002: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_place_all_opponent_battles_up_to_cost_under_self_on_play",
+                    handler_params={"max_cost": 5},
+                    family_id="self_played:auto_place_all_opponent_battles_up_to_cost_under_self_on_play",
+                    provenance="test",
+                ),
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n",
+                    handler_params={
+                        "required_source_zone": "battle",
+                        "grant_keyword": "Triple Strike",
+                        "min_released_for_keyword": 4,
+                    },
+                    family_id="self_activate_main:activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    cell = CardInstance(instance_id=990170, card_id=1002, owner_id=1, card_type="Z-BATTLE", color="Green", power=25000, has_activate_main=True, resting=True)
+    state.players[1].battle_area = [cell]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=990171, card_id=900160, owner_id=2, card_type="BATTLE", color="Red", energy_cost=1, power=10000),
+        CardInstance(instance_id=990172, card_id=900161, owner_id=2, card_type="BATTLE", color="Blue", energy_cost=2, power=10000),
+        CardInstance(instance_id=990173, card_id=900162, owner_id=2, card_type="BATTLE", color="Green", energy_cost=3, power=10000),
+        CardInstance(instance_id=990174, card_id=900163, owner_id=2, card_type="BATTLE", color="Yellow", energy_cost=4, power=10000),
+        CardInstance(instance_id=990175, card_id=900164, owner_id=2, card_type="BATTLE", color="Black", energy_cost=6, power=10000),
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=cell)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": cell.instance_id,
+            "source_card_id": cell.card_id,
+            "source_zone": "battle",
+            "played_from": "hand",
+        },
+    )
+    engine._resolve_pending_effects(state)
+    assert len(state.players[2].battle_area) == 1
+    assert state.players[2].battle_area[0].instance_id == 990175
+    assert len(state.players[1].battle_area[0].stacked_card_ids) == 4
+    activate = next(
+        action
+        for action in engine.get_legal_actions(state, 1)
+        if action.action_type == ActionType.ACTIVATE_MAIN_SKILL and action.source_zone == "battle"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].battle_area[0].resting is False
+    assert state.players[1].battle_area[0].stacked_card_ids == ()
+    assert "Triple Strike" in state.players[1].battle_area[0].temporary_keywords
+    assert len(state.players[2].drop) == 4
+    assert any(cp.name == "effect_auto_place_all_opponent_battles_up_to_cost_under_self_on_play" for cp in state.checkpoints)
+    assert any(cp.name == "effect_activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n" for cp in state.checkpoints)
+
+
+def test_phase4_gigantic_meteor_can_ko_opponent_battles_up_to_total_power_budget() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            83: (
+                EffectRule(
+                    trigger="self_activate_extra_from_hand",
+                    handler_id="activate_ko_opponent_battles_up_to_total_power",
+                    handler_params={"max_total_power": 30000, "requires_owner_turn": True},
+                    limit_per_turn=1,
+                    family_id="self_activate_extra_from_hand:activate_ko_opponent_battles_up_to_total_power",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=990050, card_id=900110, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990051, card_id=900111, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990052, card_id=900112, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+    ]
+    state.players[1].hand = [
+        CardInstance(instance_id=990053, card_id=83, owner_id=1, card_number="BT15-030", card_type="EXTRA", color="Red", energy_cost=3)
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=990054, card_id=900113, owner_id=2, card_type="BATTLE", color="Blue", power=10000, energy_cost=1),
+        CardInstance(instance_id=990055, card_id=900114, owner_id=2, card_type="BATTLE", color="Blue", power=20000, energy_cost=2),
+        CardInstance(instance_id=990056, card_id=900115, owner_id=2, card_type="BATTLE", color="Blue", power=25000, energy_cost=3),
+    ]
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    remaining_ids = {card.instance_id for card in state.players[2].battle_area}
+    drop_ids = {card.instance_id for card in state.players[2].drop}
+    assert 990054 in drop_ids
+    assert 990055 in drop_ids
+    assert 990056 in remaining_ids
+    assert any(card.instance_id == 990053 for card in state.players[1].drop)
+    assert any(cp.name == "effect_activate_ko_opponent_battles_up_to_total_power" for cp in state.checkpoints)
+
+
+def test_phase4_prismatic_burst_adds_markers_on_play_then_warps_overcost_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            36: (
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_add_markers_per_n_multicolor_energy_on_play",
+                    handler_params={"per_n_energy": 2, "min_source_markers": 1},
+                    limit_per_turn=1,
+                    family_id="self_played:auto_add_markers_per_n_multicolor_energy_on_play",
+                    provenance="test",
+                ),
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_send_up_to_n_opponent_battle_to_warp",
+                    handler_params={
+                        "max_targets": 1,
+                        "target_policy": "first",
+                        "requires_cost_greater_than_opponent_current_energy": True,
+                    },
+                    family_id="self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+                    provenance="test",
+                ),
+            )
+        },
+        skill_cost_rules={
+            36: {
+                "activate_main_unison": [
+                    {"kind": "remove_markers", "amount": 1},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=990060, card_id=900120, owner_id=1, card_type="ENERGY", color="Red/Green", resting=False),
+        CardInstance(instance_id=990061, card_id=900121, owner_id=1, card_type="ENERGY", color="Blue/Green", resting=False),
+        CardInstance(instance_id=990062, card_id=900122, owner_id=1, card_type="ENERGY", color="Red/Yellow", resting=False),
+        CardInstance(instance_id=990063, card_id=900123, owner_id=1, card_type="ENERGY", color="Blue/Yellow", resting=False),
+    ]
+    state.players[1].energy_markers = 1
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990064,
+            card_id=36,
+            owner_id=1,
+            card_number="EX19-21",
+            card_type="UNISON",
+            color="Green",
+            energy_cost=1,
+            has_activate_main=True,
+        )
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990065, card_id=900124, owner_id=2, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990066, card_id=900125, owner_id=2, card_type="ENERGY", color="Black", resting=False),
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=990067, card_id=900126, owner_id=2, card_type="BATTLE", color="Black", energy_cost=3, power=20000)
+    ]
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].unison_area) == 1
+    source = state.players[1].unison_area[0]
+    assert source.markers == 3
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    source = state.players[1].unison_area[0]
+    assert source.markers == 2
+    assert not state.players[2].battle_area
+    assert any(card.instance_id == 990067 for card in state.players[2].warp)
+    assert any(cp.name == "effect_auto_add_markers_per_n_multicolor_energy_on_play" for cp in state.checkpoints)
+    assert any(cp.name == "effect_activate_send_up_to_n_opponent_battle_to_warp" for cp in state.checkpoints)
+
+
+def test_phase4_majin_buu_pure_destroyer_can_flip_leader_draw_and_remove_self() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id != 1603:
+                return None
+            return SimpleNamespace(
+                card_name="Majin Buu Leader",
+                power_int=15000,
+                card_type="LEADER",
+                card_color="Black",
+                energy_cost_int=0,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_barrier=False,
+                has_draw=False,
+                max_draw_count=None,
+                z_energy_cost=None,
+                card_energy_cost="",
+                card_skill_unstyled="",
+                card_traits=(),
+                card_characters=(),
+                source_table="cards",
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            1603: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed",
+                    handler_params={
+                        "amount": 2,
+                        "required_leader_back_name_contains": "MAJIN BUU, LEADER OF THE AGENTS OF DESTRUCTION",
+                        "requires_leader_front_side_up": True,
+                        "max_owner_life": 6,
+                        "min_owner_energy": 2,
+                    },
+                    family_id="self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed",
+                    provenance="test",
+                ),
+            )
+        },
+    )
+    engine._card_cache[(1, "back")] = CardRuntimeData(card_name="Majin Buu, Leader of the Agents of Destruction", power=20000)
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].life = state.players[1].life[:6]
+    state.players[1].energy = [
+        CardInstance(instance_id=990070, card_id=900130, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990071, card_id=900131, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990072,
+            card_id=1603,
+            owner_id=1,
+            card_number="P-473",
+            card_type="Z-BATTLE",
+            color="Black",
+            energy_cost=1,
+            has_activate_main=True,
+        )
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=state.players[1].battle_area[0])
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle"
+    )
+    hand_before = len(state.players[1].hand)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].leader_area.awakened is True
+    assert len(state.players[1].hand) == hand_before + 2
+    assert not state.players[1].battle_area
+    assert any(card.instance_id == 990072 for card in state.players[1].removed_from_game)
+    assert any(cp.name == "effect_activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed" for cp in state.checkpoints)
+
+
+def test_phase4_king_cold_combo_can_reduce_next_matching_red_extra_cost() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            if card_id == 2409:
+                return SimpleNamespace(
+                    card_name="Explosive Dance",
+                    power_int=0,
+                    card_type="EXTRA",
+                    card_color="Red",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=True,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                )
+            return None
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            20: (
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo",
+                    handler_params={
+                        "amount": 1,
+                        "required_card_type": "EXTRA",
+                        "max_energy_cost": 3,
+                        "require_mono_color": True,
+                        "allowed_colors": "red",
+                        "max_owner_life": 3,
+                        "requires_opponent_turn": True,
+                        "uses_remaining": 1,
+                    },
+                    limit_per_turn=1,
+                    family_id="self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(instance_id=990020, card_id=720, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=1, power=10000)
+    ]
+    state.players[2].life = state.players[2].life[:3]
+    state.players[2].energy = []
+    state.players[2].hand = [
+        CardInstance(instance_id=990021, card_id=20, owner_id=2, card_type="BATTLE", color="Red", combo_cost=0, combo_power=10000, power=10000),
+        CardInstance(instance_id=990022, card_id=2409, owner_id=2, card_type="EXTRA", color="Red", energy_cost=1, has_activate_battle=True),
+    ]
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    combo = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+    assert any(cp.name == "effect_auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo" for cp in state.checkpoints)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0 for a in legal)
 
 
 def test_phase4_auto_effect_registers_on_play_and_resolves() -> None:
@@ -45,6 +1132,2137 @@ def test_phase4_auto_effect_registers_on_play_and_resolves() -> None:
     assert any(r.trigger == "self_played" for r in regs)
     assert any(r.trigger == "self_attacks" for r in regs)
     assert any(res.resolved for res in state.effect_resolutions)
+
+
+def test_phase4_activate_main_can_play_self_from_warp_with_marker_override() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 9729:
+                return SimpleNamespace(
+                    id=9729,
+                    card_number="BT29-094",
+                    card_name="Zamasu, Scheme",
+                    card_type="UNISON",
+                    card_color="black",
+                    card_energy_cost="X",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=15000,
+                    card_skill_unstyled="[Activate: Main] placeholder",
+                    has_activate_main=True,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Zamasu"]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="black",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9729: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_play_self_from_warp",
+                    "handler_params": {"markers": 0, "required_source_zone": "warp", "min_owner_energy": 2},
+                }
+            ]
+        },
+        skill_cost_rules={
+            9729: {
+                "activate_main_warp": [
+                    {
+                        "kind": "send_owner_z_energy_to_drop",
+                        "amount": 1,
+                    }
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p1_z_deck_card_ids=[910001],
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=700001, card_id=111, owner_id=1, card_type="BATTLE", color="black"),
+        CardInstance(instance_id=700002, card_id=112, owner_id=1, card_type="BATTLE", color="black"),
+    ]
+    state.players[1].z_energy = [
+        CardInstance(instance_id=700003, card_id=113, owner_id=1, card_type="BATTLE", color="black")
+    ]
+    warp_card = CardInstance(
+        instance_id=700004,
+        card_id=9729,
+        owner_id=1,
+        card_number="BT29-094",
+        card_type="UNISON",
+        color="black",
+        has_activate_main=True,
+        characters=("Zamasu",),
+    )
+    state.players[1].warp = [warp_card]
+    engine._register_card_effects(state, player_id=1, source_zone="warp", card=warp_card)
+
+    activate = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "warp"
+    )
+    state = engine.apply_action(state, activate)
+    assert len(state.players[1].z_energy) == 0
+    assert len(state.players[1].drop) == 1
+    assert state.counter_window is not None
+    assert state.counter_window.pending_action.action_type == "activate_main"
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.counter_window is not None
+    assert state.counter_window.pending_action.action_type == "play_from_warp"
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert not state.players[1].warp
+    assert any(card.instance_id == 700004 for card in state.players[1].drop)
+    assert any(cp.name == "main_play_unison" for cp in state.checkpoints)
+    assert any(cp.name == "rule_unison_zero_markers" for cp in state.checkpoints)
+
+
+def test_phase4_activate_main_can_play_battle_self_from_warp() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            9732: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_play_self_from_warp",
+                    "handler_params": {"required_source_zone": "warp", "requires_leader": "black", "min_owner_energy": 3},
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Black"
+    state.players[1].energy = [
+        CardInstance(instance_id=700101, card_id=211, owner_id=1, card_type="ENERGY", color="Black"),
+        CardInstance(instance_id=700102, card_id=212, owner_id=1, card_type="ENERGY", color="Black"),
+        CardInstance(instance_id=700103, card_id=213, owner_id=1, card_type="ENERGY", color="Black"),
+    ]
+    warp_card = CardInstance(
+        instance_id=700104,
+        card_id=9732,
+        owner_id=1,
+        card_number="BT29-097",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=1,
+        power=15000,
+        has_activate_main=True,
+    )
+    state.players[1].warp = [warp_card]
+    engine._register_card_effects(state, player_id=1, source_zone="warp", card=warp_card)
+
+    activate = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "warp"
+    )
+    state = engine.apply_action(state, activate)
+    assert state.counter_window is not None
+    assert state.counter_window.pending_action.action_type == "activate_main"
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.counter_window is not None
+    assert state.counter_window.pending_action.action_type == "play_from_warp"
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert not state.players[1].warp
+    assert any(card.instance_id == 700104 for card in state.players[1].battle_area)
+    assert any(cp.name == "counter_timing_play_from_skill" for cp in state.checkpoints)
+    assert any(cp.name == "main_play_battle" for cp in state.checkpoints)
+
+
+def test_phase4_ex_evolve_can_play_matching_battle_from_hand_on_top_of_owner_battle() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 9637:
+                return SimpleNamespace(
+                    id=9637,
+                    card_number="BT29-006",
+                    card_name="SS Son Goten, Demon Resistance",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="3",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=20000,
+                    card_skill_unstyled=(
+                        "[Deflect][Double Strike]\n"
+                        "[EX-Evolve][Limit 1]{r} : Red <Son Goten> card with an energy cost of 1.\n"
+                        "[Auto] When this card is played, draw 1 card."
+                    ),
+                    has_activate_main=False,
+                    has_auto=True,
+                    has_draw=True,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=("Deflect", "Double Strike"),
+                    card_traits_json='[]',
+                    card_character_json='["Son Goten"]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="red",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='["Son Goten"]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9637: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}},
+                {"trigger": "self_played", "handler_id": "auto_switch_self_active_on_play", "handler_params": {}},
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=700120, card_id=301, owner_id=1, card_type="ENERGY", color="Red"),
+    ]
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=700121,
+            card_id=302,
+            owner_id=1,
+            card_number="BT29-007",
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=1,
+            power=5000,
+            resting=True,
+            characters=("Son Goten",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=700122,
+            card_id=9637,
+            owner_id=1,
+            card_number="BT29-006",
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=3,
+            power=20000,
+            skill_text_raw=(
+                "[Deflect][Double Strike]\n"
+                "[EX-Evolve][Limit 1]{r} : Red <Son Goten> card with an energy cost of 1.\n"
+                "[Auto] When this card is played, draw 1 card."
+            ),
+            characters=("Son Goten",),
+        )
+    ]
+    deck_before = len(state.players[1].deck)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.EX_EVOLVE)
+    state = engine.apply_action(state, action)
+
+    evolved = state.players[1].battle_area[0]
+    assert evolved.instance_id == 700122
+    assert evolved.resting is False
+    assert evolved.stacked_card_ids == (302,)
+    assert all(card.instance_id != 700122 for card in state.players[1].hand)
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "ex_evolve" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_switch_self_active_on_play" for cp in state.checkpoints)
+    assert any(res.resolved for res in state.effect_resolutions if res.reason == "ok")
+
+
+def test_phase4_tiny_golden_warrior_can_enable_next_matching_ex_evolve_from_drop() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                9660: SimpleNamespace(
+                    id=9660,
+                    card_number="BT29-027",
+                    card_name="Tiny Golden Warrior",
+                    card_type="EXTRA",
+                    card_color="red",
+                    card_energy_cost="0",
+                    energy_cost_int=0,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled=(
+                        "[Permanent] This card gains ≪Earthling≫ in all areas.\n"
+                        "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card : "
+                        "The next time you activate [EX-Evolve] on your red <Son Goten> or <Trunks : Youth> card during this turn, "
+                        "it can also activate from its owner's Drop."
+                    ),
+                    has_activate_main=True,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=True,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Earthling"]',
+                    card_character_json='[]',
+                ),
+                9639: SimpleNamespace(
+                    id=9639,
+                    card_number="BT29-008",
+                    card_name="SS Trunks, Demon Resistance",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="3",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=20000,
+                    card_skill_unstyled=(
+                        "[Deflect][Blocker]\n"
+                        "[EX-Evolve][Limit 1]{r} : Red <Trunks : Youth> card with an energy cost of 1.\n"
+                        "[Auto] When this card is played, draw 1 card."
+                    ),
+                    has_activate_main=False,
+                    has_auto=True,
+                    has_draw=True,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=("Deflect", "Blocker"),
+                    card_traits_json='[]',
+                    card_character_json='["Trunks : Youth"]',
+                ),
+            }
+            if card_id in rows:
+                return rows[card_id]
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="red",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='["Trunks : Youth"]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9660: [
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_grant_next_ex_evolve_from_owner_drop",
+                    "handler_params": {
+                        "uses_remaining": 1,
+                        "allowed_colors": "red",
+                        "required_characters": "Son Goten,Trunks : Youth",
+                    },
+                    "limit_per_turn": 1,
+                }
+            ],
+            9639: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}},
+            ],
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Red"
+    state.players[1].leader_area.characters = ("Krillin",)
+    state.players[1].energy = [
+        CardInstance(instance_id=700130, card_id=401, owner_id=1, card_type="ENERGY", color="Red"),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=700131,
+            card_id=9660,
+            owner_id=1,
+            card_number="BT29-027",
+            card_type="EXTRA",
+            color="Red",
+            energy_cost=0,
+        )
+    ]
+    play_extra = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play_extra)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert len(state.ex_evolve_permissions) == 1
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=700132,
+            card_id=402,
+            owner_id=1,
+            card_number="BT29-009",
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=1,
+            power=5000,
+            resting=False,
+            characters=("Trunks : Youth",),
+        )
+    ]
+    state.players[1].drop = [
+        CardInstance(instance_id=700131, card_id=9660, owner_id=1, card_type="EXTRA", color="Red"),
+        CardInstance(
+            instance_id=700133,
+            card_id=9639,
+            owner_id=1,
+            card_number="BT29-008",
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=3,
+            power=20000,
+            skill_text_raw=(
+                "[Deflect][Blocker]\n"
+                "[EX-Evolve][Limit 1]{r} : Red <Trunks : Youth> card with an energy cost of 1.\n"
+                "[Auto] When this card is played, draw 1 card."
+            ),
+            characters=("Trunks : Youth",),
+        ),
+    ]
+    deck_before = len(state.players[1].deck)
+
+    ex_evolve = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.EX_EVOLVE and a.source_zone == "drop"
+    )
+    state = engine.apply_action(state, ex_evolve)
+
+    assert state.players[1].battle_area[0].instance_id == 700133
+    assert state.players[1].battle_area[0].stacked_card_ids == (402,)
+    assert len(state.players[1].deck) == deck_before - 1
+    assert not state.ex_evolve_permissions
+    assert any(cp.name == "effect_activate_grant_next_ex_evolve_from_owner_drop" for cp in state.checkpoints)
+    assert any(cp.name == "ex_evolve" for cp in state.checkpoints)
+
+
+def test_phase4_jaguars_island_challenge_stage_adds_marker_when_matching_extra_is_activated_from_hand() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                9633: SimpleNamespace(
+                    id=9633,
+                    card_number="BT29-003",
+                    card_name="Jaguar's Island, Challenge Stage",
+                    card_type="Z-UNISON",
+                    card_color="red",
+                    card_energy_cost="-",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled=(
+                        "[Auto] When you activate a red ≪Earthling≫ Extra from your hand, add 1 marker to this card. "
+                        "[UNISON -3][Activate: Main/Battle] If your Leader is a red <Krillin> card and you place 4 red ≪Earthling≫ Extras from your Drop at the bottom of their owner's deck : "
+                        "The next time you activate an [Activate] skill on a red Extra from your hand during this turn, reduce the skill cost by {1}."
+                    ),
+                    has_activate_main=True,
+                    has_activate_battle=True,
+                    has_auto=True,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=True,
+                    has_barrier=True,
+                    keywords=("Barrier",),
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                9634: SimpleNamespace(
+                    id=9634,
+                    card_number="BT29-004",
+                    card_name="Red Earthling Extra",
+                    card_type="EXTRA",
+                    card_color="red",
+                    card_energy_cost="0",
+                    energy_cost_int=0,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled="[Activate: Main] Draw 1 card.",
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Earthling"]',
+                    card_character_json="[]",
+                ),
+            }
+            return rows.get(
+                card_id,
+                SimpleNamespace(
+                    id=card_id,
+                    card_number=f"T-{card_id}",
+                    card_name=f"Card {card_id}",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="0",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=5000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9633: [
+                {
+                    "trigger": "owner_activate_extra_from_hand",
+                    "handler_id": "auto_add_markers_on_owner_activate_extra_from_hand",
+                    "handler_params": {
+                        "amount": 1,
+                        "required_card_type": "EXTRA",
+                        "allowed_colors": "red",
+                        "required_traits": "Earthling",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    stage = CardInstance(instance_id=700140, card_id=9633, owner_id=1, card_number="BT29-003", card_type="Z-UNISON", color="Red", markers=1)
+    state.players[1].unison_area = [stage]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=stage)
+    state.players[1].hand = [
+        CardInstance(instance_id=700141, card_id=9634, owner_id=1, card_number="BT29-004", card_type="EXTRA", color="Red", energy_cost=0)
+    ]
+
+    play_extra = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play_extra)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert state.players[1].unison_area[0].markers == 2
+    assert any(cp.name == "effect_auto_add_markers_on_owner_activate_extra_from_hand" for cp in state.checkpoints)
+
+
+def test_phase4_jaguars_island_challenge_stage_reduces_next_matching_extra_cost_from_hand() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                1: SimpleNamespace(
+                    id=1,
+                    card_number="BT29-001",
+                    card_name="Krillin",
+                    card_type="LEADER",
+                    card_color="red",
+                    card_energy_cost="-",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=10000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json="[]",
+                    card_character_json='["Krillin"]',
+                ),
+                9633: SimpleNamespace(
+                    id=9633,
+                    card_number="BT29-003",
+                    card_name="Jaguar's Island, Challenge Stage",
+                    card_type="Z-UNISON",
+                    card_color="red",
+                    card_energy_cost="-",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled=(
+                        "[Auto] When you activate a red ≪Earthling≫ Extra from your hand, add 1 marker to this card. "
+                        "[UNISON -3][Activate: Main/Battle] If your Leader is a red <Krillin> card and you place 4 red ≪Earthling≫ Extras from your Drop at the bottom of their owner's deck : "
+                        "The next time you activate an [Activate] skill on a red Extra from your hand during this turn, reduce the skill cost by {1}."
+                    ),
+                    has_activate_main=True,
+                    has_activate_battle=True,
+                    has_auto=True,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=True,
+                    has_barrier=True,
+                    keywords=("Barrier",),
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                9634: SimpleNamespace(
+                    id=9634,
+                    card_number="BT29-004",
+                    card_name="Red Earthling Extra",
+                    card_type="EXTRA",
+                    card_color="red",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled="[Activate: Main] Draw 1 card.",
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Earthling"]',
+                    card_character_json="[]",
+                ),
+            }
+            return rows.get(
+                card_id,
+                SimpleNamespace(
+                    id=card_id,
+                    card_number=f"T-{card_id}",
+                    card_name=f"Card {card_id}",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="0",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=5000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9633: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_reduce_next_matching_extra_skill_cost_from_hand",
+                    "handler_params": {
+                        "amount": 1,
+                        "uses_remaining": 1,
+                        "required_card_type": "EXTRA",
+                        "allowed_colors": "red",
+                        "requires_leader": "red <Krillin>",
+                    },
+                }
+            ],
+        },
+        skill_cost_rules={
+            9633: {
+                "activate_main_unison": [
+                    {"kind": "remove_markers", "amount": 3},
+                    {
+                        "kind": "send_owner_drop_to_bottom_deck",
+                        "amount": 4,
+                        "required_card_types": "EXTRA",
+                        "allowed_colors": "red",
+                        "required_traits": "earthling",
+                    },
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Red"
+    state.players[1].leader_area.characters = ("Krillin",)
+    state.players[1].unison_area = [
+        CardInstance(
+            instance_id=700150,
+            card_id=9633,
+            owner_id=1,
+            card_number="BT29-003",
+            card_type="Z-UNISON",
+            color="Red",
+            markers=4,
+            has_activate_main=True,
+        )
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=state.players[1].unison_area[0])
+    state.players[1].drop = [
+        CardInstance(instance_id=700151 + i, card_id=9634, owner_id=1, card_type="EXTRA", color="Red", traits=("Earthling",))
+        for i in range(4)
+    ]
+    state.players[1].hand = [
+        CardInstance(instance_id=700160, card_id=9634, owner_id=1, card_number="BT29-004", card_type="EXTRA", color="Red", energy_cost=1)
+    ]
+    deck_before = len(state.players[1].deck)
+
+    activate = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert len(state.activate_extra_cost_reductions) == 1
+    assert state.players[1].unison_area[0].markers == 1
+    assert not state.players[1].drop
+    assert len(state.players[1].deck) == deck_before + 4
+
+    play_extra = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play_extra)
+
+    assert not state.activate_extra_cost_reductions
+    assert state.counter_window is not None
+    assert state.counter_window.kind == "activate_extra_from_hand"
+    assert any(cp.name == "effect_activate_reduce_next_matching_extra_skill_cost_from_hand" for cp in state.checkpoints)
+
+
+def test_phase4_pursuit_activate_main_can_discard_self_and_add_matching_ex_evolve_from_deck_to_hand() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                1: SimpleNamespace(
+                    id=1,
+                    card_number="BT29-001",
+                    card_name="Krillin",
+                    card_type="LEADER",
+                    card_color="red",
+                    card_energy_cost="-",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=10000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Krillin"]',
+                ),
+                9638: SimpleNamespace(
+                    id=9638,
+                    card_number="BT29-007",
+                    card_name="Son Goten, Pursuit",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=4000,
+                    card_skill_unstyled=(
+                        "[Auto] When this card is played, draw 1 card.\n"
+                        "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card and you discard this card from your hand : "
+                        "Add up to 1 red <Son Goten> card with an energy cost of 3 and [EX-Evolve] from your deck to your hand, then shuffle your deck."
+                    ),
+                    has_activate_main=True,
+                    has_auto=True,
+                    has_draw=True,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Son Goten"]',
+                ),
+                9637: SimpleNamespace(
+                    id=9637,
+                    card_number="BT29-006",
+                    card_name="SS Son Goten, Demon Resistance",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="3",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=20000,
+                    card_skill_unstyled=(
+                        "[Deflect][Double Strike]\n"
+                        "[EX-Evolve][Limit 1]{r} : Red <Son Goten> card with an energy cost of 1.\n"
+                        "[Auto] When this card is played, draw 1 card and switch this card to Active Mode."
+                    ),
+                    has_activate_main=False,
+                    has_auto=True,
+                    has_draw=True,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=("Deflect", "Double Strike"),
+                    card_traits_json='[]',
+                    card_character_json='["Son Goten"]',
+                ),
+            }
+            if card_id in rows:
+                return rows[card_id]
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="red",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9638: [
+                {"trigger": "self_played", "handler_id": "auto_draw_n", "handler_params": {"amount": 1}, "limit_per_turn": 1},
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "red",
+                        "required_characters": "Son Goten",
+                        "max_cost": 3,
+                        "requires_leader": "if your leader is a red <krillin> card and you discard this card from your hand",
+                    },
+                    "limit_per_turn": 1,
+                },
+            ],
+        },
+        skill_cost_rules={
+            9638: {
+                "activate_main_hand": [
+                    {"kind": "send_self_from_hand_to_drop", "amount": 1},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Red"
+    state.players[1].leader_area.characters = ("Krillin",)
+    state.players[1].energy = [
+        CardInstance(instance_id=700150, card_id=501, owner_id=1, card_type="ENERGY", color="Red"),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=700151,
+            card_id=9638,
+            owner_id=1,
+            card_number="BT29-007",
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=1,
+            power=4000,
+            has_activate_main=True,
+            skill_text_raw=(
+                "[Auto] When this card is played, draw 1 card.\n"
+                "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card and you discard this card from your hand : "
+                "Add up to 1 red <Son Goten> card with an energy cost of 3 and [EX-Evolve] from your deck to your hand, then shuffle your deck."
+            ),
+            characters=("Son Goten",),
+        )
+    ]
+    state.players[1].deck = [9637, 1100, 1101]
+
+    activate = next(
+        action
+        for action in engine.get_legal_actions(state, 1)
+        if action.action_type == ActionType.ACTIVATE_MAIN_SKILL and action.source_zone == "hand"
+    )
+    state = engine.apply_action(state, activate)
+    assert any(card.instance_id == 700151 for card in state.players[1].drop)
+    assert not state.players[1].hand
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert any(card.card_id == 9637 for card in state.players[1].hand)
+    assert any(cp.name == "effect_activate_add_up_to_n_from_owner_deck_to_hand" for cp in state.checkpoints)
+
+
+def test_phase4_cross_dimensional_fighting_spirit_can_warp_on_play_and_buff_on_activate() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                2140: SimpleNamespace(
+                    id=2140,
+                    card_number="BT22-116",
+                    card_name="SS4 Son Goku, Cross-Dimensional Fighting Spirit",
+                    card_type="Z-BATTLE",
+                    card_color="black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=10000,
+                    power_int=15000,
+                    card_skill_unstyled=(
+                        "[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.\n"
+                        "[Activate: Main][Once per turn] If you have 3 or more energy and you remove 10 total cards in your Drop and Warp from the game: "
+                        "This card gets +10000 power and [Double Strike] for the turn."
+                    ),
+                    has_activate_main=True,
+                    has_auto=True,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Son Goku"]',
+                ),
+            }
+            if card_id in rows:
+                return rows[card_id]
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="black",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            2140: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+                    "handler_params": {"max_targets": 1, "target_policy": "first"},
+                },
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_gain_power_and_keyword_for_turn",
+                    "handler_params": {"power_delta": 10000, "grant_keyword": "Double Strike", "min_owner_energy": 3},
+                    "once_per_turn": True,
+                },
+            ]
+        },
+        skill_cost_rules={
+            2140: {
+                "activate_main": [
+                    {"kind": "send_owner_drop_and_warp_to_removed", "amount": 10},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=700200, card_id=601, owner_id=1, card_type="ENERGY", color="Black"),
+        CardInstance(instance_id=700201, card_id=602, owner_id=1, card_type="ENERGY", color="Black"),
+        CardInstance(instance_id=700202, card_id=603, owner_id=1, card_type="ENERGY", color="Black"),
+        CardInstance(instance_id=700203, card_id=604, owner_id=1, card_type="ENERGY", color="Black"),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=700204,
+            card_id=2140,
+            owner_id=1,
+            card_number="BT22-116",
+            card_type="Z-BATTLE",
+            color="Black",
+            energy_cost=1,
+            power=15000,
+            has_activate_main=True,
+            skill_text_raw=(
+                "[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.\n"
+                "[Activate: Main][Once per turn] If you have 3 or more energy and you remove 10 total cards in your Drop and Warp from the game: "
+                "This card gets +10000 power and [Double Strike] for the turn."
+            ),
+            characters=("Son Goku",),
+        )
+    ]
+    state.players[1].drop = [
+        CardInstance(instance_id=700210 + i, card_id=700 + i, owner_id=1, card_type="BATTLE", color="Black")
+        for i in range(6)
+    ]
+    state.players[1].warp = [
+        CardInstance(instance_id=700220 + i, card_id=800 + i, owner_id=1, card_type="BATTLE", color="Black")
+        for i in range(4)
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=700230, card_id=900, owner_id=2, card_type="BATTLE", color="Red", energy_cost=4, power=20000)
+    ]
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert not state.players[2].battle_area
+    assert any(card.instance_id == 700230 for card in state.players[2].warp)
+    assert any(cp.name == "effect_auto_send_up_to_n_opponent_battle_to_warp_on_play" for cp in state.checkpoints)
+
+    activate = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle"
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    source = next(card for card in state.players[1].battle_area if card.instance_id == 700204)
+    assert source.power == 25000
+    assert "Double Strike" in source.temporary_keywords
+    assert len(state.players[1].drop) + len(state.players[1].warp) == 0
+    assert len(state.players[1].removed_from_game) == 10
+    assert any(cp.name == "effect_activate_gain_power_and_keyword_for_turn" for cp in state.checkpoints)
+
+def test_phase4_kahseral_activate_battle_can_switch_matching_owner_battles_active() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 1:
+                return SimpleNamespace(
+                    id=1,
+                    card_number="BT14-L",
+                    card_name="Leader",
+                    card_type="LEADER",
+                    card_color="red",
+                    card_energy_cost="-",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=10000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Universe 11"]',
+                    card_character_json='[]',
+                )
+            if card_id == 11:
+                return SimpleNamespace(
+                    id=11,
+                    card_number="BT14-026",
+                    card_name="Kahseral, Warrior of Universe 11",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="2",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=15000,
+                    card_skill_unstyled=(
+                        "[Deflect][Blocker]\n"
+                        "[Permanent] If this card would be removed from your Battle Area by an opponent's skill, you may add 1 card from your life to your hand instead.\n"
+                        "[Activate: Battle][Once per turn] If your Leader Card is a red ≪Universe 11≫ card: "
+                        "Choose up to 2 of your red ≪Universe 11≫ cards with energy costs of 1 and 10000 power or less in your Battle Area and switch them to Active Mode."
+                    ),
+                    has_activate_main=False,
+                    has_activate_battle=True,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=True,
+                    has_barrier=False,
+                    keywords=("Deflect", "Blocker"),
+                    card_traits_json='["Universe 11"]',
+                    card_character_json='["Kahseral"]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="red",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=10000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='["Universe 11"]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            11: [
+                {
+                    "trigger": "self_activate_battle",
+                    "handler_id": "activate_switch_up_to_n_owner_battle_active",
+                    "handler_params": {
+                        "max_targets": 2,
+                        "max_cost": 1,
+                        "max_power": 10000,
+                        "allowed_colors": "red",
+                        "required_traits": "Universe 11",
+                        "requires_leader": "if your leader card is a red ≪universe 11≫ card",
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Red"
+    state.players[1].leader_area.traits = ("Universe 11",)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=700300,
+            card_id=11,
+            owner_id=1,
+            card_number="BT14-026",
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=2,
+            power=15000,
+            resting=False,
+            has_activate_battle=True,
+            skill_text_raw=(
+                "[Deflect][Blocker]\n"
+                "[Permanent] If this card would be removed from your Battle Area by an opponent's skill, you may add 1 card from your life to your hand instead.\n"
+                "[Activate: Battle][Once per turn] If your Leader Card is a red ≪Universe 11≫ card: "
+                "Choose up to 2 of your red ≪Universe 11≫ cards with energy costs of 1 and 10000 power or less in your Battle Area and switch them to Active Mode."
+            ),
+            traits=("Universe 11",),
+        ),
+        CardInstance(instance_id=700301, card_id=701, owner_id=1, card_type="BATTLE", color="Red", energy_cost=1, power=10000, resting=True, traits=("Universe 11",)),
+        CardInstance(instance_id=700302, card_id=702, owner_id=1, card_type="BATTLE", color="Red", energy_cost=1, power=9000, resting=True, traits=("Universe 11",)),
+        CardInstance(instance_id=700303, card_id=703, owner_id=1, card_type="BATTLE", color="Red", energy_cost=2, power=9000, resting=True, traits=("Universe 11",)),
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=state.players[1].battle_area[0])
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=700300,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+
+    activate = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert state.players[1].battle_area[1].resting is False
+    assert state.players[1].battle_area[2].resting is False
+    assert state.players[1].battle_area[3].resting is True
+    assert any(cp.name == "effect_activate_switch_up_to_n_owner_battle_active" for cp in state.checkpoints)
+
+def test_phase4_activate_main_can_send_hand_to_warp_and_add_matching_zamasu_from_warp() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 9729:
+                return SimpleNamespace(
+                    id=9729,
+                    card_number="BT29-094",
+                    card_name="Zamasu, Scheme",
+                    card_type="UNISON",
+                    card_color="black",
+                    card_energy_cost="X",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=15000,
+                    card_skill_unstyled="[UNISON +1][Activate: Main] placeholder",
+                    has_activate_main=True,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Zamasu"]',
+                )
+            if card_id == 972907:
+                return SimpleNamespace(
+                    id=972907,
+                    card_number="BT29-092",
+                    card_name="Fused Zamasu, Fearsome God",
+                    card_type="BATTLE",
+                    card_color="black",
+                    card_energy_cost="7",
+                    energy_cost_int=7,
+                    combo_cost_int=1,
+                    combo_power_int=10000,
+                    power_int=30000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Zamasu"]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="black",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9729: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_add_up_to_n_from_owner_warp_to_hand",
+                    "handler_params": {
+                        "max_add": 1,
+                        "allowed_colors": "black",
+                        "required_characters": "Zamasu",
+                        "max_cost": 7,
+                        "required_source_zone": "unison",
+                    },
+                }
+            ]
+        },
+        skill_cost_rules={
+            9729: {
+                "activate_main_unison": [
+                    {
+                        "kind": "send_owner_hand_to_warp",
+                        "amount": 1,
+                    }
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=700101,
+        card_id=9729,
+        owner_id=1,
+        card_number="BT29-094",
+        card_type="UNISON",
+        color="black",
+        has_activate_main=True,
+        markers=1,
+        characters=("Zamasu",),
+    )
+    state.players[1].unison_area = [source]
+    state.players[1].hand = [
+        CardInstance(instance_id=700102, card_id=211, owner_id=1, card_type="BATTLE", color="black")
+    ]
+    state.players[1].warp = [
+        CardInstance(instance_id=700103, card_id=972907, owner_id=1, card_type="BATTLE", color="black")
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    activate = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, activate)
+    assert len(state.players[1].hand) == 0
+    assert {card.instance_id for card in state.players[1].warp} == {700102, 700103}
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].hand) == 1
+    assert state.players[1].hand[0].instance_id == 700103
+    assert {card.instance_id for card in state.players[1].warp} == {700102}
+
+
+def test_phase4_secret_auto_can_place_matching_deck_card_into_drop_after_hand_card_hits_drop() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 9732:
+                return SimpleNamespace(
+                    id=9732,
+                    card_number="BT29-097",
+                    card_name="SS2 Trunks, Pursuit",
+                    card_type="BATTLE",
+                    card_color="black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=True,
+                    has_auto=True,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=True,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Trunks"]',
+                )
+            if card_id == 97321:
+                return SimpleNamespace(
+                    id=97321,
+                    card_number="BT29-098",
+                    card_name="Black Target",
+                    card_type="BATTLE",
+                    card_color="black",
+                    card_energy_cost="2",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                )
+            if card_id == 97322:
+                return SimpleNamespace(
+                    id=97322,
+                    card_number="BT29-099",
+                    card_name="Red Miss",
+                    card_type="BATTLE",
+                    card_color="red",
+                    card_energy_cost="2",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="black",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9732: [
+                {
+                    "trigger": "self_in_hand_sent_to_drop_or_warp",
+                    "handler_id": "auto_place_up_to_n_from_owner_deck_to_destination_zone",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "max_power": 15000,
+                        "required_card_type": "BATTLE",
+                        "mirror_destination_zone": True,
+                        "allowed_colors": "black,white",
+                        "limit_per_turn": 1,
+                        "limit_scope": "card_number",
+                    },
+                    "limit_per_turn": 1,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=[97322, 97321] + _deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].deck = [97322, 97321] + _deck(1100)
+    source = CardInstance(
+        instance_id=700105,
+        card_id=9732,
+        owner_id=1,
+        card_number="BT29-097",
+        card_type="BATTLE",
+        color="Black",
+        power=15000,
+        has_auto=True,
+    )
+    state.players[1].hand = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=source)
+
+    moved = state.players[1].hand.pop(0)
+    state.players[1].drop.append(moved)
+    engine._emit_card_placed_into_drop(state, owner_player_id=1, card=moved, source_zone="hand")
+
+    legal = engine.get_legal_actions(state, 1)
+    assert [row.action_type for row in legal] == [ActionType.DECLARE_SECRET_AUTO, ActionType.IGNORE_SECRET_AUTO]
+    state = engine.apply_action(state, legal[0])
+
+    assert any(card.card_id == 97321 for card in state.players[1].drop)
+    assert not any(card.card_id == 97322 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_place_up_to_n_from_owner_deck_to_destination_zone" for cp in state.checkpoints)
+
+
+def test_phase4_secret_auto_can_place_matching_deck_card_into_warp_after_hand_card_hits_warp() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 9732:
+                return SimpleNamespace(
+                    id=9732,
+                    card_number="BT29-097",
+                    card_name="SS2 Trunks, Pursuit",
+                    card_type="BATTLE",
+                    card_color="black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=True,
+                    has_auto=True,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=True,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Trunks"]',
+                )
+            if card_id == 97323:
+                return SimpleNamespace(
+                    id=97323,
+                    card_number="BT29-100",
+                    card_name="White Target",
+                    card_type="BATTLE",
+                    card_color="white",
+                    card_energy_cost="2",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=10000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="red",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=20000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            9732: [
+                {
+                    "trigger": "self_in_hand_sent_to_drop_or_warp",
+                    "handler_id": "auto_place_up_to_n_from_owner_deck_to_destination_zone",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "max_power": 15000,
+                        "required_card_type": "BATTLE",
+                        "mirror_destination_zone": True,
+                        "allowed_colors": "black,white",
+                        "limit_per_turn": 1,
+                        "limit_scope": "card_number",
+                    },
+                    "limit_per_turn": 1,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=[97323] + _deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state.players[1].deck = [97323] + _deck(1200)
+    source = CardInstance(
+        instance_id=700106,
+        card_id=9732,
+        owner_id=1,
+        card_number="BT29-097",
+        card_type="BATTLE",
+        color="Black",
+        power=15000,
+        has_auto=True,
+    )
+    state.players[1].hand = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=source)
+
+    moved = state.players[1].hand.pop(0)
+    engine._append_to_owner_warp(state, owner_player_id=1, card=moved, source_zone="hand")
+
+    legal = engine.get_legal_actions(state, 1)
+    assert [row.action_type for row in legal] == [ActionType.DECLARE_SECRET_AUTO, ActionType.IGNORE_SECRET_AUTO]
+    state = engine.apply_action(state, legal[0])
+
+    assert any(card.card_id == 97323 for card in state.players[1].warp)
+    assert any(cp.name == "effect_auto_place_up_to_n_from_owner_deck_to_destination_zone" for cp in state.checkpoints)
+
+
+def test_phase4_secret_auto_can_play_self_from_drop_after_hand_card_hits_drop_by_opponent_skill() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 10005:
+                return SimpleNamespace(
+                    id=10005,
+                    card_number="EX10-05",
+                    card_name="Dr. Uiro, Cybernetic Rebirth",
+                    card_type="BATTLE",
+                    card_color="yellow",
+                    card_energy_cost="3",
+                    energy_cost_int=3,
+                    combo_cost_int=1,
+                    combo_power_int=5000,
+                    power_int=19000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=True,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Dr. Uiro"]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="yellow",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_activate_main=False,
+                has_auto=False,
+                has_draw=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            10005: [
+                {
+                    "trigger": "self_in_hand_sent_to_drop_or_warp",
+                    "handler_id": "auto_play_self_from_drop_on_hand_drop",
+                    "handler_params": {
+                        "required_destination_zone": "drop",
+                        "required_drop_causes": "opponent_skill,revive",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    source = CardInstance(
+        instance_id=700107,
+        card_id=10005,
+        owner_id=1,
+        card_number="EX10-05",
+        card_type="BATTLE",
+        color="Yellow",
+        power=19000,
+        has_auto=True,
+    )
+    state.players[1].hand = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=source)
+
+    moved = state.players[1].hand.pop(0)
+    state.players[1].drop.append(moved)
+    engine._emit_card_placed_into_drop(
+        state,
+        owner_player_id=1,
+        card=moved,
+        source_zone="hand",
+        drop_cause="opponent_skill",
+    )
+
+    legal = engine.get_legal_actions(state, 1)
+    assert [row.action_type for row in legal] == [ActionType.DECLARE_SECRET_AUTO, ActionType.IGNORE_SECRET_AUTO]
+    state = engine.apply_action(state, legal[0])
+
+    assert any(card.instance_id == 700107 for card in state.players[1].battle_area)
+    assert not any(card.instance_id == 700107 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_play_self_from_drop_on_hand_drop" for cp in state.checkpoints)
+
+
+def test_phase4_unison_activate_main_can_optionally_send_hand_to_warp_and_draw() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "Black", 0, "LEADER", "[]", "[]", False, False),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False, False),
+                6688: ("Mira, Dimensional Superpower", "Black", 0, "UNISON", "[]", "[]", True, True),
+                910100: ("Warp Fodder", "Black", 1, "BATTLE", "[]", "[]", False, False),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main, has_activate_battle = data.get(
+                card_id,
+                ("Card", "Black", 0, "BATTLE", "[]", "[]", False, False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=has_activate_battle,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            6688: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_optional_send_owner_hand_to_warp_draw_n",
+                    "handler_params": {"hand_to_warp": 1, "amount": 1, "marker_delta": 1},
+                }
+            ]
+        },
+        skill_cost_rules={
+            6688: {
+                "activate_main_unison": [
+                    {
+                        "kind": "add_markers",
+                        "amount": 1,
+                    }
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=710001,
+        card_id=6688,
+        owner_id=1,
+        card_number="EX15-05",
+        card_type="UNISON",
+        color="Black",
+        has_activate_main=True,
+        markers=3,
+    )
+    state.players[1].unison_area = [source]
+    state.players[1].hand = [
+        CardInstance(instance_id=710002, card_id=910100, owner_id=1, card_type="BATTLE", color="Black")
+    ]
+    deck_before = len(state.players[1].deck)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    assert state.players[1].unison_area[0].markers == 4
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].deck) == deck_before - 1
+    assert {card.instance_id for card in state.players[1].warp} == {710002}
+    assert any(cp.name == "effect_activate_optional_send_owner_hand_to_warp_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_unison_activate_main_can_make_opponent_discard_from_hand() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            7909: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_opponent_discards_n_from_hand",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=710011,
+        card_id=7909,
+        owner_id=1,
+        card_number="BT25-141",
+        card_type="UNISON",
+        color="Yellow",
+        has_activate_main=True,
+        markers=1,
+    )
+    discarded = CardInstance(instance_id=710012, card_id=3001, owner_id=2, card_type="BATTLE", color="Red")
+    kept = CardInstance(instance_id=710013, card_id=3002, owner_id=2, card_type="BATTLE", color="Blue")
+    state.players[1].unison_area = [source]
+    state.players[2].hand = [discarded, kept]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    assert state.counter_window is not None
+    assert state.counter_window.pending_action.action_type == "activate_main"
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert len(state.players[2].hand) == 1
+    assert state.players[2].hand[0].instance_id == 710013
+    assert any(card.instance_id == 710012 for card in state.players[2].drop)
+    assert any(cp.name == "effect_activate_opponent_discards_n_from_hand" for cp in state.checkpoints)
+
+
+def test_phase4_unison_activate_battle_can_gain_power_per_owner_warp_count() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "Black", 0, "LEADER", "[]", "[]", False, False),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False, False),
+                6688: ("Mira, Dimensional Superpower", "Black", 0, "UNISON", "[]", "[]", True, True),
+                910101: ("Warp A", "Black", 1, "BATTLE", "[]", "[]", False, False),
+                910102: ("Warp B", "Black", 1, "BATTLE", "[]", "[]", False, False),
+                910103: ("Warp C", "Black", 1, "BATTLE", "[]", "[]", False, False),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main, has_activate_battle = data.get(
+                card_id,
+                ("Card", "Black", 0, "BATTLE", "[]", "[]", False, False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=has_activate_battle,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            6688: [
+                {
+                    "trigger": "self_activate_battle",
+                    "handler_id": "activate_gain_power_and_keyword_for_battle",
+                    "handler_params": {"power_delta": "expr:owner_warp_count*5000"},
+                }
+            ]
+        },
+        skill_cost_rules={
+            6688: {
+                "activate_battle_unison": [
+                    {
+                        "kind": "remove_markers",
+                        "amount": 2,
+                    }
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    source = CardInstance(
+        instance_id=710101,
+        card_id=6688,
+        owner_id=1,
+        card_number="EX15-05",
+        card_type="UNISON",
+        color="Black",
+        has_activate_battle=True,
+        markers=4,
+    )
+    state.players[1].unison_area = [source]
+    state.players[1].warp = [
+        CardInstance(instance_id=710102, card_id=910101, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=710103, card_id=910102, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=710104, card_id=910103, owner_id=1, card_type="BATTLE", color="Black"),
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[1].leader_area.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    assert state.players[1].unison_area[0].markers == 2
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.players[1].unison_area[0].battle_temporary_power_delta == 15000
+    assert any(cp.name == "effect_activate_gain_power_and_keyword_for_battle" for cp in state.checkpoints)
 
 
 def test_phase4_attack_declared_triggers_self_attack_effect() -> None:
@@ -1689,6 +4907,324 @@ def test_phase4_combo_declared_triggers_self_comboed_draw_rule() -> None:
     assert any(res.resolved and res.reason == "ok" for res in state.effect_resolutions)
 
 
+def test_phase4_combo_draw_rule_respects_leader_and_sparking_requirements() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            424256: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "requires_leader": "if your leader card is red",
+                        "min_owner_drop": 5,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Red"
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880211, card_id=201, owner_id=1, card_type="BATTLE", energy_cost=0, power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880212, card_id=424256, owner_id=1, card_type="BATTLE", combo_cost=0, combo_power=5000)
+    ]
+    deck_before = len(state.players[1].deck)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND)
+    state = engine.apply_action(state, combo)
+    assert len(state.players[1].deck) == deck_before
+
+    state.players[1].drop = [CardInstance(instance_id=880300 + i, card_id=300 + i, owner_id=1, card_type="BATTLE") for i in range(5)]
+    state.players[1].hand = [
+        CardInstance(instance_id=880213, card_id=424256, owner_id=1, card_type="BATTLE", combo_cost=0, combo_power=5000)
+    ]
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND)
+    state = engine.apply_action(state, combo)
+    assert len(state.players[1].deck) == deck_before - 1
+
+
+def test_phase4_combo_can_reduce_opponent_battle_power_with_or_leader_requirement() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            5332: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_power_reduce_up_to_n_on_combo",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "power_delta": -10000,
+                        "target_policy": "first",
+                        "requires_leader": "if your leader card is red or yellow",
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Yellow"
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880214, card_id=201, owner_id=1, card_type="BATTLE", energy_cost=0, power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880215, card_id=5332, owner_id=1, card_type="BATTLE", combo_cost=0, combo_power=10000)
+    ]
+    state.players[2].battle_area.append(
+        CardInstance(instance_id=880216, card_id=301, owner_id=2, card_type="BATTLE", energy_cost=2, power=15000)
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND)
+    state = engine.apply_action(state, combo)
+
+    assert state.players[2].battle_area[0].power == 5000
+    assert any(cp.name == "effect_auto_power_reduce_up_to_n_on_combo" for cp in state.checkpoints)
+
+
+def test_phase4_play_can_gain_self_power_for_turn_with_opponent_drop_requirement() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            8051: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_self_gain_power_for_turn_on_play",
+                    "handler_params": {"power_delta": 15000, "min_opponent_drop": 20},
+                    "limit_per_turn": 1,
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=880217,
+        card_id=8051,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=20000,
+        energy_cost=0,
+        has_auto=True,
+    )
+    state.players[1].hand = [source]
+    state.players[2].drop = [
+        CardInstance(instance_id=881000 + i, card_id=9000 + i, owner_id=2, card_type="BATTLE")
+        for i in range(20)
+    ]
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    played = next(card for card in state.players[1].battle_area if card.instance_id == 880217)
+    assert played.power == 35000
+    assert any(cp.name == "effect_auto_self_gain_power_for_turn_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_activate_main_can_play_from_owner_z_deck_with_skills_negated() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "Green", 0, "LEADER", "[]", '["Fused Zamasu, Insanity From Justice"]', False, False, False),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False, False, False),
+                8050: ("Gowasu, Instructor", "Green", 0, "UNISON", "[]", "[]", True, False, False),
+                910201: ("Zamasu Recruit", "Green", 1, "BATTLE", "[]", '["Zamasu"]', False, False, True),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main, has_activate_battle, has_auto = data.get(
+                card_id,
+                ("Card", "Green", 1, "BATTLE", "[]", "[]", False, False, False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=has_activate_battle,
+                has_auto=has_auto,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            8050: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_play_up_to_n_from_owner_z_deck_or_z_energy",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "source_pool": "z_deck_or_z_energy",
+                        "allowed_colors": "green",
+                        "required_characters": "zamasu,goku black",
+                        "max_cost": 1,
+                        "negate_skills": True,
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p1_z_deck_card_ids=[910201],
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].z_deck[0].face_up = True
+    source = CardInstance(
+        instance_id=880218,
+        card_id=8050,
+        owner_id=1,
+        card_number="BT26-065",
+        card_type="UNISON",
+        color="Green",
+        has_activate_main=True,
+        markers=1,
+    )
+    state.players[1].unison_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison"
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert not state.players[1].z_deck
+    played = next(card for card in state.players[1].battle_area if card.card_id == 910201)
+    assert played.has_auto is False
+    assert played.has_activate_main is False
+    assert any(cp.name == "effect_activate_play_up_to_n_from_owner_z_deck_or_z_energy" for cp in state.checkpoints)
+
+
+def test_phase4_activate_main_can_gain_multiple_keywords_for_turn_and_emit_skill_drop_cause() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            672: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_gain_power_and_keyword_for_turn",
+                    "handler_params": {"grant_keywords": "Critical,Double Strike"},
+                    "once_per_turn": True,
+                }
+            ]
+        },
+        skill_cost_rules={
+            672: {
+                "activate_main": [
+                    {
+                        "kind": "send_other_battle_to_drop",
+                        "amount": 1,
+                        "required_traits": "Red Ribbon Army",
+                    }
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=880219,
+        card_id=672,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        has_activate_main=True,
+    )
+    fodder = CardInstance(
+        instance_id=880220,
+        card_id=900220,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        traits=("Red Ribbon Army",),
+    )
+    state.players[1].battle_area = [source, fodder]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle"
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    source_after = next(card for card in state.players[1].battle_area if card.instance_id == 880219)
+    assert "Critical" in source_after.temporary_keywords
+    assert "Double Strike" in source_after.temporary_keywords
+    assert any(card.instance_id == 880220 for card in state.players[1].drop)
+    skill_drop_event = next(
+        evt for evt in state.effect_events
+        if evt.name == "card_placed_into_drop" and int(evt.payload.get("source_instance_id") or -1) == 880220
+    )
+    assert skill_drop_event.payload.get("drop_cause") == "skill"
+    assert any(cp.name == "effect_activate_gain_power_and_keyword_for_turn" for cp in state.checkpoints)
+
+
 def test_phase4_combo_battle_end_can_play_self_from_combo_to_battle_resting() -> None:
     engine = RulesEngine(
         effect_rules={
@@ -2014,6 +5550,57 @@ def test_phase4_self_activate_battle_draw_n_resolves_on_skill_activated_event() 
     )
     engine._resolve_pending_effects(state)
     assert len(state.players[1].deck) == deck_before - 1
+    assert len(state.players[1].hand) == hand_before + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_other_battle_played_by_dark_over_realm_can_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            8318: [
+                {
+                    "trigger": "owner_other_battle_played_by_dark_over_realm",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                    "limit_per_turn": 1,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    putine = CardInstance(
+        instance_id=881500,
+        card_id=8318,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Black",
+        power=15000,
+        skill_text_raw=(
+            "[Dark Over Realm 4]{b}, if your Leader is a <Mechikabura> card and you draw 1 card:\n"
+            "[Auto][Limit 1] When your Battle Card other than this card is played by a [Dark Over Realm] skill, draw 1 card."
+        ),
+    )
+    state.players[1].battle_area.append(putine)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=putine)
+    hand_before = len(state.players[1].hand)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": 881501,
+            "source_card_id": 8319,
+            "source_zone": "battle",
+            "played_via": "dark_over_realm",
+        },
+    )
+    engine._resolve_pending_effects(state)
     assert len(state.players[1].hand) == hand_before + 1
     assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
 
@@ -3522,6 +7109,377 @@ def test_phase4_activate_main_hidden_mode_cost_can_send_opponent_battle_to_warp(
     assert any(cp.name == "effect_activate_send_up_to_n_opponent_battle_to_warp" for cp in state.checkpoints)
 
 
+def test_phase4_leader_activate_main_can_look_top_and_send_matching_card_to_owner_warp() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "Black", 0, "LEADER", "[]", "[\"Goku Black\"]", True),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False),
+                900770: ("Black Battle", "Black", 2, "BATTLE", "[]", "[]", False),
+                900771: ("Red Battle", "Red", 2, "BATTLE", "[]", "[]", False),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main = data.get(
+                card_id,
+                ("Card", "Black", 0, "BATTLE", "[]", "[]", False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            1: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_look_top_send_up_to_n_to_owner_warp",
+                    "handler_params": {"look_count": 7, "max_send": 1, "allowed_colors": "black"},
+                    "once_per_turn": True,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.has_activate_main = True
+    state.players[1].deck = [
+        CardInstance(instance_id=880770, card_id=900771, owner_id=1, card_type="BATTLE", color="Red"),
+        CardInstance(instance_id=880771, card_id=900770, owner_id=1, card_type="BATTLE", color="Black"),
+        *state.players[1].deck,
+    ]
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "leader"
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.card_id == 900770 for card in state.players[1].warp)
+    assert all(card.card_id != 900771 for card in state.players[1].warp)
+    assert any(cp.name == "effect_activate_look_top_send_up_to_n_to_owner_warp" for cp in state.checkpoints)
+
+
+def test_phase4_unison_activate_main_can_send_top_deck_to_owner_warp_and_switch_self_active() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "Black", 0, "LEADER", "[]", "[]", False),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False),
+                900772: ("Warping Unison", "Black", 3, "UNISON", "[]", "[]", True),
+                900773: ("Deck A", "Black", 1, "BATTLE", "[]", "[]", False),
+                900774: ("Deck B", "Black", 1, "BATTLE", "[]", "[]", False),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main = data.get(
+                card_id,
+                ("Card", "Black", 0, "BATTLE", "[]", "[]", False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            900772: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_send_top_deck_to_owner_warp",
+                    "handler_params": {"send_count": 2, "switch_self_active": True, "marker_delta": 1},
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(
+            instance_id=880772,
+            card_id=900772,
+            owner_id=1,
+            card_type="UNISON",
+            color="Black",
+            has_activate_main=True,
+            markers=2,
+            resting=True,
+        )
+    )
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=state.players[1].unison_area[0])
+    state.players[1].deck = [
+        CardInstance(instance_id=880773, card_id=900773, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=880774, card_id=900774, owner_id=1, card_type="BATTLE", color="Black"),
+        *state.players[1].deck,
+    ]
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    source = state.players[1].unison_area[0]
+    assert source.resting is False
+    assert source.markers == 3
+    assert [card.card_id for card in state.players[1].warp][-2:] == [900773, 900774]
+    assert any(cp.name == "effect_activate_send_top_deck_to_owner_warp" for cp in state.checkpoints)
+
+
+def test_phase4_owner_opponent_battle_attack_can_pay_life_bottom_deck_and_play_self_from_drop_to_negate() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Black Leader", "Black", 0, "LEADER", "[]", "[]", False, False),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False, False),
+                900780: ("Reactive Gohan", "Black", 3, "BATTLE", "[]", "[]", False, True),
+                900781: ("Attacker", "Red", 2, "BATTLE", "[]", "[]", False, False),
+                900782: ("Hand Card", "Black", 1, "BATTLE", "[]", "[]", False, False),
+                900783: ("Life Card", "Black", 1, "BATTLE", "[]", "[]", False, False),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main, has_auto = data.get(
+                card_id,
+                ("Card", "Black", 0, "BATTLE", "[]", "[]", False, False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=False,
+                has_auto=has_auto,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            900780: [
+                {
+                    "trigger": "owner_opponent_battle_attacks",
+                    "handler_id": "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack",
+                    "handler_params": {
+                        "life_to_hand": 1,
+                        "bottom_deck_from_hand": 1,
+                        "max_owner_life": 4,
+                        "resting": True,
+                        "negate_attack": True,
+                        "requires_leader": "if your leader is black",
+                    },
+                    "limit_per_turn": 1,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_main(engine, state)
+    reactive = CardInstance(instance_id=880780, card_id=900780, owner_id=1, card_type="BATTLE", color="Black", has_auto=True)
+    state.players[1].drop.append(reactive)
+    engine._register_card_effects(state, player_id=1, source_zone="drop", card=reactive)
+    state.players[1].life = [
+        CardInstance(instance_id=880783, card_id=900783, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=880784, card_id=900783, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=880785, card_id=900783, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=880786, card_id=900783, owner_id=1, card_type="BATTLE", color="Black"),
+    ]
+    state.players[1].hand = [
+        CardInstance(instance_id=880782, card_id=900782, owner_id=1, card_type="BATTLE", color="Black")
+    ]
+    state.players[2].battle_area.append(
+        CardInstance(instance_id=880781, card_id=900781, owner_id=2, card_type="BATTLE", color="Red", power=15000)
+    )
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 2)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert state.attack_context is None
+    assert state.counter_window is None
+    assert len(state.players[1].life) == 3
+    assert len(state.players[1].hand) == 1
+    assert state.players[1].deck[-1] == 900782
+    played = next(card for card in state.players[1].battle_area if card.instance_id == 880780)
+    assert played.resting is True
+    assert all(card.instance_id != 880780 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack" for cp in state.checkpoints)
+
+
+def test_phase4_unison_activate_main_can_send_opponent_drop_battle_to_warp() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            data = {
+                1: ("Leader", "Yellow", 0, "LEADER", "[]", "[]", False),
+                2: ("Other Leader", "Red", 0, "LEADER", "[]", "[]", False),
+                900790: ("Piccolo Unison", "Yellow", 3, "UNISON", "[]", "[]", True),
+                900791: ("Drop Battle A", "Red", 2, "BATTLE", "[]", "[]", False),
+                900792: ("Drop Battle B", "Blue", 2, "BATTLE", "[]", "[]", False),
+                900793: ("Drop Extra", "Red", 1, "EXTRA", "[]", "[]", False),
+            }
+            name, color, cost, card_type, traits_json, characters_json, has_activate_main = data.get(
+                card_id,
+                ("Card", "Yellow", 0, "BATTLE", "[]", "[]", False),
+            )
+            return SimpleNamespace(
+                card_name=name,
+                power_int=15000,
+                card_type=card_type,
+                card_color=color,
+                energy_cost_int=cost,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                keywords=(),
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_activate_main=has_activate_main,
+                has_activate_battle=False,
+                has_auto=False,
+                has_permanent=False,
+                has_draw=False,
+                max_draw=None,
+                has_barrier=False,
+                z_energy_cost=None,
+                card_energy_cost=str(cost),
+                card_skill_unstyled="",
+                card_traits_json=traits_json,
+                card_character_json=characters_json,
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            900790: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_send_up_to_n_opponent_drop_battle_to_warp",
+                    "handler_params": {"max_targets": 2, "marker_delta": -3},
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].unison_area.append(
+        CardInstance(
+            instance_id=880790,
+            card_id=900790,
+            owner_id=1,
+            card_type="UNISON",
+            color="Yellow",
+            has_activate_main=True,
+            markers=4,
+        )
+    )
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=state.players[1].unison_area[0])
+    state.players[2].drop.extend(
+        [
+            CardInstance(instance_id=880791, card_id=900791, owner_id=2, card_type="BATTLE", color="Red"),
+            CardInstance(instance_id=880792, card_id=900792, owner_id=2, card_type="BATTLE", color="Blue"),
+            CardInstance(instance_id=880793, card_id=900793, owner_id=2, card_type="EXTRA", color="Red"),
+        ]
+    )
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    source = state.players[1].unison_area[0]
+    assert source.markers == 1
+    assert [card.card_id for card in state.players[2].warp][-2:] == [900791, 900792]
+    assert any(card.instance_id == 880793 for card in state.players[2].drop)
+    assert any(cp.name == "effect_activate_send_up_to_n_opponent_drop_battle_to_warp" for cp in state.checkpoints)
+
+
 def test_phase4_activate_main_gain_power_by_hidden_cost_target_original_power_for_turn() -> None:
     class Repo:
         def get_by_id(self, card_id: int, source_table: str = "cards"):
@@ -3693,6 +7651,168 @@ def test_phase4_activate_battle_hidden_mode_cost_can_gain_power_and_keyword_for_
     assert any(cp.name == "battle_modifiers_cleared" for cp in state.checkpoints)
 
 
+def test_phase4_activate_battle_can_buff_owner_leader_for_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900786: [
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_gain_power_and_keyword_for_battle",
+                    "handler_params": {
+                        "power_delta": 15000,
+                        "grant_keyword": "Double Strike",
+                        "target_scope": "owner_leader",
+                        "requires_leader": "black",
+                        "required_leader_traits": "Saiyan",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Black"
+    state.players[1].leader_area.traits = ("Saiyan",)
+    engine._card_cache[(1, "front")] = CardRuntimeData(card_name="Leader", card_type="LEADER", color="Black", traits=("Saiyan",))
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=880790,
+            card_id=900786,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Black",
+            energy_cost=0,
+            has_activate_battle=True,
+            skill_text_raw=(
+                "[Activate: Battle] If your Leader Card is a black ≪Saiyan≫ card, "
+                "it gets +15000 power and [Double Strike] for the duration of the battle."
+            ),
+        )
+    ]
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader" and a.target_zone == "leader"
+    )
+    leader_base_power = state.players[1].leader_area.power
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, action)
+    leader = state.players[1].leader_area
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    leader = state.players[1].leader_area
+    assert leader.power == leader_base_power + 15000
+    assert leader.battle_temporary_power_delta == 15000
+    assert "Double Strike" in leader.battle_temporary_keywords
+    assert any(cp.name == "effect_activate_gain_power_and_keyword_for_battle" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    leader = state.players[1].leader_area
+    assert leader.power == leader_base_power
+    assert leader.battle_temporary_power_delta == 0
+    assert "Double Strike" not in leader.battle_temporary_keywords
+
+
+def test_phase4_activate_battle_can_buff_matching_owner_cards_with_energy_drop_cost() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            900787: {
+                "activate_battle": [
+                    {"kind": "send_owner_energy_to_drop", "amount": 1}
+                ]
+            }
+        },
+        effect_rules={
+            900787: [
+                {
+                    "trigger": "self_activate_battle",
+                    "handler_id": "activate_gain_power_and_keyword_for_battle",
+                    "handler_params": {
+                        "power_delta": 10000,
+                        "max_targets": 1,
+                        "target_scope": "owner_cards",
+                        "allowed_colors": "blue",
+                        "required_traits": "Android",
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Blue"
+    state.players[1].leader_area.traits = ("Android",)
+    engine._card_cache[(1, "front")] = CardRuntimeData(card_name="Leader", card_type="LEADER", color="Blue", traits=("Android",))
+    state.players[1].energy = [
+        CardInstance(instance_id=880795, card_id=401, owner_id=1, card_type="ENERGY", color="Blue"),
+    ]
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=880796,
+            card_id=900787,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            has_activate_battle=True,
+            activate_limit_once_per_turn=True,
+            traits=("Red Ribbon Army",),
+            skill_text_raw=(
+                "[Activate: Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
+                "Choose up to 1 of your blue â‰ªAndroidâ‰« cards and it gets +10000 power for the battle."
+            ),
+        ),
+        CardInstance(
+            instance_id=880797,
+            card_id=900788,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=12000,
+            resting=False,
+            traits=("Android",),
+        ),
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=state.players[1].battle_area[0])
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    assert len(state.players[1].energy) == 0
+    assert len(state.players[1].drop) == 1
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    leader = state.players[1].leader_area
+    assert leader.battle_temporary_power_delta == 10000
+    assert any(cp.name == "effect_activate_gain_power_and_keyword_for_battle" for cp in state.checkpoints)
+
+
 def test_phase4_activate_battle_drop_hidden_mode_cost_can_ko_opponent_battle() -> None:
     engine = RulesEngine(
         skill_cost_rules={
@@ -3843,6 +7963,685 @@ def test_phase4_activate_main_can_draw_play_self_and_gain_keyword_until_opponent
     expired = next(card for card in state.players[1].battle_area if card.instance_id == 880780)
     assert "Barrier" not in expired.delayed_temporary_keywords
     assert any(cp.name == "delayed_keyword_clear_resolved" for cp in state.checkpoints)
+
+
+def test_phase4_activate_main_can_grant_keyword_to_all_matching_owner_battles_until_opponent_turn_end() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900785: [
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_buff_owner_battle_cards",
+                    "handler_params": {
+                        "target_policy": "all",
+                        "target_scope": "owner_battle",
+                        "grant_keyword": "Barrier",
+                        "keyword_duration": "opponent_turn",
+                        "allowed_colors": "red",
+                        "required_traits": "Saiyan",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=880791, card_id=901011, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=880785,
+            card_id=900785,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Red",
+            energy_cost=1,
+            has_activate_main=True,
+            skill_text_raw=(
+                "[Activate: Main] Choose all red ≪Saiyan≫ cards in your Battle Area. "
+                "They gain [Barrier] until the end of your opponent's next turn."
+            ),
+        )
+    ]
+    state.players[1].battle_area.extend(
+        [
+            CardInstance(instance_id=880786, card_id=901012, owner_id=1, card_type="BATTLE", color="Red", traits=("Saiyan",)),
+            CardInstance(instance_id=880787, card_id=901013, owner_id=1, card_type="BATTLE", color="Red", traits=("Saiyan",)),
+            CardInstance(instance_id=880788, card_id=901014, owner_id=1, card_type="BATTLE", color="Blue", traits=("Saiyan",)),
+            CardInstance(instance_id=880789, card_id=901015, owner_id=1, card_type="BATTLE", color="Red", traits=("Earthling",)),
+        ]
+    )
+    engine._card_cache[(901012, "front")] = CardRuntimeData(card_name="Red Saiyan A", card_type="BATTLE", color="Red", traits=("Saiyan",))
+    engine._card_cache[(901013, "front")] = CardRuntimeData(card_name="Red Saiyan B", card_type="BATTLE", color="Red", traits=("Saiyan",))
+    engine._card_cache[(901014, "front")] = CardRuntimeData(card_name="Blue Saiyan", card_type="BATTLE", color="Blue", traits=("Saiyan",))
+    engine._card_cache[(901015, "front")] = CardRuntimeData(card_name="Red Earthling", card_type="BATTLE", color="Red", traits=("Earthling",))
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert "Barrier" in next(card for card in state.players[1].battle_area if card.instance_id == 880786).delayed_temporary_keywords
+    assert "Barrier" in next(card for card in state.players[1].battle_area if card.instance_id == 880787).delayed_temporary_keywords
+    assert "Barrier" not in next(card for card in state.players[1].battle_area if card.instance_id == 880788).delayed_temporary_keywords
+    assert "Barrier" not in next(card for card in state.players[1].battle_area if card.instance_id == 880789).delayed_temporary_keywords
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+    assert "Barrier" in next(card for card in state.players[1].battle_area if card.instance_id == 880786).delayed_temporary_keywords
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    assert "Barrier" not in next(card for card in state.players[1].battle_area if card.instance_id == 880786).delayed_temporary_keywords
+    assert any(cp.name == "effect_activate_buff_owner_battle_cards" for cp in state.checkpoints)
+
+
+def test_phase4_activate_battle_can_buff_matching_owner_cards_for_turn_with_energy_drop_cost() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            901200: [
+                {
+                    "trigger": "self_activate_battle",
+                    "handler_id": "activate_buff_owner_battle_cards",
+                    "handler_params": {
+                        "target_policy": "first",
+                        "target_scope": "owner_cards",
+                        "max_targets": 1,
+                        "power_delta": 5000,
+                        "allowed_colors": "blue",
+                        "required_traits": "Red Ribbon Army",
+                    },
+                }
+            ]
+        },
+        skill_cost_rules={
+            901200: {
+                "activate_battle": [
+                    {"kind": "send_owner_energy_to_drop", "amount": 1}
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    source = CardInstance(
+        instance_id=901201,
+        card_id=901200,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        power=20000,
+        has_activate_battle=True,
+    )
+    target = CardInstance(
+        instance_id=901202,
+        card_id=901201,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        traits=("Red Ribbon Army",),
+    )
+    state.players[1].battle_area = [source, target]
+    state.players[1].energy = [
+        CardInstance(instance_id=901203, card_id=901202, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    engine._card_cache[(901201, "front")] = CardRuntimeData(card_name="Target", card_type="BATTLE", color="Blue", traits=("Red Ribbon Army",))
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[1].leader_area.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    assert len(state.players[1].energy) == 0
+    assert len(state.players[1].drop) == 1
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert next(card for card in state.players[1].battle_area if card.instance_id == 901202).temporary_power_delta == 5000
+    assert any(cp.name == "effect_activate_buff_owner_battle_cards" for cp in state.checkpoints)
+
+
+def test_phase4_scheme_wish_minus_seven_grants_indestructible_and_restricts_copies_next_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            7910: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_buff_owner_battle_cards",
+                    handler_params={
+                        "target_scope": "owner_battle",
+                        "max_targets": 1,
+                        "grant_keyword": "Indestructible",
+                        "keyword_duration": "opponent_turn",
+                        "restrict_activate_self_copies_next_turn": True,
+                    },
+                    family_id="self_activate_main:activate_buff_owner_battle_cards",
+                    provenance="test",
+                ),
+            )
+        },
+        skill_cost_rules={7910: {"activate_main_unison": [{"kind": "remove_owner_unison_markers", "amount": 7}]}},
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=991420,
+        card_id=7910,
+        owner_id=1,
+        card_type="UNISON",
+        color="Black",
+        markers=8,
+        has_activate_main=True,
+        skill_text_raw=(
+            "[-7][Activate: Main] Choose up to 1 of your Battle Cards and it gains [Indestructible] until the end of your opponent's turn. "
+            "You can't activate skills on copies of this card during your next turn."
+        ),
+    )
+    copy_in_hand = CardInstance(
+        instance_id=991421,
+        card_id=7910,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=0,
+        has_activate_main=True,
+        skill_text_raw="[Activate: Main] Test copy skill.",
+    )
+    target = CardInstance(instance_id=991422, card_id=991422, owner_id=1, card_type="BATTLE", color="Black", power=20000)
+    state.players[1].unison_area = [source]
+    state.players[1].hand = [copy_in_hand]
+    state.players[1].battle_area = [target]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison")
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    target = next(card for card in state.players[1].battle_area if card.instance_id == 991422)
+    source = next(card for card in state.players[1].unison_area if card.instance_id == 991420)
+    assert source.markers == 1
+    assert "Indestructible" in target.delayed_temporary_keywords
+    assert any(cp.name == "effect_activate_buff_owner_battle_cards" for cp in state.checkpoints)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    target = next(card for card in state.players[1].battle_area if card.instance_id == 991422)
+    assert "Indestructible" in target.delayed_temporary_keywords
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    assert any(cp.name == "scheduled_activate_skill_restrictions_activated" for cp in state.checkpoints)
+    state = _to_main(engine, state)
+
+    legal = engine.get_legal_actions(state, 1)
+    assert not any(
+        a.action_type == ActionType.ACTIVATE_MAIN_SKILL
+        and (
+            (a.source_zone == "hand" and state.players[1].hand[a.source_index].card_id == 7910)
+            or (a.source_zone == "unison" and state.players[1].unison_area[a.source_index].card_id == 7910)
+        )
+        for a in legal
+    )
+    target = next(card for card in state.players[1].battle_area if card.instance_id == 991422)
+    assert "Indestructible" not in target.delayed_temporary_keywords
+
+
+def test_phase4_activate_main_can_play_self_with_markers_from_hand_or_warp() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900787: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_play_self_from_hand",
+                    "handler_params": {"markers": 2, "required_source_zone": "hand", "min_opponent_energy": 3},
+                },
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_play_self_from_warp",
+                    "handler_params": {"markers": 2, "required_source_zone": "warp", "min_opponent_energy": 3},
+                },
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[2].energy = [
+        CardInstance(instance_id=880810, card_id=901110, owner_id=2, color="Black"),
+        CardInstance(instance_id=880811, card_id=901111, owner_id=2, color="Black"),
+        CardInstance(instance_id=880812, card_id=901112, owner_id=2, color="Black"),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=880801, card_id=901101, owner_id=1, color="Black"),
+        CardInstance(instance_id=880802, card_id=901102, owner_id=1, color="Black"),
+        CardInstance(instance_id=880803, card_id=901103, owner_id=1, color="Black"),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=880804,
+            card_id=900787,
+            owner_id=1,
+            card_type="UNISON",
+            color="Black",
+            energy_cost=2,
+            has_activate_main=True,
+        )
+    ]
+    hand_action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "hand" and a.source_index == 0
+    )
+    state = engine.apply_action(state, hand_action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.counter_window is not None and state.counter_window.kind == "play"
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].unison_area) == 1
+    assert state.players[1].unison_area[0].instance_id == 880804
+    assert state.players[1].unison_area[0].markers == 2
+    assert any(cp.name == "counter_timing_play_from_skill" for cp in state.checkpoints)
+
+    state.players[1].warp = [
+        CardInstance(
+            instance_id=880805,
+            card_id=900787,
+            owner_id=1,
+            card_type="UNISON",
+            color="Black",
+            energy_cost=2,
+            has_activate_main=True,
+        )
+    ]
+    for energy in state.players[1].energy:
+        energy.resting = False
+    warp_action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "warp" and a.source_index == 0
+    )
+    state = engine.apply_action(state, warp_action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.counter_window is not None and state.counter_window.kind == "play"
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.instance_id == 880805 and card.markers == 2 for card in state.players[1].unison_area)
+    assert any(cp.name == "counter_timing_play_from_skill" for cp in state.checkpoints)
+
+
+def test_phase4_activate_battle_from_hand_can_play_self_then_discard_opponent_hand() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            901210: [
+                {
+                    "trigger": "self_activate_battle",
+                    "handler_id": "activate_play_self_from_hand",
+                    "handler_params": {
+                        "opponent_discards_after_play": 1,
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=901211, card_id=901310, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=901212,
+            card_id=901210,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=1,
+            has_activate_battle=True,
+        )
+    ]
+    state.players[2].hand = [
+        CardInstance(instance_id=901213, card_id=901311, owner_id=2, card_type="BATTLE", color="Red"),
+        CardInstance(instance_id=901214, card_id=901312, owner_id=2, card_type="BATTLE", color="Red"),
+    ]
+
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[1].leader_area.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "hand" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.counter_window is not None and state.counter_window.kind == "play"
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert any(card.instance_id == 901212 for card in state.players[1].battle_area)
+    assert len(state.players[2].hand) == 1
+    assert len(state.players[2].drop) == 1
+    assert any(cp.name == "counter_timing_play_from_skill" for cp in state.checkpoints)
+
+
+def test_phase4_play_can_grant_keyword_to_owner_battles_with_min_character_count_until_opponent_turn_end() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            901220: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_buff_up_to_n_owner_battles_on_play",
+                    "handler_params": {
+                        "max_targets": 2,
+                        "min_character_count": 2,
+                        "required_characters": "SH",
+                        "grant_keyword": "Barrier",
+                        "keyword_duration": "opponent_turn",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=901221, card_id=901320, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=901222,
+            card_id=901220,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=1,
+            has_auto=True,
+        )
+    ]
+    state.players[1].battle_area = [
+        CardInstance(instance_id=901223, card_id=901321, owner_id=1, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=901224, card_id=901322, owner_id=1, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=901225, card_id=901323, owner_id=1, card_type="BATTLE", color="Blue"),
+    ]
+    engine._card_cache[(901321, "front")] = CardRuntimeData(card_name="Gamma Pair A", card_type="BATTLE", color="Blue", characters=("Gamma 1", "SH"))
+    engine._card_cache[(901322, "front")] = CardRuntimeData(card_name="Gamma Pair B", card_type="BATTLE", color="Blue", characters=("Gamma 2", "SH"))
+    engine._card_cache[(901323, "front")] = CardRuntimeData(card_name="Single SH", card_type="BATTLE", color="Blue", characters=("SH",))
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert "Barrier" in next(card for card in state.players[1].battle_area if card.instance_id == 901223).delayed_temporary_keywords
+    assert "Barrier" in next(card for card in state.players[1].battle_area if card.instance_id == 901224).delayed_temporary_keywords
+    assert "Barrier" not in next(card for card in state.players[1].battle_area if card.instance_id == 901225).delayed_temporary_keywords
+    assert any(cp.name == "effect_auto_buff_up_to_n_owner_battles_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_attack_can_ko_up_to_n_opponent_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            901230: [
+                {
+                    "trigger": "self_attacks",
+                    "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+                    "handler_params": {"max_targets": 1, "target_policy": "first"},
+                    "once_per_turn": True,
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(instance_id=901231, card_id=901230, owner_id=1, card_type="BATTLE", color="Yellow", power=20000, has_auto=True)
+    defender = CardInstance(instance_id=901232, card_id=901330, owner_id=2, card_type="BATTLE", color="Red", power=10000)
+    state.players[1].battle_area = [attacker]
+    state.players[2].battle_area = [defender]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=attacker)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert not state.players[2].battle_area
+    assert any(card.instance_id == 901232 for card in state.players[2].drop)
+    assert any(cp.name == "effect_auto_ko_up_to_n_on_attack" for cp in state.checkpoints)
+
+
+def test_phase4_self_ko_can_play_named_card_from_owner_drop() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            if card_id == 901240:
+                return SimpleNamespace(
+                    id=901240,
+                    card_number="BT25-114",
+                    card_name="Nuova Shenron, Blazing Blaster Meteor",
+                    card_type="BATTLE",
+                    card_color="Yellow",
+                    card_energy_cost="5",
+                    energy_cost_int=5,
+                    combo_cost_int=1,
+                    combo_power_int=5000,
+                    power_int=30000,
+                    card_skill_unstyled="",
+                    has_auto=True,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='["Nuova Shenron"]',
+                )
+            if card_id == 901241:
+                return SimpleNamespace(
+                    id=901241,
+                    card_number="BT25-200",
+                    card_name="Negative Energy Four-Star Ball",
+                    card_type="EXTRA",
+                    card_color="Yellow",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    power_int=0,
+                    card_skill_unstyled="",
+                    has_auto=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                )
+            return SimpleNamespace(
+                id=card_id,
+                card_number=f"T-{card_id}",
+                card_name=f"Card {card_id}",
+                card_type="BATTLE",
+                card_color="Yellow",
+                card_energy_cost="1",
+                energy_cost_int=1,
+                combo_cost_int=0,
+                combo_power_int=5000,
+                power_int=5000,
+                card_skill_unstyled="",
+                has_auto=False,
+                has_activate_main=False,
+                has_activate_battle=False,
+                has_counter=False,
+                has_counter_attack=False,
+                has_counter_play=False,
+                has_permanent=False,
+                has_draw=False,
+                has_barrier=False,
+                keywords=(),
+                card_traits_json='[]',
+                card_character_json='[]',
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            901240: [
+                {
+                    "trigger": "self_koed",
+                    "handler_id": "auto_play_up_to_n_named_from_owner_drop_on_self_ko",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "required_name_contains": "NEGATIVE ENERGY FOUR-STAR BALL",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    source = CardInstance(instance_id=901242, card_id=901240, owner_id=1, card_type="BATTLE", color="Yellow", power=30000, has_auto=True)
+    extra = CardInstance(instance_id=901243, card_id=901241, owner_id=1, card_type="EXTRA", color="Yellow")
+    state.players[1].battle_area = [source]
+    state.players[1].drop = [extra]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    engine._ko_card(state, 1, "battle", 901242)
+    engine._run_confirmative_rule_processing(state)
+    engine._resolve_pending_effects(state)
+    assert any(card.instance_id == 901243 for card in state.players[1].battle_area)
+    assert not any(card.instance_id == 901243 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_play_up_to_n_named_from_owner_drop_on_self_ko" for cp in state.checkpoints)
+
+
+def test_phase4_activate_battle_unison_can_switch_self_active_and_gain_power_for_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            900788: [
+                {
+                    "trigger": "self_activate_battle",
+                    "handler_id": "activate_switch_self_active_and_gain_power_for_turn",
+                    "handler_params": {"power_delta": 15000},
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].unison_area = [
+        CardInstance(
+            instance_id=880806,
+            card_id=900788,
+            owner_id=1,
+            card_type="UNISON",
+            color="Black",
+            power=20000,
+            resting=True,
+            has_activate_battle=True,
+            markers=2,
+        )
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=state.players[1].unison_area[0])
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "leader" and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_BATTLE_SKILL and a.source_zone == "unison" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    unison = state.players[1].unison_area[0]
+    assert unison.resting is False
+    assert unison.power == 35000
+    assert unison.temporary_power_delta == 15000
+    assert any(cp.name == "effect_activate_switch_self_active_and_gain_power_for_turn" for cp in state.checkpoints)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    assert state.players[1].unison_area[0].power == 20000
+    assert state.players[1].unison_area[0].temporary_power_delta == 0
 
 
 def test_phase4_activate_main_hidden_mode_battle_or_energy_cost_can_ko_and_buff_leader_for_turn() -> None:
@@ -5581,6 +10380,126 @@ def test_phase4_self_played_can_play_from_drop_rest_with_skills_negated_and_disc
     assert any(cp.name == "effect_auto_play_up_to_n_from_owner_drop_on_play" for cp in state.checkpoints)
 
 
+def test_phase4_activate_extra_from_hand_exposes_effect_choice_actions_and_selected_search_effect_resolves() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            424301: [
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_play_up_to_n_each_named_from_owner_deck_or_drop",
+                    "handler_params": {
+                        "max_each": 1,
+                        "required_name_contains_each": "SON GOTEN|TRUNKS : YOUTH",
+                        "allowed_colors": "red",
+                        "required_card_type": "BATTLE",
+                        "max_cost": 1,
+                        "rest_mode": True,
+                        "discard_from_hand_before": 1,
+                    },
+                },
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "red",
+                        "required_card_type": "EXTRA",
+                        "max_cost": 1,
+                    },
+                    "limit_per_turn": 1,
+                },
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [CardInstance(instance_id=880471, card_id=900911, owner_id=1, color="Red")]
+    state.players[1].hand = [
+        CardInstance(instance_id=880472, card_id=424301, owner_id=1, card_type="EXTRA", color="Red", energy_cost=1),
+        CardInstance(instance_id=880473, card_id=900912, owner_id=1, card_type="BATTLE", color="Red", energy_cost=1),
+    ]
+    state.players[1].deck = [900913, 900914]
+    engine._card_cache[(900913, "front")] = CardRuntimeData(card_name="Search Extra", card_type="EXTRA", color="Red", energy_cost=1)
+    legal = [a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0]
+    assert len(legal) == 2
+    assert {a.effect_choice for a in legal} == {0, 1}
+    search_action = next(a for a in legal if a.effect_choice == 1)
+    state = engine.apply_action(state, search_action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert [c.card_id for c in state.players[1].hand] == [900912, 900913]
+    assert not state.players[1].battle_area
+    assert any(cp.name == "effect_activate_add_up_to_n_from_owner_deck_to_hand" for cp in state.checkpoints)
+    assert not any(cp.name == "effect_activate_play_up_to_n_each_named_from_owner_deck_or_drop" for cp in state.checkpoints)
+
+
+def test_phase4_activate_extra_from_hand_selected_play_effect_discards_and_plays_each_named() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            424302: [
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_play_up_to_n_each_named_from_owner_deck_or_drop",
+                    "handler_params": {
+                        "max_each": 1,
+                        "required_name_contains_each": "SON GOTEN|TRUNKS : YOUTH",
+                        "allowed_colors": "red",
+                        "required_card_type": "BATTLE",
+                        "max_cost": 1,
+                        "rest_mode": True,
+                        "discard_from_hand_before": 1,
+                    },
+                },
+                {
+                    "trigger": "self_activate_extra_from_hand",
+                    "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "red",
+                        "required_card_type": "EXTRA",
+                        "max_cost": 1,
+                    },
+                },
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [CardInstance(instance_id=880481, card_id=900921, owner_id=1, color="Red")]
+    state.players[1].hand = [
+        CardInstance(instance_id=880482, card_id=424302, owner_id=1, card_type="EXTRA", color="Red", energy_cost=1),
+        CardInstance(instance_id=880483, card_id=900922, owner_id=1, card_type="BATTLE", color="Red", energy_cost=1),
+    ]
+    state.players[1].deck = [900923]
+    state.players[1].drop = [
+        CardInstance(instance_id=880484, card_id=900924, owner_id=1, card_type="BATTLE", color="Red", energy_cost=1),
+    ]
+    engine._card_cache[(900923, "front")] = CardRuntimeData(card_name="Son Goten", card_type="BATTLE", color="Red", energy_cost=1)
+    engine._card_cache[(900924, "front")] = CardRuntimeData(card_name="Trunks : Youth", card_type="BATTLE", color="Red", energy_cost=1)
+    play_action = next(
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0 and a.effect_choice == 0
+    )
+    state = engine.apply_action(state, play_action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].battle_area) == 2
+    assert all(card.resting for card in state.players[1].battle_area)
+    assert {card.card_id for card in state.players[1].battle_area} == {900923, 900924}
+    assert any(card.instance_id == 880483 for card in state.players[1].drop)
+    assert any(cp.name == "effect_activate_play_up_to_n_each_named_from_owner_deck_or_drop" for cp in state.checkpoints)
+
+
 def test_phase4_once_per_turn_is_detected_from_skill_text() -> None:
     class Repo:
         def get_by_id(self, card_id: int, source_table: str = "cards"):
@@ -5693,3 +10612,1932 @@ def test_phase4_once_per_turn_auto_draw_on_attack_triggers_once_same_turn() -> N
     rows = [r for r in state.effect_resolutions if r.reason in {"ok", "once_per_turn_used"}]
     assert any(r.resolved and r.reason == "ok" for r in rows)
     assert any((not r.resolved) and r.reason == "once_per_turn_used" for r in rows)
+
+
+def test_phase4_son_gohan_misadventure_can_declare_secret_auto_after_field_extra_hits_drop() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            90: (
+                EffectRule(
+                    trigger="owner_field_extra_placed_into_drop",
+                    handler_id="auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest",
+                    handler_params={"max_targets": 1, "ignores_barrier": True, "requires_leader": "yellow"},
+                    family_id="owner_field_extra_placed_into_drop:auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Yellow"
+    misadventure = CardInstance(
+        instance_id=990900,
+        card_id=90,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Yellow",
+        power=15000,
+        has_auto=True,
+        keywords=("Blocker",),
+    )
+    field_extra = CardInstance(
+        instance_id=990901,
+        card_id=909001,
+        owner_id=1,
+        card_type="EXTRA",
+        color="Yellow",
+        keywords=("Field",),
+    )
+    target = CardInstance(
+        instance_id=990902,
+        card_id=909002,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+        power=15000,
+        has_barrier=True,
+        keywords=("Barrier",),
+        resting=False,
+    )
+    state.players[1].hand = [misadventure]
+    state.players[1].battle_area.append(field_extra)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=misadventure)
+
+    removed = state.players[1].battle_area.pop(0)
+    state.players[1].drop.append(removed)
+    engine._emit_board_card_placed_into_drop(state, owner_player_id=1, card=removed, source_zone="battle")
+
+    legal = engine.get_legal_actions(state, 1)
+    assert [row.action_type for row in legal] == [ActionType.DECLARE_SECRET_AUTO, ActionType.IGNORE_SECRET_AUTO]
+
+    state = engine.apply_action(state, next(row for row in legal if row.action_type == ActionType.DECLARE_SECRET_AUTO))
+
+    assert not state.players[1].hand
+    assert any(card.card_id == 90 for card in state.players[1].battle_area)
+    assert state.players[2].battle_area[0].resting is True
+    assert any(cp.name == "effect_auto_play_self_from_hand_on_owner_field_extra_to_drop_switch_up_to_n_opponent_board_rest" for cp in state.checkpoints)
+
+
+def test_phase4_son_goku_reclaiming_hope_activate_main_restricts_attack_next_opponent_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            86: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end",
+                    handler_params={
+                        "max_targets": 1,
+                        "marker_delta": 1,
+                        "requires_cost_greater_or_equal_opponent_current_energy": True,
+                    },
+                    family_id="self_activate_main:activate_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    unison = CardInstance(
+        instance_id=990910,
+        card_id=86,
+        owner_id=1,
+        card_type="UNISON",
+        color="Yellow",
+        markers=1,
+        has_activate_main=True,
+    )
+    target = CardInstance(
+        instance_id=990911,
+        card_id=86001,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=3,
+        power=15000,
+    )
+    state.players[1].unison_area.append(unison)
+    state.players[2].battle_area.append(target)
+    state.players[2].energy = [
+        CardInstance(instance_id=990912 + i, card_id=86100 + i, owner_id=2, card_type="BATTLE", color="Yellow", resting=True)
+        for i in range(3)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=unison)
+
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "unison" and a.source_index == 0
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert any(row.target_instance_id == 990911 for row in state.scheduled_attack_restrictions)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_main(engine, state)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(cp.name == "scheduled_attack_restrictions_activated" for cp in state.checkpoints)
+    assert not any(
+        a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0
+        for a in legal
+    )
+
+
+def test_phase4_son_goku_reclaiming_hope_blocker_auto_can_restand_self() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            86: (
+                EffectRule(
+                    trigger="self_blocker_activated",
+                    handler_id="auto_rest_owner_battle_on_self_blocker_activated_switch_self_active",
+                    handler_params={"rest_owner_battle_count": 1},
+                    family_id="self_blocker_activated:auto_rest_owner_battle_on_self_blocker_activated_switch_self_active",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=990920,
+        card_id=86,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Yellow",
+        power=15000,
+        has_auto=True,
+        resting=True,
+        keywords=("Blocker",),
+    )
+    other = CardInstance(
+        instance_id=990921,
+        card_id=86002,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Yellow",
+        power=15000,
+        resting=False,
+    )
+    state.players[1].battle_area.extend([source, other])
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    engine._emit_effect_event(
+        state,
+        name="blocker_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990920, "source_card_id": 86},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert state.players[1].battle_area[0].resting is False
+    assert state.players[1].battle_area[1].resting is True
+    assert any(cp.name == "effect_auto_rest_owner_battle_on_self_blocker_activated_switch_self_active" for cp in state.checkpoints)
+
+
+def test_phase4_android_18_unknown_threat_attack_auto_adds_matching_energy_to_hand() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            8372: (
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack",
+                        handler_params={
+                            "max_targets": 1,
+                            "allowed_colors": "blue",
+                            "required_characters": "Android",
+                        },
+                    family_id="self_attacks:auto_add_up_to_n_matching_from_owner_energy_to_hand_on_attack",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990930,
+        card_id=8372,
+        owner_id=1,
+        card_type="UNISON",
+        color="Blue",
+        power=15000,
+        markers=1,
+        has_auto=True,
+    )
+    matching_energy = CardInstance(
+        instance_id=990931,
+        card_id=83721,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Android",),
+        resting=True,
+    )
+    state.players[1].unison_area.append(attacker)
+    state.players[1].energy.append(matching_energy)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=attacker)
+
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": 990930, "attacker_zone": "unison", "target_player_id": 2, "target_zone": "leader"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert any(card.instance_id == 990931 for card in state.players[1].hand)
+    assert not any(card.instance_id == 990931 for card in state.players[1].energy)
+
+
+def test_phase4_android_18_unknown_threat_activate_main_choices_resolve_separately() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            8372: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
+                    handler_params={"max_targets": 1, "marker_delta": 1},
+                    family_id="self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
+                    provenance="test",
+                ),
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end",
+                    handler_params={"opponent_bottom_deck_from_hand": 1, "max_targets": 1, "allowed_colors": "blue"},
+                    family_id="self_activate_main:activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    unison = CardInstance(
+        instance_id=990940,
+        card_id=8372,
+        owner_id=1,
+        card_type="UNISON",
+        color="Blue",
+        power=15000,
+        markers=1,
+        has_activate_main=True,
+        resting=True,
+    )
+    opponent_battle = CardInstance(
+        instance_id=990941,
+        card_id=83722,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+        power=15000,
+    )
+    blue_energy = CardInstance(
+        instance_id=990942,
+        card_id=83723,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        resting=True,
+    )
+    opponent_hand = CardInstance(
+        instance_id=990943,
+        card_id=83724,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+    )
+    state.players[1].unison_area.append(unison)
+    state.players[1].energy.append(blue_energy)
+    state.players[2].battle_area.append(opponent_battle)
+    state.players[2].hand.append(opponent_hand)
+    opponent_hand_before = len(state.players[2].hand)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=unison)
+
+    legal = [a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ACTIVATE_MAIN_SKILL]
+    assert len(legal) == 2
+
+    plus_action = next(
+        a
+        for a in legal
+        if a.effect_choice
+        and any(
+            reg.effect_id == a.effect_choice
+            and reg.handler_id == "activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end"
+            for reg in state.effect_registry
+        )
+    )
+    state_plus = engine.apply_action(state, plus_action)
+    state_plus = engine.apply_action(state_plus, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert not state_plus.players[2].battle_area
+    state_plus = engine.apply_action(state_plus, Action(action_type=ActionType.END_TURN, player_id=1))
+    assert state_plus.players[1].unison_area[0].resting is False
+
+    zero_action = next(
+        a
+        for a in legal
+        if a.effect_choice
+        and any(
+            reg.effect_id == a.effect_choice
+            and reg.handler_id == "activate_opponent_bottom_decks_n_from_hand_and_switch_up_to_n_owner_energy_active_at_turn_end"
+            for reg in state.effect_registry
+        )
+    )
+    state_zero = engine.apply_action(state, zero_action)
+    state_zero = engine.apply_action(state_zero, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state_zero.players[2].hand) == opponent_hand_before - 1
+    state_zero = engine.apply_action(state_zero, Action(action_type=ActionType.END_TURN, player_id=1))
+    assert state_zero.players[1].energy[0].resting is False
+
+
+def test_phase4_frieza_unrestricted_power_activate_main_buffs_self_and_reduces_opponent() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            8881: {
+                "activate_main": [
+                    {"kind": "discard_hand", "amount": 1},
+                ]
+            }
+        },
+        effect_rules={
+            8881: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn",
+                    handler_params={
+                        "self_power_delta": 10000,
+                        "target_power_delta": -20000,
+                        "max_targets": 1,
+                        "target_policy": "first",
+                    },
+                    family_id="self_activate_main:activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn",
+                    provenance="test",
+                ),
+            )
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=991100,
+        card_id=8881,
+        owner_id=1,
+        card_type="Z-BATTLE",
+        color="Red",
+        power=30000,
+        has_activate_main=True,
+    )
+    fodder = CardInstance(instance_id=991101, card_id=88811, owner_id=1, card_type="BATTLE", color="Red")
+    target = CardInstance(
+        instance_id=991102,
+        card_id=88812,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+        power=20000,
+    )
+    state.players[1].battle_area.append(source)
+    state.players[1].hand = [fodder]
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert not state.players[1].hand
+    assert state.players[1].battle_area[0].temporary_power_delta == 10000
+    assert state.players[2].battle_area[0].temporary_power_delta == -20000
+    assert any(cp.name == "effect_activate_self_gain_power_and_reduce_up_to_n_opponent_battle_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_fused_zamasu_god_of_despair_activate_main_uses_spirit_boost_and_restands() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            9720: {
+                "activate_main": [
+                    {"kind": "remove_owner_unison_markers", "amount": 1},
+                    {"kind": "send_owner_drop_to_warp", "amount": 3},
+                ]
+            }
+        },
+        effect_rules={
+            9720: (
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_switch_self_active_and_gain_power_for_turn",
+                    handler_params={},
+                    family_id="self_activate_main:activate_switch_self_active_and_gain_power_for_turn",
+                    provenance="test",
+                    limit_per_turn=1,
+                ),
+            )
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=991110,
+        card_id=9720,
+        owner_id=1,
+        card_type="Z-BATTLE",
+        color="Black",
+        power=30000,
+        resting=True,
+        has_activate_main=True,
+    )
+    marker_source = CardInstance(
+        instance_id=991111,
+        card_id=97201,
+        owner_id=1,
+        card_type="UNISON",
+        color="Black",
+        markers=1,
+    )
+    state.players[1].battle_area.append(source)
+    state.players[1].unison_area.append(marker_source)
+    state.players[1].drop = [
+        CardInstance(instance_id=991112 + i, card_id=97210 + i, owner_id=1, card_type="BATTLE", color="Black")
+        for i in range(3)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    activate = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert state.players[1].battle_area[0].resting is False
+    assert not state.players[1].unison_area
+    assert any(cp.name == "rule_unison_zero_markers" for cp in state.checkpoints)
+    assert len(state.players[1].drop) == 1
+    assert len(state.players[1].warp) == 3
+    assert any(cp.name == "effect_activate_switch_self_active_and_gain_power_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_justice_impact_field_auto_and_activate_main_board_wipe() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            8385: {
+                "activate_main": [
+                    {"kind": "send_owner_energy_to_drop", "amount": 2},
+                ]
+            }
+        },
+        effect_rules={
+            8385: (
+                EffectRule(
+                    trigger="self_field_extra_placed",
+                    handler_id="auto_switch_up_to_n_owner_leader_active_on_field_extra_placed",
+                    handler_params={
+                        "max_targets": 1,
+                        "allowed_colors": "blue",
+                        "required_traits": "red ribbon army",
+                    },
+                    family_id="self_field_extra_placed:auto_switch_up_to_n_owner_leader_active_on_field_extra_placed",
+                    provenance="test",
+                ),
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_remove_self_and_ko_all_opponent_battles",
+                    handler_params={},
+                    family_id="self_activate_main:activate_remove_self_and_ko_all_opponent_battles",
+                    provenance="test",
+                ),
+            )
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Blue"
+    state.players[1].leader_area.traits = ("Red Ribbon Army",)
+    state.players[1].leader_area.resting = True
+    stage = CardInstance(
+        instance_id=991120,
+        card_id=8385,
+        owner_id=1,
+        card_type="Z-EXTRA",
+        color="Blue/Green",
+        keywords=("Field",),
+        has_activate_main=True,
+    )
+    state.players[1].battle_area.append(stage)
+    state.players[1].energy = [
+        CardInstance(instance_id=991121 + i, card_id=83850 + i, owner_id=1, card_type="BATTLE", color="Blue", resting=True)
+        for i in range(2)
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=991130 + i, card_id=83860 + i, owner_id=2, card_type="BATTLE", color="Yellow", power=15000)
+        for i in range(2)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=stage)
+
+    engine._emit_effect_event(
+        state,
+        name="field_extra_placed",
+        actor_player_id=1,
+        payload={"source_instance_id": 991120, "source_card_id": 8385},
+    )
+    engine._resolve_pending_effects(state)
+    assert state.players[1].leader_area.resting is False
+
+    activate = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ACTIVATE_MAIN_SKILL)
+    state = engine.apply_action(state, activate)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert not state.players[2].battle_area
+    assert not state.players[1].battle_area
+    assert any(card.instance_id == 991120 for card in state.players[1].removed_from_game)
+    assert len(state.players[1].energy) == 0
+    assert any(cp.name == "effect_activate_remove_self_and_ko_all_opponent_battles" for cp in state.checkpoints)
+
+
+def test_phase4_self_attacks_can_combo_matching_card_from_warp_with_skills_negated() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            8326: (
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_combo_up_to_n_from_owner_zone_on_attack",
+                    handler_params={
+                        "max_targets": 1,
+                        "source_zone": "warp",
+                        "allowed_colors": "black",
+                        "required_card_type": "BATTLE",
+                        "exact_combo_power": 5000,
+                        "negate_skills": True,
+                        "target_policy": "first",
+                    },
+                    family_id="self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    shroom = CardInstance(instance_id=991140, card_id=8326, owner_id=1, card_type="BATTLE", color="Black", power=15000)
+    state.players[1].battle_area.append(shroom)
+    state.players[1].warp = [
+        CardInstance(instance_id=991141, card_id=83260, owner_id=1, card_type="BATTLE", color="Black", combo_power=5000, power=5000),
+        CardInstance(instance_id=991142, card_id=83261, owner_id=1, card_type="BATTLE", color="Blue", combo_power=5000, power=5000),
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=shroom)
+
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": 991140, "attacker_zone": "battle"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert any(card.instance_id == 991141 for card in state.players[1].combo_area)
+    assert all(card.instance_id != 991142 for card in state.players[1].combo_area)
+    assert all(card.instance_id != 991141 for card in state.players[1].warp)
+    assert state.players[1].combo_area[0].temporary_skills_negated is True
+    assert any(cp.name == "effect_auto_combo_up_to_n_from_owner_zone_on_attack" for cp in state.checkpoints)
+
+
+def test_phase4_self_attacks_can_gain_power_per_owner_warp_count() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            7029: (
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_self_gain_power_for_turn_on_attack",
+                    handler_params={"power_delta": "expr:owner_warp_count*5000"},
+                    family_id="self_attacks:auto_self_gain_power_for_turn_on_attack",
+                    provenance="test",
+                ),
+            )
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    mira = CardInstance(instance_id=991150, card_id=7029, owner_id=1, card_type="BATTLE", color="Black", power=30000)
+    state.players[1].battle_area.append(mira)
+    state.players[1].warp = [
+        CardInstance(instance_id=991151 + i, card_id=70290 + i, owner_id=1, card_type="BATTLE", color="Black")
+        for i in range(3)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=mira)
+
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": 991150, "attacker_zone": "battle"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert state.players[1].battle_area[0].power == 45000
+    assert state.players[1].battle_area[0].temporary_power_delta == 15000
+    assert any(cp.name == "effect_auto_self_gain_power_for_turn_on_attack" for cp in state.checkpoints)
+
+
+def test_phase4_no_challenge_for_the_strong_can_remove_self_and_prevent_leader_damage_for_battle() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            7839: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "owner_opponent_card_attacks",
+                        "handler_id": "auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle",
+                        "handler_params": {},
+                        "limit_per_turn": 1,
+                        "limit_scope": "source_instance",
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[2].leader_area.characters = ("Gogeta: GT",)
+    no_challenge = CardInstance(instance_id=991201, card_id=7839, owner_id=2, card_type="Z-EXTRA")
+    attacker = CardInstance(instance_id=991202, card_id=9202, owner_id=1, card_type="BATTLE", power=20000)
+    state.players[2].battle_area.append(no_challenge)
+    state.players[1].battle_area.append(attacker)
+    engine._register_card_effects(state, player_id=2, source_zone="battle", card=no_challenge)
+    starting_life = len(state.players[2].life)
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=991202,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DAMAGE
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={
+            "attacker_instance_id": 991202,
+            "attacker_zone": "battle",
+            "target_player_id": 2,
+            "target_zone": "leader",
+        },
+    )
+    engine._resolve_pending_effects(state)
+    assert any(card.instance_id == 991201 for card in state.players[2].removed_from_game)
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+    assert len(state.players[2].life) == starting_life
+    assert any(cp.name == "effect_auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle" for cp in state.checkpoints)
+
+
+def test_phase4_android_21_in_the_name_of_hunger_can_add_top_deck_to_energy_and_bottom_deck_opponent_battle(repo) -> None:
+    engine = RulesEngine(
+        card_repository=repo,
+        effect_rule_overrides={
+            1702: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_played",
+                        "handler_id": "auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play",
+                        "handler_params": {"max_targets": 1},
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=[
+            990301,
+            990302,
+            990303,
+            990304,
+            990305,
+            990306,
+            990307,
+            990308,
+            990309,
+            990310,
+            990311,
+            990312,
+            990313,
+            990314,
+            990315,
+            990316,
+        ],
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990304, card_id=1702, owner_id=1, card_type="Z-BATTLE", power=20000)
+    target = CardInstance(instance_id=990305, card_id=9305, owner_id=2, card_type="BATTLE", power=15000, energy_cost=3)
+    state.players[1].battle_area.append(source)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990304, "source_card_id": 1702, "source_zone": "battle", "played_from": "hand"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert state.players[1].energy and state.players[1].energy[0].card_id == 990315
+    assert state.players[1].energy[0].resting is True
+    assert all(card.instance_id != 990305 for card in state.players[2].battle_area)
+    assert state.players[2].deck[-1] == 9305
+    assert any(cp.name == "effect_auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_android_21_in_the_name_of_hunger_can_gain_keyword_from_under_self(repo) -> None:
+    engine = RulesEngine(
+        card_repository=repo,
+        effect_rule_overrides={
+            1702: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_gain_keyword_from_under_self_until_opponent_turn_end",
+                        "handler_params": {"min_source_stacked_cards": 1},
+                        "once_per_turn": True,
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990306, card_id=1702, owner_id=1, card_type="Z-BATTLE", power=20000, stacked_card_ids=(1702,))
+    state.players[1].battle_area.append(source)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990306, "source_card_id": 1702, "skill_kind": "activate_main"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert "Blocker" in source.delayed_temporary_keywords
+    assert any(row.target_instance_id == 990306 and row.keyword == "Blocker" for row in state.delayed_keyword_clears)
+    assert any(cp.name == "effect_activate_gain_keyword_from_under_self_until_opponent_turn_end" for cp in state.checkpoints)
+
+
+def test_phase4_stone_transformation_nightmare_can_negate_and_restrict_attacking_battle() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            7786: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "owner_opponent_card_attacks",
+                        "handler_id": "auto_negate_skills_and_restrict_up_to_n_opponent_battle_on_attack",
+                        "handler_params": {"max_targets": 1, "marker_delta": -1},
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990307, card_id=7786, owner_id=2, card_type="Z-UNISON", markers=1, power=20000)
+    attacker = CardInstance(instance_id=990308, card_id=9308, owner_id=1, card_type="BATTLE", power=20000)
+    state.players[2].unison_area.append(source)
+    state.players[1].battle_area.append(attacker)
+    engine._register_card_effects(state, player_id=2, source_zone="unison", card=source)
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=990308,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": 990308, "attacker_zone": "battle", "target_player_id": 2, "target_zone": "leader"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert source.markers == 0
+    assert attacker.temporary_skills_negated is True
+    assert 990308 in state.attack_restricted_instance_ids
+    assert any(cp.name == "effect_auto_negate_skills_and_restrict_up_to_n_opponent_battle_on_attack" for cp in state.checkpoints)
+
+
+def test_phase4_stone_transformation_nightmare_can_bottom_deck_opponent_battle_and_ready_mono_blue_energy() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            7786: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end",
+                        "handler_params": {
+                            "max_targets": 1,
+                            "ignores_barrier": True,
+                            "owner_energy_targets": 1,
+                            "allowed_colors": "blue",
+                            "require_mono_color": True,
+                            "marker_delta": -1,
+                        },
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990309, card_id=7786, owner_id=1, card_type="Z-UNISON", markers=1, power=20000)
+    energy = CardInstance(instance_id=990310, card_id=9310, owner_id=1, card_type="BATTLE", color="Blue", resting=True)
+    target = CardInstance(instance_id=990311, card_id=9311, owner_id=2, card_type="BATTLE", power=20000)
+    state.players[1].unison_area.append(source)
+    state.players[1].energy.append(energy)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990309, "source_card_id": 7786, "skill_kind": "activate_main"},
+    )
+    engine._resolve_pending_effects(state)
+    engine._apply_due_delayed_active_switches(state, trigger_player_id=1)
+
+    assert source.markers == 0
+    assert all(card.instance_id != 990311 for card in state.players[2].battle_area)
+    assert state.players[2].deck[-1] == 9311
+    assert energy.resting is False
+    assert any(cp.name == "effect_activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end" for cp in state.checkpoints)
+
+
+def test_phase4_haze_shenron_can_rest_opponent_cards_on_play_and_attack_and_place_drop_under_assembled(repo) -> None:
+    engine = RulesEngine(
+        card_repository=repo,
+        effect_rule_overrides={
+            7848: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_played",
+                        "handler_id": "auto_switch_up_to_n_opponent_board_rest",
+                        "handler_params": {"max_targets": 1},
+                    },
+                    {
+                        "trigger": "self_attacks",
+                        "handler_id": "auto_switch_up_to_n_opponent_board_rest",
+                        "handler_params": {"max_targets": 1, "prefer_attacker": True},
+                    },
+                    {
+                        "trigger": "owner_card_comboed",
+                        "handler_id": "auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo",
+                        "handler_params": {
+                            "max_targets": 1,
+                            "host_name_contains": "7 SHADOW DRAGONS ASSEMBLED",
+                            "allowed_colors": "yellow",
+                            "required_traits": "shadow dragon",
+                            "event_allowed_colors": "yellow",
+                            "event_required_traits": "shadow dragon",
+                            "requires_leader": "yellow <Nuova Shenron>",
+                        },
+                        "limit_per_turn": 1,
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=7845,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.characters = ("Nuova Shenron",)
+    source = CardInstance(instance_id=990312, card_id=7848, owner_id=1, card_type="Z-BATTLE", color="Yellow", power=15000, traits=("Shadow Dragon",))
+    host = CardInstance(instance_id=990313, card_id=7849, owner_id=1, card_type="Z-EXTRA", color="Yellow")
+    combo_drop = CardInstance(instance_id=990314, card_id=7848, owner_id=1, card_type="Z-BATTLE", color="Yellow", traits=("Shadow Dragon",))
+    combo_source = CardInstance(instance_id=990317, card_id=7848, owner_id=1, card_type="Z-BATTLE", color="Yellow", traits=("Shadow Dragon",))
+    unison_target = CardInstance(instance_id=990315, card_id=9315, owner_id=2, card_type="UNISON", power=15000)
+    battle_target = CardInstance(instance_id=990316, card_id=9316, owner_id=2, card_type="BATTLE", power=15000)
+    state.players[1].battle_area.extend([source, host])
+    state.players[1].drop.append(combo_drop)
+    state.players[1].combo_area.append(combo_source)
+    state.players[2].unison_area.append(unison_target)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990312, "source_card_id": 7848, "source_zone": "battle", "played_from": "hand"},
+    )
+    engine._resolve_pending_effects(state)
+    assert unison_target.resting is True
+
+    state.players[2].battle_area.append(battle_target)
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=990312,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={"attacker_instance_id": 990312, "attacker_zone": "battle", "target_player_id": 2, "target_zone": "leader"},
+    )
+    engine._resolve_pending_effects(state)
+    assert battle_target.resting is True
+
+    engine._emit_effect_event(
+        state,
+        name="card_comboed",
+        actor_player_id=1,
+        payload={"source_instance_id": 990317, "source_card_id": 7848, "source_zone": "combo"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert host.stacked_card_ids == (7848,)
+    assert all(card.instance_id != 990314 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo" for cp in state.checkpoints)
+
+
+def test_phase4_nappa_demolition_man_can_play_self_at_battle_end_after_combo(repo) -> None:
+    engine = RulesEngine(
+        card_repository=repo,
+        effect_rule_overrides={
+            6947: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_comboed_battle_end",
+                        "handler_id": "auto_play_self_from_combo_on_battle_end",
+                        "handler_params": {"requires_leader": "red,green"},
+                    }
+                ],
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Red"
+    combo_card = CardInstance(
+        instance_id=990318,
+        card_id=6947,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        power=10000,
+        combo_power=10000,
+    )
+    state.players[1].combo_area.append(combo_card)
+    engine._register_card_effects(state, player_id=1, source_zone="combo", card=combo_card)
+    engine._emit_effect_event(
+        state,
+        name="card_comboed",
+        actor_player_id=1,
+        payload={"source_instance_id": 990318, "source_card_id": 6947, "source_zone": "combo"},
+    )
+    engine._resolve_pending_effects(state)
+    engine._emit_effect_event(state, name="battle_end", actor_player_id=1, payload={})
+    engine._resolve_pending_effects(state)
+
+    assert any(card.instance_id == 990318 for card in state.players[1].battle_area)
+    assert any(cp.name == "effect_auto_play_self_from_combo_on_battle_end" for cp in state.checkpoints)
+
+
+def test_phase4_pan_buffs_played_battle_and_draws_if_threshold_reached() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            1063: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "owner_other_battle_played",
+                        "handler_id": "auto_buff_played_battle_and_draw_if_power_at_least",
+                        "handler_params": {"power_delta": 5000, "draw_if_power_at_least": 20000},
+                        "once_per_turn": True,
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1063,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    played = CardInstance(instance_id=990319, card_id=9319, owner_id=1, card_type="BATTLE", color="Yellow", power=15000)
+    state.players[1].battle_area.append(played)
+    engine._register_card_effects(state, player_id=1, source_zone="leader", card=state.players[1].leader_area)
+    starting_hand = len(state.players[1].hand)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990319, "source_card_id": 9319, "source_zone": "battle", "played_from": "hand"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert played.power == 20000
+    assert played.temporary_power_delta == 5000
+    assert len(state.players[1].hand) == starting_hand + 1
+    assert any(cp.name == "effect_auto_buff_played_battle_and_draw_if_power_at_least" for cp in state.checkpoints)
+
+
+def test_phase4_krillin_wish_after_conflict_can_bottom_deck_small_opponent_battle() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            7908: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+                        "handler_params": {"max_targets": 1, "max_cost": 5, "marker_delta": 2},
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990320, card_id=7908, owner_id=1, card_type="Z-UNISON", markers=0, power=15000)
+    target = CardInstance(instance_id=990321, card_id=9321, owner_id=2, card_type="BATTLE", power=15000, energy_cost=5)
+    state.players[1].unison_area.append(source)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990320, "source_card_id": 7908, "skill_kind": "activate_main"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert source.markers == 2
+    assert all(card.instance_id != 990321 for card in state.players[2].battle_area)
+    assert state.players[2].deck[-1] == 9321
+    assert any(cp.name == "effect_activate_bottom_deck_up_to_n_opponent_battle" for cp in state.checkpoints)
+
+
+def test_phase4_demigras_wormhole_can_mill_on_play_and_removed_and_play_from_warp() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            8323: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_played",
+                        "handler_id": "auto_place_top_n_from_owner_deck_into_drop",
+                        "handler_params": {"amount": 2, "requires_leader": "black"},
+                    },
+                    {
+                        "trigger": "self_removed_from_game",
+                        "handler_id": "auto_place_top_n_from_owner_deck_into_drop",
+                        "handler_params": {"amount": 2, "requires_leader": "black"},
+                    },
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_play_up_to_n_from_owner_warp",
+                        "handler_params": {
+                            "max_targets": 1,
+                            "allowed_colors": "black",
+                            "required_card_type": "BATTLE",
+                            "max_cost": 5,
+                            "required_skill_text_contains": "dark over realm",
+                            "required_owner_battle_skill_text_contains": "dark over realm",
+                            "negate_skills": True,
+                            "requires_leader": "black",
+                        },
+                        "limit_per_turn": 1,
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Black"
+    source = CardInstance(instance_id=990410, card_id=8323, owner_id=1, card_type="Z-EXTRA", color="Black", skill_text_raw="[Auto][Activate: Main]")
+    dark_over_realm_body = CardInstance(
+        instance_id=990411,
+        card_id=8324,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=4,
+        skill_text_raw="[Dark Over Realm 4]",
+    )
+    warp_body = CardInstance(
+        instance_id=990412,
+        card_id=8325,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=5,
+        skill_text_raw="[Dark Over Realm 5][Auto] test",
+        has_auto=True,
+    )
+    state.players[1].battle_area.extend([source, dark_over_realm_body])
+    state.players[1].warp.append(warp_body)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    deck_before = len(state.players[1].deck)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990410, "source_card_id": 8323, "source_zone": "battle"},
+    )
+    engine._resolve_pending_effects(state)
+    assert len(state.players[1].deck) == deck_before - 2
+    assert len(state.players[1].drop) >= 2
+
+    removed_before = len(state.players[1].drop)
+    engine._emit_effect_event(
+        state,
+        name="card_removed_from_game",
+        actor_player_id=1,
+        payload={"source_instance_id": 990410, "source_card_id": 8323, "source_zone": "battle", "owner_player_id": 1},
+    )
+    engine._resolve_pending_effects(state)
+    assert len(state.players[1].drop) >= removed_before + 2
+
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990410, "source_card_id": 8323, "source_zone": "battle", "skill_kind": "activate_main"},
+    )
+    engine._resolve_pending_effects(state)
+    played = next(card for card in state.players[1].battle_area if card.instance_id == 990412)
+    assert played.has_auto is False
+    assert any(cp.name == "effect_activate_play_up_to_n_from_owner_warp" for cp in state.checkpoints)
+
+
+def test_phase4_demigra_wormhole_opened_can_draw_discard_gain_wormhole_and_grant_double_strike() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            7798: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "owner_other_battle_played_by_over_realm",
+                        "handler_id": "auto_draw_n_discard_n",
+                        "handler_params": {"amount": 2, "discard_amount": 2},
+                        "once_per_turn": True,
+                    },
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_send_up_to_n_from_owner_warp_to_drop_and_gain_keyword_for_turn",
+                        "handler_params": {
+                            "max_targets": 2,
+                            "allowed_colors": "black",
+                            "required_card_type": "BATTLE",
+                            "grant_keyword": "Wormhole",
+                            "marker_delta": 1,
+                            "requires_leader": "black",
+                        },
+                    },
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_buff_owner_battle_cards",
+                        "handler_params": {
+                            "max_targets": 2,
+                            "grant_keyword": "Double Strike",
+                            "required_skill_text_contains": "over realm",
+                            "marker_delta": -3,
+                        },
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Black"
+    source = CardInstance(instance_id=990420, card_id=7798, owner_id=1, card_type="Z-UNISON", color="Black", markers=3)
+    warp_a = CardInstance(instance_id=990421, card_id=9421, owner_id=1, card_type="BATTLE", color="Black")
+    warp_b = CardInstance(instance_id=990422, card_id=9422, owner_id=1, card_type="BATTLE", color="Black")
+    over_realm_a = CardInstance(instance_id=990423, card_id=9423, owner_id=1, card_type="BATTLE", color="Black", skill_text_raw="[Over Realm 4]")
+    over_realm_b = CardInstance(instance_id=990424, card_id=9424, owner_id=1, card_type="BATTLE", color="Black", skill_text_raw="[Over Realm 6]")
+    state.players[1].unison_area.append(source)
+    state.players[1].warp.extend([warp_a, warp_b])
+    state.players[1].battle_area.extend([over_realm_a, over_realm_b])
+    state.players[1].hand.extend(
+        [
+            CardInstance(instance_id=990425, card_id=9425, owner_id=1),
+            CardInstance(instance_id=990426, card_id=9426, owner_id=1),
+        ]
+    )
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    registered = [reg for reg in state.effect_registry if reg.source_instance_id == 990420 and reg.trigger == "self_activate_main"]
+    plus_effect_id = next(reg.effect_id for reg in registered if reg.handler_id == "activate_send_up_to_n_from_owner_warp_to_drop_and_gain_keyword_for_turn")
+    minus_effect_id = next(reg.effect_id for reg in registered if reg.handler_id == "activate_buff_owner_battle_cards")
+
+    hand_before = len(state.players[1].hand)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990499, "source_card_id": 9499, "source_zone": "battle", "played_via": "over_realm"},
+    )
+    engine._resolve_pending_effects(state)
+    assert len(state.players[1].hand) == hand_before
+    assert any(cp.name == "effect_auto_draw_n_discard_n" for cp in state.checkpoints)
+
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990420, "source_card_id": 7798, "source_zone": "unison", "skill_kind": "activate_main", "selected_effect_id": plus_effect_id},
+    )
+    engine._resolve_pending_effects(state)
+    assert source.markers == 4
+    assert len(state.players[1].warp) == 0
+    assert "Wormhole" in source.temporary_keywords
+
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990420, "source_card_id": 7798, "source_zone": "unison", "skill_kind": "activate_main", "selected_effect_id": minus_effect_id},
+    )
+    engine._resolve_pending_effects(state)
+    assert source.markers == 1
+    assert "Double Strike" in over_realm_a.temporary_keywords
+    assert "Double Strike" in over_realm_b.temporary_keywords
+
+
+def test_phase4_jiren_climactic_battle_can_remove_marker_to_negate_attack() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            8448: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "owner_opponent_card_attacks",
+                        "handler_id": "auto_negate_attack_on_opponent_attack",
+                        "handler_params": {"marker_delta": -1},
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    source = CardInstance(instance_id=990430, card_id=8448, owner_id=1, card_type="Z-UNISON", color="Red", markers=2)
+    attacker = CardInstance(instance_id=990431, card_id=9431, owner_id=2, card_type="BATTLE", color="Blue", power=15000)
+    state.players[1].unison_area.append(source)
+    state.players[2].battle_area.append(attacker)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    state.attack_context = AttackContext(
+        attacker_player_id=2,
+        attacker_zone="battle",
+        attacker_instance_id=990431,
+        target_player_id=1,
+        target_zone="leader",
+        target_instance_id=state.players[1].leader_area.instance_id,
+    )
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=2,
+        payload={"attacker_instance_id": 990431, "attacker_zone": "battle"},
+    )
+    engine._resolve_pending_effects(state)
+    assert source.markers == 1
+    assert state.attack_context is None
+    assert any(cp.name == "effect_auto_negate_attack_on_opponent_attack" for cp in state.checkpoints)
+
+
+def test_phase4_oolong_greed_is_good_can_copy_battle_power_for_turn() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            892: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_copy_battle_power_to_self_for_turn",
+                        "handler_params": {
+                            "max_targets": 1,
+                            "ignores_barrier": True,
+                        },
+                        "once_per_turn": True,
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    oolong = CardInstance(
+        instance_id=990440,
+        card_id=892,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Yellow",
+        power=4000,
+        has_activate_main=True,
+    )
+    target = CardInstance(
+        instance_id=990441,
+        card_id=9441,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue",
+        power=25000,
+        has_barrier=True,
+    )
+    state.players[1].battle_area.append(oolong)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=oolong)
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": 990440,
+            "source_card_id": 892,
+            "source_zone": "battle",
+            "skill_kind": "activate_main",
+        },
+    )
+    engine._resolve_pending_effects(state)
+    assert oolong.power == 25000
+    assert oolong.temporary_power_delta == 21000
+    assert any(cp.name == "effect_activate_copy_battle_power_to_self_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_ss3_scramble_can_drop_life_damage_and_clear_opponent_combo() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            6820: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_played",
+                        "handler_id": "auto_place_life_to_drop_and_deal_damage_on_play",
+                        "handler_params": {"life_to_drop_count": 1, "damage_amount": 2},
+                    },
+                    {
+                        "trigger": "owner_opponent_card_comboed",
+                        "handler_id": "auto_send_up_to_n_opponent_combo_to_drop_on_opponent_combo",
+                        "handler_params": {"max_targets": 1, "max_energy_cost": 2},
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990450, card_id=6820, owner_id=1, card_type="BATTLE", color="Red/Green", power=40000)
+    state.players[1].battle_area.append(source)
+    starting_life = len(state.players[1].life)
+    starting_opponent_life = len(state.players[2].life)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990450, "source_card_id": 6820, "source_zone": "battle", "played_from": "hand"},
+    )
+    engine._resolve_pending_effects(state)
+    assert len(state.players[1].life) == starting_life - 1
+    assert len(state.players[2].life) == starting_opponent_life - 2
+    assert any(cp.name == "effect_auto_place_life_to_drop_and_deal_damage_on_play" for cp in state.checkpoints)
+
+    combo_a = CardInstance(instance_id=990451, card_id=9451, owner_id=2, card_type="BATTLE", color="Blue", energy_cost=2, combo_cost=1)
+    combo_b = CardInstance(instance_id=990452, card_id=9452, owner_id=2, card_type="BATTLE", color="Blue", energy_cost=4, combo_cost=1)
+    state.players[2].combo_area.extend([combo_a, combo_b])
+    engine._emit_effect_event(
+        state,
+        name="card_comboed",
+        actor_player_id=2,
+        payload={"source_instance_id": 990451, "source_card_id": 9451, "source_zone": "combo", "comboed_from": "hand"},
+    )
+    engine._resolve_pending_effects(state)
+    assert any(card.instance_id == 990451 for card in state.players[2].drop)
+    assert any(cp.name == "effect_auto_send_up_to_n_opponent_combo_to_drop_on_opponent_combo" for cp in state.checkpoints)
+
+
+def test_phase4_ss4_gogeta_bold_arrival_can_pay_drop_to_warp_and_reduce_on_self_or_opponent_battle_play() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            8444: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_or_opponent_battle_played",
+                        "handler_id": "auto_send_owner_drop_to_warp_and_reduce_up_to_n_opponent_battle_for_turn_on_self_or_opponent_battle_played",
+                        "handler_params": {
+                            "cost_amount": 1,
+                            "cost_required_traits": "Saiyan",
+                            "max_targets": 1,
+                            "power_delta": -20000,
+                        },
+                        "once_per_turn": True,
+                    }
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990460, card_id=8444, owner_id=1, card_type="Z-BATTLE", color="Red/Black", power=25000)
+    drop_saiyan = CardInstance(instance_id=990461, card_id=9461, owner_id=1, card_type="BATTLE", color="Black", traits=("Saiyan",))
+    target = CardInstance(instance_id=990462, card_id=9462, owner_id=2, card_type="BATTLE", color="Blue", power=30000)
+    state.players[1].battle_area.append(source)
+    state.players[1].drop.append(drop_saiyan)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990460, "source_card_id": 8444, "source_zone": "battle", "played_from": "z_deck"},
+    )
+    engine._resolve_pending_effects(state)
+    assert any(card.instance_id == 990461 for card in state.players[1].warp)
+    assert target.temporary_power_delta == -20000
+    assert any(cp.name == "effect_auto_send_owner_drop_to_warp_and_reduce_up_to_n_opponent_battle_for_turn_on_self_or_opponent_battle_played" for cp in state.checkpoints)
+
+
+def test_phase4_son_goku_stronger_together_can_trim_opponent_hand_and_buff_for_battle() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            1480: {
+                "activate_battle": [
+                    {"kind": "send_self_to_removed", "amount": 1},
+                ]
+            }
+        },
+        effect_rule_overrides={
+            1480: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_played",
+                        "handler_id": "auto_opponent_bottom_decks_from_hand_until_n_on_play",
+                        "handler_params": {"hand_limit": 10, "min_opponent_hand": 11, "requires_leader": "blue"},
+                    },
+                    {
+                        "trigger": "self_activate_battle",
+                        "handler_id": "activate_gain_power_and_keyword_for_battle",
+                        "handler_params": {
+                            "target_scope": "owner_battle",
+                            "max_targets": 1,
+                            "power_delta": 10000,
+                            "grant_keyword": "Triple Strike",
+                            "allowed_colors": "blue",
+                            "min_character_count": 2,
+                            "requires_leader": "<Son Gohan: SH>",
+                            "min_owner_energy": 3,
+                        },
+                        "limit_per_turn": 1,
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Blue"
+    state.players[1].leader_area.characters = ("Son Gohan: SH",)
+    source = CardInstance(instance_id=990470, card_id=1480, owner_id=1, card_type="Z-BATTLE", color="Blue", power=4000, has_activate_battle=True)
+    buff_target = CardInstance(instance_id=990471, card_id=9471, owner_id=1, card_type="BATTLE", color="Blue", power=20000, characters=("A", "B"))
+    state.players[1].battle_area.extend([source, buff_target])
+    state.players[1].energy = [
+        CardInstance(instance_id=990472, card_id=9472, owner_id=1, color="Blue"),
+        CardInstance(instance_id=990473, card_id=9473, owner_id=1, color="Blue"),
+        CardInstance(instance_id=990474, card_id=9474, owner_id=1, color="Blue"),
+    ]
+    state.players[2].hand = [
+        CardInstance(instance_id=990480 + i, card_id=9480 + i, owner_id=2, card_type="BATTLE")
+        for i in range(11)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={"source_instance_id": 990470, "source_card_id": 1480, "source_zone": "battle", "played_from": "hand"},
+    )
+    engine._resolve_pending_effects(state)
+    assert len(state.players[2].hand) == 10
+    assert any(cp.name == "effect_auto_opponent_bottom_decks_from_hand_until_n_on_play" for cp in state.checkpoints)
+
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 990470, "source_card_id": 1480, "source_zone": "battle", "skill_kind": "activate_battle"},
+    )
+    engine._resolve_pending_effects(state)
+    state.players[1].battle_area = [card for card in state.players[1].battle_area if card.instance_id != 990470]
+    state.players[1].removed_from_game.append(source)
+    assert any(card.instance_id == 990470 for card in state.players[1].removed_from_game)
+    assert buff_target.battle_temporary_power_delta == 10000
+    assert "Triple Strike" in buff_target.battle_temporary_keywords
+
+
+def test_phase4_crimson_guardian_deity_minus_one_can_switch_self_active_and_reduce_opponent_battle() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            2481: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_activate_main",
+                        "handler_id": "activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn",
+                        "handler_params": {
+                            "marker_delta": -1,
+                            "max_targets": 1,
+                            "power_delta": -25000,
+                            "ignores_barrier": True,
+                            "target_policy": "first",
+                        },
+                    }
+                ],
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=991300, card_id=2481, owner_id=1, card_type="Z-UNISON", color="Red", power=20000, resting=True, markers=2, has_activate_main=True)
+    target = CardInstance(instance_id=991301, card_id=9301, owner_id=2, card_type="BATTLE", color="Blue", power=30000, has_barrier=True)
+    state.players[1].unison_area.append(source)
+    state.players[2].battle_area.append(target)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={"source_instance_id": 991300, "source_card_id": 2481, "source_zone": "unison", "skill_kind": "activate_main"},
+    )
+    engine._resolve_pending_effects(state)
+
+    assert source.resting is False
+    assert source.markers == 1
+    assert target.temporary_power_delta == -25000
+    assert any(cp.name == "effect_activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_special_beam_cannon_inherited_power_can_ko_and_buff_branch_b() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={2064: {"activate_extra_from_hand": [{"kind": "send_self_to_removed", "amount": 1}]}},
+        effect_rule_overrides={
+            2064: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_activate_extra_from_hand",
+                        "handler_id": "activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle",
+                        "handler_params": {
+                            "max_targets": 1,
+                            "max_power": 35000,
+                            "ignores_barrier": True,
+                            "target_policy": "first",
+                            "target_scope": "owner_battle",
+                            "prefer_owner_attacker": True,
+                            "buff_max_targets": 1,
+                            "buff_target_policy": "first",
+                            "allowed_colors": "red",
+                            "required_characters": "Son Gohan: SH",
+                            "min_power": 30000,
+                            "power_delta": 15000,
+                            "grant_keyword": "Double Strike",
+                            "required_owner_attacker_allowed_colors": "red",
+                            "required_owner_attacker_required_characters": "Son Gohan: SH",
+                        },
+                    }
+                ],
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    attacker = CardInstance(instance_id=991310, card_id=9919310, owner_id=1, card_type="BATTLE", color="Red", power=30000, characters=("Son Gohan: SH",))
+    state.players[1].battle_area.append(attacker)
+    state.players[1].hand.append(
+        CardInstance(
+            instance_id=991311,
+            card_id=2064,
+            owner_id=1,
+            card_type="Z-EXTRA",
+            color="Red",
+            energy_cost=1,
+            z_energy_cost=0,
+            has_activate_battle=True,
+        )
+    )
+    state.players[1].energy = [CardInstance(instance_id=991312, card_id=9919312, owner_id=1, color="Red")]
+    target = CardInstance(instance_id=991313, card_id=9919313, owner_id=2, card_type="BATTLE", color="Blue", power=35000, has_barrier=True)
+    state.players[2].battle_area.append(target)
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+    declared_index = next(i for i, card in enumerate(state.players[1].hand) if card.instance_id == 991311)
+    declared = state.players[1].hand.pop(declared_index)
+    state.players[1].drop.append(declared)
+    engine._register_card_effects(state, player_id=1, source_zone="drop", card=declared)
+    engine._pay_skill_cost(state, state.players[1], declared, "activate_extra_from_hand")
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": 991311,
+            "source_card_id": 2064,
+            "source_zone": "drop",
+            "skill_kind": "activate_extra_from_hand",
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert not any(card.instance_id == 991313 for card in state.players[2].battle_area)
+    assert any(card.instance_id == 991313 for card in state.players[2].drop)
+    assert attacker.battle_temporary_power_delta == 15000
+    assert "Double Strike" in attacker.battle_temporary_keywords
+    assert any(card.instance_id == 991311 for card in state.players[1].removed_from_game)
+    assert any(cp.name == "effect_activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle" for cp in state.checkpoints)
+
+
+def test_phase4_ss_vegito_overwhelming_might_applies_non_leader_attack_tax_and_schedules_self_warp() -> None:
+    engine = RulesEngine(
+        effect_rule_overrides={
+            1632: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "self_played",
+                        "handler_id": "auto_apply_non_leader_attack_rest_tax_warp_self_and_optionally_negate_opponent_strike",
+                        "handler_params": {"rest_count": 1},
+                        "limit_per_turn": 1,
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=991211, card_id=9211, owner_id=1, card_type="BATTLE", color="Yellow"),
+        CardInstance(instance_id=991212, card_id=9212, owner_id=1, card_type="BATTLE", color="Yellow"),
+    ]
+    state.players[1].leader_area.resting = True
+    attacker = CardInstance(instance_id=991213, card_id=9213, owner_id=1, card_type="BATTLE", color="Yellow", power=15000)
+    state.players[1].battle_area.append(attacker)
+    state.players[2].leader_area.color = "Yellow"
+    state.players[2].z_energy = [
+        CardInstance(instance_id=991214, card_id=9214, owner_id=2, card_type="Z-ENERGY"),
+        CardInstance(instance_id=991215, card_id=9215, owner_id=2, card_type="Z-ENERGY"),
+    ]
+    state.players[2].energy = [CardInstance(instance_id=991216, card_id=9216, owner_id=2, card_type="BATTLE", color="Yellow")]
+    state.players[2].battle_area.append(
+        CardInstance(instance_id=991217, card_id=9217, owner_id=2, card_type="Z-BATTLE", color="Yellow", power=20000)
+    )
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=991218,
+            card_id=1632,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=8,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] Play this card. "
+                "[Permanent] During your opponent's turn, while your Leader is yellow, your opponent has 2 or more energy, and you have 2 or more Z-Energy, reduce the energy cost of this card in your hand by 7. "
+                "[Auto] When this card is played from your hand, your opponent can't attack with non-Leaders unless they choose 1 of their Active Mode cards and switch it to Rest Mode each time, and at the end of the turn, send this card to its owner's Warp. "
+                "Additionally, if your Leader is a Z-Leader, or you have a yellow Z-Battle Card in play, your Leader gains the following skill for the turn, "
+                "\"[Permanent] Negate all of your opponent's [Strike] skills for the turn.\""
+            ),
+        )
+    )
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.PLAY_CARD_FROM_HAND, player_id=1, hand_index=0),
+    )
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert any(card.instance_id == 991218 for card in state.players[2].battle_area)
+    assert len(state.non_leader_attack_rest_taxes) == 1
+    assert len(state.delayed_warps) == 1
+    assert 2 in state.negate_opponent_strike_for_player_ids
+    legal_attacks = [
+        action
+        for action in engine.get_legal_actions(state, 1)
+        if action.action_type == ActionType.DECLARE_ATTACK and action.attacker_zone == "battle"
+    ]
+    assert legal_attacks == []
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    assert any(card.instance_id == 991218 for card in state.players[2].warp)
+    assert all(card.instance_id != 991218 for card in state.players[2].battle_area)
+    assert any(cp.name == "effect_auto_apply_non_leader_attack_rest_tax_warp_self_and_optionally_negate_opponent_strike" for cp in state.checkpoints)

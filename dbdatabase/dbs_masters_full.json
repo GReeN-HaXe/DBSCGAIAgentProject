@@ -417230,8 +417230,8 @@
     "card_power": "20000",
     "card_rarity": "Common[C]",
     "card_series": "BT27",
-    "card_skill": "<Badge variant=\"red\">Wormhole</Badge> <br /> <Badge variant=\"red\">Dark Over Realm 4</Badge><img src=\"/assets/img/dbs_masters/card_parts/black_ball.png\" alt=\"\" class=\"colorCostBall\">, if your Leader is a &lt;Mechikabura&gt; card and you draw 1 card: ",
-    "card_skill_unstyled": "[Wormhole]\n[br]\n[Dark Over Realm 4]{b}, if your Leader is a <Mechikabura> card and you draw 1 card: ",
+    "card_skill": "<Badge variant=\"red\">Wormhole</Badge> <br /> <Badge variant=\"red\">Dark Over Realm 4</Badge><img src=\"/assets/img/dbs_masters/card_parts/black_ball.png\" alt=\"\" class=\"colorCostBall\">, on play, if your Leader is a &lt;Mechikabura&gt; card draw 1 card",
+    "card_skill_unstyled": "[Wormhole]\n[br]\n[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card",
     "card_traits": [
       "Demon God"
     ],
