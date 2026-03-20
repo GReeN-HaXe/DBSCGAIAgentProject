@@ -1659,6 +1659,16 @@
       }
     ]
   },
+  "4949": {
+    "counter_from_hand": [
+      {
+        "allowed_colors": "yellow",
+        "amount": 1,
+        "kind": "discard_hand",
+        "required_leader_colors": "red"
+      }
+    ]
+  },
   "5026": {
     "activate_main_unison": [
       {

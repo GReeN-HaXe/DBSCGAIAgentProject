@@ -595,14 +595,18 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             consumed_combo_draw = True
 
         # [Auto] When this card is played... draw X card(s)
-        m_play_draw = re.search(r"(?:if [^:]{1,120}:\s*)?when (?:this card is played(?: from your hand)?|you play this card).*?draw (\d+) card", branch)
+        m_play_draw = re.search(
+            r"(?:if [^:]{1,120}:\s*)?(?:when (?:this card is played(?: from your hand)?|you play this card)|on play).*?draw (\d+) card",
+            branch,
+        )
         if m_play_draw and not consumed_play_draw:
             amount = int(m_play_draw.group(1))
+            extra = _extract_common_conditions(branch)
             rules.append(
                 EffectRule(
                     trigger="self_played",
                     handler_id="auto_draw_n",
-                    handler_params={"amount": amount},
+                    handler_params={"amount": amount, **extra},
                     once_per_turn=once,
                 )
             )

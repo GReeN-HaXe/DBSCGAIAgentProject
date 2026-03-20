@@ -1435,6 +1435,16 @@ def test_extract_attack_self_gain_power_per_owner_warp_rule() -> None:
     assert rule.handler_params["power_delta"] == "expr:owner_warp_count*5000"
 
 
+def test_extract_dark_over_realm_on_play_draw_rule() -> None:
+    card = _card("[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["amount"] == 1
+    assert "mechikabura" in str(rule.handler_params.get("requires_leader", "")).lower()
+    assert "Mechikabura" in str(rule.handler_params["required_leader_traits"])
+
+
 def test_build_effect_rules_with_diagnostics_and_report_counts_coverage() -> None:
     class Repo:
         def list_by_ids(self, ids, source_table: str = "cards"):

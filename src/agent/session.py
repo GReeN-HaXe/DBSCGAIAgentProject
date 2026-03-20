@@ -149,6 +149,12 @@ def _resolve_zone_card_for_action(state: GameState, *, player_id: int, zone: str
         return player.unison_area[index]
     if zone == "combo" and index is not None and 0 <= index < len(player.combo_area):
         return player.combo_area[index]
+    if zone == "hand" and index is not None and 0 <= index < len(player.hand):
+        return player.hand[index]
+    if zone == "drop" and index is not None and 0 <= index < len(player.drop):
+        return player.drop[index]
+    if zone == "warp" and index is not None and 0 <= index < len(player.warp):
+        return player.warp[index]
     return None
 
 

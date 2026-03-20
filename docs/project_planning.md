@@ -233,7 +233,7 @@ Resolved:
 - [x] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
-- [ ] map high-frequency deck/trace cards to those effect families
+- [x] map high-frequency deck/trace cards to those effect families
   - status: first mapping-report slice complete
   - `scripts/build_effect_family_mapping_report.py` now emits:
     - `artifacts/effect_family_mapping_report.json`
@@ -243,8 +243,42 @@ Resolved:
     - effect catalog family assignments
   - current report snapshot:
     - priority cards: `266`
-    - mapped priority cards: `228`
-    - unmapped priority cards: `38`
+    - mapped priority cards: `263`
+    - unmapped priority cards: `3`
+  - backlog hygiene note:
+    - cards with intentionally blank / `"-"` skill text are treated as `skillless` for this mapping pass and can be skipped here
+    - exception:
+      - cards whose own text explicitly refers to `skillless` cards still belong in this effect-family backlog
+  - current conservative final-actionable slice now also maps:
+    - `BT8-104 Super Kamehameha`
+      - via maintained:
+        - `counter_play:counter_place_pending_played_battle_to_warp_if_cost_at_most`
+      - generic support now covers:
+        - `Counter: Play` replacement from pending Battle-card play to `Warp` instead of entering play
+        - text requirement checks for:
+          - `Leader Card is black`
+          - `life is at 4 or less`
+        - pending-play replacement to `Warp` without incorrectly treating the play as fully negated
+    - `BT25-142 Zamasu, Scheme Wish`
+      - via maintained conservative slice:
+        - `self_activate_main:activate_buff_owner_battle_cards`
+      - generic support now covers:
+        - next-turn scheduled activate-skill restrictions on copies of the source card
+        - `Indestructible` until the end of the opponent's turn through the existing owner-battle buff family
+      - deferred later:
+        - the `+1` control-swap line
+        - fuller “for the game” control / skill-negation semantics
+  - actionable deck/trace mapping queue is now exhausted
+  - remaining unmapped priority cards are all intentionally skipped in this pass:
+    - `BT25-010 Son Goku`
+    - `BT15-018 Natade Village Monster`
+    - `BT15-105 Wilderness Monster`
+  - local source correction completed:
+    - `BT27-100 Demigra, Encroaching Shadow`
+      - corrected the truncated DB text locally to:
+        - `[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card`
+      - extractor now maps it through:
+        - `self_played:auto_draw_n`
   - current counter-family override batch now maps:
     - `BT14-019 Dyspo, Thwarting the Enemy`
     - `BT13-135 Supreme Kai of Time, Time Labyrinth Unleashed`
@@ -291,6 +325,236 @@ Resolved:
       - generic support now covers:
         - combo-triggered “next matching Extra from hand costs less this turn” permissions
         - matching by card type, mono-color requirement, color, and maximum original energy cost
+  - current Alliance / under-card cleanup slice now also maps:
+    - `DB3-115 Piccolo Jr., Eradicator of Peace`
+      - via maintained manual override:
+        - `self_attacks:auto_alliance_rest_matching_owner_battles_gain_power_draw_n_and_deal_damage`
+      - generic support now covers:
+        - a first conservative `Alliance` runtime slice
+        - automatically resting matching active owner Battle Cards as the alliance skill cost
+        - battle-only self power gain from the total power rested by that skill
+        - attached draw + optional damage rider resolution
+    - `EX19-08 Goku Black, Works Undone`
+      - via maintained manual override:
+        - `self_activate_main:activate_add_marker_to_matching_owner_unison_and_place_self_under_it`
+      - generic support now covers:
+        - adding a marker to a matching owner Unison
+        - placing the source Battle Card under that Unison from the Battle Area
+    - `BT18-034 Cell, Awakening of the Created`
+      - via maintained manual overrides:
+        - `self_played:auto_place_all_opponent_battles_up_to_cost_under_self_on_play`
+        - `self_activate_main:activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n`
+      - generic support now covers:
+        - a first conservative “under this card” capture/release slice using the existing stack field
+        - capturing opponent Battle Cards up to an energy-cost cap under the source
+        - dropping all cards from under the source to their owner's Drop
+        - restanding the source and granting a keyword if a threshold was released
+  - current data-gap note:
+    - `BT15-018 Natade Village Monster` remains unmapped because the DB source text is `"-"`, so this is a source-data gap rather than a missing effect-family implementation
+  - current Prismatic / Demigra cleanup slice now also maps:
+    - `EX19-26 SS4 Bardock, Prismatic Aegis`
+      - via maintained manual overrides:
+        - `self_played:auto_power_reduce_up_to_n_opponent_cards_for_turn_on_play`
+    - `BT27-100 Demigra, Encroaching Shadow`
+      - via corrected local source text and extractor support for:
+        - `on play ... draw 1 card`
+      - mapped through:
+        - `self_played:auto_draw_n`
+        - `self_activate_battle:activate_power_reduce_up_to_n_opponent_battle_for_turn`
+      - generic support now covers:
+        - on-play temporary power reduction targeting opponent Battle Cards or Unisons
+        - expression-backed scaling from the number of colors in the owner's Energy Area
+        - conservative `Activate: Battle` temporary power reduction for opponent Battle Cards
+      - note:
+        - the “placed in your energy” trigger branch and the permanent cost-reduction line remain separate follow-up work
+    - `BT25-100 SSB Gogeta, Next Level Power-Up`
+      - via maintained manual override:
+        - `owner_other_battle_played:auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played`
+      - generic support now covers:
+        - owner-side “another Battle Card was played” trigger matching
+        - marker gain on the source Unison
+        - life-to-hand plus owner Leader temporary power gain when a matching multicolor `<Pan>` / `<GT>` Battle Card is played
+      - note:
+        - the defensive permanent lines still belong to the broader Unison protection seam
+    - `BT4-105 Temporal Darkness Demigra`
+      - via maintained manual override:
+        - `self_played:auto_send_up_to_n_opponent_battle_to_warp_and_play_up_to_n_from_owner_warp_on_play`
+      - generic support now covers:
+        - warping an opponent Battle Card on play
+        - then playing a qualifying Battle Card from the owner's Warp
+  - current permanent-protection slice now also maps:
+    - `P-680 Demon God Dabura, Counter`
+      - via maintained manual override families:
+        - `self_permanent:protect_owner_battle_skills_from_opponent_negation`
+        - `self_permanent:protect_owner_cards_from_opponent_rest`
+      - generic support now covers the first conservative protection hooks for:
+        - blocking opponent skill-based negation of the owner's Battle Card skills
+        - blocking opponent skill-based switching of the owner's cards to Rest Mode
+        - preventing opponent non-Leader rest-tax effects from resting the protected player's cards
+      - note:
+        - this is the first conservative permanent-protection slice, not the full permanent-rules seam
+  - current next-three counter / unison cleanup slice now also maps:
+    - `BT25-138 Son Goku, Accidental Wish`
+      - via maintained manual override:
+        - `self_activate_main:activate_power_reduce_up_to_n_opponent_battle_for_turn`
+      - generic support now covers:
+        - Unison-style `Activate: Main` temporary opponent Battle Card power reduction
+        - marker gain via `marker_delta` on that activate family
+      - note:
+        - this is the conservative first slice for the `+2` line only
+        - the `-7` delayed “when your Leader is attacked” line and the next-turn copy-activation restriction remain follow-up work
+    - `EX09-06 Almighty Resistance`
+      - via maintained manual override:
+        - `counter_counter:counter_negate_counter_attack`
+      - generic support now covers:
+        - direct `counter_from_hand` discard costs extracted from `[Counter] ... choose N colored card in your hand and place it in your Drop Area`
+        - legality gating so this maintained `Counter: Counter` family only responds to `Counter: Attack`
+      - runtime continues to use the existing counter-chain resolution path for the actual negation
+    - `EX24-11 Android 17, Guided by the Dragon Balls`
+      - via maintained manual override:
+        - `self_played:auto_switch_up_to_n_opponent_battle_rest_on_play`
+      - generic support now covers:
+        - on-play switching of an opponent Battle Card to Rest Mode with an energy-cost cap
+        - existing `Power Wish` alternate `Counter: Play` cost path plus the on-play rest follow-up
+  - current Android 21 / Dabura / Haze cleanup slice now also maps:
+    - `BT20-028 Android 21, in the Name of Hunger`
+      - via maintained manual overrides:
+        - `self_played:auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play`
+        - `self_activate_main:activate_gain_keyword_from_under_self_until_opponent_turn_end`
+      - generic support now covers:
+        - combined on-play top-deck-to-rest-energy plus opponent Battle Card bottom-decking
+        - first conservative “gain a keyword from cards placed under this card” activate slice
+    - `BT25-044 Dabura, Stone Transformation Nightmare`
+      - via maintained manual overrides:
+        - `owner_opponent_card_attacks:auto_negate_skills_and_restrict_up_to_n_opponent_battle_on_attack`
+        - `self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end`
+      - generic support now covers:
+        - first conservative auto marker-cost slice on a Z-Unison auto trigger
+        - opponent Battle Card skill negation + attack restriction from an opponent-attack trigger
+        - bottom-decking an opponent Battle Card while scheduling mono-color owner Energy to switch active at end of turn
+    - `BT25-102 Haze Shenron, Great Dragon Quake`
+      - via maintained manual overrides:
+        - `self_played:auto_switch_up_to_n_opponent_board_rest`
+        - `self_attacks:auto_switch_up_to_n_opponent_board_rest`
+        - `owner_card_comboed:auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo`
+      - generic support now covers:
+        - opponent Battle-or-Unison rest targeting on play or attack
+        - owner-side combo trigger matching
+        - placing matching cards from Drop under a named card in the owner's Battle Area
+  - shared leader/under-card follow-up hardening:
+    - leader requirement checks now fall back to live leader instance traits/characters when repository metadata is sparse
+    - combo-trigger filters can now use the live combo-area instance rather than only repository metadata
+  - current Nappa / Pan / Krillin cleanup slice now also maps:
+    - `BT9-090 Nappa, Demolition Man`
+      - via maintained manual override:
+        - `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end`
+      - generic support now covers:
+        - battle-end self-play from Combo Area
+        - leader-color-gated combo-end follow-up families
+    - `SD17-01 Pan`
+      - via maintained manual override:
+        - `owner_other_battle_played:auto_buff_played_battle_and_draw_if_power_at_least`
+      - generic support now covers:
+        - owner-side “another Battle Card was played” buffing of the played card
+        - attached draw riders once a power threshold is reached
+        - `once_per_turn` enforcement on that owner-side play trigger
+    - `BT25-140 Krillin, Wish After Conflict`
+      - via maintained manual override:
+        - `self_activate_main:activate_bottom_deck_up_to_n_opponent_battle`
+      - generic support now covers:
+        - marker-costed bottom-decking of opponent Battle Cards from public `Activate: Main`
+  - current Wormhole / Climactic Battle cleanup slice now also maps:
+    - `BT27-094 Demigra's Wormhole`
+      - via maintained manual overrides:
+        - `self_played:auto_place_top_n_from_owner_deck_into_drop`
+        - `self_removed_from_game:auto_place_top_n_from_owner_deck_into_drop`
+        - `self_activate_main:activate_play_up_to_n_from_owner_warp`
+      - generic support now covers:
+        - first conservative `self_removed_from_game` trigger support via skill-cost removal events
+        - top-deck self-mill on play and on removal from the game
+        - public `Activate: Main` play from Warp with skill-text filtering and non-keyword skill negation
+    - `BT25-120 Demigra, Wormhole Opened`
+      - via maintained manual overrides:
+        - `owner_other_battle_played_by_over_realm:auto_draw_n_discard_n`
+        - `self_activate_main:activate_send_up_to_n_from_owner_warp_to_drop_and_gain_keyword_for_turn`
+        - `self_activate_main:activate_buff_owner_battle_cards`
+      - generic support now covers:
+        - owner-side `Over Realm` play triggers distinct from `Dark Over Realm`
+        - draw-then-discard auto resolution
+        - moving matching cards from Warp to Drop while granting a temporary keyword
+        - owner battle-card keyword grants filtered by skill-text content
+    - `BT27-005 Jiren, Climactic Battle`
+      - via maintained manual override:
+        - `owner_opponent_card_attacks:auto_negate_attack_on_opponent_attack`
+      - generic support now covers:
+        - first conservative opponent-attack auto-negate family with marker consumption on Unisons
+  - current Vegito / Crimson Guardian / Special Beam Cannon slice now also maps:
+    - `BT27-093 SS4 Vegito, Barrage`
+      - via maintained manual override:
+        - `self_permanent:reduce_own_z_deck_cost_if_owner_battle_with_skill_text_in_play`
+      - note:
+        - this is currently catalog-mapped as a maintained permanent family
+        - native Z-Deck play-cost runtime semantics are still a later seam
+    - `BT24-004 SSG Son Goku, Crimson Guardian Deity`
+      - via maintained manual override:
+        - `self_activate_main:activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn`
+      - current conservative slice covers the `[-1]` activate line
+      - note:
+        - the attack-time combo-from-under auto and `[-2]` line remain deferred
+    - `BT22-007 Special Beam Cannon, Inherited Power`
+      - via maintained manual override:
+        - `self_activate_extra_from_hand:activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle`
+      - generic support now covers:
+        - `Activate: Battle` hand/Z-Extra branch with `send_self_to_removed` paid from `Drop`
+        - KO of an opponent Battle Card up to a power threshold while ignoring `[Barrier]`
+        - battle-duration power + keyword buff on filtered owner Battle Cards
+      - note:
+        - this is the conservative branch-B slice
+        - the alternate Z-Leader buff-and-remove branch remains deferred
+  - current King Vegeta / Oolong / Prismatic Burst slice now also maps:
+    - `BT13-030 King Vegeta's Imposing Presence`
+      - via maintained manual override:
+        - `counter_attack:counter_reduce_attacker_and_apply_attack_power_tax`
+      - generic support now covers:
+        - attacker power reduction on `Counter: Attack`
+        - repeat attack power taxes for the rest of the turn
+        - same-turn hand-copy activation restrictions for that counter card
+    - `P-405 Oolong, Greed is Good`
+      - via maintained manual override:
+        - `self_activate_main:activate_copy_battle_power_to_self_for_turn`
+      - generic support now covers:
+        - public `Activate: Main` power-copy effects from a chosen Battle Card in play
+        - ignoring `[Barrier]` on that target selection when the text allows it
+    - `EX19-25 SS4 Bardock, Prismatic Burst`
+      - via maintained manual override:
+        - `counter_play:counter_play_self_and_place_pending_played_battle_to_drop_if_power_at_most`
+      - generic support now covers:
+        - `Counter: Play` self-play with pending-play replacement
+        - forcing a pending Battle Card play to resolve into `Drop` instead of entering play when it is under a power threshold
+  - current Scramble / Bold Arrival / Stronger Together slice now also maps:
+    - `BT7-130 SS3 Scramble - Raditz, Vegeta & Broly`
+      - via maintained manual overrides:
+        - `self_played:auto_place_life_to_drop_and_deal_damage_on_play`
+        - `owner_opponent_card_comboed:auto_send_up_to_n_opponent_combo_to_drop_on_opponent_combo`
+      - generic support now covers:
+        - on-play self life-to-Drop plus direct damage
+        - opponent-combo triggers keyed off the comboing card's battle-card energy cost
+        - sending cards from the opponent's Combo Area to Drop as an auto effect
+    - `BT27-123 SS4 Gogeta, Bold Arrival`
+      - via maintained manual override:
+        - `self_or_opponent_battle_played:auto_send_owner_drop_to_warp_and_reduce_up_to_n_opponent_battle_for_turn_on_self_or_opponent_battle_played`
+      - generic support now covers:
+        - first conservative mixed trigger for `this card or your opponent's Battle Card is played`
+        - auto-cost payment from owner Drop to Warp inside a triggered family
+        - temporary opponent Battle Card power reduction after paying that auto cost
+    - `BT19-037 Son Goku, Stronger Together`
+      - via maintained manual overrides:
+        - `self_played:auto_opponent_bottom_decks_from_hand_until_n_on_play`
+        - `self_activate_battle:activate_gain_power_and_keyword_for_battle`
+      - generic support now covers:
+        - on-play hand trimming until the opponent reaches a hand-size cap
+        - `Activate: Battle` self-removal costs extracted from battle text
+        - battle-duration owner-battle buff targeting with `min_character_count`
   - current black warp/search family slice now also maps:
     - `BT29-086 Goku Black`
       - via extracted `self_activate_main:activate_look_top_send_up_to_n_to_owner_warp`
@@ -391,6 +655,33 @@ Resolved:
           - Battle Area
           - Energy Area
           - Drop Area
+  - current defensive Vegito / Gogeta slice now also maps:
+    - `BT25-103 No Challenge for the Strong`
+      - via manual override family:
+        - `owner_opponent_card_attacks:auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle`
+      - runtime support now covers:
+        - opponent-card attack triggers on public in-play cards
+        - removing the source from the game as the auto cost
+        - preventing leader damage for the current battle
+        - preventing KO of the current protected battle target for the current battle
+    - `BT20-099 SS Vegito, Overwhelming Might`
+      - via manual override family:
+        - `self_played:auto_apply_non_leader_attack_rest_tax_warp_self_and_optionally_negate_opponent_strike`
+      - runtime support now covers:
+        - delayed self-warp at end of turn
+        - opponent non-Leader attack tax that requires an additional active card to switch to Rest Mode
+        - turn-scoped leader-side strike negation
+        - emitting `card_played` during counter self-play resolution so on-play autos can resolve honestly
+      - hand cost reduction parsing now also supports:
+        - `During your opponent's turn`
+        - `your opponent has N or more energy`
+        - `you have N or more Z-Energy`
+    - `P-643 SS Vegito, Power Release`
+      - via manual override family:
+        - `counter_attack:counter_play_self_buff_owner_cards_for_battle`
+      - the already-supported alternate counter cost family now has an explicit maintained mapping for the real card:
+        - add `1` life to hand
+        - send `2` matching Drop cards to Warp
   - current red `Spirit Boost` counter slice now also maps:
     - `BT14-029 Difference of Status`
       - via manual override family:
@@ -666,12 +957,21 @@ Resolved:
         - using `[Field]` Extras in the Battle Area as valid public activate sources
         - `Activate: Main` energy-to-Drop skill costs on public in-play cards
         - removing the source card from the game and KOing all opponent Battle Cards in one reusable activate family
+    - `DB2-143 Koitsukai, Mechanical Courage`
+      - via maintained:
+        - `self_activate_main:activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play`
+      - generic support now covers:
+        - public `Activate: Main` from `Drop`
+        - reusable public-activate energy cost metadata (`activate_total_cost`)
+        - removing the source card from `Drop` to `removed_from_game`
+        - bottom-decking up to `N` cards from hand and drawing the same amount
+        - turn-scoped punishment when the opponent plays a Battle Card with `20000` power or less
   - highest-frequency currently unmapped cards in active deck/trace usage include:
-    - `DB3-115 Piccolo Jr., Eradicator of Peace`
-    - `BT25-010 Son Goku`
-    - `EX19-08 Goku Black, Works Undone`
-    - `BT15-018 Natade Village Monster`
-    - `BT15-105 Wilderness Monster`
+    - skillless / source-data-gap entries we intentionally skip in this pass:
+      - `BT25-010 Son Goku`
+      - `BT15-018 Natade Village Monster`
+      - `BT15-105 Wilderness Monster`
+    - no further actionable cards remain in this queue after the final `Vegito / Crimson Guardian / Special Beam Cannon / Super Kamehameha / Scheme Wish` slice
 - [ ] auto-assign cards to effect families where pattern confidence is high
   - status: first high-confidence candidate-report slice complete
   - `scripts/build_effect_family_assignment_candidates.py` now emits:

@@ -288,6 +288,28 @@ def test_extract_activate_main_energy_to_drop_cost_rule() -> None:
             {
                 "kind": "send_owner_energy_to_drop",
                 "amount": 2,
+            },
+            {
+                "kind": "send_self_to_removed",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_battle_remove_self_to_removed_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle] If your Leader's character name includes <SH>, you have 3 or more energy, and you remove this card from the game: "
+            "Choose up to 1 of your blue Battle Cards and it gets +10000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle": [
+            {
+                "kind": "send_self_to_removed",
+                "amount": 1,
             }
         ]
     }
@@ -630,6 +652,26 @@ def test_extract_counter_alternate_drop_to_warp_only_rule() -> None:
                 "required_leader_traits": "power wish",
                 "requires_life_at_most": 4,
                 "required_traits": "power wish",
+            }
+        ]
+    }
+
+
+def test_extract_counter_direct_discard_yellow_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Counter] If your Leader Card is red and you choose 1 yellow card in your hand and place it in your Drop Area: "
+            "Negate the [Counter: Attack] skill."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_from_hand": [
+            {
+                "kind": "discard_hand",
+                "amount": 1,
+                "allowed_colors": "yellow",
+                "required_leader_colors": "red",
             }
         ]
     }

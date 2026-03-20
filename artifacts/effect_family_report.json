@@ -91,13 +91,31 @@
       }
     },
     {
-      "card_count": 1,
+      "card_count": 2,
       "card_ids": [
+        8233,
         8896
       ],
       "family_id": "counter_attack:counter_play_self_buff_owner_cards_for_battle",
       "handlers": {
-        "counter_play_self_buff_owner_cards_for_battle": 1
+        "counter_play_self_buff_owner_cards_for_battle": 2
+      },
+      "provenances": {
+        "manual_override": 2
+      },
+      "rule_count": 2,
+      "triggers": {
+        "counter_attack": 2
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        6581
+      ],
+      "family_id": "counter_attack:counter_reduce_attacker_and_apply_attack_power_tax",
+      "handlers": {
+        "counter_reduce_attacker_and_apply_attack_power_tax": 1
       },
       "provenances": {
         "manual_override": 1
@@ -127,11 +145,62 @@
     {
       "card_count": 1,
       "card_ids": [
+        4949
+      ],
+      "family_id": "counter_counter:counter_negate_counter_attack",
+      "handlers": {
+        "counter_negate_counter_attack": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "counter_counter": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         89
       ],
       "family_id": "counter_play:counter_force_pending_play_rest_play_self_draw_n",
       "handlers": {
         "counter_force_pending_play_rest_play_self_draw_n": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "counter_play": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        6997
+      ],
+      "family_id": "counter_play:counter_place_pending_played_battle_to_warp_if_cost_at_most",
+      "handlers": {
+        "counter_place_pending_played_battle_to_warp_if_cost_at_most": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "counter_play": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        40
+      ],
+      "family_id": "counter_play:counter_play_self_and_place_pending_played_battle_to_drop_if_power_at_most",
+      "handlers": {
+        "counter_play_self_and_place_pending_played_battle_to_drop_if_power_at_most": 1
       },
       "provenances": {
         "manual_override": 1
@@ -191,6 +260,23 @@
       "rule_count": 2,
       "triggers": {
         "owner_battle_played_from_warp": 2
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7848
+      ],
+      "family_id": "owner_card_comboed:auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo",
+      "handlers": {
+        "auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_card_comboed": 1
       }
     },
     {
@@ -317,6 +403,74 @@
     {
       "card_count": 1,
       "card_ids": [
+        8448
+      ],
+      "family_id": "owner_opponent_card_attacks:auto_negate_attack_on_opponent_attack",
+      "handlers": {
+        "auto_negate_attack_on_opponent_attack": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_opponent_card_attacks": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7786
+      ],
+      "family_id": "owner_opponent_card_attacks:auto_negate_skills_and_restrict_up_to_n_opponent_battle_on_attack",
+      "handlers": {
+        "auto_negate_skills_and_restrict_up_to_n_opponent_battle_on_attack": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_opponent_card_attacks": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7839
+      ],
+      "family_id": "owner_opponent_card_attacks:auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle",
+      "handlers": {
+        "auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_opponent_card_attacks": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        6820
+      ],
+      "family_id": "owner_opponent_card_comboed:auto_send_up_to_n_opponent_combo_to_drop_on_opponent_combo",
+      "handlers": {
+        "auto_send_up_to_n_opponent_combo_to_drop_on_opponent_combo": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_opponent_card_comboed": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         56
       ],
       "family_id": "owner_opponent_skill_plays_overcost_battle:auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power",
@@ -351,6 +505,40 @@
     {
       "card_count": 1,
       "card_ids": [
+        7846
+      ],
+      "family_id": "owner_other_battle_played:auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played",
+      "handlers": {
+        "auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_other_battle_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        1063
+      ],
+      "family_id": "owner_other_battle_played:auto_buff_played_battle_and_draw_if_power_at_least",
+      "handlers": {
+        "auto_buff_played_battle_and_draw_if_power_at_least": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_other_battle_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         8318
       ],
       "family_id": "owner_other_battle_played_by_dark_over_realm:auto_draw_n",
@@ -363,6 +551,23 @@
       "rule_count": 1,
       "triggers": {
         "owner_other_battle_played_by_dark_over_realm": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7798
+      ],
+      "family_id": "owner_other_battle_played_by_over_realm:auto_draw_n_discard_n",
+      "handlers": {
+        "auto_draw_n_discard_n": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "owner_other_battle_played_by_over_realm": 1
       }
     },
     {
@@ -390,7 +595,7 @@
       }
     },
     {
-      "card_count": 86,
+      "card_count": 87,
       "card_ids": [
         10093,
         10164,
@@ -404,6 +609,7 @@
         1192,
         1343,
         1434,
+        1480,
         163,
         1768,
         1808,
@@ -481,14 +687,15 @@
       ],
       "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
       "handlers": {
-        "activate_gain_power_and_keyword_for_battle": 89
+        "activate_gain_power_and_keyword_for_battle": 90
       },
       "provenances": {
-        "extractor": 89
+        "extractor": 89,
+        "manual_override": 1
       },
-      "rule_count": 89,
+      "rule_count": 90,
       "triggers": {
-        "self_activate_battle": 89
+        "self_activate_battle": 90
       }
     },
     {
@@ -643,6 +850,23 @@
       "rule_count": 119,
       "triggers": {
         "self_activate_battle": 119
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        41
+      ],
+      "family_id": "self_activate_battle:activate_power_reduce_up_to_n_opponent_battle_for_turn",
+      "handlers": {
+        "activate_power_reduce_up_to_n_opponent_battle_for_turn": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_battle": 1
       }
     },
     {
@@ -900,6 +1124,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        2064
+      ],
+      "family_id": "self_activate_extra_from_hand:activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle",
+      "handlers": {
+        "activate_ko_up_to_n_opponent_battle_and_buff_owner_cards_for_battle": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         9657
       ],
       "family_id": "self_activate_extra_from_hand:activate_play_up_to_n_each_named_from_owner_deck_or_drop",
@@ -912,6 +1153,23 @@
       "rule_count": 1,
       "triggers": {
         "self_activate_extra_from_hand": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        23
+      ],
+      "family_id": "self_activate_main:activate_add_marker_to_matching_owner_unison_and_place_self_under_it",
+      "handlers": {
+        "activate_add_marker_to_matching_owner_unison_and_place_self_under_it": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
       }
     },
     {
@@ -991,6 +1249,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        7908
+      ],
+      "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+      "handlers": {
+        "activate_bottom_deck_up_to_n_opponent_battle": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         8372
       ],
       "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end",
@@ -1006,10 +1281,29 @@
       }
     },
     {
-      "card_count": 8,
+      "card_count": 1,
+      "card_ids": [
+        7786
+      ],
+      "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end",
+      "handlers": {
+        "activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 10,
       "card_ids": [
         1758,
         2586,
+        7798,
+        7910,
         7956,
         8177,
         8352,
@@ -1019,14 +1313,32 @@
       ],
       "family_id": "self_activate_main:activate_buff_owner_battle_cards",
       "handlers": {
-        "activate_buff_owner_battle_cards": 8
+        "activate_buff_owner_battle_cards": 10
       },
       "provenances": {
-        "extractor": 8
+        "extractor": 8,
+        "manual_override": 2
       },
-      "rule_count": 8,
+      "rule_count": 10,
       "triggers": {
-        "self_activate_main": 8
+        "self_activate_main": 10
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        892
+      ],
+      "family_id": "self_activate_main:activate_copy_battle_power_to_self_for_turn",
+      "handlers": {
+        "activate_copy_battle_power_to_self_for_turn": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
       }
     },
     {
@@ -1068,11 +1380,45 @@
     {
       "card_count": 1,
       "card_ids": [
+        1002
+      ],
+      "family_id": "self_activate_main:activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n",
+      "handlers": {
+        "activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         1603
       ],
       "family_id": "self_activate_main:activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed",
       "handlers": {
         "activate_flip_owner_leader_to_back_draw_n_and_send_self_to_removed": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        1702
+      ],
+      "family_id": "self_activate_main:activate_gain_keyword_from_under_self_until_opponent_turn_end",
+      "handlers": {
+        "activate_gain_keyword_from_under_self_until_opponent_turn_end": 1
       },
       "provenances": {
         "manual_override": 1
@@ -2024,6 +2370,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        8323
+      ],
+      "family_id": "self_activate_main:activate_play_up_to_n_from_owner_warp",
+      "handlers": {
+        "activate_play_up_to_n_from_owner_warp": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         8050
       ],
       "family_id": "self_activate_main:activate_play_up_to_n_from_owner_z_deck_or_z_energy",
@@ -2032,6 +2395,23 @@
       },
       "provenances": {
         "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7906
+      ],
+      "family_id": "self_activate_main:activate_power_reduce_up_to_n_opponent_battle_for_turn",
+      "handlers": {
+        "activate_power_reduce_up_to_n_opponent_battle_for_turn": 1
+      },
+      "provenances": {
+        "manual_override": 1
       },
       "rule_count": 1,
       "triggers": {
@@ -2063,6 +2443,23 @@
       "family_id": "self_activate_main:activate_remove_self_and_ko_all_opponent_battles",
       "handlers": {
         "activate_remove_self_and_ko_all_opponent_battles": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7386
+      ],
+      "family_id": "self_activate_main:activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play",
+      "handlers": {
+        "activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play": 1
       },
       "provenances": {
         "manual_override": 1
@@ -2126,6 +2523,23 @@
       "rule_count": 6,
       "triggers": {
         "self_activate_main": 6
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7798
+      ],
+      "family_id": "self_activate_main:activate_send_up_to_n_from_owner_warp_to_drop_and_gain_keyword_for_turn",
+      "handlers": {
+        "activate_send_up_to_n_from_owner_warp_to_drop_and_gain_keyword_for_turn": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
       }
     },
     {
@@ -2240,6 +2654,23 @@
       "family_id": "self_activate_main:activate_switch_self_active_and_gain_power_for_turn",
       "handlers": {
         "activate_switch_self_active_and_gain_power_for_turn": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_activate_main": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        2481
+      ],
+      "family_id": "self_activate_main:activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn",
+      "handlers": {
+        "activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn": 1
       },
       "provenances": {
         "manual_override": 1
@@ -2835,6 +3266,23 @@
       }
     },
     {
+      "card_count": 1,
+      "card_ids": [
+        6299
+      ],
+      "family_id": "self_attacks:auto_alliance_rest_matching_owner_battles_gain_power_draw_n_and_deal_damage",
+      "handlers": {
+        "auto_alliance_rest_matching_owner_battles_gain_power_draw_n_and_deal_damage": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
       "card_count": 27,
       "card_ids": [
         10092,
@@ -3350,6 +3798,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        7848
+      ],
+      "family_id": "self_attacks:auto_switch_up_to_n_opponent_board_rest",
+      "handlers": {
+        "auto_switch_up_to_n_opponent_board_rest": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_attacks": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         86
       ],
       "family_id": "self_blocker_activated:auto_rest_owner_battle_on_self_blocker_activated_switch_self_active",
@@ -3632,7 +4097,7 @@
       }
     },
     {
-      "card_count": 31,
+      "card_count": 32,
       "card_ids": [
         102,
         104,
@@ -3655,6 +4120,7 @@
         601,
         65,
         6780,
+        6947,
         7040,
         7178,
         720,
@@ -3668,14 +4134,15 @@
       ],
       "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
       "handlers": {
-        "auto_play_self_from_combo_on_battle_end": 31
+        "auto_play_self_from_combo_on_battle_end": 32
       },
       "provenances": {
-        "extractor": 31
+        "extractor": 31,
+        "manual_override": 1
       },
-      "rule_count": 31,
+      "rule_count": 32,
       "triggers": {
-        "self_comboed_battle_end": 31
+        "self_comboed_battle_end": 32
       }
     },
     {
@@ -3805,11 +4272,96 @@
     {
       "card_count": 1,
       "card_ids": [
+        8444
+      ],
+      "family_id": "self_or_opponent_battle_played:auto_send_owner_drop_to_warp_and_reduce_up_to_n_opponent_battle_for_turn_on_self_or_opponent_battle_played",
+      "handlers": {
+        "auto_send_owner_drop_to_warp_and_reduce_up_to_n_opponent_battle_for_turn_on_self_or_opponent_battle_played": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_or_opponent_battle_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        8492
+      ],
+      "family_id": "self_permanent:protect_owner_battle_skills_from_opponent_negation",
+      "handlers": {
+        "noop_auto": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_permanent": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        8492
+      ],
+      "family_id": "self_permanent:protect_owner_cards_from_opponent_rest",
+      "handlers": {
+        "noop_auto": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_permanent": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        8315
+      ],
+      "family_id": "self_permanent:reduce_own_z_deck_cost_if_owner_battle_with_skill_text_in_play",
+      "handlers": {
+        "reduce_own_z_deck_cost_if_owner_battle_with_skill_text_in_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_permanent": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         36
       ],
       "family_id": "self_played:auto_add_markers_per_n_multicolor_energy_on_play",
       "handlers": {
         "auto_add_markers_per_n_multicolor_energy_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        1702
+      ],
+      "family_id": "self_played:auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play",
+      "handlers": {
+        "auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play": 1
       },
       "provenances": {
         "manual_override": 1
@@ -3923,6 +4475,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        1632
+      ],
+      "family_id": "self_played:auto_apply_non_leader_attack_rest_tax_warp_self_and_optionally_negate_opponent_strike",
+      "handlers": {
+        "auto_apply_non_leader_attack_rest_tax_warp_self_and_optionally_negate_opponent_strike": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         7954
       ],
       "family_id": "self_played:auto_buff_up_to_n_owner_battles_on_play",
@@ -3938,7 +4507,7 @@
       }
     },
     {
-      "card_count": 714,
+      "card_count": 715,
       "card_ids": [
         100,
         1003,
@@ -4555,6 +5124,7 @@
         8246,
         8248,
         8250,
+        8317,
         8325,
         8329,
         8350,
@@ -4657,14 +5227,14 @@
       ],
       "family_id": "self_played:auto_draw_n",
       "handlers": {
-        "auto_draw_n": 714
+        "auto_draw_n": 718
       },
       "provenances": {
-        "extractor": 714
+        "extractor": 718
       },
-      "rule_count": 714,
+      "rule_count": 718,
       "triggers": {
-        "self_played": 714
+        "self_played": 718
       }
     },
     {
@@ -5258,6 +5828,74 @@
     {
       "card_count": 1,
       "card_ids": [
+        1480
+      ],
+      "family_id": "self_played:auto_opponent_bottom_decks_from_hand_until_n_on_play",
+      "handlers": {
+        "auto_opponent_bottom_decks_from_hand_until_n_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        1002
+      ],
+      "family_id": "self_played:auto_place_all_opponent_battles_up_to_cost_under_self_on_play",
+      "handlers": {
+        "auto_place_all_opponent_battles_up_to_cost_under_self_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        6820
+      ],
+      "family_id": "self_played:auto_place_life_to_drop_and_deal_damage_on_play",
+      "handlers": {
+        "auto_place_life_to_drop_and_deal_damage_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        8323
+      ],
+      "family_id": "self_played:auto_place_top_n_from_owner_deck_into_drop",
+      "handlers": {
+        "auto_place_top_n_from_owner_deck_into_drop": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         19
       ],
       "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
@@ -5487,6 +6125,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        41
+      ],
+      "family_id": "self_played:auto_power_reduce_up_to_n_opponent_cards_for_turn_on_play",
+      "handlers": {
+        "auto_power_reduce_up_to_n_opponent_cards_for_turn_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         5531
       ],
       "family_id": "self_played:auto_restrict_self_copies_from_hand_next_turn_on_play",
@@ -5602,6 +6257,23 @@
       }
     },
     {
+      "card_count": 1,
+      "card_ids": [
+        5826
+      ],
+      "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_and_play_up_to_n_from_owner_warp_on_play",
+      "handlers": {
+        "auto_send_up_to_n_opponent_battle_to_warp_and_play_up_to_n_from_owner_warp_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
       "card_count": 22,
       "card_ids": [
         10163,
@@ -5700,6 +6372,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        7940
+      ],
+      "family_id": "self_played:auto_switch_up_to_n_opponent_battle_rest_on_play",
+      "handlers": {
+        "auto_switch_up_to_n_opponent_battle_rest_on_play": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         8918
       ],
       "family_id": "self_played:auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end",
@@ -5708,6 +6397,23 @@
       },
       "provenances": {
         "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_played": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        7848
+      ],
+      "family_id": "self_played:auto_switch_up_to_n_opponent_board_rest",
+      "handlers": {
+        "auto_switch_up_to_n_opponent_board_rest": 1
+      },
+      "provenances": {
+        "manual_override": 1
       },
       "rule_count": 1,
       "triggers": {
@@ -5783,6 +6489,23 @@
       "rule_count": 16,
       "triggers": {
         "self_played": 16
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        8323
+      ],
+      "family_id": "self_removed_from_game:auto_place_top_n_from_owner_deck_into_drop",
+      "handlers": {
+        "auto_place_top_n_from_owner_deck_into_drop": 1
+      },
+      "provenances": {
+        "manual_override": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_removed_from_game": 1
       }
     },
     {
@@ -5998,12 +6721,12 @@
   ],
   "schema_version": "effect_family_report.v1",
   "summary": {
-    "card_rule_count": 3010,
-    "effect_rule_count": 4133,
-    "family_count": 117,
+    "card_rule_count": 3045,
+    "effect_rule_count": 4184,
+    "family_count": 159,
     "provenance_counts": {
-      "extractor": 4083,
-      "manual_override": 50
+      "extractor": 4087,
+      "manual_override": 97
     }
   }
 }

@@ -288,6 +288,10 @@ class SkillCostDsl:
         return in_battle or in_unison
 
     @staticmethod
+    def _in_drop(player: PlayerState, source_card: CardInstance) -> bool:
+        return any(c.instance_id == source_card.instance_id for c in player.drop)
+
+    @staticmethod
     def _remove_source_from_battle_or_unison(
         player: PlayerState,
         source_card: CardInstance,
@@ -311,6 +315,28 @@ class SkillCostDsl:
             if card.instance_id != source_card.instance_id:
                 continue
             removed = player.unison_area.pop(i)
+            if destination == "drop":
+                player.drop.append(removed)
+            elif destination == "warp":
+                player.warp.append(removed)
+            elif destination == "removed":
+                player.removed_from_game.append(removed)
+            else:
+                raise ValueError(f"Unknown destination: {destination}")
+            return True
+        return False
+
+    @staticmethod
+    def _remove_source_from_drop(
+        player: PlayerState,
+        source_card: CardInstance,
+        *,
+        destination: str,
+    ) -> bool:
+        for i, card in enumerate(player.drop):
+            if card.instance_id != source_card.instance_id:
+                continue
+            removed = player.drop.pop(i)
             if destination == "drop":
                 player.drop.append(removed)
             elif destination == "warp":
@@ -440,7 +466,7 @@ class SkillCostDsl:
             if step.kind == "send_self_to_removed":
                 if step.amount != 1:
                     return False
-                if not SkillCostDsl._in_battle_or_unison(player, source_card):
+                if not (SkillCostDsl._in_battle_or_unison(player, source_card) or SkillCostDsl._in_drop(player, source_card)):
                     return False
                 continue
             if step.kind == "switch_owner_battle_to_hidden":
@@ -650,8 +676,14 @@ class SkillCostDsl:
                     raise ValueError("Source card not found in battle/unison area for send_self_to_warp.")
                 continue
             if step.kind == "send_self_to_removed":
-                if not SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="removed"):
-                    raise ValueError("Source card not found in battle/unison area for send_self_to_removed.")
+                removed_zone = "drop"
+                if SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="removed"):
+                    removed_zone = "unison" if str(getattr(source_card, "card_type", "")).upper() in {"UNISON", "Z-UNISON"} else "battle"
+                elif not SkillCostDsl._remove_source_from_drop(player, source_card, destination="removed"):
+                    raise ValueError("Source card not found in battle/unison/drop for send_self_to_removed.")
+                metadata["removed_source_instance_id"] = int(source_card.instance_id)
+                metadata["removed_source_card_id"] = int(source_card.card_id)
+                metadata["removed_source_zone"] = removed_zone
                 continue
             if step.kind == "switch_owner_battle_to_hidden":
                 candidates = SkillCostDsl._owner_battle_candidates(player, source_card, step)

@@ -59,6 +59,12 @@ _ACTIVATE_MAIN_DISCARD_HAND_RE = re.compile(
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:"
 )
+_ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?remove this card from the game\s*:"
+)
+_ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,260}?remove this card from the game\s*:"
+)
 _ACTIVATE_MAIN_SPIRIT_BOOST_RE = re.compile(
     r"\[activate(?::)?\s*main\](?:.{0,120}?)?\[spirit boost\s+(\d+)\]"
 )
@@ -91,6 +97,9 @@ _COUNTER_ALT_HIDDEN_TO_DROP_RE = re.compile(
 )
 _COUNTER_ALT_REDUCE_OWNER_BATTLE_POWER_RE = re.compile(
     r"\[(?:permanent|permament)\].{0,220}?activate this card's \[counter\] skill from your hand by choosing (\d+) of your (.+?) battle cards? and reducing their power by (-?\d+) for the turn instead of paying its energy cost"
+)
+_COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
+    r"\[counter:\s*(?:attack|play|counter|battle card attack)\].{0,220}?choose (\d+) (.+?) cards? in your hand and place (?:it|them) in your drop area\s*:"
 )
 
 
@@ -127,6 +136,8 @@ def _extract_required_leader_traits(text: str) -> str:
     cleaned = re.sub(r"\b(red|blue|green|yellow|black|white|mono-black|mono-red|mono-blue|mono-green|mono-yellow|mono-white)\b", " ", cleaned)
     cleaned = re.sub(r"[^0-9a-z ,/.-]", " ", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,.-")
+    if cleaned.startswith("and ") or "you choose" in cleaned:
+        return ""
     if not cleaned:
         return ""
     parts = [part.strip() for part in re.split(r"\bor\b|/|,", cleaned) if part.strip()]
@@ -478,6 +489,10 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         amount = int(m_activate_main_drop_to_warp.group(1))
         descriptor = str(m_activate_main_drop_to_warp.group(2) or "").strip()
         rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_owner_drop_to_warp", descriptor, amount))
+    if _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE.search(text):
+        rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
+    if _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE.search(text):
+        rules.setdefault("activate_battle", []).append({"kind": "send_self_to_removed", "amount": 1})
     m_activate_main_remove_total_drop_and_warp = _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE.search(text)
     if m_activate_main_remove_total_drop_and_warp:
         rules["activate_main"] = [
@@ -649,6 +664,18 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         if required_leader_traits:
             params["required_leader_traits"] = required_leader_traits
         rules["counter_alternate_from_hand"] = [params]
+
+    m_counter_direct_discard_hand = _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE.search(text)
+    if m_counter_direct_discard_hand:
+        descriptor = m_counter_direct_discard_hand.group(2).strip()
+        params = _extract_filtered_cost_step("discard_hand", descriptor, int(m_counter_direct_discard_hand.group(1)))
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
+        rules["counter_from_hand"] = [params]
 
     return rules
 

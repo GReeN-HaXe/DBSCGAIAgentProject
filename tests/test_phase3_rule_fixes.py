@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from src.game import Action, ActionType, BattleStep, CardInstance, RulesEngine, TurnPhase
+from src.game.state import NonLeaderAttackRestTax
 
 
 def _deck(seed: int, size: int = 60) -> list[int]:
@@ -331,6 +332,108 @@ def test_counter_chain_counter_counter_restores_attack() -> None:
     assert any(cp.name == "counter_chain_resolution_complete" for cp in state.checkpoints)
     assert any("Counter chain resolution begin" in row for row in state.log)
     assert any("Counter chain resolution complete" in row and "order=1" in row for row in state.log)
+
+
+def test_almighty_resistance_can_counter_counter_by_discarding_yellow_hand_card() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            4949: {
+                "counter_from_hand": [
+                    {"kind": "discard_hand", "amount": 1, "allowed_colors": "yellow", "required_leader_colors": "red"},
+                ]
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state.players[1].leader_area.color = "Red"
+    state = _to_p2_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=700055, card_id=855, owner_id=1, card_type="ENERGY", color="Red"),
+        CardInstance(instance_id=700056, card_id=856, owner_id=1, card_type="ENERGY", color="Yellow"),
+    ]
+    state.players[2].hand.append(
+        CardInstance(instance_id=700048, card_id=48, owner_id=2, has_counter=True, counter_modes=("Counter: Attack",), energy_cost=0)
+    )
+    state.players[1].hand.extend(
+        [
+            CardInstance(
+                instance_id=700049,
+                card_id=4949,
+                owner_id=1,
+                card_type="EXTRA",
+                color="Red/Yellow",
+                energy_cost=2,
+                has_counter=True,
+                has_counter_counter=True,
+                counter_modes=("Counter: Counter",),
+                skill_text_raw="[Counter: Counter] If your Leader Card is red and you choose 1 yellow card in your hand and place it in your Drop Area: Negate the [Counter: Attack] skill.",
+            ),
+            CardInstance(instance_id=700050, card_id=850, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=1),
+        ]
+    )
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+    state = engine.apply_action(state, Action(action_type=ActionType.DECLARE_COUNTER_FROM_HAND, player_id=2, hand_index=len(state.players[2].hand) - 1))
+    legal = engine.get_legal_actions(state, 1)
+    almighty_action = next(a for a in legal if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND and state.players[1].hand[a.hand_index].card_id == 4949)
+    state = engine.apply_action(state, almighty_action)
+    assert any(card.instance_id == 700050 for card in state.players[1].drop)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert state.attack_context is not None
+    last_two = state.counter_resolutions[-2:]
+    assert any(r.resolved and r.negated_motion_id is not None for r in last_two)
+
+
+def test_almighty_resistance_is_not_legal_against_non_attack_counter_motion() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            4949: {
+                "counter_from_hand": [
+                    {"kind": "discard_hand", "amount": 1, "allowed_colors": "yellow", "required_leader_colors": "red"},
+                ]
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=1, shuffle_decks=False
+    )
+    state.players[1].leader_area.color = "Red"
+    state = _to_main(engine, state)
+    state.players[1].hand = [CardInstance(instance_id=700051, card_id=851, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    state.players[1].energy = [
+        CardInstance(instance_id=700057, card_id=857, owner_id=1, card_type="ENERGY", color="Red"),
+        CardInstance(instance_id=700058, card_id=858, owner_id=1, card_type="ENERGY", color="Yellow"),
+    ]
+    state.players[2].hand = [
+        CardInstance(instance_id=700052, card_id=852, owner_id=2, card_type="BATTLE", energy_cost=0, has_counter=True, has_counter_play=True, counter_modes=("Counter: Play",)),
+    ]
+    state.players[1].hand.extend(
+        [
+        CardInstance(
+            instance_id=700053,
+            card_id=4949,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Red/Yellow",
+            energy_cost=2,
+            has_counter=True,
+            has_counter_counter=True,
+            counter_modes=("Counter: Counter",),
+            skill_text_raw="[Counter: Counter] If your Leader Card is red and you choose 1 yellow card in your hand and place it in your Drop Area: Negate the [Counter: Attack] skill.",
+        ),
+        CardInstance(instance_id=700054, card_id=853, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=1),
+        ]
+    )
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND)
+    state = engine.apply_action(state, play)
+    first_counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, first_counter)
+    legal = engine.get_legal_actions(state, 1)
+    assert all(a.action_type != ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
 
 
 def test_declaring_counter_closes_other_pending_counters_in_same_hand() -> None:
@@ -958,6 +1061,127 @@ def test_counter_attack_can_negate_attacker_skills_and_prevent_switch_active_wit
     assert state.players[1].battle_area[0].resting is True
     assert any(cp.name == "counter_effect_attacker_skills_negated" for cp in state.checkpoints)
     assert any(cp.name == "counter_effect_attacker_cannot_switch_active" for cp in state.checkpoints)
+
+
+def test_dabura_counter_protection_prevents_opponent_skill_negation_on_owner_battle_cards() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=790030,
+            card_id=8492,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            power=20000,
+            has_permanent=True,
+            skill_text_raw=(
+                "[Dark Over Realm 4] [Blocker]\n"
+                "[Permanent] Skills on your Battle Cards can't be negated by your opponent's skills.\n"
+                "[Permanent] Your cards can't be switched to Rest Mode by your opponent's skills."
+            ),
+        ),
+        CardInstance(
+            instance_id=790031,
+            card_id=628,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=2,
+            power=20000,
+            keywords=("Dual Attack",),
+            has_barrier=True,
+            has_activate_battle=True,
+        ),
+    ]
+    state.players[2].energy = []
+    state.players[2].leader_area.color = "Yellow"
+    state.players[2].unison_area = [
+        CardInstance(instance_id=790032, card_id=629, owner_id=2, card_type="UNISON", color="Yellow", markers=1)
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=790033,
+            card_id=4226,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Yellow",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] If your Leader Card is mono-yellow: Choose the attacking card, ignoring [Barrier], "
+                "negate its skills for the turn, and it can't be switched to Active Mode until the start of your next turn."
+                "[Permanent] If you have a yellow Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."
+            ),
+        )
+    ]
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 1
+    )
+    state = engine.apply_action(state, attack)
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+    attacker = state.players[1].battle_area[1]
+    assert attacker.temporary_skills_negated is False
+    assert attacker.temporary_cannot_switch_active is True
+    assert any(cp.name == "counter_effect_attacker_skill_negation_prevented" for cp in state.checkpoints)
+
+
+def test_dabura_counter_protection_prevents_opponent_rest_tax_from_resting_owner_cards() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=790034,
+            card_id=8492,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            power=20000,
+            has_permanent=True,
+            skill_text_raw=(
+                "[Dark Over Realm 4] [Blocker]\n"
+                "[Permanent] Skills on your Battle Cards can't be negated by your opponent's skills.\n"
+                "[Permanent] Your cards can't be switched to Rest Mode by your opponent's skills."
+            ),
+        ),
+        CardInstance(instance_id=790035, card_id=630, owner_id=1, card_type="BATTLE", color="Black", power=15000),
+        CardInstance(instance_id=790036, card_id=631, owner_id=1, card_type="BATTLE", color="Black", power=10000),
+    ]
+    state.non_leader_attack_rest_taxes.append(
+        NonLeaderAttackRestTax(owner_player_id=2, affected_player_id=1, rest_count=1, expires_on_turn_end_player_id=2)
+    )
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 1
+    )
+    state = engine.apply_action(state, attack)
+    assert state.players[1].battle_area[0].resting is False
+    assert state.players[1].battle_area[2].resting is False
+    assert state.attack_context is not None
+    assert any(cp.name == "non_leader_attack_rest_tax_prevented_by_protection" for cp in state.checkpoints)
 
 
 def test_counter_play_can_force_pending_battle_play_rest_then_play_self_and_draw() -> None:
@@ -2342,3 +2566,252 @@ def test_skill_cost_dsl_send_self_to_removed() -> None:
     state = engine.apply_action(state, action)
     assert len(state.players[1].battle_area) == 0
     assert any(c.instance_id == 770021 for c in state.players[1].removed_from_game)
+
+
+def test_ss_vegito_power_release_can_counter_with_life_and_drop_to_warp_and_buff_for_battle() -> None:
+    engine = RulesEngine(
+        skill_cost_rules={
+            8233: {
+                "counter_alternate_from_hand": [
+                    {"kind": "add_life_to_hand", "amount": 1, "required_leader_colors": "red"},
+                    {"kind": "send_owner_drop_to_warp", "amount": 2, "required_traits": "saiyan"},
+                ]
+            }
+        },
+        effect_rule_overrides={
+            8233: {
+                "mode": "replace",
+                "rules": [
+                    {
+                        "trigger": "counter_attack",
+                        "handler_id": "counter_play_self_buff_owner_cards_for_battle",
+                        "handler_params": {"max_targets": 1, "power_delta": 30000, "target_scope": "owner_cards"},
+                        "limit_per_turn": 1,
+                    },
+                ],
+            }
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1, p1_deck_card_ids=_deck(1000), p2_leader_card_id=2, p2_deck_card_ids=_deck(2000), first_player=2, shuffle_decks=False
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].leader_area.color = "Red"
+    starting_life = len(state.players[2].life)
+    starting_leader_power = state.players[2].leader_area.power
+    state.players[2].drop = [
+        CardInstance(instance_id=770031, card_id=9301, owner_id=2, card_type="BATTLE", color="Red", traits=("Saiyan",), characters=("Goku",)),
+        CardInstance(instance_id=770032, card_id=9302, owner_id=2, card_type="BATTLE", color="Blue", traits=("Saiyan",), characters=("Vegeta",)),
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=770033,
+            card_id=8233,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=6,
+            has_counter=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Blocker][Counter: Attack][Limit 1] Play this card, then choose up to 1 of your cards and it gets +30000 power for the battle. "
+                "[Permanent] If your Leader is red, you can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand and sending 2 â‰ªSaiyanâ‰« cards from your Drop to their owner's Warp instead of paying its energy cost."
+            ),
+        )
+    ]
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=1, attacker_zone="leader", target_player_id=2, target_zone="leader"),
+    )
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert len(state.players[2].life) == starting_life - 1
+    assert len(state.players[2].warp) == 2
+    assert len(state.players[2].drop) == 0
+    assert any(card.instance_id == 770033 for card in state.players[2].battle_area)
+    assert state.players[2].leader_area.power == starting_leader_power + 30000
+    assert state.players[2].leader_area.battle_temporary_power_delta == 30000
+    assert any(cp.name == "counter_effect_play_self_battle_buff_resolved" for cp in state.checkpoints)
+
+
+def test_super_kamehameha_can_send_pending_play_to_warp_if_cost_at_most() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(instance_id=780201, card_id=98201, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=0, power=20000)
+    ]
+    state.players[2].leader_area.color = "Black"
+    state.players[2].life = state.players[2].life[:4]
+    state.players[2].energy = [
+        CardInstance(instance_id=780202, card_id=98202, owner_id=2, card_type="ENERGY", color="Black", energy_cost=0)
+    ]
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=780203,
+            card_id=6997,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Black",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] If your Leader Card is black and your life is at 4 or less: "
+                "If the Battle Card being played has an energy cost of 3 or less, it is sent to its owner's Warp instead of being played. "
+                "[Permanent] If you have only black cards in your energy and your life is at 4 or less, "
+                "you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."
+            ),
+        )
+    ]
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PLAY_CARD_FROM_HAND, player_id=1, hand_index=0))
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert any(card.instance_id == 780201 for card in state.players[1].warp)
+    assert all(card.instance_id != 780201 for card in state.players[1].battle_area)
+    assert any(cp.name == "counter_effect_pending_play_to_warp_scheduled" for cp in state.checkpoints)
+    assert any(cp.name == "play_replaced_to_warp" for cp in state.checkpoints)
+
+
+def test_king_vegeta_counter_applies_attack_power_tax_and_restricts_hand_copies_for_turn() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p2_main(engine, state)
+    state.players[2].battle_area = [
+        CardInstance(instance_id=780001, card_id=9801, owner_id=2, card_type="BATTLE", color="Blue", power=20000),
+        CardInstance(instance_id=780002, card_id=9802, owner_id=2, card_type="BATTLE", color="Blue", power=15000),
+    ]
+    state.players[1].leader_area.color = "Red"
+    state.players[1].leader_area.traits = ("Saiyan",)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=780003,
+            card_id=6581,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Red",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] If your Leader Card is a mono-red ≪Saiyan≫ card: You may choose the attacking card, ignoring [Barrier], "
+                "and it gets -10000 power for the turn; your opponent can't attack with cards for the turn unless they give the attacking card -5000 power for the turn each time. "
+                "You can't activate copies of this card from your hand for the turn."
+            ),
+        ),
+        CardInstance(
+            instance_id=780004,
+            card_id=6581,
+            owner_id=1,
+            card_type="EXTRA",
+            color="Red",
+            energy_cost=0,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw=(
+                "[Counter: Attack] If your Leader Card is a mono-red ≪Saiyan≫ card: You may choose the attacking card, ignoring [Barrier], "
+                "and it gets -10000 power for the turn; your opponent can't attack with cards for the turn unless they give the attacking card -5000 power for the turn each time. "
+                "You can't activate copies of this card from your hand for the turn."
+            ),
+        ),
+    ]
+    state = engine.apply_action(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="battle", attacker_index=0, target_player_id=1, target_zone="leader"),
+    )
+    counter = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    first_attacker = state.players[2].battle_area[0]
+    assert first_attacker.temporary_power_delta == -10000
+    assert len(state.attack_power_taxes) == 1
+    assert len(state.active_counter_hand_restrictions) == 1
+    assert any(cp.name == "counter_effect_attacker_power_reduce_applied" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_attack_power_tax_applied" for cp in state.checkpoints)
+    assert any(cp.name == "counter_effect_hand_counter_restriction_applied" for cp in state.checkpoints)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=2))
+    state.phase = TurnPhase.MAIN
+    state.attack_context = None
+    state.battle_step = None
+    state.players[2].leader_area.resting = False
+    engine._declare_attack(
+        state,
+        Action(action_type=ActionType.DECLARE_ATTACK, player_id=2, attacker_zone="leader", target_player_id=1, target_zone="leader"),
+    )
+    second_attacker = state.players[2].leader_area
+    assert second_attacker.temporary_power_delta == -5000
+    assert any(cp.name == "attack_power_tax_applied" for cp in state.checkpoints)
+    legal_counter = engine.get_legal_actions(state, 1)
+    assert not any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal_counter)
+
+
+def test_prismatic_burst_counter_play_can_replace_small_pending_play_with_drop() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = []
+    state.players[1].hand = [
+        CardInstance(instance_id=780011, card_id=9811, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=0, power=20000)
+    ]
+    state.players[2].energy = []
+    state.players[2].hand = [
+        CardInstance(
+            instance_id=780012,
+            card_id=40,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=0,
+            power=15000,
+            has_counter=True,
+            has_counter_play=True,
+            counter_modes=("Counter: Play",),
+            skill_text_raw=(
+                "[Counter: Play] Play this card, and if the Battle Card being played has 20000 power or less, "
+                "place it in its owner's Drop Area instead."
+            ),
+        )
+    ]
+    state = engine.apply_action(state, Action(action_type=ActionType.PLAY_CARD_FROM_HAND, player_id=1, hand_index=0))
+    counter = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND)
+    state = engine.apply_action(state, counter)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert any(card.instance_id == 780012 for card in state.players[2].battle_area)
+    assert any(card.instance_id == 780011 for card in state.players[1].drop)
+    assert all(card.instance_id != 780011 for card in state.players[1].battle_area)
+    assert any(cp.name == "counter_effect_pending_play_to_drop_scheduled" for cp in state.checkpoints)
+    assert any(cp.name == "play_replaced_to_drop" for cp in state.checkpoints)
