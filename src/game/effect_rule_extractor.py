@@ -100,6 +100,10 @@ _ACTIVATE_MAIN_GRANT_NEXT_EX_EVOLVE_FROM_DROP_RE = re.compile(
 _ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_EXTRA_SKILL_COST_RE = re.compile(
     r"\[activate(?::)?\s*main/battle\].{0,360}?the next time you activate an? \[activate\] skill on an? (.+?) extra from your hand during this turn,\s*reduce the skill cost by \{?(\d+)\}?"
 )
+_ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_ARRIVAL_SKILL_COST_RE = re.compile(
+    r"\[activate(?::)?\s*(main|battle)\].{0,420}?the next time (?:you|your) activate \[arrival\s+([^\]]+)\] on (.+?) card(?: with an energy cost of (\d+))? in your hand(?: during this turn)?[,:]\s*reduce the skill cost by (?:\{([^}]+)\}|\(([^)]+)\)|(\d+))",
+    re.IGNORECASE,
+)
 _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?choose up to (\d+) of your opponent'?s battle cards?\s*(?:,|and|then)?\s*ko (?:it|them)"
 )
@@ -1124,6 +1128,48 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_activate_battle",
                     handler_id="activate_reduce_next_matching_extra_skill_cost_from_hand",
                     handler_params=dict(params),
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_activate_main_battle_reduce_next_arrival_skill_cost = _ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_ARRIVAL_SKILL_COST_RE.search(branch)
+        if m_activate_main_battle_reduce_next_arrival_skill_cost:
+            skill_kind = str(m_activate_main_battle_reduce_next_arrival_skill_cost.group(1) or "").strip().lower()
+            arrival_colors = ",".join(
+                sorted(
+                    {
+                        part.strip().lower()
+                        for part in str(m_activate_main_battle_reduce_next_arrival_skill_cost.group(2) or "").replace("/", ",").split(",")
+                        if part.strip()
+                    }
+                )
+            )
+            descriptor = m_activate_main_battle_reduce_next_arrival_skill_cost.group(3).strip()
+            max_cost_group = m_activate_main_battle_reduce_next_arrival_skill_cost.group(4)
+            reduction_token = next(
+                (
+                    str(token).strip()
+                    for token in m_activate_main_battle_reduce_next_arrival_skill_cost.groups()[4:]
+                    if str(token or "").strip()
+                ),
+                "",
+            )
+            extra = _extract_common_conditions(branch)
+            params = {
+                "uses_remaining": 1,
+                "required_arrival_colors": arrival_colors,
+                "reduction_cost_token": reduction_token,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            if max_cost_group is not None:
+                params["max_energy_cost"] = int(max_cost_group)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle" if skill_kind == "battle" else "self_activate_main",
+                    handler_id="activate_reduce_next_matching_arrival_skill_cost_from_hand",
+                    handler_params=params,
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )

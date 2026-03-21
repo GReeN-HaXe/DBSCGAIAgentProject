@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 347,
+  "effect_rule_count": 348,
   "rules": {
     "7762": [
       {
@@ -1023,6 +1023,29 @@
         "provenance": "extractor",
         "source_text": "[activate: main/battle][limit 1](1), if your leader's back side is a yellow <gogeta: gt> card and you have a total of 2 or more multicolor <pan> cards and/or multicolor cards with <gt> in their character names in your energy: play this card from your hand.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "7844": [
+      {
+        "family_id": "self_played:auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play",
+        "handler_id": "auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play",
+        "handler_params": {
+          "discard_amount": 2,
+          "discard_grant_keyword": "Double Strike",
+          "ignores_barrier": true,
+          "ko_grant_keyword": "Dual Attack",
+          "ko_max_targets": 2,
+          "ko_target_policy": "first",
+          "min_opponent_energy": 3,
+          "requires_leader": "green,yellow",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "source_text": "",
+        "trigger": "self_played"
       }
     ],
     "7846": [
@@ -2160,6 +2183,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[+1][activate: main] your opponent discards 1 card their hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_schedule_opponent_non_leader_skill_draw_replacement_next_turn",
+        "handler_id": "activate_schedule_opponent_non_leader_skill_draw_replacement_next_turn",
+        "handler_params": {
+          "restrict_activate_self_copies_next_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "source_text": "",
         "trigger": "self_activate_main"
       }
     ],
@@ -5493,25 +5529,6 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](green)(green), if your leader is a green &lt;mai: future&gt;-only card and you have 3 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "8215": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "green",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 5,
-          "required_traits": "Saiyan"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 green \u226asaiyan\u226b card with an energy cost of 5 or less to your hand, then shuffle your deck.",
-        "trigger": "self_played"
       }
     ]
   },

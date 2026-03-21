@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 2967,
+  "card_rule_count": 2968,
   "catalog_kind": "dbs_effect_catalog_manifest",
-  "effect_rule_count": 3846,
+  "effect_rule_count": 3848,
   "schema_version": 1,
   "shard_count": 12,
   "shards": [
@@ -70,24 +70,24 @@
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 347,
+      "effect_rule_count": 348,
       "first_card_id": 7762,
-      "last_card_id": 8215,
-      "path": "shard_0010_7762_8215.json"
+      "last_card_id": 8214,
+      "path": "shard_0010_7762_8214.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 393,
-      "first_card_id": 8216,
-      "last_card_id": 8947,
-      "path": "shard_0011_8216_8947.json"
+      "effect_rule_count": 392,
+      "first_card_id": 8215,
+      "last_card_id": 8946,
+      "path": "shard_0011_8215_8946.json"
     },
     {
-      "card_rule_count": 217,
-      "effect_rule_count": 344,
-      "first_card_id": 8948,
+      "card_rule_count": 218,
+      "effect_rule_count": 346,
+      "first_card_id": 8947,
       "last_card_id": 10204,
-      "path": "shard_0012_8948_10204.json"
+      "path": "shard_0012_8947_10204.json"
     }
   ]
 }

@@ -1,8 +1,27 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 393,
+  "effect_rule_count": 392,
   "rules": {
+    "8215": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 5,
+          "required_traits": "Saiyan"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 green \u226asaiyan\u226b card with an energy cost of 5 or less to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
     "8216": [
       {
         "family_id": "self_played:auto_play_up_to_n_from_owner_drop_on_play",
@@ -6195,38 +6214,6 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[activate: main](2), if your opponent has 3 or more energy: play this card from your hand, then choose up to 2 of your opponent's battle cards, ignoring [barrier], and switch them to hidden mode.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "8947": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, draw 1 card.",
-        "trigger": "self_attacks"
-      },
-      {
-        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
-        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "negate_self_skill_for_game": true,
-          "required_characters": "Stop You Fiend",
-          "required_name_contains": "STOP YOU FIEND!"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] add up to 1 {stop you fiend!} from your deck to your hand, shuffle your deck, and negate this skill for the game.",
         "trigger": "self_activate_main"
       }
     ]

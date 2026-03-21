@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 217,
+  "card_rule_count": 218,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 344,
+  "effect_rule_count": 346,
   "rules": {
     "10025": [
       {
@@ -1261,6 +1261,38 @@
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] if your leader is a \u226auniverse 2\u226b card: when this card is played, draw 1 card, send up to 1 {rozie, witchy warrior} from your drop to your warp, add up to 1 black \u226amaiden squadron\u226b card from your drop or warp to your z-energy, then send up to 2 battle cards from your opponent's drop to their owner's warp.",
         "trigger": "self_played"
+      }
+    ],
+    "8947": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "negate_self_skill_for_game": true,
+          "required_characters": "Stop You Fiend",
+          "required_name_contains": "STOP YOU FIEND!"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] add up to 1 {stop you fiend!} from your deck to your hand, shuffle your deck, and negate this skill for the game.",
+        "trigger": "self_activate_main"
       }
     ],
     "8948": [

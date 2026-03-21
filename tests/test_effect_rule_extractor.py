@@ -360,6 +360,22 @@ def test_extract_jaguars_island_challenge_stage_rules() -> None:
     assert any("krillin" in str(r.handler_params.get("required_leader_traits", "")).lower() for r in reduce_rules)
 
 
+def test_extract_activate_battle_can_reduce_next_matching_arrival_skill_cost() -> None:
+    card = _card(
+        "[Activate: Battle][Once per turn] If it's your opponent's turn and you have 1 or more red cards and 1 or more green cards in your Combo Area: "
+        "During this turn, the next time your activate [Arrival Red/Green] on a <Vegeta> or <Trunks: Future> card with an energy cost of 5 in your hand, reduce the skill cost by {r}."
+    )
+    rules = extract_effect_rules_from_card(card)
+    reduce_rule = next(r for r in rules if r.handler_id == "activate_reduce_next_matching_arrival_skill_cost_from_hand")
+    assert reduce_rule.trigger == "self_activate_battle"
+    assert reduce_rule.handler_params["required_arrival_colors"] == "green,red"
+    assert reduce_rule.handler_params["required_characters"] == "Trunks: Future,Vegeta"
+    assert reduce_rule.handler_params["max_energy_cost"] == 5
+    assert reduce_rule.handler_params["reduction_cost_token"] == "r"
+    assert reduce_rule.handler_params["uses_remaining"] == 1
+    assert reduce_rule.once_per_turn is True
+
+
 def test_extract_ex_evolve_followup_draw_and_switch_self_active_rules() -> None:
     card = _card(
         "[Deflect][Double Strike] "

@@ -948,8 +948,16 @@ Resolved:
       - runtime support now covers:
         - owner-side trigger matching when another Battle Card is played by a `[Dark Over Realm]` skill
         - preserving `Limit 1` on the resulting draw trigger
-      - note:
-        - the summon-side `[Dark Over Realm]` action itself remains a broader backlog seam
+      - status update:
+        - first summon-side `[Dark Over Realm]` action slice is now in
+      - generic runtime now also covers:
+        - a dedicated `DARK_OVER_REALM` legal action for hand Battle Cards with `[Dark Over Realm N]`
+        - first conservative keyword-cost parsing for:
+          - `[Dark Over Realm N]{b}`
+          - `[Dark Over Realm N](X)`
+          - `[Dark Over Realm N]②`-style circled numerals
+        - sending `N` cards from Drop to Warp on declaration
+        - carrying `played_via=dark_over_realm` through the normal play/counter path so existing `played by [Dark Over Realm]` autos trigger correctly
   - current black combo/counter cleanup slice now also maps:
     - `BT27-103 Demon God Shroom, Scheming`
       - via extracted `self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack`
@@ -1015,8 +1023,17 @@ Resolved:
       - via extracted `self_activate_main:activate_opponent_discards_n_from_hand`
       - generic support now covers:
         - `Activate: Main` effects that force the opponent to discard from hand
+        - delayed opponent-next-turn replacement of draws caused by non-Leader card skills
+        - scheduling the card's next-turn activate-copy restriction alongside that delayed replacement
+    - `BT25-137 SS4 Gogeta VS Omega Shenron, Clash With Ultimate Evil`
+      - via maintained manual override:
+        - `self_played:auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play`
+      - generic support now covers:
+        - on-play choice families that deterministically resolve one of two branches instead of double-firing both
+        - branch scoring across opponent hand discard vs KO of Rest Mode Battle Cards ignoring `Barrier`
+        - branch-specific temporary keyword grants such as `Double Strike` or `Dual Attack`
       - note:
-        - Oolong's delayed opponent-next-turn draw-replacement effect is still open backlog work
+        - this is a conservative deterministic branch-selection slice, not full player-authored auto choice UI
   - current combo-trigger power-reduction slice now also maps:
     - `BT9-096 Whis, Celestial Moderator`
       - via extracted `self_comboed:auto_power_reduce_up_to_n_on_combo`
@@ -1546,7 +1563,22 @@ Resolved:
   - `[Z-Awaken]`
   - `[Aegis]`
   - `[Arrival]`
-  - `[Dark Over Realm]` / `Wormhole`
+    - status: first summon-side `[Arrival]` action slice complete
+    - generic runtime now covers:
+      - a dedicated `ARRIVAL` legal action during offense/defense battle steps
+      - conservative `[Arrival Color/Color](Cost)` parsing from hand Battle Cards
+      - slash-separated cost forms like `(Red)/(Yellow)`
+      - brace color-cost forms like `{r}`
+      - mixed specified plus circled-numeral cost forms like `(Yellow)②`
+      - requiring the current Combo Area colors to satisfy the arrival colors
+      - first header-level leader-gated arrival slice for forms like:
+        - `[Arrival Red/Yellow]{y}, if your Leader is {Super Baby 2, Awakened Malevolence} :`
+      - carrying `played_via=arrival` through the normal play/counter path so on-play effects resolve without a separate summon model
+      - first turn-scoped arrival skill-cost reduction slice from battle/main effects, including specified-pip reductions like `{r}`
+  - `[Dark Over Realm]` / `[Over Realm]` / `Wormhole`
+    - status:
+      - first summon-side `[Dark Over Realm]` action slice complete
+      - first summon-side `[Over Realm]` action slice complete
 
 ### P1: Human-vs-AI Benchmark Expansion
 

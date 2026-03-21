@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 2967,
+  "card_rule_count": 2968,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 3846,
+  "effect_rule_count": 3848,
   "rules": {
     "10": [
       {
@@ -45643,6 +45643,29 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "7844": [
+      {
+        "family_id": "self_played:auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play",
+        "handler_id": "auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play",
+        "handler_params": {
+          "discard_amount": 2,
+          "discard_grant_keyword": "Double Strike",
+          "ignores_barrier": true,
+          "ko_grant_keyword": "Dual Attack",
+          "ko_max_targets": 2,
+          "ko_target_policy": "first",
+          "min_opponent_energy": 3,
+          "requires_leader": "green,yellow",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "source_text": "",
+        "trigger": "self_played"
+      }
+    ],
     "7846": [
       {
         "family_id": "owner_other_battle_played:auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played",
@@ -46778,6 +46801,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[+1][activate: main] your opponent discards 1 card their hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_schedule_opponent_non_leader_skill_draw_replacement_next_turn",
+        "handler_id": "activate_schedule_opponent_non_leader_skill_draw_replacement_next_turn",
+        "handler_params": {
+          "restrict_activate_self_copies_next_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "source_text": "",
         "trigger": "self_activate_main"
       }
     ],

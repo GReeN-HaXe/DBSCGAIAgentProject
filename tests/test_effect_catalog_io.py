@@ -239,7 +239,7 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     if not OVERRIDES_PATH.exists():
         return
     loaded = load_effect_rule_overrides_json(OVERRIDES_PATH)
-    assert len(loaded) == 82
+    assert len(loaded) == 84
     assert loaded[86][0] == "replace"
     assert loaded[90][0] == "replace"
     assert loaded[8372][0] == "replace"
@@ -258,6 +258,8 @@ def test_checked_in_effect_catalog_overrides_cover_known_edge_cases() -> None:
     assert loaded[5531][0] == "replace"
     assert loaded[6947][0] == "replace"
     assert loaded[7358][0] == "replace"
+    assert loaded[7844][0] == "replace"
+    assert loaded[7909][0] == "append"
     assert loaded[7236][0] == "replace"
     assert loaded[7459][0] == "replace"
     assert loaded[7786][0] == "replace"

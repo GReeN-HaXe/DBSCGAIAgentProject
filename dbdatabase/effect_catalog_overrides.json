@@ -1,7 +1,7 @@
 {
   "catalog_kind": "dbs_effect_catalog_overrides",
   "schema_version": 1,
-  "override_count": 79,
+  "override_count": 84,
   "overrides": {
     "20": {
       "mode": "replace",
@@ -1190,6 +1190,48 @@
           "limit_per_turn": null,
           "limit_scope": "card_number",
           "family_id": "owner_other_battle_played:auto_add_life_to_hand_and_buff_owner_leader_on_owner_matching_battle_played",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "7844": {
+      "mode": "replace",
+      "rules": [
+        {
+          "trigger": "self_played",
+          "handler_id": "auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play",
+          "handler_params": {
+            "discard_amount": 2,
+            "discard_grant_keyword": "Double Strike",
+            "ko_max_targets": 2,
+            "ko_target_policy": "first",
+            "rest_mode_only": true,
+            "ignores_barrier": true,
+            "ko_grant_keyword": "Dual Attack",
+            "requires_leader": "green,yellow",
+            "min_opponent_energy": 3
+          },
+          "once_per_turn": false,
+          "limit_per_turn": 1,
+          "limit_scope": "card_number",
+          "family_id": "self_played:auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play",
+          "provenance": "manual_override"
+        }
+      ]
+    },
+    "7909": {
+      "mode": "append",
+      "rules": [
+        {
+          "trigger": "self_activate_main",
+          "handler_id": "activate_schedule_opponent_non_leader_skill_draw_replacement_next_turn",
+          "handler_params": {
+            "restrict_activate_self_copies_next_turn": true
+          },
+          "once_per_turn": false,
+          "limit_per_turn": null,
+          "limit_scope": "card_number",
+          "family_id": "self_activate_main:activate_schedule_opponent_non_leader_skill_draw_replacement_next_turn",
           "provenance": "manual_override"
         }
       ]
