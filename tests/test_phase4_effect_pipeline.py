@@ -14439,6 +14439,792 @@ def test_phase4_arrival_action_respects_header_level_leader_name_gate() -> None:
     assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
 
 
+def test_phase4_arrival_action_respects_mixed_header_requirements() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            999326: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990500,
+        card_id=9381,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    combo_card = CardInstance(
+        instance_id=990501,
+        card_id=9382,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        combo_cost=0,
+        combo_power=5000,
+    )
+    arrival = CardInstance(
+        instance_id=990502,
+        card_id=999326,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        energy_cost=4,
+        skill_text_raw="[Arrival Blue/Yellow](Yellow), if your Leader is {Zen-Oh, One Who Wipes Away} and your opponent has 3 or more energy and it's your opponent's turn :\n[Auto] When this card is played, draw 1 card.",
+    )
+    state.players[1].battle_area = [attacker]
+    state.players[1].energy = [
+        CardInstance(instance_id=990503, card_id=9383, owner_id=1, card_type="BATTLE", color="Red"),
+        CardInstance(instance_id=990504, card_id=9384, owner_id=1, card_type="BATTLE", color="Blue"),
+    ]
+    state.players[2].hand = [combo_card, arrival]
+    state.players[2].energy = [CardInstance(instance_id=990505, card_id=9385, owner_id=2, card_type="BATTLE", color="Yellow")]
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+    engine._card_cache[(2, "front")] = CardRuntimeData(card_name="Zen-Oh, One Who Wipes Away", color="Blue")
+
+    combo_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.COMBO_FROM_HAND)
+    state = engine.apply_action(state, combo_action)
+    assert not any(a.action_type == ActionType.ARRIVAL for a in engine.get_legal_actions(state, 2))
+
+    state.players[1].energy.append(CardInstance(instance_id=990506, card_id=9386, owner_id=1, card_type="BATTLE", color="Yellow"))
+    arrival_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.ARRIVAL)
+    state = engine.apply_action(state, arrival_action)
+    assert state.counter_window is not None
+    assert any(cp.name == "arrival_declared" for cp in state.checkpoints)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=1))
+
+    assert any(card.instance_id == 990502 for card in state.players[2].battle_area)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_arrival_action_supports_parenthetical_reminder_text_variant() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            999327: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    combo_card = CardInstance(
+        instance_id=990510,
+        card_id=9391,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        combo_cost=0,
+        combo_power=5000,
+    )
+    arrival = CardInstance(
+        instance_id=990511,
+        card_id=999327,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        energy_cost=4,
+        skill_text_raw="[Arrival Blue/Yellow] (Yellow) (Play this card from your hand when you have blue and yellow cards in your Combo Area.)\n[Auto] When this card is played, draw 1 card.",
+    )
+    attacker = CardInstance(
+        instance_id=990512,
+        card_id=9392,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=1,
+        power=15000,
+    )
+    state.players[1].hand = [combo_card, arrival]
+    state.players[1].energy = [CardInstance(instance_id=990513, card_id=9393, owner_id=1, card_type="BATTLE", color="Yellow")]
+    state.players[1].battle_area = [attacker]
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+    deck_before = len(state.players[1].deck)
+
+    combo_action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND)
+    state = engine.apply_action(state, combo_action)
+    arrival_action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ARRIVAL)
+    state = engine.apply_action(state, arrival_action)
+    assert state.counter_window is not None
+    assert state.players[1].energy[0].resting is True
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert any(card.instance_id == 990511 for card in state.players[1].battle_area)
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_arrival_action_can_apply_header_draw_before_counter_window() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    combo_card = CardInstance(
+        instance_id=990520,
+        card_id=9401,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        combo_cost=0,
+        combo_power=5000,
+    )
+    arrival = CardInstance(
+        instance_id=990521,
+        card_id=999328,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        energy_cost=4,
+        skill_text_raw="[Arrival Blue/Yellow]{y}, draw 1 card:\n[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode.",
+    )
+    attacker = CardInstance(
+        instance_id=990522,
+        card_id=9402,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=1,
+        power=15000,
+    )
+    state.players[1].hand = [combo_card, arrival]
+    state.players[1].energy = [CardInstance(instance_id=990523, card_id=9403, owner_id=1, card_type="BATTLE", color="Yellow")]
+    state.players[1].battle_area = [attacker]
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.OFFENSE
+    deck_before = len(state.players[1].deck)
+
+    combo_action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND)
+    state = engine.apply_action(state, combo_action)
+    arrival_action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.ARRIVAL)
+    state = engine.apply_action(state, arrival_action)
+
+    assert state.counter_window is not None
+    assert len(state.players[1].deck) == deck_before - 1
+    assert len(state.players[1].hand) == 2
+    assert state.players[1].energy[0].resting is True
+
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    assert any(card.instance_id == 990521 for card in state.players[1].battle_area)
+    assert len(state.players[1].hand) == 1
+
+
+def test_phase4_aegis_action_can_discard_matching_colors_restand_energy_and_trigger_auto() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990530,
+        card_id=9411,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    aegis_card = CardInstance(
+        instance_id=990531,
+        card_id=999329,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        power=20000,
+        skill_text_raw="[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)",
+    )
+    blue_cost = CardInstance(
+        instance_id=990532,
+        card_id=9412,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue",
+        combo_cost=0,
+        combo_power=5000,
+    )
+    yellow_cost = CardInstance(
+        instance_id=990533,
+        card_id=9413,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+        combo_cost=0,
+        combo_power=5000,
+    )
+    resting_energy_1 = CardInstance(instance_id=990534, card_id=9414, owner_id=2, card_type="BATTLE", color="Blue", resting=True)
+    resting_energy_2 = CardInstance(instance_id=990535, card_id=9415, owner_id=2, card_type="BATTLE", color="Yellow", resting=True)
+    state.players[1].battle_area = [attacker]
+    state.players[2].battle_area = [aegis_card]
+    state.players[2].hand = [blue_cost, yellow_cost]
+    state.players[2].energy = [resting_energy_1, resting_energy_2]
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=state.next_effect_id,
+            owner_player_id=2,
+            source_instance_id=aegis_card.instance_id,
+            source_card_id=aegis_card.card_id,
+            source_zone="battle",
+            trigger="self_aegis_activated",
+            handler_id="auto_draw_n",
+            handler_params={"amount": 1},
+        )
+    )
+    state.next_effect_id += 1
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+    deck_before = len(state.players[2].deck)
+
+    aegis_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.AEGIS)
+    state = engine.apply_action(state, aegis_action)
+
+    assert all(card.resting is False for card in state.players[2].energy)
+    assert len(state.players[2].hand) == 1
+    assert len(state.players[2].drop) == 2
+    assert len(state.players[2].deck) == deck_before - 1
+    assert any(cp.name == "aegis_activated" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+    assert not any(a.action_type == ActionType.AEGIS for a in engine.get_legal_actions(state, 2))
+
+
+def test_phase4_aegis_action_can_switch_opponent_energy_to_rest() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990540,
+        card_id=9421,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    aegis_card = CardInstance(
+        instance_id=990541,
+        card_id=999330,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        power=20000,
+        skill_text_raw="[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)",
+    )
+    state.players[1].battle_area = [attacker]
+    state.players[1].energy = [
+        CardInstance(instance_id=990542, card_id=9422, owner_id=1, card_type="BATTLE", color="Blue", resting=False),
+        CardInstance(instance_id=990543, card_id=9423, owner_id=1, card_type="BATTLE", color="Yellow", resting=False),
+        CardInstance(instance_id=990544, card_id=9424, owner_id=1, card_type="BATTLE", color="Red", resting=False),
+    ]
+    state.players[2].battle_area = [aegis_card]
+    state.players[2].hand = [
+        CardInstance(instance_id=990545, card_id=9425, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990546, card_id=9426, owner_id=2, card_type="BATTLE", color="Yellow"),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990547, card_id=9427, owner_id=2, card_type="BATTLE", color="Blue", resting=True),
+        CardInstance(instance_id=990548, card_id=9428, owner_id=2, card_type="BATTLE", color="Yellow", resting=True),
+    ]
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=state.next_effect_id,
+            owner_player_id=2,
+            source_instance_id=aegis_card.instance_id,
+            source_card_id=aegis_card.card_id,
+            source_zone="battle",
+            trigger="self_aegis_activated",
+            handler_id="auto_switch_up_to_n_opponent_energy_rest_on_aegis",
+            handler_params={"max_targets": 3},
+        )
+    )
+    state.next_effect_id += 1
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+
+    aegis_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.AEGIS)
+    state = engine.apply_action(state, aegis_action)
+
+    assert sum(1 for card in state.players[1].energy if card.resting) == 3
+    assert any(cp.name == "effect_auto_switch_up_to_n_opponent_energy_rest_on_aegis" for cp in state.checkpoints)
+
+
+def test_phase4_aegis_action_can_draw_switch_self_active_and_rest_opponent_board() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990550,
+        card_id=9431,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    target = CardInstance(
+        instance_id=990551,
+        card_id=9432,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=2,
+        power=15000,
+        resting=False,
+    )
+    aegis_card = CardInstance(
+        instance_id=990552,
+        card_id=999331,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        power=20000,
+        resting=True,
+        skill_text_raw="[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)",
+    )
+    state.players[1].battle_area = [attacker, target]
+    state.players[2].battle_area = [aegis_card]
+    state.players[2].hand = [
+        CardInstance(instance_id=990553, card_id=9433, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990554, card_id=9434, owner_id=2, card_type="BATTLE", color="Yellow"),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990555, card_id=9435, owner_id=2, card_type="BATTLE", color="Blue", resting=True),
+        CardInstance(instance_id=990556, card_id=9436, owner_id=2, card_type="BATTLE", color="Yellow", resting=True),
+    ]
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=state.next_effect_id,
+            owner_player_id=2,
+            source_instance_id=aegis_card.instance_id,
+            source_card_id=aegis_card.card_id,
+            source_zone="battle",
+            trigger="self_aegis_activated",
+            handler_id="auto_draw_n_switch_self_active_and_switch_up_to_n_opponent_board_rest_on_aegis",
+            handler_params={"amount": 1, "max_targets": 1},
+        )
+    )
+    state.next_effect_id += 1
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+    deck_before = len(state.players[2].deck)
+
+    aegis_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.AEGIS)
+    state = engine.apply_action(state, aegis_action)
+
+    assert len(state.players[2].deck) == deck_before - 1
+    assert state.players[2].battle_area[0].resting is False
+    assert sum(1 for card in state.players[1].battle_area if card.resting) >= 1
+    assert any(cp.name == "effect_auto_draw_n_switch_self_active_and_switch_up_to_n_opponent_board_rest_on_aegis" for cp in state.checkpoints)
+
+
+def test_phase4_aegis_action_can_discard_then_play_matching_card_from_drop() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990560,
+        card_id=9441,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    aegis_card = CardInstance(
+        instance_id=990561,
+        card_id=999332,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        power=20000,
+        resting=False,
+        traits=("Universe 6",),
+        skill_text_raw="[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)",
+    )
+    playable = CardInstance(
+        instance_id=990562,
+        card_id=9442,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=2,
+        power=15000,
+        traits=("Universe 6",),
+        keywords=(),
+    )
+    with_keyword = CardInstance(
+        instance_id=990563,
+        card_id=9443,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=2,
+        power=15000,
+        traits=("Universe 6",),
+        keywords=("Blocker",),
+    )
+    state.players[1].battle_area = [attacker]
+    state.players[2].battle_area = [aegis_card]
+    state.players[2].drop = [with_keyword, playable]
+    state.players[2].hand = [
+        CardInstance(instance_id=990564, card_id=9444, owner_id=2, card_type="BATTLE", color="Red"),
+        CardInstance(instance_id=990565, card_id=9445, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990566, card_id=9446, owner_id=2, card_type="BATTLE", color="Yellow"),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990567, card_id=9447, owner_id=2, card_type="BATTLE", color="Blue", resting=True),
+        CardInstance(instance_id=990568, card_id=9448, owner_id=2, card_type="BATTLE", color="Yellow", resting=True),
+    ]
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=state.next_effect_id,
+            owner_player_id=2,
+            source_instance_id=aegis_card.instance_id,
+            source_card_id=aegis_card.card_id,
+            source_zone="battle",
+            trigger="self_aegis_activated",
+            handler_id="auto_optional_discard_play_up_to_n_from_owner_drop_on_aegis",
+            handler_params={
+                "discard_from_hand_before": 1,
+                "max_targets": 1,
+                "max_cost": 2,
+                "allowed_colors": "blue,yellow",
+                "required_traits": "Universe 6",
+                "requires_no_keywords": True,
+            },
+        )
+    )
+    state.next_effect_id += 1
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+
+    aegis_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.AEGIS)
+    state = engine.apply_action(state, aegis_action)
+
+    assert any(card.instance_id == playable.instance_id for card in state.players[2].battle_area)
+    assert not any(card.instance_id == playable.instance_id for card in state.players[2].drop)
+    assert any(card.instance_id == 990564 for card in state.players[2].drop)
+    assert any(cp.name == "effect_auto_optional_discard_play_up_to_n_from_owner_drop_on_aegis" for cp in state.checkpoints)
+
+
+def test_phase4_aegis_action_can_mill_opponent_deck_if_no_other_matching_owner_battle_exists() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(910000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990570,
+        card_id=9451,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    aegis_card = CardInstance(
+        instance_id=990571,
+        card_id=999333,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        power=15000,
+        traits=("Evil Incarnate",),
+        skill_text_raw="[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)",
+    )
+    other_matching = CardInstance(
+        instance_id=990572,
+        card_id=9452,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue",
+        power=5000,
+        traits=("Evil Incarnate",),
+    )
+    state.players[1].battle_area = [attacker]
+    state.players[2].battle_area = [aegis_card, other_matching]
+    state.players[2].hand = [
+        CardInstance(instance_id=990573, card_id=9453, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990574, card_id=9454, owner_id=2, card_type="BATTLE", color="Yellow"),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990575, card_id=9455, owner_id=2, card_type="BATTLE", color="Blue", resting=True),
+        CardInstance(instance_id=990576, card_id=9456, owner_id=2, card_type="BATTLE", color="Yellow", resting=True),
+    ]
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=state.next_effect_id,
+            owner_player_id=2,
+            source_instance_id=aegis_card.instance_id,
+            source_card_id=aegis_card.card_id,
+            source_zone="battle",
+            trigger="self_aegis_activated",
+            handler_id="auto_place_top_n_from_opponent_deck_into_drop_on_aegis",
+            handler_params={"amount": 1, "required_no_other_owner_traits": "Evil Incarnate"},
+        )
+    )
+    state.next_effect_id += 1
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+
+    aegis_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.AEGIS)
+    blocked_state = engine.apply_action(state, aegis_action)
+
+    deck_before = len(blocked_state.players[1].deck)
+    assert len(blocked_state.players[1].drop) == 0
+
+    blocked_state.players[2].battle_area = [aegis_card]
+    blocked_state.players[2].hand = [
+        CardInstance(instance_id=990577, card_id=9457, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990578, card_id=9458, owner_id=2, card_type="BATTLE", color="Yellow"),
+    ]
+    blocked_state.players[2].energy = [
+        CardInstance(instance_id=990579, card_id=9459, owner_id=2, card_type="BATTLE", color="Blue", resting=True),
+        CardInstance(instance_id=990580, card_id=9460, owner_id=2, card_type="BATTLE", color="Yellow", resting=True),
+    ]
+    blocked_state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=blocked_state.players[2].leader_area.instance_id,
+    )
+    blocked_state.battle_step = BattleStep.DEFENSE
+    blocked_state.activate_skill_usage.clear()
+
+    aegis_action = next(a for a in engine.get_legal_actions(blocked_state, 2) if a.action_type == ActionType.AEGIS)
+    final_state = engine.apply_action(blocked_state, aegis_action)
+
+    assert len(final_state.players[1].drop) == 1
+    assert len(final_state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "effect_auto_place_top_n_from_opponent_deck_into_drop_on_aegis" for cp in final_state.checkpoints)
+
+
+def test_phase4_aegis_action_can_use_matching_drop_card_in_combo_with_skills_negated() -> None:
+    engine = RulesEngine()
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=990581,
+        card_id=9461,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=1,
+        power=15000,
+    )
+    aegis_card = CardInstance(
+        instance_id=990582,
+        card_id=999334,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue/Yellow",
+        power=20000,
+        skill_text_raw="[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)",
+    )
+    combo_card = CardInstance(
+        instance_id=990583,
+        card_id=9462,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue",
+        combo_power=5000,
+        power=5000,
+        keywords=("Blocker",),
+    )
+    nonmatching = CardInstance(
+        instance_id=990584,
+        card_id=9463,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Green",
+        combo_power=5000,
+        power=5000,
+    )
+    state.players[1].battle_area = [attacker]
+    state.players[2].battle_area = [aegis_card]
+    state.players[2].drop = [nonmatching, combo_card]
+    state.players[2].hand = [
+        CardInstance(instance_id=990585, card_id=9464, owner_id=2, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990586, card_id=9465, owner_id=2, card_type="BATTLE", color="Yellow"),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990587, card_id=9466, owner_id=2, card_type="BATTLE", color="Blue", resting=True),
+        CardInstance(instance_id=990588, card_id=9467, owner_id=2, card_type="BATTLE", color="Yellow", resting=True),
+    ]
+    state.effect_registry.append(
+        EffectRegistration(
+            effect_id=state.next_effect_id,
+            owner_player_id=2,
+            source_instance_id=aegis_card.instance_id,
+            source_card_id=aegis_card.card_id,
+            source_zone="battle",
+            trigger="self_aegis_activated",
+            handler_id="auto_combo_up_to_n_from_owner_zone_on_aegis",
+            handler_params={
+                "source_zone": "drop",
+                "max_targets": 1,
+                "allowed_colors": "blue,yellow",
+                "exact_combo_power": 5000,
+                "negate_skills": True,
+            },
+        )
+    )
+    state.next_effect_id += 1
+    state.attack_context = AttackContext(
+        attacker_player_id=1,
+        attacker_zone="battle",
+        attacker_instance_id=attacker.instance_id,
+        target_player_id=2,
+        target_zone="leader",
+        target_instance_id=state.players[2].leader_area.instance_id,
+    )
+    state.battle_step = BattleStep.DEFENSE
+
+    aegis_action = next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.AEGIS)
+    state = engine.apply_action(state, aegis_action)
+
+    assert any(card.instance_id == combo_card.instance_id for card in state.players[2].combo_area)
+    assert not any(card.instance_id == combo_card.instance_id for card in state.players[2].drop)
+    comboed = next(card for card in state.players[2].combo_area if card.instance_id == combo_card.instance_id)
+    assert comboed.temporary_skills_negated is True
+    assert any(
+        event.name == "card_comboed"
+        and event.payload.get("source_instance_id") == combo_card.instance_id
+        and event.payload.get("comboed_from") == "drop"
+        for event in state.effect_events
+    )
+    assert any(cp.name == "effect_auto_combo_up_to_n_from_owner_zone_on_aegis" for cp in state.checkpoints)
+
+
 def test_phase4_demigra_wormhole_opened_can_draw_discard_gain_wormhole_and_grant_double_strike() -> None:
     engine = RulesEngine(
         effect_rule_overrides={

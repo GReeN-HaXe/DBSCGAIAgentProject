@@ -14,6 +14,7 @@ class ActionType(str, Enum):
     DARK_OVER_REALM = "dark_over_realm"
     OVER_REALM = "over_realm"
     ARRIVAL = "arrival"
+    AEGIS = "aegis"
     EX_EVOLVE = "ex_evolve"
     UNISON_GROWTH = "unison_growth"
     AWAKEN = "awaken"

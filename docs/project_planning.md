@@ -1562,6 +1562,26 @@ Resolved:
   - `[Wish]`
   - `[Z-Awaken]`
   - `[Aegis]`
+    - status: first defense-step Aegis action slice complete
+    - generic runtime now covers:
+      - a dedicated `AEGIS` legal action during the Defense Step
+      - parsing `[Aegis Color/Color][Once per turn]` headers on in-play Battle Cards
+      - paying the Aegis hand cost by discarding a minimal matching set of hand cards whose colors satisfy the Aegis colors
+      - switching up to 2 resting energy cards to Active Mode on resolution
+      - emitting `aegis_activated` so self/owner Aegis-triggered autos can hook into real gameplay actions
+    - status: first Aegis-triggered auto follow-up slice complete
+    - generic runtime now also covers:
+      - `self_aegis_activated:auto_switch_up_to_n_opponent_energy_rest_on_aegis`
+      - `self_aegis_activated:auto_draw_n_switch_self_active_and_switch_up_to_n_opponent_board_rest_on_aegis`
+      - `self_aegis_activated:auto_switch_up_to_n_opponent_board_rest`
+      - `self_aegis_activated:auto_draw_n`
+    - status: second Aegis-triggered auto follow-up slice complete
+    - generic runtime now also covers:
+      - `self_aegis_activated:auto_optional_discard_play_up_to_n_from_owner_drop_on_aegis`
+      - `self_aegis_activated:auto_place_top_n_from_opponent_deck_into_drop_on_aegis`
+    - status: third Aegis-triggered auto follow-up slice complete
+    - generic runtime now also covers:
+      - `self_aegis_activated:auto_combo_up_to_n_from_owner_zone_on_aegis`
   - `[Arrival]`
     - status: first summon-side `[Arrival]` action slice complete
     - generic runtime now covers:
@@ -1573,6 +1593,12 @@ Resolved:
       - requiring the current Combo Area colors to satisfy the arrival colors
       - first header-level leader-gated arrival slice for forms like:
         - `[Arrival Red/Yellow]{y}, if your Leader is {Super Baby 2, Awakened Malevolence} :`
+      - first mixed header-condition slice beyond leader-only text, covering forms like:
+        - `if your Leader is {...} and your opponent has 3 or more energy and it's your opponent's turn`
+      - parenthetical reminder-text arrival headers like:
+        - `[Arrival Blue/Yellow] (Yellow) (Play this card from your hand when you have blue and yellow cards in your Combo Area.)`
+      - first declaration-time arrival header draw slice for forms like:
+        - `[Arrival Blue/Yellow]{y}, draw 1 card:`
       - carrying `played_via=arrival` through the normal play/counter path so on-play effects resolve without a separate summon model
       - first turn-scoped arrival skill-cost reduction slice from battle/main effects, including specified-pip reductions like `{r}`
   - `[Dark Over Realm]` / `[Over Realm]` / `Wormhole`
