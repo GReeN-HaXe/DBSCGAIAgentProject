@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dbs_effect_catalog_manifest.schema.json",
+  "title": "DBS Effect Catalog Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_kind",
+    "schema_version",
+    "card_rule_count",
+    "effect_rule_count",
+    "shard_count",
+    "shards"
+  ],
+  "properties": {
+    "catalog_kind": {
+      "const": "dbs_effect_catalog_manifest"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "card_rule_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "effect_rule_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "shard_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "shards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "first_card_id",
+          "last_card_id",
+          "card_rule_count",
+          "effect_rule_count"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "first_card_id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "last_card_id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "card_rule_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "effect_rule_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}

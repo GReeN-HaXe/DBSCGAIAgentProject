@@ -35,6 +35,7 @@ from src.agent import (
 )
 from src.db import SQLiteCardRepository
 from src.game import RulesEngine
+from src.game.effect_rules import default_effect_catalog_path
 
 HISTORY_PROFILE_PRESETS: dict[str, dict[str, float | int]] = {
     "quick": {
@@ -337,7 +338,7 @@ def main() -> None:
     parser.add_argument("--profiles", type=str, default="balanced,aggressive,control", help="Comma-separated profile names.")
     parser.add_argument("--games-per-matchup", type=int, default=None, help="Number of games for each ordered profile pair.")
     parser.add_argument("--max-actions", type=int, default=None, help="Maximum actions before ending a game.")
-    parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--effect-catalog", type=Path, default=default_effect_catalog_path(ROOT), help="Path to effect catalog merged JSON, shard manifest JSON, or shard directory.")
     parser.add_argument("--effect-catalog-overrides", type=Path, default=Path("dbdatabase/effect_catalog_overrides.json"), help="Optional path to effect catalog overrides JSON.")
     parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")

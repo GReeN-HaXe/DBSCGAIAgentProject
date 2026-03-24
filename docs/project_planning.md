@@ -177,6 +177,10 @@ Resolved:
 
 ### Effect Support
 
+- Primary effect catalog artifact:
+  - `dbdatabase/effect_catalog_shards/manifest.json`
+- Compatibility merged effect catalog:
+  - `dbdatabase/effect_catalog.json`
 - Audit artifact:
   - `artifacts/effect_support_audit.json`
 - Ranked implementation shortlist:
@@ -226,10 +230,38 @@ Resolved:
     - provenance
   - status: generated-catalog size concern added
   - `dbdatabase/effect_catalog.json` is now large enough that repo ergonomics, diffs, and reviewability are becoming a real maintenance concern even though runtime loading is still acceptable
-  - next infra slice for this item:
-    - shard the generated catalog behind a manifest
+  - status: first catalog-sharding slice complete
+  - `scripts/build_effect_catalog.py` now writes:
+    - merged runtime artifact:
+      - `dbdatabase/effect_catalog.json`
+    - manifest-based shard set:
+      - `dbdatabase/effect_catalog_shards/manifest.json`
+      - `dbdatabase/effect_catalog_shards/shard_*.json`
+  - loader/runtime support:
+    - `load_effect_rules_json(...)` now accepts:
+      - the merged catalog JSON
+      - a shard manifest JSON
+      - a shard directory containing `manifest.json`
+  - status: shard-default consumer slice complete
+  - reporting/runtime scripts now prefer the shard directory by default when it exists:
+    - `scripts/build_effect_family_report.py`
+    - `scripts/build_effect_family_mapping_report.py`
+    - `scripts/play_vs_ai.py`
+    - `scripts/run_ai_match.py`
+    - `scripts/run_ai_match_batch.py`
+    - `scripts/run_profile_matchups.py`
+    - `scripts/checkpoint_timeline.py`
+    - `scripts/generate_phase8_self_play_dataset.py`
+  - merged-file fallback remains in place through `default_effect_catalog_path(...)`, so older environments that only have `dbdatabase/effect_catalog.json` still work without extra setup
+  - current artifact posture:
+    - primary catalog artifact for repo workflows:
+      - `dbdatabase/effect_catalog_shards/manifest.json`
+    - merged JSON remains a compatibility output for older tooling and direct one-file inspection
+  - manifest contract is now checked in at:
+    - `dbdatabase/effect_catalog_manifest.schema.json`
+  - current sharding direction:
     - keep small human-maintained sources (`extractor`, `overrides`, schemas) as the real review surface
-    - preserve an optional merged runtime artifact if the engine/scripts still want a single-file load path
+    - preserve the merged runtime artifact for backward compatibility while the repo transitions toward sharded review ergonomics
 - [x] identify the top repeated text families from `dbs_masters.db`, active decks, and recent traces
 - [ ] define reusable effect families for common Auto / Activate / Counter patterns
 - [ ] implement the top 20-30 effect families first to maximize real deck coverage
@@ -244,7 +276,8 @@ Resolved:
   - current report snapshot:
     - priority cards: `266`
     - mapped priority cards: `263`
-    - unmapped priority cards: `3`
+    - actionable unmapped priority cards: `0`
+    - intentionally skipped priority cards: `3`
   - backlog hygiene note:
     - cards with intentionally blank / `"-"` skill text are treated as `skillless` for this mapping pass and can be skipped here
     - exception:
@@ -260,16 +293,139 @@ Resolved:
           - `life is at 4 or less`
         - pending-play replacement to `Warp` without incorrectly treating the play as fully negated
     - `BT25-142 Zamasu, Scheme Wish`
-      - via maintained conservative slice:
+      - via maintained slices:
+        - `self_activate_main:activate_exchange_control_of_battle_cards_for_game`
         - `self_activate_main:activate_buff_owner_battle_cards`
       - generic support now covers:
+        - battle-card control transfer across players while preserving the card’s original `owner_id`
+        - permanent skill negation for the game on transferred cards
+        - permanent per-skill activate negation for the game on public cards
+        - effect re-registration on controlled public cards after control changes
+        - owner-correct out-of-play routing for controlled board cards on KO / zero-power / zero-marker cleanup
+        - the `+1` control-swap line
         - next-turn scheduled activate-skill restrictions on copies of the source card
         - `Indestructible` until the end of the opponent's turn through the existing owner-battle buff family
+  - current long-lived control / skill-negation generalization slice now also covers:
+    - simple on-play opponent Battle Card control gain
+      - `self_played:auto_gain_control_opponent_battle_on_play`
+      - example family text:
+        - `When you play this card, choose up to 1 of the Battle Cards in your opponent's Battle Area with an energy cost of 3 or less and gain control of it`
+    - self-transfer control families on public cards
+      - `self_played:auto_transfer_self_control_to_opponent_on_play`
+      - `self_activate_main:activate_transfer_self_control_to_opponent`
+      - `turn_start:auto_transfer_self_control_to_opponent`
+      - `turn_end:auto_transfer_self_control_to_opponent`
+      - maintained first-card coverage now includes:
+        - `BT19-055 Pan, Glimpse of Talent`
+        - `P-564 Paragus, Cunning Father`
+        - `P-277 Veku, the Unpredictable`
+      - this slice also hardened the existing deck-play family so maintained named targets are respected:
+        - `auto_play_up_to_n_from_owner_deck_on_play` now honors `required_name_contains`
+    - one-shot public activate skills that negate themselves for the game after resolution
+      - shared post-resolution engine support now applies `negate_self_skill_for_game` across activate families instead of only inside the deck-search handler
+      - existing activate families now covered include:
+        - `activate_add_up_to_n_from_owner_deck_to_hand`
+        - `activate_switch_self_active_and_gain_power_for_turn`
+      - example family text:
+        - `Add up to 1 {Potara} from your deck to your hand, shuffle your deck, and negate this skill for the game`
+    - permanent copy-wide counter activation locks for the game
+      - resolved hand counters can now apply a persistent copy restriction keyed by player + card id
+      - current reusable scope covered:
+        - `counter_from_hand`
+      - example family text:
+        - `You can't activate the [Counter: Attack] skill on copies of this card for the game`
+        - `You can't activate copies of this card for the game`
+    - permanent copy-wide auto activation locks for the game
+      - resolved autos can now apply a persistent copy restriction keyed to:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+      - future matching public autos are blocked before entering pending resolution
+      - matching deferred secret autos are created as preblocked opportunities
+      - example family text:
+        - `You can't activate the [Auto] skill on copies of this card for the game`
+    - generic all-skill copy locks for the game now use the same permanent restriction model
+      - resolved skills can now apply a scope-wide copy restriction with:
+        - `scope = any`
+      - current covered wording:
+        - `You can't activate skills on copies of this card for the game`
+      - this now blocks matching future:
+        - autos
+        - activates
+        - counters from hand
+    - generic all-skill copy locks for the turn now use the same temporary restriction model
+      - resolved skills can now apply a scope-wide temporary copy restriction with:
+        - `scope = any`
+      - current covered wording:
+        - `You can't activate skills on copies of this card for the turn`
+      - this now blocks matching same-turn:
+        - autos
+        - activates
+        - counters from hand
+      - and it expires correctly on the next turn cycle
+      - detector refinement:
+        - generic activation-copy wording is now explicitly kept separate from non-activation text like:
+          - `You can't play copies of this card ...`
+          - `You can't use copies of this card ...`
+      - conservative adjacent support is now in place too:
+        - `You can't play copies of this card for the turn`
+          - blocks same-card hand plays for the turn
+        - `You can't use copies of this card in a combo for the turn`
+          - blocks same-card hand combos for the turn
+      - permanent adjacent support is now in place too:
+        - `You can't play copies of this card for the game`
+          - blocks same-card hand plays for the game
+        - `You can't use copies of this card in a combo for the game`
+          - blocks same-card hand combos for the game
+    - temporary copy-wide activate restrictions are now registration-aware
+      - next-turn / turn-scoped activate-copy locks now preserve:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+      - public multi-activate cards can now keep unrelated activate lines legal while only the matching restricted line is blocked
+    - temporary hand-counter restrictions now also support mode-wide turn locks
+      - resolved hand counters can now restrict a specific counter mode on other cards for the turn
+      - current reusable examples include:
+        - `You can't activate the [Counter: Play] skills of other cards for the turn`
+        - `You can't activate the [Counter: Attack] skills of other cards for the turn`
+      - this lives on the same temporary hand-counter restriction state used for copy locks
+      - generic same-card wording is now covered too:
+        - `You can't activate copies of this card for the turn`
+    - temporary copy-wide auto activation locks now use the same precise registration model
+      - resolved autos can now apply a turn-scoped restriction keyed to:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+        - source skill line text
+      - future matching public autos are blocked for the rest of the turn
+      - matching deferred secret autos are created as preblocked opportunities for the rest of the turn
+      - line-level source-text provenance now keeps mixed multi-auto cards from leaking restriction text across unrelated auto lines
+      - generic wording is now covered too:
+        - `You can't activate copies of this card for the turn`
+        - `You can't activate copies of this card for the game`
+    - text-driven `Activate: Main` / `Activate: Battle` copy locks for the turn now use the same temporary restriction model
+      - successful public activates can now apply a turn-scoped activate restriction keyed to:
+        - player
+        - card id
+        - trigger
+        - handler
+        - handler params
+        - source skill line text
+      - matching activate copies are blocked for the rest of the turn and become legal again next turn
+      - permanent generic wording is now covered too:
+        - `You can't activate copies of this card for the game`
+      - this complements the older scheduled next-turn activate-copy restriction path instead of replacing it
       - deferred later:
-        - the `+1` control-swap line
-        - fuller “for the game” control / skill-negation semantics
+        - broader long-lived control / skill-negation generalization beyond the current battle-card exchange slice
+        - non-auto, non-counter copy-wide activation locks for the game
   - actionable deck/trace mapping queue is now exhausted
-  - remaining unmapped priority cards are all intentionally skipped in this pass:
+  - remaining raw unmapped priority cards are all intentionally skipped in this pass:
     - `BT25-010 Son Goku`
     - `BT15-018 Natade Village Monster`
     - `BT15-105 Wilderness Monster`
@@ -279,6 +435,19 @@ Resolved:
         - `[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card`
       - extractor now maps it through:
         - `self_played:auto_draw_n`
+  - status: formal source-text patch layer complete
+  - checked-in source patch inputs now live at:
+    - `dbdatabase/source_text_patches.json`
+    - `dbdatabase/source_text_patches.schema.json`
+    - `dbdatabase/source_text_patches.py`
+  - source patch application and verification now live at:
+    - `scripts/apply_source_text_patches.py`
+    - `tests/test_source_text_patches.py`
+    - `artifacts/source_text_patch_summary.json`
+  - rebuild-path hardening:
+    - `dbdatabase/createdb.py` now reapplies checked-in source-text patches during DB rebuild
+    - the rebuild path also reapplies the existing DeckPlanet missing-cards SQL patch before downstream tagging/catalog generation
+    - this preserves the prior DB/catalog coverage instead of silently shrinking the database when rebuilding from the raw export
   - current counter-family override batch now maps:
     - `BT14-019 Dyspo, Thwarting the Enemy`
     - `BT13-135 Supreme Kai of Time, Time Labyrinth Unleashed`
@@ -350,7 +519,7 @@ Resolved:
         - dropping all cards from under the source to their owner's Drop
         - restanding the source and granting a keyword if a threshold was released
   - current data-gap note:
-    - `BT15-018 Natade Village Monster` remains unmapped because the DB source text is `"-"`, so this is a source-data gap rather than a missing effect-family implementation
+    - `BT15-018 Natade Village Monster` remains intentionally skipped because it is a skillless card, not because of a missing effect-family implementation
   - current Prismatic / Demigra cleanup slice now also maps:
     - `EX19-26 SS4 Bardock, Prismatic Aegis`
       - via maintained manual overrides:
@@ -779,8 +948,16 @@ Resolved:
       - runtime support now covers:
         - owner-side trigger matching when another Battle Card is played by a `[Dark Over Realm]` skill
         - preserving `Limit 1` on the resulting draw trigger
-      - note:
-        - the summon-side `[Dark Over Realm]` action itself remains a broader backlog seam
+      - status update:
+        - first summon-side `[Dark Over Realm]` action slice is now in
+      - generic runtime now also covers:
+        - a dedicated `DARK_OVER_REALM` legal action for hand Battle Cards with `[Dark Over Realm N]`
+        - first conservative keyword-cost parsing for:
+          - `[Dark Over Realm N]{b}`
+          - `[Dark Over Realm N](X)`
+          - `[Dark Over Realm N]②`-style circled numerals
+        - sending `N` cards from Drop to Warp on declaration
+        - carrying `played_via=dark_over_realm` through the normal play/counter path so existing `played by [Dark Over Realm]` autos trigger correctly
   - current black combo/counter cleanup slice now also maps:
     - `BT27-103 Demon God Shroom, Scheming`
       - via extracted `self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack`
@@ -846,8 +1023,17 @@ Resolved:
       - via extracted `self_activate_main:activate_opponent_discards_n_from_hand`
       - generic support now covers:
         - `Activate: Main` effects that force the opponent to discard from hand
+        - delayed opponent-next-turn replacement of draws caused by non-Leader card skills
+        - scheduling the card's next-turn activate-copy restriction alongside that delayed replacement
+    - `BT25-137 SS4 Gogeta VS Omega Shenron, Clash With Ultimate Evil`
+      - via maintained manual override:
+        - `self_played:auto_choose_discard_or_ko_rest_battles_and_gain_keyword_on_play`
+      - generic support now covers:
+        - on-play choice families that deterministically resolve one of two branches instead of double-firing both
+        - branch scoring across opponent hand discard vs KO of Rest Mode Battle Cards ignoring `Barrier`
+        - branch-specific temporary keyword grants such as `Double Strike` or `Dual Attack`
       - note:
-        - Oolong's delayed opponent-next-turn draw-replacement effect is still open backlog work
+        - this is a conservative deterministic branch-selection slice, not full player-authored auto choice UI
   - current combo-trigger power-reduction slice now also maps:
     - `BT9-096 Whis, Celestial Moderator`
       - via extracted `self_comboed:auto_power_reduce_up_to_n_on_combo`
@@ -1374,10 +1560,155 @@ Resolved:
   - regression-covered in `tests/test_phase3_rule_fixes.py`
 - [ ] implement reusable leader keyword families from rule manual additions:
   - `[Wish]`
+    - status: first leader Wish slice complete
+    - generic runtime now covers:
+      - reusing the existing leader `AWAKEN` action for front-side `[Wish]` leaders
+      - `7 [Dragon Ball] cards in your Drop Area` wish condition checks
+      - `life is at 3 or less or there are 7 [Dragon Ball] cards in your Drop Area` wish condition checks
+      - first pre-flip Wish effect branches for:
+        - add up to 1 `≪Desire≫` card from `Drop` to hand, then flip
+        - draw 1, recycle all `Dragon Ball` cards from `Drop` to the bottom of the deck, then flip
+    - status: Wish follow-up event slice complete
+    - `leader_wished` is now a first-class effect event, and generic triggers like `owner_leader_wished:auto_draw_n` can hook into it
   - `[Z-Awaken]`
+    - status: first leader Z-Awaken action slice complete
+    - generic runtime now covers:
+      - a dedicated `Z_AWAKEN` legal action from face-up `Z-Deck`
+      - conservative leader-only Z-Awaken matching after the current leader is already on its back side
+      - paying parsed specified skill cost plus `Z-Energy`
+      - brace-symbol specified skill costs like:
+        - `[Z-Awaken] {u}, when you have 2 or more cards in your Combo Area: {Majin Buu, Shape-Shifter}.`
+      - life-threshold forms like:
+        - `[Z-Awaken](Yellow), when your life is at 3 or less: {SS Vegeta, Fighting Instincts}.`
+      - combo-area condition forms like:
+        - `[Z-Awaken](Green), when you have 2 or more cards in your Combo Area: Mono-green <Gotenks>.`
+      - owner-Drop requirement forms like:
+        - `[Z-Awaken] When your life is at 2 or less and there are 1 or more <King Piccolo> cards in your Drop: Green <King Piccolo> or green <Piccolo Jr.>.`
+      - Z-Energy warp requirement forms like:
+        - `[Z-Awaken](Yellow), if your life is at 4 or less and you send 1 <Zamasu> card and 1 <Goku Black> card from your Z-Energy to your Warp: Yellow <Goku Black>.`
+      - replacing the current leader in place and emitting `leader_z_awakened`
+    - status: Z-Awaken follow-up event slice complete
+    - `leader_z_awakened` is now a first-class effect event, and generic triggers like `owner_leader_z_awakened:auto_draw_n` can hook into it
+    - status: first Z-Awaken cost-reduction support slice complete
+    - generic runtime/extraction now also covers:
+      - temporary reducers that lower the next matching `Z-Awaken` skill cost on a card in your `Z-Deck`
+      - temporary reducers that also lower that card's `Z-Energy` cost for the turn
+      - both activate-driven and on-play-driven support-card phrasing
+    - status: first Z-Awaken temporal-header slice complete
+    - generic runtime now also covers:
+      - `all of your energy is in Rest Mode` header gating
+      - `skip your Charge Phase during your next turn` scheduling and turn-start resolution
+      - multi-character target headers like:
+        - `Red <Son Goku: GT> <Vegeta: GT>.`
+    - status: first header-only Spirit Boost Z-Awaken slice complete
+    - generic runtime now also covers:
+      - header-only forms without a colon, like:
+        - `[Z-Awaken][Spirit Boost 2] Green <Cooler> card.`
+      - paying `Spirit Boost` marker costs from owner Unisons during `Z_AWAKEN`
+    - status: first Z-Stack-on-Z-Awaken slice complete
+    - generic runtime now also covers:
+      - simple `[Z-Stack N]` leader-entry stacking from `Z-Deck`
+      - first common descriptor form:
+        - `Yellow Battle Card with energy cost of 3 or less.`
+      - storing stacked cards conservatively via `leader_area.stacked_card_ids`
+    - status: second Z-Stack-on-Z-Awaken slice complete
+    - generic runtime now also covers:
+      - trait-filtered descriptor forms like:
+        - `Red ≪Universe 7≫ Battle Cards with different character names.`
+      - enforcing `different character names` while selecting stacked cards from `Z-Deck`
+    - status: first under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `When this card is played, place up to 1 ... from your Drop under this card`
+      - first reusable battle-host under-card family from live text like:
+        - `place up to 1 ≪Saiyan≫ card from your Drop under this card`
+    - status: second under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `When this card is played, place up to N ... from your deck and/or Drop under this card`
+      - first conservative mixed-source policy for that family:
+        - choose matching cards from `Drop` first
+        - then fill remaining slots from the top of `Deck`
+    - status: third under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `[Activate: Main/Battle] Play up to 1 ... from under this card, and place this card under the played card`
+      - first conservative promotion policy for that family:
+        - play matching cards directly from under the source host
+        - emit `played_from="under"` on the resulting play event
+        - then place the source host under the first played card
+      - current timing scope:
+        - existing `Activate: Main`
+        - existing `Activate: Battle`
+        - not yet the separate `start of your opponent's Main Phase` auto timing seam
+    - status: fourth under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `When this card is played from under a card by a skill, this card gets +X power and [Keyword] for the turn`
+      - first reusable self-follow-up family on the new under-card play path
+      - current conservative trigger semantics:
+        - `played_from="under"`
+        - `played_via="skill"`
+    - status: first opponent-main-phase under-card timing slice complete
+    - generic runtime/extraction now also covers:
+      - a real `main_phase_start` effect event on the charge-to-main transition
+      - `At the start of your opponent's Main Phase, play up to 1 ... from under this card, and place this card under the played card`
+      - first conservative timing scope:
+        - `owner_opponent_main_phase_start`
+    - status: first owner-main-phase under-card timing slice complete
+    - generic runtime/extraction now also covers:
+      - `At the start of your Main Phase, play up to 1 ... from under this card, and place this card under the played card`
+      - sibling timing scope:
+        - `owner_main_phase_start`
+    - status: first auto-costed main-phase under-card slice complete
+    - generic runtime/extraction now also covers:
+      - header-costed auto timing lines like:
+        - `[Auto](Red), if ... : At the start of your opponent's Main Phase, play up to 1 ... from under this card, and place this card under the played card`
+      - current conservative auto-cost scope:
+        - specified energy costs from the `[Auto]` header
+        - paid at trigger resolution before the under-card play body fires
   - `[Aegis]`
+    - status: first defense-step Aegis action slice complete
+    - generic runtime now covers:
+      - a dedicated `AEGIS` legal action during the Defense Step
+      - parsing `[Aegis Color/Color][Once per turn]` headers on in-play Battle Cards
+      - paying the Aegis hand cost by discarding a minimal matching set of hand cards whose colors satisfy the Aegis colors
+      - switching up to 2 resting energy cards to Active Mode on resolution
+      - emitting `aegis_activated` so self/owner Aegis-triggered autos can hook into real gameplay actions
+    - status: first Aegis-triggered auto follow-up slice complete
+    - generic runtime now also covers:
+      - `self_aegis_activated:auto_switch_up_to_n_opponent_energy_rest_on_aegis`
+      - `self_aegis_activated:auto_draw_n_switch_self_active_and_switch_up_to_n_opponent_board_rest_on_aegis`
+      - `self_aegis_activated:auto_switch_up_to_n_opponent_board_rest`
+      - `self_aegis_activated:auto_draw_n`
+    - status: second Aegis-triggered auto follow-up slice complete
+    - generic runtime now also covers:
+      - `self_aegis_activated:auto_optional_discard_play_up_to_n_from_owner_drop_on_aegis`
+      - `self_aegis_activated:auto_place_top_n_from_opponent_deck_into_drop_on_aegis`
+    - status: third Aegis-triggered auto follow-up slice complete
+    - generic runtime now also covers:
+      - `self_aegis_activated:auto_combo_up_to_n_from_owner_zone_on_aegis`
+    - status: fourth Aegis-triggered auto generalization slice complete
+    - the newer Aegis follow-up families now also support `owner_aegis_activated`, not just `self_aegis_activated`
   - `[Arrival]`
-  - `[Dark Over Realm]` / `Wormhole`
+    - status: first summon-side `[Arrival]` action slice complete
+    - generic runtime now covers:
+      - a dedicated `ARRIVAL` legal action during offense/defense battle steps
+      - conservative `[Arrival Color/Color](Cost)` parsing from hand Battle Cards
+      - slash-separated cost forms like `(Red)/(Yellow)`
+      - brace color-cost forms like `{r}`
+      - mixed specified plus circled-numeral cost forms like `(Yellow)②`
+      - requiring the current Combo Area colors to satisfy the arrival colors
+      - first header-level leader-gated arrival slice for forms like:
+        - `[Arrival Red/Yellow]{y}, if your Leader is {Super Baby 2, Awakened Malevolence} :`
+      - first mixed header-condition slice beyond leader-only text, covering forms like:
+        - `if your Leader is {...} and your opponent has 3 or more energy and it's your opponent's turn`
+      - parenthetical reminder-text arrival headers like:
+        - `[Arrival Blue/Yellow] (Yellow) (Play this card from your hand when you have blue and yellow cards in your Combo Area.)`
+      - first declaration-time arrival header draw slice for forms like:
+        - `[Arrival Blue/Yellow]{y}, draw 1 card:`
+      - carrying `played_via=arrival` through the normal play/counter path so on-play effects resolve without a separate summon model
+      - first turn-scoped arrival skill-cost reduction slice from battle/main effects, including specified-pip reductions like `{r}`
+  - `[Dark Over Realm]` / `[Over Realm]` / `Wormhole`
+    - status:
+      - first summon-side `[Dark Over Realm]` action slice complete
+      - first summon-side `[Over Realm]` action slice complete
 
 ### P1: Human-vs-AI Benchmark Expansion
 

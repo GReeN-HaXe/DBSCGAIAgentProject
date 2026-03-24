@@ -1,0 +1,15 @@
+{
+  "catalog_kind": "dbs_source_text_patches",
+  "schema_version": "1",
+  "patches": [
+    {
+      "card_number": "BT27-100",
+      "fields": {
+        "card_skill": "<Badge variant=\"red\">Wormhole</Badge> <br /> <Badge variant=\"red\">Dark Over Realm 4</Badge><img src=\"/assets/img/dbs_masters/card_parts/black_ball.png\" alt=\"\" class=\"colorCostBall\">, on play, if your Leader is a &lt;Mechikabura&gt; card draw 1 card",
+        "card_skill_unstyled": "[Wormhole]\n[br]\n[Dark Over Realm 4]{b}, on play, if your Leader is a <Mechikabura> card draw 1 card"
+      },
+      "reason": "Source text is truncated in the upstream export. The corrected local text is an on-play draw line, not a trailing colon fragment.",
+      "apply_to_variants": true
+    }
+  ]
+}

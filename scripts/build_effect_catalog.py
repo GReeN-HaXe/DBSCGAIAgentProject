@@ -14,7 +14,7 @@ from src.db import SQLiteCardRepository
 from src.game.effect_rule_extractor import (
     build_effect_rules_with_diagnostics_and_report,
 )
-from src.game.effect_rules import save_effect_rules_json
+from src.game.effect_rules import save_effect_rules_json, save_effect_rules_sharded_json
 from src.game.effect_rules import load_effect_rule_overrides_json, merge_effect_rule_overrides
 
 
@@ -47,7 +47,7 @@ def _candidate_card_ids(db_path: Path, *, limit: int | None) -> list[int]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build effect catalog JSON from card skill text.")
+    parser = argparse.ArgumentParser(description="Build merged and sharded effect catalogs from card skill text.")
     parser.add_argument(
         "--db-path",
         type=Path,
@@ -58,7 +58,7 @@ def main() -> None:
         "--output",
         type=Path,
         default=ROOT / "dbdatabase" / "effect_catalog.json",
-        help="Path to output effect catalog JSON.",
+        help="Path to merged compatibility effect catalog JSON.",
     )
     parser.add_argument("--limit", type=int, default=0, help="Optional max candidate cards (0 means all).")
     parser.add_argument(
@@ -72,6 +72,18 @@ def main() -> None:
         type=Path,
         default=ROOT / "dbdatabase" / "effect_catalog_overrides.json",
         help="Optional path to effect catalog overrides JSON.",
+    )
+    parser.add_argument(
+        "--shard-output-dir",
+        type=Path,
+        default=ROOT / "dbdatabase" / "effect_catalog_shards",
+        help="Directory for the primary shard manifest + shard files.",
+    )
+    parser.add_argument(
+        "--shard-size",
+        type=int,
+        default=250,
+        help="Max card-rule entries per sharded effect catalog file.",
     )
     parser.add_argument(
         "--top-unmatched",
@@ -94,6 +106,7 @@ def main() -> None:
     if args.overrides.exists():
         rules = merge_effect_rule_overrides(rules, load_effect_rule_overrides_json(args.overrides))
     save_effect_rules_json(args.output, rules)
+    manifest_path = save_effect_rules_sharded_json(args.shard_output_dir, rules, shard_size=args.shard_size)
 
     strict_report_raw = str(args.strict_report).strip()
     strict_report_path = Path(strict_report_raw) if strict_report_raw else None
@@ -108,6 +121,7 @@ def main() -> None:
     print(f"Cards with extracted rules: {len(rules)}")
     print(f"Total extracted rules: {total_rules}")
     print(f"Wrote catalog: {args.output}")
+    print(f"Wrote sharded catalog manifest: {manifest_path}")
     if args.overrides.exists():
         print(f"Applied overrides: {args.overrides}")
     if strict_report_path is not None:

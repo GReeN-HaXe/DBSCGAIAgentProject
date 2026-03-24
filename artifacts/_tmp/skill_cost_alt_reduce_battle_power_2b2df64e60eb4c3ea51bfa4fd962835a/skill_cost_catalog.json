@@ -1,0 +1,13 @@
+{
+  "900316": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 2,
+        "kind": "reduce_owner_battle_power_for_turn",
+        "power_delta": -10000,
+        "required_card_types": "BATTLE",
+        "required_leader_colors": "red"
+      }
+    ]
+  }
+}

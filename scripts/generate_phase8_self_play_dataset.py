@@ -13,6 +13,7 @@ from src.agent import HeuristicPolicy, merge_phase7_trace_artifacts, run_ai_vs_a
 from src.agent.deck_setup import load_sample_game_setup_from_db, read_card_ids_file, validate_leader_and_deck
 from src.db import SQLiteCardRepository
 from src.game import RulesEngine
+from src.game.effect_rules import default_effect_catalog_path
 
 
 def _build_deck(seed: int, size: int = 60) -> list[int]:
@@ -99,7 +100,7 @@ def main() -> None:
     parser.add_argument("--p1-deck-file", type=Path, default=None, help="Optional P1 deck id file.")
     parser.add_argument("--p2-deck-file", type=Path, default=None, help="Optional P2 deck id file.")
     parser.add_argument("--use-db-sample-decks", action="store_true", help="Use DB-derived sample leaders/decks.")
-    parser.add_argument("--effect-catalog", type=Path, default=Path("dbdatabase/effect_catalog.json"), help="Path to effect catalog JSON.")
+    parser.add_argument("--effect-catalog", type=Path, default=default_effect_catalog_path(ROOT), help="Path to effect catalog merged JSON, shard manifest JSON, or shard directory.")
     parser.add_argument("--effect-catalog-overrides", type=Path, default=Path("dbdatabase/effect_catalog_overrides.json"), help="Optional path to effect catalog overrides JSON.")
     parser.add_argument("--skill-cost-catalog", type=Path, default=Path("dbdatabase/skill_cost_catalog.json"), help="Path to skill cost catalog JSON.")
     parser.add_argument("--db-path", type=Path, default=Path("dbdatabase/dbs_masters.db"), help="Path to SQLite card database.")

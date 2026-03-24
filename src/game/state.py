@@ -67,6 +67,7 @@ class CardInstance:
     battle_temporary_power_delta: int = 0
     delayed_temporary_keywords: Tuple[str, ...] = ()
     temporary_skills_negated: bool = False
+    permanent_skills_negated: bool = False
     temporary_cannot_switch_active: bool = False
     stacked_card_ids: Tuple[int, ...] = ()
     traits: Tuple[str, ...] = ()
@@ -196,6 +197,7 @@ class EffectRegistration:
     trigger: str
     handler_id: str
     handler_params: dict[str, int | str | bool] = field(default_factory=dict)
+    source_skill_text: str = ""
     source_card_number: str = ""
     once_per_turn: bool = False
     limit_per_turn: int | None = None
@@ -234,6 +236,7 @@ class DeferredSecretAuto:
     once_per_turn: bool = False
     limit_per_turn: int | None = None
     limit_scope: str = "card_number"
+    source_skill_text: str = ""
 
 
 @dataclass(frozen=True)
@@ -256,6 +259,7 @@ class SecretAutoOpportunity:
     once_per_turn: bool = False
     limit_per_turn: int | None = None
     limit_scope: str = "card_number"
+    source_skill_text: str = ""
     status: str = "pending"
     preblocked: bool = False
 
@@ -312,15 +316,67 @@ class ActivateExtraCostReduction:
 
 
 @dataclass(frozen=True)
+class ActivateArrivalCostReduction:
+    owner_player_id: int
+    created_turn_number: int
+    amount: int = 0
+    specified_costs: Tuple[Tuple[str, int], ...] = ()
+    required_arrival_colors: str = ""
+    max_energy_cost: int = -1
+    allowed_colors: str = ""
+    required_traits: str = ""
+    required_characters: str = ""
+    required_name_contains: str = ""
+    uses_remaining: int = 1
+
+
+@dataclass(frozen=True)
+class ActivateZAwakenCostReduction:
+    owner_player_id: int
+    created_turn_number: int
+    amount: int = 0
+    specified_costs: Tuple[Tuple[str, int], ...] = ()
+    z_energy_reduction: int = 0
+    allowed_colors: str = ""
+    required_traits: str = ""
+    required_characters: str = ""
+    required_name_contains: str = ""
+    uses_remaining: int = 1
+
+
+@dataclass(frozen=True)
 class DelayedCardPlayRestriction:
     owner_player_id: int
     restricted_card_id: int
 
 
 @dataclass(frozen=True)
+class PermanentCardRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+
+
+@dataclass(frozen=True)
+class TemporaryComboRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
+class DelayedSkillDrawReplacement:
+    owner_player_id: int
+    affected_player_id: int
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
 class DelayedActivateSkillRestriction:
     owner_player_id: int
     restricted_card_id: int
+    trigger: str = ""
+    handler_id: str = ""
+    handler_params_signature: Tuple[Tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -349,8 +405,38 @@ class AttackPowerTax:
 @dataclass(frozen=True)
 class CounterHandActivationRestriction:
     owner_player_id: int
-    restricted_card_id: int
+    restricted_card_id: int = 0
+    restricted_mode: str = ""
     expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
+class TemporarySkillActivationRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+    scope: str = "auto"
+    trigger: str = ""
+    handler_id: str = ""
+    handler_params_signature: Tuple[Tuple[str, str], ...] = ()
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
+class PermanentSkillActivationRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+    scope: str = "activate"
+    trigger: str = ""
+    handler_id: str = ""
+    handler_params_signature: Tuple[Tuple[str, str], ...] = ()
+
+
+@dataclass(frozen=True)
+class PermanentlyNegatedSkill:
+    source_instance_id: int
+    trigger: str
+    handler_id: str
+    handler_params_signature: Tuple[Tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -403,15 +489,25 @@ class GameState:
     delayed_warps: list[DelayedWarp] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
+    activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)
+    activate_z_awaken_cost_reductions: list[ActivateZAwakenCostReduction] = field(default_factory=list)
     scheduled_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
     active_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
+    permanent_card_play_restrictions: list[PermanentCardRestriction] = field(default_factory=list)
+    active_combo_restrictions: list[TemporaryComboRestriction] = field(default_factory=list)
+    permanent_combo_restrictions: list[PermanentCardRestriction] = field(default_factory=list)
+    active_skill_draw_replacements: list[DelayedSkillDrawReplacement] = field(default_factory=list)
     scheduled_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     active_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     scheduled_attack_restrictions: list[ScheduledAttackRestriction] = field(default_factory=list)
+    scheduled_charge_phase_skip_player_ids: set[int] = field(default_factory=set)
     low_power_battle_play_hand_warp_penalties: list[LowPowerBattlePlayHandWarpPenalty] = field(default_factory=list)
     attack_power_taxes: list[AttackPowerTax] = field(default_factory=list)
     non_leader_attack_rest_taxes: list[NonLeaderAttackRestTax] = field(default_factory=list)
     active_counter_hand_restrictions: list[CounterHandActivationRestriction] = field(default_factory=list)
+    active_temporary_skill_activation_restrictions: list[TemporarySkillActivationRestriction] = field(default_factory=list)
+    permanent_skill_activation_restrictions: list[PermanentSkillActivationRestriction] = field(default_factory=list)
+    permanently_negated_skills: list[PermanentlyNegatedSkill] = field(default_factory=list)
     negate_opponent_strike_for_player_ids: set[int] = field(default_factory=set)
     battle_no_damage_player_ids: set[int] = field(default_factory=set)
     battle_ko_protected_instance_ids: set[int] = field(default_factory=set)

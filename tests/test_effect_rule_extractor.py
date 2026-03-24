@@ -37,6 +37,20 @@ def test_extract_draw_rules_on_play_and_attack() -> None:
     assert all(r.provenance == "extractor" for r in rules)
 
 
+def test_extract_source_text_tracks_individual_auto_lines() -> None:
+    card = _card(
+        "[Auto] When this card is played, draw 1 card."
+        "<br>[Auto] When this card attacks, draw 1 card, and you can't activate copies of this card for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    played = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_draw_n")
+    attacks = next(r for r in rules if r.trigger == "self_attacks" and r.handler_id == "auto_draw_n")
+    assert "when this card is played" in played.source_text.lower()
+    assert "when this card attacks" in attacks.source_text.lower()
+    assert "copies of this card for the turn" not in played.source_text.lower()
+    assert "copies of this card for the turn" in attacks.source_text.lower()
+
+
 def test_extract_limit_x_tracks_limit_count_on_effect_rules() -> None:
     card = _card("[Auto][Limit 2] When this card attacks, draw 1 card.")
     rules = extract_effect_rules_from_card(card)
@@ -346,6 +360,144 @@ def test_extract_jaguars_island_challenge_stage_rules() -> None:
     assert any("krillin" in str(r.handler_params.get("required_leader_traits", "")).lower() for r in reduce_rules)
 
 
+def test_extract_activate_battle_can_reduce_next_matching_arrival_skill_cost() -> None:
+    card = _card(
+        "[Activate: Battle][Once per turn] If it's your opponent's turn and you have 1 or more red cards and 1 or more green cards in your Combo Area: "
+        "During this turn, the next time your activate [Arrival Red/Green] on a <Vegeta> or <Trunks: Future> card with an energy cost of 5 in your hand, reduce the skill cost by {r}."
+    )
+    rules = extract_effect_rules_from_card(card)
+    reduce_rule = next(r for r in rules if r.handler_id == "activate_reduce_next_matching_arrival_skill_cost_from_hand")
+    assert reduce_rule.trigger == "self_activate_battle"
+    assert reduce_rule.handler_params["required_arrival_colors"] == "green,red"
+    assert reduce_rule.handler_params["required_characters"] == "Trunks: Future,Vegeta"
+    assert reduce_rule.handler_params["max_energy_cost"] == 5
+    assert reduce_rule.handler_params["reduction_cost_token"] == "r"
+    assert reduce_rule.handler_params["uses_remaining"] == 1
+    assert reduce_rule.once_per_turn is True
+
+
+def test_extract_activate_main_can_reduce_next_matching_z_awaken_cost_in_z_deck() -> None:
+    card = _card(
+        "[Activate: Main][Once per turn][Spirit Boost 1] If you have {Power Ball, Mimicking the Moon} in your Battle Area: "
+        "Reduce the [Z-Awaken] skill cost on {Son Gohan, Power of a Rampaging Great Ape} in your Z-Deck by (Yellow) for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    reduce_rule = next(r for r in rules if r.handler_id == "activate_reduce_next_matching_z_awaken_cost_in_z_deck")
+    assert reduce_rule.trigger == "self_activate_main"
+    assert reduce_rule.handler_params["target_required_name_contains"] == "SON GOHAN, POWER OF A RAMPAGING GREAT APE"
+    assert reduce_rule.handler_params["reduction_cost_token"] == "yellow"
+    assert reduce_rule.handler_params["uses_remaining"] == 1
+    assert reduce_rule.once_per_turn is True
+
+
+def test_extract_self_played_can_reduce_next_matching_z_awaken_cost_and_z_energy_in_z_deck() -> None:
+    card = _card(
+        "[Auto] When this card is played, add up to 1 card from your life to your hand, "
+        "then reduce the [Z-Awaken] skill cost of {Golden Frieza, Shining Emperor} in your Z-Deck by {y} "
+        "and reduce its Z-Energy cost by 1 for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    reduce_rule = next(r for r in rules if r.handler_id == "auto_reduce_next_matching_z_awaken_cost_in_z_deck_on_play")
+    assert reduce_rule.trigger == "self_played"
+    assert reduce_rule.handler_params["target_required_name_contains"] == "GOLDEN FRIEZA, SHINING EMPEROR"
+    assert reduce_rule.handler_params["reduction_cost_token"] == "y"
+    assert reduce_rule.handler_params["z_energy_reduction"] == 1
+    assert reduce_rule.handler_params["uses_remaining"] == 1
+
+
+def test_extract_self_played_can_place_from_drop_under_self() -> None:
+    card = _card(
+        "[Auto] When this card is played, place up to 1 ≪Saiyan≫ card from your Drop under this card, "
+        "and this card gains [Barrier] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_place_up_to_n_from_owner_drop_under_self_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_traits"] == "Saiyan"
+
+
+def test_extract_self_played_can_place_from_deck_or_drop_under_self() -> None:
+    card = _card(
+        "[Auto] When this card is played, place up to 2 red \u226aSaiyan\u226b Battle Cards from your deck and/or Drop under this card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_place_up_to_n_from_owner_deck_or_drop_under_self_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Saiyan"
+    assert rule.handler_params["required_card_type"] == "BATTLE"
+
+
+def test_extract_activate_main_can_play_from_under_self_and_place_self_under_played() -> None:
+    card = _card(
+        "[Activate: Main][Limit 1] Play up to 1 red \u226aUniverse 7\u226b <Son Gohan: Adolescence> card with an energy cost of 2 or less from under this card, and place this card under the played card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_play_up_to_n_from_under_self_and_place_self_under_played_card")
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Universe 7"
+    assert "Son Gohan: Adolescence" in rule.handler_params["required_characters"]
+    assert rule.handler_params["max_cost"] == 2
+
+
+def test_extract_self_played_from_under_by_skill_can_gain_power_and_keyword() -> None:
+    card = _card(
+        "[Auto] If you have 4 or more energy: When this card is played from under a card by a skill, this card gets +10000 power and [Dual Attack] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_self_gain_power_for_turn_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["power_delta"] == 10000
+    assert rule.handler_params["grant_keyword"] == "Dual Attack"
+    assert rule.handler_params["requires_played_from"] == "under"
+    assert rule.handler_params["requires_played_via"] == "skill"
+    assert rule.handler_params["min_owner_energy"] == 4
+
+
+def test_extract_opponent_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
+    card = _card(
+        "[Auto] If your Leader is a red <Warriors of Universe 7> card: At the start of your opponent's Main Phase, play up to 1 red ≪Universe 7≫ card with an energy cost of 2 or less from under this card, and place this card under the played card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Universe 7"
+    assert rule.handler_params["max_cost"] == 2
+    assert "warriors of universe 7" in rule.handler_params["requires_leader"]
+
+
+def test_extract_owner_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
+    card = _card(
+        "[Auto] At the start of your Main Phase, play up to 1 red <Piccolo Jr.> or ≪Demon Clan≫ card with an energy cost of 3 from under this card, and place this card under the played card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card")
+    assert rule.trigger == "owner_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert "Piccolo Jr." in rule.handler_params["required_characters"]
+    assert "Demon Clan" in rule.handler_params["required_traits"]
+    assert rule.handler_params["max_cost"] == 3
+
+
+def test_extract_costed_opponent_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
+    card = _card(
+        "[Auto](Red), if your Leader is a red <Warriors of Universe 7> card and your opponent has 2 or more energy: "
+        "At the start of your opponent's Main Phase, play up to 1 red ≪Universe 7≫ card with an energy cost of 3 or less from under this card, and place this card under the played card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["auto_cost_header"] == "(red)"
+    assert rule.handler_params["min_opponent_energy"] == 2
+
+
 def test_extract_ex_evolve_followup_draw_and_switch_self_active_rules() -> None:
     card = _card(
         "[Deflect][Double Strike] "
@@ -380,6 +532,20 @@ def test_extract_pursuit_activate_main_search_rule() -> None:
     assert search_rule.handler_params["max_cost"] == 3
     assert search_rule.handler_params["requires_ex_evolve"] is True
     assert "krillin" in str(search_rule.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_activate_main_search_rule_can_negate_itself_for_game() -> None:
+    card = _card(
+        "[Activate: Main] Add up to 1 {Potara} from your deck to your hand, shuffle your deck, and negate this skill for the game."
+    )
+    rules = extract_effect_rules_from_card(card)
+    search_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand"
+    )
+    assert search_rule.handler_params["max_targets"] == 1
+    assert search_rule.handler_params["required_name_contains"] == "POTARA"
+    assert search_rule.handler_params["negate_self_skill_for_game"] is True
 
 
 def test_extract_cross_dimensional_fighting_spirit_families() -> None:
@@ -1076,6 +1242,17 @@ def test_extract_play_gain_control_opponent_unison_rule() -> None:
     rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_unison_on_play")
     assert rule.trigger == "self_played"
     assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_play_gain_control_opponent_battle_rule() -> None:
+    card = _card(
+        "[Auto] When you play this card, choose up to 1 of the Battle Cards in your opponent's Battle Area with an energy cost of 3 or less and gain control of it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_battle_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 3
 
 
 def test_extract_play_switch_owner_board_to_revealed_rule() -> None:

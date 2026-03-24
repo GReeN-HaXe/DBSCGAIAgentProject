@@ -49,9 +49,9 @@ def test_build_effect_family_mapping_report_ranks_priority_cards_and_unmapped() 
     payload = build_effect_family_mapping_report(
         rules,
         card_metadata={
-            101: {"card_number": "BT1-001", "card_name": "Mapped Battle"},
-            202: {"card_number": "BT1-002", "card_name": "Mapped Leader"},
-            303: {"card_number": "BT1-003", "card_name": "Unmapped Trace Card"},
+            101: {"card_number": "BT1-001", "card_name": "Mapped Battle", "card_skill_unstyled": "[Auto] Draw 1."},
+            202: {"card_number": "BT1-002", "card_name": "Mapped Leader", "card_skill_unstyled": "[Auto] Draw 1."},
+            303: {"card_number": "BT1-003", "card_name": "Unmapped Trace Card", "card_skill_unstyled": "[Activate: Main] Test."},
         },
         deck_card_counts={101: 4, 202: 1},
         trace_card_counts={101: 2, 202: 1, 303: 3},
@@ -61,6 +61,7 @@ def test_build_effect_family_mapping_report_ranks_priority_cards_and_unmapped() 
     assert payload["summary"]["priority_card_count"] == 3
     assert payload["summary"]["mapped_priority_card_count"] == 2
     assert payload["summary"]["unmapped_priority_card_count"] == 1
+    assert payload["summary"]["intentionally_skipped_priority_card_count"] == 0
     assert payload["priority_cards"][0]["card_id"] == 101
     assert payload["priority_cards"][0]["combined_count"] == 6
     assert payload["priority_cards"][0]["family_ids"] == ["self_played:auto_draw_n"]
@@ -69,6 +70,28 @@ def test_build_effect_family_mapping_report_ranks_priority_cards_and_unmapped() 
     assert payload["unmapped_priority_cards"][0]["card_id"] == 303
     assert payload["top_priority_families"][0]["family_id"] == "self_played:auto_draw_n"
     assert payload["top_priority_families"][0]["combined_count"] == 6
+
+
+def test_build_effect_family_mapping_report_separates_skillless_skips_from_unmapped() -> None:
+    payload = build_effect_family_mapping_report(
+        {},
+        card_metadata={
+            303: {"card_number": "BT1-003", "card_name": "Actionable Unmapped", "card_skill_unstyled": "[Activate: Main] Test."},
+            404: {"card_number": "BT1-004", "card_name": "Skillless Skip", "card_skill_unstyled": "-"},
+        },
+        deck_card_counts={404: 2},
+        trace_card_counts={303: 3},
+    )
+
+    assert payload["summary"]["priority_card_count"] == 2
+    assert payload["summary"]["mapped_priority_card_count"] == 0
+    assert payload["summary"]["raw_unmapped_priority_card_count"] == 2
+    assert payload["summary"]["unmapped_priority_card_count"] == 1
+    assert payload["summary"]["intentionally_skipped_priority_card_count"] == 1
+    assert payload["unmapped_priority_cards"][0]["card_id"] == 303
+    assert payload["intentionally_skipped_priority_cards"][0]["card_id"] == 404
+    assert payload["priority_cards"][0]["intentionally_skipped"] is False
+    assert any(row["card_id"] == 404 and row["intentionally_skipped"] is True for row in payload["priority_cards"])
 
 
 def test_collect_trace_card_counts_handles_human_and_ai_trace_shapes() -> None:
@@ -125,13 +148,13 @@ def test_build_effect_family_mapping_report_script_writes_json() -> None:
     db_path = tmp_path / "cards.db"
     conn = sqlite3.connect(str(db_path))
     try:
-        conn.execute("CREATE TABLE cards (id INTEGER PRIMARY KEY, card_number TEXT, card_name TEXT, card_type TEXT)")
+        conn.execute("CREATE TABLE cards (id INTEGER PRIMARY KEY, card_number TEXT, card_name TEXT, card_type TEXT, card_skill_unstyled TEXT)")
         conn.executemany(
-            "INSERT INTO cards (id, card_number, card_name, card_type) VALUES (?, ?, ?, ?)",
+            "INSERT INTO cards (id, card_number, card_name, card_type, card_skill_unstyled) VALUES (?, ?, ?, ?, ?)",
             [
-                (101, "BT1-001", "Mapped Battle", "BATTLE"),
-                (202, "BT1-002", "Mapped Leader", "LEADER"),
-                (303, "BT1-003", "Unmapped Trace Card", "BATTLE"),
+                (101, "BT1-001", "Mapped Battle", "BATTLE", "[Auto] Draw 1."),
+                (202, "BT1-002", "Mapped Leader", "LEADER", "[Auto] Draw 1."),
+                (303, "BT1-003", "Unmapped Trace Card", "BATTLE", "[Activate: Main] Test."),
             ],
         )
         conn.commit()
@@ -217,4 +240,5 @@ def test_build_effect_family_mapping_report_script_writes_json() -> None:
     assert payload["summary"]["priority_card_count"] == 3
     assert payload["summary"]["mapped_priority_card_count"] == 1
     assert payload["summary"]["unmapped_priority_card_count"] == 2
+    assert payload["summary"]["intentionally_skipped_priority_card_count"] == 0
     assert payload["priority_cards"][0]["card_id"] == 101

@@ -11,6 +11,17 @@ from src.game.effect_rule_extractor import (
 
 
 EFFECT_SUPPORT_AUDIT_SCHEMA_VERSION = "effect_support_audit.v1"
+_INTENTIONALLY_SKIPPED_CARD_NUMBERS = {
+    "BT25-010",
+    "BT15-018",
+    "BT15-105",
+}
+
+
+def _is_intentionally_skipped_skillless(card_number: object, skill_text: object) -> bool:
+    if str(card_number or "").strip().upper() in _INTENTIONALLY_SKIPPED_CARD_NUMBERS:
+        return True
+    return str(skill_text or "").strip() == "-"
 
 
 def build_effect_support_audit(
@@ -34,6 +45,7 @@ def build_effect_support_audit(
     priority_cards_with_rules = 0
     priority_cards_with_diagnostics = 0
     priority_cards_without_rules = 0
+    priority_intentionally_skipped_cards = 0
 
     for card in cards:
         signature = skill_template_signature(card.card_skill_unstyled)
@@ -119,6 +131,7 @@ def build_effect_support_audit(
     ][: max(int(top_families), 0)]
 
     priority_unimplemented_cards: list[dict[str, object]] = []
+    intentionally_skipped_priority_cards: list[dict[str, object]] = []
     priority_diagnostic_cards: list[dict[str, object]] = []
     if priority_set:
         for card in cards:
@@ -126,7 +139,20 @@ def build_effect_support_audit(
                 continue
             signature = skill_template_signature(card.card_skill_unstyled)
             notes = diagnostics.get(int(card.id), [])
-            if int(card.id) not in rules_by_card:
+            intentionally_skipped = _is_intentionally_skipped_skillless(card.card_number, card.card_skill_unstyled)
+            if int(card.id) not in rules_by_card and intentionally_skipped:
+                priority_intentionally_skipped_cards += 1
+                priority_cards_without_rules -= 1
+                intentionally_skipped_priority_cards.append(
+                    {
+                        "card_id": int(card.id),
+                        "card_number": str(card.card_number),
+                        "card_name": str(card.card_name),
+                        "template": signature,
+                        "skip_reason": "skillless",
+                    }
+                )
+            elif int(card.id) not in rules_by_card:
                 priority_unimplemented_cards.append(
                     {
                         "card_id": int(card.id),
@@ -158,6 +184,7 @@ def build_effect_support_audit(
             "priority_skill_card_count": priority_skill_cards,
             "priority_cards_with_rules": priority_cards_with_rules,
             "priority_cards_without_rules": priority_cards_without_rules,
+            "priority_intentionally_skipped_cards": priority_intentionally_skipped_cards,
             "priority_cards_with_diagnostics": priority_cards_with_diagnostics,
         },
         "coverage": {
@@ -169,12 +196,14 @@ def build_effect_support_audit(
             "priority": {
                 "cards_with_rules": priority_cards_with_rules,
                 "cards_without_rules": priority_cards_without_rules,
+                "intentionally_skipped_cards": priority_intentionally_skipped_cards,
                 "cards_with_diagnostics": priority_cards_with_diagnostics,
             },
         },
         "top_global_families": serialized_families[: max(int(top_families), 0)],
         "top_priority_families": top_priority_families,
         "priority_unimplemented_cards": priority_unimplemented_cards,
+        "intentionally_skipped_priority_cards": intentionally_skipped_priority_cards,
         "priority_diagnostic_cards": priority_diagnostic_cards,
         "extractor_report": extractor_report,
     }
