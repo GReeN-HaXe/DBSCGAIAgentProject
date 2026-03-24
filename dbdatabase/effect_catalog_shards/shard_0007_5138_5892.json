@@ -3,6 +3,66 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 271,
   "rules": {
+    "5138": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] \u2463: draw 2 cards and switch this card to active mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "5150": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "5158": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a battle card or extra card to switch energy to active mode, they can't switch energy to active mode unless they choose 5 cards from their drop area and send them to their warp.",
+        "trigger": "self_played"
+      }
+    ],
+    "5159": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      }
+    ],
     "5163": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -4304,67 +4364,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is a &lt;broly&gt; card: when you combo with this card, choose up to 1 red extra card with [field] and an energy cost of 2 from your deck, place it in your drop area, then shuffle your deck. if you placed a card in your drop area, choose up to 1 of your energy, switch it to active mode, and if you have 5 or less cards in your hand, draw 1 card.",
         "trigger": "self_comboed"
-      }
-    ],
-    "5900": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "5901": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 2
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, draw 2 cards.",
-        "trigger": "self_played"
-      }
-    ],
-    "5902": [
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": 3
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][burst 3] when you play this card, choose up to 1 of your opponent's battle cards with an energy cost of 3 or less and ko it.",
-        "trigger": "self_played"
-      }
-    ],
-    "5903": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "requires_leader": "if your leader card is an &lt;android 13&gt; card"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] place this card in your drop area from your hand: if your leader card is an &lt;android 13&gt; card, draw 1 card.",
-        "trigger": "self_activate_main"
       }
     ]
   },

@@ -104,6 +104,14 @@ _ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_ARRIVAL_SKILL_COST_RE = re.compile(
     r"\[activate(?::)?\s*(main|battle)\].{0,420}?the next time (?:you|your) activate \[arrival\s+([^\]]+)\] on (.+?) card(?: with an energy cost of (\d+))? in your hand(?: during this turn)?[,:]\s*reduce the skill cost by (?:\{([^}]+)\}|\(([^)]+)\)|(\d+))",
     re.IGNORECASE,
 )
+_ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_Z_AWAKEN_COST_RE = re.compile(
+    r"\[activate(?::)?\s*(main|battle)\].{0,420}?reduce the \[z-awaken\] skill cost (?:on|of) (.+?) in your z-deck by (?:\{([^}]+)\}|\(([^)]+)\)|(\d+))(?: and reduce its z-energy cost by (\d+))?.{0,40}?for the turn",
+    re.IGNORECASE,
+)
+_AUTO_ON_PLAY_REDUCE_NEXT_Z_AWAKEN_COST_RE = re.compile(
+    r"when this card is played.{0,420}?reduce the \[z-awaken\] skill cost (?:on|of) (.+?) in your z-deck by (?:\{([^}]+)\}|\(([^)]+)\)|(\d+))(?: and reduce its z-energy cost by (\d+))?.{0,40}?for the turn",
+    re.IGNORECASE,
+)
 _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?choose up to (\d+) of your opponent'?s battle cards?\s*(?:,|and|then)?\s*ko (?:it|them)"
 )
@@ -118,6 +126,9 @@ _ACTIVATE_MAIN_LOOK_TOP_SEND_DIRECT_TO_OWNER_WARP_RE = re.compile(
 )
 _ACTIVATE_MAIN_PLAY_SELF_FROM_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,240}?play this card from your hand"
+)
+_ACTIVATE_MAIN_BATTLE_PLAY_UP_TO_N_FROM_UNDER_SELF_AND_PLACE_SELF_UNDER_PLAYED_RE = re.compile(
+    r"\[activate(?::)?\s*(main|battle)\].{0,420}?play up to (\d+) (.+?) from under this card,\s*and place this card under the played card"
 )
 _ACTIVATE_MAIN_BATTLE_PLAY_SELF_FROM_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main/battle\].{0,320}?play this card from your hand"
@@ -199,6 +210,12 @@ _PLAY_SWITCH_UP_TO_N_ANY_PLAYER_BOARD_TO_REVEALED_RE = re.compile(
 )
 _PLAY_SWITCH_UP_TO_N_OWNER_BATTLE_TO_HIDDEN_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,200})?choose up to (\d+) (?:(?:of your )?(.*?) )?cards?(?: in your battle area)? and switch (?:it|them) to hidden mode"
+)
+_PLAY_FROM_UNDER_BY_SKILL_GAIN_POWER_AND_KEYWORD_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when this card is played from under a card by a skill,\s*this card gets \+(\d+) power and \[([^\]]+)\] for the turn"
+)
+_MAIN_PHASE_PLAY_FROM_UNDER_SELF_AND_PLACE_SELF_UNDER_PLAYED_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*play up to (\d+) (.+?) from under this card,\s*and place this card under the played card"
 )
 _PLAY_BUFF_UP_TO_N_OWNER_BATTLE_WITH_MIN_CHAR_NAMES_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,220})?choose up to (\d+) of your battle cards with (\d+) or more character names including <([^>]+)> and (?:it|they) gain(?:s)? \[([^\]]+)\] until the end of your opponent'?s turn"
@@ -305,6 +322,12 @@ _PLAY_ADD_UP_TO_N_FROM_DECK_TO_HAND_RE = re.compile(
 )
 _PLAY_UP_TO_N_FROM_DROP_RE = re.compile(
     r"(?:if [^:]{1,160}:\s*)?when this card is played(?: from your hand)?[^.]{0,260}?play up to (\d+) (.+?) from your drop(?: area)?"
+)
+_PLAY_PLACE_UP_TO_N_FROM_DROP_UNDER_SELF_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when this card is played(?: from your hand)?[^.]{0,220}?place up to (\d+) (.+?) from your drop(?: area)? under this card"
+)
+_PLAY_PLACE_UP_TO_N_FROM_DECK_OR_DROP_UNDER_SELF_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when this card is played(?: from your hand)?[^.]{0,240}?place up to (\d+) (.+?) from your deck(?: and/or| or) drop(?: area)? under this card"
 )
 _PLAY_ADD_MARKER_PER_N_MULTICOLOR_ENERGY_RE = re.compile(
     r"(?:if [^:]{1,160}:\s*)?when this card is played, add a marker to (?:this card|it) for every (\d+) multicolor card in your energy"
@@ -587,6 +610,17 @@ def _extract_max_targets(text: str) -> int | str:
     return 1
 
 
+def _extract_auto_header_cost_header(text: str) -> str:
+    m_auto_cost = re.match(
+        r"\s*(?:\[[^\]]+\])?\s*\[auto\]((?:\{[^}]+\}|\([^)]*\)|[①②③④⑤⑥⑦⑧⑨⑩])+)\s*(?:,|:)",
+        text,
+        re.IGNORECASE,
+    )
+    if m_auto_cost is None:
+        return ""
+    return str(m_auto_cost.group(1) or "").strip()
+
+
 def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     text = _normalize_text(card.card_skill_unstyled)
     branches = _split_effect_branches(card.card_skill_unstyled)
@@ -650,6 +684,63 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_played",
                     handler_id="auto_switch_self_active_on_play",
                     handler_params={},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_played_from_under_by_skill_buff = _PLAY_FROM_UNDER_BY_SKILL_GAIN_POWER_AND_KEYWORD_RE.search(branch)
+        if m_played_from_under_by_skill_buff:
+            power_delta = int(m_played_from_under_by_skill_buff.group(1))
+            grant_keyword = " ".join(part.capitalize() for part in m_played_from_under_by_skill_buff.group(2).replace("-", " ").split())
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_self_gain_power_for_turn_on_play",
+                    handler_params={
+                        "power_delta": power_delta,
+                        "grant_keyword": grant_keyword,
+                        "requires_played_from": "under",
+                        "requires_played_via": "skill",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                )
+            )
+
+        m_main_phase_under_play = _MAIN_PHASE_PLAY_FROM_UNDER_SELF_AND_PLACE_SELF_UNDER_PLAYED_RE.search(branch)
+        if m_main_phase_under_play:
+            phase_owner = str(m_main_phase_under_play.group(1) or "").strip().lower()
+            max_targets = int(m_main_phase_under_play.group(2))
+            descriptor = m_main_phase_under_play.group(3).lower()
+            m_cost_less = re.search(r"energy costs? of (\d+) or less", descriptor)
+            if m_cost_less is None:
+                m_cost_less = re.search(r"energy cost of (\d+) or less", descriptor)
+            m_cost_exact = re.search(r"energy cost of (\d+)\b", descriptor)
+            min_cost = int(m_cost_exact.group(1)) if (m_cost_exact and m_cost_less is None) else -1
+            max_cost = int(m_cost_less.group(1)) if m_cost_less else (int(m_cost_exact.group(1)) if m_cost_exact else -1)
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "max_cost": max_cost,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            auto_cost_header = _extract_auto_header_cost_header(branch)
+            if auto_cost_header:
+                params["auto_cost_header"] = auto_cost_header
+            if min_cost >= 0:
+                params["min_cost"] = min_cost
+            if "rest mode" in branch:
+                params["resting"] = True
+            if "with its skills negated" in branch or "with their skills negated" in branch:
+                params["negate_skills"] = True
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
+                    handler_params=params,
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )
@@ -1175,6 +1266,85 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_activate_main_battle_reduce_next_z_awaken_cost = _ACTIVATE_MAIN_BATTLE_REDUCE_NEXT_Z_AWAKEN_COST_RE.search(branch)
+        if m_activate_main_battle_reduce_next_z_awaken_cost:
+            skill_kind = str(m_activate_main_battle_reduce_next_z_awaken_cost.group(1) or "").strip().lower()
+            descriptor = m_activate_main_battle_reduce_next_z_awaken_cost.group(2).strip()
+            reduction_token = next(
+                (
+                    str(token).strip()
+                    for token in m_activate_main_battle_reduce_next_z_awaken_cost.groups()[2:5]
+                    if str(token or "").strip()
+                ),
+                "",
+            )
+            z_energy_reduction = m_activate_main_battle_reduce_next_z_awaken_cost.group(6)
+            extra = _extract_common_conditions(branch)
+            target_filters = _descriptor_filters(descriptor, branch)
+            params = {
+                "uses_remaining": 1,
+                "reduction_cost_token": reduction_token,
+                **extra,
+            }
+            if "allowed_colors" in target_filters:
+                params["target_allowed_colors"] = target_filters["allowed_colors"]
+            if "required_traits" in target_filters:
+                params["target_required_traits"] = target_filters["required_traits"]
+            if "required_characters" in target_filters:
+                params["target_required_characters"] = target_filters["required_characters"]
+            if "required_name_contains" in target_filters:
+                params["target_required_name_contains"] = target_filters["required_name_contains"]
+            if z_energy_reduction is not None:
+                params["z_energy_reduction"] = int(z_energy_reduction)
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_battle" if skill_kind == "battle" else "self_activate_main",
+                    handler_id="activate_reduce_next_matching_z_awaken_cost_in_z_deck",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_auto_on_play_reduce_next_z_awaken_cost = _AUTO_ON_PLAY_REDUCE_NEXT_Z_AWAKEN_COST_RE.search(branch)
+        if m_auto_on_play_reduce_next_z_awaken_cost:
+            descriptor = m_auto_on_play_reduce_next_z_awaken_cost.group(1).strip()
+            reduction_token = next(
+                (
+                    str(token).strip()
+                    for token in m_auto_on_play_reduce_next_z_awaken_cost.groups()[1:4]
+                    if str(token or "").strip()
+                ),
+                "",
+            )
+            z_energy_reduction = m_auto_on_play_reduce_next_z_awaken_cost.group(5)
+            extra = _extract_common_conditions(branch)
+            target_filters = _descriptor_filters(descriptor, branch)
+            params = {
+                "uses_remaining": 1,
+                "reduction_cost_token": reduction_token,
+                **extra,
+            }
+            if "allowed_colors" in target_filters:
+                params["target_allowed_colors"] = target_filters["allowed_colors"]
+            if "required_traits" in target_filters:
+                params["target_required_traits"] = target_filters["required_traits"]
+            if "required_characters" in target_filters:
+                params["target_required_characters"] = target_filters["required_characters"]
+            if "required_name_contains" in target_filters:
+                params["target_required_name_contains"] = target_filters["required_name_contains"]
+            if z_energy_reduction is not None:
+                params["z_energy_reduction"] = int(z_energy_reduction)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_reduce_next_matching_z_awaken_cost_in_z_deck_on_play",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         m_activate_battle_ko = _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE.search(branch)
         if m_activate_battle_ko:
             max_targets = int(m_activate_battle_ko.group(1))
@@ -1443,6 +1613,40 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 EffectRule(
                     trigger="self_activate_battle",
                     handler_id="activate_play_self_from_hand",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_activate_play_from_under_self = _ACTIVATE_MAIN_BATTLE_PLAY_UP_TO_N_FROM_UNDER_SELF_AND_PLACE_SELF_UNDER_PLAYED_RE.search(branch)
+        if m_activate_play_from_under_self:
+            trigger = "self_activate_battle" if m_activate_play_from_under_self.group(1).lower() == "battle" else "self_activate_main"
+            max_targets = int(m_activate_play_from_under_self.group(2))
+            descriptor = m_activate_play_from_under_self.group(3).lower()
+            m_cost_less = re.search(r"energy costs? of (\d+) or less", descriptor)
+            if m_cost_less is None:
+                m_cost_less = re.search(r"energy cost of (\d+) or less", descriptor)
+            m_cost_exact = re.search(r"energy cost of (\d+)\b", descriptor)
+            min_cost = int(m_cost_exact.group(1)) if (m_cost_exact and m_cost_less is None) else -1
+            max_cost = int(m_cost_less.group(1)) if m_cost_less else (int(m_cost_exact.group(1)) if m_cost_exact else -1)
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "max_cost": max_cost,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            if min_cost >= 0:
+                params["min_cost"] = min_cost
+            if "rest mode" in branch:
+                params["resting"] = True
+            if "with its skills negated" in branch or "with their skills negated" in branch:
+                params["negate_skills"] = True
+            rules.append(
+                EffectRule(
+                    trigger=trigger,
+                    handler_id="activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
                     handler_params=params,
                     once_per_turn=once,
                     limit_per_turn=limit,
@@ -2456,6 +2660,34 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_played",
                     handler_id="auto_play_up_to_n_from_owner_drop_on_play",
                     handler_params=params,
+                    once_per_turn=once,
+                )
+            )
+
+        m_place_deck_or_drop_under_self = _PLAY_PLACE_UP_TO_N_FROM_DECK_OR_DROP_UNDER_SELF_RE.search(branch)
+        if m_place_deck_or_drop_under_self:
+            max_targets = int(m_place_deck_or_drop_under_self.group(1))
+            descriptor = m_place_deck_or_drop_under_self.group(2).lower()
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_place_up_to_n_from_owner_deck_or_drop_under_self_on_play",
+                    handler_params={"max_targets": max_targets, **_descriptor_filters(descriptor, branch), **extra},
+                    once_per_turn=once,
+                )
+            )
+
+        m_place_drop_under_self = _PLAY_PLACE_UP_TO_N_FROM_DROP_UNDER_SELF_RE.search(branch)
+        if m_place_drop_under_self:
+            max_targets = int(m_place_drop_under_self.group(1))
+            descriptor = m_place_drop_under_self.group(2).lower()
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_place_up_to_n_from_owner_drop_under_self_on_play",
+                    handler_params={"max_targets": max_targets, **_descriptor_filters(descriptor, branch), **extra},
                     once_per_turn=once,
                 )
             )

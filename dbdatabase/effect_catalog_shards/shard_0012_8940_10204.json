@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 218,
+  "card_rule_count": 224,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 346,
+  "effect_rule_count": 354,
   "rules": {
     "10025": [
       {
@@ -1261,6 +1261,118 @@
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] if your leader is a \u226auniverse 2\u226b card: when this card is played, draw 1 card, send up to 1 {rozie, witchy warrior} from your drop to your warp, add up to 1 black \u226amaiden squadron\u226b card from your drop or warp to your z-energy, then send up to 2 battle cards from your opponent's drop to their owner's warp.",
         "trigger": "self_played"
+      }
+    ],
+    "8940": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_opponent_energy": 3,
+          "required_leader_traits": "\u226aGod\u226b",
+          "requires_leader": "if your leader is a \u226agod\u226b card and your opponent has 3 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](2), if your leader is a \u226agod\u226b card and your opponent has 3 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_opponent_energy": 3,
+          "required_leader_traits": "\u226aGod\u226b",
+          "requires_leader": "if your leader is a \u226agod\u226b card and your opponent has 3 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](2), if your leader is a \u226agod\u226b card and your opponent has 3 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8941": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{w}{w}(3): draw 2 cards and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{w}{w}(3): draw 2 cards and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8942": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "white",
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 15000,
+          "requires_leader": "if your leader is white",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] if your leader is white: look at up to 3 cards from the top of your deck, add up to 1 white card with \u226auniverse\u226b in its special traits to your hand, place the remaining cards at the bottom of their owner's deck in any order, then choose up to 1 of your white cards and it gets +15000 power for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "8944": [
+      {
+        "family_id": "self_activate_main:activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n",
+        "handler_id": "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose all the cards in your opponent's battle area and switch them to revealed mode, then choose up to 1 of your opponent's battle cards and ko it.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8946": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "ignores_barrier": true,
+          "min_opponent_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main](2), if your opponent has 3 or more energy: play this card from your hand, then choose up to 2 of your opponent's battle cards, ignoring [barrier], and switch them to hidden mode.",
+        "trigger": "self_activate_main"
       }
     ],
     "8947": [
@@ -3197,6 +3309,23 @@
         "provenance": "extractor",
         "source_text": "[activate: main]{2} : draw 1 card, then choose up to 1 of your opponent's battle cards, ignoring [barrier], and it gets -25000 power for the turn.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "9662": [
+      {
+        "family_id": "self_played:auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "handler_id": "auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 3,
+          "required_characters": "5000 Combo Power And Different Names"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, place up to 3 cards with 5000 combo power and different card names from your drop under this card.",
+        "trigger": "self_played"
       }
     ],
     "9663": [

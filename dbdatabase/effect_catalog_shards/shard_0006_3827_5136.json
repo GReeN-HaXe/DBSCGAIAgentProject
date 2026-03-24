@@ -3,6 +3,71 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 262,
   "rules": {
+    "3827": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "&Lt;Zamasu&Gt;",
+          "requires_leader": "if your leader card is a &lt;zamasu&gt; card and it's your opponent's turn",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] if your leader card is a &lt;zamasu&gt; card and it's your opponent's turn:  draw 1 card, then choose 1 card in your opponent's hand, place it in their energy in rest mode, then if you placed an opponent's card in their energy, at the end of the turn your opponent chooses 1 of their energy and places it in its owner's drop area",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "3832": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "Black &Lt;Supreme Kai Of Time&Gt;",
+          "requires_leader": "if your leader card is a black &lt;supreme kai of time&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a black &lt;supreme kai of time&gt; card: when this card is played using [over realm], send up to 2 cards from the top of your deck to your warp, then draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "3833": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3835": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][burst 2] (you must place the top 2 cards of your deck in your drop area to activate this skill.) when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      }
+    ],
     "3836": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -4036,66 +4101,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if you have 2 or more red/green multicolor cards in your energy: when you combo with this card, draw 1 card.",
         "trigger": "self_comboed"
-      }
-    ],
-    "5138": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 2
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][once per turn] \u2463: draw 2 cards and switch this card to active mode.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "5150": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "5158": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a battle card or extra card to switch energy to active mode, they can't switch energy to active mode unless they choose 5 cards from their drop area and send them to their warp.",
-        "trigger": "self_played"
-      }
-    ],
-    "5159": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, draw 1 card.",
-        "trigger": "self_attacks"
       }
     ]
   },

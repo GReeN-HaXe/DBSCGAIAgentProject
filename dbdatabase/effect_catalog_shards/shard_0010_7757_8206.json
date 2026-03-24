@@ -1,8 +1,115 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 348,
+  "effect_rule_count": 350,
   "rules": {
+    "7757": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, draw 1 card, and during this turn, the next time you activate an [activate: main] skill on {ss2 son gohan, astonishing strike} from your hand, reduce the skill cost by {u}{u}.",
+        "trigger": "self_played"
+      }
+    ],
+    "7758": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "requires_leader": "if your leader is blue and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{u}, if your leader is blue and you have 2 or more energy: play this card from your hand and add up to 1 card from your life to your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] add this card to your z-energy: draw 1 card and discard 1 card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "7760": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader is a yellow <son goku",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a yellow <son goku: childhood> card, you have 1 or more yellow cards with {bulma} and 1 or more yellow cards with {yamcha} in their card names in play, and you discard 1 card from your hand: draw 1 card, play this card from your hand in rest mode, and this card gets +10000 power for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader is a yellow <son goku",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a yellow <son goku: childhood> card, you have 1 or more yellow cards with {bulma} and 1 or more yellow cards with {yamcha} in their card names in play, and you discard 1 card from your hand: draw 1 card, play this card from your hand in rest mode, and this card gets +10000 power for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "7761": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 2 cards and send 1 card from your hand to its owner's warp.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_top_deck_to_owner_warp",
+        "handler_id": "activate_send_top_deck_to_owner_warp",
+        "handler_params": {
+          "min_opponent_energy": 2,
+          "requires_leader": "if your leaderis a <trunks",
+          "send_count": 3,
+          "switch_self_active": false
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leaderis a <trunks: xeno>-only card, your opponent has 2 or more energy, and you remove this card in your warp from the game: send up to 3 cards from the top of your deck to their owner's warp, and during this turn, the next time you activate an [activate: main] skill on a black <trunks: xeno> card with an energy cost of 5 from your warp, reduce the skill cost by {b}.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "7762": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -5447,87 +5554,6 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](blue)(blue)(blue)(blue), place 1 blue battle card with an energy cost of 5 or more into its owner's drop: play this card from your hand. additionally, if the card placed into its owner's drop by this skill is a \u226aphantom demon\u226b card, draw 2 cards.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "8208": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "look_count": 7,
-          "max_add": 2,
-          "max_cost": -1,
-          "required_characters": "Lt Gogeta Br Gt"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 7 cards from the top of your deck, add up to 2 blue &lt;gogeta: br&gt; cards to your hand, shuffle your deck, then choose up to 1 of your opponent's battle cards and return it to its owner's hand.",
-        "trigger": "self_played"
-      }
-    ],
-    "8210": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "8212": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_owner_energy": 3,
-          "requires_leader": "if your leader is green and you have 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](green), if your leader is green and you have 3 or more energy: play this card from your hand, and play 1 earthling token. (earthling tokens have 1000 power, 0 combo cost, and 0 combo power.)",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "8214": [
-      {
-        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and ko it.",
-        "trigger": "self_attacks"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_owner_energy": 3,
-          "requires_leader": "if your leader is a green &lt;mai"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](green)(green), if your leader is a green &lt;mai: future&gt;-only card and you have 3 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
       }
     ]

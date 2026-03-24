@@ -3816,6 +3816,24 @@
         "trigger": "self_played"
       }
     ],
+    "1747": [
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_id": "activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_card_type": "Z-BATTLE",
+          "required_characters": "Lt Anilaza Gt"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](red)(red), place 3 cards from under this card in their owners' drops, and place 1 &lt;paparoni&gt; card from your hand or battle area in its owner's drop: play up to 1 &lt;anilaza&gt; z-battle card from under this card, and place this card under the played card.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "1748": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -4048,6 +4066,43 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "1761": [
+      {
+        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
+        "handler_id": "auto_self_gain_power_for_turn_on_play",
+        "handler_params": {
+          "grant_keyword": "Dual Attack",
+          "min_owner_energy": 4,
+          "power_delta": 10000,
+          "requires_played_from": "under",
+          "requires_played_via": "skill"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 4 or more energy: when this card is played from under a card by a skill, this card gets +10000 power and [dual attack] for the turn.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_opponent_main_phase_start:auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_id": "auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_params": {
+          "allowed_colors": "red",
+          "max_cost": 2,
+          "max_targets": 1,
+          "required_leader_traits": "Red &Lt;Warriors Of Universe 7&Gt;",
+          "required_traits": "Universe 7",
+          "requires_leader": "if your leader is a red &lt;warriors of universe 7&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is a red &lt;warriors of universe 7&gt; card: at the start of your opponent's main phase, play up to 1 red \u226auniverse 7\u226b card with an energy cost of 2 or less from under this card, and place this card under the played card.",
+        "trigger": "owner_opponent_main_phase_start"
+      }
+    ],
     "1764": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4081,6 +4136,28 @@
         "provenance": "extractor",
         "source_text": "[auto][limit 1] if your leader is a \u226auniverse 7\u226b card: when this card is played, draw 1 card, choose up to 1 of your opponent's battle cards, and it gets -25000 power for the turn.",
         "trigger": "self_played"
+      }
+    ],
+    "1765": [
+      {
+        "family_id": "owner_opponent_main_phase_start:auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_id": "auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_params": {
+          "allowed_colors": "red",
+          "auto_cost_header": "(red)",
+          "max_cost": 3,
+          "max_targets": 1,
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Red &Lt;Warriors Of Universe 7&Gt;",
+          "required_traits": "Universe 7",
+          "requires_leader": "if your leader is a red &lt;warriors of universe 7&gt; card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](red), if your leader is a red &lt;warriors of universe 7&gt; card and your opponent has 2 or more energy: at the start of your opponent's main phase, play up to 1 red \u226auniverse 7\u226b card with an energy cost of 3 or less from under this card, and place this card under the played card.",
+        "trigger": "owner_opponent_main_phase_start"
       }
     ],
     "1767": [
@@ -4606,6 +4683,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, at the end of the turn, choose up to 1 of your opponent's battle cards or unisons and it gets -20000 power for the turn.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_id": "activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_params": {
+          "max_cost": 2,
+          "max_targets": 1,
+          "required_characters": "Lt Son Gohan Adolescence Gt",
+          "required_traits": "Universe 7"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if there are 4 or more colors among cards in your energy, z-energy, battle area, drop, and warp: play up to 1 \u226auniverse 7\u226b &lt;son gohan: adolescence&gt; card with an energy cost of 2 or less from under this card, and place this card under the played card.",
+        "trigger": "self_activate_main"
       }
     ],
     "1801": [
@@ -4680,6 +4773,26 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: battle][limit 1](1), if your leader has [warrior of universe 7], a \u226auniverse 7\u226b card is in your combo area, and it's your turn: draw 1 card, and play this card from your hand.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "1806": [
+      {
+        "family_id": "self_activate_battle:activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_id": "activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+        "handler_params": {
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_card_type": "Z-BATTLE",
+          "required_characters": "Lt Piccolo Gt",
+          "required_traits": "Universe 7"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if there are 4 or more colors among cards in your energy, z-energy, battle area, drop, and warp, and it's your opponent's turn: play up to 1 \u226auniverse 7\u226b &lt;piccolo&gt; z-battle card with an energy cost of 2 from under this card, and place this card under the played card.",
         "trigger": "self_activate_battle"
       }
     ],
@@ -5105,96 +5218,6 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[activate: main][once per turn] add 1 card from your life to your hand: this card gets +10000 power and [dual attack] for the turn.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1848": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main](yellow), choose 1 of your yellow &lt;son goku&gt; or &lt;vegeta&gt; cards: play this card from your hand, and the chosen card will not switch to active mode during your next charge phase.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1849": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "ignores_barrier": true,
-          "rest_mode_only": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] when this card is played, draw 1 card, choose up to 1 of your opponent's battle cards in rest mode, ignoring [barrier], and ko it.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "ignores_barrier": true,
-          "max_cost": -1,
-          "rest_mode_only": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] when this card is played, draw 1 card, choose up to 1 of your opponent's battle cards in rest mode, ignoring [barrier], and ko it.",
-        "trigger": "self_played"
-      }
-    ],
-    "1850": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "requires_leader": "if your leader is a yellow &lt;son goku&gt;, you have a {whis, time regression} in play, and you place 2 of your energy in rest mode into your drop",
-          "rest_mode_only": true,
-          "resting": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] if your leader is a yellow &lt;son goku&gt;, you have a {whis, time regression} in play, and you place 2 of your energy in rest mode into your drop: play this card from your hand, and this card gains [double strike] for the turn.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1851": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played from your hand, draw 1 card.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "requires_leader": "if your leader's back side is {ssb vegeta, god-level power} and you choose 1 of your yellow &lt;son goku&gt; cards"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](yellow), if your leader's back side is {ssb vegeta, god-level power} and you choose 1 of your yellow &lt;son goku&gt; cards: play this card from your hand, and the chosen card will not switch to active mode during your next charge phase.",
         "trigger": "self_activate_main"
       }
     ]

@@ -1,8 +1,98 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 325,
+  "effect_rule_count": 326,
   "rules": {
+    "1848": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](yellow), choose 1 of your yellow &lt;son goku&gt; or &lt;vegeta&gt; cards: play this card from your hand, and the chosen card will not switch to active mode during your next charge phase.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1849": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "ignores_barrier": true,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, draw 1 card, choose up to 1 of your opponent's battle cards in rest mode, ignoring [barrier], and ko it.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, draw 1 card, choose up to 1 of your opponent's battle cards in rest mode, ignoring [barrier], and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "1850": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader is a yellow &lt;son goku&gt;, you have a {whis, time regression} in play, and you place 2 of your energy in rest mode into your drop",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a yellow &lt;son goku&gt;, you have a {whis, time regression} in play, and you place 2 of your energy in rest mode into your drop: play this card from your hand, and this card gains [double strike] for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1851": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, draw 1 card.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader's back side is {ssb vegeta, god-level power} and you choose 1 of your yellow &lt;son goku&gt; cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](yellow), if your leader's back side is {ssb vegeta, god-level power} and you choose 1 of your yellow &lt;son goku&gt; cards: play this card from your hand, and the chosen card will not switch to active mode during your next charge phase.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "1852": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -5125,86 +5215,6 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 green \u226agod\u226b card with an energy cost of 5 or less to your hand, then shuffle your deck.",
-        "trigger": "self_played"
-      }
-    ],
-    "2313": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_owner_energy": 3
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](green), if you have 3 or more energy and there are a total of 6 or more extras under your green &lt;broly: br&gt; cards: play this card from your hand, and this card gains [barrier] for the turn.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "ignores_barrier": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][once per turn](green): draw 1 card, then choose up to 1 of your opponent's battle cards, ignoring [barrier], and ko it.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2315": [
-      {
-        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "\"[auto][once per turn] when this card attacks, choose up to 1 of your opponent's battle cards and ko it.\"",
-        "trigger": "self_attacks"
-      }
-    ],
-    "2316": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](green), place 1 green extra from your hand under one of your green &lt;broly: br&gt; cards, then send this card from your drop to your warp: draw 1 card.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2317": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "yellow",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 5,
-          "required_traits": "God"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow \u226agod\u226b card with an energy cost of 5 or less to your hand, then shuffle your deck.",
         "trigger": "self_played"
       }
     ]

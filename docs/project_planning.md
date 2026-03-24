@@ -1560,7 +1560,109 @@ Resolved:
   - regression-covered in `tests/test_phase3_rule_fixes.py`
 - [ ] implement reusable leader keyword families from rule manual additions:
   - `[Wish]`
+    - status: first leader Wish slice complete
+    - generic runtime now covers:
+      - reusing the existing leader `AWAKEN` action for front-side `[Wish]` leaders
+      - `7 [Dragon Ball] cards in your Drop Area` wish condition checks
+      - `life is at 3 or less or there are 7 [Dragon Ball] cards in your Drop Area` wish condition checks
+      - first pre-flip Wish effect branches for:
+        - add up to 1 `≪Desire≫` card from `Drop` to hand, then flip
+        - draw 1, recycle all `Dragon Ball` cards from `Drop` to the bottom of the deck, then flip
+    - status: Wish follow-up event slice complete
+    - `leader_wished` is now a first-class effect event, and generic triggers like `owner_leader_wished:auto_draw_n` can hook into it
   - `[Z-Awaken]`
+    - status: first leader Z-Awaken action slice complete
+    - generic runtime now covers:
+      - a dedicated `Z_AWAKEN` legal action from face-up `Z-Deck`
+      - conservative leader-only Z-Awaken matching after the current leader is already on its back side
+      - paying parsed specified skill cost plus `Z-Energy`
+      - brace-symbol specified skill costs like:
+        - `[Z-Awaken] {u}, when you have 2 or more cards in your Combo Area: {Majin Buu, Shape-Shifter}.`
+      - life-threshold forms like:
+        - `[Z-Awaken](Yellow), when your life is at 3 or less: {SS Vegeta, Fighting Instincts}.`
+      - combo-area condition forms like:
+        - `[Z-Awaken](Green), when you have 2 or more cards in your Combo Area: Mono-green <Gotenks>.`
+      - owner-Drop requirement forms like:
+        - `[Z-Awaken] When your life is at 2 or less and there are 1 or more <King Piccolo> cards in your Drop: Green <King Piccolo> or green <Piccolo Jr.>.`
+      - Z-Energy warp requirement forms like:
+        - `[Z-Awaken](Yellow), if your life is at 4 or less and you send 1 <Zamasu> card and 1 <Goku Black> card from your Z-Energy to your Warp: Yellow <Goku Black>.`
+      - replacing the current leader in place and emitting `leader_z_awakened`
+    - status: Z-Awaken follow-up event slice complete
+    - `leader_z_awakened` is now a first-class effect event, and generic triggers like `owner_leader_z_awakened:auto_draw_n` can hook into it
+    - status: first Z-Awaken cost-reduction support slice complete
+    - generic runtime/extraction now also covers:
+      - temporary reducers that lower the next matching `Z-Awaken` skill cost on a card in your `Z-Deck`
+      - temporary reducers that also lower that card's `Z-Energy` cost for the turn
+      - both activate-driven and on-play-driven support-card phrasing
+    - status: first Z-Awaken temporal-header slice complete
+    - generic runtime now also covers:
+      - `all of your energy is in Rest Mode` header gating
+      - `skip your Charge Phase during your next turn` scheduling and turn-start resolution
+      - multi-character target headers like:
+        - `Red <Son Goku: GT> <Vegeta: GT>.`
+    - status: first header-only Spirit Boost Z-Awaken slice complete
+    - generic runtime now also covers:
+      - header-only forms without a colon, like:
+        - `[Z-Awaken][Spirit Boost 2] Green <Cooler> card.`
+      - paying `Spirit Boost` marker costs from owner Unisons during `Z_AWAKEN`
+    - status: first Z-Stack-on-Z-Awaken slice complete
+    - generic runtime now also covers:
+      - simple `[Z-Stack N]` leader-entry stacking from `Z-Deck`
+      - first common descriptor form:
+        - `Yellow Battle Card with energy cost of 3 or less.`
+      - storing stacked cards conservatively via `leader_area.stacked_card_ids`
+    - status: second Z-Stack-on-Z-Awaken slice complete
+    - generic runtime now also covers:
+      - trait-filtered descriptor forms like:
+        - `Red ≪Universe 7≫ Battle Cards with different character names.`
+      - enforcing `different character names` while selecting stacked cards from `Z-Deck`
+    - status: first under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `When this card is played, place up to 1 ... from your Drop under this card`
+      - first reusable battle-host under-card family from live text like:
+        - `place up to 1 ≪Saiyan≫ card from your Drop under this card`
+    - status: second under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `When this card is played, place up to N ... from your deck and/or Drop under this card`
+      - first conservative mixed-source policy for that family:
+        - choose matching cards from `Drop` first
+        - then fill remaining slots from the top of `Deck`
+    - status: third under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `[Activate: Main/Battle] Play up to 1 ... from under this card, and place this card under the played card`
+      - first conservative promotion policy for that family:
+        - play matching cards directly from under the source host
+        - emit `played_from="under"` on the resulting play event
+        - then place the source host under the first played card
+      - current timing scope:
+        - existing `Activate: Main`
+        - existing `Activate: Battle`
+        - not yet the separate `start of your opponent's Main Phase` auto timing seam
+    - status: fourth under-battle-card stacking slice complete
+    - generic runtime/extraction now also covers:
+      - `When this card is played from under a card by a skill, this card gets +X power and [Keyword] for the turn`
+      - first reusable self-follow-up family on the new under-card play path
+      - current conservative trigger semantics:
+        - `played_from="under"`
+        - `played_via="skill"`
+    - status: first opponent-main-phase under-card timing slice complete
+    - generic runtime/extraction now also covers:
+      - a real `main_phase_start` effect event on the charge-to-main transition
+      - `At the start of your opponent's Main Phase, play up to 1 ... from under this card, and place this card under the played card`
+      - first conservative timing scope:
+        - `owner_opponent_main_phase_start`
+    - status: first owner-main-phase under-card timing slice complete
+    - generic runtime/extraction now also covers:
+      - `At the start of your Main Phase, play up to 1 ... from under this card, and place this card under the played card`
+      - sibling timing scope:
+        - `owner_main_phase_start`
+    - status: first auto-costed main-phase under-card slice complete
+    - generic runtime/extraction now also covers:
+      - header-costed auto timing lines like:
+        - `[Auto](Red), if ... : At the start of your opponent's Main Phase, play up to 1 ... from under this card, and place this card under the played card`
+      - current conservative auto-cost scope:
+        - specified energy costs from the `[Auto]` header
+        - paid at trigger resolution before the under-card play body fires
   - `[Aegis]`
     - status: first defense-step Aegis action slice complete
     - generic runtime now covers:
@@ -1582,6 +1684,8 @@ Resolved:
     - status: third Aegis-triggered auto follow-up slice complete
     - generic runtime now also covers:
       - `self_aegis_activated:auto_combo_up_to_n_from_owner_zone_on_aegis`
+    - status: fourth Aegis-triggered auto generalization slice complete
+    - the newer Aegis follow-up families now also support `owner_aegis_activated`, not just `self_aegis_activated`
   - `[Arrival]`
     - status: first summon-side `[Arrival]` action slice complete
     - generic runtime now covers:

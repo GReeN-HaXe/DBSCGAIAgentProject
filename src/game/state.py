@@ -331,6 +331,20 @@ class ActivateArrivalCostReduction:
 
 
 @dataclass(frozen=True)
+class ActivateZAwakenCostReduction:
+    owner_player_id: int
+    created_turn_number: int
+    amount: int = 0
+    specified_costs: Tuple[Tuple[str, int], ...] = ()
+    z_energy_reduction: int = 0
+    allowed_colors: str = ""
+    required_traits: str = ""
+    required_characters: str = ""
+    required_name_contains: str = ""
+    uses_remaining: int = 1
+
+
+@dataclass(frozen=True)
 class DelayedCardPlayRestriction:
     owner_player_id: int
     restricted_card_id: int
@@ -476,6 +490,7 @@ class GameState:
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)
+    activate_z_awaken_cost_reductions: list[ActivateZAwakenCostReduction] = field(default_factory=list)
     scheduled_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
     active_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
     permanent_card_play_restrictions: list[PermanentCardRestriction] = field(default_factory=list)
@@ -485,6 +500,7 @@ class GameState:
     scheduled_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     active_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     scheduled_attack_restrictions: list[ScheduledAttackRestriction] = field(default_factory=list)
+    scheduled_charge_phase_skip_player_ids: set[int] = field(default_factory=set)
     low_power_battle_play_hand_warp_penalties: list[LowPowerBattlePlayHandWarpPenalty] = field(default_factory=list)
     attack_power_taxes: list[AttackPowerTax] = field(default_factory=list)
     non_leader_attack_rest_taxes: list[NonLeaderAttackRestTax] = field(default_factory=list)

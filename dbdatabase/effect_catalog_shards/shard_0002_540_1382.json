@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 316,
+  "effect_rule_count": 318,
   "rules": {
     "1000": [
       {
@@ -889,6 +889,21 @@
       }
     ],
     "1065": [
+      {
+        "family_id": "self_played:auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "handler_id": "auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_traits": "Saiyan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, place up to 1 \u226asaiyan\u226b card from your drop under this card, and this card gains [barrier] for the turn. additionally, if your opponent has 4 or more life, deal 1 damage to them.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
         "handler_id": "activate_gain_power_and_keyword_for_turn",
@@ -1927,6 +1942,22 @@
       }
     ],
     "1158": [
+      {
+        "family_id": "self_played:auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "handler_id": "auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 4,
+          "required_characters": "Non- Lt Bardock Gt Different Character Names",
+          "required_traits": "Bardock'S Crew"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, place up to 4 non-&lt;bardock&gt; \u226abardock's crew\u226b cards with different character names from your drop under this card, and you can't play battle cards for the turn.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
