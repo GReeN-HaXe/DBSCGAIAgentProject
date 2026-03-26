@@ -1913,6 +1913,446 @@ def test_phase4_union_absorb_can_use_warp_material_and_promote_from_hand() -> No
     assert len(state.players[1].warp) == 0
 
 
+def test_phase4_union_absorb_can_pay_extra_hand_discard_cost_before_promoting_from_deck() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union Absorb] Choose 1 <Towa> card in your Warp, place it under this card, "
+        "then choose 1 card in your hand and discard it: "
+        "Choose 1 <Mira> card with an energy cost of 6 in your deck, play it on top of this card, then shuffle your deck."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Android Leader",
+        card_type="LEADER",
+        color="Black",
+        traits=("Android",),
+        characters=("Towa",),
+    )
+    engine._card_cache[(990372, "front")] = CardRuntimeData(
+        card_name="Discard Absorb Host",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=4,
+        skill_text_raw=union_text,
+        traits=("Android",),
+        characters=("Mira",),
+    )
+    engine._card_cache[(990373, "front")] = CardRuntimeData(
+        card_name="Towa Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=2,
+        characters=("Towa",),
+    )
+    engine._card_cache[(990374, "front")] = CardRuntimeData(
+        card_name="Mira Union",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        characters=("Mira",),
+    )
+    engine._card_cache[(990375, "front")] = CardRuntimeData(
+        card_name="Discard Fodder",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=1,
+        characters=("Fodder",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990376,
+            card_id=990372,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=4,
+            skill_text_raw=union_text,
+            traits=("Android",),
+            characters=("Mira",),
+        )
+    ]
+    state.players[1].warp = [
+        CardInstance(
+            instance_id=990377,
+            card_id=990373,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=2,
+            characters=("Towa",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990378,
+            card_id=990375,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=1,
+            characters=("Fodder",),
+        )
+    ]
+    state.players[1].deck = [990374, 991500, 991501]
+    state.players[1].energy = [
+        CardInstance(instance_id=990379, card_id=990450, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990380, card_id=990451, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990381, card_id=990452, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990382, card_id=990453, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990374
+    assert promoted.stacked_card_ids == (990373, 990372)
+    assert len(state.players[1].warp) == 0
+    assert len(state.players[1].hand) == 0
+    assert any(card.card_id == 990375 for card in state.players[1].drop)
+
+
+def test_phase4_union_absorb_can_use_named_android_pair_from_drop_area() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union Absorb](Green)(Yellow), choose 1 <Android 14> card and 1 <Android 15> card in your Drop Area "
+        "and place them under this card: Choose up to 1 <Android 13> "
+        "card in your hand and play it on top of this card."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Android Leader",
+        card_type="LEADER",
+        color="Green/Yellow",
+        traits=("Android",),
+        characters=("Android Leader",),
+    )
+    engine._card_cache[(990383, "front")] = CardRuntimeData(
+        card_name="Android Host",
+        card_type="BATTLE",
+        color="Green/Yellow",
+        energy_cost=4,
+        skill_text_raw=union_text,
+        traits=("Android",),
+        characters=("Absorb Host",),
+    )
+    engine._card_cache[(990384, "front")] = CardRuntimeData(
+        card_name="Android 14 Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        characters=("Android 14",),
+    )
+    engine._card_cache[(990385, "front")] = CardRuntimeData(
+        card_name="Android 15 Material",
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=2,
+        characters=("Android 15",),
+    )
+    engine._card_cache[(990386, "front")] = CardRuntimeData(
+        card_name="Android 13 Union",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=7,
+        characters=("Android 13",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990387,
+            card_id=990383,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green/Yellow",
+            energy_cost=4,
+            skill_text_raw=union_text,
+            traits=("Android",),
+            characters=("Absorb Host",),
+        )
+    ]
+    state.players[1].drop = [
+        CardInstance(
+            instance_id=990388,
+            card_id=990384,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=2,
+            characters=("Android 14",),
+        ),
+        CardInstance(
+            instance_id=990389,
+            card_id=990385,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=2,
+            characters=("Android 15",),
+        ),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990390,
+            card_id=990386,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=7,
+            characters=("Android 13",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990391, card_id=990454, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990392, card_id=990455, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990386
+    assert promoted.stacked_card_ids == (990384, 990385, 990383)
+    assert len(state.players[1].drop) == 0
+    assert len(state.players[1].hand) == 0
+
+
+def test_phase4_union_absorb_can_use_named_android_pair_from_hand_and_drop() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union Absorb](Green)(Yellow), choose 1 <Android 14> card and 1 <Android 15> card from your hand or Drop Area "
+        "and place them under this card: Choose up to 1 <Android 13> "
+        "card in your Drop Area and play it on top of this card."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Android Leader",
+        card_type="LEADER",
+        color="Green/Yellow",
+        traits=("Android",),
+        characters=("Android Leader",),
+    )
+    engine._card_cache[(990393, "front")] = CardRuntimeData(
+        card_name="Mixed Android Host",
+        card_type="BATTLE",
+        color="Green/Yellow",
+        energy_cost=4,
+        skill_text_raw=union_text,
+        traits=("Android",),
+        characters=("Absorb Host",),
+    )
+    engine._card_cache[(990394, "front")] = CardRuntimeData(
+        card_name="Android 14 Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        characters=("Android 14",),
+    )
+    engine._card_cache[(990395, "front")] = CardRuntimeData(
+        card_name="Android 15 Material",
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=2,
+        characters=("Android 15",),
+    )
+    engine._card_cache[(990396, "front")] = CardRuntimeData(
+        card_name="Android 13 Union",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=7,
+        characters=("Android 13",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990397,
+            card_id=990393,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green/Yellow",
+            energy_cost=4,
+            skill_text_raw=union_text,
+            traits=("Android",),
+            characters=("Absorb Host",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990398,
+            card_id=990394,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=2,
+            characters=("Android 14",),
+        )
+    ]
+    state.players[1].drop = [
+        CardInstance(
+            instance_id=990399,
+            card_id=990395,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=2,
+            characters=("Android 15",),
+        ),
+        CardInstance(
+            instance_id=990400,
+            card_id=990396,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=7,
+            characters=("Android 13",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990401, card_id=990456, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990402, card_id=990457, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990396
+    assert promoted.stacked_card_ids == (990394, 990395, 990393)
+    assert len(state.players[1].hand) == 0
+    assert len(state.players[1].drop) == 0
+
+
+def test_phase4_union_absorb_can_use_choose_one_each_materials_from_hand_and_battle() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union Absorb][Once per turn](Red), choose 1 each of <Bizu> and <Ribet> from your hand and/or Battle Area "
+        "and place them under this card: Play up to 1 <Super Sigma> card from your deck or Drop Area on top of this card, "
+        "then shuffle your deck if you looked through it."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Dr. Myuu",
+        card_type="LEADER",
+        color="Red",
+        characters=("Dr. Myuu",),
+    )
+    engine._card_cache[(990403, "front")] = CardRuntimeData(
+        card_name="Sigma Host",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=3,
+        skill_text_raw=union_text,
+        characters=("Machine Mutant Host",),
+    )
+    engine._card_cache[(990404, "front")] = CardRuntimeData(
+        card_name="Bizu",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=2,
+        characters=("Bizu",),
+    )
+    engine._card_cache[(990405, "front")] = CardRuntimeData(
+        card_name="Ribet",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=2,
+        characters=("Ribet",),
+    )
+    engine._card_cache[(990406, "front")] = CardRuntimeData(
+        card_name="Super Sigma",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=6,
+        characters=("Super Sigma",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990407,
+            card_id=990403,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=3,
+            skill_text_raw=union_text,
+            characters=("Machine Mutant Host",),
+        ),
+        CardInstance(
+            instance_id=990408,
+            card_id=990405,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=2,
+            characters=("Ribet",),
+        ),
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990409,
+            card_id=990404,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=2,
+            characters=("Bizu",),
+        )
+    ]
+    state.players[1].drop = [
+        CardInstance(
+            instance_id=990410,
+            card_id=990406,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=6,
+            characters=("Super Sigma",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990411, card_id=990458, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990406
+    assert promoted.stacked_card_ids == (990404, 990405, 990403)
+    assert len(state.players[1].hand) == 0
+    assert len(state.players[1].drop) == 0
+    assert len(state.players[1].battle_area) == 1
+
+
 def test_phase4_union_fusion_can_play_from_hand_using_matching_materials() -> None:
     engine = RulesEngine(
         effect_rules={

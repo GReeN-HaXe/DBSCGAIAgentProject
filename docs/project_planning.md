@@ -1805,6 +1805,23 @@ Resolved:
         - `owner_union_absorb_activated:auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb`
       - first covered live wording family:
         - `When one of your ≪Namekian≫ cards activates [Union Absorb], place the top card of your deck under this card, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.`
+    - status: first Union-Absorb extra hand-discard cost slice complete
+      - runtime now supports an additional absorb header cost of:
+        - `then choose 1 card in your hand and discard it:`
+      - current conservative scope:
+        - supported cleanly when the promotion target is not chosen from hand
+        - mixed `discard + hand target` absorbs are still deferred
+      - first covered live wording family:
+        - `Choose 1 <Towa> card in your Warp, place it under this card, then choose 1 card in your hand and discard it: Choose 1 <Mira> card with an energy cost of 6 in your deck, play it on top of this card, then shuffle your deck.`
+    - status: first repeated named-material Union-Absorb slice complete
+      - runtime now supports repeated named material requirements like:
+        - `choose 1 <Android 14> card and 1 <Android 15> card ... and place them under this card`
+        - `choose 1 each of <Bizu> and <Ribet> ... and place them under this card`
+      - shared-zone sourcing now works for that seam across:
+        - `Drop Area`
+        - `hand or Drop Area`
+        - `hand and/or Battle Area`
+      - the absorb requirement checker now only consumes explicit condition text, which avoids false negatives from plain material clauses on these repeated-material lines
   - `[Union-Fusion]`
     - status: first conservative action slice complete
     - generic runtime now covers:

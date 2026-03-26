@@ -1641,6 +1641,21 @@ class RulesEngine:
             return None
         prefix, suffix = line.split(":", 1)
         prefix_lc = prefix.lower()
+        requirement_parts: list[str] = []
+        if re.search(
+            r"\bif your\b|\byou have \d+ or more energy\b|\byour opponent has \d+ or more energy\b|\ball of your energy\b",
+            prefix_lc,
+        ):
+            requirement_parts.append(prefix)
+        suffix_stripped = str(suffix or "").strip()
+        m_suffix_requirement = re.match(
+            r"^(if .+?)(?:,\s*(?:choose|play)\b|$)",
+            suffix_stripped,
+            re.IGNORECASE,
+        )
+        if m_suffix_requirement is not None:
+            requirement_parts.append(str(m_suffix_requirement.group(1) or "").strip())
+        requirement_text = " ".join(part for part in requirement_parts if part.strip())
         total_cost = 0
         specified_costs: dict[str, int] = {}
         for brace_token in re.findall(r"\{([^}]+)\}", prefix):
@@ -1660,16 +1675,44 @@ class RulesEngine:
         m_energy = re.search(r"you have (\d+) or more energy", prefix_lc)
         if m_energy is not None:
             min_owner_energy = int(m_energy.group(1))
-
-        material_count = 0
-        material_descriptor = ""
-        material_zones: tuple[str, ...] = ()
-        m_material = re.search(
-            r"(?:choose|place)\s*(\d+)\s+(.+?)(?:\s+cards?)?\s+(?:in|from)\s+your\s+(.+?)\s+and place (?:it|them) under this card",
+        extra_discard_from_hand = 0
+        m_discard = re.search(
+            r"then choose (\d+) cards? in your hand and discard (?:it|them)",
             prefix,
             re.IGNORECASE,
         )
-        if m_material is not None:
+        if m_discard is not None:
+            extra_discard_from_hand = int(m_discard.group(1))
+
+        material_count = 0
+        material_descriptor = ""
+        material_requirements: tuple[str, ...] = ()
+        material_zones: tuple[str, ...] = ()
+        m_multi_material = re.search(
+            r"(?:choose|place)\s+1\s+each of\s+(.+?)\s+and\s+(.+?)\s+(?:in|from)\s+your\s+(.+?)(?:\s+and|,)\s*place (?:it|them) under this card",
+            prefix,
+            re.IGNORECASE,
+        )
+        if m_multi_material is None:
+            m_multi_material = re.search(
+                r"(?:choose|place)\s+1\s+(.+?)\s+and\s+1\s+(.+?)(?:\s+cards?)?\s+(?:in|from)\s+your\s+(.+?)(?:\s+and|,)\s*place (?:it|them) under this card",
+                prefix,
+                re.IGNORECASE,
+            )
+        if m_multi_material is not None:
+            material_requirements = (
+                str(m_multi_material.group(1) or "").strip(),
+                str(m_multi_material.group(2) or "").strip(),
+            )
+            material_zones = self._parse_union_zone_list(m_multi_material.group(3))
+        m_material = re.search(
+            r"(?:choose|place)\s*(\d+)\s+(.+?)(?:\s+cards?)?\s+(?:in|from)\s+your\s+(.+?)(?:\s+and|,)\s*place (?:it|them) under this card",
+            prefix,
+            re.IGNORECASE,
+        )
+        if material_requirements:
+            material_count = len(material_requirements)
+        elif m_material is not None:
             material_count = int(m_material.group(1))
             material_descriptor = str(m_material.group(2) or "").strip()
             material_zones = self._parse_union_zone_list(m_material.group(3))
@@ -1723,7 +1766,7 @@ class RulesEngine:
                 target_force_rest = target_mode == "rest"
         if target_count <= 0 or not target_zones:
             m_target = re.search(
-                r"choose(?: up to)? (\d+) (.+?) (?:from|in) your (.+?) and play it on top of this card(?: in (active|rest) mode)?",
+                r"choose(?: up to)? (\d+) (.+?) (?:from|in) your (.+?)(?:,| and)\s*play it on top of this card(?: in (active|rest) mode)?",
                 suffix,
                 re.IGNORECASE,
             )
@@ -1748,10 +1791,12 @@ class RulesEngine:
             "specified_costs": specified_costs,
             "min_owner_energy": min_owner_energy,
             "limit_once": "[once per turn]" in prefix_lc or "[limit 1]" in prefix_lc,
-            "raw_requirement_text": prefix,
+            "raw_requirement_text": requirement_text,
             "material_count": material_count,
             "material_descriptor": material_descriptor,
+            "material_requirements": material_requirements,
             "material_zones": material_zones,
+            "extra_discard_from_hand": extra_discard_from_hand,
             "target_count": target_count,
             "target_descriptor": target_descriptor,
             "target_zones": target_zones,
@@ -2211,6 +2256,61 @@ class RulesEngine:
         spec: dict[str, object],
     ) -> list[tuple[str, int, CardInstance]] | None:
         owner = state.players[player_id]
+        material_requirements = tuple(str(part or "").strip() for part in tuple(spec.get("material_requirements", ()) or ()) if str(part or "").strip())
+        if material_requirements:
+            chosen: list[tuple[str, int, CardInstance]] = []
+            used_sources: set[tuple[str, int]] = set()
+            for requirement in material_requirements:
+                filters = self._parse_union_descriptor_filters(requirement)
+                allowed_colors = {part.strip().lower() for part in str(filters.get("allowed_colors", "")).split(",") if part.strip()}
+                required_traits = {part.strip().lower() for part in str(filters.get("required_traits", "")).split(",") if part.strip()}
+                required_characters = {part.strip().lower() for part in str(filters.get("required_characters", "")).split(",") if part.strip()}
+                required_name_contains = str(filters.get("required_name_contains", "")).strip().upper()
+                required_card_type = str(filters.get("required_card_type", "")).strip().upper()
+                required_card_types = {required_card_type} if required_card_type else set()
+                max_cost = int(filters.get("max_cost", -1) or -1)
+                selected: tuple[str, int, CardInstance] | None = None
+                for zone in tuple(spec.get("material_zones", ()) or ()):
+                    if zone == "hand":
+                        pool: Sequence[CardInstance] = owner.hand
+                    elif zone == "battle":
+                        pool = owner.battle_area
+                    elif zone == "drop":
+                        pool = owner.drop
+                    elif zone == "warp":
+                        pool = owner.warp
+                    elif zone == "leader_under":
+                        pool = [
+                            self._create_card_instance(next_instance_id=0, card_id=card_id, owner_id=player_id)
+                            for card_id in tuple(owner.leader_area.stacked_card_ids or ())
+                        ]
+                    else:
+                        continue
+                    for index, card in enumerate(pool):
+                        if (zone, index) in used_sources:
+                            continue
+                        if zone == "battle" and int(card.instance_id) == int(source.instance_id):
+                            continue
+                        if not self._card_matches_effect_filters(
+                            card,
+                            allowed_colors=allowed_colors,
+                            required_traits=required_traits,
+                            required_characters=required_characters,
+                            required_name_contains=required_name_contains,
+                            required_card_types=required_card_types,
+                        ):
+                            continue
+                        if max_cost >= 0 and int(card.energy_cost or 0) > max_cost:
+                            continue
+                        selected = (zone, index, card)
+                        break
+                    if selected is not None:
+                        break
+                if selected is None:
+                    return None
+                chosen.append(selected)
+                used_sources.add((selected[0], selected[1]))
+            return chosen
         amount = int(spec.get("material_count", 0) or 0)
         if amount <= 0:
             return []
@@ -2443,6 +2543,23 @@ class RulesEngine:
         )
         return True
 
+    def _discard_owner_hand_for_union_absorb(
+        self,
+        state: GameState,
+        *,
+        player_id: int,
+        amount: int,
+    ) -> None:
+        owner = state.players[player_id]
+        remaining = max(int(amount or 0), 0)
+        while remaining > 0:
+            if not owner.hand:
+                raise RulesViolation("Not enough hand cards for Union Absorb discard cost.")
+            discarded = owner.hand.pop(0)
+            owner.drop.append(discarded)
+            self._emit_card_placed_into_drop(state, owner_player_id=player_id, card=discarded, source_zone="hand")
+            remaining -= 1
+
     def _legal_union_absorb_actions(self, state: GameState, player_id: int) -> list[Action]:
         player = state.players[player_id]
         actions: list[Action] = []
@@ -2464,9 +2581,21 @@ class RulesEngine:
                 z_cost=0,
             ):
                 continue
-            if self._find_union_absorb_material_candidates(state, player_id=player_id, source=card, spec=spec) is None:
+            chosen_materials = self._find_union_absorb_material_candidates(state, player_id=player_id, source=card, spec=spec)
+            if chosen_materials is None:
                 continue
-            if self._find_union_absorb_target_candidate(state, player_id=player_id, spec=spec) is None:
+            target_candidate = self._find_union_absorb_target_candidate(state, player_id=player_id, spec=spec)
+            if target_candidate is None:
+                continue
+            extra_discard_from_hand = int(spec.get("extra_discard_from_hand", 0) or 0)
+            if extra_discard_from_hand > 0:
+                hand_material_count = sum(1 for zone, _idx, _card in chosen_materials if zone == "hand")
+                hand_remaining = len(player.hand) - hand_material_count
+                if target_candidate[0] == "hand":
+                    continue
+                if hand_remaining < extra_discard_from_hand:
+                    continue
+            if target_candidate is None:
                 continue
             actions.append(
                 Action(
@@ -2493,8 +2622,17 @@ class RulesEngine:
         chosen_materials = self._find_union_absorb_material_candidates(state, player_id=action.player_id, source=source, spec=spec)
         if chosen_materials is None:
             raise RulesViolation("No valid Union Absorb material is available.")
-        if self._find_union_absorb_target_candidate(state, player_id=action.player_id, spec=spec) is None:
+        target_candidate = self._find_union_absorb_target_candidate(state, player_id=action.player_id, spec=spec)
+        if target_candidate is None:
             raise RulesViolation("No valid Union Absorb target is available.")
+        extra_discard_from_hand = int(spec.get("extra_discard_from_hand", 0) or 0)
+        if extra_discard_from_hand > 0:
+            hand_material_count = sum(1 for zone, _idx, _card in chosen_materials if zone == "hand")
+            hand_remaining = len(player.hand) - hand_material_count
+            if target_candidate[0] == "hand":
+                raise RulesViolation("Union Absorb discard costs with hand promotion targets are not supported yet.")
+            if hand_remaining < extra_discard_from_hand:
+                raise RulesViolation("Not enough hand cards for Union Absorb discard cost.")
         self._pay_costs(
             player,
             energy_cost=int(spec.get("total_cost", 0) or 0),
@@ -2508,6 +2646,8 @@ class RulesEngine:
             source=source,
             chosen=chosen_materials,
         )
+        if extra_discard_from_hand > 0:
+            self._discard_owner_hand_for_union_absorb(state, player_id=action.player_id, amount=extra_discard_from_hand)
         self._emit_effect_event(
             state,
             name="union_activated",
