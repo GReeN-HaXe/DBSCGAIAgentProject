@@ -112,6 +112,10 @@ _AUTO_ON_PLAY_REDUCE_NEXT_Z_AWAKEN_COST_RE = re.compile(
     r"when this card is played.{0,420}?reduce the \[z-awaken\] skill cost (?:on|of) (.+?) in your z-deck by (?:\{([^}]+)\}|\(([^)]+)\)|(\d+))(?: and reduce its z-energy cost by (\d+))?.{0,40}?for the turn",
     re.IGNORECASE,
 )
+_AUTO_ON_PLAY_GRANT_NEXT_MATCHING_UNION_PLAY_KEYWORD_RE = re.compile(
+    r"when this card is played.{0,420}?during this turn,\s*the next time you play (.+?) card with \[union\],\s*it gains \[([^\]]+)\] for the turn",
+    re.IGNORECASE,
+)
 _ACTIVATE_BATTLE_KO_UP_TO_N_OPP_BATTLE_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,320}?choose up to (\d+) of your opponent'?s battle cards?\s*(?:,|and|then)?\s*ko (?:it|them)"
 )
@@ -216,6 +220,30 @@ _PLAY_FROM_UNDER_BY_SKILL_GAIN_POWER_AND_KEYWORD_RE = re.compile(
 )
 _MAIN_PHASE_PLAY_FROM_UNDER_SELF_AND_PLACE_SELF_UNDER_PLAYED_RE = re.compile(
     r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*play up to (\d+) (.+?) from under this card,\s*and place this card under the played card"
+)
+_MAIN_PHASE_PLAY_FROM_OWNER_HAND_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*play up to (\d+) (.+?) from your hand(?: in rest mode)?"
+)
+_MAIN_PHASE_PLAY_FROM_OWNER_DROP_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*play up to (\d+) (.+?) from your drop(?: area)?(?: in rest mode)?"
+)
+_MAIN_PHASE_PLAY_FROM_OWNER_DECK_RE = re.compile(
+    r"(?:if [^:]{1,260}:\s*)?at the start of your (opponent'?s )?main phase,\s*play up to (\d+) (.+?) from your deck(?: with (\d+) markers? on it)?(?: in rest mode)?(?:,\s*then shuffle your deck)?"
+)
+_MAIN_PHASE_PLAY_FROM_OWNER_HAND_ON_TOP_OF_SELF_RE = re.compile(
+    r"(?:if [^:]{1,260}:\s*)?at the start of your (opponent'?s )?main phase,\s*choose up to (\d+) (.+?) in your hand and play it on top of this card"
+)
+_MAIN_PHASE_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*draw (\d+) card"
+)
+_MAIN_PHASE_DRAW_SWITCH_LEADER_AND_ENERGY_ACTIVE_AND_GRANT_KEYWORD_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*draw (\d+) card,\s*switch up to (\d+) of your leaders? and up to (\d+) of your energy to active mode,\s*and your leader gains \[([^\]]+)\] for the turn"
+)
+_MAIN_PHASE_SWITCH_UP_TO_N_OWNER_ENERGY_ACTIVE_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*choose up to (\d+) of your(?: (.+?))? energy and switch (?:it|them) to active mode"
+)
+_MAIN_PHASE_SWITCH_SELF_ACTIVE_AND_GAIN_KEYWORD_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?at the start of your (opponent'?s )?main phase,\s*switch this card to active mode,\s*and it gains \[([^\]]+)\] for the turn"
 )
 _PLAY_BUFF_UP_TO_N_OWNER_BATTLE_WITH_MIN_CHAR_NAMES_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
     r"when this card is played(?: from your hand)?(?:[^.]{0,220})?choose up to (\d+) of your battle cards with (\d+) or more character names including <([^>]+)> and (?:it|they) gain(?:s)? \[([^\]]+)\] until the end of your opponent'?s turn"
@@ -328,6 +356,9 @@ _PLAY_PLACE_UP_TO_N_FROM_DROP_UNDER_SELF_RE = re.compile(
 )
 _PLAY_PLACE_UP_TO_N_FROM_DECK_OR_DROP_UNDER_SELF_RE = re.compile(
     r"(?:if [^:]{1,160}:\s*)?when this card is played(?: from your hand)?[^.]{0,240}?place up to (\d+) (.+?) from your deck(?: and/or| or) drop(?: area)? under this card"
+)
+_OWNER_UNION_ABSORB_ACTIVATED_PLACE_TOP_DECK_UNDER_SELF_AND_REST_RE = re.compile(
+    r"when one of your (.+?) cards activates \[union absorb\],\s*place the top card of your deck under this card,\s*then choose up to (\d+) of your opponent'?s battle cards? and switch (?:it|them) to rest mode"
 )
 _PLAY_ADD_MARKER_PER_N_MULTICOLOR_ENERGY_RE = re.compile(
     r"(?:if [^:]{1,160}:\s*)?when this card is played, add a marker to (?:this card|it) for every (\d+) multicolor card in your energy"
@@ -468,9 +499,21 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
                 if k in {"allowed_colors", "required_traits", "required_characters", "required_name_contains"}
             }
         )
-    m_mono_energy = re.search(r"if all of your energy is mono-(red|blue|green|yellow|black)", text)
+    m_mono_energy = re.search(r"if (?:(?:your leader(?: card)? and )?energy are all|all of your energy is) mono-(red|blue|green|yellow|black)", text)
     if m_mono_energy:
         params["requires_mono_energy"] = m_mono_energy.group(1).strip()
+    m_owner_battle_or_z_energy = re.search(r"if you have a (.+?) card in play or in your z-energy", text)
+    if m_owner_battle_or_z_energy:
+        raw_descriptor = m_owner_battle_or_z_energy.group(1).strip()
+        descriptor = raw_descriptor.lower()
+        filters = {
+            k: v
+            for k, v in _descriptor_filters(descriptor, text).items()
+            if k in {"allowed_colors", "required_traits", "required_characters", "required_name_contains"}
+        }
+        if "<" in raw_descriptor and "required_characters" not in filters and "required_traits" in filters:
+            filters["required_characters"] = str(filters.pop("required_traits"))
+        params.update({f"required_owner_battle_or_z_energy_{k}": v for k, v in filters.items()})
     if "ignoring [barrier]" in text or "ignoring barrier" in text:
         params["ignores_barrier"] = True
     if "rest mode" in text:
@@ -519,6 +562,8 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
         params["required_traits"] = ",".join(raw_required_traits)
     if "[ex-evolve]" in descriptor_lc or " ex-evolve" in descriptor_lc:
         params["requires_ex_evolve"] = True
+    if "[union]" in descriptor_lc or " union skill" in descriptor_lc:
+        params["required_skill_text_contains"] = "[union]"
 
     required_card_type = ""
     if "z-battle card" in descriptor_lc or "z battle card" in descriptor_lc:
@@ -619,6 +664,39 @@ def _extract_auto_header_cost_header(text: str) -> str:
     if m_auto_cost is None:
         return ""
     return str(m_auto_cost.group(1) or "").strip()
+
+
+def _extract_main_phase_auto_cost_params(text: str) -> dict[str, int | str | bool]:
+    params: dict[str, int | str | bool] = {}
+    auto_cost_header = _extract_auto_header_cost_header(text)
+    if auto_cost_header:
+        params["auto_cost_header"] = auto_cost_header
+    m_marker = re.match(r"\s*\[([+-]?\d+)\]\s*\[auto\]", text, re.IGNORECASE)
+    if m_marker is None:
+        m_marker = re.match(r"\s*\[auto\]\s*\[([+-]?\d+)\]", text, re.IGNORECASE)
+    if m_marker is not None:
+        try:
+            params["auto_marker_delta"] = int(m_marker.group(1))
+        except ValueError:
+            pass
+    m_discard = re.search(r"discard (\d+) cards? from your hand:\s*at the start of your", text)
+    if m_discard is not None:
+        params["auto_discard_hand_before"] = int(m_discard.group(1))
+    m_choose_discard = re.search(r"choose (\d+) cards? in your hand and discard (?:it|them):\s*at the start of your", text)
+    if m_choose_discard is not None:
+        params["auto_discard_hand_before"] = int(m_choose_discard.group(1))
+    m_bottom_deck = re.search(r"place (\d+) cards? from your hand at the bottom of your deck(?: in any order)?:\s*at the start of your", text)
+    if m_bottom_deck is not None:
+        params["auto_bottom_deck_hand_before"] = int(m_bottom_deck.group(1))
+    if "place this card in its owner's drop" in text or "place this card in its owners' drop" in text:
+        if ": at the start of your" in text:
+            params["auto_place_self_in_drop_before"] = True
+    if "remove this card from the game: at the start of your" in text:
+        params["auto_remove_self_before"] = True
+    m_under_to_drop = re.search(r"place (\d+) cards? from under this card in (?:their|its) owners?' drops?:\s*at the start of your", text)
+    if m_under_to_drop is not None:
+        params["auto_release_under_to_drop_before"] = int(m_under_to_drop.group(1))
+    return params
 
 
 def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
@@ -726,10 +804,8 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 "max_cost": max_cost,
                 **_descriptor_filters(descriptor, branch),
                 **extra,
+                **_extract_main_phase_auto_cost_params(branch),
             }
-            auto_cost_header = _extract_auto_header_cost_header(branch)
-            if auto_cost_header:
-                params["auto_cost_header"] = auto_cost_header
             if min_cost >= 0:
                 params["min_cost"] = min_cost
             if "rest mode" in branch:
@@ -741,6 +817,193 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
                     handler_id="auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
                     handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_hand_play = _MAIN_PHASE_PLAY_FROM_OWNER_HAND_RE.search(branch)
+        if m_main_phase_hand_play:
+            phase_owner = str(m_main_phase_hand_play.group(1) or "").strip().lower()
+            max_targets = int(m_main_phase_hand_play.group(2))
+            descriptor = m_main_phase_hand_play.group(3).lower()
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+                **_extract_main_phase_auto_cost_params(branch),
+            }
+            if "rest mode" in branch:
+                params["rest_mode"] = True
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_play_up_to_n_from_owner_hand_on_main_phase_start",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_drop_play = _MAIN_PHASE_PLAY_FROM_OWNER_DROP_RE.search(branch)
+        if m_main_phase_drop_play:
+            phase_owner = str(m_main_phase_drop_play.group(1) or "").strip().lower()
+            max_targets = int(m_main_phase_drop_play.group(2))
+            descriptor = m_main_phase_drop_play.group(3).lower()
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+                **_extract_main_phase_auto_cost_params(branch),
+            }
+            if "rest mode" in branch:
+                params["rest_mode"] = True
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_play_up_to_n_from_owner_drop_on_main_phase_start",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_deck_play = _MAIN_PHASE_PLAY_FROM_OWNER_DECK_RE.search(branch)
+        if m_main_phase_deck_play:
+            phase_owner = str(m_main_phase_deck_play.group(1) or "").strip().lower()
+            max_targets = int(m_main_phase_deck_play.group(2))
+            descriptor = m_main_phase_deck_play.group(3).lower()
+            markers = int(m_main_phase_deck_play.group(4) or 0)
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+                **_extract_main_phase_auto_cost_params(branch),
+            }
+            if markers > 0:
+                params["markers"] = markers
+            if "rest mode" in branch:
+                params["rest_mode"] = True
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_play_up_to_n_from_owner_deck_on_main_phase_start",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_hand_play_on_top = _MAIN_PHASE_PLAY_FROM_OWNER_HAND_ON_TOP_OF_SELF_RE.search(branch)
+        if m_main_phase_hand_play_on_top:
+            phase_owner = str(m_main_phase_hand_play_on_top.group(1) or "").strip().lower()
+            max_targets = int(m_main_phase_hand_play_on_top.group(2))
+            descriptor = m_main_phase_hand_play_on_top.group(3).lower()
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+                **_extract_main_phase_auto_cost_params(branch),
+            }
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_switch_energy = _MAIN_PHASE_SWITCH_UP_TO_N_OWNER_ENERGY_ACTIVE_RE.search(branch)
+        if m_main_phase_switch_energy:
+            phase_owner = str(m_main_phase_switch_energy.group(1) or "").strip().lower()
+            max_targets = int(m_main_phase_switch_energy.group(2))
+            descriptor = str(m_main_phase_switch_energy.group(3) or "").lower()
+            colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor)))
+            requires_multicolor = "multicolor" in descriptor
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                **extra,
+                **_extract_main_phase_auto_cost_params(branch),
+            }
+            if colors:
+                params["allowed_colors"] = ",".join(colors)
+            if requires_multicolor:
+                params["requires_multicolor"] = True
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_switch_up_to_n_owner_energy_active_on_main_phase_start",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_switch_self = _MAIN_PHASE_SWITCH_SELF_ACTIVE_AND_GAIN_KEYWORD_RE.search(branch)
+        if m_main_phase_switch_self:
+            phase_owner = str(m_main_phase_switch_self.group(1) or "").strip().lower()
+            grant_keyword = " ".join(part.capitalize() for part in m_main_phase_switch_self.group(2).replace("-", " ").split())
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start",
+                    handler_params={
+                        "grant_keyword": grant_keyword,
+                        **extra,
+                        **_extract_main_phase_auto_cost_params(branch),
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_draw_switch = _MAIN_PHASE_DRAW_SWITCH_LEADER_AND_ENERGY_ACTIVE_AND_GRANT_KEYWORD_RE.search(branch)
+        if m_main_phase_draw_switch:
+            phase_owner = str(m_main_phase_draw_switch.group(1) or "").strip().lower()
+            amount = int(m_main_phase_draw_switch.group(2))
+            max_leader_targets = int(m_main_phase_draw_switch.group(3))
+            max_energy_targets = int(m_main_phase_draw_switch.group(4))
+            grant_keyword = " ".join(part.capitalize() for part in m_main_phase_draw_switch.group(5).replace("-", " ").split())
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn",
+                    handler_params={
+                        "amount": amount,
+                        "max_leader_targets": max_leader_targets,
+                        "max_energy_targets": max_energy_targets,
+                        "grant_keyword": grant_keyword,
+                        **extra,
+                        **_extract_main_phase_auto_cost_params(branch),
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_main_phase_draw = None if m_main_phase_draw_switch else _MAIN_PHASE_DRAW_RE.search(branch)
+        if m_main_phase_draw:
+            phase_owner = str(m_main_phase_draw.group(1) or "").strip().lower()
+            amount = int(m_main_phase_draw.group(2))
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_main_phase_start" if phase_owner.startswith("opponent") else "owner_main_phase_start",
+                    handler_id="auto_draw_n",
+                    handler_params={
+                        "amount": amount,
+                        **extra,
+                        **_extract_main_phase_auto_cost_params(branch),
+                    },
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )
@@ -1339,6 +1602,44 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 EffectRule(
                     trigger="self_played",
                     handler_id="auto_reduce_next_matching_z_awaken_cost_in_z_deck_on_play",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_auto_on_play_grant_next_matching_union_play_keyword = _AUTO_ON_PLAY_GRANT_NEXT_MATCHING_UNION_PLAY_KEYWORD_RE.search(branch)
+        if m_auto_on_play_grant_next_matching_union_play_keyword:
+            descriptor = m_auto_on_play_grant_next_matching_union_play_keyword.group(1).strip()
+            grant_keyword = " ".join(
+                part.capitalize()
+                for part in m_auto_on_play_grant_next_matching_union_play_keyword.group(2).replace("-", " ").split()
+            )
+            target_filters = _descriptor_filters(descriptor, branch)
+            params: dict[str, int | str | bool] = {
+                "grant_keyword": grant_keyword,
+            }
+            if "allowed_colors" in target_filters:
+                params["allowed_colors"] = target_filters["allowed_colors"]
+            required_characters = sorted(
+                {
+                    match.strip().title()
+                    for match in re.findall(r"<([^>]+)>", descriptor)
+                    if match.strip()
+                }
+            )
+            if required_characters:
+                params["required_characters"] = ",".join(required_characters)
+            elif "required_characters" in target_filters:
+                params["required_characters"] = target_filters["required_characters"]
+            if "required_traits" in target_filters:
+                params["required_traits"] = target_filters["required_traits"]
+            if "required_name_contains" in target_filters:
+                params["required_name_contains"] = target_filters["required_name_contains"]
+            rules.append(
+                EffectRule(
+                    trigger="self_played",
+                    handler_id="auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword",
                     handler_params=params,
                     once_per_turn=once,
                     limit_per_turn=limit,
@@ -2689,6 +2990,32 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     handler_id="auto_place_up_to_n_from_owner_drop_under_self_on_play",
                     handler_params={"max_targets": max_targets, **_descriptor_filters(descriptor, branch), **extra},
                     once_per_turn=once,
+                )
+            )
+
+        m_owner_union_absorb_top_deck_under_self_and_rest = _OWNER_UNION_ABSORB_ACTIVATED_PLACE_TOP_DECK_UNDER_SELF_AND_REST_RE.search(branch)
+        if m_owner_union_absorb_top_deck_under_self_and_rest:
+            descriptor = m_owner_union_absorb_top_deck_under_self_and_rest.group(1).lower()
+            max_targets = int(m_owner_union_absorb_top_deck_under_self_and_rest.group(2))
+            trigger_filters = _descriptor_filters(descriptor, branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+            }
+            if "allowed_colors" in trigger_filters:
+                params["trigger_allowed_colors"] = trigger_filters["allowed_colors"]
+            if "required_traits" in trigger_filters:
+                params["trigger_required_traits"] = trigger_filters["required_traits"]
+            if "required_characters" in trigger_filters:
+                params["trigger_required_characters"] = trigger_filters["required_characters"]
+            if "required_name_contains" in trigger_filters:
+                params["trigger_required_name_contains"] = trigger_filters["required_name_contains"]
+            rules.append(
+                EffectRule(
+                    trigger="owner_union_absorb_activated",
+                    handler_id="auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
                 )
             )
 

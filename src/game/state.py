@@ -345,6 +345,19 @@ class ActivateZAwakenCostReduction:
 
 
 @dataclass(frozen=True)
+class DelayedUnionPlayKeywordGrant:
+    owner_player_id: int
+    created_turn_number: int
+    grant_keyword: str
+    allowed_colors: str = ""
+    required_traits: str = ""
+    required_characters: str = ""
+    required_name_contains: str = ""
+    uses_remaining: int = 1
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
 class DelayedCardPlayRestriction:
     owner_player_id: int
     restricted_card_id: int
@@ -491,6 +504,7 @@ class GameState:
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)
     activate_z_awaken_cost_reductions: list[ActivateZAwakenCostReduction] = field(default_factory=list)
+    delayed_union_play_keyword_grants: list[DelayedUnionPlayKeywordGrant] = field(default_factory=list)
     scheduled_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
     active_card_play_restrictions: list[DelayedCardPlayRestriction] = field(default_factory=list)
     permanent_card_play_restrictions: list[PermanentCardRestriction] = field(default_factory=list)

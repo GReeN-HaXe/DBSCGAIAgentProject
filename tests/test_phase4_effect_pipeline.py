@@ -1193,6 +1193,3970 @@ def test_phase4_z_awaken_can_replace_awakened_leader_from_face_up_z_deck() -> No
     assert any(cp.name == "leader_z_awakened" for cp in state.checkpoints)
 
 
+def test_phase4_union_absorb_can_promote_from_deck_on_top_of_source() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990302: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union Absorb][Once per turn](2), if your Leader Card is a ≪Namekian≫ card, "
+        "you have 3 or more energy, and you choose 1 ≪Namekian≫ card in your hand or Battle Area "
+        "and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 "
+        "on top of this card from your deck, then shuffle your deck."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Piccolo Leader",
+        card_type="LEADER",
+        color="Green",
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990300, "front")] = CardRuntimeData(
+        card_name="Piccolo Host",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990301, "front")] = CardRuntimeData(
+        card_name="Namekian Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=1,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990302, "front")] = CardRuntimeData(
+        card_name="Piccolo Union",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=4,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990310,
+            card_id=990300,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=2,
+            skill_text_raw=union_text,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990311,
+            card_id=990301,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=1,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].deck = [991000, 990302, 991001, 991002]
+    state.players[1].energy = [
+        CardInstance(instance_id=990312, card_id=990400, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990313, card_id=990401, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990314, card_id=990402, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990302
+    assert promoted.stacked_card_ids == (990301, 990300)
+    assert len(state.players[1].hand) == hand_before
+    assert len(state.players[1].deck) == 2
+    assert sum(1 for card in state.players[1].energy if card.resting) == 2
+    assert any(cp.name == "union_absorb" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+    assert not any(a.action_type == ActionType.UNION_ABSORB for a in engine.get_legal_actions(state, 1))
+
+
+def test_phase4_owner_union_absorb_activated_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990320: [
+                {
+                    "trigger": "owner_union_absorb_activated",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union Absorb][Once per turn](2), if your Leader Card is a ≪Namekian≫ card, "
+        "you have 3 or more energy, and you choose 1 ≪Namekian≫ card in your hand or Battle Area "
+        "and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 "
+        "on top of this card from your deck, then shuffle your deck."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Piccolo Leader",
+        card_type="LEADER",
+        color="Green",
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990300, "front")] = CardRuntimeData(
+        card_name="Piccolo Host",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990301, "front")] = CardRuntimeData(
+        card_name="Namekian Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=1,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990302, "front")] = CardRuntimeData(
+        card_name="Piccolo Union",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=4,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990320, "front")] = CardRuntimeData(
+        card_name="Union Watcher",
+        card_type="BATTLE",
+        color="Green",
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    host = CardInstance(
+        instance_id=990321,
+        card_id=990300,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    watcher = CardInstance(instance_id=990322, card_id=990320, owner_id=1, card_type="BATTLE", color="Green")
+    state.players[1].battle_area = [host, watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990323,
+            card_id=990301,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=1,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].deck = [991100, 990302, 991101, 991102]
+    state.players[1].energy = [
+        CardInstance(instance_id=990324, card_id=990410, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990325, card_id=990411, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990326, card_id=990412, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_self_played_using_union_absorb_can_trigger_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990343: [
+                {
+                    "trigger": "self_played_using_union_absorb",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union Absorb][Once per turn](2), if your Leader Card is a ≪Namekian≫ card, "
+        "you have 3 or more energy, and you choose 1 ≪Namekian≫ card in your hand or Battle Area "
+        "and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 "
+        "on top of this card from your deck, then shuffle your deck."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Piccolo Leader",
+        card_type="LEADER",
+        color="Green",
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990343, "front")] = CardRuntimeData(
+        card_name="Absorb Trigger Body",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=4,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990344, "front")] = CardRuntimeData(
+        card_name="Absorb Host",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990345, "front")] = CardRuntimeData(
+        card_name="Namekian Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=1,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990346,
+            card_id=990344,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=2,
+            skill_text_raw=union_text,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990347,
+            card_id=990345,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=1,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].deck = [991200, 990343, 991201]
+    state.players[1].energy = [
+        CardInstance(instance_id=990348, card_id=990420, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990349, card_id=990421, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990350, card_id=990422, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_other_battle_played_using_union_absorb_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990351: [
+                {
+                    "trigger": "owner_other_battle_played_using_union_absorb",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union Absorb][Once per turn](2), if your Leader Card is a ≪Namekian≫ card, "
+        "you have 3 or more energy, and you choose 1 ≪Namekian≫ card in your hand or Battle Area "
+        "and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 "
+        "on top of this card from your deck, then shuffle your deck."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Piccolo Leader",
+        card_type="LEADER",
+        color="Green",
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990343, "front")] = CardRuntimeData(
+        card_name="Absorb Union",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=4,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990344, "front")] = CardRuntimeData(
+        card_name="Absorb Host",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990345, "front")] = CardRuntimeData(
+        card_name="Namekian Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=1,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990351, "front")] = CardRuntimeData(
+        card_name="Absorb Watcher",
+        card_type="BATTLE",
+        color="Green",
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    host = CardInstance(
+        instance_id=990352,
+        card_id=990344,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    watcher = CardInstance(instance_id=990353, card_id=990351, owner_id=1, card_type="BATTLE", color="Green")
+    state.players[1].battle_area = [host, watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990354,
+            card_id=990345,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=1,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].deck = [991300, 990343, 991301]
+    state.players[1].energy = [
+        CardInstance(instance_id=990355, card_id=990430, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990356, card_id=990431, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990357, card_id=990432, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_union_absorb_activated_can_place_top_deck_under_self_and_rest_opponent_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990360: [
+                {
+                    "trigger": "owner_union_absorb_activated",
+                    "handler_id": "auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "trigger_required_traits": "Namekian",
+                    },
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union Absorb][Once per turn](2), if your Leader Card is a ≪Namekian≫ card, "
+        "you have 3 or more energy, and you choose 1 ≪Namekian≫ card in your hand or Battle Area "
+        "and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 "
+        "on top of this card from your deck, then shuffle your deck."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Piccolo Leader",
+        card_type="LEADER",
+        color="Green",
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990360, "front")] = CardRuntimeData(
+        card_name="Absorb Follow-up Watcher",
+        card_type="UNISON",
+        color="Yellow",
+    )
+    engine._card_cache[(990361, "front")] = CardRuntimeData(
+        card_name="Absorb Host",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990362, "front")] = CardRuntimeData(
+        card_name="Namekian Material",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=1,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990363, "front")] = CardRuntimeData(
+        card_name="Piccolo Union",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=4,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    engine._card_cache[(990364, "front")] = CardRuntimeData(
+        card_name="Top Deck Follower",
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=1,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    host = CardInstance(
+        instance_id=990365,
+        card_id=990361,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        skill_text_raw=union_text,
+        traits=("Namekian",),
+        characters=("Piccolo",),
+    )
+    watcher = CardInstance(instance_id=990366, card_id=990360, owner_id=1, card_type="UNISON", color="Yellow", markers=1)
+    opponent_target = CardInstance(instance_id=990367, card_id=990500, owner_id=2, card_type="BATTLE", color="Red", resting=False)
+    state.players[1].battle_area = [host]
+    state.players[1].unison_area = [watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990368,
+            card_id=990362,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=1,
+            traits=("Namekian",),
+            characters=("Piccolo",),
+        )
+    ]
+    state.players[1].deck = [990364, 991400, 990363, 991401]
+    state.players[1].energy = [
+        CardInstance(instance_id=990369, card_id=990440, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990370, card_id=990441, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990371, card_id=990442, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+    state.players[2].battle_area = [opponent_target]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].unison_area[0].stacked_card_ids == (990364,)
+    assert state.players[2].battle_area[0].resting is True
+    assert any(
+        cp.name == "effect_auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb"
+        for cp in state.checkpoints
+    )
+
+
+def test_phase4_union_absorb_can_use_material_from_under_leader() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union Absorb][Once per turn] Choose 1 card under your ≪Majin≫ Leader Card and place it under this card: "
+        "Play up to 1 mono-green <Majin Buu> card with an energy cost of 4 and 15000 power from your deck or Drop Area "
+        "on top of this card, then shuffle your deck if you looked through it."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Majin Leader",
+        card_type="LEADER",
+        color="Green",
+        traits=("Majin",),
+        characters=("Majin Buu",),
+    )
+    engine._card_cache[(990340, "front")] = CardRuntimeData(
+        card_name="Majin Host",
+        card_type="BATTLE",
+        color="Green",
+        skill_text_raw=union_text,
+        traits=("Majin",),
+        characters=("Majin Buu",),
+    )
+    engine._card_cache[(990341, "front")] = CardRuntimeData(
+        card_name="Leader Under Card",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        traits=("Majin",),
+        characters=("Majin Buu",),
+    )
+    engine._card_cache[(990342, "front")] = CardRuntimeData(
+        card_name="Majin Union",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=4,
+        traits=("Majin",),
+        characters=("Majin Buu",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.stacked_card_ids = (990341,)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990343,
+            card_id=990340,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            skill_text_raw=union_text,
+            traits=("Majin",),
+            characters=("Majin Buu",),
+        )
+    ]
+    state.players[1].drop = [
+        CardInstance(
+            instance_id=990344,
+            card_id=990342,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=4,
+            traits=("Majin",),
+            characters=("Majin Buu",),
+        )
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990342
+    assert promoted.stacked_card_ids == (990341, 990340)
+    assert state.players[1].leader_area.stacked_card_ids == ()
+
+
+def test_phase4_union_absorb_can_use_warp_material_and_promote_from_hand() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union Absorb](4), place 1 <Towa> from your Warp under this card: "
+        "If your Leader Card is an ≪Android≫ or <Towa>, choose 1 <Mira> with an energy cost of 7 "
+        "in your hand or Warp and play it on top of this card in Active Mode."
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(
+        card_name="Android Leader",
+        card_type="LEADER",
+        color="Black",
+        traits=("Android",),
+        characters=("Towa",),
+    )
+    engine._card_cache[(990350, "front")] = CardRuntimeData(
+        card_name="Union Host",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=4,
+        skill_text_raw=union_text,
+        traits=("Android",),
+        characters=("Mira",),
+    )
+    engine._card_cache[(990351, "front")] = CardRuntimeData(
+        card_name="Towa Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=2,
+        characters=("Towa",),
+    )
+    engine._card_cache[(990352, "front")] = CardRuntimeData(
+        card_name="Mira Union",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=7,
+        characters=("Mira",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990353,
+            card_id=990350,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=4,
+            skill_text_raw=union_text,
+            traits=("Android",),
+            characters=("Mira",),
+        )
+    ]
+    state.players[1].warp = [
+        CardInstance(
+            instance_id=990354,
+            card_id=990351,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=2,
+            characters=("Towa",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990355,
+            card_id=990352,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=7,
+            characters=("Mira",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990356, card_id=990420, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990357, card_id=990421, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990358, card_id=990422, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990359, card_id=990423, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_ABSORB)
+    state = engine.apply_action(state, action)
+
+    promoted = state.players[1].battle_area[0]
+    assert promoted.card_id == 990352
+    assert promoted.resting is False
+    assert promoted.stacked_card_ids == (990351, 990350)
+    assert len(state.players[1].hand) == 0
+    assert len(state.players[1].warp) == 0
+
+
+def test_phase4_union_fusion_can_play_from_hand_using_matching_materials() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990361: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990361, "front")] = CardRuntimeData(
+        card_name="Fusion Body",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990362, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990363, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990364,
+            card_id=990361,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990365,
+            card_id=990362,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990366,
+            card_id=990363,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990367, card_id=990430, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990368, card_id=990431, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990361
+    assert len(state.players[1].drop) == 2
+    assert {card.card_id for card in state.players[1].drop} == {990362, 990363}
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert sum(1 for card in state.players[1].energy if card.resting) == 2
+    assert any(cp.name == "union_fusion" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_other_battle_played_using_union_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990370: [
+                {
+                    "trigger": "owner_other_battle_played_using_union",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990361, "front")] = CardRuntimeData(
+        card_name="Fusion Body",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990362, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990363, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    engine._card_cache[(990370, "front")] = CardRuntimeData(
+        card_name="Union Watcher",
+        card_type="BATTLE",
+        color="Blue",
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    watcher = CardInstance(instance_id=990371, card_id=990370, owner_id=1, card_type="BATTLE", color="Blue")
+    state.players[1].battle_area = [watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990372,
+            card_id=990361,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990373,
+            card_id=990362,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990374,
+            card_id=990363,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990375, card_id=990440, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990376, card_id=990441, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_self_played_using_union_fusion_can_trigger_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990377: [
+                {
+                    "trigger": "self_played_using_union_fusion",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990377, "front")] = CardRuntimeData(
+        card_name="Fusion Trigger Body",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990378, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990379, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990430,
+            card_id=990377,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990432,
+            card_id=990378,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990433,
+            card_id=990379,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990434, card_id=990434, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990435, card_id=990435, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_fusion_header_can_draw_two_cards_before_play_resolution() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Fusion](2), draw 2 cards: <Son Goku: Br> card and <Vegeta: Br> card."
+    engine._card_cache[(990523, "front")] = CardRuntimeData(
+        card_name="Fusion Draw Two",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=7,
+        skill_text_raw=union_text,
+        characters=("Gogeta: Br",),
+    )
+    engine._card_cache[(990524, "front")] = CardRuntimeData(
+        card_name="Son Goku: Br Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goku: Br",),
+    )
+    engine._card_cache[(990525, "front")] = CardRuntimeData(
+        card_name="Vegeta: Br Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Vegeta: Br",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990526,
+            card_id=990523,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=7,
+            skill_text_raw=union_text,
+            characters=("Gogeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990527,
+            card_id=990524,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goku: Br",),
+        ),
+        CardInstance(
+            instance_id=990528,
+            card_id=990525,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Vegeta: Br",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990529, card_id=990529, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990530, card_id=990530, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].battle_area) == 1
+    assert len(state.players[1].hand) == hand_before - 3 + 2
+
+
+def test_phase4_union_fusion_header_can_draw_one_card_on_colored_material_line() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Fusion](Red)(Red)(Red)(Red), draw 1 card: Red <Son Goku: GT> and red <Vegeta: GT>."
+    engine._card_cache[(990531, "front")] = CardRuntimeData(
+        card_name="Fusion Draw One",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=8,
+        skill_text_raw=union_text,
+        characters=("Gogeta: GT",),
+    )
+    engine._card_cache[(990532, "front")] = CardRuntimeData(
+        card_name="Son Goku: GT Material",
+        card_type="BATTLE",
+        color="Red",
+        power=25000,
+        characters=("Son Goku: GT",),
+    )
+    engine._card_cache[(990533, "front")] = CardRuntimeData(
+        card_name="Vegeta: GT Material",
+        card_type="BATTLE",
+        color="Red",
+        power=25000,
+        characters=("Vegeta: GT",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1100),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2100),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990534,
+            card_id=990531,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=8,
+            skill_text_raw=union_text,
+            characters=("Gogeta: GT",),
+        ),
+        CardInstance(
+            instance_id=990535,
+            card_id=990532,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            power=25000,
+            characters=("Son Goku: GT",),
+        ),
+        CardInstance(
+            instance_id=990536,
+            card_id=990533,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            power=25000,
+            characters=("Vegeta: GT",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990537, card_id=990537, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990538, card_id=990538, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990539, card_id=990539, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990540, card_id=990540, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].battle_area) == 1
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+
+
+def test_phase4_owner_other_battle_played_using_union_fusion_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990436: [
+                {
+                    "trigger": "owner_other_battle_played_using_union_fusion",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990437, "front")] = CardRuntimeData(
+        card_name="Fusion Watched Body",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990438, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990439, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    engine._card_cache[(990436, "front")] = CardRuntimeData(
+        card_name="Fusion Watcher",
+        card_type="BATTLE",
+        color="Blue",
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    watcher = CardInstance(instance_id=990440, card_id=990436, owner_id=1, card_type="BATTLE", color="Blue")
+    state.players[1].battle_area = [watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990441,
+            card_id=990437,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990442,
+            card_id=990438,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990443,
+            card_id=990439,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990444, card_id=990444, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990445, card_id=990445, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_fusion_can_pay_circled_generic_cost() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Fusion]②: <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990446, "front")] = CardRuntimeData(
+        card_name="Circled Cost Fusion",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990447, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990448, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990449,
+            card_id=990446,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990450,
+            card_id=990447,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990451,
+            card_id=990448,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990452, card_id=990452, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990453, card_id=990453, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990446
+    assert sum(1 for card in state.players[1].energy if card.resting) == 2
+
+
+def test_phase4_union_fusion_can_pay_mixed_specified_and_circled_cost() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Fusion](Blue)(Blue)③: <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990454, "front")] = CardRuntimeData(
+        card_name="Mixed Cost Fusion",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=8,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990455, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990456, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990457,
+            card_id=990454,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=8,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990458,
+            card_id=990455,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990459,
+            card_id=990456,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990460, card_id=990460, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990461, card_id=990461, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990462, card_id=990462, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990463, card_id=990463, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+        CardInstance(instance_id=990464, card_id=990464, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990454
+    assert sum(1 for card in state.players[1].energy if card.resting) == 5
+
+
+def test_phase4_self_union_fusion_activated_can_trigger_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990465: [
+                {
+                    "trigger": "self_union_fusion_activated",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990465, "front")] = CardRuntimeData(
+        card_name="Fusion Activation Watcher",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990466, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990467, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990468,
+            card_id=990465,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990469,
+            card_id=990466,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990470,
+            card_id=990467,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990471, card_id=990471, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990472, card_id=990472, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_union_fusion_activated_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990473: [
+                {
+                    "trigger": "owner_union_fusion_activated",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990474, "front")] = CardRuntimeData(
+        card_name="Fusion Body",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990475, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990476, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    engine._card_cache[(990473, "front")] = CardRuntimeData(
+        card_name="Owner Fusion Activation Watcher",
+        card_type="BATTLE",
+        color="Blue",
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    watcher = CardInstance(instance_id=990477, card_id=990473, owner_id=1, card_type="BATTLE", color="Blue")
+    state.players[1].battle_area = [watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990478,
+            card_id=990474,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990479,
+            card_id=990475,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990480,
+            card_id=990476,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990481, card_id=990481, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990482, card_id=990482, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_fusion_can_require_opponent_energy_threshold() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Fusion](Blue)(Blue), if your opponent has 4 or more energy: <Son Goten> and <Trunks: Youth> "
+        "(Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)"
+    )
+    engine._card_cache[(990483, "front")] = CardRuntimeData(
+        card_name="Threshold Fusion",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gotenks",),
+    )
+    engine._card_cache[(990484, "front")] = CardRuntimeData(
+        card_name="Son Goten Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goten",),
+    )
+    engine._card_cache[(990485, "front")] = CardRuntimeData(
+        card_name="Trunks Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Trunks: Youth",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990486,
+            card_id=990483,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gotenks",),
+        ),
+        CardInstance(
+            instance_id=990487,
+            card_id=990484,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goten",),
+        ),
+        CardInstance(
+            instance_id=990494,
+            card_id=990485,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Trunks: Youth",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990495, card_id=990495, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990496, card_id=990496, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990497, card_id=990497, owner_id=2, card_type="ENERGY", color="Yellow", resting=False),
+        CardInstance(instance_id=990498, card_id=990498, owner_id=2, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990499, card_id=990499, owner_id=2, card_type="ENERGY", color="Red", resting=False),
+    ]
+
+    assert all(a.action_type != ActionType.UNION_FUSION for a in engine.get_legal_actions(state, 1))
+
+    state.players[2].energy.append(
+        CardInstance(instance_id=990500, card_id=990500, owner_id=2, card_type="ENERGY", color="Blue", resting=False)
+    )
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990483
+
+
+def test_phase4_union_fusion_can_parse_db_style_limit_and_requirement_line_without_reminder_text() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Fusion] [Limit 1] If your opponent has 2 or more energy: Blue <Son Goku: Br> card and blue <Vegeta: Br> card."
+    engine._card_cache[(990501, "front")] = CardRuntimeData(
+        card_name="DB Style Fusion",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gogeta: Br",),
+    )
+    engine._card_cache[(990502, "front")] = CardRuntimeData(
+        card_name="Son Goku: Br Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goku: Br",),
+    )
+    engine._card_cache[(990503, "front")] = CardRuntimeData(
+        card_name="Vegeta: Br Material",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Vegeta: Br",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990504,
+            card_id=990501,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gogeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990505,
+            card_id=990502,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goku: Br",),
+        ),
+        CardInstance(
+            instance_id=990506,
+            card_id=990503,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Vegeta: Br",),
+        ),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990507, card_id=990507, owner_id=2, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    assert all(a.action_type != ActionType.UNION_FUSION for a in engine.get_legal_actions(state, 1))
+
+    state.players[2].energy.append(
+        CardInstance(instance_id=990508, card_id=990508, owner_id=2, card_type="ENERGY", color="Green", resting=False)
+    )
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990501
+    assert len(state.players[1].drop) == 2
+    assert {card.card_id for card in state.players[1].drop} == {990502, 990503}
+
+
+def test_phase4_union_fusion_limit_one_blocks_second_copy_same_turn() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Fusion] [Limit 1] If your opponent has 2 or more energy: Blue <Son Goku: Br> card and blue <Vegeta: Br> card."
+    engine._card_cache[(990509, "front")] = CardRuntimeData(
+        card_name="Limited Fusion",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Gogeta: Br",),
+    )
+    engine._card_cache[(990510, "front")] = CardRuntimeData(
+        card_name="Son Goku: Br Material A",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goku: Br",),
+    )
+    engine._card_cache[(990511, "front")] = CardRuntimeData(
+        card_name="Vegeta: Br Material A",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Vegeta: Br",),
+    )
+    engine._card_cache[(990512, "front")] = CardRuntimeData(
+        card_name="Son Goku: Br Material B",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goku: Br",),
+    )
+    engine._card_cache[(990513, "front")] = CardRuntimeData(
+        card_name="Vegeta: Br Material B",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Vegeta: Br",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990514,
+            card_id=990509,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gogeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990515,
+            card_id=990509,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Gogeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990516,
+            card_id=990510,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goku: Br",),
+        ),
+        CardInstance(
+            instance_id=990517,
+            card_id=990511,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Vegeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990518,
+            card_id=990512,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goku: Br",),
+        ),
+        CardInstance(
+            instance_id=990519,
+            card_id=990513,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Vegeta: Br",),
+        ),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990520, card_id=990520, owner_id=2, card_type="ENERGY", color="Yellow", resting=False),
+        CardInstance(instance_id=990521, card_id=990521, owner_id=2, card_type="ENERGY", color="Green", resting=False),
+    ]
+
+    legal = [a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION]
+    assert len(legal) == 2
+
+    state = engine.apply_action(state, legal[0])
+
+    remaining = [a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION]
+    assert remaining == []
+
+
+def test_phase4_union_fusion_on_play_can_pay_z_energy_and_grant_barrier_to_next_matching_union_play() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990522: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword",
+                    "handler_params": {
+                        "grant_keyword": "Barrier",
+                        "allowed_colors": "blue",
+                        "required_characters": "Gogeta: Br",
+                    },
+                }
+            ]
+        },
+        skill_cost_rules={
+            990522: {
+                "auto_on_play_battle": [
+                    {
+                        "kind": "send_owner_z_energy_to_drop",
+                        "amount": 2,
+                    }
+                ]
+            }
+        },
+    )
+    support_text = (
+        "[Union-Fusion] [Limit 1] If your opponent has 2 or more energy: Blue <Son Goku: Br> card and blue <Vegeta: Br> card.\n"
+        "[Auto] Place 2 of your Z-Energy into their owner's Drop: When this card is played, activate this skill. "
+        "During this turn, the next time you play a blue <Gogeta: Br> card with [Union], it gains [Barrier] for the turn."
+    )
+    target_text = (
+        "[Union-Fusion] [Limit 1] If your opponent has 2 or more energy: Blue <Son Goku: Br> card and blue <Vegeta: Br> card."
+    )
+    engine._card_cache[(990522, "front")] = CardRuntimeData(
+        card_name="SS Gogeta, Overflowing Fighting Spirit",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=5,
+        skill_text_raw=support_text,
+        characters=("Gogeta: Br",),
+    )
+    engine._card_cache[(990523, "front")] = CardRuntimeData(
+        card_name="Blue Gogeta Follow-Up",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=5,
+        skill_text_raw=target_text,
+        characters=("Gogeta: Br",),
+    )
+    engine._card_cache[(990524, "front")] = CardRuntimeData(
+        card_name="Son Goku: Br Material A",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goku: Br",),
+    )
+    engine._card_cache[(990525, "front")] = CardRuntimeData(
+        card_name="Vegeta: Br Material A",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Vegeta: Br",),
+    )
+    engine._card_cache[(990526, "front")] = CardRuntimeData(
+        card_name="Son Goku: Br Material B",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Son Goku: Br",),
+    )
+    engine._card_cache[(990527, "front")] = CardRuntimeData(
+        card_name="Vegeta: Br Material B",
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        characters=("Vegeta: Br",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p1_z_deck_card_ids=[910001],
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990528,
+            card_id=990522,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=5,
+            skill_text_raw=support_text,
+            characters=("Gogeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990529,
+            card_id=990523,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=5,
+            skill_text_raw=target_text,
+            characters=("Gogeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990530,
+            card_id=990524,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goku: Br",),
+        ),
+        CardInstance(
+            instance_id=990531,
+            card_id=990525,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Vegeta: Br",),
+        ),
+        CardInstance(
+            instance_id=990532,
+            card_id=990526,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Son Goku: Br",),
+        ),
+        CardInstance(
+            instance_id=990533,
+            card_id=990527,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            power=15000,
+            characters=("Vegeta: Br",),
+        ),
+    ]
+    state.players[1].z_energy = [
+        CardInstance(instance_id=990534, card_id=990534, owner_id=1, card_type="BATTLE", color="Blue"),
+        CardInstance(instance_id=990535, card_id=990535, owner_id=1, card_type="BATTLE", color="Blue"),
+    ]
+    state.players[2].energy = [
+        CardInstance(instance_id=990536, card_id=990536, owner_id=2, card_type="ENERGY", color="Yellow", resting=False),
+        CardInstance(instance_id=990537, card_id=990537, owner_id=2, card_type="ENERGY", color="Green", resting=False),
+    ]
+
+    first_action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, first_action)
+
+    support_played = next(card for card in state.players[1].battle_area if card.card_id == 990522)
+    assert len(state.players[1].z_energy) == 0
+    assert not engine._card_has_keyword(support_played, "Barrier")
+    assert any(cp.name == "effect_auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword" for cp in state.checkpoints)
+
+    second_action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_FUSION)
+    state = engine.apply_action(state, second_action)
+
+    target_played = next(card for card in state.players[1].battle_area if card.card_id == 990523)
+    assert engine._card_has_keyword(target_played, "Barrier")
+    assert any(cp.name == "delayed_union_play_keyword_grant_applied" for cp in state.checkpoints)
+
+
+def test_phase4_union_potara_can_play_from_hand_using_matching_materials() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990381: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = "[Union-Potara](Black): <Son Goku: Xeno> card and <Vegeta: Xeno> card."
+    engine._card_cache[(990381, "front")] = CardRuntimeData(
+        card_name="Vegito, Xeno Body",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=5,
+        skill_text_raw=union_text,
+        characters=("Vegito: Xeno",),
+    )
+    engine._card_cache[(990382, "front")] = CardRuntimeData(
+        card_name="Son Goku: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Son Goku: Xeno",),
+    )
+    engine._card_cache[(990383, "front")] = CardRuntimeData(
+        card_name="Vegeta: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Vegeta: Xeno",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990384,
+            card_id=990381,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=5,
+            skill_text_raw=union_text,
+            characters=("Vegito: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990385,
+            card_id=990382,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Son Goku: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990386,
+            card_id=990383,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Vegeta: Xeno",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990387, card_id=990440, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[-1]
+    assert played.card_id == 990381
+    assert played.stacked_card_ids == (990382, 990383)
+    assert len(state.players[1].drop) == 0
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert sum(1 for card in state.players[1].energy if card.resting) == 1
+    assert any(cp.name == "union_potara" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_potara_can_move_hand_material_onto_battle_host_and_stack_both() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Potara](Blue): <Son Goku> and <Vegeta>."
+    engine._card_cache[(990388, "front")] = CardRuntimeData(
+        card_name="Battle Host Hand Material Potara",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990389, "front")] = CardRuntimeData(
+        card_name="Battle Son Goku Material",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990380, "front")] = CardRuntimeData(
+        card_name="Hand Vegeta Material",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990378,
+            card_id=990389,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            characters=("Son Goku",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990379,
+            card_id=990388,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990377,
+            card_id=990380,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            characters=("Vegeta",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990376, card_id=990376, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990388
+    assert played.stacked_card_ids == (990380, 990389)
+    assert len(state.players[1].hand) == 0
+    assert len(state.players[1].drop) == 0
+
+
+def test_phase4_owner_union_potara_activated_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990390: [
+                {
+                    "trigger": "owner_union_potara_activated",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = "[Union-Potara](Black): <Son Goku: Xeno> card and <Vegeta: Xeno> card."
+    engine._card_cache[(990391, "front")] = CardRuntimeData(
+        card_name="Potara Body",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=5,
+        skill_text_raw=union_text,
+        characters=("Vegito: Xeno",),
+    )
+    engine._card_cache[(990392, "front")] = CardRuntimeData(
+        card_name="Son Goku: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Son Goku: Xeno",),
+    )
+    engine._card_cache[(990393, "front")] = CardRuntimeData(
+        card_name="Vegeta: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Vegeta: Xeno",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    watcher = CardInstance(instance_id=990394, card_id=990390, owner_id=1, card_type="BATTLE", color="Black")
+    state.players[1].battle_area = [watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990395,
+            card_id=990391,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=5,
+            skill_text_raw=union_text,
+            characters=("Vegito: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990396,
+            card_id=990392,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Son Goku: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990397,
+            card_id=990393,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Vegeta: Xeno",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990398, card_id=990441, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == hand_before - 3 + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_potara_can_play_on_top_of_stacked_together_materials() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990401: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = (
+        "[Union-Potara](Blue)(Blue): <Goku Black> and <Zamasu> "
+        "(Place this card in Active Mode on top of the 2 specified cards stacked together)"
+    )
+    engine._card_cache[(990401, "front")] = CardRuntimeData(
+        card_name="Merged Zamasu",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Fused Zamasu",),
+    )
+    engine._card_cache[(990402, "front")] = CardRuntimeData(
+        card_name="Goku Black Host",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Goku Black",),
+    )
+    engine._card_cache[(990403, "front")] = CardRuntimeData(
+        card_name="Zamasu Under",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Zamasu",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    host = CardInstance(
+        instance_id=990404,
+        card_id=990402,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        resting=True,
+        stacked_card_ids=(990403,),
+        characters=("Goku Black",),
+    )
+    state.players[1].battle_area = [host]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990405,
+            card_id=990401,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Fused Zamasu",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990406, card_id=990442, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990407, card_id=990443, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990401
+    assert played.resting is False
+    assert played.stacked_card_ids == (990403, 990402)
+    assert len(state.players[1].hand) == 1
+    assert sum(1 for card in state.players[1].energy if card.resting) == 2
+    assert any(cp.name == "union_potara" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_potara_header_can_draw_cards_before_play_followups() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Potara](1), draw 2 cards: Green <Zamasu> card and green <Goku Black> card."
+    engine._card_cache[(990411, "front")] = CardRuntimeData(
+        card_name="Header Draw Potara",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=5,
+        skill_text_raw=union_text,
+        characters=("Fused Zamasu",),
+    )
+    engine._card_cache[(990412, "front")] = CardRuntimeData(
+        card_name="Zamasu Material",
+        card_type="BATTLE",
+        color="Green",
+        characters=("Zamasu",),
+    )
+    engine._card_cache[(990413, "front")] = CardRuntimeData(
+        card_name="Goku Black Material",
+        card_type="BATTLE",
+        color="Green",
+        characters=("Goku Black",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990414,
+            card_id=990411,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=5,
+            skill_text_raw=union_text,
+            characters=("Fused Zamasu",),
+        ),
+        CardInstance(
+            instance_id=990415,
+            card_id=990412,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            characters=("Zamasu",),
+        ),
+        CardInstance(
+            instance_id=990416,
+            card_id=990413,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            characters=("Goku Black",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990417, card_id=990444, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990411
+    assert len(state.players[1].hand) == 2
+    assert sum(1 for card in state.players[1].energy if card.resting) == 1
+
+
+def test_phase4_union_potara_header_can_draw_and_mill_top_opponent_deck() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara]{g}, if your Leader is a green <Zamasu> card, you draw 1 card, "
+        "and place the top card of your opponent's deck into its owner's Drop: "
+        "Green <Zamasu> card and green <Goku Black> card."
+    )
+    engine._card_cache[(990421, "front")] = CardRuntimeData(
+        card_name="Header Draw Mill Potara",
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Fused Zamasu",),
+    )
+    engine._card_cache[(990422, "front")] = CardRuntimeData(
+        card_name="Zamasu Material",
+        card_type="BATTLE",
+        color="Green",
+        characters=("Zamasu",),
+    )
+    engine._card_cache[(990423, "front")] = CardRuntimeData(
+        card_name="Goku Black Material",
+        card_type="BATTLE",
+        color="Green",
+        characters=("Goku Black",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area = CardInstance(
+        instance_id=990424,
+        card_id=990450,
+        owner_id=1,
+        card_type="LEADER",
+        color="Green",
+        characters=("Zamasu",),
+    )
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990425,
+            card_id=990421,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Fused Zamasu",),
+        ),
+        CardInstance(
+            instance_id=990426,
+            card_id=990422,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            characters=("Zamasu",),
+        ),
+        CardInstance(
+            instance_id=990427,
+            card_id=990423,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            characters=("Goku Black",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990428, card_id=990445, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+    ]
+    state.players[2].deck = [990499, 2001, 2002]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990421
+    assert len(state.players[1].hand) == 1
+    assert state.players[2].drop[-1].card_id == 990499
+    assert len(state.players[2].deck) == 2
+
+
+def test_phase4_union_potara_can_pay_circled_generic_cost() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Potara]②: <Trunks: Xeno> and <Vegeta: Xeno>."
+    engine._card_cache[(990431, "front")] = CardRuntimeData(
+        card_name="Circled Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=5,
+        skill_text_raw=union_text,
+        characters=("Vegeks: Xeno",),
+    )
+    engine._card_cache[(990432, "front")] = CardRuntimeData(
+        card_name="Trunks: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Trunks: Xeno",),
+    )
+    engine._card_cache[(990433, "front")] = CardRuntimeData(
+        card_name="Vegeta: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Vegeta: Xeno",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990434,
+            card_id=990431,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=5,
+            skill_text_raw=union_text,
+            characters=("Vegeks: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990435,
+            card_id=990432,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Trunks: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990436,
+            card_id=990433,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Vegeta: Xeno",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990437, card_id=990446, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990438, card_id=990447, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990431
+    assert sum(1 for card in state.players[1].energy if card.resting) == 2
+
+
+def test_phase4_union_potara_can_pay_mixed_specified_and_circled_cost_on_stacked_host() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara](Blue)(Blue)③: <Son Goku> and <Vegeta> "
+        "(Place this card in Active Mode on top of the 2 specified cards stacked together)"
+    )
+    engine._card_cache[(990441, "front")] = CardRuntimeData(
+        card_name="Mixed Cost Potara",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=8,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990442, "front")] = CardRuntimeData(
+        card_name="Son Goku Host",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990443, "front")] = CardRuntimeData(
+        card_name="Vegeta Under",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990444,
+            card_id=990442,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            resting=True,
+            stacked_card_ids=(990443,),
+            characters=("Son Goku",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990445,
+            card_id=990441,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=8,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990448, card_id=990448, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990449, card_id=990449, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990450, card_id=990450, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990451, card_id=990451, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+        CardInstance(instance_id=990452, card_id=990452, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990441
+    assert played.resting is False
+    assert played.stacked_card_ids == (990443, 990442)
+    assert sum(1 for card in state.players[1].energy if card.resting) == 5
+
+
+def test_phase4_self_played_using_union_potara_can_trigger_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990461: [
+                {
+                    "trigger": "self_played_using_union_potara",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = "[Union-Potara](Red)(Red)(Red): <Caulifla> and <Kale>"
+    engine._card_cache[(990461, "front")] = CardRuntimeData(
+        card_name="Potara Self Trigger",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Kefla",),
+    )
+    engine._card_cache[(990462, "front")] = CardRuntimeData(
+        card_name="Caulifla Material",
+        card_type="BATTLE",
+        color="Red",
+        characters=("Caulifla",),
+    )
+    engine._card_cache[(990463, "front")] = CardRuntimeData(
+        card_name="Kale Material",
+        card_type="BATTLE",
+        color="Red",
+        characters=("Kale",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990464,
+            card_id=990461,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Kefla",),
+        ),
+        CardInstance(
+            instance_id=990465,
+            card_id=990462,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            characters=("Caulifla",),
+        ),
+        CardInstance(
+            instance_id=990466,
+            card_id=990463,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            characters=("Kale",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990467, card_id=990467, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990468, card_id=990468, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990469, card_id=990469, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990461
+    assert len(state.players[1].hand) == 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_other_battle_played_using_union_potara_can_trigger_owner_auto_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990470: [
+                {
+                    "trigger": "owner_other_battle_played_using_union_potara",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {"amount": 1},
+                }
+            ]
+        }
+    )
+    union_text = "[Union-Potara](Red)(Red)(Red): <Caulifla> and <Kale>"
+    engine._card_cache[(990471, "front")] = CardRuntimeData(
+        card_name="Potara Body",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Kefla",),
+    )
+    engine._card_cache[(990472, "front")] = CardRuntimeData(
+        card_name="Caulifla Material",
+        card_type="BATTLE",
+        color="Red",
+        characters=("Caulifla",),
+    )
+    engine._card_cache[(990473, "front")] = CardRuntimeData(
+        card_name="Kale Material",
+        card_type="BATTLE",
+        color="Red",
+        characters=("Kale",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    watcher = CardInstance(instance_id=990474, card_id=990470, owner_id=1, card_type="BATTLE", color="Red")
+    state.players[1].battle_area = [watcher]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990475,
+            card_id=990471,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Kefla",),
+        ),
+        CardInstance(
+            instance_id=990476,
+            card_id=990472,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            characters=("Caulifla",),
+        ),
+        CardInstance(
+            instance_id=990477,
+            card_id=990473,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            characters=("Kale",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990478, card_id=990478, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990479, card_id=990479, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+        CardInstance(instance_id=990480, card_id=990480, owner_id=1, card_type="ENERGY", color="Red", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert len(state.players[1].hand) == 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_union_potara_header_can_warp_opponent_battle_and_draw() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara] Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and draw 1 card: "
+        "<Son Goku> and <Vegeta>."
+    )
+    engine._card_cache[(990481, "front")] = CardRuntimeData(
+        card_name="Warp Draw Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990482, "front")] = CardRuntimeData(
+        card_name="Son Goku Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990483, "front")] = CardRuntimeData(
+        card_name="Vegeta Material",
+        card_type="BATTLE",
+        color="Black",
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990484,
+            card_id=990481,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990485,
+            card_id=990482,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Son Goku",),
+        ),
+        CardInstance(
+            instance_id=990486,
+            card_id=990483,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            characters=("Vegeta",),
+        ),
+    ]
+    state.players[2].battle_area = [
+        CardInstance(instance_id=990487, card_id=990500, owner_id=2, card_type="BATTLE", color="Red")
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].battle_area[-1].card_id == 990481
+    assert len(state.players[1].hand) == 1
+    assert len(state.players[2].battle_area) == 0
+    assert state.players[2].warp[-1].card_id == 990500
+
+
+def test_phase4_union_potara_can_parse_colonless_material_line() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Potara] Blue <Son Goku> and blue <Vegeta>."
+    engine._card_cache[(990488, "front")] = CardRuntimeData(
+        card_name="Colonless Potara",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990489, "front")] = CardRuntimeData(
+        card_name="Blue Son Goku Material",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990490, "front")] = CardRuntimeData(
+        card_name="Blue Vegeta Material",
+        card_type="BATTLE",
+        color="Blue",
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990491,
+            card_id=990488,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990492,
+            card_id=990489,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            characters=("Son Goku",),
+        ),
+        CardInstance(
+            instance_id=990493,
+            card_id=990490,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            characters=("Vegeta",),
+        ),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[-1]
+    assert played.card_id == 990488
+    assert played.stacked_card_ids == (990489, 990490)
+    assert len(state.players[1].drop) == 0
+    assert len(state.players[1].hand) == 0
+    assert any(cp.name == "union_potara" for cp in state.checkpoints)
+
+
+def test_phase4_union_potara_can_play_on_stacked_host_with_from_hand_wording() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara] ⑤: <Son Goku> and <Vegeta> "
+        "(Place this card in Active Mode from your hand on top of the 2 specified cards stacked together)"
+    )
+    engine._card_cache[(990494, "front")] = CardRuntimeData(
+        card_name="From Hand Stacked Potara",
+        card_type="BATTLE",
+        color="Red",
+        energy_cost=8,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990495, "front")] = CardRuntimeData(
+        card_name="Son Goku Host",
+        card_type="BATTLE",
+        color="Red",
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990496, "front")] = CardRuntimeData(
+        card_name="Vegeta Under",
+        card_type="BATTLE",
+        color="Red",
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990497,
+            card_id=990495,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            resting=True,
+            stacked_card_ids=(990496,),
+            characters=("Son Goku",),
+        )
+    ]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990498,
+            card_id=990494,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=8,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990501, card_id=990501, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990502, card_id=990502, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990503, card_id=990503, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+        CardInstance(instance_id=990504, card_id=990504, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990505, card_id=990505, owner_id=1, card_type="ENERGY", color="White", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990494
+    assert played.resting is False
+    assert played.stacked_card_ids == (990496, 990495)
+    assert len(state.players[1].hand) == 0
+    assert sum(1 for card in state.players[1].energy if card.resting) == 5
+
+
+def test_phase4_union_potara_can_require_material_energy_cost_floor() -> None:
+    engine = RulesEngine()
+    union_text = "[Union-Potara] (Yellow): Blue <Kale> and yellow <Caulifla> with energy costs of 4 or more."
+    engine._card_cache[(990506, "front")] = CardRuntimeData(
+        card_name="Energy Floor Potara",
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Kefla",),
+    )
+    engine._card_cache[(990507, "front")] = CardRuntimeData(
+        card_name="Low Cost Kale",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Kale",),
+    )
+    engine._card_cache[(990508, "front")] = CardRuntimeData(
+        card_name="High Cost Kale",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=4,
+        characters=("Kale",),
+    )
+    engine._card_cache[(990509, "front")] = CardRuntimeData(
+        card_name="High Cost Caulifla",
+        card_type="BATTLE",
+        color="Yellow",
+        energy_cost=4,
+        characters=("Caulifla",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990510,
+            card_id=990506,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Kefla",),
+        ),
+        CardInstance(
+            instance_id=990511,
+            card_id=990507,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=3,
+            characters=("Kale",),
+        ),
+        CardInstance(
+            instance_id=990512,
+            card_id=990509,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Yellow",
+            energy_cost=4,
+            characters=("Caulifla",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990513, card_id=990513, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    assert all(a.action_type != ActionType.UNION_POTARA for a in engine.get_legal_actions(state, 1))
+
+    state.players[1].hand[1] = CardInstance(
+        instance_id=990514,
+        card_id=990508,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=4,
+        characters=("Kale",),
+    )
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[-1]
+    assert played.card_id == 990506
+    assert played.stacked_card_ids == (990508, 990509)
+    assert len(state.players[1].drop) == 0
+
+
+def test_phase4_union_potara_can_use_material_from_energy_when_permanent_allows_it() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara] Blue <Son Goku> and blue <Vegeta>\n"
+        "[Permanent] If you have 4 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand."
+    )
+    engine._card_cache[(990515, "front")] = CardRuntimeData(
+        card_name="Energy Permission Potara",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990516, "front")] = CardRuntimeData(
+        card_name="Energy Son Goku Material",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990517, "front")] = CardRuntimeData(
+        card_name="Hand Vegeta Material",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990518,
+            card_id=990515,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990519,
+            card_id=990517,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=3,
+            characters=("Vegeta",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990520, card_id=990516, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=3, characters=("Son Goku",), resting=False),
+        CardInstance(instance_id=990521, card_id=990521, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990522, card_id=990522, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+
+    assert all(a.action_type != ActionType.UNION_POTARA for a in engine.get_legal_actions(state, 1))
+
+    state.players[1].energy.append(
+        CardInstance(instance_id=990523, card_id=990523, owner_id=1, card_type="ENERGY", color="Blue", resting=False)
+    )
+    state.players[1].energy.append(
+        CardInstance(instance_id=990524, card_id=990524, owner_id=1, card_type="ENERGY", color="Green", resting=False)
+    )
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[-1]
+    assert played.card_id == 990515
+    assert played.stacked_card_ids == (990517, 990516)
+    assert len(state.players[1].drop) == 0
+
+
+def test_phase4_union_potara_can_use_material_from_warp_when_permanent_allows_it() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara]③: <Trunks: Xeno> and <Vegeta: Xeno>.\n"
+        "[Permanent] You can choose Battle Cards in your Warp when choosing cards to use with this card's [Union] skill from your hand."
+    )
+    engine._card_cache[(990525, "front")] = CardRuntimeData(
+        card_name="Warp Permission Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegeks: Xeno",),
+    )
+    engine._card_cache[(990526, "front")] = CardRuntimeData(
+        card_name="Warp Trunks Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Trunks: Xeno",),
+    )
+    engine._card_cache[(990527, "front")] = CardRuntimeData(
+        card_name="Hand Vegeta Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Vegeta: Xeno",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990528,
+            card_id=990525,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegeks: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990529,
+            card_id=990527,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Vegeta: Xeno",),
+        ),
+    ]
+    state.players[1].warp = [
+        CardInstance(instance_id=990530, card_id=990526, owner_id=1, card_type="BATTLE", color="Black", energy_cost=3, characters=("Trunks: Xeno",))
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990531, card_id=990531, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990532, card_id=990532, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990533, card_id=990533, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[-1]
+    assert played.card_id == 990525
+    assert played.stacked_card_ids == (990527, 990526)
+    assert len(state.players[1].drop) == 0
+    assert not state.players[1].warp
+
+
+def test_phase4_union_potara_can_use_material_from_under_black_z_unison_when_permanent_allows_it() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara][Limit 1](Black): <Son Goku> card and <Vegeta> card, both black.\n"
+        "[Permanent] You can choose Battle Cards from under your black Z-Unison when choosing cards to use with a black card's [Union-Potara] skill from your hand."
+    )
+    engine._card_cache[(990534, "front")] = CardRuntimeData(
+        card_name="Under Z-Unison Permission Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990535, "front")] = CardRuntimeData(
+        card_name="Under Z-Unison Son Goku Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990536, "front")] = CardRuntimeData(
+        card_name="Hand Vegeta Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Vegeta",),
+    )
+    engine._card_cache[(990537, "front")] = CardRuntimeData(
+        card_name="Black Z-Unison Host",
+        card_type="Z-UNISON",
+        color="Black",
+        energy_cost=2,
+        characters=("Towa",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990538,
+            card_id=990534,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990539,
+            card_id=990536,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Vegeta",),
+        ),
+    ]
+    state.players[1].unison_area = [
+        CardInstance(
+            instance_id=990540,
+            card_id=990537,
+            owner_id=1,
+            card_type="Z-UNISON",
+            color="Black",
+            energy_cost=2,
+            markers=1,
+            stacked_card_ids=(990535,),
+            characters=("Towa",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990541, card_id=990541, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[-1]
+    assert played.card_id == 990534
+    assert played.stacked_card_ids == (990536, 990535)
+    assert len(state.players[1].drop) == 0
+    assert state.players[1].unison_area[0].stacked_card_ids == ()
+
+
+def test_phase4_union_potara_moves_energy_material_to_battle_then_stacks_under_source() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara] Blue <Son Goku> and blue <Vegeta>\n"
+        "[Permanent] If you have 4 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand."
+    )
+    engine._card_cache[(990542, "front")] = CardRuntimeData(
+        card_name="Energy Fidelity Potara",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990543, "front")] = CardRuntimeData(
+        card_name="Battle Son Goku Material",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990544, "front")] = CardRuntimeData(
+        card_name="Energy Vegeta Material",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990545,
+            card_id=990542,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        )
+    ]
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990546,
+            card_id=990543,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=3,
+            characters=("Son Goku",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990547, card_id=990544, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=3, characters=("Vegeta",), resting=False),
+        CardInstance(instance_id=990548, card_id=990548, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990549, card_id=990549, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990550, card_id=990550, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990542
+    assert played.stacked_card_ids == (990544, 990543)
+    assert not any(card.card_id == 990544 for card in state.players[1].drop)
+    assert not any(card.card_id == 990543 for card in state.players[1].drop)
+
+
+def test_phase4_union_potara_moves_hand_and_energy_materials_to_stack_under_source() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara] Blue <Son Goku> and blue <Vegeta>\n"
+        "[Permanent] If you have 4 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand."
+    )
+    engine._card_cache[(990568, "front")] = CardRuntimeData(
+        card_name="Hand Energy Fidelity Potara",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990569, "front")] = CardRuntimeData(
+        card_name="Hand Son Goku Material",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990570, "front")] = CardRuntimeData(
+        card_name="Energy Vegeta Material",
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=3,
+        characters=("Vegeta",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990571,
+            card_id=990568,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990572,
+            card_id=990569,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Blue",
+            energy_cost=3,
+            characters=("Son Goku",),
+        ),
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990573, card_id=990570, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=3, characters=("Vegeta",), resting=False),
+        CardInstance(instance_id=990574, card_id=990574, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990575, card_id=990575, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990576, card_id=990576, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990568
+    assert played.stacked_card_ids == (990570, 990569)
+    assert len(state.players[1].hand) == 0
+    assert not any(card.card_id == 990570 for card in state.players[1].drop)
+    assert not any(card.card_id == 990569 for card in state.players[1].drop)
+
+
+def test_phase4_union_potara_moves_under_z_unison_material_to_battle_then_stacks_under_source() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara][Limit 1](Black): <Son Goku> card and <Vegeta> card, both black.\n"
+        "[Permanent] You can choose Battle Cards from under your black Z-Unison when choosing cards to use with a black card's [Union-Potara] skill from your hand."
+    )
+    engine._card_cache[(990551, "front")] = CardRuntimeData(
+        card_name="Under Z-Unison Fidelity Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990552, "front")] = CardRuntimeData(
+        card_name="Battle Son Goku Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990553, "front")] = CardRuntimeData(
+        card_name="Under Z-Unison Vegeta Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Vegeta",),
+    )
+    engine._card_cache[(990554, "front")] = CardRuntimeData(
+        card_name="Black Z-Unison Host",
+        card_type="Z-UNISON",
+        color="Black",
+        energy_cost=2,
+        characters=("Towa",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990555,
+            card_id=990551,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        )
+    ]
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990556,
+            card_id=990552,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Son Goku",),
+        )
+    ]
+    state.players[1].unison_area = [
+        CardInstance(
+            instance_id=990557,
+            card_id=990554,
+            owner_id=1,
+            card_type="Z-UNISON",
+            color="Black",
+            energy_cost=2,
+            markers=1,
+            stacked_card_ids=(990553,),
+            characters=("Towa",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990558, card_id=990558, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990551
+    assert played.stacked_card_ids == (990553, 990552)
+    assert state.players[1].unison_area[0].stacked_card_ids == ()
+    assert not any(card.card_id == 990553 for card in state.players[1].drop)
+
+
+def test_phase4_union_potara_moves_warp_material_to_battle_then_stacks_under_source() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara]③: <Trunks: Xeno> and <Vegeta: Xeno>.\n"
+        "[Permanent] You can choose Battle Cards in your Warp when choosing cards to use with this card's [Union] skill from your hand."
+    )
+    engine._card_cache[(990559, "front")] = CardRuntimeData(
+        card_name="Warp Fidelity Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegeks: Xeno",),
+    )
+    engine._card_cache[(990560, "front")] = CardRuntimeData(
+        card_name="Battle Trunks: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Trunks: Xeno",),
+    )
+    engine._card_cache[(990561, "front")] = CardRuntimeData(
+        card_name="Warp Vegeta: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Vegeta: Xeno",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990562,
+            card_id=990559,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegeks: Xeno",),
+        )
+    ]
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990563,
+            card_id=990560,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Trunks: Xeno",),
+        )
+    ]
+    state.players[1].warp = [
+        CardInstance(
+            instance_id=990564,
+            card_id=990561,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Vegeta: Xeno",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990565, card_id=990565, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990566, card_id=990566, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990567, card_id=990567, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990559
+    assert played.stacked_card_ids == (990561, 990560)
+    assert not state.players[1].warp
+    assert not any(card.card_id == 990561 for card in state.players[1].drop)
+
+
+def test_phase4_union_potara_moves_hand_and_warp_materials_to_stack_under_source() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara]③: <Trunks: Xeno> and <Vegeta: Xeno>.\n"
+        "[Permanent] You can choose Battle Cards in your Warp when choosing cards to use with this card's [Union] skill from your hand."
+    )
+    engine._card_cache[(990577, "front")] = CardRuntimeData(
+        card_name="Hand Warp Fidelity Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegeks: Xeno",),
+    )
+    engine._card_cache[(990578, "front")] = CardRuntimeData(
+        card_name="Hand Trunks: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Trunks: Xeno",),
+    )
+    engine._card_cache[(990579, "front")] = CardRuntimeData(
+        card_name="Warp Vegeta: Xeno Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Vegeta: Xeno",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990580,
+            card_id=990577,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegeks: Xeno",),
+        ),
+        CardInstance(
+            instance_id=990581,
+            card_id=990578,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Trunks: Xeno",),
+        ),
+    ]
+    state.players[1].warp = [
+        CardInstance(
+            instance_id=990582,
+            card_id=990579,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Vegeta: Xeno",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990583, card_id=990583, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+        CardInstance(instance_id=990584, card_id=990584, owner_id=1, card_type="ENERGY", color="Blue", resting=False),
+        CardInstance(instance_id=990585, card_id=990585, owner_id=1, card_type="ENERGY", color="Yellow", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990577
+    assert played.stacked_card_ids == (990579, 990578)
+    assert len(state.players[1].hand) == 0
+    assert not state.players[1].warp
+    assert not any(card.card_id == 990579 for card in state.players[1].drop)
+    assert not any(card.card_id == 990578 for card in state.players[1].drop)
+
+
+def test_phase4_union_potara_moves_hand_and_under_z_unison_materials_to_stack_under_source() -> None:
+    engine = RulesEngine()
+    union_text = (
+        "[Union-Potara][Limit 1](Black): <Son Goku> card and <Vegeta> card, both black.\n"
+        "[Permanent] You can choose Battle Cards from under your black Z-Unison when choosing cards to use with a black card's [Union-Potara] skill from your hand."
+    )
+    engine._card_cache[(990586, "front")] = CardRuntimeData(
+        card_name="Hand Under Z-Unison Fidelity Potara",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=6,
+        skill_text_raw=union_text,
+        characters=("Vegito",),
+    )
+    engine._card_cache[(990587, "front")] = CardRuntimeData(
+        card_name="Hand Son Goku Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Son Goku",),
+    )
+    engine._card_cache[(990588, "front")] = CardRuntimeData(
+        card_name="Under Z-Unison Vegeta Material",
+        card_type="BATTLE",
+        color="Black",
+        energy_cost=3,
+        characters=("Vegeta",),
+    )
+    engine._card_cache[(990589, "front")] = CardRuntimeData(
+        card_name="Black Z-Unison Host",
+        card_type="Z-UNISON",
+        color="Black",
+        energy_cost=2,
+        characters=("Towa",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=990590,
+            card_id=990586,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=6,
+            skill_text_raw=union_text,
+            characters=("Vegito",),
+        ),
+        CardInstance(
+            instance_id=990591,
+            card_id=990587,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Black",
+            energy_cost=3,
+            characters=("Son Goku",),
+        ),
+    ]
+    state.players[1].unison_area = [
+        CardInstance(
+            instance_id=990592,
+            card_id=990589,
+            owner_id=1,
+            card_type="Z-UNISON",
+            color="Black",
+            energy_cost=2,
+            markers=1,
+            stacked_card_ids=(990588,),
+            characters=("Towa",),
+        )
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=990593, card_id=990593, owner_id=1, card_type="ENERGY", color="Black", resting=False),
+    ]
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.UNION_POTARA)
+    state = engine.apply_action(state, action)
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990586
+    assert played.stacked_card_ids == (990588, 990587)
+    assert len(state.players[1].hand) == 0
+    assert state.players[1].unison_area[0].stacked_card_ids == ()
+    assert not any(card.card_id == 990588 for card in state.players[1].drop)
+    assert not any(card.card_id == 990587 for card in state.players[1].drop)
+
+
 def test_phase4_z_awaken_can_require_combo_area_count_and_matching_awakened_leader() -> None:
     engine = RulesEngine()
     engine._card_cache[(1, "front")] = CardRuntimeData(card_name="Gotenks Front", card_type="LEADER", color="Green", has_awaken=True)
@@ -2456,6 +6420,726 @@ def test_phase4_costed_opponent_main_phase_start_can_pay_energy_to_play_from_und
     assert played.stacked_card_ids == (990273,)
     assert state.players[1].energy[0].resting is True
     assert any(cp.name == "effect_auto_header_cost_paid" for cp in state.checkpoints)
+
+
+def test_phase4_opponent_main_phase_start_can_discard_from_hand_before_playing_from_under_self() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990279: SimpleNamespace(
+                    card_name="Universe 7 Support",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="2",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Universe 7"]',
+                    card_character_json='["Son Goku"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990278: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_play_up_to_n_from_under_self_and_place_self_under_played_card",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "red",
+                        "required_traits": "Universe 7",
+                        "max_cost": 2,
+                        "auto_discard_hand_before": 1,
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    discard_card = CardInstance(instance_id=990280, card_id=5001, owner_id=1, card_type="BATTLE", color="Red", energy_cost=1, power=5000)
+    state.players[1].hand = [discard_card]
+    host = CardInstance(
+        instance_id=990178,
+        card_id=990278,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        power=20000,
+        stacked_card_ids=(990279,),
+    )
+    state.players[1].battle_area = [host]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=host)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    played = state.players[1].battle_area[0]
+    assert played.card_id == 990279
+    assert played.stacked_card_ids == (990278,)
+    assert all(card.instance_id != 991023 for card in state.players[1].hand)
+    assert any(card.instance_id == 990280 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_header_cost_paid" for cp in state.checkpoints)
+
+
+def test_phase4_owner_main_phase_draw_auto_can_place_self_in_drop_before_resolution() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990281: [
+                {
+                    "trigger": "owner_main_phase_start",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "auto_place_self_in_drop_before": True,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990181, card_id=990281, owner_id=1, card_type="BATTLE", color="Blue", power=5000)
+    state.players[1].battle_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    before_hand = len(state.players[1].hand)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+
+    assert len(state.players[1].hand) == before_hand + 1
+    assert not state.players[1].battle_area
+    assert any(card.card_id == 990281 for card in state.players[1].drop)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_opponent_main_phase_draw_switch_and_keyword_auto_can_pay_discard_and_plus_marker() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990282: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn",
+                    "handler_params": {
+                        "amount": 1,
+                        "max_leader_targets": 1,
+                        "max_energy_targets": 1,
+                        "grant_keyword": "Blocker",
+                        "auto_discard_hand_before": 1,
+                        "auto_marker_delta": 1,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.resting = True
+    state.players[1].energy = [
+        CardInstance(instance_id=990283, card_id=5002, owner_id=1, card_type="ENERGY", color="Yellow", energy_cost=0, power=0, resting=True),
+    ]
+    discard_card = CardInstance(instance_id=990284, card_id=5003, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=1, power=5000)
+    state.players[1].hand = [discard_card]
+    source = CardInstance(
+        instance_id=990182,
+        card_id=990282,
+        owner_id=1,
+        card_type="UNISON",
+        color="Yellow",
+        power=15000,
+        markers=1,
+    )
+    state.players[1].unison_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    before_hand = len(state.players[1].hand)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    assert len(state.players[1].hand) == before_hand
+    assert state.players[1].leader_area.resting is False
+    assert state.players[1].energy[0].resting is False
+    assert "Blocker" in state.players[1].leader_area.temporary_keywords
+    assert state.players[1].unison_area[0].markers == 2
+    assert any(card.instance_id == 990284 for card in state.players[1].drop)
+    assert any(
+        cp.name == "effect_auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn"
+        for cp in state.checkpoints
+    )
+
+
+def test_phase4_opponent_main_phase_draw_auto_can_bottom_deck_hand_before_resolution() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990285: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "auto_bottom_deck_hand_before": 1,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    moved = CardInstance(instance_id=990286, card_id=5004, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=1, power=5000)
+    state.players[1].hand = [moved]
+    source = CardInstance(instance_id=990183, card_id=990285, owner_id=1, card_type="BATTLE", color="Blue", power=5000)
+    state.players[1].battle_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    before_hand = len(state.players[1].hand)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    assert len(state.players[1].hand) == before_hand
+    assert state.players[1].deck[-1] == 5004
+    assert any(cp.name == "effect_auto_header_cost_paid" for cp in state.checkpoints)
+
+
+def test_phase4_opponent_main_phase_draw_auto_can_remove_self_from_game_before_resolution() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990287: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "auto_remove_self_before": True,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=990184, card_id=990287, owner_id=1, card_type="BATTLE", color="Black", power=5000)
+    state.players[1].battle_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    before_hand = len(state.players[1].hand)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    assert len(state.players[1].hand) == before_hand + 1
+    assert not state.players[1].battle_area
+    assert any(card.card_id == 990287 for card in state.players[1].removed_from_game)
+    assert any(event.name == "card_removed_from_game" and int(event.payload.get("source_card_id") or -1) == 990287 for event in state.effect_events)
+
+
+def test_phase4_owner_main_phase_draw_auto_can_release_under_cards_to_drop_before_resolution() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990288: [
+                {
+                    "trigger": "owner_main_phase_start",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "auto_release_under_to_drop_before": 2,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=990185,
+        card_id=990288,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red",
+        power=5000,
+        stacked_card_ids=(5005, 5006, 5007),
+    )
+    state.players[1].battle_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    before_hand = len(state.players[1].hand)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+
+    assert len(state.players[1].hand) == before_hand + 1
+    assert state.players[1].battle_area[0].stacked_card_ids == (5007,)
+    released_ids = {card.card_id for card in state.players[1].drop}
+    assert 5005 in released_ids
+    assert 5006 in released_ids
+    assert any(cp.name == "effect_auto_header_cost_paid" for cp in state.checkpoints)
+
+
+def test_phase4_opponent_main_phase_start_can_play_from_owner_drop_after_placing_self_in_drop() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                991011: SimpleNamespace(
+                    card_name="Blue Gogeta",
+                    power_int=25000,
+                    card_type="BATTLE",
+                    card_color="Blue",
+                    energy_cost_int=5,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="5",
+                    card_skill_unstyled="[Union]",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Gogeta"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            991010: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_play_up_to_n_from_owner_drop_on_main_phase_start",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "blue",
+                        "required_characters": "Gogeta",
+                        "required_skill_text_contains": "[union]",
+                        "max_cost": 5,
+                        "auto_place_self_in_drop_before": True,
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=991012, card_id=991010, owner_id=1, card_type="BATTLE", color="Blue", power=5000)
+    played = CardInstance(instance_id=991013, card_id=991011, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=5, power=25000)
+    state.players[1].battle_area = [source]
+    state.players[1].drop = [played]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    assert any(card.card_id == 991010 for card in state.players[1].drop)
+    assert any(card.instance_id == 991013 for card in state.players[1].battle_area)
+    assert any(cp.name == "effect_auto_play_up_to_n_from_owner_drop_on_main_phase_start" for cp in state.checkpoints)
+
+
+def test_phase4_owner_main_phase_start_can_play_from_owner_hand_in_rest_mode() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                991021: SimpleNamespace(
+                    card_name="Frost Soldier",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Blue",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Frieza Army"]',
+                    card_character_json='["Frost"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            991020: [
+                {
+                    "trigger": "owner_main_phase_start",
+                    "handler_id": "auto_play_up_to_n_from_owner_hand_on_main_phase_start",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "blue",
+                        "required_characters": "Frost",
+                        "max_cost": 4,
+                        "rest_mode": True,
+                        "auto_cost_header": "(blue)",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=991022, card_id=6001, owner_id=1, card_type="ENERGY", color="Blue", energy_cost=0, power=0),
+    ]
+    hand_card = CardInstance(instance_id=991023, card_id=991021, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=4, power=15000)
+    source = CardInstance(instance_id=991024, card_id=991020, owner_id=1, card_type="BATTLE", color="Blue", power=5000)
+    state.players[1].hand = [hand_card]
+    state.players[1].battle_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+
+    assert all(card.instance_id != 991023 for card in state.players[1].hand)
+    assert any(card.instance_id == 991023 and card.resting for card in state.players[1].battle_area)
+    assert state.players[1].energy[0].resting is True
+    assert any(cp.name == "effect_auto_play_up_to_n_from_owner_hand_on_main_phase_start" for cp in state.checkpoints)
+
+
+def test_phase4_opponent_main_phase_start_can_switch_owner_multicolor_energy_active() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            991030: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_switch_up_to_n_owner_energy_active_on_main_phase_start",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "requires_multicolor": True,
+                        "auto_discard_hand_before": 1,
+                        "auto_marker_delta": 1,
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    discard_card = CardInstance(instance_id=991031, card_id=6002, owner_id=1, card_type="BATTLE", color="Yellow", energy_cost=1, power=5000)
+    source = CardInstance(instance_id=991032, card_id=991030, owner_id=1, card_type="UNISON", color="Yellow", power=15000, markers=1)
+    mono_energy = CardInstance(instance_id=991033, card_id=6003, owner_id=1, card_type="ENERGY", color="Yellow", energy_cost=0, power=0, resting=True)
+    multi_energy = CardInstance(instance_id=991034, card_id=6004, owner_id=1, card_type="ENERGY", color="Yellow/Blue", energy_cost=0, power=0, resting=True)
+    state.players[1].hand = [discard_card]
+    state.players[1].unison_area = [source]
+    state.players[1].energy = [mono_energy, multi_energy]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    assert not state.players[1].hand
+    assert any(card.instance_id == 991031 for card in state.players[1].drop)
+    assert state.players[1].unison_area[0].markers == 2
+    assert state.players[1].energy[0].resting is True
+    assert state.players[1].energy[1].resting is False
+    assert any(cp.name == "effect_auto_switch_up_to_n_owner_energy_active_on_main_phase_start" for cp in state.checkpoints)
+
+
+def test_phase4_owner_main_phase_start_can_play_from_owner_deck_with_markers_in_rest_mode() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                992011: SimpleNamespace(
+                    card_name="Frieza & Cell, a Match Made in Hell",
+                    power_int=15000,
+                    card_type="UNISON",
+                    card_color="Blue",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json='["Frieza & Cell, a Match Made in Hell"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            992010: [
+                {
+                    "trigger": "owner_main_phase_start",
+                    "handler_id": "auto_play_up_to_n_from_owner_deck_on_main_phase_start",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "required_name_contains": "FRIEZA & CELL, A MATCH MADE IN HELL",
+                        "markers": 2,
+                        "rest_mode": True,
+                        "auto_cost_header": "(blue)",
+                        "auto_discard_hand_before": 1,
+                        "requires_mono_energy": "blue",
+                        "requires_leader": "if your leader card and energy are all mono-blue",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Blue"
+    state.players[1].energy = [
+        CardInstance(instance_id=992012, card_id=6101, owner_id=1, card_type="ENERGY", color="Blue", energy_cost=0, power=0),
+    ]
+    discard_card = CardInstance(instance_id=992013, card_id=6102, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=1, power=5000)
+    source = CardInstance(instance_id=992014, card_id=992010, owner_id=1, card_type="BATTLE", color="Blue", power=5000)
+    state.players[1].hand = [discard_card]
+    state.players[1].deck = [6105, 992011] + state.players[1].deck
+    state.players[1].battle_area = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+
+    assert any(card.instance_id == 992013 for card in state.players[1].drop)
+    assert state.players[1].energy[0].resting is True
+    assert state.players[1].unison_area
+    played = state.players[1].unison_area[0]
+    assert played.card_id == 992011
+    assert played.markers == 2
+    assert played.resting is True
+    assert any(cp.name == "effect_auto_play_up_to_n_from_owner_deck_on_main_phase_start" for cp in state.checkpoints)
+
+
+def test_phase4_opponent_main_phase_start_can_switch_self_active_and_gain_keyword_with_owner_battle_or_z_energy_requirement() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            992020: [
+                {
+                    "trigger": "owner_opponent_main_phase_start",
+                    "handler_id": "auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start",
+                    "handler_params": {
+                        "grant_keyword": "Blocker",
+                        "required_owner_battle_or_z_energy_allowed_colors": "yellow",
+                        "required_owner_battle_or_z_energy_required_characters": "Vegeta",
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(instance_id=992021, card_id=992020, owner_id=1, card_type="BATTLE", color="Yellow", power=5000, resting=True)
+    z_energy = CardInstance(instance_id=992022, card_id=6103, owner_id=1, card_type="Z-ENERGY", color="Yellow", power=0, characters=("Vegeta",))
+    state.players[1].battle_area = [source]
+    state.players[1].z_energy = [z_energy]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=2))
+
+    assert state.players[1].battle_area[0].resting is False
+    assert "Blocker" in state.players[1].battle_area[0].temporary_keywords
+    assert any(cp.name == "effect_auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start" for cp in state.checkpoints)
+
+
+def test_phase4_owner_main_phase_start_can_play_from_owner_hand_on_top_of_self() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                992031: SimpleNamespace(
+                    card_name="Frost Evolution",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Blue",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json='["Frost"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            992030: [
+                {
+                    "trigger": "owner_main_phase_start",
+                    "handler_id": "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "allowed_colors": "blue",
+                        "required_characters": "Frost",
+                        "max_cost": 4,
+                        "auto_cost_header": "(blue)(blue)",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=992032, card_id=6201, owner_id=1, card_type="ENERGY", color="Blue", energy_cost=0, power=0),
+        CardInstance(instance_id=992033, card_id=6202, owner_id=1, card_type="ENERGY", color="Blue", energy_cost=0, power=0),
+    ]
+    source = CardInstance(
+        instance_id=992034,
+        card_id=992030,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        power=5000,
+        stacked_card_ids=(6203,),
+    )
+    played = CardInstance(instance_id=992035, card_id=992031, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=4, power=20000)
+    state.players[1].battle_area = [source]
+    state.players[1].hand = [played]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_CHARGE, player_id=1))
+
+    assert all(card.instance_id != 992035 for card in state.players[1].hand)
+    assert state.players[1].energy[0].resting is True
+    assert state.players[1].energy[1].resting is True
+    assert state.players[1].battle_area[0].card_id == 992031
+    assert state.players[1].battle_area[0].stacked_card_ids == (6203, 992030)
+    assert any(cp.name == "effect_auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start" for cp in state.checkpoints)
 
 
 def test_phase4_king_cold_combo_can_reduce_next_matching_red_extra_cost() -> None:

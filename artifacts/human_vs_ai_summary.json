@@ -1,34 +1,86 @@
 {
   "winner_id": null,
-  "total_actions": 2,
+  "total_actions": 10,
   "human_player_id": 1,
   "ai_profile": "balanced",
-  "final_turn_number": 1,
+  "final_turn_number": 2,
   "final_phase": "main",
-  "checkpoint_count": 9,
+  "checkpoint_count": 25,
   "checkpoint_tail": [
-    "pregame_leaders_placed",
-    "pregame_starting_player_decided",
-    "pregame_setup_complete",
-    "charge_phase_begin",
-    "charge_phase_after_untap",
     "charge_phase_after_draw_skipped",
     "charge_phase_charge_window",
     "charge_phase_after_energy_placement",
-    "counter_timing_play"
+    "main_phase_begin",
+    "end_phase_begin",
+    "charge_phase_begin",
+    "charge_phase_after_untap",
+    "charge_phase_after_draw",
+    "charge_phase_charge_window",
+    "charge_phase_after_energy_placement",
+    "main_phase_begin",
+    "extra_moved_to_drop_on_declare",
+    "counter_timing_activate_extra",
+    "skill_activation_no_registered_effect",
+    "extra_activation_resolved",
+    "counter_timing_play",
+    "main_play_battle",
+    "counter_timing_attack",
+    "battle_offense_step",
+    "battle_defense_step"
   ],
-  "effect_resolution_count": 0,
+  "effect_resolution_count": 3,
   "effect_unresolved_count": 0,
+  "secret_auto_summary": {
+    "opportunity_count": 0,
+    "pending_count": 0,
+    "blocked_count": 0,
+    "preblocked_count": 0,
+    "status_counts": {}
+  },
   "setup": {
     "mode": "fresh",
     "first_player": 1,
     "shuffle_decks": false,
     "seed": null,
-    "p1_leader_id": 1,
-    "p2_leader_id": 2,
+    "p1_leader_id": 35,
+    "p2_leader_id": 52,
     "p1_deck_size": 60,
     "p2_deck_size": 60,
-    "deck_source": "synthetic"
+    "deck_source": "db_sample"
   },
-  "trace_hash": "2d1f9a678cf2ae33dd1484e6f680aabcbfdc9114d209d2a7e06a908af4aa909e"
+  "turn_history": [
+    {
+      "turn_number": 1,
+      "action_count": 2,
+      "charges": 1,
+      "plays": 0,
+      "attacks": 0,
+      "skills": 0,
+      "end_turns": 1,
+      "actions": [
+        "1. P1 charge_from_hand hand_index=2 card=BT14-018 Jiren, the Avenger",
+        "2. P1 end_turn"
+      ]
+    },
+    {
+      "turn_number": 2,
+      "action_count": 8,
+      "charges": 1,
+      "plays": 2,
+      "attacks": 1,
+      "skills": 0,
+      "end_turns": 0,
+      "actions": [
+        "3. P2 charge_from_hand hand_index=3 card=BT15-018 Natade Village Monster",
+        "4. P2 play_card_from_hand hand_index=5 card=BT15-029 Demonic Playtime",
+        "5. P1 pass_counter_window",
+        "6. P2 play_card_from_hand hand_index=0 card=BT15-015 Videl, Opposing the Demon",
+        "7. P1 pass_counter_window",
+        "8. P2 declare_attack attacker_zone=battle attacker_index=0 attacker_card=BT15-015 Videl, Opposing the Demon target_player=1 target_zone=leader target_card=EX19-20 Bardock",
+        "9. P1 pass_counter_window",
+        "10. P2 end_offense_step"
+      ]
+    }
+  ],
+  "trace_hash": "c3743db86bef40d4ea6034db4d3e539615dd8da1f814a2a5ef3052127524b7b0"
 }

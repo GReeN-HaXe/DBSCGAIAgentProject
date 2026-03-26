@@ -149,6 +149,14 @@
       }
     ]
   },
+  "1056": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "1080": {
     "activate_main_unison": [
       {
@@ -305,6 +313,14 @@
       }
     ]
   },
+  "13": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "1335": {
     "activate_main_unison": [
       {
@@ -334,6 +350,22 @@
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "1365": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "1372": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -490,6 +522,14 @@
       }
     ]
   },
+  "1849": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "186": {
     "activate_main_unison": [
       {
@@ -507,6 +547,14 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1965": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -566,6 +614,20 @@
       }
     ]
   },
+  "2142": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "2186": {
     "activate_main_hand": [
       {
@@ -594,6 +656,22 @@
       }
     ]
   },
+  "2225": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2243": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "226": {
     "activate_main_unison": [
       {
@@ -607,6 +685,54 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2269": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2281": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2282": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2294": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2295": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "238": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -687,6 +813,22 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2542": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2558": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -1285,6 +1427,14 @@
       }
     ]
   },
+  "402": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "4025": {
     "activate_main_unison": [
       {
@@ -1314,6 +1464,14 @@
       {
         "amount": 5,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "4037": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -2918,6 +3076,22 @@
       }
     ]
   },
+  "7768": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "7770": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "7772": {
     "activate_main_hand": [
       {
@@ -2982,6 +3156,22 @@
       }
     ]
   },
+  "7849": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "7879": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "7883": {
     "activate_main_unison": [
       {
@@ -2991,6 +3181,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7884": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3126,11 +3324,35 @@
       }
     ]
   },
+  "7944": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "7950": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "7955": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "7956": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3167,6 +3389,14 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "8070": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3297,6 +3527,14 @@
       }
     ]
   },
+  "8323": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "8342": {
     "activate_main_unison": [
       {
@@ -3352,6 +3590,10 @@
       {
         "amount": 2,
         "kind": "send_owner_energy_to_drop"
+      },
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3382,6 +3624,20 @@
       {
         "amount": 1,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8398": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3461,6 +3717,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8480": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3549,6 +3813,14 @@
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "8857": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },
@@ -3747,6 +4019,14 @@
       }
     ]
   },
+  "8975": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ]
+  },
   "9628": {
     "activate_main": [
       {
@@ -3821,10 +4101,20 @@
     ]
   },
   "9694": {
+    "activate_battle": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      }
+    ],
     "activate_main": [
       {
         "amount": 1,
         "kind": "discard_hand"
+      },
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
       }
     ]
   },

@@ -71,6 +71,10 @@ _ACTIVATE_MAIN_SPIRIT_BOOST_RE = re.compile(
 _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?remove (\d+) total cards? in your drop and warp from the game\s*:"
 )
+_AUTO_ON_PLAY_Z_ENERGY_TO_DROP_RE = re.compile(
+    r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when this card is played,\s*activate this skill",
+    re.IGNORECASE,
+)
 _COUNTER_ALT_REST_HIDDEN_BATTLE_RE = re.compile(
     r"activate this card's \[counter\] skill from your hand by switching 1 hidden mode card in your battle area to rest mode instead of paying its energy cost"
 )
@@ -499,6 +503,15 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_drop_and_warp_to_removed",
                 "amount": int(m_activate_main_remove_total_drop_and_warp.group(1)),
+            }
+        ]
+
+    m_auto_on_play_z_energy_to_drop = _AUTO_ON_PLAY_Z_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_play_z_energy_to_drop:
+        rules["auto_on_play_battle"] = [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": int(m_auto_on_play_z_energy_to_drop.group(1)),
             }
         ]
 

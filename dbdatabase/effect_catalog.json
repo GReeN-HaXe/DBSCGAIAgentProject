@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 2974,
+  "card_rule_count": 2980,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 3858,
+  "effect_rule_count": 3867,
   "rules": {
     "10": [
       {
@@ -1422,6 +1422,24 @@
         "provenance": "extractor",
         "source_text": "[activate: main] [limit 1] if your leader is a blue <gogeta: br> card and you discard this card from your hand: draw 1 card.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "10178": [
+      {
+        "family_id": "self_played:auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword",
+        "handler_id": "auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "grant_keyword": "Barrier",
+          "required_characters": "Gogeta: Br",
+          "required_traits": "Gogeta: Br"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] place 2 of your z-energy into their owner's drop: when this card is played, activate this skill. during this turn, the next time you play a blue <gogeta: br> card with [union], it gains [barrier] for the turn.",
+        "trigger": "self_played"
       }
     ],
     "10179": [
@@ -7738,6 +7756,23 @@
     ],
     "157": [
       {
+        "family_id": "owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+        "handler_id": "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "auto_cost_header": "(blue)(blue)",
+          "max_cost": 4,
+          "max_targets": 1,
+          "required_characters": "Lt Frost Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue)(blue): at the start of your main phase, choose up to 1 blue &lt;frost&gt; card with an energy cost of 4 in your hand and play it on top of this card.",
+        "trigger": "owner_main_phase_start"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -9179,6 +9214,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](green), if your leader is a green &lt;super 17&gt; card or green &lt;hell fighter 17&gt; card and you have an &lt;android 17&gt; card in play: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "1714": [
+      {
+        "family_id": "owner_main_phase_start:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader is a green &lt;son goku"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a green &lt;son goku: gt&gt; card, this card and {dr. myuu, vengeful alliance} are in your warp, and you send 1 green &lt;son goku: gt&gt; card from your hand to your warp: at the start of your main phase, draw 1 card.",
+        "trigger": "owner_main_phase_start"
       }
     ],
     "1716": [
@@ -10697,6 +10748,8 @@
           "max_cost": 5,
           "max_targets": 1,
           "min_owner_energy": 3,
+          "required_owner_battle_or_z_energy_allowed_colors": "yellow",
+          "required_owner_battle_or_z_energy_required_characters": "Lt Son Goku Gt",
           "rest_mode_only": true,
           "target_policy": "first"
         },
@@ -10740,6 +10793,21 @@
       }
     ],
     "1812": [
+      {
+        "family_id": "owner_opponent_main_phase_start:auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start",
+        "handler_id": "auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start",
+        "handler_params": {
+          "grant_keyword": "Blocker",
+          "required_owner_battle_or_z_energy_allowed_colors": "yellow",
+          "required_owner_battle_or_z_energy_required_characters": "Lt Vegeta Gt"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have a yellow &lt;vegeta&gt; card in play or in your z-energy: at the start of your opponent's main phase, switch this card to active mode, and it gains [blocker] for the turn.",
+        "trigger": "owner_opponent_main_phase_start"
+      },
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -35066,6 +35134,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_opponent_main_phase_start:auto_switch_up_to_n_owner_energy_active_on_main_phase_start",
+        "handler_id": "auto_switch_up_to_n_owner_energy_active_on_main_phase_start",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the start of your opponent's main phase, choose up to 1 of your energy and switch it to active mode.",
+        "trigger": "owner_opponent_main_phase_start"
       }
     ],
     "5998": [
@@ -36842,6 +36923,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if you have 3 or more energy and choose 1 skill-less battle card in your hand and discard it: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "628": [
+      {
+        "family_id": "owner_union_absorb_activated:auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb",
+        "handler_id": "auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb",
+        "handler_params": {
+          "max_targets": 1,
+          "trigger_required_traits": "Namekian"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when one of your \u226anamekian\u226b cards activates [union absorb], place the top card of your deck under this card, then choose up to 1 of your opponent's battle cards and switch it to rest mode.",
+        "trigger": "owner_union_absorb_activated"
       }
     ],
     "6282": [
@@ -39131,6 +39228,31 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, draw 1 card.",
         "trigger": "self_played"
+      }
+    ],
+    "6685": [
+      {
+        "family_id": "owner_main_phase_start:auto_play_up_to_n_from_owner_deck_on_main_phase_start",
+        "handler_id": "auto_play_up_to_n_from_owner_deck_on_main_phase_start",
+        "handler_params": {
+          "auto_cost_header": "(blue)",
+          "auto_discard_hand_before": 1,
+          "markers": 2,
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Frieza Cell,A Match Made In Hell",
+          "required_name_contains": "FRIEZA & CELL, A MATCH MADE IN HELL",
+          "requires_leader": "if your leader card and energy are all mono-blue and you choose 1 card in your hand and discard it",
+          "requires_mono_energy": "blue",
+          "rest_mode": true,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue), if your leader card and energy are all mono-blue and you choose 1 card in your hand and discard it: at the start of your main phase, play up to 1 {frieza & cell, a match made in hell} from your deck with 2 markers on it in rest mode, then shuffle your deck.",
+        "trigger": "owner_main_phase_start"
       }
     ],
     "6687": [
@@ -43313,7 +43435,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "requires_leader": "if your leader card and energy are all mono-yellow"
+          "requires_leader": "if your leader card and energy are all mono-yellow",
+          "requires_mono_energy": "yellow"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -47049,6 +47172,26 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7916": [
+      {
+        "family_id": "owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_drop_on_main_phase_start",
+        "handler_id": "auto_play_up_to_n_from_owner_drop_on_main_phase_start",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "auto_place_self_in_drop_before": true,
+          "max_cost": 5,
+          "max_targets": 1,
+          "required_characters": "Gogeta",
+          "required_skill_text_contains": "[union]"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] place this card in its owner's drop: at the start of your opponent's main phase, play up to 1 blue <gogeta> card with an energy cost of 5 and a [union] skill from your drop.",
+        "trigger": "owner_opponent_main_phase_start"
+      }
+    ],
     "7918": [
       {
         "family_id": "turn_end:auto_switch_self_active_on_turn_end",
@@ -49251,6 +49394,26 @@
         "provenance": "extractor",
         "source_text": "[activate: battle][limit 1] if your leader is a red card with both <son goku: gt> and <android 18>, draw 2 cards and discard 2 cards from your hand, choose up to 1 of your red <son goku: gt> cards and it gets +15000 power for the battle. additionally, if you have a red <android 18> card with 20000 power or more in play, the chosen card gets +10000 power for the battle.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "8121": [
+      {
+        "family_id": "owner_opponent_main_phase_start:auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn",
+        "handler_id": "auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn",
+        "handler_params": {
+          "amount": 1,
+          "auto_discard_hand_before": 1,
+          "auto_marker_delta": 1,
+          "grant_keyword": "Blocker",
+          "max_energy_targets": 1,
+          "max_leader_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+1][auto] discard 1 card from your hand: at the start of your opponent's main phase, draw 1 card, switch up to 1 of your leaders and up to 1 of your energy to active mode, and your leader gains [blocker] for the turn.",
+        "trigger": "owner_opponent_main_phase_start"
       }
     ],
     "8122": [

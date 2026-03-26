@@ -405,6 +405,19 @@ def test_extract_self_played_can_reduce_next_matching_z_awaken_cost_and_z_energy
     assert reduce_rule.handler_params["uses_remaining"] == 1
 
 
+def test_extract_self_played_can_grant_keyword_to_next_matching_union_play() -> None:
+    card = _card(
+        "[Auto] Place 2 of your Z-Energy into their owner's Drop: When this card is played, activate this skill. "
+        "During this turn, the next time you play a blue <Gogeta: Br> card with [Union], it gains [Barrier] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["grant_keyword"] == "Barrier"
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["required_characters"] == "Gogeta: Br"
+
+
 def test_extract_self_played_can_place_from_drop_under_self() -> None:
     card = _card(
         "[Auto] When this card is played, place up to 1 ≪Saiyan≫ card from your Drop under this card, "
@@ -428,6 +441,23 @@ def test_extract_self_played_can_place_from_deck_or_drop_under_self() -> None:
     assert rule.handler_params["allowed_colors"] == "red"
     assert rule.handler_params["required_traits"] == "Saiyan"
     assert rule.handler_params["required_card_type"] == "BATTLE"
+
+
+def test_extract_owner_union_absorb_activated_can_place_top_deck_under_self_and_rest_opponent_battle() -> None:
+    card = _card(
+        "[Auto][Once per turn] When one of your ≪Namekian≫ cards activates [Union Absorb], "
+        "place the top card of your deck under this card, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb"
+    )
+    assert rule.trigger == "owner_union_absorb_activated"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["trigger_required_traits"] == "Namekian"
+    assert rule.once_per_turn is True
 
 
 def test_extract_activate_main_can_play_from_under_self_and_place_self_under_played() -> None:
@@ -496,6 +526,153 @@ def test_extract_costed_opponent_main_phase_can_play_from_under_self_and_place_s
     assert rule.trigger == "owner_opponent_main_phase_start"
     assert rule.handler_params["auto_cost_header"] == "(red)"
     assert rule.handler_params["min_opponent_energy"] == 2
+
+
+def test_extract_owner_main_phase_draw_can_place_self_in_drop_before() -> None:
+    card = _card("[Auto] Place this card in its owner's Drop: At the start of your Main Phase, draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "owner_main_phase_start"
+    assert rule.handler_params["amount"] == 1
+    assert bool(rule.handler_params["auto_place_self_in_drop_before"]) is True
+
+
+def test_extract_costed_opponent_main_phase_draw_switch_and_keyword_auto() -> None:
+    card = _card(
+        "[+1][Auto] Discard 1 card from your hand: "
+        "At the start of your opponent's Main Phase, draw 1 card, switch up to 1 of your Leaders and up to 1 of your energy to Active Mode, and your Leader gains [Blocker] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn"
+    )
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["max_leader_targets"] == 1
+    assert rule.handler_params["max_energy_targets"] == 1
+    assert rule.handler_params["grant_keyword"] == "Blocker"
+    assert rule.handler_params["auto_discard_hand_before"] == 1
+    assert rule.handler_params["auto_marker_delta"] == 1
+
+
+def test_extract_owner_main_phase_draw_can_bottom_deck_hand_before() -> None:
+    card = _card(
+        "[0][Auto] If your Leader is a <Trunks: Future> card and you place 1 card from your hand at the bottom of your deck: "
+        "At the start of your opponent's Main Phase, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["auto_marker_delta"] == 0
+    assert rule.handler_params["auto_bottom_deck_hand_before"] == 1
+
+
+def test_extract_owner_main_phase_draw_can_remove_self_before() -> None:
+    card = _card("[Auto] Remove this card from the game: At the start of your opponent's Main Phase, draw 1 card.")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert bool(rule.handler_params["auto_remove_self_before"]) is True
+
+
+def test_extract_owner_main_phase_draw_can_release_under_cards_to_drop_before() -> None:
+    card = _card(
+        "[Auto] Place 2 cards from under this card in their owners' Drops: At the start of your Main Phase, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_draw_n")
+    assert rule.trigger == "owner_main_phase_start"
+    assert rule.handler_params["auto_release_under_to_drop_before"] == 2
+
+
+def test_extract_opponent_main_phase_can_play_from_owner_drop() -> None:
+    card = _card(
+        "[Auto][Limit 1] Place this card in its owner's Drop: "
+        "At the start of your opponent's Main Phase, play up to 1 blue <Gogeta> card with an energy cost of 5 and a [Union] skill from your Drop."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_drop_on_main_phase_start")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert "Gogeta" in rule.handler_params["required_characters"]
+    assert rule.handler_params["max_cost"] == 5
+    assert rule.handler_params["required_skill_text_contains"] == "[union]"
+    assert bool(rule.handler_params["auto_place_self_in_drop_before"]) is True
+
+
+def test_extract_owner_main_phase_can_play_from_owner_hand() -> None:
+    card = _card(
+        "[Auto](Blue): At the start of your Main Phase, play up to 1 blue <Frost> Battle Card with an energy cost of 4 or less from your hand in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_on_main_phase_start")
+    assert rule.trigger == "owner_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert "Frost" in rule.handler_params["required_characters"]
+    assert rule.handler_params["max_cost"] == 4
+    assert bool(rule.handler_params["rest_mode"]) is True
+    assert rule.handler_params["auto_cost_header"] == "(blue)"
+
+
+def test_extract_opponent_main_phase_can_switch_owner_energy_active() -> None:
+    card = _card(
+        "[Auto][+1] Discard 1 card from your hand: At the start of your opponent's Main Phase, choose up to 1 of your multicolor energy and switch it to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_main_phase_start")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert bool(rule.handler_params["requires_multicolor"]) is True
+    assert rule.handler_params["auto_discard_hand_before"] == 1
+    assert rule.handler_params["auto_marker_delta"] == 1
+
+
+def test_extract_owner_main_phase_can_play_from_owner_deck_with_markers() -> None:
+    card = _card(
+        "[Auto](Blue), if your Leader Card and energy are all mono-blue and you choose 1 card in your hand and discard it: "
+        "At the start of your Main Phase, play up to 1 {Frieza & Cell, a Match Made in Hell} from your deck with 2 markers on it in Rest Mode, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_deck_on_main_phase_start")
+    assert rule.trigger == "owner_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "FRIEZA & CELL, A MATCH MADE IN HELL"
+    assert rule.handler_params["markers"] == 2
+    assert bool(rule.handler_params["rest_mode"]) is True
+    assert rule.handler_params["auto_cost_header"] == "(blue)"
+    assert rule.handler_params["auto_discard_hand_before"] == 1
+    assert rule.handler_params["requires_mono_energy"] == "blue"
+
+
+def test_extract_opponent_main_phase_can_switch_self_active_and_gain_keyword() -> None:
+    card = _card(
+        "[Auto] If you have a yellow <Vegeta> card in play or in your Z-Energy: "
+        "At the start of your opponent's Main Phase, switch this card to Active Mode, and it gains [Blocker] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start")
+    assert rule.trigger == "owner_opponent_main_phase_start"
+    assert rule.handler_params["grant_keyword"] == "Blocker"
+    assert rule.handler_params["required_owner_battle_or_z_energy_allowed_colors"] == "yellow"
+    assert rule.handler_params["required_owner_battle_or_z_energy_required_characters"] == "Vegeta"
+
+
+def test_extract_owner_main_phase_can_play_from_owner_hand_on_top_of_self() -> None:
+    card = _card(
+        "[Auto](Blue)(Blue): At the start of your Main Phase, choose up to 1 blue <Frost> card with an energy cost of 4 in your hand and play it on top of this card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start")
+    assert rule.trigger == "owner_main_phase_start"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert "Frost" in rule.handler_params["required_characters"]
+    assert rule.handler_params["max_cost"] == 4
+    assert rule.handler_params["auto_cost_header"] == "(blue)(blue)"
 
 
 def test_extract_ex_evolve_followup_draw_and_switch_self_active_rules() -> None:

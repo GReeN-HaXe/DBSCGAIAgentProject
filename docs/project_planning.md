@@ -1663,6 +1663,63 @@ Resolved:
       - current conservative auto-cost scope:
         - specified energy costs from the `[Auto]` header
         - paid at trigger resolution before the under-card play body fires
+    - status: second auto-costed main-phase timing slice complete
+    - generic runtime/extraction now also covers:
+      - non-energy main-phase auto header costs:
+        - discard from hand before the timed auto body resolves
+        - `Place this card in its owner's Drop` on simple timed auto bodies
+        - unison marker-style `[+1][Auto]` / `[-X][Auto]` header deltas
+        - place cards from hand at the bottom of the deck before the timed auto body resolves
+        - remove the source card from the game before the timed auto body resolves
+        - place cards from under the source into Drop before the timed auto body resolves
+      - first generic main-phase-start draw family:
+        - `owner_main_phase_start:auto_draw_n`
+        - `owner_opponent_main_phase_start:auto_draw_n`
+      - first richer timed main-phase body family:
+        - draw, switch up to `N` owner leader/energy cards active, and grant the owner leader a keyword for the turn
+      - current conservative self-drop scope:
+        - supported on timed draw-style bodies
+        - not yet wired into the under-card promotion family itself
+    - status: third timed main-phase body slice complete
+    - generic runtime/extraction now also covers:
+      - timed play from hand:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_hand_on_main_phase_start`
+      - timed play from Drop:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_drop_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_drop_on_main_phase_start`
+      - timed owner-energy restand:
+        - `owner_main_phase_start:auto_switch_up_to_n_owner_energy_active_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_switch_up_to_n_owner_energy_active_on_main_phase_start`
+      - current conservative body scope:
+        - hand/drop plays use the existing battle/unison registration path
+        - rest-mode entry is supported
+        - timed drop plays can reuse the new `Place this card in its owner's Drop` header cost path
+        - first descriptor-level skill-text filter support for timed bodies now covers `[Union]`
+    - status: fourth timed main-phase body slice complete
+    - generic runtime/extraction now also covers:
+      - timed play from deck:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_deck_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_deck_on_main_phase_start`
+        - current conservative deck scope:
+          - named-target selection
+          - markers on entry
+          - rest-mode entry
+      - timed self-restand plus keyword:
+        - `owner_main_phase_start:auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start`
+      - shared timing-condition hardening:
+        - `if your Leader Card and energy are all mono-blue`
+        - `if you have a yellow <Vegeta> card in play or in your Z-Energy`
+    - status: fifth timed main-phase body slice complete
+    - generic runtime/extraction now also covers:
+      - timed hand promotion onto the source host:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start`
+      - current conservative on-top scope:
+        - hand source only
+        - source host replaced in place
+        - prior stacked cards are preserved under the new top card
   - `[Aegis]`
     - status: first defense-step Aegis action slice complete
     - generic runtime now covers:
@@ -1705,6 +1762,168 @@ Resolved:
         - `[Arrival Blue/Yellow]{y}, draw 1 card:`
       - carrying `played_via=arrival` through the normal play/counter path so on-play effects resolve without a separate summon model
       - first turn-scoped arrival skill-cost reduction slice from battle/main effects, including specified-pip reductions like `{r}`
+  - `[Union Absorb]`
+    - status: first conservative action slice complete
+    - generic runtime now covers:
+      - a dedicated `UNION_ABSORB` legal action during your Main Phase on in-play Battle Cards
+      - paying printed Union Absorb energy costs, including specified pips
+      - leader/energy requirement checks on the Union header text
+      - placing matching material from `hand`, `battle`, `drop`, or `warp` under the host
+      - promoting a matching Battle Card from `deck` or `drop` on top of the host
+      - preserving under-card stacking so the promoted card keeps:
+        - prior under-cards
+        - newly absorbed material
+        - the old host card itself
+      - emitting `played_via=union_absorb` and `union_activated`
+      - first source-backed live wording family:
+        - `... choose 1 ≪Namekian≫ card in your hand or Battle Area and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 on top of this card from your deck ...`
+    - status: second material-source slice complete
+      - `Union Absorb` can now also consume material from under your Leader
+      - first covered live wording family:
+        - `Choose 1 card under your ≪Majin≫ Leader Card and place it under this card: Play up to 1 mono-green <Majin Buu> card with an energy cost of 4 ... from your deck or Drop Area on top of this card ...`
+    - status: third target/material wording slice complete
+      - `Union Absorb` now also supports:
+        - shorter material wording like `place 1 <Towa> from your Warp under this card`
+        - promotion targets from `hand` or `warp`, not just `deck` / `drop`
+      - first covered live wording family:
+        - `place 1 <Towa> from your Warp under this card: ... choose 1 <Mira> with an energy cost of 7 in your hand or Warp and play it on top of this card in Active Mode`
+    - status: first Union activation event slice complete
+      - `union_activated` is now emitted from the real action path
+      - trigger matching now covers:
+        - `self_union_activated`
+        - `owner_union_activated`
+        - `self_union_absorb_activated`
+        - `owner_union_absorb_activated`
+      - generic `auto_draw_n` can now respond to real Union activation events
+    - status: first Union-Absorb-specific play-trigger slice complete
+      - trigger matching now also covers:
+        - `self_played_using_union_absorb`
+        - `owner_other_battle_played_using_union_absorb`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards played via real Union-Absorb actions
+    - status: first owner-Union-Absorb follow-up slice complete
+      - runtime and extractor support now cover:
+        - `owner_union_absorb_activated:auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb`
+      - first covered live wording family:
+        - `When one of your ≪Namekian≫ cards activates [Union Absorb], place the top card of your deck under this card, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.`
+  - `[Union-Fusion]`
+    - status: first conservative action slice complete
+    - generic runtime now covers:
+      - a dedicated `UNION_FUSION` legal action from hand Battle Cards during your Main Phase
+      - paying printed Union-Fusion energy costs, including specified pips
+      - consuming named material Battle Cards from your hand into your Drop
+      - enforcing the first common reminder-text constraint:
+        - `with the same power`
+      - playing the fusion card from hand and carrying `played_via=union_fusion`
+      - emitting `union_activated` with `union_kind=union_fusion`
+      - first covered live wording family:
+        - `[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> (Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)`
+    - status: first Union-Fusion-specific play-trigger slice complete
+      - trigger matching now also covers:
+        - `self_played_using_union_fusion`
+        - `owner_other_battle_played_using_union_fusion`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards played via real Union-Fusion actions
+    - status: first Union-Fusion cost-variant slice complete
+      - runtime now also supports:
+        - bare circled generic costs like `②`
+        - mixed specified plus circled costs like `(Blue)(Blue)③`
+    - status: first Union-Fusion activation/requirement slice complete
+      - generic `auto_draw_n` can now be regression-covered on:
+        - `self_union_fusion_activated`
+        - `owner_union_fusion_activated`
+      - opponent-energy gate is now regression-covered for text like:
+        - `if your opponent has 4 or more energy`
+    - status: first Union-Fusion source-format / limit slice complete
+      - runtime is now regression-covered for DB-style lines like:
+        - `[Union-Fusion] [Limit 1] If your opponent has 2 or more energy: Blue <Son Goku: Br> card and blue <Vegeta: Br> card.`
+      - the once-per-turn lock is now regression-covered across multiple hand copies of the same Fusion card
+    - status: first Union-Fusion support follow-up slice complete
+      - runtime and extractor/catalog support now cover an on-play Fusion follow-up that:
+        - pays `Z-Energy` as an auto cost
+        - arms the next matching owner card played via `[Union]`
+        - grants that played card a keyword for the turn
+      - checked-in extractor coverage now maps this wording family to:
+        - `self_played:auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword`
+      - checked-in skill-cost extraction now maps the header cost to:
+        - `auto_on_play_battle -> send_owner_z_energy_to_drop`
+      - first covered live wording family:
+        - `Place 2 of your Z-Energy into their owner's Drop: When this card is played, activate this skill. During this turn, the next time you play a blue <Gogeta: Br> card with [Union], it gains [Barrier] for the turn.`
+    - status: first Union-Fusion header draw slice complete
+      - runtime now supports header-side draw effects on the Fusion line itself before play finishes
+      - first covered live wording families:
+        - `[Union-Fusion](2), draw 2 cards: <Son Goku: Br> card and <Vegeta: Br> card.`
+        - `[Union-Fusion](Red)(Red)(Red)(Red), draw 1 card: Red <Son Goku: GT> and red <Vegeta: GT>.`
+    - status: first Union-play follow-up trigger slice complete
+      - trigger matching now covers:
+        - `self_played_using_union`
+        - `owner_other_battle_played_using_union`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards that entered play via a real Union action
+  - `[Union-Potara]`
+    - status: first conservative action slice complete
+    - generic runtime now covers:
+      - a dedicated `UNION_POTARA` legal action from hand Battle Cards during your Main Phase
+      - paying printed Union-Potara energy costs, including specified pips
+      - consuming named material Battle Cards from your hand into your Drop
+      - respecting first simple header gates through the shared requirement matcher
+      - playing the Potara card from hand and carrying `played_via=union_potara`
+      - emitting `union_activated` with `union_kind=union_potara`
+      - first covered live wording family:
+        - `[Union-Potara](Black): <Son Goku: Xeno> card and <Vegeta: Xeno> card.`
+    - status: second stacked-together action slice complete
+      - generic runtime now also covers:
+        - `Place this card in Active Mode on top of the 2 specified cards stacked together`
+        - `Place this card in Active Mode from your hand on top of the 2 specified cards stacked together`
+        - promoting from hand onto a Battle Card already carrying the second named material underneath it
+        - preserving the existing under-card chain on the new Potara card
+      - first covered live wording family:
+        - `[Union-Potara](Blue)(Blue): <Goku Black> and <Zamasu> (Place this card in Active Mode on top of the 2 specified cards stacked together)`
+    - status: first header-effect slice complete
+      - declaration-time Union-Potara headers now also support:
+        - `draw 1/2 cards`
+        - `place the top card of your opponent's deck into its owner's Drop`
+        - `choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp`
+      - first covered live wording families:
+        - `[Union-Potara](1), draw 2 cards: Green <Zamasu> card and green <Goku Black> card.`
+        - `[Union-Potara]{g}, if your Leader is a green <Zamasu> card, you draw 1 card, and place the top card of your opponent's deck into its owner's Drop: ...`
+        - `[Union-Potara] Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and draw 1 card: <Son Goku> and <Vegeta>.`
+    - status: first cost-variant slice complete
+      - Union-Potara now also supports:
+        - bare circled generic costs like `②`
+        - mixed specified-plus-generic costs like `(Blue)(Blue)③`
+    - status: first source-format tolerance slice complete
+      - Union-Potara parsing now also tolerates colonless live DB forms like:
+        - `[Union-Potara] Blue <Son Goku> and blue <Vegeta>.`
+    - status: first material-floor requirement slice complete
+      - Union-Potara material matching now also supports shared wording like:
+        - `with energy costs of 4 or more`
+    - status: first expanded material-zone slice complete
+      - Union-Potara can now conservatively choose named materials from:
+        - `energy`
+        - `warp`
+        - `under your black Z-Unison`
+      - when the source card's permanent explicitly allows that expanded material range
+    - status: first expanded-area movement fidelity slice complete
+      - when chosen Union-Potara materials come from Battle Area plus an expanded material area,
+        the expanded-area material now moves into Battle Area first and both chosen materials stay
+        stacked under the played Potara card
+    - status: second hand-material Union-Potara fidelity slice complete
+      - when chosen Union-Potara materials include:
+        - `hand`
+        - `battle + hand`
+        - `hand + energy`
+        - `hand + warp`
+        - `hand + under your black Z-Unison`
+      - the chosen non-stacked materials now enter Battle Area first and stay stacked under the
+        played Potara card instead of going to Drop
+    - status: first Potara-specific play-trigger slice complete
+      - trigger matching now also covers:
+        - `self_played_using_union_potara`
+        - `owner_other_battle_played_using_union_potara`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards played via real Union-Potara actions
+    - status: first Union-Potara activation event slice complete
+      - trigger matching now covers:
+        - `self_union_potara_activated`
+        - `owner_union_potara_activated`
+      - generic `auto_draw_n` can now respond to real Union-Potara activation events
   - `[Dark Over Realm]` / `[Over Realm]` / `Wormhole`
     - status:
       - first summon-side `[Dark Over Realm]` action slice complete

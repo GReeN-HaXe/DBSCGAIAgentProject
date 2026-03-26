@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 322,
+  "effect_rule_count": 323,
   "rules": {
     "10": [
       {
@@ -973,6 +973,23 @@
       }
     ],
     "157": [
+      {
+        "family_id": "owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+        "handler_id": "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "auto_cost_header": "(blue)(blue)",
+          "max_cost": 4,
+          "max_targets": 1,
+          "required_characters": "Lt Frost Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue)(blue): at the start of your main phase, choose up to 1 blue &lt;frost&gt; card with an energy cost of 4 in your hand and play it on top of this card.",
+        "trigger": "owner_main_phase_start"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",

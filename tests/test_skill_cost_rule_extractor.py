@@ -188,6 +188,24 @@ def test_extract_zamasu_scheme_activate_main_costs_are_source_zone_specific() ->
     }
 
 
+def test_extract_auto_on_play_z_energy_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] Place 2 of your Z-Energy into their owner's Drop: When this card is played, activate this skill. "
+            "During this turn, the next time you play a blue <Gogeta: Br> card with [Union], it gains [Barrier] for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_play_battle": [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": 2,
+            }
+        ]
+    }
+
+
 def test_extract_plain_unison_marker_activate_costs_for_main_and_battle() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
