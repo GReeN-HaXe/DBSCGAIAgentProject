@@ -2046,6 +2046,252 @@ Resolved:
       - current semantics are explicit:
         - the same owner-combo event filter path now also supports name-token matching from `{...}` descriptors
         - deterministic target selection removes markers from the first legal opponent Unison
+    - status: fourth owner-card-combo watcher slice complete
+      - added:
+        - `owner_card_comboed:auto_play_self_from_under_leader_or_owner_hand_on_owner_combo`
+        - first public `leader_under` effect-registration bridge for cards stacked under your Leader
+      - first covered live wording family:
+        - `If your Leader is blue and you have 3 or more energy: When you use a blue <Krillin> card from your hand or Battle Area in a combo, play this card from under your Leader or from your hand.`
+      - current semantics are explicit:
+        - owner-combo header costs like `(Blue)` now reuse the normal energy-payment parser on this seam
+        - hand copies continue to use the existing secret-auto path
+        - under-Leader copies register publicly through the new `leader_under` bridge and prefer the under-Leader source before falling back to hand
+    - status: fifth owner-card-combo / Krillin follow-up slice complete
+      - added:
+        - `self_played:auto_play_up_to_n_from_owner_z_energy_combo_or_drop_on_play`
+      - first covered live wording family:
+        - `[Auto](Blue): When this card is played, play up to 1 mono-blue <Krillin> card with an energy cost of 3 from your Z-Energy, Combo Area, or Drop.`
+      - current semantics are explicit:
+        - this first conservative multi-zone play family resolves with deterministic source priority:
+          - `z_energy`
+          - then `combo`
+          - then `drop`
+        - auto header energy costs like `(Blue)` are paid before resolution on this slice
+    - status: sixth owner-card-combo recovery slice complete
+      - added:
+        - `owner_card_comboed:auto_combo_self_from_battle_on_owner_combo`
+      - first covered live wording family:
+        - `When you use a card in a combo, you may use this card from a Battle Area in a combo. If you do, play this card from its owner's Drop at the end of the battle.`
+      - current semantics are explicit:
+        - the owner-combo watcher deterministically moves the source card from Battle Area into Combo Area
+        - the paired battle-end replay uses the existing `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` path with `requires_comboed_from="battle"`
+    - status: first added-to-z-energy trigger slice complete
+      - added:
+        - `self_added_to_z_energy:auto_draw_n`
+        - first emitted `card_added_to_z_energy` effect event
+      - first covered live wording family:
+        - `When this card is added to Z-Energy, draw 1 card.`
+      - current semantics are explicit:
+        - `card_added_to_z_energy` is emitted from the battle-end self-to-z-energy path
+        - the moved card re-registers from `z_energy` before the event is emitted so self-triggers can resolve immediately
+    - status: second added-to-z-energy trigger slice complete
+      - added:
+        - `self_added_to_z_energy:auto_buff_up_to_n_owner_battle_on_z_energy_added`
+      - first covered live wording family:
+        - `When this card is added to Z-Energy, choose up to 1 of your <Hirudegarn> Battle Cards and it gets +1000 power for the turn.`
+      - current semantics are explicit:
+        - the event can now buff filtered owner Battle Cards after the source has re-registered from `z_energy`
+        - character filters are normalized from angle-bracket names for this slice
+    - status: third added-to-z-energy trigger slice complete
+      - added:
+        - `self_added_to_z_energy:auto_switch_up_to_n_opponent_board_rest`
+        - common requirement support for `min_owner_z_energy`
+      - first covered live wording family:
+        - `When this card attacks or when this card is added to Z-Energy, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - the existing opponent-board Rest handler now supports the `card_added_to_z_energy` event
+        - the common requirement path now enforces `you have N or more Z-Energy`
+    - status: first placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_power_reduce_up_to_n_on_placed_under`
+        - first emitted `card_placed_under_card` effect event
+        - first Union Absorb support for material source zones:
+          - `combo area`
+          - `z-energy`
+      - first covered live wording family:
+        - `When this card in your hand, Z-Energy, or Combo Area is placed under your red <Super 17> card, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the turn.`
+      - current semantics are explicit:
+        - under-placement now emits a real provenance event with:
+          - source instance
+          - source zone
+          - host instance
+          - host zone
+        - the first trigger slice is currently exercised through the Union Absorb material-placement path
+    - status: second placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_add_up_to_n_from_owner_deck_to_hand_then_discard_n_on_placed_under`
+      - first covered live wording family:
+        - `When this card in your hand is placed under your green <Cell> Leader, add up to a total of 2 <Android 17>, <Android 18>, and/or <Cell> cards-all green and with an energy cost of 1-from your deck to your hand, place 1 card from your hand into your Drop, then shuffle your deck.`
+      - current semantics are explicit:
+        - the provenance event now supports leader-host follow-ups as well as battle-card hosts
+        - current validation uses a real `card_placed_under_card` emission against a Leader host
+        - the search/discard path is conservative and deterministic:
+          - add up to the first matching cards from deck to hand
+          - then discard the first matching count from hand to Drop
+    - status: third placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_host_gain_keywords_until_opponent_turn_on_placed_under`
+      - first covered live wording family:
+        - `When this card is placed under a red Battle Card with both <Android 17> and <Android 18>, the card on top of this card gains [Barrier] and [Critical] until the end of your opponent's turn.`
+      - current semantics are explicit:
+        - the placed-under provenance event can now target the host card itself
+        - host matching is conservative but faithful for the first repeated shape:
+          - color
+          - card type
+          - required character names
+          - `with both <...> and <...>` is enforced as an all-character requirement
+        - keyword grants use the existing opponent-turn delayed-keyword clear path
+    - status: fourth placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under`
+      - first covered live wording family:
+        - `When this card in your hand is placed under a {Hyperbolic Time Chamber} in your Battle Area, place up to 1 {SS Son Gohan, Showing the Results of Training} from your deck under a {Hyperbolic Time Chamber} in your Battle Area, then shuffle your deck.`
+      - current semantics are explicit:
+        - the placed-under provenance event can now drive follow-up deck placement under a named host in Battle Area
+        - the first slice is conservative:
+          - named source card from `Deck`
+          - named host in `Battle Area`
+          - deterministic first-match selection from deck
+        - the follow-up under-placement also emits `card_placed_under_card` with `placed_from="deck"` for later host-level watcher seams
+    - status: first owner placed-under host-watcher slice complete
+      - added:
+        - `owner_card_placed_under_owner_card:auto_switch_up_to_n_opponent_board_rest`
+      - first covered live wording family:
+        - `When a card is placed under a {Spirit Bomb} in your Battle Area, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - `card_placed_under_card` now supports owner-side host watchers as well as self-source watchers
+        - the first watcher slice is conservative:
+          - named host in `Battle Area`
+          - opponent `Battle Card` targets only
+    - status: fifth placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_switch_up_to_n_owner_board_to_revealed_on_placed_under`
+      - first covered live wording family:
+        - `When this card is placed under a <Vegito> card with a [Union] skill, choose up to 1 of your cards and switch it to Revealed Mode.`
+      - current semantics are explicit:
+        - the placed-under event can now drive owner-board reveal follow-ups
+        - the first slice is conservative:
+          - host in `Battle Area`
+          - host filtered by character and host skill text containing `[Union]`
+          - revealed targets come from owner `Battle Area` / `Unison Area`
+    - status: sixth placed-under provenance slice complete
+      - widened:
+        - `self_placed_under_owner_card:auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under`
+      - first covered live wording family:
+        - `When this card in your hand is placed under a {Destroyed West City} in your Battle Area, place up to 1 red <Android 18> card from your deck under a Z-Extra in your Battle Area, then shuffle your deck.`
+      - current semantics are explicit:
+        - the deck search side now supports descriptor filters, not just named cards
+        - the target host side now supports generic host filters, not just named hosts
+        - the first widened target-host slice is conservative:
+          - owner `Battle Area` only
+          - deterministic first matching target host
+          - first generic host descriptor is `Z-Extra`
+    - status: first played-under named-host follow-up slice complete
+      - widened:
+        - `self_played:auto_self_gain_power_for_turn_on_play`
+      - first covered live wording family:
+        - `When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +10000 power for the turn.`
+      - current semantics are explicit:
+        - the self-played buff family can now require:
+          - `requires_played_from="under"`
+          - `under_host_name_contains`
+        - host matching is stable even when the old host is already tucked under the played card:
+          - it falls back to the `card_played` payload host card id when the host instance is no longer in a public zone
+        - the nearby activate-from-under seam is also a bit more robust:
+          - pending public activates can now recover their source by instance even after that source has moved zones during resolution
+    - status: second played-under named-host follow-up slice complete
+      - widened:
+        - `self_played:auto_self_gain_power_for_turn_on_play`
+        - battle-step combo legality
+      - first covered live wording family:
+        - `When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +5000 power and you may use this card in a combo in Rest Mode for the turn.`
+      - current semantics are explicit:
+        - the self-played buff family can now also grant:
+          - temporary combo-from-battle permission while resting
+        - the first reusable action slice is conservative:
+          - new `COMBO_FROM_BATTLE` legal action
+          - battle cards only
+          - resting source card only
+          - normal combo cost payment
+          - event provenance recorded as `comboed_from="battle"`
+    - status: third Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_attacks:auto_combo_up_to_n_named_from_under_named_host_on_attack_then_draw_n_and_gain_keyword_for_battle`
+      - first covered live wording family:
+        - `When this card attacks, use up to 1 {SS Trunks, Mysterious Future Warrior} under a {Hyperbolic Time Chamber} in your Battle Area in a combo. If you do, draw 1 card, and this card gains [Critical] for the battle.`
+      - current semantics are explicit:
+        - the attack-time under-host combo path is conservative:
+          - owner `Battle Area` named host only
+          - named under-card only
+          - deterministic first matching under-card
+        - if a card is actually used from under the host:
+          - it enters `combo_area`
+          - it records `comboed_from="under"`
+          - the attacker can immediately get a battle-only keyword follow-up
+    - status: fourth Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_activate_main:activate_place_self_from_hand_and_up_to_n_named_from_owner_deck_under_named_host`
+      - first covered live wording family:
+        - `Choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: Place this card from your hand and up to 1 {SS Trunks, Mysterious Future Warrior} from your deck under the chosen card, then shuffle your deck.`
+      - current semantics are explicit:
+        - the activate-side host setup path is conservative:
+          - owner `Battle Area` named host only
+          - rest the chosen host
+          - place self from `hand` under that host
+          - place up to `N` named cards from `deck` under the same host
+        - both under-placement steps emit the normal `card_placed_under_card` event, so existing placed-under follow-ups can trigger on top of this setup line
+    - status: fifth Hyperbolic named-host follow-up slice complete
+      - added:
+        - regression-backed mirror coverage for:
+          - `Choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: Place this card from your hand and up to 1 {SS Vegeta, Arrogance} from your deck under the chosen card, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing activate-side host setup family is now proven for both sibling deck targets:
+          - `{SS Trunks, Mysterious Future Warrior}`
+          - `{SS Vegeta, Arrogance}`
+    - status: sixth Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_activate_main:activate_rest_named_host_and_place_each_named_from_owner_hand_under_it`
+      - first covered live wording family:
+        - `If your Leader is a green <Son Gohan: Childhood> and you discard this card from your hand: Choose up to 1 {Hyperbolic Time Chamber} in your Battle Area, switch it to Rest Mode, place 1 {SS Vegeta, Arrogance} and 1 {SS Trunks, Mysterious Future Warrior} from your hand under the chosen card, then shuffle your deck.`
+      - current semantics are explicit:
+        - the new activate-side hand setup family is conservative:
+          - owner `Battle Area` named host only
+          - source card discarded from `hand` via the normal activate-hand skill-cost path
+          - rest the chosen host
+          - place one each of the named hand cards under that host in printed order
+        - each successful hand placement emits the normal `card_placed_under_card` event, so existing placed-under follow-ups can stack on top of this setup line too
+    - status: first union placed-under provenance slice complete
+      - added:
+        - `self_placed_under_by_union:auto_switch_up_to_n_opponent_board_rest`
+        - `placed_by="union"` provenance on under-placement events from the current Union Absorb path
+      - first covered live wording family:
+        - `When this card is placed under another card by [Union], choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - the first slice is intentionally conservative:
+          - `placed_by="union"` is currently emitted from the Union Absorb material-placement path
+          - the watcher uses the existing opponent-board Rest handler
+          - `ignoring [Barrier]` is honored
+    - status: second union placed-under provenance slice complete
+      - added:
+        - `self_placed_under_by_union:auto_schedule_switch_up_to_n_owner_energy_active_on_opponent_next_main_phase_on_placed_under_by_union`
+        - first delayed next-`main_phase_start` energy-restand queue
+      - first covered live wording family:
+        - `When this card is placed under another card by [Union], activate this skill. At the beginning of your opponent's next Main Phase, choose up to 1 of your blue energy and switch it to Active Mode.`
+      - current semantics are explicit:
+        - the under-placement event schedules a delayed next-opponent-main energy restand
+        - the first slice is conservative:
+          - owner energy only
+          - color filtering
+          - no extra header-cost support on the delayed clause
+    - status: third union placed-under provenance slice complete
+      - added:
+        - `placed_by="union"` provenance on the first Union Potara material-stacking path
+      - current semantics are explicit:
+        - the widened paths now cover:
+          - the hand-material Union Potara fidelity flow
+          - the stacked-host Union Potara replacement flow
+        - cards that are actually stacked under the played Potara card now emit `card_placed_under_card` with `placed_by="union"`
+        - this lets existing `self_placed_under_by_union` watchers resolve from more than just Union Absorb
     - status: first Union-play follow-up trigger slice complete
       - trigger matching now covers:
         - `self_played_using_union`

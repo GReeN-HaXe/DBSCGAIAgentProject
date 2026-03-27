@@ -67,6 +67,7 @@ class CardInstance:
     battle_temporary_keywords: Tuple[str, ...] = ()
     battle_temporary_power_delta: int = 0
     delayed_temporary_keywords: Tuple[str, ...] = ()
+    temporary_can_combo_from_battle_while_resting: bool = False
     temporary_keyword_skills_negated: bool = False
     temporary_skills_negated: bool = False
     permanent_skills_negated: bool = False
@@ -291,6 +292,15 @@ class DelayedActiveSwitch:
 
 
 @dataclass(frozen=True)
+class DelayedMainPhaseEnergySwitch:
+    owner_player_id: int
+    trigger_player_id: int
+    max_targets: int = 1
+    allowed_colors: str = ""
+    requires_multicolor: bool = False
+
+
+@dataclass(frozen=True)
 class ExEvolvePermission:
     owner_player_id: int
     created_turn_number: int
@@ -511,6 +521,7 @@ class GameState:
     delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
     delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
     delayed_active_switches: list[DelayedActiveSwitch] = field(default_factory=list)
+    delayed_main_phase_energy_switches: list[DelayedMainPhaseEnergySwitch] = field(default_factory=list)
     delayed_warps: list[DelayedWarp] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)

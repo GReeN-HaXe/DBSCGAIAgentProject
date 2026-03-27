@@ -269,6 +269,25 @@ def test_extract_activate_main_discard_self_from_hand_cost_rule() -> None:
     }
 
 
+def test_extract_activate_main_discard_self_from_hand_cost_rule_with_colon_in_leader_name() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> and you discard this card from your hand: "
+            "Choose up to 1 {Hyperbolic Time Chamber} in your Battle Area, switch it to Rest Mode, place 1 {SS Vegeta, Arrogance} "
+            "and 1 {SS Trunks, Mysterious Future Warrior} from your hand under the chosen card, then shuffle your deck."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_hand": [
+            {
+                "kind": "send_self_from_hand_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_battle_energy_to_drop_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

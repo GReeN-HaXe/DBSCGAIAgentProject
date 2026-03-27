@@ -371,6 +371,7 @@
         "family_id": "self_played:auto_add_top_deck_to_energy_rest_on_play",
         "handler_id": "auto_add_top_deck_to_energy_rest_on_play",
         "handler_params": {
+          "auto_cost_header": "(blue)(blue)",
           "requires_mono_energy": "blue",
           "rest_mode_only": true
         },
@@ -387,6 +388,7 @@
         "family_id": "self_played:auto_add_top_deck_to_energy_rest_on_play",
         "handler_id": "auto_add_top_deck_to_energy_rest_on_play",
         "handler_params": {
+          "auto_cost_header": "(blue)(blue)",
           "requires_mono_energy": "blue",
           "rest_mode_only": true
         },
@@ -694,7 +696,8 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "auto_cost_header": "(green)"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -1102,7 +1105,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
-          "requires_leader": "if your leader is a red &lt;son goku"
+          "required_leader_traits": "Red &Lt;Son Goku: Gt&Gt; &Lt;Vegeta: Gt&Gt;",
+          "requires_leader": "if your leader is a red &lt;son goku: gt&gt; &lt;vegeta: gt&gt; card, you have 2 or more energy, and 1 or more &lt;son goku: gt&gt; cards are in your combo area"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -1121,7 +1125,8 @@
           "max_cost": 4,
           "max_targets": 1,
           "required_characters": "Lt Son Goku Gt Gt And 20000 Power",
-          "requires_leader": "if your leader is a red &lt;son goku"
+          "required_leader_traits": "Red &Lt;Son Goku: Gt&Gt; &Lt;Vegeta: Gt&Gt;",
+          "requires_leader": "if your leader is a red &lt;son goku: gt&gt; &lt;vegeta: gt&gt; card and you discard this card from your hand"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -1183,6 +1188,7 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "min_owner_z_energy": 6,
           "required_leader_traits": "Red \u226aShadow Dragon\u226b",
           "requires_leader": "if your leader is a red \u226ashadow dragon\u226b card and your leader is a z-leader or you have 6 or more z-energy"
         },
@@ -1197,6 +1203,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "min_owner_z_energy": 6,
           "required_leader_traits": "Red \u226aShadow Dragon\u226b",
           "requires_leader": "if your leader is a red \u226ashadow dragon\u226b card and your leader is a z-leader or you have 6 or more z-energy"
         },
@@ -1230,6 +1237,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "min_owner_z_energy": 6,
+          "required_leader_traits": "Z-Leader,You Have 6,More Z-Energy: Play This",
           "requires_leader": "if your leader is a z-leader or you have 6 or more z-energy"
         },
         "limit_per_turn": 1,
@@ -1245,6 +1254,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "min_owner_z_energy": 6,
+          "required_leader_traits": "Z-Leader,You Have 6,More Z-Energy: Play This",
           "requires_leader": "if your leader is a z-leader or you have 6 or more z-energy"
         },
         "limit_per_turn": 1,
@@ -1330,7 +1341,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
-          "requires_leader": "if your leader is a red &lt;son goku"
+          "required_leader_traits": "Red &Lt;Son Goku: Gt&Gt; &Lt;Vegeta: Gt&Gt;",
+          "requires_leader": "if your leader is a red &lt;son goku: gt&gt; &lt;vegeta: gt&gt; card, you have 2 or more energy, and 1 or more &lt;vegeta: gt&gt; cards are in your combo area"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -1428,7 +1440,8 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "requires_leader": "if your leader is a &lt;piccolo"
+          "required_leader_traits": "&Lt;Piccolo: Sh&Gt;",
+          "requires_leader": "if your leader is a &lt;piccolo: sh&gt; card"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -1443,7 +1456,8 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "requires_leader": "if your leader is a &lt;piccolo"
+          "required_leader_traits": "&Lt;Piccolo: Sh&Gt;",
+          "requires_leader": "if your leader is a &lt;piccolo: sh&gt; card"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -1471,7 +1485,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "requires_leader": "if your leader is a yellow &lt;piccolo",
+          "required_leader_traits": "Yellow &Lt;Piccolo: Sh&Gt;",
+          "requires_leader": "if your leader is a yellow &lt;piccolo: sh&gt; card and you have a yellow &lt;son gohan: sh&gt; z-battle card in play",
           "rest_mode_only": true,
           "resting": true
         },
@@ -1507,7 +1522,8 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "requires_leader": "if your leader is a &lt;piccolo",
+          "required_leader_traits": "&Lt;Piccolo: Sh&Gt;",
+          "requires_leader": "if your leader is a &lt;piccolo: sh&gt; card and you switch this card to rest mode",
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -1522,7 +1538,8 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "requires_leader": "if your leader is a &lt;piccolo",
+          "required_leader_traits": "&Lt;Piccolo: Sh&Gt;",
+          "requires_leader": "if your leader is a &lt;piccolo: sh&gt; card and you switch this card to rest mode",
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -2255,7 +2272,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "requires_leader": "if your leader is a blue &lt;son gohan"
+          "required_leader_traits": "Blue &Lt;Son Gohan: Childhood&Gt;",
+          "requires_leader": "if your leader is a blue &lt;son gohan: childhood&gt; card: you may play 1 skill-less battle card with an energy cost of 2 from your energy"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -2496,7 +2514,6 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 3,
-          "required_leader_traits": "&Lt;Dr. Myuu&Gt;",
           "requires_leader": "if your leader is a &lt;dr. myuu&gt; card, you have 3 or more energy, and you choose 1 &lt;nezi&gt;, 1 &lt;bizu&gt;, and 1 &lt;ribet&gt; card in your drop"
         },
         "limit_per_turn": 1,
@@ -2582,7 +2599,7 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "required_leader_traits": "Red \u226aSaiyan\u226b",
-          "requires_leader": "if your leader is a red \u226asaiyan\u226b card and you choose 5 &lt;son gohan"
+          "requires_leader": "if your leader is a red \u226asaiyan\u226b card and you choose 5 &lt;son gohan: youth&gt;, &lt;vegeta&gt;, &lt;trunks: future&gt;, &lt;piccolo&gt;, and/or &lt;krillin&gt; cards - all red - in your drop"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -2736,7 +2753,7 @@
           "max_add": 1,
           "max_cost": -1,
           "required_characters": "Lt Vegeta Xeno Gt,Lt Trunks Xeno Gt,Lt Vegeks Xeno Gt - All",
-          "requires_leader": "if your leader's back side is a &lt;vegeks",
+          "requires_leader": "if your leader's back side is a &lt;vegeks: xeno&gt; card: when this card is played from your hand",
           "requires_played_from": "hand"
         },
         "limit_per_turn": 1,
@@ -2770,7 +2787,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "requires_leader": "if your leader is a blue &lt;trunks"
+          "required_leader_traits": "Blue &Lt;Trunks: Youth&Gt;",
+          "requires_leader": "if your leader is a blue &lt;trunks: youth&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -2850,7 +2868,7 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "requires_leader": "if your leader's back side is {frieza, resurrected}"
+          "requires_leader": "if your leader's back side is {frieza"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -2869,7 +2887,7 @@
           "max_cost": 4,
           "required_characters": "Or 1 Unison A Specified Cost Of 2",
           "required_traits": "Frieza'S Army",
-          "requires_leader": "if your leader's back side is {frieza, resurrected} and you place 1 card from your hand at the bottom of your deck"
+          "requires_leader": "if your leader's back side is {frieza"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -2950,7 +2968,8 @@
           "allowed_colors": "black",
           "max_cost": -1,
           "max_targets": 1,
-          "requires_leader": "if your leader is a black &lt;son goku"
+          "required_leader_traits": "Black &Lt;Son Goku: Xeno&Gt;-Only",
+          "requires_leader": "if your leader is a black &lt;son goku: xeno&gt;-only card and you place 1 card from your hand at the bottom of your deck"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3347,7 +3366,7 @@
           "amount": 2,
           "min_owner_energy": 2,
           "required_leader_traits": "Red &Lt;Vegito&Gt;",
-          "requires_leader": "if your leader is a red &lt;vegito&gt; card, its front side is facing up, you have 2 or more energy, and you remove this card from the game"
+          "requires_leader": "if your leader is a red &lt;vegito&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3375,6 +3394,7 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "min_owner_z_energy": 3,
           "requires_leader": "if your leader is mono-blue or a &lt;zamasu&gt; or &lt;goku black&gt; card and you have 3 or more z-energy"
         },
         "limit_per_turn": 1,
@@ -3546,7 +3566,6 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "required_leader_traits": "&Lt;Dr. Myuu&Gt;",
           "requires_leader": "if your leader card is a &lt;dr. myuu&gt; card"
         },
         "limit_per_turn": null,
@@ -4849,7 +4868,8 @@
         "family_id": "self_played:auto_add_top_deck_to_energy_rest_on_play",
         "handler_id": "auto_add_top_deck_to_energy_rest_on_play",
         "handler_params": {
-          "requires_leader": "if your leader card is a blue &lt;trunks",
+          "required_leader_traits": "Blue &Lt;Trunks: Future&Gt;",
+          "requires_leader": "if your leader card is a blue &lt;trunks: future&gt; card",
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -4939,7 +4959,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
-          "requires_leader": "if your leader card is yellow, a &lt;son gohan",
+          "requires_leader": "if your leader card is yellow, a &lt;son gohan: adolescence&gt; card, or a &lt;piccolo&gt; card",
           "resting": false
         },
         "limit_per_turn": null,

@@ -430,6 +430,25 @@ def test_extract_self_played_can_place_from_drop_under_self() -> None:
     assert rule.handler_params["required_traits"] == "Saiyan"
 
 
+def test_extract_self_played_can_play_from_z_energy_combo_or_drop() -> None:
+    card = _card(
+        "[Auto](Blue): When this card is played, "
+        "play up to 1 mono-blue <Krillin> card with an energy cost of 3 from your Z-Energy, Combo Area, or Drop."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_play_up_to_n_from_owner_z_energy_combo_or_drop_on_play"
+    )
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["required_characters"] == "Krillin"
+    assert rule.handler_params["max_cost"] == 3
+    assert rule.handler_params["auto_cost_header"] == "(blue)"
+
+
 def test_extract_self_played_can_place_from_deck_or_drop_under_self() -> None:
     card = _card(
         "[Auto] When this card is played, place up to 2 red \u226aSaiyan\u226b Battle Cards from your deck and/or Drop under this card."
@@ -486,6 +505,103 @@ def test_extract_self_played_from_under_by_skill_can_gain_power_and_keyword() ->
     assert rule.handler_params["requires_played_from"] == "under"
     assert rule.handler_params["requires_played_via"] == "skill"
     assert rule.handler_params["min_owner_energy"] == 4
+
+
+def test_extract_self_played_under_named_host_can_gain_power() -> None:
+    card = _card(
+        "[Auto] When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +10000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_self_gain_power_for_turn_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["power_delta"] == 10000
+    assert rule.handler_params["requires_played_from"] == "under"
+    assert rule.handler_params["under_host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+
+
+def test_extract_self_played_under_named_host_can_gain_power_and_combo_from_battle() -> None:
+    card = _card(
+        "[Auto] When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +5000 power and you may use this card in a combo in Rest Mode for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_self_gain_power_for_turn_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["power_delta"] == 5000
+    assert rule.handler_params["requires_played_from"] == "under"
+    assert rule.handler_params["under_host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["grant_can_combo_from_battle_while_resting"] is True
+
+
+def test_extract_self_attacks_combo_named_from_under_named_host_then_draw_and_gain_keyword() -> None:
+    card = _card(
+        "[Auto] When this card attacks, use up to 1 {SS Trunks, Mysterious Future Warrior} under a {Hyperbolic Time Chamber} in your Battle Area in a combo. If you do, draw 1 card, and this card gains [Critical] for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_combo_up_to_n_named_from_under_named_host_on_attack_then_draw_n_and_gain_keyword_for_battle"
+    )
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "SS TRUNKS, MYSTERIOUS FUTURE WARRIOR"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["grant_keyword"] == "Critical"
+
+
+def test_extract_activate_main_can_rest_named_host_and_place_self_and_named_deck_under_it() -> None:
+    card = _card(
+        "[Activate: Main](Green), choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: "
+        "Place this card from your hand and up to 1 {SS Trunks, Mysterious Future Warrior} from your deck under the chosen card, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_place_self_from_hand_and_up_to_n_named_from_owner_deck_under_named_host"
+    )
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "SS TRUNKS, MYSTERIOUS FUTURE WARRIOR"
+    assert rule.handler_params["rest_host"] is True
+
+
+def test_extract_activate_main_can_rest_named_host_and_place_self_and_named_vegeta_from_deck_under_it() -> None:
+    card = _card(
+        "[Activate: Main](Green), choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: "
+        "Place this card from your hand and up to 1 {SS Vegeta, Arrogance} from your deck under the chosen card, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_place_self_from_hand_and_up_to_n_named_from_owner_deck_under_named_host"
+    )
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "SS VEGETA, ARROGANCE"
+    assert rule.handler_params["rest_host"] is True
+
+
+def test_extract_activate_main_can_rest_named_host_and_place_each_named_hand_under_it() -> None:
+    card = _card(
+        "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> and you discard this card from your hand: "
+        "Choose up to 1 {Hyperbolic Time Chamber} in your Battle Area, switch it to Rest Mode, place 1 {SS Vegeta, Arrogance} and 1 {SS Trunks, Mysterious Future Warrior} from your hand under the chosen card, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_rest_named_host_and_place_each_named_from_owner_hand_under_it"
+    )
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["required_name_contains_each"] == "SS VEGETA, ARROGANCE|SS TRUNKS, MYSTERIOUS FUTURE WARRIOR"
+    assert rule.handler_params["rest_host"] is True
+    assert "son gohan: childhood" in rule.handler_params["requires_leader"]
 
 
 def test_extract_opponent_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
@@ -2181,3 +2297,275 @@ def test_extract_owner_combo_remove_markers_from_opponent_unison_rule() -> None:
     assert rule.handler_params["max_targets"] == 1
     assert rule.handler_params["marker_amount"] == 2
     assert rule.handler_params["event_required_name_contains"] == "SS SON GOKU, SHOWING THE RESULTS OF TRAINING"
+
+
+def test_extract_owner_combo_can_play_self_from_under_leader_or_hand_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1](Blue), if your Leader is blue and you have 3 or more energy: "
+        "When you use a blue <Krillin> card from your hand or Battle Area in a combo, "
+        "play this card from under your Leader or from your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_play_self_from_under_leader_or_owner_hand_on_owner_combo"
+    )
+    assert rule.handler_params["event_allowed_colors"] == "blue"
+    assert str(rule.handler_params["event_required_characters"]).lower() == "krillin"
+    assert "blue" in str(rule.handler_params.get("requires_leader", "")).lower()
+    assert rule.handler_params["min_owner_energy"] == 3
+
+
+def test_extract_owner_combo_can_use_self_from_battle_and_replay_at_battle_end_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] When you use a card in a combo, you may use this card from a Battle Area in a combo. "
+        "If you do, play this card from its owner's Drop at the end of the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    combo_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_combo_self_from_battle_on_owner_combo"
+    )
+    battle_end_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed_battle_end"
+        and r.handler_id == "auto_play_self_from_combo_on_battle_end"
+    )
+    assert combo_rule.limit_per_turn == 1
+    assert battle_end_rule.limit_per_turn == 1
+    assert battle_end_rule.handler_params["requires_comboed_from"] == "battle"
+
+
+def test_extract_self_added_to_z_energy_draw_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have a ≪Universe 7≫ card in your Combo Area: "
+        "When this card is added to Z-Energy, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_added_to_z_energy"
+        and r.handler_id == "auto_draw_n"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.limit_per_turn == 1
+    assert rule.handler_params["required_owner_combo_required_traits"] == "Universe 7"
+
+
+def test_extract_self_added_to_z_energy_can_buff_owner_battle_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your Leader is a blue ≪Phantom Demon≫ card: "
+        "When this card is added to Z-Energy, choose up to 1 of your <Hirudegarn> Battle Cards and it gets +1000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_added_to_z_energy"
+        and r.handler_id == "auto_buff_up_to_n_owner_battle_on_z_energy_added"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == 1000
+    assert rule.handler_params["required_characters"] == "Hirudegarn"
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_self_added_to_z_energy_can_switch_opponent_board_rest_rule() -> None:
+    card = _card(
+        "[Dual Attack]\n"
+        "[Auto][Limit 1] If your Leader is yellow and you have 3 or more Z-Energy: "
+        "When this card attacks or when this card is added to Z-Energy, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_added_to_z_energy"
+        and r.handler_id == "auto_switch_up_to_n_opponent_board_rest"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["min_owner_z_energy"] == 3
+    assert "if your leader is yellow" in str(rule.handler_params["requires_leader"]).lower()
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_self_placed_under_owner_card_can_power_reduce_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your Leader's back side is a red <Super 17> card: "
+        "When this card in your hand, Z-Energy, or Combo Area is placed under your red <Super 17> card, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_power_reduce_up_to_n_on_placed_under"
+    )
+    assert rule.handler_params["requires_placed_from_zones"] == "hand,z_energy,combo"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["power_delta"] == -10000
+    assert rule.handler_params["host_allowed_colors"] == "red"
+    assert rule.handler_params["host_required_characters"] == "Super 17"
+    assert "leader's back side" in str(rule.handler_params["requires_leader"]).lower()
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_self_placed_under_owner_leader_can_search_then_discard_rule() -> None:
+    card = _card(
+        "[Auto] When this card in your hand is placed under your green <Cell> Leader, "
+        "add up to a total of 2 <Android 17>, <Android 18>, and/or <Cell> cards-all green and with an energy cost of 1-from your deck to your hand, "
+        "place 1 card from your hand into your Drop, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_then_discard_n_on_placed_under"
+    )
+    assert rule.handler_params["requires_placed_from_zones"] == "hand"
+    assert rule.handler_params["required_host_zone"] == "leader"
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["discard_count"] == 1
+    assert rule.handler_params["allowed_colors"] == "green"
+    assert rule.handler_params["required_characters"] == "Android 17,Android 18,Cell"
+    assert rule.handler_params["max_cost"] == 1
+    assert rule.handler_params["host_allowed_colors"] == "green"
+    assert rule.handler_params["host_required_characters"] == "Cell"
+
+
+def test_extract_self_placed_under_owner_card_can_grant_host_keywords_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader is {Android 17 & Android 18, Future Evil}: "
+        "When this card is placed under a red Battle Card with both <Android 17> and <Android 18>, "
+        "the card on top of this card gains [Barrier] and [Critical] until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_host_gain_keywords_until_opponent_turn_on_placed_under"
+    )
+    assert rule.handler_params["required_host_zone"] == "battle"
+    assert rule.handler_params["host_allowed_colors"] == "red"
+    assert rule.handler_params["host_required_card_type"] == "BATTLE"
+    assert rule.handler_params["host_required_characters"] == "Android 17,Android 18"
+    assert rule.handler_params["host_requires_all_characters"] is True
+    assert rule.handler_params["grant_keywords"] == "Barrier,Critical"
+    assert "future evil" in str(rule.handler_params["requires_leader"]).lower()
+
+
+def test_extract_self_placed_under_owner_card_can_place_named_from_deck_under_named_host_rule() -> None:
+    card = _card(
+        "[Auto] When this card in your hand is placed under a {Hyperbolic Time Chamber} in your Battle Area, "
+        "place up to 1 {SS Son Gohan, Showing the Results of Training} from your deck under a {Hyperbolic Time Chamber} in your Battle Area, "
+        "then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under"
+    )
+    assert rule.handler_params["requires_placed_from_zones"] == "hand"
+    assert rule.handler_params["required_host_zone"] == "battle"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["required_name_contains"] == "SS SON GOHAN, SHOWING THE RESULTS OF TRAINING"
+    assert rule.handler_params["target_host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+
+
+def test_extract_self_placed_under_owner_card_can_place_filtered_from_deck_under_target_host_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] When this card in your hand is placed under a {Destroyed West City} in your Battle Area, "
+        "place up to 1 red <Android 18> card from your deck under a Z-Extra in your Battle Area, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under"
+        and r.handler_params.get("host_name_contains") == "DESTROYED WEST CITY"
+    )
+    assert rule.handler_params["requires_placed_from_zones"] == "hand"
+    assert rule.handler_params["required_host_zone"] == "battle"
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_characters"] == "Android 18"
+    assert rule.handler_params["target_host_required_card_type"] == "EXTRA"
+
+
+def test_extract_owner_card_placed_under_named_host_can_rest_opponent_battle_rule() -> None:
+    card = _card(
+        "[Auto][Once per turn] When a card is placed under a {Spirit Bomb} in your Battle Area, "
+        "choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_placed_under_owner_card"
+        and r.handler_id == "auto_switch_up_to_n_opponent_board_rest"
+    )
+    assert rule.handler_params["required_host_zone"] == "battle"
+    assert rule.handler_params["host_name_contains"] == "SPIRIT BOMB"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["target_card_types"] == "BATTLE"
+
+
+def test_extract_self_placed_under_owner_card_can_switch_owner_board_to_revealed_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] When this card is placed under a <Vegito> card with a [Union] skill, "
+        "choose up to 1 of your cards and switch it to Revealed Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_switch_up_to_n_owner_board_to_revealed_on_placed_under"
+    )
+    assert rule.handler_params["required_host_zone"] == "battle"
+    assert rule.handler_params["host_required_card_type"] == "BATTLE"
+    assert rule.handler_params["host_required_characters"] == "Vegito"
+    assert rule.handler_params["host_required_skill_text_contains"] == "[union"
+    assert rule.handler_params["max_targets"] == 1
+
+
+def test_extract_self_placed_under_by_union_can_rest_opponent_battle_rule() -> None:
+    card = _card(
+        "[Auto] When this card is placed under another card by [Union], choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_by_union"
+        and r.handler_id == "auto_switch_up_to_n_opponent_board_rest"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["target_card_types"] == "BATTLE"
+    assert rule.handler_params["ignores_barrier"] is True
+
+
+def test_extract_self_placed_under_by_union_can_schedule_opponent_next_main_energy_restand_rule() -> None:
+    card = _card(
+        "[Auto] When this card is placed under another card by [Union], activate this skill. "
+        "At the beginning of your opponent's next Main Phase, choose up to 1 of your blue energy and switch it to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_by_union"
+        and r.handler_id == "auto_schedule_switch_up_to_n_owner_energy_active_on_opponent_next_main_phase_on_placed_under_by_union"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "blue"

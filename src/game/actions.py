@@ -26,6 +26,7 @@ class ActionType(str, Enum):
     ACTIVATE_BATTLE_SKILL = "activate_battle_skill"
     ACTIVATE_BLOCKER = "activate_blocker"
     COMBO_FROM_HAND = "combo_from_hand"
+    COMBO_FROM_BATTLE = "combo_from_battle"
     END_OFFENSE_STEP = "end_offense_step"
     END_DEFENSE_STEP = "end_defense_step"
     DECLARE_COUNTER_FROM_HAND = "declare_counter_from_hand"
