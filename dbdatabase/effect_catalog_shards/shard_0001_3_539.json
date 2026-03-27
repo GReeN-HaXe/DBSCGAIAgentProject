@@ -1956,6 +1956,7 @@
           "max_targets": 1,
           "power_delta": 10000,
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_owner_turn": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -1973,6 +1974,7 @@
         "handler_params": {
           "amount": 1,
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_opponent_turn": true
         },
         "limit_per_turn": null,
@@ -1991,6 +1993,7 @@
           "power_delta": 5000,
           "required_characters": "And It Gets 10000 Power For The Battle,Then If It S Your Opponent S Turn,Draw 1,Then Choose Up To 1 Of Your",
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_opponent_turn": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -3406,6 +3409,7 @@
         "handler_params": {
           "amount": 1,
           "requires_leader": "if your leader card and energy are all black",
+          "requires_mono_energy": "black",
           "requires_opponent_turn": true
         },
         "limit_per_turn": null,

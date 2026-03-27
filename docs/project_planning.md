@@ -1936,6 +1936,116 @@ Resolved:
           - card type
           - color match
           - max energy cost
+    - status: older combo power-reduction family aligned with the newer self-combo seam
+      - `self_comboed:auto_power_reduce_up_to_n_on_combo` now explicitly preserves:
+        - `requires_comboed_from="hand"` when the source wording says `from your hand`
+      - this keeps the established `-10000 power on combo` family from leaking onto future non-hand combo sources
+    - status: fifth adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, this card gets +1000 combo power for the duration of the turn for each card in your Drop Area and Warp.`
+      - current semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - owner `Drop + Warp` count is used at combo resolution time
+        - the optional errata cap like `up to a maximum of 12` is supported
+    - status: sixth adjacent combo/battle-end support slice complete
+      - `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` now also supports:
+        - hand-origin combo gating on the comboed card instance itself
+        - owner-battle requirement filters like:
+          - `with an <Android 18> card in battle`
+        - first conservative auto-header combo cost support:
+          - single-color `[Auto](Blue)` energy payment via `auto_on_combo_battle`
+    - status: seventh adjacent combo/battle-end support slice complete
+      - the same `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` family now also covers:
+        - `At the end of the battle after you combo with this card from your hand, if your Leader Card is ... , play this card`
+        - optional `in Rest Mode`
+      - current semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - common leader requirement parsing is reused
+    - status: eighth adjacent combo/battle-end support slice complete
+      - added:
+        - `self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end`
+      - common requirement extraction/runtime now also covers:
+        - leader back-side name filters
+        - owner Combo Area card filters like:
+          - `you have a <Vegeta: Xeno> card in your Combo Area`
+      - first covered live wording family:
+        - `When this card is used in a combo from your hand, add this card from your Drop to your Z-Energy at the end of the battle.`
+    - status: ninth adjacent combo/battle-end support slice complete
+      - added:
+        - `self_comboed:auto_self_gain_combo_power_on_combo`
+        - `self_comboed_battle_end:auto_send_self_to_owner_warp_on_battle_end`
+      - first covered live wording family:
+        - `When you combo with this card from your hand, this card gets +5000 combo power for the duration of the turn and is sent to its owner's Warp at the end of the battle.`
+      - current semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - the combo-power increase applies to the live combo-area instance before battle resolution
+        - the same card then moves from Combo Area or Drop to Warp at `battle_end`
+    - status: tenth adjacent self-combo support slice complete
+      - existing generic combo draw handling plus the new flat combo-power family now cover:
+        - `When this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.`
+      - current semantics are explicit:
+        - draw resolution reuses `self_comboed:auto_draw_n`
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - the flat combo-power increase applies to the live combo-area instance for the current battle
+    - status: eleventh adjacent self-combo support slice complete
+      - added:
+        - `self_comboed:auto_buff_other_owner_combo_card_on_combo`
+      - existing generic combo draw handling plus the new combo-area buff family now cover:
+        - `When this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your Combo Area and it gets +6000 combo power for the battle.`
+      - current semantics are explicit:
+        - draw resolution reuses `self_comboed:auto_draw_n`
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - deterministic targeting picks the first other card already in the owner Combo Area
+    - status: twelfth adjacent self-combo support slice complete
+      - added:
+        - `self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo`
+      - the adjacent self-combo seam now also covers repeated Super Combo wording like:
+        - `When this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. If you do, draw 2 cards.`
+      - current semantics are explicit:
+        - the flat combo-power increase reuses `self_comboed:auto_self_gain_combo_power_on_combo`
+        - the optional hand-to-bottom-deck branch resolves deterministically from the front of hand
+        - if no spare hand card remains after comboing, the optional draw branch simply doesn’t resolve
+    - status: first owner-card-combo watcher slice complete
+      - added shared owner-combo event matching for:
+        - `event_requires_comboed_from`
+        - `event_allowed_colors`
+        - `event_required_card_type`
+        - `event_required_traits`
+        - `event_required_characters`
+        - `event_required_name_contains`
+        - `event_requires_skill_less`
+        - `event_min_energy_cost` / `event_max_energy_cost` / `event_exact_energy_cost`
+      - added:
+        - `owner_card_comboed:auto_comboed_card_gain_combo_power_on_owner_combo`
+        - owner-combo event filtering on generic `auto_draw_n`
+      - first covered live wording families:
+        - `When one of your skill-less Battle Cards is used in a combo, it gets +4000 combo power for the battle, then draw 1 card.`
+        - `When you use a blue card from your hand in a combo, draw 1 card.`
+      - current semantics are explicit:
+        - combo-trigger header costs now support:
+          - `auto_on_owner_combo_battle -> remove_owner_unison_markers`
+        - the same owner-combo cost is paid once per triggering combo event, even if multiple rules from the same skill line resolve
+    - status: second owner-card-combo watcher slice complete
+      - added:
+        - `owner_card_comboed:auto_switch_self_active_on_owner_combo`
+        - `owner_card_comboed:auto_add_markers_and_self_power_for_turn_on_owner_combo`
+        - `owner_card_comboed:auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo`
+      - first covered live wording families:
+        - `When you use a card in a combo, switch this card to Active Mode.`
+        - `When you use a black Battle Card in a combo, add a marker to this card and it gets +5000 power for the turn.`
+        - `When you use a black Battle Card in a combo, your opponent sends 1 Battle Card from their Drop Area to their Warp; if there are no Battle Cards in your opponent's Drop Area, draw 1 card.`
+      - current semantics are explicit:
+        - owner-combo watchers now reuse the same filtered combo-event probe instead of card-specific runtime branches
+        - the opponent-drop branch resolves deterministically from the first legal Battle Card in Drop
+        - the fallback draw branch only fires if no opponent Battle Card was sent to Warp
+    - status: third owner-card-combo watcher slice complete
+      - added:
+        - `owner_card_comboed:auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo`
+      - first covered live wording family:
+        - `If this card is in a battle: When you use a {SS Son Goku, Showing the Results of Training} in a combo, choose up to 1 of your opponent's Unisons and remove 2 markers from it.`
+      - current semantics are explicit:
+        - the same owner-combo event filter path now also supports name-token matching from `{...}` descriptors
+        - deterministic target selection removes markers from the first legal opponent Unison
     - status: first Union-play follow-up trigger slice complete
       - trigger matching now covers:
         - `self_played_using_union`

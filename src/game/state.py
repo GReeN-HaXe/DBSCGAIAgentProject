@@ -35,6 +35,7 @@ class CardInstance:
     energy_cost: Optional[int] = None
     combo_cost: Optional[int] = None
     combo_power: Optional[int] = None
+    comboed_from: Optional[str] = None
     keywords: Tuple[str, ...] = ()
     has_counter: bool = False
     counter_modes: Tuple[str, ...] = ()

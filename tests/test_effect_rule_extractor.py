@@ -961,6 +961,7 @@ def test_extract_combo_can_reduce_opponent_battle_power_rule() -> None:
     rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_power_reduce_up_to_n_on_combo")
     assert rule.handler_params["max_targets"] == 1
     assert rule.handler_params["power_delta"] == -10000
+    assert rule.handler_params["requires_comboed_from"] == "hand"
     assert rule.handler_params["requires_leader"] == "if your leader card is red or yellow"
 
 
@@ -1932,3 +1933,251 @@ def test_extract_self_combo_place_matching_deck_card_in_drop_rule() -> None:
     assert rule.handler_params["allowed_colors"] == "green,yellow"
     assert rule.handler_params["max_cost"] == 4
     assert rule.handler_params["required_card_type"] == "BATTLE"
+
+
+def test_extract_self_combo_gain_combo_power_per_owner_drop_and_warp_rule() -> None:
+    card = _card(
+        "[Super Combo][Auto] If all of your energy is black: "
+        "When you combo with this card from your hand, this card gets +1000 combo power for the duration of the turn for each card in your Drop Area and Warp (up to a maximum of 12)."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp"
+    )
+    assert rule.handler_params["combo_power_per_card"] == 1000
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["max_count"] == 12
+    assert rule.handler_params["requires_mono_energy"] == "black"
+
+
+def test_extract_self_combo_battle_end_play_self_with_owner_battle_requirement_rule() -> None:
+    card = _card(
+        "[Auto](Blue), during your turn: "
+        "When you combo with this card from your hand with an <Android 18> card in battle, play this card at the end of the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed_battle_end"
+        and r.handler_id == "auto_play_self_from_combo_on_battle_end"
+    )
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["requires_owner_turn"] is True
+    assert rule.handler_params["required_owner_battle_required_characters"] == "Android 18"
+
+
+def test_extract_self_combo_battle_end_play_self_in_rest_mode_rule() -> None:
+    card = _card(
+        "[Auto] At the end of the battle after you combo with this card from your hand, if your Leader Card is ≪Universe 11≫, play this card in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed_battle_end"
+        and r.handler_id == "auto_play_self_from_combo_on_battle_end"
+    )
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["resting"] is True
+    assert rule.handler_params["requires_leader"] == "if your leader card is ≪universe 11≫"
+
+
+def test_extract_self_combo_battle_end_add_self_to_z_energy_rule() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your Leader's back side is a black <Vegito: Xeno> card, you have 2 or more energy, and you have a <Vegeta: Xeno> card in your Combo Area: "
+        "When this card is used in a combo from your hand, add this card from your Drop to your Z-Energy at the end of the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed_battle_end"
+        and r.handler_id == "auto_add_self_to_owner_z_energy_on_battle_end"
+    )
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["required_leader_back_name_contains"] == "VEGITO: XENO"
+    assert rule.handler_params["min_owner_energy"] == 2
+    assert rule.handler_params["required_owner_combo_required_characters"] == "Vegeta: Xeno"
+
+
+def test_extract_self_combo_gain_combo_power_and_warp_self_on_battle_end_rules() -> None:
+    card = _card(
+        "[Auto] When you combo with this card from your hand, this card gets +5000 combo power for the duration of the turn and is sent to its owner's Warp at the end of the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    combo_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_self_gain_combo_power_on_combo"
+    )
+    battle_end_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed_battle_end"
+        and r.handler_id == "auto_send_self_to_owner_warp_on_battle_end"
+    )
+    assert combo_rule.handler_params["combo_power_delta"] == 5000
+    assert combo_rule.handler_params["requires_comboed_from"] == "hand"
+    assert battle_end_rule.handler_params["requires_comboed_from"] == "hand"
+
+
+def test_extract_self_combo_draw_and_gain_combo_power_for_battle_rules() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is green and your life is at 4 or less: "
+        "When this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_draw_n"
+    )
+    combo_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_self_gain_combo_power_on_combo"
+    )
+    assert draw_rule.handler_params["amount"] == 1
+    assert "green" in str(draw_rule.handler_params.get("requires_leader", "")).lower()
+    assert combo_rule.handler_params["combo_power_delta"] == 10000
+    assert combo_rule.handler_params["requires_comboed_from"] == "hand"
+    assert "green" in str(combo_rule.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_self_combo_draw_and_buff_other_combo_card_for_battle_rules() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is yellow and your life is at 4 or less: "
+        "When this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your Combo Area and it gets +6000 combo power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_draw_n"
+    )
+    buff_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_buff_other_owner_combo_card_on_combo"
+    )
+    assert draw_rule.handler_params["amount"] == 1
+    assert buff_rule.handler_params["combo_power_delta"] == 6000
+    assert buff_rule.handler_params["requires_comboed_from"] == "hand"
+    assert buff_rule.handler_params["exclude_self"] is True
+    assert "yellow" in str(buff_rule.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_self_combo_gain_combo_power_and_optional_bottom_deck_draw_rules() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is red, your life is at 4 or less, and all of your energy is red: "
+        "When this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. If you do, draw 2 cards."
+    )
+    rules = extract_effect_rules_from_card(card)
+    combo_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_self_gain_combo_power_on_combo"
+    )
+    draw_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo"
+    )
+    assert combo_rule.handler_params["combo_power_delta"] == 10000
+    assert "red" in str(combo_rule.handler_params.get("requires_leader", "")).lower()
+    assert draw_rule.handler_params["bottom_deck_from_hand"] == 1
+    assert draw_rule.handler_params["amount"] == 2
+    assert "all of your energy is red" in str(draw_rule.handler_params.get("requires_leader", "")).lower()
+
+
+def test_extract_owner_comboed_card_gain_combo_power_and_draw_rules() -> None:
+    card = _card(
+        "[Auto][Once per turn] When one of your skill-less Battle Cards is used in a combo, it gets +4000 combo power for the battle, then draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    buff_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_comboed_card_gain_combo_power_on_owner_combo"
+    )
+    draw_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_draw_n"
+    )
+    assert buff_rule.handler_params["combo_power_delta"] == 4000
+    assert buff_rule.handler_params["event_requires_skill_less"] is True
+    assert buff_rule.handler_params["event_required_card_type"] == "BATTLE"
+    assert draw_rule.handler_params["amount"] == 1
+    assert draw_rule.handler_params["event_requires_skill_less"] is True
+
+
+def test_extract_owner_combo_switch_self_active_and_owner_combo_marker_buff_rules() -> None:
+    card = _card(
+        "[Auto][Once per turn] When you use a card in a combo, switch this card to Active Mode.\n"
+        "[Auto][Once per turn] When you use a black Battle Card in a combo, add a marker to this card and it gets +5000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    switch_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_switch_self_active_on_owner_combo"
+    )
+    buff_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_add_markers_and_self_power_for_turn_on_owner_combo"
+    )
+    assert switch_rule.handler_params == {}
+    assert buff_rule.handler_params["marker_delta"] == 1
+    assert buff_rule.handler_params["power_delta"] == 5000
+    assert buff_rule.handler_params["event_allowed_colors"] == "black"
+    assert buff_rule.handler_params["event_required_card_type"] == "BATTLE"
+
+
+def test_extract_owner_combo_send_opponent_drop_to_warp_else_draw_rule() -> None:
+    card = _card(
+        "[Auto][Once per turn] If this card is in a battle: When you use a black Battle Card in a combo, your opponent sends 1 Battle Card from their Drop Area to their Warp; if there are no Battle Cards in your opponent's Drop Area, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["draw_amount"] == 1
+    assert rule.handler_params["event_allowed_colors"] == "black"
+    assert rule.handler_params["event_required_card_type"] == "BATTLE"
+
+
+def test_extract_owner_combo_remove_markers_from_opponent_unison_rule() -> None:
+    card = _card(
+        "[Auto][Once per turn] If this card is in a battle: When you use a {SS Son Goku, Showing the Results of Training} in a combo, choose up to 1 of your opponent's Unisons and remove 2 markers from it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_card_comboed"
+        and r.handler_id == "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["marker_amount"] == 2
+    assert rule.handler_params["event_required_name_contains"] == "SS SON GOKU, SHOWING THE RESULTS OF TRAINING"

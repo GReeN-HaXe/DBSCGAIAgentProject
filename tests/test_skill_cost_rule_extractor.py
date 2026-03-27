@@ -887,6 +887,43 @@ def test_extract_auto_on_opponent_combo_z_energy_cost_rule() -> None:
     }
 
 
+def test_extract_auto_on_combo_single_energy_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto](Blue), during your turn: "
+            "When you combo with this card from your hand with an <Android 18> card in battle, play this card at the end of the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+                "allowed_colors": "blue",
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_owner_combo_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto][Once per turn][Spirit Boost 1] "
+            "When one of your skill-less Battle Cards is used in a combo, it gets +4000 combo power for the battle, then draw 1 card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_owner_combo_battle": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_engine_uses_catalog_for_counter_alternate_hidden_battle_cost() -> None:
     catalog_path = _workspace_temp_catalog_path("skill_cost_alt_catalog")
     save_skill_cost_rules_json(

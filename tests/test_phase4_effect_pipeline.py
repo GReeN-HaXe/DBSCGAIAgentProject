@@ -3076,6 +3076,60 @@ def test_phase4_self_combo_can_place_matching_deck_card_in_drop() -> None:
     assert any(cp.name == "effect_auto_place_up_to_n_from_owner_deck_into_drop_on_combo" for cp in state.checkpoints)
 
 
+def test_phase4_self_combo_can_gain_combo_power_from_owner_drop_and_warp_with_cap() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            278221: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp",
+                    "handler_params": {
+                        "combo_power_per_card": 1000,
+                        "requires_comboed_from": "hand",
+                        "max_count": 12,
+                        "requires_mono_energy": "black",
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=991400, card_id=400, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=991401, card_id=401, owner_id=1, card_type="BATTLE", color="Black"),
+    ]
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=991402, card_id=402, owner_id=1, card_type="BATTLE", color="Black", power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=991403, card_id=278221, owner_id=1, card_type="BATTLE", color="Black", combo_cost=0, combo_power=10000)
+    ]
+    state.players[1].drop = [CardInstance(instance_id=991410 + i, card_id=410 + i, owner_id=1, card_type="BATTLE") for i in range(8)]
+    state.players[1].warp = [CardInstance(instance_id=991420 + i, card_id=420 + i, owner_id=1, card_type="BATTLE") for i in range(7)]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    assert len(state.players[1].combo_area) == 1
+    assert state.players[1].combo_area[0].combo_power == 22000
+    assert any(cp.name == "effect_auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp" for cp in state.checkpoints)
+
+
 def test_phase4_owner_other_battle_played_using_union_can_trigger_owner_auto_draw() -> None:
     engine = RulesEngine(
         effect_rules={
@@ -13313,6 +13367,731 @@ def test_phase4_combo_battle_end_can_play_self_from_combo_to_battle_resting() ->
     assert played.resting is True
     assert all(c.instance_id != 880212 for c in state.players[1].combo_area)
     assert any(cp.name == "effect_auto_play_self_from_combo_on_battle_end" for cp in state.checkpoints)
+
+
+def test_phase4_combo_battle_end_can_pay_blue_cost_and_require_android_18_in_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            411301: [
+                {
+                    "trigger": "self_comboed_battle_end",
+                    "handler_id": "auto_play_self_from_combo_on_battle_end",
+                    "handler_params": {
+                        "requires_comboed_from": "hand",
+                        "requires_owner_turn": True,
+                        "required_owner_battle_required_characters": "Android 18",
+                    },
+                }
+            ]
+        },
+        skill_cost_rules={
+            411301: {
+                "auto_on_combo_battle": [
+                    {
+                        "kind": "send_owner_energy_to_drop",
+                        "amount": 1,
+                        "allowed_colors": "blue",
+                    }
+                ]
+            }
+        },
+    )
+    engine._card_cache[(18018, "front")] = CardRuntimeData(card_type="BATTLE", color="Blue", characters=("Android 18",), card_name="Android 18")
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].battle_area = [
+        CardInstance(instance_id=880220, card_id=18018, owner_id=1, card_type="BATTLE", color="Blue", power=15000),
+        CardInstance(instance_id=880221, card_id=221, owner_id=1, card_type="BATTLE", color="Blue", power=10000),
+    ]
+    state.players[1].hand = [
+        CardInstance(instance_id=880222, card_id=411301, owner_id=1, card_type="BATTLE", color="Blue", combo_cost=0, combo_power=5000)
+    ]
+    state.players[1].energy = [
+        CardInstance(instance_id=880223, card_id=223, owner_id=1, card_type="BATTLE", color="Red"),
+        CardInstance(instance_id=880224, card_id=224, owner_id=1, card_type="BATTLE", color="Blue"),
+    ]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+
+    played = next((c for c in state.players[1].battle_area if c.instance_id == 880222), None)
+    assert played is not None
+    assert [c.color for c in state.players[1].energy] == ["Red"]
+    assert any(c.color == "Blue" for c in state.players[1].drop)
+    assert any(cp.name == "effect_auto_play_self_from_combo_on_battle_end" for cp in state.checkpoints)
+
+
+def test_phase4_combo_battle_end_can_play_self_active_from_hand_with_green_leader_requirement() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            350151: [
+                {
+                    "trigger": "self_comboed_battle_end",
+                    "handler_id": "auto_play_self_from_combo_on_battle_end",
+                    "handler_params": {
+                        "requires_comboed_from": "hand",
+                        "requires_leader": "if your leader card is green",
+                    },
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Green"
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880230, card_id=230, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880231, card_id=350151, owner_id=1, card_type="BATTLE", color="Green", combo_cost=0, combo_power=5000)
+    ]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+
+    played = next((c for c in state.players[1].battle_area if c.instance_id == 880231), None)
+    assert played is not None
+    assert played.resting is False
+    assert all(c.instance_id != 880231 for c in state.players[1].combo_area)
+    assert any(cp.name == "effect_auto_play_self_from_combo_on_battle_end" for cp in state.checkpoints)
+
+
+def test_phase4_combo_battle_end_can_add_self_to_owner_z_energy_with_combo_area_requirement() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30610: [
+                {
+                    "trigger": "self_comboed_battle_end",
+                    "handler_id": "auto_add_self_to_owner_z_energy_on_battle_end",
+                    "handler_params": {
+                        "requires_comboed_from": "hand",
+                        "required_leader_back_name_contains": "VEGITO: XENO",
+                        "min_owner_energy": 2,
+                        "required_owner_combo_required_characters": "Vegeta: Xeno",
+                    },
+                    "limit_per_turn": 1,
+                }
+            ]
+        }
+    )
+    engine._card_cache[(1, "back")] = CardRuntimeData(card_name="Vegito: Xeno", color="Black")
+    engine._card_cache[(8802401, "front")] = CardRuntimeData(card_type="BATTLE", color="Black", characters=("Vegeta: Xeno",), card_name="Vegeta: Xeno")
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].energy = [
+        CardInstance(instance_id=880240, card_id=240, owner_id=1, card_type="BATTLE", color="Black"),
+        CardInstance(instance_id=880241, card_id=241, owner_id=1, card_type="BATTLE", color="Black"),
+    ]
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880242, card_id=242, owner_id=1, card_type="BATTLE", color="Black", power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880243, card_id=8802401, owner_id=1, card_type="BATTLE", color="Black", combo_cost=0, combo_power=5000),
+        CardInstance(instance_id=880244, card_id=30610, owner_id=1, card_type="BATTLE", color="Black", combo_cost=0, combo_power=5000),
+    ]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo1 = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo1)
+    combo2 = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo2)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+
+    assert any(c.instance_id == 880244 for c in state.players[1].z_energy)
+    assert all(c.instance_id != 880244 for c in state.players[1].combo_area)
+    assert any(cp.name == "effect_auto_add_self_to_owner_z_energy_on_battle_end" for cp in state.checkpoints)
+
+
+def test_phase4_combo_can_gain_combo_power_and_warp_self_at_battle_end() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30611: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_self_gain_combo_power_on_combo",
+                    "handler_params": {
+                        "combo_power_delta": 5000,
+                        "requires_comboed_from": "hand",
+                    },
+                },
+                {
+                    "trigger": "self_comboed_battle_end",
+                    "handler_id": "auto_send_self_to_owner_warp_on_battle_end",
+                    "handler_params": {
+                        "requires_comboed_from": "hand",
+                    },
+                },
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880245, card_id=245, owner_id=1, card_type="BATTLE", color="Yellow", power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880246, card_id=30611, owner_id=1, card_type="BATTLE", color="Yellow", combo_cost=0, combo_power=5000)
+    ]
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    combo_card = next(c for c in state.players[1].combo_area if c.instance_id == 880246)
+    assert combo_card.combo_power == 10000
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_OFFENSE_STEP, player_id=1))
+    state = engine.apply_action(state, Action(action_type=ActionType.END_DEFENSE_STEP, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.RESOLVE_BATTLE, player_id=1))
+
+    assert any(c.instance_id == 880246 for c in state.players[1].warp)
+    assert all(c.instance_id != 880246 for c in state.players[1].combo_area)
+    assert any(cp.name == "effect_auto_self_gain_combo_power_on_combo" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_send_self_to_owner_warp_on_battle_end" for cp in state.checkpoints)
+
+
+def test_phase4_combo_can_draw_and_gain_combo_power_for_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30612: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "requires_leader": "if your leader card is green and your life is at 4 or less",
+                    },
+                },
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_self_gain_combo_power_on_combo",
+                    "handler_params": {
+                        "combo_power_delta": 10000,
+                        "requires_comboed_from": "hand",
+                        "requires_leader": "if your leader card is green and your life is at 4 or less",
+                    },
+                },
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Green"
+    while len(state.players[1].life) > 4:
+        state.players[1].drop.append(state.players[1].life.pop())
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880247, card_id=247, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880248, card_id=30612, owner_id=1, card_type="BATTLE", color="Green", combo_cost=0, combo_power=5000)
+    ]
+    deck_before = len(state.players[1].deck)
+    hand_before = len(state.players[1].hand)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    combo_card = next(c for c in state.players[1].combo_area if c.instance_id == 880248)
+    assert combo_card.combo_power == 15000
+    assert len(state.players[1].deck) == deck_before - 1
+    assert len(state.players[1].hand) == hand_before
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_self_gain_combo_power_on_combo" for cp in state.checkpoints)
+
+
+def test_phase4_combo_can_draw_and_buff_other_combo_card_for_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30613: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "requires_leader": "if your leader card is yellow and your life is at 4 or less",
+                    },
+                },
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_buff_other_owner_combo_card_on_combo",
+                    "handler_params": {
+                        "combo_power_delta": 6000,
+                        "requires_comboed_from": "hand",
+                        "exclude_self": True,
+                        "requires_leader": "if your leader card is yellow and your life is at 4 or less",
+                    },
+                },
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Yellow"
+    while len(state.players[1].life) > 4:
+        state.players[1].drop.append(state.players[1].life.pop())
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880249, card_id=249, owner_id=1, card_type="BATTLE", color="Yellow", power=15000)
+    )
+    state.players[1].hand = [
+        CardInstance(instance_id=880250, card_id=90250, owner_id=1, card_type="BATTLE", color="Yellow", combo_cost=0, combo_power=5000),
+        CardInstance(instance_id=880251, card_id=30613, owner_id=1, card_type="BATTLE", color="Yellow", combo_cost=0, combo_power=5000),
+    ]
+    deck_before = len(state.players[1].deck)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo1 = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo1)
+    combo2 = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo2)
+
+    buffed_card = next(c for c in state.players[1].combo_area if c.instance_id == 880250)
+    source_card = next(c for c in state.players[1].combo_area if c.instance_id == 880251)
+    assert buffed_card.combo_power == 11000
+    assert source_card.combo_power == 5000
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_buff_other_owner_combo_card_on_combo" for cp in state.checkpoints)
+
+
+def test_phase4_combo_can_gain_combo_power_and_optionally_bottom_deck_hand_to_draw_two() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30614: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_self_gain_combo_power_on_combo",
+                    "handler_params": {
+                        "combo_power_delta": 10000,
+                        "requires_leader": "if your leader card is red, your life is at 4 or less, and all of your energy is red",
+                    },
+                },
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+                    "handler_params": {
+                        "bottom_deck_from_hand": 1,
+                        "amount": 2,
+                        "requires_leader": "if your leader card is red, your life is at 4 or less, and all of your energy is red",
+                        "requires_mono_energy": "red",
+                    },
+                },
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    state.players[1].leader_area.color = "Red"
+    while len(state.players[1].life) > 4:
+        state.players[1].drop.append(state.players[1].life.pop())
+    state.players[1].energy = [
+        CardInstance(instance_id=880252, card_id=252, owner_id=1, card_type="BATTLE", color="Red"),
+        CardInstance(instance_id=880253, card_id=253, owner_id=1, card_type="BATTLE", color="Red"),
+    ]
+    state.players[1].battle_area.append(
+        CardInstance(instance_id=880254, card_id=254, owner_id=1, card_type="BATTLE", color="Red", power=15000)
+    )
+    filler = CardInstance(instance_id=880255, card_id=90255, owner_id=1, card_type="BATTLE", color="Red", combo_cost=0, combo_power=5000)
+    state.players[1].hand = [
+        CardInstance(instance_id=880256, card_id=30614, owner_id=1, card_type="BATTLE", color="Red", combo_cost=0, combo_power=5000),
+        filler,
+    ]
+    deck_before = len(state.players[1].deck)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    combo_card = next(c for c in state.players[1].combo_area if c.instance_id == 880256)
+    assert combo_card.combo_power == 15000
+    assert len(state.players[1].deck) == deck_before - 1
+    assert len(state.players[1].hand) == 2
+    assert state.players[1].deck[-1] == filler.card_id
+    assert all(card.instance_id != filler.instance_id for card in state.players[1].hand)
+    assert any(cp.name == "effect_auto_self_gain_combo_power_on_combo" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo" for cp in state.checkpoints)
+
+
+def test_phase4_owner_comboed_card_can_gain_combo_power_and_draw_with_spirit_boost_cost() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30615: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_comboed_card_gain_combo_power_on_owner_combo",
+                    "handler_params": {
+                        "combo_power_delta": 4000,
+                        "event_required_card_type": "BATTLE",
+                        "event_requires_skill_less": True,
+                        "event_requires_comboed_from": "hand",
+                    },
+                    "once_per_turn": True,
+                },
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "event_required_card_type": "BATTLE",
+                        "event_requires_skill_less": True,
+                        "event_requires_comboed_from": "hand",
+                    },
+                    "once_per_turn": True,
+                },
+            ]
+        },
+        skill_cost_rules={
+            30615: {
+                "auto_on_owner_combo_battle": [
+                    {"kind": "remove_owner_unison_markers", "amount": 1},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=880257, card_id=30615, owner_id=1, card_type="UNISON", color="Green", power=15000, markers=1)
+    attacker = CardInstance(instance_id=880258, card_id=258, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    combo_card = CardInstance(
+        instance_id=880259,
+        card_id=90259,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        energy_cost=2,
+        combo_cost=0,
+        combo_power=5000,
+        keywords=("skill-less",),
+    )
+    state.players[1].unison_area.append(watcher)
+    state.players[1].battle_area.append(attacker)
+    state.players[1].hand = [combo_card]
+    deck_before = len(state.players[1].deck)
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    comboed = next(c for c in state.players[1].combo_area if c.instance_id == 880259)
+    watcher_after = next(c for c in state.players[1].unison_area if c.instance_id == 880257)
+    assert comboed.combo_power == 9000
+    assert watcher_after.markers == 0
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "effect_auto_comboed_card_gain_combo_power_on_owner_combo" for cp in state.checkpoints)
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+
+def test_phase4_owner_combo_can_switch_self_active() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30616: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_switch_self_active_on_owner_combo",
+                    "handler_params": {},
+                    "once_per_turn": True,
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=880260, card_id=30616, owner_id=1, card_type="BATTLE", color="Red", power=5000, resting=True)
+    attacker = CardInstance(instance_id=880261, card_id=261, owner_id=1, card_type="BATTLE", color="Red", power=15000)
+    combo_card = CardInstance(instance_id=880262, card_id=262, owner_id=1, card_type="BATTLE", color="Red", combo_cost=0, combo_power=5000)
+    state.players[1].battle_area.extend([watcher, attacker])
+    state.players[1].hand = [combo_card]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 1 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    watcher_after = next(c for c in state.players[1].battle_area if c.instance_id == 880260)
+    assert watcher_after.resting is False
+    assert any(cp.name == "effect_auto_switch_self_active_on_owner_combo" for cp in state.checkpoints)
+
+
+def test_phase4_owner_combo_can_add_marker_and_gain_power_for_turn() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30617: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_add_markers_and_self_power_for_turn_on_owner_combo",
+                    "handler_params": {
+                        "marker_delta": 1,
+                        "power_delta": 5000,
+                        "event_allowed_colors": "black",
+                        "event_required_card_type": "BATTLE",
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=880263, card_id=30617, owner_id=1, card_type="UNISON", color="Black", power=15000, markers=1)
+    attacker = CardInstance(instance_id=880264, card_id=264, owner_id=1, card_type="BATTLE", color="Black", power=15000)
+    combo_card = CardInstance(instance_id=880265, card_id=265, owner_id=1, card_type="BATTLE", color="Black", combo_cost=0, combo_power=5000)
+    state.players[1].unison_area.append(watcher)
+    state.players[1].battle_area.append(attacker)
+    state.players[1].hand = [combo_card]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    watcher_after = next(c for c in state.players[1].unison_area if c.instance_id == 880263)
+    assert watcher_after.markers == 2
+    assert watcher_after.power == 20000
+    assert watcher_after.temporary_power_delta == 5000
+    assert any(cp.name == "effect_auto_add_markers_and_self_power_for_turn_on_owner_combo" for cp in state.checkpoints)
+
+
+def test_phase4_owner_combo_can_send_opponent_drop_to_warp_else_draw() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30618: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "draw_amount": 1,
+                        "event_allowed_colors": "black",
+                        "event_required_card_type": "BATTLE",
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=880266, card_id=30618, owner_id=1, card_type="BATTLE", color="Black", power=5000)
+    attacker = CardInstance(instance_id=880267, card_id=267, owner_id=1, card_type="BATTLE", color="Black", power=15000)
+    combo_card = CardInstance(instance_id=880268, card_id=268, owner_id=1, card_type="BATTLE", color="Black", combo_cost=0, combo_power=5000)
+    opp_drop_battle = CardInstance(instance_id=880269, card_id=269, owner_id=2, card_type="BATTLE", color="Blue")
+    state.players[1].battle_area.extend([watcher, attacker])
+    state.players[1].hand = [combo_card]
+    state.players[2].drop = [opp_drop_battle]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 1 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    assert any(card.instance_id == 880269 for card in state.players[2].warp)
+    assert all(card.instance_id != 880269 for card in state.players[2].drop)
+    assert any(cp.name == "effect_auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo" for cp in state.checkpoints)
+
+
+def test_phase4_owner_combo_can_remove_markers_from_opponent_unison() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            30619: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "marker_amount": 2,
+                        "event_allowed_colors": "red",
+                        "event_required_card_type": "BATTLE",
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        }
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=880270, card_id=30619, owner_id=1, card_type="BATTLE", color="Red", power=5000)
+    attacker = CardInstance(instance_id=880271, card_id=271, owner_id=1, card_type="BATTLE", color="Red", power=15000)
+    combo_card = CardInstance(instance_id=880272, card_id=272, owner_id=1, card_type="BATTLE", color="Red", combo_cost=0, combo_power=5000)
+    opp_unison = CardInstance(instance_id=880273, card_id=273, owner_id=2, card_type="UNISON", color="Blue", power=15000, markers=3)
+    state.players[1].battle_area.extend([watcher, attacker])
+    state.players[1].hand = [combo_card]
+    state.players[2].unison_area = [opp_unison]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 1 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    opp_unison_after = next(c for c in state.players[2].unison_area if c.instance_id == 880273)
+    assert opp_unison_after.markers == 1
+    assert any(cp.name == "effect_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo" for cp in state.checkpoints)
 
 
 def test_phase4_turn_end_switch_self_active_handler() -> None:

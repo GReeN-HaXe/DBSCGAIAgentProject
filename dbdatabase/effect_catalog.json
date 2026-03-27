@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 2985,
+  "card_rule_count": 3002,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 3872,
+  "effect_rule_count": 3938,
   "rules": {
     "10": [
       {
@@ -485,6 +485,37 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader is red, your life is at 4 or less, and all of your energy is red: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is red, your life is at 4 or less, and all of your energy is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is red, your life is at 4 or less, and all of your energy is red: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is red, your life is at 4 or less, and all of your energy is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is red, your life is at 4 or less, and all of your energy is red: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
       }
     ],
     "10039": [
@@ -621,6 +652,37 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "max_owner_life": 4,
           "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
         },
@@ -1092,6 +1154,37 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is green, your life is at 4 or less, and all of your energy is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is green, your life is at 4 or less, and all of your energy is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "max_owner_life": 4,
           "requires_leader": "if your leader is green, your life is at 4 or less, and all of your energy is green"
         },
@@ -1662,6 +1755,37 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is black, your life is at 4 or less, and all of your energy is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is black, your life is at 4 or less, and all of your energy is black: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is black, your life is at 4 or less, and all of your energy is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is black, your life is at 4 or less, and all of your energy is black: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "max_owner_life": 4,
           "requires_leader": "if your leader is black, your life is at 4 or less, and all of your energy is black"
         },
@@ -3364,6 +3488,23 @@
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch this card to active mode.",
         "trigger": "turn_end"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "red",
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_characters": "A Mono"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+1][auto] when you use a mono-red battle card in a combo, draw 1 card. additionally, if a battle card with 20000 power or more is in your battle area, this card gains [double strike] for the turn.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "1136": [
@@ -3440,6 +3581,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "1145": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_traits": "Bardock'S Crew"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a \u226abardock's crew\u226b card in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "1151": [
@@ -5347,6 +5505,21 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 5000,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader is a blue &lt;vegeta"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](blue), if your leader is a blue &lt;vegeta: gt&gt; card and it's your turn: when this card is used in a combo from your hand,  if one of your blue &lt;vegeta: gt&gt; cards is in a battle, switch up to 1 of your mono-blue energy to active mode, and this card gets +5000 combo power for the battle",
+        "trigger": "self_comboed"
       }
     ],
     "1382": [
@@ -6269,6 +6442,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards in rest mode and ko it.",
         "trigger": "self_attacks"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_traits": "A",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a card in a combo, draw 1 card, and choose up to 1 of your opponent's battle cards and switch it to rest mode.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "1447": [
@@ -6589,6 +6778,25 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](blue), if a &lt;trunks: sh&gt; card is in your z-energy: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "1475": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "blue",
+          "event_max_cost": -1,
+          "event_required_traits": "A",
+          "event_requires_comboed_from": "hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a blue card from your hand in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "1476": [
@@ -12632,6 +12840,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and ko it.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
+        "handler_id": "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
+        "handler_params": {
+          "event_max_cost": -1,
+          "event_required_characters": "A Ss Son Goku,Showing The Results Of Training",
+          "event_required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
+          "marker_amount": 2,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] if this card is in a battle: when you use a {ss son goku, showing the results of training} in a combo, choose up to 1 of your opponent's unisons and remove 2 markers from it.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "1974": [
@@ -15334,6 +15559,7 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 4,
+          "required_owner_combo_required_characters": "Skill-Less Battle",
           "requires_leader": "if your leader is a red \u226auniverse 7\u226b &lt;son gohan"
         },
         "limit_per_turn": 1,
@@ -17662,6 +17888,24 @@
         "trigger": "self_activate_main"
       }
     ],
+    "2379": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "red",
+          "event_max_cost": -1,
+          "event_required_characters": "Is Used"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when one of your red cards is used in a combo, draw 1 card, then choose up to 1 of your opponent's battle cards or unisons and it gets -5000 power for the turn.",
+        "trigger": "owner_card_comboed"
+      }
+    ],
     "2382": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -18490,7 +18734,8 @@
           "max_add": 1,
           "max_cost": -1,
           "required_card_type": "BATTLE",
-          "required_characters": "Grandpa S Heirloom,The Four-Star Ball,Skill-Less"
+          "required_characters": "Grandpa S Heirloom,The Four-Star Ball,Skill-Less",
+          "requires_skill_less": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -18640,7 +18885,9 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "min_owner_energy": 4
+          "min_owner_energy": 4,
+          "required_owner_combo_allowed_colors": "yellow",
+          "required_owner_combo_required_characters": "4,More Energy And You Choose 1 Each Of A Lt Kale Gt In Your Battle Area And A Lt Caulifla Gt"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -18656,6 +18903,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
+          "required_owner_combo_allowed_colors": "yellow",
+          "required_owner_combo_required_characters": "2,More Energy And You Choose 1 Lt Kale Gt In Your Battle Area And 1 Lt Caulifla Gt",
           "rest_mode_only": true
         },
         "limit_per_turn": 1,
@@ -19210,6 +19459,23 @@
       }
     ],
     "2480": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "red",
+          "event_max_cost": -1,
+          "event_required_characters": "One Of Your Or",
+          "event_required_traits": "Earthling,Saiyan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use one of your red \u226asaiyan\u226b or \u226aearthling\u226b cards in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -19898,6 +20164,7 @@
           "max_targets": 1,
           "power_delta": 10000,
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_owner_turn": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -19915,6 +20182,7 @@
         "handler_params": {
           "amount": 1,
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_opponent_turn": true
         },
         "limit_per_turn": null,
@@ -19933,6 +20201,7 @@
           "power_delta": 5000,
           "required_characters": "And It Gets 10000 Power For The Battle,Then If It S Your Opponent S Turn,Draw 1,Then Choose Up To 1 Of Your",
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_opponent_turn": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -20373,6 +20642,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "2540": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_characters": "Lt Son Goku Xeno Gt,Lt Vegeta Xeno Gt Is Used"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn][burst 1] when one of your &lt;son goku: xeno&gt; or &lt;vegeta: xeno&gt; cards is used in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
+      }
+    ],
     "2541": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -20401,6 +20687,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 2 cards and discard 1 card from your hand.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end",
+        "handler_id": "auto_add_self_to_owner_z_energy_on_battle_end",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "required_owner_combo_required_characters": "Lt Vegeta Xeno Gt",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader's back side is a black &lt;vegito"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader's back side is a black &lt;vegito: xeno&gt; card, you have 2 or more energy, and you have a &lt;vegeta: xeno&gt; card in your combo area: when this card is used in a combo from your hand, add this card from your drop to your z-energy at the end of the battle.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "2545": [
@@ -20444,6 +20746,24 @@
         "provenance": "extractor",
         "source_text": "[auto][burst 2] when this card is played, draw 1 card, add 1 card from your hand to your z-energy, then choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and send it to its owner's warp.",
         "trigger": "self_played"
+      }
+    ],
+    "2548": [
+      {
+        "family_id": "self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end",
+        "handler_id": "auto_add_self_to_owner_z_energy_on_battle_end",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "required_owner_combo_required_characters": "Lt Son Goku Xeno Gt",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader's back side is a black &lt;vegito"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader's back side is a black &lt;vegito: xeno&gt; card, you have 2 or more energy, and you have a &lt;son goku: xeno&gt; card in your combo area: when this card is used in a combo from your hand, add this card from your drop to your z-energy at the end of the battle.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "2549": [
@@ -20891,7 +21211,9 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "required_owner_combo_allowed_colors": "blue",
+          "required_owner_combo_required_characters": "Lt Hoi Gt"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -24468,6 +24790,7 @@
         "handler_params": {
           "amount": 1,
           "requires_leader": "if your leader card and energy are all black",
+          "requires_mono_energy": "black",
           "requires_opponent_turn": true
         },
         "limit_per_turn": null,
@@ -24694,6 +25017,24 @@
         "trigger": "self_activate_main"
       }
     ],
+    "3897": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is red",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is red, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "3898": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -24911,6 +25252,24 @@
         "trigger": "self_activate_main"
       }
     ],
+    "3935": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is blue",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is blue, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "3936": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -24987,6 +25346,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_characters": "Skill-Less Is Used",
+          "event_requires_skill_less": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when one of your skill-less battle cards is used in a combo, draw 1 card and add up to 1 card from your life to your hand.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "3961": [
@@ -25235,6 +25611,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, negate all other battle card skills, then choose all cards in both players' hands as well as all other battle cards and return them to their decks. shuffle both decks afterwards. then, both players draw 5 cards. (cards stacked under other cards are placed in the drop area)",
         "trigger": "self_played"
+      }
+    ],
+    "4012": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is green",
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is green, play this card.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "4013": [
@@ -25494,6 +25887,24 @@
         "trigger": "owner_leader_attacks"
       }
     ],
+    "4046": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is yellow",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is yellow, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "4056": [
       {
         "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
@@ -25705,6 +26116,24 @@
     ],
     "4106": [
       {
+        "family_id": "owner_card_comboed:auto_add_markers_and_self_power_for_turn_on_owner_combo",
+        "handler_id": "auto_add_markers_and_self_power_for_turn_on_owner_combo",
+        "handler_params": {
+          "event_allowed_colors": "black",
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_traits": "A",
+          "marker_delta": 1,
+          "power_delta": 5000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a black battle card in a combo, add a marker to this card and it gets +5000 power for the turn.",
+        "trigger": "owner_card_comboed"
+      },
+      {
         "family_id": "self_activate_main:activate_send_up_to_n_opponent_drop_battle_to_warp",
         "handler_id": "activate_send_up_to_n_opponent_drop_battle_to_warp",
         "handler_params": {
@@ -25870,6 +26299,22 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "requires_leader": "if your leader card is green and your life is at 4 or less"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is green and your life is at 4 or less"
         },
         "limit_per_turn": 1,
@@ -26578,6 +27023,22 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is blue and your life is at 4 or less"
         },
         "limit_per_turn": 1,
@@ -27476,6 +27937,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "power_delta": -5000,
+          "requires_comboed_from": "",
           "target_policy": "first"
         },
         "limit_per_turn": null,
@@ -28213,6 +28675,24 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card, if your leader card is green and your life is at 4 or less, draw 1 card.",
         "trigger": "self_comboed"
+      }
+    ],
+    "4774": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is \u226auniverse 11\u226b",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is \u226auniverse 11\u226b, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "4782": [
@@ -28978,7 +29458,8 @@
           "max_cost": 1,
           "max_targets": 1,
           "required_card_type": "BATTLE",
-          "required_traits": "Skill-Less"
+          "required_traits": "Skill-Less",
+          "requires_skill_less": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -29424,6 +29905,24 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is green and your life is at 4 or less: when you combo with this card, draw 1 card.",
         "trigger": "self_comboed"
+      }
+    ],
+    "5168": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "required_owner_battle_required_characters": "Lt Android 18 Gt",
+          "requires_comboed_from": "hand",
+          "requires_owner_turn": true,
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue), during your turn: when you combo with this card from your hand with an &lt;android 18&gt; card in battle, play this card at the end of the battle.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "5170": [
@@ -30524,6 +31023,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "power_delta": -10000,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is red or yellow",
           "target_policy": "first"
         },
@@ -30540,7 +31040,8 @@
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
-          "max_cost": -1
+          "max_cost": -1,
+          "requires_opponent_turn": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -31462,6 +31963,37 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is blue, your life is at 4 or less, and all of your energy is blue: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue, your life is at 4 or less, and all of your energy is blue"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue, your life is at 4 or less, and all of your energy is blue: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue, your life is at 4 or less, and all of your energy is blue"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue, your life is at 4 or less, and all of your energy is blue: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
       }
     ],
     "5434": [
@@ -31538,6 +32070,37 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is green, your life is at 4 or less, and all of your energy is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is green, your life is at 4 or less, and all of your energy is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "max_owner_life": 4,
           "requires_leader": "if your leader card is green, your life is at 4 or less, and all of your energy is green"
         },
@@ -31722,6 +32285,37 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is red, your life is at 4 or less, and all of your energy is red: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is red, your life is at 4 or less, and all of your energy is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is red, your life is at 4 or less, and all of your energy is red: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is red, your life is at 4 or less, and all of your energy is red"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is red, your life is at 4 or less, and all of your energy is red: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
       }
     ],
     "546": [
@@ -31772,6 +32366,24 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo",
+        "handler_id": "auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo",
+        "handler_params": {
+          "draw_amount": 1,
+          "event_allowed_colors": "black",
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_traits": "A",
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] if this card is in a battle: when you use a black battle card in a combo, your opponent sends 1 battle card from their drop area to their warp; if there are no battle cards in your opponent's drop area, draw 1 card.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "5466": [
@@ -32001,6 +32613,37 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is black, your life is at 4 or less, and all of your energy is black: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is black, your life is at 4 or less, and all of your energy is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is black, your life is at 4 or less, and all of your energy is black: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is black, your life is at 4 or less, and all of your energy is black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is black, your life is at 4 or less, and all of your energy is black: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
       }
     ],
     "5489": [
@@ -32041,6 +32684,37 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "max_owner_life": 4,
           "requires_leader": "if your leader card is yellow, your life is at 4 or less, and all of your energy is yellow"
         },
@@ -32720,6 +33394,22 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is yellow and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, and this card gets +10000 combo power for the battle.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is yellow and your life is at 4 or less"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is yellow and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, and this card gets +10000 combo power for the battle.",
+        "trigger": "self_comboed"
       }
     ],
     "5585": [
@@ -32883,7 +33573,8 @@
           "max_add": 1,
           "max_cost": -1,
           "required_card_type": "UNISON",
-          "required_characters": "Skill-Less,A Specified Cost Of 2"
+          "required_characters": "Skill-Less,A Specified Cost Of 2",
+          "requires_skill_less": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -32891,6 +33582,24 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow skill-less battle card or yellow unison card with a specified cost of 2 among them to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "yellow",
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_characters": "A Skill-Less",
+          "event_requires_skill_less": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you use a yellow skill-less battle card in a combo, draw 1 card; you can't activate the [auto] skill on copies of this card for the turn.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "5609": [
@@ -32908,6 +33617,27 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is yellow and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
         "trigger": "self_comboed"
+      }
+    ],
+    "5613": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "black",
+          "event_max_cost": -1,
+          "event_required_characters": "A , , Or",
+          "event_required_traits": "Demon God,Demon Realm Race,Evil Wizard",
+          "required_leader_traits": "Black \u226aDemon Realm Race\u226b",
+          "requires_leader": "if your leader card is a black \u226ademon realm race\u226b card and it's your turn"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] if your leader card is a black \u226ademon realm race\u226b card and it's your turn: when you use a black \u226aevil wizard\u226b, \u226ademon realm race\u226b, or \u226ademon god\u226b card in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "5614": [
@@ -33501,7 +34231,8 @@
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
-          "max_cost": 4
+          "max_cost": 4,
+          "requires_opponent_turn": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -33548,7 +34279,8 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 2
+          "amount": 2,
+          "requires_owner_turn": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -35257,6 +35989,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "power_delta": -5000,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is red or blue",
           "target_policy": "first"
         },
@@ -35737,6 +36470,22 @@
         "handler_params": {
           "amount": 1,
           "min_owner_drop": 5,
+          "requires_leader": "if your leader card is black"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][sparking 5] if your leader card is black: when this card is used in a combo from your hand, draw 1 card, and this card gets +10000 combo power for the battle.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "min_owner_drop": 5,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is black"
         },
         "limit_per_turn": 1,
@@ -37639,6 +38388,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "power_delta": -5000,
+          "requires_comboed_from": "",
           "target_policy": "first"
         },
         "limit_per_turn": null,
@@ -37909,6 +38659,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "power_delta": -10000,
+          "requires_opponent_turn": true,
           "target_policy": "first"
         },
         "limit_per_turn": null,
@@ -38288,6 +39039,23 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "requires_leader": "if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, then choose 1 card in your combo area other than this card and it gets +6000 combo power for the battle.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_buff_other_owner_combo_card_on_combo",
+        "handler_id": "auto_buff_other_owner_combo_card_on_combo",
+        "handler_params": {
+          "combo_power_delta": 6000,
+          "exclude_self": true,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -38727,6 +39495,23 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is blue and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your combo area and it gets +6000 combo power for the battle.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_buff_other_owner_combo_card_on_combo",
+        "handler_id": "auto_buff_other_owner_combo_card_on_combo",
+        "handler_params": {
+          "combo_power_delta": 6000,
+          "exclude_self": true,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your combo area and it gets +6000 combo power for the battle.",
+        "trigger": "self_comboed"
       }
     ],
     "6589": [
@@ -39027,6 +39812,24 @@
         "trigger": "self_played"
       }
     ],
+    "6643": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is green",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is green, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "6644": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -39186,6 +39989,7 @@
           "max_targets": 1,
           "power_delta": -10000,
           "required_leader_traits": "Red \u226aFrieza'S Army\u226b",
+          "requires_comboed_from": "",
           "requires_leader": "if your leader card is a red \u226afrieza's army\u226b card and there are 2 or more mono-red extra cards in your drop area",
           "target_policy": "first"
         },
@@ -39636,6 +40440,23 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your combo area and it gets +6000 combo power for the battle.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_buff_other_owner_combo_card_on_combo",
+        "handler_id": "auto_buff_other_owner_combo_card_on_combo",
+        "handler_params": {
+          "combo_power_delta": 6000,
+          "exclude_self": true,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is green and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your combo area and it gets +6000 combo power for the battle.",
+        "trigger": "self_comboed"
       }
     ],
     "673": [
@@ -40029,7 +40850,8 @@
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
-          "max_cost": -1
+          "max_cost": -1,
+          "requires_owner_turn": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -40043,6 +40865,7 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "requires_owner_turn": true,
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -40109,6 +40932,23 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "requires_leader": "if your leader card is yellow and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is yellow and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your combo area and it gets +6000 combo power for the battle.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_buff_other_owner_combo_card_on_combo",
+        "handler_id": "auto_buff_other_owner_combo_card_on_combo",
+        "handler_params": {
+          "combo_power_delta": 6000,
+          "exclude_self": true,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is yellow and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -41768,6 +42608,7 @@
           "required_characters": "Opponent S Skill-Less In Rest Mode,Ko It,Then Choose Up To 1 Of Your Battle",
           "required_leader_traits": "Mono-Yellow \u226aAndroid\u226b",
           "requires_leader": "if your leader card is a mono-yellow \u226aandroid\u226b card",
+          "requires_skill_less": true,
           "rest_mode_only": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -42872,6 +43713,23 @@
         "trigger": "self_played"
       }
     ],
+    "7222": [
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp",
+        "handler_id": "auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp",
+        "handler_params": {
+          "combo_power_per_card": 1000,
+          "requires_comboed_from": "hand",
+          "requires_mono_energy": "black"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if all of your energy is black: when you combo with this card from your hand, this card gets +1000 combo power for the duration of the turn for each card in your drop area and warp.",
+        "trigger": "self_comboed"
+      }
+    ],
     "7228": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -43530,6 +44388,24 @@
         "provenance": "extractor",
         "source_text": "[0][auto] at the end of your turn, switch this card to active mode, and it gains [blocker] until the end of your opponent's next turn.",
         "trigger": "turn_end"
+      }
+    ],
+    "7313": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is \u226auniverse 7\u226b",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is \u226auniverse 7\u226b, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "7316": [
@@ -44365,6 +45241,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7442": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_traits": "Universe 7"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a \u226auniverse 7\u226b card in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
+      }
+    ],
     "7445": [
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
@@ -44399,6 +45292,25 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 red \u226auniverse 7\u226b card with an energy cost of 4 or less, or 1 red unison card with a specified cost of 2 among them to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "red",
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_characters": "A Mono- Skill-Less",
+          "event_requires_skill_less": true,
+          "requires_leader": "if your leader card is red"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader card is red: when you use a mono-red skill-less battle card in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "7449": [
@@ -44588,6 +45500,22 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is red and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is red and your life is at 4 or less"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is red and your life is at 4 or less: when this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.",
+        "trigger": "self_comboed"
       }
     ],
     "7467": [
@@ -44743,7 +45671,8 @@
           "max_cost": -1,
           "max_targets": 1,
           "required_card_type": "BATTLE",
-          "required_characters": "Skill-Less 15000 Power"
+          "required_characters": "Skill-Less 15000 Power",
+          "requires_skill_less": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -45020,6 +45949,35 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "requires_leader": "if your leader is blue, all of your energy is blue, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is blue, all of your energy is blue, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "requires_leader": "if your leader is blue, all of your energy is blue, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is blue, all of your energy is blue, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "requires_leader": "if your leader is blue, all of your energy is blue, and you have 2 or more z-energy"
         },
         "limit_per_turn": null,
@@ -45828,6 +46786,35 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader is red, all of your energy is red, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1card from your hand at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "requires_leader": "if your leader is red, all of your energy is red, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is red, all of your energy is red, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "requires_leader": "if your leader is red, all of your energy is red, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is red, all of your energy is red, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
       }
     ],
     "7833": [
@@ -45939,6 +46926,35 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader is yellow, all of your energy is yellow and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "requires_leader": "if your leader is yellow, all of your energy is yellow and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, all of your energy is yellow and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "requires_leader": "if your leader is yellow, all of your energy is yellow and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, all of your energy is yellow and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
       }
     ],
     "7842": [
@@ -45962,6 +46978,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -45975,6 +46992,7 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46407,6 +47425,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46420,6 +47439,7 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46452,6 +47472,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46491,6 +47512,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46504,6 +47526,7 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46519,6 +47542,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46532,6 +47556,7 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA: GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -46825,6 +47850,35 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "requires_leader": "if your leader is green, all of your energy is green, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is green, all of your energy is green, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "requires_leader": "if your leader is green, all of your energy is green, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is green, all of your energy is green, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "requires_leader": "if your leader is green, all of your energy is green, and you have 2 or more z-energy"
         },
         "limit_per_turn": null,
@@ -49301,6 +50355,7 @@
         "handler_params": {
           "amount": 1,
           "min_owner_energy": 2,
+          "required_leader_back_name_contains": "SUPER 17",
           "requires_leader": "if your leader's back side is a red <super 17> card and you have 2 or more energy"
         },
         "limit_per_turn": 1,
@@ -49315,6 +50370,7 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
+          "required_leader_back_name_contains": "SUPER 17",
           "requires_leader": "if your leader's back side is a red <super 17> card and you have 2 or more energy"
         },
         "limit_per_turn": 1,
@@ -49397,6 +50453,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
+          "required_leader_back_name_contains": "SUPER 17",
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
           "requires_leader": "if your leader's back side is a red <super 17> card, you have 2 or more energy, and you have 1 or more <android 17> card and 1 or more <hell fighter 17> card in your combo area"
         },
         "limit_per_turn": 1,
@@ -49540,6 +50598,7 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
+          "required_leader_back_name_contains": "SUPER 17",
           "requires_leader": "if your leader's back side is a red <super 17> card and you have 2 or more energy"
         },
         "limit_per_turn": 1,
@@ -49556,7 +50615,8 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "min_opponent_energy": 3
+          "min_opponent_energy": 3,
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -49569,7 +50629,8 @@
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "min_opponent_energy": 3
+          "min_opponent_energy": 3,
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -49611,6 +50672,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
+          "required_leader_back_name_contains": "SUPER 17",
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
           "requires_leader": "if your leader's back side is a red <super 17> card, you have 2 or more energy, and you have 1 or more <android 17> card and 1 or more <hell fighter 17> card in your combo area"
         },
         "limit_per_turn": 1,
@@ -50266,6 +51329,35 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 2,
+          "requires_leader": "if your leader is black, all of your energy is black, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is black, all of your energy is black, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "requires_leader": "if your leader is black, all of your energy is black, and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is black, all of your energy is black, and you have 2 or more z-energy: when this card is used in a combo, this card gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
           "requires_leader": "if your leader is black, all of your energy is black, and you have 2 or more z-energy"
         },
         "limit_per_turn": null,
@@ -51051,6 +52143,24 @@
         "provenance": "manual_override",
         "source_text": "",
         "trigger": "self_activate_extra_from_hand"
+      }
+    ],
+    "8306": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_allowed_colors": "black",
+          "event_max_cost": -1,
+          "event_required_traits": "A"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a black card in a combo, draw 1 card and add up to 1 card from your life to your hand.",
+        "trigger": "owner_card_comboed"
       }
     ],
     "8307": [
@@ -53274,6 +54384,17 @@
     ],
     "8440": [
       {
+        "family_id": "owner_card_comboed:auto_switch_self_active_on_owner_combo",
+        "handler_id": "auto_switch_self_active_on_owner_combo",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a card in a combo, switch this card to active mode.",
+        "trigger": "owner_card_comboed"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -54025,6 +55146,7 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "required_leader_back_name_contains": "VEGEKS: XENO",
           "requires_leader": "if your leader's back side is a <vegeks"
         },
         "limit_per_turn": 1,
@@ -54039,6 +55161,7 @@
         "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
         "handler_params": {
           "max_targets": 1,
+          "required_leader_back_name_contains": "VEGEKS: XENO",
           "requires_leader": "if your leader's back side is a <vegeks",
           "target_policy": "first"
         },
@@ -57981,6 +59104,7 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "required_leader_back_name_contains": "GOGETA : GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,
@@ -57994,6 +59118,7 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
+          "required_leader_back_name_contains": "GOGETA : GT",
           "requires_leader": "if your leader's back side is a yellow <gogeta"
         },
         "limit_per_turn": 1,

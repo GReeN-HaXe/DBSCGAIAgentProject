@@ -1,0 +1,16 @@
+{
+  "900310": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand",
+        "required_leader_colors": "red"
+      },
+      {
+        "amount": 2,
+        "kind": "send_owner_drop_to_warp",
+        "required_traits": "saiyan"
+      }
+    ]
+  }
+}

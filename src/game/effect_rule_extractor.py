@@ -30,6 +30,46 @@ _COMBO_TRIGGER_FROM_HAND_PLACE_DECK_CARD_IN_DROP_RE = re.compile(
     r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*choose up to (\d+) (.+?) from your deck,\s*place (?:it|them) in your drop area,\s*then shuffle your deck",
     re.IGNORECASE,
 )
+_COMBO_TRIGGER_FROM_HAND_SELF_GAIN_COMBO_POWER_PER_DROP_AND_WARP_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*this card gets \+(\d+) combo power for the duration of the turn for each card in your drop area and warp(?:.*?up to a maximum of (\d+))?",
+    re.IGNORECASE,
+)
+_COMBO_TRIGGER_FROM_HAND_SELF_GAIN_FLAT_COMBO_POWER_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand(?:[^.\[]){0,220}?this card gets \+(\d+) combo power for (?:the duration of the turn|the battle)(?! for each card)",
+    re.IGNORECASE,
+)
+_COMBO_TRIGGER_FROM_HAND_BUFF_OTHER_COMBO_CARD_RE = re.compile(
+    r"(?:if [^:]{1,180}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand(?:[^.\[]){0,220}?choose 1 card (?:(?:other than this card in your combo area)|(?:in your combo area other than this card)) and it gets \+(\d+) combo power for the battle",
+    re.IGNORECASE,
+)
+_COMBO_TRIGGER_SELF_GAIN_COMBO_POWER_OPTIONAL_BOTTOM_DECK_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?when (?:this card is used in a combo|you combo with this card),\s*(?:this card|it) gets \+(\d+) combo power for the battle(?:, then|\.\s*additionally,)?\s*you may (?:(?:choose )?(\d+)\s*card(?:s)?(?: in your hand)? and place (?:it|them)|place (\d+)\s*card(?:s)? from your hand) at the bottom of your deck\.\s*if you do, draw (\d+) cards?",
+    re.IGNORECASE,
+)
+_OWNER_COMBOED_CARD_GAIN_COMBO_POWER_AND_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?when one of your (.+?) is used in a combo,\s*it gets \+(\d+) combo power for the battle,\s*then draw (\d+) card",
+    re.IGNORECASE,
+)
+_OWNER_COMBO_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?when (?:one of your|you use) (.+?) in a combo,\s*draw (\d+) card",
+    re.IGNORECASE,
+)
+_OWNER_COMBO_SWITCH_SELF_ACTIVE_RE = re.compile(
+    r"(?:if [^:]{1,180}:\s*)?when you use a card in a combo,\s*switch this card to active mode",
+    re.IGNORECASE,
+)
+_OWNER_COMBO_ADD_MARKER_AND_SELF_POWER_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?when you use (.+?) in a combo,\s*add a marker to this card and it gets \+(\d+) power for the turn",
+    re.IGNORECASE,
+)
+_OWNER_COMBO_REMOVE_MARKERS_FROM_OPP_UNISON_RE = re.compile(
+    r"(?:if [^:]{1,260}:\s*)?when you use (.+?) in a combo,\s*choose up to (\d+) of your opponent'?s unisons? and remove (\d+) markers? from (?:it|them)",
+    re.IGNORECASE,
+)
+_OWNER_COMBO_SEND_OPP_DROP_TO_WARP_ELSE_DRAW_RE = re.compile(
+    r"(?:if [^:]{1,260}:\s*)?when you use (.+?) in a combo,\s*your opponent sends (\d+) battle cards? from their drop area to their warp;\s*if there are no battle cards in your opponent'?s drop area,\s*draw (\d+) card",
+    re.IGNORECASE,
+)
 _OPPONENT_COMBO_BOTTOM_DECK_HAND_AND_NEGATE_SELF_FOR_BATTLE_RE = re.compile(
     r"when your opponent uses cards? in a combo,\s*(?:you opponent|your opponent) places (\d+) cards? from their hand at the bottom of their deck, then you negate this skill for the battle",
     re.IGNORECASE,
@@ -61,6 +101,22 @@ _LEADER_SELF_ATTACK_LOOK_TOP_ADD_DIRECT_TO_HAND_RE = re.compile(
 _COMBO_DRAW_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when (?:this card is used in a combo|you combo with this card).*?draw (\d+) card")
 _COMBO_BATTLE_END_PLAY_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?at the end of a battle in which this card was used in a combo(?: from your (?:hand|life|energy|drop area))?.*?play this card from (?:your )?drop"
+)
+_COMBO_FROM_HAND_BATTLE_END_PLAY_SELF_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?at the end of the battle after you combo with this card from your hand(?:[^.\[]){0,220}?play this card(?: in rest mode)?",
+    re.IGNORECASE,
+)
+_COMBO_FROM_HAND_WITH_OWNER_BATTLE_PLAY_AT_BATTLE_END_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand with (?:an?|1) (.+?) card in battle,\s*play this card at the end of the battle",
+    re.IGNORECASE,
+)
+_COMBO_FROM_HAND_BATTLE_END_ADD_SELF_TO_Z_ENERGY_RE = re.compile(
+    r"(?:if [^:]{1,200}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*add this card from your drop to your z-energy at the end of the battle",
+    re.IGNORECASE,
+)
+_COMBO_FROM_HAND_BATTLE_END_WARP_SELF_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand(?:[^.\[]){0,260}?(?:send this card to|(?:this card )?is sent to) (?:its|their) owner'?s warp at the end of the battle",
+    re.IGNORECASE,
 )
 _ATTACK_COMBO_FROM_OWNER_ZONE_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?(?:whe|when) this card attacks,\s*use up to (\d+) (.+?) from your (drop|warp) in a combo(?:,?\s*and (?:it|they) get -(\d+) combo power)? with (?:its|their) skills? negated for the turn"
@@ -482,6 +538,9 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
         m_inline_leader = re.search(r"(if your leader(?: card)?[^,.]{0,120})", text)
         if m_inline_leader:
             params["requires_leader"] = m_inline_leader.group(1).strip()
+    m_leader_back = re.search(r"if your leader'?s back side is a [^<]*<([^>]+)> card", text)
+    if m_leader_back:
+        params["required_leader_back_name_contains"] = m_leader_back.group(1).strip().upper()
     m_leader_traits = re.search(r"if your leader(?: card)? is a ([^:]+?) card", text)
     if m_leader_traits:
         raw_traits = m_leader_traits.group(1)
@@ -519,7 +578,7 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
                 if k in {"allowed_colors", "required_traits", "required_characters", "required_name_contains"}
             }
         )
-    m_mono_energy = re.search(r"if (?:(?:your leader(?: card)? and )?energy are all|all of your energy is) mono-(red|blue|green|yellow|black)", text)
+    m_mono_energy = re.search(r"if (?:(?:your leader(?: card)? and )?energy are all|all of your energy is) (?:mono-)?(red|blue|green|yellow|black)", text)
     if m_mono_energy:
         params["requires_mono_energy"] = m_mono_energy.group(1).strip()
     m_owner_battle_or_z_energy = re.search(r"if you have a (.+?) card in play or in your z-energy", text)
@@ -534,13 +593,25 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
         if "<" in raw_descriptor and "required_characters" not in filters and "required_traits" in filters:
             filters["required_characters"] = str(filters.pop("required_traits"))
         params.update({f"required_owner_battle_or_z_energy_{k}": v for k, v in filters.items()})
+    m_owner_combo = re.search(r"(?:if|and) you have (?:a |an )?(.+?) card in your combo area", text)
+    if m_owner_combo:
+        raw_descriptor = m_owner_combo.group(1).strip()
+        descriptor = raw_descriptor.lower()
+        filters = {
+            k: v
+            for k, v in _descriptor_filters(descriptor, text).items()
+            if k in {"allowed_colors", "required_traits", "required_characters", "required_name_contains"}
+        }
+        if "<" in raw_descriptor and "required_characters" not in filters and "required_traits" in filters:
+            filters["required_characters"] = str(filters.pop("required_traits"))
+        params.update({f"required_owner_combo_{k}": v for k, v in filters.items()})
     if "ignoring [barrier]" in text or "ignoring barrier" in text:
         params["ignores_barrier"] = True
     if "rest mode" in text:
         params["rest_mode_only"] = True
-    if "if it's your turn" in text:
+    if "if it's your turn" in text or "during your turn" in text:
         params["requires_owner_turn"] = True
-    if "if it's your opponent's turn" in text:
+    if "if it's your opponent's turn" in text or "during your opponent's turn" in text:
         params["requires_opponent_turn"] = True
     return params
 
@@ -598,12 +669,18 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
         required_card_type = "BATTLE"
     if required_card_type:
         params["required_card_type"] = required_card_type
+    if "skill-less" in descriptor_lc or "skill less" in descriptor_lc:
+        params["requires_skill_less"] = True
 
     m_name_token = re.search(r"\{([^}]+)\}\s+in\s+(?:their|its)?\s*card\s+names?", descriptor_lc)
     if m_name_token:
         params["required_name_contains"] = m_name_token.group(1).strip().upper()
     elif re.fullmatch(r"\{([^}]+)\}", descriptor.strip()):
         params["required_name_contains"] = descriptor.strip()[1:-1].strip().upper()
+    else:
+        m_embedded_name_token = re.fullmatch(r"(?:an?|one of your)?\s*\{([^}]+)\}", descriptor.strip(), re.IGNORECASE)
+        if m_embedded_name_token:
+            params["required_name_contains"] = m_embedded_name_token.group(1).strip().upper()
 
     cleaned = descriptor_lc
     cleaned = re.sub(r"\{[^}]+\}\s+in\s+(?:their|its)?\s*card\s+names?", " ", cleaned)
@@ -1224,6 +1301,67 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
             )
 
         # [Auto] At the end of a battle in which this card was used in a combo... play this card from your Drop...
+        if _COMBO_FROM_HAND_BATTLE_END_PLAY_SELF_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            rest = "rest mode" in branch.lower()
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed_battle_end",
+                    handler_id="auto_play_self_from_combo_on_battle_end",
+                    handler_params={
+                        "resting": rest,
+                        "requires_comboed_from": "hand",
+                        **extra,
+                    },
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_with_owner_battle_play_end = _COMBO_FROM_HAND_WITH_OWNER_BATTLE_PLAY_AT_BATTLE_END_RE.search(branch)
+        if m_combo_with_owner_battle_play_end:
+            extra = _extract_common_conditions(branch)
+            descriptor = str(m_combo_with_owner_battle_play_end.group(1) or "").strip().lower()
+            filters = {
+                k: v
+                for k, v in _descriptor_filters(descriptor, branch).items()
+                if k in {"allowed_colors", "required_traits", "required_characters", "required_name_contains"}
+            }
+            if "<" in m_combo_with_owner_battle_play_end.group(1) and "required_characters" not in filters and "required_traits" in filters:
+                filters["required_characters"] = str(filters.pop("required_traits"))
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed_battle_end",
+                    handler_id="auto_play_self_from_combo_on_battle_end",
+                    handler_params={
+                        "resting": False,
+                        "requires_comboed_from": "hand",
+                        **{f"required_owner_battle_{k}": v for k, v in filters.items()},
+                        **extra,
+                    },
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        if _COMBO_FROM_HAND_BATTLE_END_ADD_SELF_TO_Z_ENERGY_RE.search(branch):
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed_battle_end",
+                    handler_id="auto_add_self_to_owner_z_energy_on_battle_end",
+                    handler_params={
+                        "requires_comboed_from": "hand",
+                        **extra,
+                    },
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         if _COMBO_BATTLE_END_PLAY_RE.search(branch):
             extra = _extract_common_conditions(branch)
             rest = "rest mode" in branch
@@ -3202,6 +3340,7 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                             "max_cost": max_cost,
                             "target_policy": "first",
                             "power_delta": -int(m_power.group(1)),
+                            "requires_comboed_from": "hand" if "from your hand" in branch.lower() else "",
                             **extra,
                         },
                         once_per_turn=once,
@@ -3311,6 +3450,220 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_comboed",
                     handler_id="auto_place_up_to_n_from_owner_deck_into_drop_on_combo",
                     handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_gain_combo_power = _COMBO_TRIGGER_FROM_HAND_SELF_GAIN_COMBO_POWER_PER_DROP_AND_WARP_RE.search(branch)
+        if m_combo_gain_combo_power:
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "combo_power_per_card": int(m_combo_gain_combo_power.group(1)),
+                "requires_comboed_from": "hand",
+                **extra,
+            }
+            if m_combo_gain_combo_power.group(2):
+                params["max_count"] = int(m_combo_gain_combo_power.group(2))
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_gain_flat_combo_power = _COMBO_TRIGGER_FROM_HAND_SELF_GAIN_FLAT_COMBO_POWER_RE.search(branch)
+        if m_combo_gain_flat_combo_power and "for each card in your drop area and warp" not in branch.lower():
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_self_gain_combo_power_on_combo",
+                    handler_params={
+                        "combo_power_delta": int(m_combo_gain_flat_combo_power.group(1)),
+                        "requires_comboed_from": "hand",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_battle_end_warp_self = _COMBO_FROM_HAND_BATTLE_END_WARP_SELF_RE.search(branch)
+        if m_combo_battle_end_warp_self:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed_battle_end",
+                    handler_id="auto_send_self_to_owner_warp_on_battle_end",
+                    handler_params={
+                        "requires_comboed_from": "hand",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_buff_other_combo_card = _COMBO_TRIGGER_FROM_HAND_BUFF_OTHER_COMBO_CARD_RE.search(branch)
+        if m_combo_buff_other_combo_card:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_buff_other_owner_combo_card_on_combo",
+                    handler_params={
+                        "combo_power_delta": int(m_combo_buff_other_combo_card.group(1)),
+                        "requires_comboed_from": "hand",
+                        "exclude_self": True,
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_power_bottom_deck_draw = _COMBO_TRIGGER_SELF_GAIN_COMBO_POWER_OPTIONAL_BOTTOM_DECK_DRAW_RE.search(branch)
+        if m_combo_power_bottom_deck_draw:
+            extra = _extract_common_conditions(branch)
+            bottom_count = int(m_combo_power_bottom_deck_draw.group(2) or m_combo_power_bottom_deck_draw.group(3) or 1)
+            draw_count = int(m_combo_power_bottom_deck_draw.group(4))
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_self_gain_combo_power_on_combo",
+                    handler_params={
+                        "combo_power_delta": int(m_combo_power_bottom_deck_draw.group(1)),
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+                    handler_params={
+                        "bottom_deck_from_hand": bottom_count,
+                        "amount": draw_count,
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_comboed_card_gain_combo_power_and_draw = _OWNER_COMBOED_CARD_GAIN_COMBO_POWER_AND_DRAW_RE.search(branch)
+        if m_owner_comboed_card_gain_combo_power_and_draw:
+            descriptor = m_owner_comboed_card_gain_combo_power_and_draw.group(1).lower()
+            combo_power_delta = int(m_owner_comboed_card_gain_combo_power_and_draw.group(2))
+            draw_amount = int(m_owner_comboed_card_gain_combo_power_and_draw.group(3))
+            extra = _extract_common_conditions(branch)
+            event_filters = _descriptor_filters(descriptor, branch)
+            prefixed_filters = {f"event_{key}": value for key, value in event_filters.items()}
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_comboed_card_gain_combo_power_on_owner_combo",
+                    handler_params={"combo_power_delta": combo_power_delta, **prefixed_filters, **extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_draw_n",
+                    handler_params={"amount": draw_amount, **prefixed_filters, **extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_combo_draw = _OWNER_COMBO_DRAW_RE.search(branch)
+        if m_owner_combo_draw and "it gets +" not in branch.lower():
+            descriptor = m_owner_combo_draw.group(1).lower()
+            draw_amount = int(m_owner_combo_draw.group(2))
+            extra = _extract_common_conditions(branch)
+            event_filters = _descriptor_filters(descriptor, branch)
+            if "from your hand" in descriptor or "from your hand" in branch.lower():
+                event_filters["requires_comboed_from"] = "hand"
+            prefixed_filters = {f"event_{key}": value for key, value in event_filters.items()}
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_draw_n",
+                    handler_params={"amount": draw_amount, **prefixed_filters, **extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_combo_switch_self_active = _OWNER_COMBO_SWITCH_SELF_ACTIVE_RE.search(branch)
+        if m_owner_combo_switch_self_active:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_switch_self_active_on_owner_combo",
+                    handler_params={**extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_combo_add_marker_and_self_power = _OWNER_COMBO_ADD_MARKER_AND_SELF_POWER_RE.search(branch)
+        if m_owner_combo_add_marker_and_self_power:
+            descriptor = m_owner_combo_add_marker_and_self_power.group(1).lower()
+            power_delta = int(m_owner_combo_add_marker_and_self_power.group(2))
+            extra = _extract_common_conditions(branch)
+            event_filters = _descriptor_filters(descriptor, branch)
+            prefixed_filters = {f"event_{key}": value for key, value in event_filters.items()}
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_add_markers_and_self_power_for_turn_on_owner_combo",
+                    handler_params={"marker_delta": 1, "power_delta": power_delta, **prefixed_filters, **extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_combo_remove_markers_from_opp_unison = _OWNER_COMBO_REMOVE_MARKERS_FROM_OPP_UNISON_RE.search(branch)
+        if m_owner_combo_remove_markers_from_opp_unison:
+            descriptor = m_owner_combo_remove_markers_from_opp_unison.group(1).lower()
+            max_targets = int(m_owner_combo_remove_markers_from_opp_unison.group(2))
+            marker_amount = int(m_owner_combo_remove_markers_from_opp_unison.group(3))
+            extra = _extract_common_conditions(branch)
+            event_filters = _descriptor_filters(descriptor, branch)
+            prefixed_filters = {f"event_{key}": value for key, value in event_filters.items()}
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
+                    handler_params={"max_targets": max_targets, "marker_amount": marker_amount, **prefixed_filters, **extra},
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_combo_send_opp_drop_to_warp_else_draw = _OWNER_COMBO_SEND_OPP_DROP_TO_WARP_ELSE_DRAW_RE.search(branch)
+        if m_owner_combo_send_opp_drop_to_warp_else_draw:
+            descriptor = m_owner_combo_send_opp_drop_to_warp_else_draw.group(1).lower()
+            max_targets = int(m_owner_combo_send_opp_drop_to_warp_else_draw.group(2))
+            draw_amount = int(m_owner_combo_send_opp_drop_to_warp_else_draw.group(3))
+            extra = _extract_common_conditions(branch)
+            event_filters = _descriptor_filters(descriptor, branch)
+            prefixed_filters = {f"event_{key}": value for key, value in event_filters.items()}
+            rules.append(
+                EffectRule(
+                    trigger="owner_card_comboed",
+                    handler_id="auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo",
+                    handler_params={"max_targets": max_targets, "draw_amount": draw_amount, **prefixed_filters, **extra},
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )

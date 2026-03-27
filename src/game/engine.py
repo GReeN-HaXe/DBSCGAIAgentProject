@@ -175,6 +175,17 @@ class RulesEngine:
             "auto_play_up_to_n_from_owner_hand_on_self_combo": self._handle_auto_play_up_to_n_from_owner_hand_on_self_combo,
             "auto_switch_up_to_n_owner_energy_active_on_combo": self._handle_auto_switch_up_to_n_owner_energy_active_on_combo,
             "auto_place_up_to_n_from_owner_deck_into_drop_on_combo": self._handle_auto_place_up_to_n_from_owner_deck_into_drop_on_combo,
+            "auto_comboed_card_gain_combo_power_on_owner_combo": self._handle_auto_comboed_card_gain_combo_power_on_owner_combo,
+            "auto_switch_self_active_on_owner_combo": self._handle_auto_switch_self_active_on_owner_combo,
+            "auto_add_markers_and_self_power_for_turn_on_owner_combo": self._handle_auto_add_markers_and_self_power_for_turn_on_owner_combo,
+            "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo": self._handle_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo,
+            "auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo": self._handle_auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo,
+            "auto_self_gain_combo_power_on_combo": self._handle_auto_self_gain_combo_power_on_combo,
+            "auto_buff_other_owner_combo_card_on_combo": self._handle_auto_buff_other_owner_combo_card_on_combo,
+            "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo": self._handle_auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo,
+            "auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp": self._handle_auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp,
+            "auto_add_self_to_owner_z_energy_on_battle_end": self._handle_auto_add_self_to_owner_z_energy_on_battle_end,
+            "auto_send_self_to_owner_warp_on_battle_end": self._handle_auto_send_self_to_owner_warp_on_battle_end,
             "auto_play_up_to_n_named_from_owner_drop_on_self_ko": self._handle_auto_play_up_to_n_named_from_owner_drop_on_self_ko,
             "auto_play_self_from_drop_on_hand_drop": self._handle_auto_play_self_from_drop_on_hand_drop,
             "auto_gain_control_opponent_battle_on_play": self._handle_auto_gain_control_opponent_battle_on_play,
@@ -4746,6 +4757,7 @@ class RulesEngine:
             raise RulesViolation("This card cannot be comboed right now.")
         self._pay_energy_cost(player, card.combo_cost or 0)
         combo_card = player.hand.pop(action.hand_index)
+        combo_card.comboed_from = "hand"
         player.combo_area.append(combo_card)
         self._register_card_effects(state, player_id=action.player_id, source_zone="combo", card=combo_card)
         self._emit_effect_event(
@@ -9287,6 +9299,13 @@ class RulesEngine:
             return
         if not self._effect_requirements_met(state, reg):
             return
+        if reg.trigger == "owner_card_comboed":
+            owner_combo_match = self._match_owner_combo_event(state, event, reg)
+            if owner_combo_match is None:
+                return
+            owner, _live_combo_card, _combo_probe = owner_combo_match
+            if not self._pay_owner_combo_skill_cost_if_needed(state, event, reg, owner):
+                return
         if event.name == "main_phase_start":
             if not self._can_pay_main_phase_auto_costs(state, reg):
                 return
@@ -10989,6 +11008,153 @@ class RulesEngine:
             self._place_card_under_host(host, owner.drop.pop(idx))
         self._checkpoint(state, "effect_auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo")
 
+    def _build_owner_combo_event_probe(
+        self,
+        state: GameState,
+        *,
+        owner_player_id: int,
+        event: EffectEvent,
+    ) -> tuple[PlayerState, CardInstance | None, CardInstance] | None:
+        owner = state.players.get(owner_player_id)
+        if owner is None:
+            return None
+        combo_instance_id = int(event.payload.get("source_instance_id") or -1)
+        live_combo_card = next((card for card in owner.combo_area if card.instance_id == combo_instance_id), None)
+        if live_combo_card is not None:
+            return owner, live_combo_card, live_combo_card
+        combo_card_id = int(event.payload.get("source_card_id") or 0)
+        if combo_card_id <= 0:
+            return None
+        combo_runtime = self._resolve_card_runtime_data(combo_card_id)
+        combo_probe = CardInstance(
+            instance_id=combo_instance_id if combo_instance_id > 0 else 0,
+            card_id=combo_card_id,
+            owner_id=owner_player_id,
+            card_type=str(combo_runtime.card_type or "BATTLE"),
+            color=str(combo_runtime.color or "") or None,
+            power=int(combo_runtime.power or 0),
+            energy_cost=combo_runtime.energy_cost,
+            skill_text_raw=str(combo_runtime.skill_text_raw or ""),
+            traits=tuple(combo_runtime.traits or ()),
+            characters=tuple(combo_runtime.characters or ()),
+            keywords=tuple(combo_runtime.keywords or ()),
+            has_counter=bool(combo_runtime.has_counter),
+            has_activate_main=bool(combo_runtime.has_activate_main),
+            has_activate_battle=bool(combo_runtime.has_activate_battle),
+            has_auto=bool(combo_runtime.has_auto),
+            has_permanent=bool(combo_runtime.has_permanent),
+            has_draw=bool(combo_runtime.has_draw),
+            has_barrier=bool(combo_runtime.has_barrier),
+        )
+        return owner, None, combo_probe
+
+    def _card_is_skillless(self, card: CardInstance) -> bool:
+        keywords = {str(k).strip().lower() for k in (card.keywords or ()) if str(k).strip()}
+        if "skill-less" in keywords or "skill less" in keywords:
+            return True
+        runtime = self._resolve_card_runtime_data(card.card_id)
+        runtime_keywords = {str(k).strip().lower() for k in (runtime.keywords or ()) if str(k).strip()}
+        if "skill-less" in runtime_keywords or "skill less" in runtime_keywords:
+            return True
+        raw_skill_text = str(getattr(card, "skill_text_raw", "") or runtime.skill_text_raw or "").strip().lower()
+        if raw_skill_text in {"", "-"}:
+            return True
+        return not any(
+            (
+                bool(runtime.has_counter),
+                bool(runtime.has_activate_main),
+                bool(runtime.has_activate_battle),
+                bool(runtime.has_auto),
+                bool(runtime.has_permanent),
+                bool(runtime.has_draw),
+                bool(runtime.has_awaken),
+                bool(runtime.keywords),
+            )
+        )
+
+    def _match_owner_combo_event(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> tuple[PlayerState, CardInstance | None, CardInstance] | None:
+        if event.name != "card_comboed" or event.actor_player_id != reg.owner_player_id:
+            return None
+        match = self._build_owner_combo_event_probe(state, owner_player_id=reg.owner_player_id, event=event)
+        if match is None:
+            return None
+        owner, live_combo_card, combo_probe = match
+        required_from = str(reg.handler_params.get("event_requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(event.payload.get("comboed_from") or "").strip().lower()
+            if comboed_from != required_from:
+                return None
+        allowed_colors = {
+            part.strip().lower()
+            for part in str(reg.handler_params.get("event_allowed_colors", "")).replace("|", ",").replace("/", ",").split(",")
+            if part.strip()
+        }
+        required_traits = {
+            part.strip().lower()
+            for part in str(reg.handler_params.get("event_required_traits", "")).replace("|", ",").split(",")
+            if part.strip()
+        }
+        required_characters = {
+            part.strip().lower()
+            for part in str(reg.handler_params.get("event_required_characters", "")).replace("|", ",").split(",")
+            if part.strip()
+        }
+        required_name_contains = str(reg.handler_params.get("event_required_name_contains", "")).strip().upper()
+        required_card_types = {
+            part.strip().upper()
+            for part in str(reg.handler_params.get("event_required_card_type", "")).replace("|", ",").split(",")
+            if part.strip()
+        }
+        if not self._card_matches_effect_filters(
+            combo_probe,
+            allowed_colors=allowed_colors,
+            required_traits=required_traits,
+            required_characters=required_characters,
+            required_name_contains=required_name_contains,
+            required_card_types=required_card_types,
+        ):
+            return None
+        event_min_cost = self._resolve_effect_int_param(state, reg, "event_min_energy_cost", default=-1)
+        event_max_cost = self._resolve_effect_int_param(state, reg, "event_max_energy_cost", default=-1)
+        event_exact_cost = self._resolve_effect_int_param(state, reg, "event_exact_energy_cost", default=-1)
+        combo_cost = int(combo_probe.energy_cost or -1)
+        if event_exact_cost >= 0 and combo_cost != event_exact_cost:
+            return None
+        if event_min_cost >= 0 and combo_cost < event_min_cost:
+            return None
+        if event_max_cost >= 0 and combo_cost > event_max_cost:
+            return None
+        if bool(reg.handler_params.get("event_requires_skill_less", False)) and not self._card_is_skillless(combo_probe):
+            return None
+        return owner, live_combo_card, combo_probe
+
+    def _pay_owner_combo_skill_cost_if_needed(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+        owner: PlayerState,
+    ) -> bool:
+        paid_keys_obj = event.payload.get("_paid_owner_combo_cost_keys")
+        paid_keys = set(paid_keys_obj) if isinstance(paid_keys_obj, list) else set()
+        paid_key = f"{reg.owner_player_id}:{reg.source_zone}:{reg.source_instance_id}:auto_on_owner_combo_battle"
+        if paid_key in paid_keys:
+            return True
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return False
+        if not self._can_pay_skill_cost(owner, source, "auto_on_owner_combo_battle", source_zone=reg.source_zone):
+            return False
+        self._pay_skill_cost(state, owner, source, "auto_on_owner_combo_battle", source_zone=reg.source_zone)
+        paid_keys.add(paid_key)
+        event.payload["_paid_owner_combo_cost_keys"] = list(paid_keys)
+        return True
+
     def _handle_auto_place_up_to_n_from_owner_drop_under_self_on_play(
         self,
         state: GameState,
@@ -11858,11 +12024,34 @@ class RulesEngine:
             return
 
         source: CardInstance | None = None
+        source_zone = ""
         for i, c in enumerate(owner.combo_area):
             if c.instance_id == reg.source_instance_id:
-                source = owner.combo_area.pop(i)
+                source = c
+                source_zone = "combo"
                 break
         if source is None:
+            for i, c in enumerate(owner.drop):
+                if c.instance_id == reg.source_instance_id:
+                    source = c
+                    source_zone = "drop"
+                    break
+        if source is None:
+            return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(getattr(source, "comboed_from", "") or "").strip().lower()
+            if comboed_from != required_from:
+                return
+        if not self._can_pay_skill_cost(owner, source, "auto_on_combo_battle", source_zone=source_zone):
+            return
+        self._pay_skill_cost(state, owner, source, "auto_on_combo_battle", source_zone=source_zone)
+        if source_zone == "combo":
+            for i, c in enumerate(owner.combo_area):
+                if c.instance_id == reg.source_instance_id:
+                    source = owner.combo_area.pop(i)
+                    break
+        elif source_zone == "drop":
             for i, c in enumerate(owner.drop):
                 if c.instance_id == reg.source_instance_id:
                     source = owner.drop.pop(i)
@@ -11885,6 +12074,79 @@ class RulesEngine:
             },
         )
         self._checkpoint(state, "effect_auto_play_self_from_combo_on_battle_end")
+
+    def _handle_auto_add_self_to_owner_z_energy_on_battle_end(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "battle_end":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source: CardInstance | None = None
+        for i, c in enumerate(owner.combo_area):
+            if c.instance_id == reg.source_instance_id:
+                source = owner.combo_area.pop(i)
+                break
+        if source is None:
+            for i, c in enumerate(owner.drop):
+                if c.instance_id == reg.source_instance_id:
+                    source = owner.drop.pop(i)
+                    break
+        if source is None:
+            return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(getattr(source, "comboed_from", "") or "").strip().lower()
+            if comboed_from != required_from:
+                return
+        owner.z_energy.append(source)
+        self._checkpoint(state, "effect_auto_add_self_to_owner_z_energy_on_battle_end")
+
+    def _handle_auto_send_self_to_owner_warp_on_battle_end(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "battle_end":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source: CardInstance | None = None
+        source_zone = ""
+        for i, c in enumerate(owner.combo_area):
+            if c.instance_id == reg.source_instance_id:
+                source = owner.combo_area.pop(i)
+                source_zone = "combo"
+                break
+        if source is None:
+            for i, c in enumerate(owner.drop):
+                if c.instance_id == reg.source_instance_id:
+                    source = owner.drop.pop(i)
+                    source_zone = "drop"
+                    break
+        if source is None:
+            return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(getattr(source, "comboed_from", "") or "").strip().lower()
+            if comboed_from != required_from:
+                if source_zone == "combo":
+                    owner.combo_area.append(source)
+                elif source_zone == "drop":
+                    owner.drop.append(source)
+                return
+        self._append_to_owner_warp(state, owner_player_id=reg.owner_player_id, card=source, source_zone=source_zone or None)
+        self._checkpoint(state, "effect_auto_send_self_to_owner_warp_on_battle_end")
 
     def _handle_activate_play_self_from_hand(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "skill_activated":
@@ -16023,6 +16285,278 @@ class RulesEngine:
             self._emit_card_placed_into_drop(state, owner_player_id=reg.owner_player_id, card=card, source_zone="deck")
         self._checkpoint(state, "effect_auto_place_up_to_n_from_owner_deck_into_drop_on_combo")
 
+    def _handle_auto_comboed_card_gain_combo_power_on_owner_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if not self._effect_requirements_met(state, reg):
+            return
+        match = self._match_owner_combo_event(state, event, reg)
+        if match is None:
+            return
+        owner, live_combo_card, _combo_probe = match
+        if live_combo_card is None:
+            return
+        if not self._pay_owner_combo_skill_cost_if_needed(state, event, reg, owner):
+            return
+        delta = self._resolve_effect_int_param(state, reg, "combo_power_delta", default=0)
+        if delta == 0:
+            return
+        live_combo_card.combo_power = int(live_combo_card.combo_power or 0) + delta
+        self._checkpoint(state, "effect_auto_comboed_card_gain_combo_power_on_owner_combo")
+
+    def _handle_auto_switch_self_active_on_owner_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if not self._effect_requirements_met(state, reg):
+            return
+        match = self._match_owner_combo_event(state, event, reg)
+        if match is None:
+            return
+        owner, _live_combo_card, _combo_probe = match
+        if not self._pay_owner_combo_skill_cost_if_needed(state, event, reg, owner):
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        source.resting = False
+        self._checkpoint(state, "effect_auto_switch_self_active_on_owner_combo")
+
+    def _handle_auto_add_markers_and_self_power_for_turn_on_owner_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if not self._effect_requirements_met(state, reg):
+            return
+        match = self._match_owner_combo_event(state, event, reg)
+        if match is None:
+            return
+        owner, _live_combo_card, _combo_probe = match
+        if not self._pay_owner_combo_skill_cost_if_needed(state, event, reg, owner):
+            return
+        source = self._find_by_instance(owner, reg.source_zone, reg.source_instance_id)
+        if source is None:
+            return
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta > 0 and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
+        power_delta = self._resolve_effect_int_param(state, reg, "power_delta", default=0)
+        if power_delta != 0:
+            self._apply_temporary_power_delta(state, card=source, delta=power_delta, reason="effect_owner_combo_source_buff")
+        self._checkpoint(state, "effect_auto_add_markers_and_self_power_for_turn_on_owner_combo")
+
+    def _handle_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if not self._effect_requirements_met(state, reg):
+            return
+        match = self._match_owner_combo_event(state, event, reg)
+        if match is None:
+            return
+        owner, _live_combo_card, _combo_probe = match
+        if not self._pay_owner_combo_skill_cost_if_needed(state, event, reg, owner):
+            return
+        opponent = state.players.get(self._opponent_of(reg.owner_player_id))
+        if opponent is None or not opponent.unison_area:
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        marker_amount = self._resolve_effect_int_param(state, reg, "marker_amount", default=1)
+        if marker_amount <= 0:
+            return
+        policy = str(reg.handler_params.get("target_policy", "first"))
+        indexes = self._choose_effect_target_indexes(state, reg, list(opponent.unison_area), max_targets, policy)
+        if not indexes:
+            return
+        candidates = list(opponent.unison_area)
+        for idx in indexes:
+            target = candidates[idx]
+            removable = min(int(getattr(target, "markers", 0) or 0), marker_amount)
+            if removable <= 0:
+                continue
+            self._remove_unison_markers(state, unison=target, amount=removable, reason="effect")
+        self._checkpoint(state, "effect_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo")
+
+    def _handle_auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if not self._effect_requirements_met(state, reg):
+            return
+        match = self._match_owner_combo_event(state, event, reg)
+        if match is None:
+            return
+        owner, _live_combo_card, _combo_probe = match
+        if not self._pay_owner_combo_skill_cost_if_needed(state, event, reg, owner):
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if opponent is None:
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        moved = 0
+        while moved < max(max_targets, 0):
+            idx = next(
+                (
+                    i
+                    for i, card in enumerate(opponent.drop)
+                    if str(card.card_type or "").strip().upper() in {"BATTLE", "Z-BATTLE"}
+                ),
+                None,
+            )
+            if idx is None:
+                break
+            card = opponent.drop.pop(idx)
+            self._append_to_owner_warp(state, owner_player_id=opponent_id, card=card, source_zone="drop")
+            moved += 1
+        if moved == 0:
+            draw_amount = self._resolve_effect_int_param(state, reg, "draw_amount", default=1)
+            for _ in range(max(draw_amount, 0)):
+                self._draw_one_from_registration(state, reg)
+        self._checkpoint(state, "effect_auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo")
+
+    def _handle_auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_comboed":
+            return
+        if int(event.payload.get("source_instance_id") or -1) != reg.source_instance_id:
+            return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(event.payload.get("comboed_from") or "").strip().lower()
+            if comboed_from != required_from:
+                return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, "combo", reg.source_instance_id)
+        if source is None:
+            return
+        per_card = self._resolve_effect_int_param(state, reg, "combo_power_per_card", default=0)
+        if per_card <= 0:
+            return
+        total_cards = len(owner.drop) + len(owner.warp)
+        max_count = self._resolve_effect_int_param(state, reg, "max_count", default=-1)
+        if max_count >= 0:
+            total_cards = min(total_cards, max_count)
+        if total_cards <= 0:
+            return
+        current_combo_power = int(source.combo_power or 0)
+        source.combo_power = current_combo_power + (per_card * total_cards)
+        self._checkpoint(state, "effect_auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp")
+
+    def _handle_auto_self_gain_combo_power_on_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_comboed":
+            return
+        if int(event.payload.get("source_instance_id") or -1) != reg.source_instance_id:
+            return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(event.payload.get("comboed_from") or "").strip().lower()
+            if comboed_from != required_from:
+                return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        source = self._find_by_instance(owner, "combo", reg.source_instance_id)
+        if source is None:
+            return
+        delta = self._resolve_effect_int_param(state, reg, "combo_power_delta", default=0)
+        if delta == 0:
+            return
+        current_combo_power = int(source.combo_power or 0)
+        source.combo_power = current_combo_power + delta
+        self._checkpoint(state, "effect_auto_self_gain_combo_power_on_combo")
+
+    def _handle_auto_buff_other_owner_combo_card_on_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_comboed":
+            return
+        if int(event.payload.get("source_instance_id") or -1) != reg.source_instance_id:
+            return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(event.payload.get("comboed_from") or "").strip().lower()
+            if comboed_from != required_from:
+                return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        delta = self._resolve_effect_int_param(state, reg, "combo_power_delta", default=0)
+        if delta == 0:
+            return
+        exclude_self = bool(reg.handler_params.get("exclude_self", False))
+        target: CardInstance | None = None
+        for card in owner.combo_area:
+            if exclude_self and int(card.instance_id) == int(reg.source_instance_id):
+                continue
+            target = card
+            break
+        if target is None:
+            return
+        current_combo_power = int(target.combo_power or 0)
+        target.combo_power = current_combo_power + delta
+        self._checkpoint(state, "effect_auto_buff_other_owner_combo_card_on_combo")
+
+    def _handle_auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_comboed":
+            return
+        if int(event.payload.get("source_instance_id") or -1) != reg.source_instance_id:
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        bottom_count = self._resolve_effect_int_param(state, reg, "bottom_deck_from_hand", default=1)
+        draw_count = self._resolve_effect_int_param(state, reg, "amount", default=1)
+        if bottom_count <= 0 or draw_count <= 0:
+            return
+        if len(owner.hand) < bottom_count:
+            return
+        for _ in range(bottom_count):
+            owner.deck.append(owner.hand.pop(0).card_id)
+        for _ in range(draw_count):
+            self._draw_one_from_registration(state, reg)
+        self._checkpoint(state, "effect_auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo")
+
     def _handle_auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "card_played":
             return
@@ -16379,6 +16913,11 @@ class RulesEngine:
             return
         if not self._effect_requirements_met(state, reg):
             return
+        required_from = str(reg.handler_params.get("requires_comboed_from", "")).strip().lower()
+        if required_from:
+            comboed_from = str(event.payload.get("comboed_from") or "").strip().lower()
+            if comboed_from != required_from:
+                return
         max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
         if max_targets <= 0:
             return
@@ -16894,6 +17433,41 @@ class RulesEngine:
                     required_name_contains=owner_battle_or_z_energy_required_name_contains,
                 )
                 for card in zones_to_scan
+            ):
+                return False
+        owner_combo_allowed_colors = {
+            part.strip()
+            for part in str(reg.handler_params.get("required_owner_combo_allowed_colors", "")).strip().lower().replace("|", ",").split(",")
+            if part.strip()
+        }
+        owner_combo_required_traits = {
+            part.strip()
+            for part in str(reg.handler_params.get("required_owner_combo_required_traits", "")).strip().lower().replace("|", ",").split(",")
+            if part.strip()
+        }
+        owner_combo_required_characters = {
+            part.strip()
+            for part in str(reg.handler_params.get("required_owner_combo_required_characters", "")).strip().lower().replace("|", ",").split(",")
+            if part.strip()
+        }
+        owner_combo_required_name_contains = str(reg.handler_params.get("required_owner_combo_required_name_contains", "")).strip().upper()
+        if (
+            owner_combo_allowed_colors
+            or owner_combo_required_traits
+            or owner_combo_required_characters
+            or owner_combo_required_name_contains
+        ):
+            if not owner.combo_area:
+                return False
+            if not any(
+                self._card_matches_effect_filters(
+                    card,
+                    allowed_colors=owner_combo_allowed_colors,
+                    required_traits=owner_combo_required_traits,
+                    required_characters=owner_combo_required_characters,
+                    required_name_contains=owner_combo_required_name_contains,
+                )
+                for card in owner.combo_area
             ):
                 return False
         owner_attacker_allowed_colors = {

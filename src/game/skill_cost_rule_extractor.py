@@ -79,6 +79,14 @@ _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE = re.compile(
     r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when your opponent uses cards? in a combo",
     re.IGNORECASE,
 )
+_AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE = re.compile(
+    r"\[auto\]\((red|blue|green|yellow|black|white)\)(?:.{0,220}?)?:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
+_AUTO_ON_OWNER_COMBO_SPIRIT_BOOST_RE = re.compile(
+    r"\[auto\](?:.{0,140}?)?\[spirit boost\s+(\d+)\](?:.{0,260}?)?(?::\s*)?(?:if [^:]{1,220}:\s*)?when (?:one of your|you use) .+? in a combo",
+    re.IGNORECASE,
+)
 _COUNTER_ALT_REST_HIDDEN_BATTLE_RE = re.compile(
     r"activate this card's \[counter\] skill from your hand by switching 1 hidden mode card in your battle area to rest mode instead of paying its energy cost"
 )
@@ -524,6 +532,24 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_z_energy_to_drop",
                 "amount": int(m_auto_on_opponent_combo_z_energy_to_drop.group(1)),
+            }
+        ]
+    m_auto_on_owner_combo_spirit_boost = _AUTO_ON_OWNER_COMBO_SPIRIT_BOOST_RE.search(text)
+    if m_auto_on_owner_combo_spirit_boost:
+        rules.setdefault("auto_on_owner_combo_battle", []).insert(
+            0,
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": int(m_auto_on_owner_combo_spirit_boost.group(1)),
+            },
+        )
+    m_auto_on_combo_energy_to_drop = _AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_combo_energy_to_drop:
+        rules["auto_on_combo_battle"] = [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+                "allowed_colors": str(m_auto_on_combo_energy_to_drop.group(1) or "").strip().lower(),
             }
         ]
 

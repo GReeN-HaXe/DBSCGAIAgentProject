@@ -388,7 +388,18 @@ class SkillCostDsl:
                     return False
                 continue
             if step.kind == "send_owner_energy_to_drop":
-                if len(player.energy) < step.amount:
+                allowed_colors = SkillCostDsl._parse_param_set(step.params.get("allowed_colors"))
+                available = [
+                    card
+                    for card in player.energy
+                    if not allowed_colors
+                    or not {
+                        part.strip().lower()
+                        for part in str(card.color or "").replace("/", ",").split(",")
+                        if part.strip()
+                    }.isdisjoint(allowed_colors)
+                ]
+                if len(available) < step.amount:
                     return False
                 continue
             if step.kind == "add_markers":
@@ -542,8 +553,21 @@ class SkillCostDsl:
                 metadata["alternate_cost_kind"] = "rest_owner_leader"
                 continue
             if step.kind == "send_owner_energy_to_drop":
-                for _ in range(min(step.amount, len(player.energy))):
-                    player.drop.append(player.energy.pop(0))
+                allowed_colors = SkillCostDsl._parse_param_set(step.params.get("allowed_colors"))
+                moved = 0
+                i = 0
+                while i < len(player.energy) and moved < step.amount:
+                    card = player.energy[i]
+                    colors = {
+                        part.strip().lower()
+                        for part in str(card.color or "").replace("/", ",").split(",")
+                        if part.strip()
+                    }
+                    if allowed_colors and colors.isdisjoint(allowed_colors):
+                        i += 1
+                        continue
+                    player.drop.append(player.energy.pop(i))
+                    moved += 1
                 metadata["alternate_cost_kind"] = "send_owner_energy_to_drop"
                 continue
             if step.kind == "add_markers":
