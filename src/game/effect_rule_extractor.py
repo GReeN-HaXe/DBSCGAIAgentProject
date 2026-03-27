@@ -14,6 +14,26 @@ _WS_RE = re.compile(r"\s+")
 _PLAY_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when (?:this card is played(?: from your hand)?|you play this card)")
 _ATTACK_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when this card attacks")
 _COMBO_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when (?:this card is used in a combo|you combo with this card)")
+_COMBO_TRIGGER_FROM_HAND_OPPONENT_BOTTOM_DECK_HAND_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*your opponent chooses (\d+) cards? in their hand and places? (?:it|them) at the bottom of their deck",
+    re.IGNORECASE,
+)
+_COMBO_TRIGGER_FROM_HAND_SWITCH_OPPONENT_LEADER_OR_BATTLE_REST_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*choose up to (\d+) of your opponent's leader cards? or battle cards? and switch (?:it|them) to rest mode",
+    re.IGNORECASE,
+)
+_COMBO_TRIGGER_FROM_HAND_SWITCH_OWNER_ENERGY_ACTIVE_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*choose up to (\d+) of your (.+?) energy and switch (?:it|them) to active mode",
+    re.IGNORECASE,
+)
+_COMBO_TRIGGER_FROM_HAND_PLACE_DECK_CARD_IN_DROP_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when (?:this card is used in a combo|you combo with this card) from your hand,\s*choose up to (\d+) (.+?) from your deck,\s*place (?:it|them) in your drop area,\s*then shuffle your deck",
+    re.IGNORECASE,
+)
+_OPPONENT_COMBO_BOTTOM_DECK_HAND_AND_NEGATE_SELF_FOR_BATTLE_RE = re.compile(
+    r"when your opponent uses cards? in a combo,\s*(?:you opponent|your opponent) places (\d+) cards? from their hand at the bottom of their deck, then you negate this skill for the battle",
+    re.IGNORECASE,
+)
 _PLAY_OR_COMBO_DRAW_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card(?: in your hand)? is played or used in a combo.*?draw (\d+) card"
 )
@@ -3187,6 +3207,114 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                         once_per_turn=once,
                     )
                 )
+
+        m_opponent_combo_bottom_deck = _OPPONENT_COMBO_BOTTOM_DECK_HAND_AND_NEGATE_SELF_FOR_BATTLE_RE.search(branch)
+        if m_opponent_combo_bottom_deck:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="owner_opponent_card_comboed",
+                    handler_id="auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle",
+                    handler_params={
+                        "amount": int(m_opponent_combo_bottom_deck.group(1)),
+                        "negate_self_skill_for_battle": True,
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_bottom_deck_opp_hand = _COMBO_TRIGGER_FROM_HAND_OPPONENT_BOTTOM_DECK_HAND_RE.search(branch)
+        if m_combo_bottom_deck_opp_hand:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_opponent_bottom_decks_n_from_hand_on_combo",
+                    handler_params={
+                        "amount": int(m_combo_bottom_deck_opp_hand.group(1)),
+                        "requires_comboed_from": "hand",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_switch_opp_leader_or_battle_rest = _COMBO_TRIGGER_FROM_HAND_SWITCH_OPPONENT_LEADER_OR_BATTLE_REST_RE.search(branch)
+        if m_combo_switch_opp_leader_or_battle_rest:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_switch_up_to_n_opponent_leader_or_battle_rest_on_combo",
+                    handler_params={
+                        "max_targets": int(m_combo_switch_opp_leader_or_battle_rest.group(1)),
+                        "requires_comboed_from": "hand",
+                        "target_policy": "first",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_switch_owner_energy_active = _COMBO_TRIGGER_FROM_HAND_SWITCH_OWNER_ENERGY_ACTIVE_RE.search(branch)
+        if m_combo_switch_owner_energy_active:
+            max_targets = int(m_combo_switch_owner_energy_active.group(1))
+            descriptor = str(m_combo_switch_owner_energy_active.group(2) or "").lower()
+            colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor)))
+            requires_multicolor = "multicolor" in descriptor
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "requires_comboed_from": "hand",
+                **extra,
+            }
+            if colors:
+                params["allowed_colors"] = ",".join(colors)
+            if requires_multicolor:
+                params["requires_multicolor"] = True
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_switch_up_to_n_owner_energy_active_on_combo",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_combo_place_deck_card_in_drop = _COMBO_TRIGGER_FROM_HAND_PLACE_DECK_CARD_IN_DROP_RE.search(branch)
+        if m_combo_place_deck_card_in_drop:
+            max_targets = int(m_combo_place_deck_card_in_drop.group(1))
+            descriptor = str(m_combo_place_deck_card_in_drop.group(2) or "").lower()
+            colors = sorted(set(re.findall(r"\b(red|blue|green|yellow|black)\b", descriptor)))
+            m_cost = re.search(r"energy cost of (\d+) or less", descriptor)
+            max_cost = int(m_cost.group(1)) if m_cost else -1
+            required_type = "BATTLE" if "battle card" in descriptor else ""
+            extra = _extract_common_conditions(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "requires_comboed_from": "hand",
+                **extra,
+            }
+            if colors:
+                params["allowed_colors"] = ",".join(colors)
+            if max_cost >= 0:
+                params["max_cost"] = max_cost
+            if required_type:
+                params["required_card_type"] = required_type
+            rules.append(
+                EffectRule(
+                    trigger="self_comboed",
+                    handler_id="auto_place_up_to_n_from_owner_deck_into_drop_on_combo",
+                    handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
 
         # [Auto] When this card attacks, use up to N ... from your Drop/Warp in a combo with its skills negated for the turn.
         m_attack_combo = _ATTACK_COMBO_FROM_OWNER_ZONE_RE.search(branch)

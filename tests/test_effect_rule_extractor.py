@@ -1845,3 +1845,90 @@ def test_diagnostics_does_not_flag_combo_draw_when_draw_is_only_on_play() -> Non
     rules = extract_effect_rules_from_card(card)
     notes = diagnose_unresolved_patterns(card, rules)
     assert "missed_combo_draw" not in notes
+
+
+def test_extract_union_fusion_opponent_combo_support_rule() -> None:
+    card = _card(
+        "[Auto] Place 2 of your Z-Energy into their owner's Drop: "
+        "When your opponent uses cards in a combo, your opponent places 1 card from their hand at the bottom of their deck, "
+        "then you negate this skill for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_opponent_card_comboed"
+        and r.handler_id == "auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["negate_self_skill_for_battle"] is True
+
+
+def test_extract_self_combo_opponent_bottom_deck_hand_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is blue or green: "
+        "When you combo with this card from your hand, your opponent chooses 1 card in their hand and places it at the bottom of their deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_opponent_bottom_decks_n_from_hand_on_combo"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+
+
+def test_extract_self_combo_switch_opponent_leader_or_battle_rest_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is blue or yellow: "
+        "When you combo with this card from your hand, choose up to 1 of your opponent's Leader Cards or Battle Cards and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_switch_up_to_n_opponent_leader_or_battle_rest_on_combo"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+
+
+def test_extract_self_combo_switch_owner_multicolor_energy_active_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is red or blue and it's your opponent's turn: "
+        "When you combo with this card from your hand, choose up to 1 of your Red/Blue multicolor energy and switch it to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_combo"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["allowed_colors"] == "blue,red"
+    assert rule.handler_params["requires_multicolor"] is True
+
+
+def test_extract_self_combo_place_matching_deck_card_in_drop_rule() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is green or yellow: "
+        "When you combo with this card from your hand, choose up to 1 green or yellow Battle Card with an energy cost of 4 or less from your deck, "
+        "place it in your Drop Area, then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed"
+        and r.handler_id == "auto_place_up_to_n_from_owner_deck_into_drop_on_combo"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["allowed_colors"] == "green,yellow"
+    assert rule.handler_params["max_cost"] == 4
+    assert rule.handler_params["required_card_type"] == "BATTLE"

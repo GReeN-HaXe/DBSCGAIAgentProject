@@ -1,8 +1,8 @@
 {
   "candidates_scanned": 5766,
   "cards_with_diagnostics": 207,
-  "cards_with_rules": 2900,
-  "cards_without_rules": 2866,
+  "cards_with_rules": 2905,
+  "cards_without_rules": 2861,
   "coverage": {
     "by_handler": {
       "activate_add_up_to_n_from_owner_deck_to_hand": 35,
@@ -55,10 +55,13 @@
       "auto_ko_up_to_n_opponent_battle_on_play": 10,
       "auto_ko_up_to_n_opponent_battle_on_switch": 2,
       "auto_look_top_add_up_to_one_to_hand_on_play": 295,
+      "auto_opponent_bottom_decks_n_from_hand_on_combo": 1,
       "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1,
       "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 17,
+      "auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle": 1,
       "auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword": 1,
       "auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb": 1,
+      "auto_place_up_to_n_from_owner_deck_into_drop_on_combo": 1,
       "auto_place_up_to_n_from_owner_deck_to_destination_zone": 1,
       "auto_place_up_to_n_from_owner_drop_under_self_on_play": 3,
       "auto_play_self_from_combo_on_battle_end": 31,
@@ -90,8 +93,10 @@
       "auto_switch_up_to_n_any_player_board_to_revealed_on_play": 1,
       "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end": 1,
       "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end": 1,
+      "auto_switch_up_to_n_opponent_leader_or_battle_rest_on_combo": 1,
       "auto_switch_up_to_n_owner_battle_to_hidden_on_play": 4,
       "auto_switch_up_to_n_owner_board_to_revealed_on_play": 2,
+      "auto_switch_up_to_n_owner_energy_active_on_combo": 1,
       "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed": 2,
       "auto_switch_up_to_n_owner_energy_active_on_main_phase_start": 1,
       "auto_switch_up_to_n_owner_energy_active_on_turn_end": 26,
@@ -104,6 +109,7 @@
       "owner_leader_attacks": 38,
       "owner_main_phase_start": 3,
       "owner_opponent_battle_attacks": 1,
+      "owner_opponent_card_comboed": 1,
       "owner_opponent_main_phase_start": 6,
       "owner_opponent_skill_plays_overcost_battle": 2,
       "owner_other_battle_played_by_dark_over_realm": 1,
@@ -112,7 +118,7 @@
       "self_activate_extra_from_hand": 5,
       "self_activate_main": 1366,
       "self_attacks": 368,
-      "self_comboed": 196,
+      "self_comboed": 200,
       "self_comboed_battle_end": 31,
       "self_hidden_battle_to_drop": 2,
       "self_in_hand_sent_to_drop_or_warp": 2,
@@ -770,7 +776,7 @@
       "missed_play_draw"
     ]
   },
-  "total_extracted_rules": 3763,
+  "total_extracted_rules": 3768,
   "unmatched_top_templates": [
     {
       "count": 6,

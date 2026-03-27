@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 2980,
+  "card_rule_count": 2985,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 3867,
+  "effect_rule_count": 3872,
   "rules": {
     "10": [
       {
@@ -30122,6 +30122,25 @@
         "trigger": "self_activate_main"
       }
     ],
+    "5273": [
+      {
+        "family_id": "self_comboed:auto_switch_up_to_n_opponent_leader_or_battle_rest_on_combo",
+        "handler_id": "auto_switch_up_to_n_opponent_leader_or_battle_rest_on_combo",
+        "handler_params": {
+          "max_targets": 1,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is blue or yellow",
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue or yellow: when you combo with this card from your hand, choose up to 1 of your opponent's leader cards or battle cards and switch it to rest mode.",
+        "trigger": "self_comboed"
+      }
+    ],
     "528": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -30344,6 +30363,26 @@
         "trigger": "self_activate_main"
       }
     ],
+    "5316": [
+      {
+        "family_id": "self_comboed:auto_place_up_to_n_from_owner_deck_into_drop_on_combo",
+        "handler_id": "auto_place_up_to_n_from_owner_deck_into_drop_on_combo",
+        "handler_params": {
+          "allowed_colors": "green,yellow",
+          "max_cost": 4,
+          "max_targets": 1,
+          "required_card_type": "BATTLE",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is green or yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is green or yellow: when you combo with this card from your hand, choose up to 1 green or yellow battle card with an energy cost of 4 or less from your deck, place it in your drop area, then shuffle your deck.",
+        "trigger": "self_comboed"
+      }
+    ],
     "5319": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -30373,6 +30412,23 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if you have a green unison card in play and your opponent has no battle cards in play: play this card from your hand in rest mode.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "5320": [
+      {
+        "family_id": "self_comboed:auto_opponent_bottom_decks_n_from_hand_on_combo",
+        "handler_id": "auto_opponent_bottom_decks_n_from_hand_on_combo",
+        "handler_params": {
+          "amount": 1,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is blue or green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue or green: when you combo with this card from your hand, your opponent chooses 1 card in their hand and places it at the bottom of their deck.",
+        "trigger": "self_comboed"
       }
     ],
     "5322": [
@@ -41456,6 +41512,25 @@
         "trigger": "self_played"
       }
     ],
+    "7030": [
+      {
+        "family_id": "self_comboed:auto_switch_up_to_n_owner_energy_active_on_combo",
+        "handler_id": "auto_switch_up_to_n_owner_energy_active_on_combo",
+        "handler_params": {
+          "allowed_colors": "blue,red",
+          "max_targets": 1,
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is red or blue and it's your opponent's turn",
+          "requires_multicolor": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is red or blue and it's your opponent's turn: when you combo with this card from your hand, choose up to 1 of your red/blue multicolor energy and switch it to active mode.",
+        "trigger": "self_comboed"
+      }
+    ],
     "7033": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -49782,6 +49857,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue <son goku: br> or <gogeta: br> card to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      }
+    ],
+    "8142": [
+      {
+        "family_id": "owner_opponent_card_comboed:auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle",
+        "handler_id": "auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle",
+        "handler_params": {
+          "amount": 1,
+          "negate_self_skill_for_battle": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] place 2 of your z-energy into their owner's drop: when your opponent uses cards in a combo, you opponent places 1 card from their hand at the bottom of their deck, then you negate this skill for the battle.",
+        "trigger": "owner_opponent_card_comboed"
       }
     ],
     "8143": [

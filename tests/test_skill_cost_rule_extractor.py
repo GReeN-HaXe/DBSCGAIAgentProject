@@ -868,6 +868,25 @@ def test_engine_loads_skill_cost_catalog_from_path() -> None:
     assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
 
 
+def test_extract_auto_on_opponent_combo_z_energy_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] Place 2 of your Z-Energy into their owner's Drop: "
+            "When your opponent uses cards in a combo, your opponent places 1 card from their hand at the bottom of their deck, "
+            "then you negate this skill for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_opponent_combo_battle": [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": 2,
+            }
+        ]
+    }
+
+
 def test_engine_uses_catalog_for_counter_alternate_hidden_battle_cost() -> None:
     catalog_path = _workspace_temp_catalog_path("skill_cost_alt_catalog")
     save_skill_cost_rules_json(

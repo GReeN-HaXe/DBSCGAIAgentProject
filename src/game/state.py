@@ -66,6 +66,7 @@ class CardInstance:
     battle_temporary_keywords: Tuple[str, ...] = ()
     battle_temporary_power_delta: int = 0
     delayed_temporary_keywords: Tuple[str, ...] = ()
+    temporary_keyword_skills_negated: bool = False
     temporary_skills_negated: bool = False
     permanent_skills_negated: bool = False
     temporary_cannot_switch_active: bool = False
@@ -435,6 +436,16 @@ class TemporarySkillActivationRestriction:
 
 
 @dataclass(frozen=True)
+class BattleSkillActivationRestriction:
+    owner_player_id: int
+    restricted_card_id: int
+    scope: str = "auto"
+    trigger: str = ""
+    handler_id: str = ""
+    handler_params_signature: Tuple[Tuple[str, str], ...] = ()
+
+
+@dataclass(frozen=True)
 class PermanentSkillActivationRestriction:
     owner_player_id: int
     restricted_card_id: int
@@ -520,6 +531,7 @@ class GameState:
     non_leader_attack_rest_taxes: list[NonLeaderAttackRestTax] = field(default_factory=list)
     active_counter_hand_restrictions: list[CounterHandActivationRestriction] = field(default_factory=list)
     active_temporary_skill_activation_restrictions: list[TemporarySkillActivationRestriction] = field(default_factory=list)
+    active_battle_skill_activation_restrictions: list[BattleSkillActivationRestriction] = field(default_factory=list)
     permanent_skill_activation_restrictions: list[PermanentSkillActivationRestriction] = field(default_factory=list)
     permanently_negated_skills: list[PermanentlyNegatedSkill] = field(default_factory=list)
     negate_opponent_strike_for_player_ids: set[int] = field(default_factory=set)

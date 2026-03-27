@@ -1822,6 +1822,25 @@ Resolved:
         - `hand or Drop Area`
         - `hand and/or Battle Area`
       - the absorb requirement checker now only consumes explicit condition text, which avoids false negatives from plain material clauses on these repeated-material lines
+    - status: first multi-name Union-Absorb target slice complete
+      - runtime now supports promotion targets like:
+        - `{Baby Vegeta, an Unfair Choice} or {Super Baby 1, All-Consuming Terror}`
+      - `Union-Absorb` target parsing now also handles:
+        - `play it in Active Mode on top of this card`
+        - source lines with card-name colons like `<Vegeta: GT>` without mis-splitting the skill clause
+    - status: first optional-material `If you do` Union-Absorb slice complete
+      - runtime now supports:
+        - `You may place up to 1 <Cell> card from your deck or Drop Area under this card. If you do, ...`
+      - optional under-card sourcing now works from:
+        - `deck`
+        - `Drop Area`
+      - the played target can now resolve without replacing the absorb host when the wording is plain `play it` rather than `play it on top of this card`
+    - status: first keyword-skill-negated Union-Absorb target-play slice complete
+      - runtime now supports:
+        - `play it with its keyword skills negated for the turn`
+      - current semantics are conservative and intentional:
+        - keyword skills are negated
+        - non-keyword on-play autos still resolve
   - `[Union-Fusion]`
     - status: first conservative action slice complete
     - generic runtime now covers:
@@ -1869,6 +1888,54 @@ Resolved:
       - first covered live wording families:
         - `[Union-Fusion](2), draw 2 cards: <Son Goku: Br> card and <Vegeta: Br> card.`
         - `[Union-Fusion](Red)(Red)(Red)(Red), draw 1 card: Red <Son Goku: GT> and red <Vegeta: GT>.`
+    - status: first Union-Fusion opponent-combo support slice complete
+      - runtime and extractor/catalog support now cover an opponent-combo Fusion support line that:
+        - pays `Z-Energy` as an auto cost on the combo trigger
+        - places 1 card from the opponent's hand at the bottom of their deck
+        - negates that specific auto line for the current battle
+      - checked-in extractor coverage now maps this wording family to:
+        - `owner_opponent_card_comboed:auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle`
+      - checked-in skill-cost extraction now maps the combo-trigger cost to:
+        - `auto_on_opponent_combo_battle -> send_owner_z_energy_to_drop`
+      - current battle-scope semantics are explicit:
+        - the same auto line is blocked on later combo events in that battle
+        - it becomes available again in a later battle
+      - first covered live wording family:
+        - `Place 2 of your Z-Energy into their owner's Drop: When your opponent uses cards in a combo, your opponent places 1 card from their hand at the bottom of their deck, then you negate this skill for the battle.`
+    - status: adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, your opponent chooses 1 card in their hand and places it at the bottom of their deck.`
+      - new combo provenance now records:
+        - `comboed_from="hand"` on normal `COMBO_FROM_HAND` events
+      - current conservative semantics are explicit:
+        - opponent choice is modeled deterministically from the front of hand
+        - the trigger can be scoped to hand-origin combos without leaking onto drop/warp combo events
+    - status: second adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, choose up to 1 of your opponent's Leader Cards or Battle Cards and switch it to Rest Mode.`
+      - current target semantics are explicit:
+        - the shared opponent-card selector is reused
+        - Unisons are excluded from this family
+        - `target_policy="first"` remains deterministic, so the opponent Leader is chosen before Battle Cards when both are legal
+    - status: third adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, choose up to 1 of your Red/Blue multicolor energy and switch it to Active Mode.`
+      - current target semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - shared leader / opponent-turn requirement checks still apply
+        - shared energy filters cover:
+          - color matching
+          - multicolor-only matching
+    - status: fourth adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, choose up to 1 green or yellow Battle Card with an energy cost of 4 or less from your deck, place it in your Drop Area, then shuffle your deck.`
+      - current target semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - deck search remains deterministic and selects the first matching card
+        - current filtering covers:
+          - card type
+          - color match
+          - max energy cost
     - status: first Union-play follow-up trigger slice complete
       - trigger matching now covers:
         - `self_played_using_union`

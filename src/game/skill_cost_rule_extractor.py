@@ -75,6 +75,10 @@ _AUTO_ON_PLAY_Z_ENERGY_TO_DROP_RE = re.compile(
     r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when this card is played,\s*activate this skill",
     re.IGNORECASE,
 )
+_AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE = re.compile(
+    r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when your opponent uses cards? in a combo",
+    re.IGNORECASE,
+)
 _COUNTER_ALT_REST_HIDDEN_BATTLE_RE = re.compile(
     r"activate this card's \[counter\] skill from your hand by switching 1 hidden mode card in your battle area to rest mode instead of paying its energy cost"
 )
@@ -512,6 +516,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_z_energy_to_drop",
                 "amount": int(m_auto_on_play_z_energy_to_drop.group(1)),
+            }
+        ]
+    m_auto_on_opponent_combo_z_energy_to_drop = _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_opponent_combo_z_energy_to_drop:
+        rules["auto_on_opponent_combo_battle"] = [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": int(m_auto_on_opponent_combo_z_energy_to_drop.group(1)),
             }
         ]
 

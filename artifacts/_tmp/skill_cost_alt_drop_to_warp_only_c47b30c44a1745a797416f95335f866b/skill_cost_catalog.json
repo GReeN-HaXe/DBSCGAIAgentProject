@@ -1,0 +1,13 @@
+{
+  "900312": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 2,
+        "kind": "send_owner_drop_to_warp",
+        "required_leader_traits": "power wish",
+        "required_traits": "power wish",
+        "requires_life_at_most": 4
+      }
+    ]
+  }
+}
