@@ -1,7 +1,7 @@
 {
   "card_rule_count": 3014,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 3963,
+  "effect_rule_count": 3968,
   "rules": {
     "10": [
       {
@@ -12252,7 +12252,8 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "min_owner_energy": 2
+          "min_owner_energy": 2,
+          "required_owner_battle_required_name_contains": "UNIVERSAL TUFFLEIZATION PLAN"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -12861,6 +12862,26 @@
     ],
     "1965": [
       {
+        "family_id": "self_played:auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed",
+        "handler_id": "auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed",
+        "handler_params": {
+          "host_name_contains": "HYPERBOLIC TIME CHAMBER",
+          "ko_max_cost": 3,
+          "ko_max_targets": 1,
+          "max_targets": 1,
+          "min_owner_energy": 2,
+          "required_name_contains_any": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING|SS SON GOHAN, SHOWING THE RESULTS OF TRAINING",
+          "rest_host": true,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 2 or more energy, choose 1 {hyperbolic time chamber} from your battle area, and switch it to rest mode: when this card is played, place up to 1 {ss son goku, showing the results of training} or {ss son gohan, showing the results of training} from your hand under the chosen card. if you placed a card, choose up to 1 of your opponent's battle cards with an energy cost of 3 or less and ko it.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
@@ -12928,6 +12949,22 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](green), place this card in your drop: draw 1 card and play up to 1 {ss son gohan, showing the results of training} under a {hyperbolic time chamber} in your battle area.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host",
+        "handler_id": "activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host",
+        "handler_params": {
+          "amount": 1,
+          "host_name_contains": "HYPERBOLIC TIME CHAMBER",
+          "max_targets": 1,
+          "required_name_contains": "SS SON GOHAN, SHOWING THE RESULTS OF TRAINING"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -13074,6 +13111,23 @@
     ],
     "1972": [
       {
+        "family_id": "self_activate_main:activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn",
+        "handler_id": "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn",
+        "handler_params": {
+          "max_targets": 1,
+          "power_delta": 10000,
+          "required_leader_traits": "Green &Lt;Son Gohan: Childhood&Gt; Z-Leader,You Remove This",
+          "required_name_contains": "SS VEGETA, ARROGANCE",
+          "requires_leader": "if your leader is a green &lt;son gohan: childhood&gt; z-leader, you remove this card in the drop from the game, and you discard 1 card from your hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](green), if your leader is a green &lt;son gohan: childhood&gt; z-leader, you remove this card in the drop from the game, and you discard 1 card from your hand: play up to 1 {ss vegeta, arrogance} from your drop and that card gets +10000 power for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
         "family_id": "self_activate_main:activate_place_self_from_hand_and_up_to_n_named_from_owner_deck_under_named_host",
         "handler_id": "activate_place_self_from_hand_and_up_to_n_named_from_owner_deck_under_named_host",
         "handler_params": {
@@ -13108,6 +13162,41 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 green \u226asaiyan\u226b with an energy cost of 4 or less to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "required_owner_battle_required_name_contains": "HYPERBOLIC TIME CHAMBER",
+          "required_owner_combo_required_card_type": "BATTLE",
+          "required_owner_combo_required_characters": "Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
+          "requires_comboed_from": "battle"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] there is a {hyperbolic time chamber} in your battle area and a skill-less battle card in your combo area: when this card in your battle area is used in a combo, draw 1 card and add this card to its owner's z-energy.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end",
+        "handler_id": "auto_add_self_to_owner_z_energy_on_battle_end",
+        "handler_params": {
+          "required_owner_battle_required_name_contains": "HYPERBOLIC TIME CHAMBER",
+          "required_owner_combo_required_card_type": "BATTLE",
+          "required_owner_combo_required_characters": "Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
+          "requires_comboed_from": "battle"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] there is a {hyperbolic time chamber} in your battle area and a skill-less battle card in your combo area: when this card in your battle area is used in a combo, draw 1 card and add this card to its owner's z-energy.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "1975": [
@@ -15824,7 +15913,9 @@
         "handler_params": {
           "min_owner_energy": 4,
           "required_leader_traits": "Red \u226aUniverse 7\u226b &Lt;Son Gohan: Adolescence&Gt;",
+          "required_owner_combo_required_card_type": "BATTLE",
           "required_owner_combo_required_characters": "Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
           "requires_leader": "if your leader is a red \u226auniverse 7\u226b &lt;son gohan: adolescence&gt; card, you have 4 or more energy, and you have a skill-less battle card in your combo area"
         },
         "limit_per_turn": 1,
@@ -22320,7 +22411,10 @@
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
+        "handler_params": {
+          "required_owner_combo_allowed_colors": "yellow",
+          "required_owner_combo_required_characters": "1 Lt Caulifla Gt"
+        },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
@@ -27848,6 +27942,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "required_leader_traits": "&Lt;Zamasu&Gt;,&Lt;Goku Black&Gt;",
+          "required_owner_combo_allowed_colors": "black",
+          "required_owner_combo_required_characters": "There Is At Least 1 Lt Zamasu Gt And 1 Lt Goku Gt",
           "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card and there is at least 1 &lt;zamasu&gt; card and 1 &lt;goku black&gt; card in your combo area"
         },
         "limit_per_turn": null,
@@ -30031,7 +30127,9 @@
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
+        "handler_params": {
+          "required_owner_battle_required_name_contains": "POWER BALL"
+        },
         "limit_per_turn": null,
         "limit_scope": "card_number",
         "once_per_turn": false,
@@ -39521,6 +39619,7 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1",
           "requires_leader": "if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -39537,6 +39636,7 @@
           "combo_power_delta": 6000,
           "exclude_self": true,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1",
           "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less"
         },
@@ -39970,6 +40070,7 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_leader": "if your leader card is blue and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -39986,6 +40087,7 @@
           "combo_power_delta": 6000,
           "exclude_self": true,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is blue and your life is at 4 or less"
         },
@@ -40916,6 +41018,7 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_leader": "if your leader card is green and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -40932,6 +41035,7 @@
           "combo_power_delta": 6000,
           "exclude_self": true,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is green and your life is at 4 or less"
         },
@@ -41416,6 +41520,7 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_leader": "if your leader card is yellow and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -41432,6 +41537,7 @@
           "combo_power_delta": 6000,
           "exclude_self": true,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is yellow and your life is at 4 or less"
         },
@@ -45810,6 +45916,10 @@
         "handler_params": {
           "amount": 1,
           "required_leader_traits": "Mono-Red \u226aUniverse 7\u226b",
+          "required_owner_combo_allowed_colors": "red",
+          "required_owner_combo_required_card_type": "BATTLE",
+          "required_owner_combo_required_characters": "You Only Have This And 1 Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
           "requires_leader": "if your leader card is a mono-red \u226auniverse 7\u226b card, and you only have this card and 1 red skill-less battle card in your combo area"
         },
         "limit_per_turn": null,
@@ -45827,6 +45937,10 @@
         "handler_params": {
           "amount": 1,
           "required_leader_traits": "Mono-Red \u226aUniverse 7\u226b",
+          "required_owner_combo_allowed_colors": "red",
+          "required_owner_combo_required_card_type": "BATTLE",
+          "required_owner_combo_required_characters": "You Only Have This And 1 Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
           "requires_leader": "if your leader card is a mono-red \u226auniverse 7\u226b card, and you only have this card and 1 red skill-less battle card in your combo area"
         },
         "limit_per_turn": null,

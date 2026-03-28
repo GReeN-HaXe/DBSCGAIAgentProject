@@ -3597,6 +3597,7 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1",
           "requires_leader": "if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -3613,6 +3614,7 @@
           "combo_power_delta": 6000,
           "exclude_self": true,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1",
           "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is red or a \u226aheroine\u226b card and your life is at 4 or less"
         },
@@ -4009,6 +4011,7 @@
         "handler_params": {
           "amount": 1,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_leader": "if your leader card is blue and your life is at 4 or less"
         },
         "limit_per_turn": null,
@@ -4025,6 +4028,7 @@
           "combo_power_delta": 6000,
           "exclude_self": true,
           "max_owner_life": 4,
+          "required_owner_combo_required_characters": "Your Life Is At 4,Less When This Is Used In A Combo,Draw 1,Then Choose 1 Other Than This",
           "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is blue and your life is at 4 or less"
         },

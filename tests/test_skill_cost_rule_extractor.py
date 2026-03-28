@@ -288,6 +288,24 @@ def test_extract_activate_main_discard_self_from_hand_cost_rule_with_colon_in_le
     }
 
 
+def test_extract_activate_main_place_self_in_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main](Green), place this card in your Drop: "
+            "Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_self_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_battle_energy_to_drop_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -350,6 +368,27 @@ def test_extract_activate_battle_remove_self_to_removed_cost_rule() -> None:
             }
         ]
     }
+
+
+def test_extract_activate_main_remove_self_in_drop_and_discard_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> Z-Leader, "
+            "you remove this card in the Drop from the game, and you discard 1 card from your hand: "
+            "Play up to 1 {SS Vegeta, Arrogance} from your Drop and that card gets +10000 power for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"] == [
+        {
+            "kind": "send_self_to_removed",
+            "amount": 1,
+        },
+        {
+            "kind": "discard_hand",
+            "amount": 1,
+        },
+    ]
 
 
 def test_extract_activate_main_discard_hand_cost_rule() -> None:

@@ -56,8 +56,16 @@ _ACTIVATE_MAIN_DISCARD_SELF_FROM_HAND_RE = re.compile(
 _ACTIVATE_MAIN_DISCARD_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?discard (\d+) card(?:s)? from your hand\s*:"
 )
+_ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?place this card in your drop\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:"
+)
+_ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,320}?remove this card in the drop from the game,\s*and you discard (\d+) card(?:s)? from your hand\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?remove this card from the game\s*:"
@@ -476,8 +484,9 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_main_hand_to_warp.group(1)),
             }
         ]
+    m_activate_main_remove_self_in_drop_and_discard_hand = _ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE.search(text)
     m_activate_main_discard_hand = _ACTIVATE_MAIN_DISCARD_HAND_RE.search(text)
-    if m_activate_main_discard_hand:
+    if m_activate_main_discard_hand and m_activate_main_remove_self_in_drop_and_discard_hand is None:
         rules["activate_main"] = [
             {
                 "kind": "discard_hand",
@@ -491,6 +500,13 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": 1,
             }
         ]
+    if _ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE.search(text):
+        rules.setdefault("activate_main", []).append(
+            {
+                "kind": "send_self_to_drop",
+                "amount": 1,
+            }
+        )
     m_activate_main_spirit_boost = _ACTIVATE_MAIN_SPIRIT_BOOST_RE.search(text)
     if m_activate_main_spirit_boost:
         rules.setdefault("activate_main", []).insert(
@@ -505,6 +521,11 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         amount = int(m_activate_main_drop_to_warp.group(1))
         descriptor = str(m_activate_main_drop_to_warp.group(2) or "").strip()
         rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_owner_drop_to_warp", descriptor, amount))
+    if m_activate_main_remove_self_in_drop_and_discard_hand:
+        rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
+        rules.setdefault("activate_main", []).append(
+            {"kind": "discard_hand", "amount": int(m_activate_main_remove_self_in_drop_and_discard_hand.group(1))}
+        )
     if _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE.search(text):
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
     if _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE.search(text):

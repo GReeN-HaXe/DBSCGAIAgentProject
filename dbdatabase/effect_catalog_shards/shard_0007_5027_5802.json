@@ -119,7 +119,9 @@
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
+        "handler_params": {
+          "required_owner_battle_required_name_contains": "POWER BALL"
+        },
         "limit_per_turn": null,
         "limit_scope": "card_number",
         "once_per_turn": false,

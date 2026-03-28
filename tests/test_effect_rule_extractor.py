@@ -604,6 +604,91 @@ def test_extract_activate_main_can_rest_named_host_and_place_each_named_hand_und
     assert "son gohan: childhood" in rule.handler_params["requires_leader"]
 
 
+def test_extract_activate_main_can_draw_and_play_named_from_owner_hand_under_named_host() -> None:
+    card = _card(
+        "[Activate: Main](Green), place this card in your Drop: "
+        "Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host"
+    )
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "SS SON GOHAN, SHOWING THE RESULTS OF TRAINING"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+
+
+def test_extract_self_played_can_rest_named_host_place_named_from_hand_under_it_then_ko_if_placed() -> None:
+    card = _card(
+        "[Auto] If you have 2 or more energy, choose 1 {Hyperbolic Time Chamber} from your Battle Area, and switch it to Rest Mode: "
+        "When this card is played, place up to 1 {SS Son Goku, Showing the Results of Training} or {SS Son Gohan, Showing the Results of Training} from your hand under the chosen card. "
+        "If you placed a card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed"
+    )
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["max_targets"] == 1
+    assert (
+        rule.handler_params["required_name_contains_any"]
+        == "SS SON GOKU, SHOWING THE RESULTS OF TRAINING|SS SON GOHAN, SHOWING THE RESULTS OF TRAINING"
+    )
+    assert rule.handler_params["ko_max_targets"] == 1
+    assert rule.handler_params["ko_max_cost"] == 3
+    assert rule.handler_params["min_owner_energy"] == 2
+
+
+def test_extract_activate_main_can_play_named_from_owner_drop_and_gain_power_for_turn() -> None:
+    card = _card(
+        "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> Z-Leader, "
+        "you remove this card in the Drop from the game, and you discard 1 card from your hand: "
+        "Play up to 1 {SS Vegeta, Arrogance} from your Drop and that card gets +10000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn"
+    )
+    assert rule.trigger == "self_activate_main"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "SS VEGETA, ARROGANCE"
+    assert rule.handler_params["power_delta"] == 10000
+    assert "son gohan: childhood" in rule.handler_params["requires_leader"]
+
+
+def test_extract_self_comboed_from_battle_can_draw_and_add_self_to_z_energy() -> None:
+    card = _card(
+        "[Auto][Limit 1] There is a {Hyperbolic Time Chamber} in your Battle Area and a skill-less Battle Card in your Combo Area: "
+        "When this card in your Battle Area is used in a combo, draw 1 card and add this card to its owner's Z-Energy."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_draw_n")
+    assert draw_rule.handler_params["amount"] == 1
+    assert draw_rule.handler_params["requires_comboed_from"] == "battle"
+    assert draw_rule.handler_params["required_owner_battle_required_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert draw_rule.handler_params["required_owner_combo_required_card_type"] == "BATTLE"
+    assert draw_rule.handler_params["required_owner_combo_requires_skill_less"] is True
+
+    z_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_comboed_battle_end" and r.handler_id == "auto_add_self_to_owner_z_energy_on_battle_end"
+    )
+    assert z_rule.handler_params["requires_comboed_from"] == "battle"
+    assert z_rule.handler_params["required_owner_battle_required_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert z_rule.handler_params["required_owner_combo_required_card_type"] == "BATTLE"
+    assert z_rule.handler_params["required_owner_combo_requires_skill_less"] is True
+
+
 def test_extract_opponent_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
     card = _card(
         "[Auto] If your Leader is a red <Warriors of Universe 7> card: At the start of your opponent's Main Phase, play up to 1 red ≪Universe 7≫ card with an energy cost of 2 or less from under this card, and place this card under the played card."
@@ -2479,6 +2564,26 @@ def test_extract_self_placed_under_owner_card_can_place_named_from_deck_under_na
     assert rule.handler_params["required_host_zone"] == "battle"
     assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
     assert rule.handler_params["required_name_contains"] == "SS SON GOHAN, SHOWING THE RESULTS OF TRAINING"
+    assert rule.handler_params["target_host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+
+
+def test_extract_self_placed_under_owner_card_can_place_hyperbolic_mirror_named_from_deck_under_named_host_rule() -> None:
+    card = _card(
+        "[Auto] When this card in your hand is placed under a {Hyperbolic Time Chamber} in your Battle Area, "
+        "place up to 1 {SS Son Goku, Showing the Results of Training} from your deck under a {Hyperbolic Time Chamber} in your Battle Area, "
+        "then shuffle your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_under_owner_card"
+        and r.handler_id == "auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under"
+    )
+    assert rule.handler_params["requires_placed_from_zones"] == "hand"
+    assert rule.handler_params["required_host_zone"] == "battle"
+    assert rule.handler_params["host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["required_name_contains"] == "SS SON GOKU, SHOWING THE RESULTS OF TRAINING"
     assert rule.handler_params["target_host_name_contains"] == "HYPERBOLIC TIME CHAMBER"
 
 

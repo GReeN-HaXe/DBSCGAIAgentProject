@@ -4077,6 +4077,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "required_leader_traits": "&Lt;Zamasu&Gt;,&Lt;Goku Black&Gt;",
+          "required_owner_combo_allowed_colors": "black",
+          "required_owner_combo_required_characters": "There Is At Least 1 Lt Zamasu Gt And 1 Lt Goku Gt",
           "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card and there is at least 1 &lt;zamasu&gt; card and 1 &lt;goku black&gt; card in your combo area"
         },
         "limit_per_turn": null,

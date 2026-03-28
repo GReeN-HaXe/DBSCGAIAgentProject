@@ -282,6 +282,10 @@
         "handler_params": {
           "amount": 1,
           "required_leader_traits": "Mono-Red \u226aUniverse 7\u226b",
+          "required_owner_combo_allowed_colors": "red",
+          "required_owner_combo_required_card_type": "BATTLE",
+          "required_owner_combo_required_characters": "You Only Have This And 1 Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
           "requires_leader": "if your leader card is a mono-red \u226auniverse 7\u226b card, and you only have this card and 1 red skill-less battle card in your combo area"
         },
         "limit_per_turn": null,
@@ -299,6 +303,10 @@
         "handler_params": {
           "amount": 1,
           "required_leader_traits": "Mono-Red \u226aUniverse 7\u226b",
+          "required_owner_combo_allowed_colors": "red",
+          "required_owner_combo_required_card_type": "BATTLE",
+          "required_owner_combo_required_characters": "You Only Have This And 1 Skill-Less Battle",
+          "required_owner_combo_requires_skill_less": true,
           "requires_leader": "if your leader card is a mono-red \u226auniverse 7\u226b card, and you only have this card and 1 red skill-less battle card in your combo area"
         },
         "limit_per_turn": null,

@@ -2260,6 +2260,74 @@ Resolved:
           - rest the chosen host
           - place one each of the named hand cards under that host in printed order
         - each successful hand placement emits the normal `card_placed_under_card` event, so existing placed-under follow-ups can stack on top of this setup line too
+    - status: seventh Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_activate_main:activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host`
+        - first reusable activate-main self-to-drop cost extraction for:
+          - `place this card in your Drop:`
+      - first covered live wording family:
+        - `Place this card in your Drop: Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area.`
+      - current semantics are explicit:
+        - the new Hyperbolic promotion path is conservative:
+          - source battle card pays its cost by moving itself to `Drop`
+          - draw resolves first
+          - then a matching card is promoted from `hand` onto the named host
+          - the host is preserved under the played card and the normal `card_played` event includes `under_host_instance_id`
+        - this means the existing:
+          - `When this card is played under a {Hyperbolic Time Chamber}...`
+          follow-ups now compose on top of the new activate line
+    - status: eighth Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_played:auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed`
+        - reusable helper support for placing up to `N` matching cards from `hand` under a chosen public host
+      - first covered live wording family:
+        - `If you have 2 or more energy, choose 1 {Hyperbolic Time Chamber} from your Battle Area, and switch it to Rest Mode: When this card is played, place up to 1 {SS Son Goku, Showing the Results of Training} or {SS Son Gohan, Showing the Results of Training} from your hand under the chosen card. If you placed a card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it.`
+      - current semantics are explicit:
+        - the new on-play Hyperbolic helper is conservative and deterministic:
+          - it chooses the first matching named host in your `Battle Area`
+          - it rests that host before hand placement
+          - it places up to the printed count of matching named cards from `hand`
+          - the KO clause only resolves if at least one card was successfully placed under the host
+    - status: ninth Hyperbolic follow-up slice complete
+      - added:
+        - `self_activate_main:activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn`
+        - first reusable `play_from_drop` pending-action resolution path with:
+          - normal `Counter: Play` timing
+          - temporary power grant on the resolved play
+        - first activate-main skill-cost extraction for:
+          - `remove this card in the Drop from the game, and you discard 1 card from your hand:`
+      - first covered live wording family:
+        - `If your Leader is a green <Son Gohan: Childhood> Z-Leader, you remove this card in the Drop from the game, and you discard 1 card from your hand: Play up to 1 {SS Vegeta, Arrogance} from your Drop and that card gets +10000 power for the turn.`
+      - current semantics are explicit:
+        - the activate resolves in two windows:
+          - first the activate skill itself resolves from `drop`
+          - then the named `drop` play opens the normal `Counter: Play` window
+        - the played card receives its temporary power buff on successful resolution before its normal on-play event flow continues
+    - status: tenth Hyperbolic follow-up slice complete
+      - widened:
+        - `self_comboed:auto_draw_n`
+        - `self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end`
+      - first covered live wording family:
+        - `[Auto][Limit 1] There is a {Hyperbolic Time Chamber} in your Battle Area and a skill-less Battle Card in your Combo Area: When this card in your Battle Area is used in a combo, draw 1 card and add this card to its owner's Z-Energy.`
+      - current semantics are explicit:
+        - the shared combo extractor now preserves:
+          - `requires_comboed_from="battle"`
+          - named-owner-battle prerequisites like `{Hyperbolic Time Chamber}`
+          - owner-combo requirements including:
+            - `required_card_type=BATTLE`
+            - `requires_skill_less=True`
+        - the runtime path reuses the existing:
+          - draw-on-combo
+          - battle-end self-to-`Z-Energy`
+          families rather than adding a Krillin-only handler
+    - status: eleventh Hyperbolic follow-up slice complete
+      - added:
+        - regression-backed mirror coverage for:
+          - `When this card in your hand is placed under a {Hyperbolic Time Chamber} in your Battle Area, place up to 1 {SS Son Goku, Showing the Results of Training} from your deck under a {Hyperbolic Time Chamber} in your Battle Area, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing placed-under deck-under family is now proven for both sibling training targets:
+          - `{SS Son Goku, Showing the Results of Training}`
+          - `{SS Son Gohan, Showing the Results of Training}`
     - status: first union placed-under provenance slice complete
       - added:
         - `self_placed_under_by_union:auto_switch_up_to_n_opponent_board_rest`

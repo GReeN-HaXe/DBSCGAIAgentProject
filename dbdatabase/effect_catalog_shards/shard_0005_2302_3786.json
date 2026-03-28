@@ -4798,7 +4798,10 @@
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
+        "handler_params": {
+          "required_owner_combo_allowed_colors": "yellow",
+          "required_owner_combo_required_characters": "1 Lt Caulifla Gt"
+        },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,

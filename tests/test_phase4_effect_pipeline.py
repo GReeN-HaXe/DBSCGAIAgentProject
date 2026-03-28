@@ -8322,6 +8322,897 @@ def test_phase4_activate_main_can_discard_self_rest_named_host_and_place_each_na
     )
 
 
+def test_phase4_activate_main_can_place_self_in_drop_draw_and_play_named_from_hand_under_named_host() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990321: SimpleNamespace(
+                    card_name="SS Son Goku, Showing the Results of Training",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Barrier",),
+                    has_counter=False,
+                    has_activate_main=True,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=True,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="3",
+                    card_skill_unstyled=(
+                        "[Barrier] "
+                        "[Auto] When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +10000 power for the turn. "
+                        "[Activate: Main](Green), place this card in your Drop: Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area."
+                    ),
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Goku"]',
+                ),
+                990322: SimpleNamespace(
+                    card_name="Hyperbolic Time Chamber",
+                    power_int=0,
+                    card_type="EXTRA",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                990323: SimpleNamespace(
+                    card_name="SS Son Gohan, Showing the Results of Training",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Deflect",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Gohan"]',
+                ),
+                990324: SimpleNamespace(
+                    card_name="Draw Fodder",
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=1,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990321: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host",
+                    "handler_params": {
+                        "amount": 1,
+                        "max_targets": 1,
+                        "required_name_contains": "SS SON GOHAN, SHOWING THE RESULTS OF TRAINING",
+                        "host_name_contains": "HYPERBOLIC TIME CHAMBER",
+                    },
+                },
+            ],
+            990323: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_self_gain_power_for_turn_on_play",
+                    "handler_params": {
+                        "power_delta": 10000,
+                        "requires_played_from": "under",
+                        "under_host_name_contains": "HYPERBOLIC TIME CHAMBER",
+                    },
+                }
+            ],
+        },
+        skill_cost_rules={
+            990321: {
+                "activate_main": [
+                    {"kind": "send_self_to_drop", "amount": 1},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    host = CardInstance(
+        instance_id=990325,
+        card_id=990322,
+        owner_id=1,
+        card_type="EXTRA",
+        color="Green",
+        power=1000,
+        resting=False,
+    )
+    host.card_name = "Hyperbolic Time Chamber"
+    source = CardInstance(
+        instance_id=990326,
+        card_id=990321,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=20000,
+        has_activate_main=True,
+        has_auto=True,
+    )
+    gohan = CardInstance(
+        instance_id=990327,
+        card_id=990323,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=20000,
+        has_auto=True,
+    )
+    state.players[1].battle_area = [source, host]
+    state.players[1].hand = [gohan]
+    state.players[1].deck = [990324] + list(state.players[1].deck)
+    state.players[1].energy = [
+        CardInstance(instance_id=990328, card_id=990329, owner_id=1, card_type="ENERGY", color="Green", resting=False)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=gohan)
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "battle" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    assert any(card.instance_id == 990326 for card in state.players[1].drop)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    played = next(card for card in state.players[1].battle_area if card.card_id == 990323)
+    assert played.instance_id == 990327
+    assert played.power == 30000
+    assert played.stacked_card_ids == (990322,)
+    assert not any(card.instance_id == 990327 for card in state.players[1].hand)
+    assert any(card.card_id == 990324 for card in state.players[1].hand)
+    assert any(
+        event.name == "card_played"
+        and event.payload.get("source_instance_id") == 990327
+        and event.payload.get("under_host_instance_id") == 990325
+        and event.payload.get("played_from") == "under"
+        for event in state.effect_events
+    )
+    assert any(
+        cp.name == "effect_activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host"
+        for cp in state.checkpoints
+    )
+    assert any(cp.name == "effect_auto_self_gain_power_for_turn_on_play" for cp in state.checkpoints)
+
+
+def test_phase4_self_played_can_rest_named_host_place_named_from_hand_under_it_then_ko_if_placed() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990330: SimpleNamespace(
+                    card_name="SS Son Goku, Assisting His Son",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Deflect",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled=(
+                        "[Auto] If you have 2 or more energy, choose 1 {Hyperbolic Time Chamber} from your Battle Area, and switch it to Rest Mode: "
+                        "When this card is played, place up to 1 {SS Son Goku, Showing the Results of Training} or {SS Son Gohan, Showing the Results of Training} from your hand under the chosen card. "
+                        "If you placed a card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it."
+                    ),
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Goku"]',
+                ),
+                990331: SimpleNamespace(
+                    card_name="Hyperbolic Time Chamber",
+                    power_int=0,
+                    card_type="EXTRA",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                990332: SimpleNamespace(
+                    card_name="SS Son Goku, Showing the Results of Training",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Barrier",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=True,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="3",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Goku"]',
+                ),
+                990333: SimpleNamespace(
+                    card_name="SS Son Gohan, Showing the Results of Training",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Deflect",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Gohan"]',
+                ),
+                990334: SimpleNamespace(
+                    card_name="Opponent Low Cost",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Red",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="3",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                990335: SimpleNamespace(
+                    card_name="Opponent High Cost",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Blue",
+                    energy_cost_int=4,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="4",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990330: [
+                {
+                    "trigger": "self_played",
+                    "handler_id": "auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed",
+                    "handler_params": {
+                        "host_name_contains": "HYPERBOLIC TIME CHAMBER",
+                        "max_targets": 1,
+                        "required_name_contains_any": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING|SS SON GOHAN, SHOWING THE RESULTS OF TRAINING",
+                        "rest_host": True,
+                        "ko_max_targets": 1,
+                        "ko_max_cost": 3,
+                        "min_owner_energy": 2,
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=990336,
+        card_id=990330,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=20000,
+        has_auto=True,
+    )
+    host = CardInstance(
+        instance_id=990337,
+        card_id=990331,
+        owner_id=1,
+        card_type="EXTRA",
+        color="Green",
+        power=0,
+        resting=False,
+    )
+    host.card_name = "Hyperbolic Time Chamber"
+    goku = CardInstance(
+        instance_id=990338,
+        card_id=990332,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=20000,
+    )
+    filler = CardInstance(
+        instance_id=990339,
+        card_id=990399,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+    )
+    low = CardInstance(
+        instance_id=990340,
+        card_id=990334,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Red",
+        power=15000,
+    )
+    high = CardInstance(
+        instance_id=990341,
+        card_id=990335,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Blue",
+        power=20000,
+    )
+    state.players[1].battle_area = [source, host]
+    state.players[1].hand = [filler, goku]
+    state.players[1].energy = [
+        CardInstance(instance_id=990342, card_id=990343, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+        CardInstance(instance_id=990344, card_id=990345, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+    ]
+    state.players[2].battle_area = [low, high]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+
+    engine._emit_effect_event(
+        state,
+        name="card_played",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": 990336,
+            "source_card_id": 990330,
+            "source_zone": "battle",
+            "played_from": "hand",
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert host.resting is True
+    assert host.stacked_card_ids == (990332,)
+    assert not any(card.instance_id == 990338 for card in state.players[1].hand)
+    assert any(card.instance_id == 990339 for card in state.players[1].hand)
+    assert not any(card.instance_id == 990340 for card in state.players[2].battle_area)
+    assert any(card.instance_id == 990341 for card in state.players[2].battle_area)
+    assert any(
+        event.name == "card_placed_under_card"
+        and event.payload.get("host_instance_id") == 990337
+        and event.payload.get("source_card_id") == 990332
+        and event.payload.get("placed_from") == "hand"
+        for event in state.effect_events
+    )
+    assert any(
+        cp.name == "effect_auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed"
+        for cp in state.checkpoints
+    )
+
+
+def test_phase4_activate_main_from_drop_can_play_named_from_owner_drop_and_gain_power_for_turn() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990350: SimpleNamespace(
+                    card_name="SS Trunks, Mysterious Future Warrior",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=True,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="2",
+                    card_skill_unstyled=(
+                        "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> Z-Leader, "
+                        "you remove this card in the Drop from the game, and you discard 1 card from your hand: "
+                        "Play up to 1 {SS Vegeta, Arrogance} from your Drop and that card gets +10000 power for the turn."
+                    ),
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Trunks"]',
+                ),
+                990351: SimpleNamespace(
+                    card_name="SS Vegeta, Arrogance",
+                    power_int=20000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=2,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Deflect",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="2",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Vegeta"]',
+                ),
+                1: SimpleNamespace(
+                    card_name="Son Gohan: Childhood",
+                    power_int=10000,
+                    card_type="Z-LEADER",
+                    card_color="Green",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="-",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Gohan: Childhood"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990350: [
+                {
+                    "trigger": "self_activate_main",
+                    "handler_id": "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "required_name_contains": "SS VEGETA, ARROGANCE",
+                        "power_delta": 10000,
+                        "requires_leader": "if your leader is a green <son gohan: childhood> z-leader",
+                    },
+                }
+            ]
+        },
+        skill_cost_rules={
+            990350: {
+                "activate_main": [
+                    {"kind": "send_self_to_removed", "amount": 1},
+                    {"kind": "discard_hand", "amount": 1},
+                ]
+            }
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Green"
+    state.players[1].leader_area.card_type = "Z-LEADER"
+    state.players[1].leader_area.characters = ("Son Gohan: Childhood",)
+    source = CardInstance(
+        instance_id=990352,
+        card_id=990350,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=15000,
+        has_activate_main=True,
+    )
+    vegeta = CardInstance(
+        instance_id=990353,
+        card_id=990351,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=20000,
+    )
+    filler = CardInstance(
+        instance_id=990354,
+        card_id=990399,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+    )
+    state.players[1].drop = [source, vegeta]
+    state.players[1].hand = [filler]
+    state.players[1].energy = [
+        CardInstance(instance_id=990355, card_id=990356, owner_id=1, card_type="ENERGY", color="Green", resting=False)
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="drop", card=source)
+
+    action = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.ACTIVATE_MAIN_SKILL and a.source_zone == "drop" and a.source_index == 0
+    )
+    state = engine.apply_action(state, action)
+    assert any(card.instance_id == 990352 for card in state.players[1].removed_from_game)
+    assert any(card.instance_id == 990354 for card in state.players[1].drop)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+
+    played = next(card for card in state.players[1].battle_area if card.instance_id == 990353)
+    assert played.power == 30000
+    assert not any(card.instance_id == 990353 for card in state.players[1].drop)
+    assert any(
+        event.name == "card_played"
+        and event.payload.get("source_instance_id") == 990353
+        and event.payload.get("played_from") == "drop"
+        and event.payload.get("played_via") == "skill"
+        for event in state.effect_events
+    )
+    assert any(
+        cp.name == "effect_activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn"
+        for cp in state.checkpoints
+    )
+
+
+def test_phase4_self_comboed_from_battle_can_draw_and_add_self_to_z_energy_with_hyperbolic_requirements() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990360: SimpleNamespace(
+                    card_name="Krillin, Battle Support",
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled=(
+                        "[Auto][Limit 1] There is a {Hyperbolic Time Chamber} in your Battle Area and a skill-less Battle Card in your Combo Area: "
+                        "When this card in your Battle Area is used in a combo, draw 1 card and add this card to its owner's Z-Energy."
+                    ),
+                    has_awaken=False,
+                    card_traits_json='["Earthling"]',
+                    card_character_json='["Krillin"]',
+                ),
+                990361: SimpleNamespace(
+                    card_name="Hyperbolic Time Chamber",
+                    power_int=0,
+                    card_type="EXTRA",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                990362: SimpleNamespace(
+                    card_name="Skill-Less Training Dummy",
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=("Skill-less",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+                990363: SimpleNamespace(
+                    card_name="Deck Draw Fodder",
+                    power_int=5000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990360: [
+                {
+                    "trigger": "self_comboed",
+                    "handler_id": "auto_draw_n",
+                    "handler_params": {
+                        "amount": 1,
+                        "requires_comboed_from": "battle",
+                        "required_owner_battle_required_name_contains": "HYPERBOLIC TIME CHAMBER",
+                        "required_owner_combo_required_card_type": "BATTLE",
+                        "required_owner_combo_requires_skill_less": True,
+                    },
+                    "limit_per_turn": 1,
+                },
+                {
+                    "trigger": "self_comboed_battle_end",
+                    "handler_id": "auto_add_self_to_owner_z_energy_on_battle_end",
+                    "handler_params": {
+                        "requires_comboed_from": "battle",
+                        "required_owner_battle_required_name_contains": "HYPERBOLIC TIME CHAMBER",
+                        "required_owner_combo_required_card_type": "BATTLE",
+                        "required_owner_combo_requires_skill_less": True,
+                    },
+                    "limit_per_turn": 1,
+                },
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    host = CardInstance(
+        instance_id=990364,
+        card_id=990361,
+        owner_id=1,
+        card_type="EXTRA",
+        color="Green",
+        power=0,
+    )
+    host.card_name = "Hyperbolic Time Chamber"
+    attacker = CardInstance(instance_id=990365, card_id=365, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    krillin = CardInstance(
+        instance_id=990366,
+        card_id=990360,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+        combo_cost=0,
+        combo_power=5000,
+    )
+    dummy = CardInstance(
+        instance_id=990367,
+        card_id=990362,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+        combo_cost=0,
+        combo_power=5000,
+        keywords=("Skill-less",),
+    )
+    state.players[1].battle_area = [host, attacker]
+    state.players[1].combo_area = [dummy, krillin]
+    state.players[1].deck = [990363] + list(state.players[1].deck)
+    krillin.comboed_from = "battle"
+    engine._register_card_effects(state, player_id=1, source_zone="combo", card=krillin)
+
+    hand_before = len(state.players[1].hand)
+    deck_before = len(state.players[1].deck)
+    engine._emit_effect_event(
+        state,
+        name="card_comboed",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": 990366,
+            "source_card_id": 990360,
+            "source_zone": "combo",
+            "comboed_from": "battle",
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert len(state.players[1].hand) == hand_before + 1
+    assert len(state.players[1].deck) == deck_before - 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
+
+    engine._emit_effect_event(state, name="battle_end", actor_player_id=1, payload={})
+    engine._resolve_pending_effects(state)
+
+    assert any(card.instance_id == 990366 for card in state.players[1].z_energy)
+    assert all(card.instance_id != 990366 for card in state.players[1].combo_area)
+    assert any(
+        event.name == "card_added_to_z_energy"
+        and event.payload.get("source_instance_id") == 990366
+        for event in state.effect_events
+    )
+    assert any(cp.name == "effect_auto_add_self_to_owner_z_energy_on_battle_end" for cp in state.checkpoints)
+
+
 def test_phase4_opponent_main_phase_start_can_play_from_under_self_and_place_self_under_played() -> None:
     class Repo:
         @staticmethod
@@ -16307,6 +17198,158 @@ def test_phase4_self_placed_under_owner_card_can_place_named_from_deck_under_nam
     assert any(
         event.name == "card_placed_under_card"
         and event.payload.get("source_card_id") == 30671
+        and event.payload.get("placed_from") == "deck"
+        for event in state.effect_events
+    )
+    assert any(cp.name == "effect_auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under" for cp in state.checkpoints)
+
+
+def test_phase4_self_placed_under_owner_card_can_place_hyperbolic_mirror_named_from_deck_under_named_host() -> None:
+    class Repo:
+        def get_by_id(self, card_id: int, source_table: str = "cards"):
+            mapping = {
+                30670: SimpleNamespace(
+                    card_name="Hyperbolic Time Chamber",
+                    power_int=0,
+                    card_type="EXTRA",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                    keywords=(),
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                ),
+                30673: SimpleNamespace(
+                    card_name="SS Son Goku, Showing the Results of Training",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    card_traits_json="[]",
+                    card_character_json='["Son Goku"]',
+                    keywords=(),
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                ),
+            }
+            return mapping.get(
+                card_id,
+                SimpleNamespace(
+                    card_name="",
+                    power_int=0,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=0,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                    keywords=(),
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_draw=False,
+                    max_draw=None,
+                    has_barrier=False,
+                    z_energy_cost=None,
+                    card_energy_cost="0",
+                    card_skill_unstyled="",
+                ),
+            )
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            30671: [
+                {
+                    "trigger": "self_placed_under_owner_card",
+                    "handler_id": "auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under",
+                    "handler_params": {
+                        "requires_placed_from_zones": "hand",
+                        "required_host_zone": "battle",
+                        "host_name_contains": "HYPERBOLIC TIME CHAMBER",
+                        "max_targets": 1,
+                        "required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
+                        "target_host_name_contains": "HYPERBOLIC TIME CHAMBER",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    host = CardInstance(
+        instance_id=880360,
+        card_id=30670,
+        owner_id=1,
+        card_type="EXTRA",
+        color="Green",
+        power=0,
+    )
+    host.card_name = "Hyperbolic Time Chamber"
+    source = CardInstance(
+        instance_id=880361,
+        card_id=30671,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+    )
+    state.players[1].battle_area = [host]
+    state.players[1].hand = [source]
+    state.players[1].deck = [30673] + list(state.players[1].deck)
+
+    engine._emit_card_placed_under_card(
+        state,
+        owner_player_id=1,
+        host=host,
+        host_zone="battle",
+        card=source,
+        source_zone="hand",
+    )
+
+    assert 30673 in state.players[1].battle_area[0].stacked_card_ids
+    assert 30673 not in state.players[1].deck
+    assert any(
+        event.name == "card_placed_under_card"
+        and event.payload.get("source_card_id") == 30673
         and event.payload.get("placed_from") == "deck"
         for event in state.effect_events
     )
