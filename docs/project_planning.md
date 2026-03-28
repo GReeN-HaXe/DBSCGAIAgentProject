@@ -1663,6 +1663,63 @@ Resolved:
       - current conservative auto-cost scope:
         - specified energy costs from the `[Auto]` header
         - paid at trigger resolution before the under-card play body fires
+    - status: second auto-costed main-phase timing slice complete
+    - generic runtime/extraction now also covers:
+      - non-energy main-phase auto header costs:
+        - discard from hand before the timed auto body resolves
+        - `Place this card in its owner's Drop` on simple timed auto bodies
+        - unison marker-style `[+1][Auto]` / `[-X][Auto]` header deltas
+        - place cards from hand at the bottom of the deck before the timed auto body resolves
+        - remove the source card from the game before the timed auto body resolves
+        - place cards from under the source into Drop before the timed auto body resolves
+      - first generic main-phase-start draw family:
+        - `owner_main_phase_start:auto_draw_n`
+        - `owner_opponent_main_phase_start:auto_draw_n`
+      - first richer timed main-phase body family:
+        - draw, switch up to `N` owner leader/energy cards active, and grant the owner leader a keyword for the turn
+      - current conservative self-drop scope:
+        - supported on timed draw-style bodies
+        - not yet wired into the under-card promotion family itself
+    - status: third timed main-phase body slice complete
+    - generic runtime/extraction now also covers:
+      - timed play from hand:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_hand_on_main_phase_start`
+      - timed play from Drop:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_drop_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_drop_on_main_phase_start`
+      - timed owner-energy restand:
+        - `owner_main_phase_start:auto_switch_up_to_n_owner_energy_active_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_switch_up_to_n_owner_energy_active_on_main_phase_start`
+      - current conservative body scope:
+        - hand/drop plays use the existing battle/unison registration path
+        - rest-mode entry is supported
+        - timed drop plays can reuse the new `Place this card in its owner's Drop` header cost path
+        - first descriptor-level skill-text filter support for timed bodies now covers `[Union]`
+    - status: fourth timed main-phase body slice complete
+    - generic runtime/extraction now also covers:
+      - timed play from deck:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_deck_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_deck_on_main_phase_start`
+        - current conservative deck scope:
+          - named-target selection
+          - markers on entry
+          - rest-mode entry
+      - timed self-restand plus keyword:
+        - `owner_main_phase_start:auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start`
+      - shared timing-condition hardening:
+        - `if your Leader Card and energy are all mono-blue`
+        - `if you have a yellow <Vegeta> card in play or in your Z-Energy`
+    - status: fifth timed main-phase body slice complete
+    - generic runtime/extraction now also covers:
+      - timed hand promotion onto the source host:
+        - `owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start`
+        - `owner_opponent_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start`
+      - current conservative on-top scope:
+        - hand source only
+        - source host replaced in place
+        - prior stacked cards are preserved under the new top card
   - `[Aegis]`
     - status: first defense-step Aegis action slice complete
     - generic runtime now covers:
@@ -1705,6 +1762,676 @@ Resolved:
         - `[Arrival Blue/Yellow]{y}, draw 1 card:`
       - carrying `played_via=arrival` through the normal play/counter path so on-play effects resolve without a separate summon model
       - first turn-scoped arrival skill-cost reduction slice from battle/main effects, including specified-pip reductions like `{r}`
+  - `[Union Absorb]`
+    - status: first conservative action slice complete
+    - generic runtime now covers:
+      - a dedicated `UNION_ABSORB` legal action during your Main Phase on in-play Battle Cards
+      - paying printed Union Absorb energy costs, including specified pips
+      - leader/energy requirement checks on the Union header text
+      - placing matching material from `hand`, `battle`, `drop`, or `warp` under the host
+      - promoting a matching Battle Card from `deck` or `drop` on top of the host
+      - preserving under-card stacking so the promoted card keeps:
+        - prior under-cards
+        - newly absorbed material
+        - the old host card itself
+      - emitting `played_via=union_absorb` and `union_activated`
+      - first source-backed live wording family:
+        - `... choose 1 ≪Namekian≫ card in your hand or Battle Area and place it under this card: Play up to 1 green <Piccolo> card with an energy cost of 4 on top of this card from your deck ...`
+    - status: second material-source slice complete
+      - `Union Absorb` can now also consume material from under your Leader
+      - first covered live wording family:
+        - `Choose 1 card under your ≪Majin≫ Leader Card and place it under this card: Play up to 1 mono-green <Majin Buu> card with an energy cost of 4 ... from your deck or Drop Area on top of this card ...`
+    - status: third target/material wording slice complete
+      - `Union Absorb` now also supports:
+        - shorter material wording like `place 1 <Towa> from your Warp under this card`
+        - promotion targets from `hand` or `warp`, not just `deck` / `drop`
+      - first covered live wording family:
+        - `place 1 <Towa> from your Warp under this card: ... choose 1 <Mira> with an energy cost of 7 in your hand or Warp and play it on top of this card in Active Mode`
+    - status: first Union activation event slice complete
+      - `union_activated` is now emitted from the real action path
+      - trigger matching now covers:
+        - `self_union_activated`
+        - `owner_union_activated`
+        - `self_union_absorb_activated`
+        - `owner_union_absorb_activated`
+      - generic `auto_draw_n` can now respond to real Union activation events
+    - status: first Union-Absorb-specific play-trigger slice complete
+      - trigger matching now also covers:
+        - `self_played_using_union_absorb`
+        - `owner_other_battle_played_using_union_absorb`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards played via real Union-Absorb actions
+    - status: first owner-Union-Absorb follow-up slice complete
+      - runtime and extractor support now cover:
+        - `owner_union_absorb_activated:auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb`
+      - first covered live wording family:
+        - `When one of your ≪Namekian≫ cards activates [Union Absorb], place the top card of your deck under this card, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.`
+    - status: first Union-Absorb extra hand-discard cost slice complete
+      - runtime now supports an additional absorb header cost of:
+        - `then choose 1 card in your hand and discard it:`
+      - current conservative scope:
+        - supported cleanly when the promotion target is not chosen from hand
+        - mixed `discard + hand target` absorbs are still deferred
+      - first covered live wording family:
+        - `Choose 1 <Towa> card in your Warp, place it under this card, then choose 1 card in your hand and discard it: Choose 1 <Mira> card with an energy cost of 6 in your deck, play it on top of this card, then shuffle your deck.`
+    - status: first repeated named-material Union-Absorb slice complete
+      - runtime now supports repeated named material requirements like:
+        - `choose 1 <Android 14> card and 1 <Android 15> card ... and place them under this card`
+        - `choose 1 each of <Bizu> and <Ribet> ... and place them under this card`
+      - shared-zone sourcing now works for that seam across:
+        - `Drop Area`
+        - `hand or Drop Area`
+        - `hand and/or Battle Area`
+      - the absorb requirement checker now only consumes explicit condition text, which avoids false negatives from plain material clauses on these repeated-material lines
+    - status: first multi-name Union-Absorb target slice complete
+      - runtime now supports promotion targets like:
+        - `{Baby Vegeta, an Unfair Choice} or {Super Baby 1, All-Consuming Terror}`
+      - `Union-Absorb` target parsing now also handles:
+        - `play it in Active Mode on top of this card`
+        - source lines with card-name colons like `<Vegeta: GT>` without mis-splitting the skill clause
+    - status: first optional-material `If you do` Union-Absorb slice complete
+      - runtime now supports:
+        - `You may place up to 1 <Cell> card from your deck or Drop Area under this card. If you do, ...`
+      - optional under-card sourcing now works from:
+        - `deck`
+        - `Drop Area`
+      - the played target can now resolve without replacing the absorb host when the wording is plain `play it` rather than `play it on top of this card`
+    - status: first keyword-skill-negated Union-Absorb target-play slice complete
+      - runtime now supports:
+        - `play it with its keyword skills negated for the turn`
+      - current semantics are conservative and intentional:
+        - keyword skills are negated
+        - non-keyword on-play autos still resolve
+  - `[Union-Fusion]`
+    - status: first conservative action slice complete
+    - generic runtime now covers:
+      - a dedicated `UNION_FUSION` legal action from hand Battle Cards during your Main Phase
+      - paying printed Union-Fusion energy costs, including specified pips
+      - consuming named material Battle Cards from your hand into your Drop
+      - enforcing the first common reminder-text constraint:
+        - `with the same power`
+      - playing the fusion card from hand and carrying `played_via=union_fusion`
+      - emitting `union_activated` with `union_kind=union_fusion`
+      - first covered live wording family:
+        - `[Union-Fusion](Blue)(Blue): <Son Goten> and <Trunks: Youth> (Place 1 each of the specified card with the same power from your hand into your Drop Area and play this card.)`
+    - status: first Union-Fusion-specific play-trigger slice complete
+      - trigger matching now also covers:
+        - `self_played_using_union_fusion`
+        - `owner_other_battle_played_using_union_fusion`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards played via real Union-Fusion actions
+    - status: first Union-Fusion cost-variant slice complete
+      - runtime now also supports:
+        - bare circled generic costs like `②`
+        - mixed specified plus circled costs like `(Blue)(Blue)③`
+    - status: first Union-Fusion activation/requirement slice complete
+      - generic `auto_draw_n` can now be regression-covered on:
+        - `self_union_fusion_activated`
+        - `owner_union_fusion_activated`
+      - opponent-energy gate is now regression-covered for text like:
+        - `if your opponent has 4 or more energy`
+    - status: first Union-Fusion source-format / limit slice complete
+      - runtime is now regression-covered for DB-style lines like:
+        - `[Union-Fusion] [Limit 1] If your opponent has 2 or more energy: Blue <Son Goku: Br> card and blue <Vegeta: Br> card.`
+      - the once-per-turn lock is now regression-covered across multiple hand copies of the same Fusion card
+    - status: first Union-Fusion support follow-up slice complete
+      - runtime and extractor/catalog support now cover an on-play Fusion follow-up that:
+        - pays `Z-Energy` as an auto cost
+        - arms the next matching owner card played via `[Union]`
+        - grants that played card a keyword for the turn
+      - checked-in extractor coverage now maps this wording family to:
+        - `self_played:auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword`
+      - checked-in skill-cost extraction now maps the header cost to:
+        - `auto_on_play_battle -> send_owner_z_energy_to_drop`
+      - first covered live wording family:
+        - `Place 2 of your Z-Energy into their owner's Drop: When this card is played, activate this skill. During this turn, the next time you play a blue <Gogeta: Br> card with [Union], it gains [Barrier] for the turn.`
+    - status: first Union-Fusion header draw slice complete
+      - runtime now supports header-side draw effects on the Fusion line itself before play finishes
+      - first covered live wording families:
+        - `[Union-Fusion](2), draw 2 cards: <Son Goku: Br> card and <Vegeta: Br> card.`
+        - `[Union-Fusion](Red)(Red)(Red)(Red), draw 1 card: Red <Son Goku: GT> and red <Vegeta: GT>.`
+    - status: first Union-Fusion opponent-combo support slice complete
+      - runtime and extractor/catalog support now cover an opponent-combo Fusion support line that:
+        - pays `Z-Energy` as an auto cost on the combo trigger
+        - places 1 card from the opponent's hand at the bottom of their deck
+        - negates that specific auto line for the current battle
+      - checked-in extractor coverage now maps this wording family to:
+        - `owner_opponent_card_comboed:auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle`
+      - checked-in skill-cost extraction now maps the combo-trigger cost to:
+        - `auto_on_opponent_combo_battle -> send_owner_z_energy_to_drop`
+      - current battle-scope semantics are explicit:
+        - the same auto line is blocked on later combo events in that battle
+        - it becomes available again in a later battle
+      - first covered live wording family:
+        - `Place 2 of your Z-Energy into their owner's Drop: When your opponent uses cards in a combo, your opponent places 1 card from their hand at the bottom of their deck, then you negate this skill for the battle.`
+    - status: adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, your opponent chooses 1 card in their hand and places it at the bottom of their deck.`
+      - new combo provenance now records:
+        - `comboed_from="hand"` on normal `COMBO_FROM_HAND` events
+      - current conservative semantics are explicit:
+        - opponent choice is modeled deterministically from the front of hand
+        - the trigger can be scoped to hand-origin combos without leaking onto drop/warp combo events
+    - status: second adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, choose up to 1 of your opponent's Leader Cards or Battle Cards and switch it to Rest Mode.`
+      - current target semantics are explicit:
+        - the shared opponent-card selector is reused
+        - Unisons are excluded from this family
+        - `target_policy="first"` remains deterministic, so the opponent Leader is chosen before Battle Cards when both are legal
+    - status: third adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, choose up to 1 of your Red/Blue multicolor energy and switch it to Active Mode.`
+      - current target semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - shared leader / opponent-turn requirement checks still apply
+        - shared energy filters cover:
+          - color matching
+          - multicolor-only matching
+    - status: fourth adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, choose up to 1 green or yellow Battle Card with an energy cost of 4 or less from your deck, place it in your Drop Area, then shuffle your deck.`
+      - current target semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - deck search remains deterministic and selects the first matching card
+        - current filtering covers:
+          - card type
+          - color match
+          - max energy cost
+    - status: older combo power-reduction family aligned with the newer self-combo seam
+      - `self_comboed:auto_power_reduce_up_to_n_on_combo` now explicitly preserves:
+        - `requires_comboed_from="hand"` when the source wording says `from your hand`
+      - this keeps the established `-10000 power on combo` family from leaking onto future non-hand combo sources
+    - status: fifth adjacent self-combo support slice complete
+      - generic runtime/extraction now also covers:
+        - `When you combo with this card from your hand, this card gets +1000 combo power for the duration of the turn for each card in your Drop Area and Warp.`
+      - current semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - owner `Drop + Warp` count is used at combo resolution time
+        - the optional errata cap like `up to a maximum of 12` is supported
+    - status: sixth adjacent combo/battle-end support slice complete
+      - `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` now also supports:
+        - hand-origin combo gating on the comboed card instance itself
+        - owner-battle requirement filters like:
+          - `with an <Android 18> card in battle`
+        - first conservative auto-header combo cost support:
+          - single-color `[Auto](Blue)` energy payment via `auto_on_combo_battle`
+    - status: seventh adjacent combo/battle-end support slice complete
+      - the same `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` family now also covers:
+        - `At the end of the battle after you combo with this card from your hand, if your Leader Card is ... , play this card`
+        - optional `in Rest Mode`
+      - current semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - common leader requirement parsing is reused
+    - status: eighth adjacent combo/battle-end support slice complete
+      - added:
+        - `self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end`
+      - common requirement extraction/runtime now also covers:
+        - leader back-side name filters
+        - owner Combo Area card filters like:
+          - `you have a <Vegeta: Xeno> card in your Combo Area`
+      - first covered live wording family:
+        - `When this card is used in a combo from your hand, add this card from your Drop to your Z-Energy at the end of the battle.`
+    - status: ninth adjacent combo/battle-end support slice complete
+      - added:
+        - `self_comboed:auto_self_gain_combo_power_on_combo`
+        - `self_comboed_battle_end:auto_send_self_to_owner_warp_on_battle_end`
+      - first covered live wording family:
+        - `When you combo with this card from your hand, this card gets +5000 combo power for the duration of the turn and is sent to its owner's Warp at the end of the battle.`
+      - current semantics are explicit:
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - the combo-power increase applies to the live combo-area instance before battle resolution
+        - the same card then moves from Combo Area or Drop to Warp at `battle_end`
+    - status: tenth adjacent self-combo support slice complete
+      - existing generic combo draw handling plus the new flat combo-power family now cover:
+        - `When this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.`
+      - current semantics are explicit:
+        - draw resolution reuses `self_comboed:auto_draw_n`
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - the flat combo-power increase applies to the live combo-area instance for the current battle
+    - status: eleventh adjacent self-combo support slice complete
+      - added:
+        - `self_comboed:auto_buff_other_owner_combo_card_on_combo`
+      - existing generic combo draw handling plus the new combo-area buff family now cover:
+        - `When this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your Combo Area and it gets +6000 combo power for the battle.`
+      - current semantics are explicit:
+        - draw resolution reuses `self_comboed:auto_draw_n`
+        - hand-origin combo gating is preserved through `comboed_from="hand"`
+        - deterministic targeting picks the first other card already in the owner Combo Area
+    - status: twelfth adjacent self-combo support slice complete
+      - added:
+        - `self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo`
+      - the adjacent self-combo seam now also covers repeated Super Combo wording like:
+        - `When this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. If you do, draw 2 cards.`
+      - current semantics are explicit:
+        - the flat combo-power increase reuses `self_comboed:auto_self_gain_combo_power_on_combo`
+        - the optional hand-to-bottom-deck branch resolves deterministically from the front of hand
+        - if no spare hand card remains after comboing, the optional draw branch simply doesn’t resolve
+    - status: first owner-card-combo watcher slice complete
+      - added shared owner-combo event matching for:
+        - `event_requires_comboed_from`
+        - `event_allowed_colors`
+        - `event_required_card_type`
+        - `event_required_traits`
+        - `event_required_characters`
+        - `event_required_name_contains`
+        - `event_requires_skill_less`
+        - `event_min_energy_cost` / `event_max_energy_cost` / `event_exact_energy_cost`
+      - added:
+        - `owner_card_comboed:auto_comboed_card_gain_combo_power_on_owner_combo`
+        - owner-combo event filtering on generic `auto_draw_n`
+      - first covered live wording families:
+        - `When one of your skill-less Battle Cards is used in a combo, it gets +4000 combo power for the battle, then draw 1 card.`
+        - `When you use a blue card from your hand in a combo, draw 1 card.`
+      - current semantics are explicit:
+        - combo-trigger header costs now support:
+          - `auto_on_owner_combo_battle -> remove_owner_unison_markers`
+        - the same owner-combo cost is paid once per triggering combo event, even if multiple rules from the same skill line resolve
+    - status: second owner-card-combo watcher slice complete
+      - added:
+        - `owner_card_comboed:auto_switch_self_active_on_owner_combo`
+        - `owner_card_comboed:auto_add_markers_and_self_power_for_turn_on_owner_combo`
+        - `owner_card_comboed:auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo`
+      - first covered live wording families:
+        - `When you use a card in a combo, switch this card to Active Mode.`
+        - `When you use a black Battle Card in a combo, add a marker to this card and it gets +5000 power for the turn.`
+        - `When you use a black Battle Card in a combo, your opponent sends 1 Battle Card from their Drop Area to their Warp; if there are no Battle Cards in your opponent's Drop Area, draw 1 card.`
+      - current semantics are explicit:
+        - owner-combo watchers now reuse the same filtered combo-event probe instead of card-specific runtime branches
+        - the opponent-drop branch resolves deterministically from the first legal Battle Card in Drop
+        - the fallback draw branch only fires if no opponent Battle Card was sent to Warp
+    - status: third owner-card-combo watcher slice complete
+      - added:
+        - `owner_card_comboed:auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo`
+      - first covered live wording family:
+        - `If this card is in a battle: When you use a {SS Son Goku, Showing the Results of Training} in a combo, choose up to 1 of your opponent's Unisons and remove 2 markers from it.`
+      - current semantics are explicit:
+        - the same owner-combo event filter path now also supports name-token matching from `{...}` descriptors
+        - deterministic target selection removes markers from the first legal opponent Unison
+    - status: fourth owner-card-combo watcher slice complete
+      - added:
+        - `owner_card_comboed:auto_play_self_from_under_leader_or_owner_hand_on_owner_combo`
+        - first public `leader_under` effect-registration bridge for cards stacked under your Leader
+      - first covered live wording family:
+        - `If your Leader is blue and you have 3 or more energy: When you use a blue <Krillin> card from your hand or Battle Area in a combo, play this card from under your Leader or from your hand.`
+      - current semantics are explicit:
+        - owner-combo header costs like `(Blue)` now reuse the normal energy-payment parser on this seam
+        - hand copies continue to use the existing secret-auto path
+        - under-Leader copies register publicly through the new `leader_under` bridge and prefer the under-Leader source before falling back to hand
+    - status: fifth owner-card-combo / Krillin follow-up slice complete
+      - added:
+        - `self_played:auto_play_up_to_n_from_owner_z_energy_combo_or_drop_on_play`
+      - first covered live wording family:
+        - `[Auto](Blue): When this card is played, play up to 1 mono-blue <Krillin> card with an energy cost of 3 from your Z-Energy, Combo Area, or Drop.`
+      - current semantics are explicit:
+        - this first conservative multi-zone play family resolves with deterministic source priority:
+          - `z_energy`
+          - then `combo`
+          - then `drop`
+        - auto header energy costs like `(Blue)` are paid before resolution on this slice
+    - status: sixth owner-card-combo recovery slice complete
+      - added:
+        - `owner_card_comboed:auto_combo_self_from_battle_on_owner_combo`
+      - first covered live wording family:
+        - `When you use a card in a combo, you may use this card from a Battle Area in a combo. If you do, play this card from its owner's Drop at the end of the battle.`
+      - current semantics are explicit:
+        - the owner-combo watcher deterministically moves the source card from Battle Area into Combo Area
+        - the paired battle-end replay uses the existing `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` path with `requires_comboed_from="battle"`
+    - status: first added-to-z-energy trigger slice complete
+      - added:
+        - `self_added_to_z_energy:auto_draw_n`
+        - first emitted `card_added_to_z_energy` effect event
+      - first covered live wording family:
+        - `When this card is added to Z-Energy, draw 1 card.`
+      - current semantics are explicit:
+        - `card_added_to_z_energy` is emitted from the battle-end self-to-z-energy path
+        - the moved card re-registers from `z_energy` before the event is emitted so self-triggers can resolve immediately
+    - status: second added-to-z-energy trigger slice complete
+      - added:
+        - `self_added_to_z_energy:auto_buff_up_to_n_owner_battle_on_z_energy_added`
+      - first covered live wording family:
+        - `When this card is added to Z-Energy, choose up to 1 of your <Hirudegarn> Battle Cards and it gets +1000 power for the turn.`
+      - current semantics are explicit:
+        - the event can now buff filtered owner Battle Cards after the source has re-registered from `z_energy`
+        - character filters are normalized from angle-bracket names for this slice
+    - status: third added-to-z-energy trigger slice complete
+      - added:
+        - `self_added_to_z_energy:auto_switch_up_to_n_opponent_board_rest`
+        - common requirement support for `min_owner_z_energy`
+      - first covered live wording family:
+        - `When this card attacks or when this card is added to Z-Energy, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - the existing opponent-board Rest handler now supports the `card_added_to_z_energy` event
+        - the common requirement path now enforces `you have N or more Z-Energy`
+    - status: first placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_power_reduce_up_to_n_on_placed_under`
+        - first emitted `card_placed_under_card` effect event
+        - first Union Absorb support for material source zones:
+          - `combo area`
+          - `z-energy`
+      - first covered live wording family:
+        - `When this card in your hand, Z-Energy, or Combo Area is placed under your red <Super 17> card, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the turn.`
+      - current semantics are explicit:
+        - under-placement now emits a real provenance event with:
+          - source instance
+          - source zone
+          - host instance
+          - host zone
+        - the first trigger slice is currently exercised through the Union Absorb material-placement path
+    - status: second placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_add_up_to_n_from_owner_deck_to_hand_then_discard_n_on_placed_under`
+      - first covered live wording family:
+        - `When this card in your hand is placed under your green <Cell> Leader, add up to a total of 2 <Android 17>, <Android 18>, and/or <Cell> cards-all green and with an energy cost of 1-from your deck to your hand, place 1 card from your hand into your Drop, then shuffle your deck.`
+      - current semantics are explicit:
+        - the provenance event now supports leader-host follow-ups as well as battle-card hosts
+        - current validation uses a real `card_placed_under_card` emission against a Leader host
+        - the search/discard path is conservative and deterministic:
+          - add up to the first matching cards from deck to hand
+          - then discard the first matching count from hand to Drop
+    - status: third placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_host_gain_keywords_until_opponent_turn_on_placed_under`
+      - first covered live wording family:
+        - `When this card is placed under a red Battle Card with both <Android 17> and <Android 18>, the card on top of this card gains [Barrier] and [Critical] until the end of your opponent's turn.`
+      - current semantics are explicit:
+        - the placed-under provenance event can now target the host card itself
+        - host matching is conservative but faithful for the first repeated shape:
+          - color
+          - card type
+          - required character names
+          - `with both <...> and <...>` is enforced as an all-character requirement
+        - keyword grants use the existing opponent-turn delayed-keyword clear path
+    - status: fourth placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under`
+      - first covered live wording family:
+        - `When this card in your hand is placed under a {Hyperbolic Time Chamber} in your Battle Area, place up to 1 {SS Son Gohan, Showing the Results of Training} from your deck under a {Hyperbolic Time Chamber} in your Battle Area, then shuffle your deck.`
+      - current semantics are explicit:
+        - the placed-under provenance event can now drive follow-up deck placement under a named host in Battle Area
+        - the first slice is conservative:
+          - named source card from `Deck`
+          - named host in `Battle Area`
+          - deterministic first-match selection from deck
+        - the follow-up under-placement also emits `card_placed_under_card` with `placed_from="deck"` for later host-level watcher seams
+    - status: first owner placed-under host-watcher slice complete
+      - added:
+        - `owner_card_placed_under_owner_card:auto_switch_up_to_n_opponent_board_rest`
+      - first covered live wording family:
+        - `When a card is placed under a {Spirit Bomb} in your Battle Area, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - `card_placed_under_card` now supports owner-side host watchers as well as self-source watchers
+        - the first watcher slice is conservative:
+          - named host in `Battle Area`
+          - opponent `Battle Card` targets only
+    - status: fifth placed-under provenance slice complete
+      - added:
+        - `self_placed_under_owner_card:auto_switch_up_to_n_owner_board_to_revealed_on_placed_under`
+      - first covered live wording family:
+        - `When this card is placed under a <Vegito> card with a [Union] skill, choose up to 1 of your cards and switch it to Revealed Mode.`
+      - current semantics are explicit:
+        - the placed-under event can now drive owner-board reveal follow-ups
+        - the first slice is conservative:
+          - host in `Battle Area`
+          - host filtered by character and host skill text containing `[Union]`
+          - revealed targets come from owner `Battle Area` / `Unison Area`
+    - status: sixth placed-under provenance slice complete
+      - widened:
+        - `self_placed_under_owner_card:auto_place_up_to_n_named_from_owner_deck_under_named_host_on_placed_under`
+      - first covered live wording family:
+        - `When this card in your hand is placed under a {Destroyed West City} in your Battle Area, place up to 1 red <Android 18> card from your deck under a Z-Extra in your Battle Area, then shuffle your deck.`
+      - current semantics are explicit:
+        - the deck search side now supports descriptor filters, not just named cards
+        - the target host side now supports generic host filters, not just named hosts
+        - the first widened target-host slice is conservative:
+          - owner `Battle Area` only
+          - deterministic first matching target host
+          - first generic host descriptor is `Z-Extra`
+    - status: first played-under named-host follow-up slice complete
+      - widened:
+        - `self_played:auto_self_gain_power_for_turn_on_play`
+      - first covered live wording family:
+        - `When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +10000 power for the turn.`
+      - current semantics are explicit:
+        - the self-played buff family can now require:
+          - `requires_played_from="under"`
+          - `under_host_name_contains`
+        - host matching is stable even when the old host is already tucked under the played card:
+          - it falls back to the `card_played` payload host card id when the host instance is no longer in a public zone
+        - the nearby activate-from-under seam is also a bit more robust:
+          - pending public activates can now recover their source by instance even after that source has moved zones during resolution
+    - status: second played-under named-host follow-up slice complete
+      - widened:
+        - `self_played:auto_self_gain_power_for_turn_on_play`
+        - battle-step combo legality
+      - first covered live wording family:
+        - `When this card is played under a {Hyperbolic Time Chamber} in your Battle Area, this card gets +5000 power and you may use this card in a combo in Rest Mode for the turn.`
+      - current semantics are explicit:
+        - the self-played buff family can now also grant:
+          - temporary combo-from-battle permission while resting
+        - the first reusable action slice is conservative:
+          - new `COMBO_FROM_BATTLE` legal action
+          - battle cards only
+          - resting source card only
+          - normal combo cost payment
+          - event provenance recorded as `comboed_from="battle"`
+    - status: third Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_attacks:auto_combo_up_to_n_named_from_under_named_host_on_attack_then_draw_n_and_gain_keyword_for_battle`
+      - first covered live wording family:
+        - `When this card attacks, use up to 1 {SS Trunks, Mysterious Future Warrior} under a {Hyperbolic Time Chamber} in your Battle Area in a combo. If you do, draw 1 card, and this card gains [Critical] for the battle.`
+      - current semantics are explicit:
+        - the attack-time under-host combo path is conservative:
+          - owner `Battle Area` named host only
+          - named under-card only
+          - deterministic first matching under-card
+        - if a card is actually used from under the host:
+          - it enters `combo_area`
+          - it records `comboed_from="under"`
+          - the attacker can immediately get a battle-only keyword follow-up
+    - status: fourth Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_activate_main:activate_place_self_from_hand_and_up_to_n_named_from_owner_deck_under_named_host`
+      - first covered live wording family:
+        - `Choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: Place this card from your hand and up to 1 {SS Trunks, Mysterious Future Warrior} from your deck under the chosen card, then shuffle your deck.`
+      - current semantics are explicit:
+        - the activate-side host setup path is conservative:
+          - owner `Battle Area` named host only
+          - rest the chosen host
+          - place self from `hand` under that host
+          - place up to `N` named cards from `deck` under the same host
+        - both under-placement steps emit the normal `card_placed_under_card` event, so existing placed-under follow-ups can trigger on top of this setup line
+    - status: fifth Hyperbolic named-host follow-up slice complete
+      - added:
+        - regression-backed mirror coverage for:
+          - `Choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: Place this card from your hand and up to 1 {SS Vegeta, Arrogance} from your deck under the chosen card, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing activate-side host setup family is now proven for both sibling deck targets:
+          - `{SS Trunks, Mysterious Future Warrior}`
+          - `{SS Vegeta, Arrogance}`
+    - status: sixth Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_activate_main:activate_rest_named_host_and_place_each_named_from_owner_hand_under_it`
+      - first covered live wording family:
+        - `If your Leader is a green <Son Gohan: Childhood> and you discard this card from your hand: Choose up to 1 {Hyperbolic Time Chamber} in your Battle Area, switch it to Rest Mode, place 1 {SS Vegeta, Arrogance} and 1 {SS Trunks, Mysterious Future Warrior} from your hand under the chosen card, then shuffle your deck.`
+      - current semantics are explicit:
+        - the new activate-side hand setup family is conservative:
+          - owner `Battle Area` named host only
+          - source card discarded from `hand` via the normal activate-hand skill-cost path
+          - rest the chosen host
+          - place one each of the named hand cards under that host in printed order
+        - each successful hand placement emits the normal `card_placed_under_card` event, so existing placed-under follow-ups can stack on top of this setup line too
+    - status: seventh Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_activate_main:activate_draw_n_and_play_up_to_n_named_from_owner_hand_under_named_host`
+        - first reusable activate-main self-to-drop cost extraction for:
+          - `place this card in your Drop:`
+      - first covered live wording family:
+        - `Place this card in your Drop: Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area.`
+      - current semantics are explicit:
+        - the new Hyperbolic promotion path is conservative:
+          - source battle card pays its cost by moving itself to `Drop`
+          - draw resolves first
+          - then a matching card is promoted from `hand` onto the named host
+          - the host is preserved under the played card and the normal `card_played` event includes `under_host_instance_id`
+        - this means the existing:
+          - `When this card is played under a {Hyperbolic Time Chamber}...`
+          follow-ups now compose on top of the new activate line
+    - status: eighth Hyperbolic named-host follow-up slice complete
+      - added:
+        - `self_played:auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed`
+        - reusable helper support for placing up to `N` matching cards from `hand` under a chosen public host
+      - first covered live wording family:
+        - `If you have 2 or more energy, choose 1 {Hyperbolic Time Chamber} from your Battle Area, and switch it to Rest Mode: When this card is played, place up to 1 {SS Son Goku, Showing the Results of Training} or {SS Son Gohan, Showing the Results of Training} from your hand under the chosen card. If you placed a card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it.`
+      - current semantics are explicit:
+        - the new on-play Hyperbolic helper is conservative and deterministic:
+          - it chooses the first matching named host in your `Battle Area`
+          - it rests that host before hand placement
+          - it places up to the printed count of matching named cards from `hand`
+          - the KO clause only resolves if at least one card was successfully placed under the host
+    - status: ninth Hyperbolic follow-up slice complete
+      - added:
+        - `self_activate_main:activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn`
+        - first reusable `play_from_drop` pending-action resolution path with:
+          - normal `Counter: Play` timing
+          - temporary power grant on the resolved play
+        - first activate-main skill-cost extraction for:
+          - `remove this card in the Drop from the game, and you discard 1 card from your hand:`
+      - first covered live wording family:
+        - `If your Leader is a green <Son Gohan: Childhood> Z-Leader, you remove this card in the Drop from the game, and you discard 1 card from your hand: Play up to 1 {SS Vegeta, Arrogance} from your Drop and that card gets +10000 power for the turn.`
+      - current semantics are explicit:
+        - the activate resolves in two windows:
+          - first the activate skill itself resolves from `drop`
+          - then the named `drop` play opens the normal `Counter: Play` window
+        - the played card receives its temporary power buff on successful resolution before its normal on-play event flow continues
+    - status: tenth Hyperbolic follow-up slice complete
+      - widened:
+        - `self_comboed:auto_draw_n`
+        - `self_comboed_battle_end:auto_add_self_to_owner_z_energy_on_battle_end`
+      - first covered live wording family:
+        - `[Auto][Limit 1] There is a {Hyperbolic Time Chamber} in your Battle Area and a skill-less Battle Card in your Combo Area: When this card in your Battle Area is used in a combo, draw 1 card and add this card to its owner's Z-Energy.`
+      - current semantics are explicit:
+        - the shared combo extractor now preserves:
+          - `requires_comboed_from="battle"`
+          - named-owner-battle prerequisites like `{Hyperbolic Time Chamber}`
+          - owner-combo requirements including:
+            - `required_card_type=BATTLE`
+            - `requires_skill_less=True`
+        - the runtime path reuses the existing:
+          - draw-on-combo
+          - battle-end self-to-`Z-Energy`
+          families rather than adding a Krillin-only handler
+    - status: eleventh Hyperbolic follow-up slice complete
+      - added:
+        - regression-backed mirror coverage for:
+          - `When this card in your hand is placed under a {Hyperbolic Time Chamber} in your Battle Area, place up to 1 {SS Son Goku, Showing the Results of Training} from your deck under a {Hyperbolic Time Chamber} in your Battle Area, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing placed-under deck-under family is now proven for both sibling training targets:
+          - `{SS Son Goku, Showing the Results of Training}`
+          - `{SS Son Gohan, Showing the Results of Training}`
+    - status: first union placed-under provenance slice complete
+      - added:
+        - `self_placed_under_by_union:auto_switch_up_to_n_opponent_board_rest`
+        - `placed_by="union"` provenance on under-placement events from the current Union Absorb path
+      - first covered live wording family:
+        - `When this card is placed under another card by [Union], choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - the first slice is intentionally conservative:
+          - `placed_by="union"` is currently emitted from the Union Absorb material-placement path
+          - the watcher uses the existing opponent-board Rest handler
+          - `ignoring [Barrier]` is honored
+    - status: second union placed-under provenance slice complete
+      - added:
+        - `self_placed_under_by_union:auto_schedule_switch_up_to_n_owner_energy_active_on_opponent_next_main_phase_on_placed_under_by_union`
+        - first delayed next-`main_phase_start` energy-restand queue
+      - first covered live wording family:
+        - `When this card is placed under another card by [Union], activate this skill. At the beginning of your opponent's next Main Phase, choose up to 1 of your blue energy and switch it to Active Mode.`
+      - current semantics are explicit:
+        - the under-placement event schedules a delayed next-opponent-main energy restand
+        - the first slice is conservative:
+          - owner energy only
+          - color filtering
+          - no extra header-cost support on the delayed clause
+    - status: third union placed-under provenance slice complete
+      - added:
+        - `placed_by="union"` provenance on the first Union Potara material-stacking path
+      - current semantics are explicit:
+        - the widened paths now cover:
+          - the hand-material Union Potara fidelity flow
+          - the stacked-host Union Potara replacement flow
+        - cards that are actually stacked under the played Potara card now emit `card_placed_under_card` with `placed_by="union"`
+        - this lets existing `self_placed_under_by_union` watchers resolve from more than just Union Absorb
+    - status: first Union-play follow-up trigger slice complete
+      - trigger matching now covers:
+        - `self_played_using_union`
+        - `owner_other_battle_played_using_union`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards that entered play via a real Union action
+  - `[Union-Potara]`
+    - status: first conservative action slice complete
+    - generic runtime now covers:
+      - a dedicated `UNION_POTARA` legal action from hand Battle Cards during your Main Phase
+      - paying printed Union-Potara energy costs, including specified pips
+      - consuming named material Battle Cards from your hand into your Drop
+      - respecting first simple header gates through the shared requirement matcher
+      - playing the Potara card from hand and carrying `played_via=union_potara`
+      - emitting `union_activated` with `union_kind=union_potara`
+      - first covered live wording family:
+        - `[Union-Potara](Black): <Son Goku: Xeno> card and <Vegeta: Xeno> card.`
+    - status: second stacked-together action slice complete
+      - generic runtime now also covers:
+        - `Place this card in Active Mode on top of the 2 specified cards stacked together`
+        - `Place this card in Active Mode from your hand on top of the 2 specified cards stacked together`
+        - promoting from hand onto a Battle Card already carrying the second named material underneath it
+        - preserving the existing under-card chain on the new Potara card
+      - first covered live wording family:
+        - `[Union-Potara](Blue)(Blue): <Goku Black> and <Zamasu> (Place this card in Active Mode on top of the 2 specified cards stacked together)`
+    - status: first header-effect slice complete
+      - declaration-time Union-Potara headers now also support:
+        - `draw 1/2 cards`
+        - `place the top card of your opponent's deck into its owner's Drop`
+        - `choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp`
+      - first covered live wording families:
+        - `[Union-Potara](1), draw 2 cards: Green <Zamasu> card and green <Goku Black> card.`
+        - `[Union-Potara]{g}, if your Leader is a green <Zamasu> card, you draw 1 card, and place the top card of your opponent's deck into its owner's Drop: ...`
+        - `[Union-Potara] Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and draw 1 card: <Son Goku> and <Vegeta>.`
+    - status: first cost-variant slice complete
+      - Union-Potara now also supports:
+        - bare circled generic costs like `②`
+        - mixed specified-plus-generic costs like `(Blue)(Blue)③`
+    - status: first source-format tolerance slice complete
+      - Union-Potara parsing now also tolerates colonless live DB forms like:
+        - `[Union-Potara] Blue <Son Goku> and blue <Vegeta>.`
+    - status: first material-floor requirement slice complete
+      - Union-Potara material matching now also supports shared wording like:
+        - `with energy costs of 4 or more`
+    - status: first expanded material-zone slice complete
+      - Union-Potara can now conservatively choose named materials from:
+        - `energy`
+        - `warp`
+        - `under your black Z-Unison`
+      - when the source card's permanent explicitly allows that expanded material range
+    - status: first expanded-area movement fidelity slice complete
+      - when chosen Union-Potara materials come from Battle Area plus an expanded material area,
+        the expanded-area material now moves into Battle Area first and both chosen materials stay
+        stacked under the played Potara card
+    - status: second hand-material Union-Potara fidelity slice complete
+      - when chosen Union-Potara materials include:
+        - `hand`
+        - `battle + hand`
+        - `hand + energy`
+        - `hand + warp`
+        - `hand + under your black Z-Unison`
+      - the chosen non-stacked materials now enter Battle Area first and stay stacked under the
+        played Potara card instead of going to Drop
+    - status: first Potara-specific play-trigger slice complete
+      - trigger matching now also covers:
+        - `self_played_using_union_potara`
+        - `owner_other_battle_played_using_union_potara`
+      - generic `auto_draw_n` can now respond specifically to Battle Cards played via real Union-Potara actions
+    - status: first Union-Potara activation event slice complete
+      - trigger matching now covers:
+        - `self_union_potara_activated`
+        - `owner_union_potara_activated`
+      - generic `auto_draw_n` can now respond to real Union-Potara activation events
   - `[Dark Over Realm]` / `[Over Realm]` / `Wormhole`
     - status:
       - first summon-side `[Dark Over Realm]` action slice complete

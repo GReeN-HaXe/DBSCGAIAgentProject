@@ -188,6 +188,24 @@ def test_extract_zamasu_scheme_activate_main_costs_are_source_zone_specific() ->
     }
 
 
+def test_extract_auto_on_play_z_energy_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] Place 2 of your Z-Energy into their owner's Drop: When this card is played, activate this skill. "
+            "During this turn, the next time you play a blue <Gogeta: Br> card with [Union], it gains [Barrier] for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_play_battle": [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": 2,
+            }
+        ]
+    }
+
+
 def test_extract_plain_unison_marker_activate_costs_for_main_and_battle() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -245,6 +263,43 @@ def test_extract_activate_main_discard_self_from_hand_cost_rule() -> None:
         "activate_main_hand": [
             {
                 "kind": "send_self_from_hand_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_discard_self_from_hand_cost_rule_with_colon_in_leader_name() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> and you discard this card from your hand: "
+            "Choose up to 1 {Hyperbolic Time Chamber} in your Battle Area, switch it to Rest Mode, place 1 {SS Vegeta, Arrogance} "
+            "and 1 {SS Trunks, Mysterious Future Warrior} from your hand under the chosen card, then shuffle your deck."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_hand": [
+            {
+                "kind": "send_self_from_hand_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_place_self_in_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main](Green), place this card in your Drop: "
+            "Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_self_to_drop",
                 "amount": 1,
             }
         ]
@@ -313,6 +368,27 @@ def test_extract_activate_battle_remove_self_to_removed_cost_rule() -> None:
             }
         ]
     }
+
+
+def test_extract_activate_main_remove_self_in_drop_and_discard_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main](Green), if your Leader is a green <Son Gohan: Childhood> Z-Leader, "
+            "you remove this card in the Drop from the game, and you discard 1 card from your hand: "
+            "Play up to 1 {SS Vegeta, Arrogance} from your Drop and that card gets +10000 power for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"] == [
+        {
+            "kind": "send_self_to_removed",
+            "amount": 1,
+        },
+        {
+            "kind": "discard_hand",
+            "amount": 1,
+        },
+    ]
 
 
 def test_extract_activate_main_discard_hand_cost_rule() -> None:
@@ -848,6 +924,62 @@ def test_engine_loads_skill_cost_catalog_from_path() -> None:
     state = engine.apply_action(state, play)
     legal = engine.get_legal_actions(state, 2)
     assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+
+
+def test_extract_auto_on_opponent_combo_z_energy_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] Place 2 of your Z-Energy into their owner's Drop: "
+            "When your opponent uses cards in a combo, your opponent places 1 card from their hand at the bottom of their deck, "
+            "then you negate this skill for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_opponent_combo_battle": [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": 2,
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_combo_single_energy_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto](Blue), during your turn: "
+            "When you combo with this card from your hand with an <Android 18> card in battle, play this card at the end of the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+                "allowed_colors": "blue",
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_owner_combo_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto][Once per turn][Spirit Boost 1] "
+            "When one of your skill-less Battle Cards is used in a combo, it gets +4000 combo power for the battle, then draw 1 card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_owner_combo_battle": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
+            }
+        ]
+    }
 
 
 def test_engine_uses_catalog_for_counter_alternate_hidden_battle_cost() -> None:

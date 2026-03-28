@@ -1,0 +1,12 @@
+{
+  "900313": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "send_all_owner_drop_to_warp",
+        "required_leader_colors": "black",
+        "requires_life_at_most": 4
+      }
+    ]
+  }
+}

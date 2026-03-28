@@ -56,8 +56,16 @@ _ACTIVATE_MAIN_DISCARD_SELF_FROM_HAND_RE = re.compile(
 _ACTIVATE_MAIN_DISCARD_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?discard (\d+) card(?:s)? from your hand\s*:"
 )
+_ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?place this card in your drop\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:"
+)
+_ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,320}?remove this card in the drop from the game,\s*and you discard (\d+) card(?:s)? from your hand\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?remove this card from the game\s*:"
@@ -70,6 +78,22 @@ _ACTIVATE_MAIN_SPIRIT_BOOST_RE = re.compile(
 )
 _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?remove (\d+) total cards? in your drop and warp from the game\s*:"
+)
+_AUTO_ON_PLAY_Z_ENERGY_TO_DROP_RE = re.compile(
+    r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when this card is played,\s*activate this skill",
+    re.IGNORECASE,
+)
+_AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE = re.compile(
+    r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when your opponent uses cards? in a combo",
+    re.IGNORECASE,
+)
+_AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE = re.compile(
+    r"\[auto\]\((red|blue|green|yellow|black|white)\)(?:.{0,220}?)?:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
+_AUTO_ON_OWNER_COMBO_SPIRIT_BOOST_RE = re.compile(
+    r"\[auto\](?:.{0,140}?)?\[spirit boost\s+(\d+)\](?:.{0,260}?)?(?::\s*)?(?:if [^:]{1,220}:\s*)?when (?:one of your|you use) .+? in a combo",
+    re.IGNORECASE,
 )
 _COUNTER_ALT_REST_HIDDEN_BATTLE_RE = re.compile(
     r"activate this card's \[counter\] skill from your hand by switching 1 hidden mode card in your battle area to rest mode instead of paying its energy cost"
@@ -460,8 +484,9 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_main_hand_to_warp.group(1)),
             }
         ]
+    m_activate_main_remove_self_in_drop_and_discard_hand = _ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE.search(text)
     m_activate_main_discard_hand = _ACTIVATE_MAIN_DISCARD_HAND_RE.search(text)
-    if m_activate_main_discard_hand:
+    if m_activate_main_discard_hand and m_activate_main_remove_self_in_drop_and_discard_hand is None:
         rules["activate_main"] = [
             {
                 "kind": "discard_hand",
@@ -475,6 +500,13 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": 1,
             }
         ]
+    if _ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE.search(text):
+        rules.setdefault("activate_main", []).append(
+            {
+                "kind": "send_self_to_drop",
+                "amount": 1,
+            }
+        )
     m_activate_main_spirit_boost = _ACTIVATE_MAIN_SPIRIT_BOOST_RE.search(text)
     if m_activate_main_spirit_boost:
         rules.setdefault("activate_main", []).insert(
@@ -489,6 +521,11 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         amount = int(m_activate_main_drop_to_warp.group(1))
         descriptor = str(m_activate_main_drop_to_warp.group(2) or "").strip()
         rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_owner_drop_to_warp", descriptor, amount))
+    if m_activate_main_remove_self_in_drop_and_discard_hand:
+        rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
+        rules.setdefault("activate_main", []).append(
+            {"kind": "discard_hand", "amount": int(m_activate_main_remove_self_in_drop_and_discard_hand.group(1))}
+        )
     if _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE.search(text):
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
     if _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE.search(text):
@@ -499,6 +536,41 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_drop_and_warp_to_removed",
                 "amount": int(m_activate_main_remove_total_drop_and_warp.group(1)),
+            }
+        ]
+
+    m_auto_on_play_z_energy_to_drop = _AUTO_ON_PLAY_Z_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_play_z_energy_to_drop:
+        rules["auto_on_play_battle"] = [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": int(m_auto_on_play_z_energy_to_drop.group(1)),
+            }
+        ]
+    m_auto_on_opponent_combo_z_energy_to_drop = _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_opponent_combo_z_energy_to_drop:
+        rules["auto_on_opponent_combo_battle"] = [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": int(m_auto_on_opponent_combo_z_energy_to_drop.group(1)),
+            }
+        ]
+    m_auto_on_owner_combo_spirit_boost = _AUTO_ON_OWNER_COMBO_SPIRIT_BOOST_RE.search(text)
+    if m_auto_on_owner_combo_spirit_boost:
+        rules.setdefault("auto_on_owner_combo_battle", []).insert(
+            0,
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": int(m_auto_on_owner_combo_spirit_boost.group(1)),
+            },
+        )
+    m_auto_on_combo_energy_to_drop = _AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_combo_energy_to_drop:
+        rules["auto_on_combo_battle"] = [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+                "allowed_colors": str(m_auto_on_combo_energy_to_drop.group(1) or "").strip().lower(),
             }
         ]
 

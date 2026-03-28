@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 322,
+  "effect_rule_count": 323,
   "rules": {
     "10": [
       {
@@ -397,6 +397,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "auto_cost_header": "(black)",
           "rest_mode_only": true,
           "resting": true
         },
@@ -973,6 +974,23 @@
       }
     ],
     "157": [
+      {
+        "family_id": "owner_main_phase_start:auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+        "handler_id": "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "auto_cost_header": "(blue)(blue)",
+          "max_cost": 4,
+          "max_targets": 1,
+          "required_characters": "Lt Frost Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue)(blue): at the start of your main phase, choose up to 1 blue &lt;frost&gt; card with an energy cost of 4 in your hand and play it on top of this card.",
+        "trigger": "owner_main_phase_start"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -1637,6 +1655,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "auto_cost_header": "\u2461",
           "rest_mode_only": true,
           "resting": true
         },
@@ -1653,6 +1672,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "auto_cost_header": "\u2461",
           "resting": false
         },
         "limit_per_turn": null,
@@ -1939,6 +1959,7 @@
           "max_targets": 1,
           "power_delta": 10000,
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_owner_turn": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -1956,6 +1977,7 @@
         "handler_params": {
           "amount": 1,
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_opponent_turn": true
         },
         "limit_per_turn": null,
@@ -1974,6 +1996,7 @@
           "power_delta": 5000,
           "required_characters": "And It Gets 10000 Power For The Battle,Then If It S Your Opponent S Turn,Draw 1,Then Choose Up To 1 Of Your",
           "requires_leader": "if your leader card and energy are all red",
+          "requires_mono_energy": "red",
           "requires_opponent_turn": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -2886,7 +2909,8 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "requires_leader": "if your leader card is a yellow &lt;trunks"
+          "required_leader_traits": "Yellow &Lt;Trunks: Future&Gt;",
+          "requires_leader": "if your leader card is a yellow &lt;trunks: future&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -2931,7 +2955,8 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "requires_leader": "if your leader card is a yellow &lt;trunks"
+          "required_leader_traits": "Yellow &Lt;Trunks: Future&Gt;",
+          "requires_leader": "if your leader card is a yellow &lt;trunks: future&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -2964,7 +2989,8 @@
           "max_add": 1,
           "max_cost": 3,
           "required_characters": "Lt Vegeta Gt,Lt Trunks Future Gt",
-          "requires_leader": "if your leader card is a mono-yellow &lt;trunks"
+          "required_leader_traits": "Mono-Yellow &Lt;Trunks: Future&Gt;",
+          "requires_leader": "if your leader card is a mono-yellow &lt;trunks: future&gt; card and you discard this card from your hand"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -3074,8 +3100,9 @@
         "family_id": "self_activate_main:activate_play_self_from_warp",
         "handler_id": "activate_play_self_from_warp",
         "handler_params": {
+          "required_leader_traits": "Black &Lt;Trunks: Xeno&Gt;",
           "required_source_zone": "warp",
-          "requires_leader": "if your leader card is a black &lt;trunks"
+          "requires_leader": "if your leader card is a black &lt;trunks: xeno&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3090,8 +3117,9 @@
         "family_id": "self_activate_main:activate_play_self_from_warp",
         "handler_id": "activate_play_self_from_warp",
         "handler_params": {
+          "required_leader_traits": "Black &Lt;Trunks: Xeno&Gt;",
           "required_source_zone": "warp",
-          "requires_leader": "if your leader card is a black &lt;trunks"
+          "requires_leader": "if your leader card is a black &lt;trunks: xeno&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3150,8 +3178,9 @@
         "handler_id": "activate_play_self_from_warp",
         "handler_params": {
           "min_owner_energy": 3,
+          "required_leader_traits": "Black &Lt;Trunks: Xeno&Gt;-Only",
           "required_source_zone": "warp",
-          "requires_leader": "if your leader card is a black &lt;trunks"
+          "requires_leader": "if your leader card is a black &lt;trunks: xeno&gt;-only card and you have 3 or more energy"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -3187,7 +3216,8 @@
         "family_id": "owner_battle_played_from_warp:auto_gain_wormhole_on_owner_black_battle_played_from_warp",
         "handler_id": "auto_gain_wormhole_on_owner_black_battle_played_from_warp",
         "handler_params": {
-          "requires_leader": "if your leader card is a black &lt;trunks"
+          "required_leader_traits": "Black &Lt;Trunks: Xeno&Gt;-Only",
+          "requires_leader": "if your leader card is a black &lt;trunks: xeno&gt;-only card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3202,7 +3232,8 @@
         "family_id": "owner_battle_played_from_warp:auto_gain_wormhole_on_owner_black_battle_played_from_warp",
         "handler_id": "auto_gain_wormhole_on_owner_black_battle_played_from_warp",
         "handler_params": {
-          "requires_leader": "if your leader card is a black &lt;trunks"
+          "required_leader_traits": "Black &Lt;Trunks: Xeno&Gt;-Only",
+          "requires_leader": "if your leader card is a black &lt;trunks: xeno&gt;-only card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3357,7 +3388,8 @@
           "max_targets": 1,
           "power_delta": 5000,
           "required_characters": "Leader,Unison",
-          "requires_leader": "if your leader card is a black &lt;trunks",
+          "required_leader_traits": "Black &Lt;Trunks: Xeno&Gt;-Only",
+          "requires_leader": "if your leader card is a black &lt;trunks: xeno&gt;-only card and you place this card at the bottom of your deck from your warp",
           "target_policy": "first",
           "target_scope": "owner_cards"
         },
@@ -3389,6 +3421,7 @@
         "handler_params": {
           "amount": 1,
           "requires_leader": "if your leader card and energy are all black",
+          "requires_mono_energy": "black",
           "requires_opponent_turn": true
         },
         "limit_per_turn": null,
@@ -3441,8 +3474,9 @@
           "max_add": 2,
           "max_cost": -1,
           "move_unpicked_to_bottom": true,
+          "required_leader_traits": "Black &Lt;Bardock: Xeno&Gt;",
           "required_name_contains": "SS4",
-          "requires_leader": "if your leader card is a black &lt;bardock"
+          "requires_leader": "if your leader card is a black &lt;bardock: xeno&gt; card or a \u226asaiyan\u226b card with {ss4} in its card name"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -3955,7 +3989,7 @@
         "handler_params": {
           "amount": 2,
           "required_leader_traits": "Yellow \u226aShenron\u226b &Lt;Zamasu&Gt;,Yellow \u226aShenron\u226b &Lt;Goku Black&Gt;",
-          "requires_leader": "if your leader card is a yellow \u226ashenron\u226b &lt;zamasu&gt; or yellow \u226ashenron\u226b &lt;goku black&gt; card"
+          "requires_leader": "if your leader card is a yellow \u226ashenron\u226b &lt;zamasu&gt; or yellow \u226ashenron\u226b &lt;goku black&gt; card: you may choose 1 \u226agod\u226b card in your hand and send it to your warp"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3970,6 +4004,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "auto_cost_header": "(black)",
           "required_leader_traits": "Black \u226aSaiyan\u226b",
           "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
           "rest_mode_only": true,
@@ -4042,6 +4077,8 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "required_leader_traits": "&Lt;Zamasu&Gt;,&Lt;Goku Black&Gt;",
+          "required_owner_combo_allowed_colors": "black",
+          "required_owner_combo_required_characters": "There Is At Least 1 Lt Zamasu Gt And 1 Lt Goku Gt",
           "requires_leader": "if your leader card is a &lt;zamasu&gt; or &lt;goku black&gt; card and there is at least 1 &lt;zamasu&gt; card and 1 &lt;goku black&gt; card in your combo area"
         },
         "limit_per_turn": null,
@@ -4159,7 +4196,7 @@
           "amount": 2,
           "min_owner_energy": 2,
           "required_leader_traits": "Blue &Lt;Zamasu&Gt; And &Lt;Goku Black&Gt;",
-          "requires_leader": "if your leader card is a blue &lt;zamasu&gt; and &lt;goku black&gt; card, you have 2 or more energy, and you discard this card from your hand"
+          "requires_leader": "if your leader card is a blue &lt;zamasu&gt; and &lt;goku black&gt; card"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -4237,6 +4274,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "auto_cost_header": "(black)",
           "required_leader_traits": "Black \u226aSaiyan\u226b",
           "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
           "rest_mode_only": true,
