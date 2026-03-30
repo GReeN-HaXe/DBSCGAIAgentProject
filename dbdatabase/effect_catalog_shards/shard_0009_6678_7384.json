@@ -1,8 +1,39 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 284,
+  "effect_rule_count": 286,
   "rules": {
+    "6678": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "KING COLD'S DYNASTY",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {king cold's dynasty} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      }
+    ],
+    "6679": [
+      {
+        "family_id": "counter_attack:counter_negate_attack_play_self",
+        "handler_id": "counter_negate_attack_play_self",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "source_text": "",
+        "trigger": "counter_attack"
+      }
+    ],
     "6681": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -249,6 +280,22 @@
       }
     ],
     "6723": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "YOUNG INVADERS",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {young invaders} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -4113,6 +4160,22 @@
     ],
     "7350": [
       {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "FOREBODING MUSIC BOX",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {foreboding music box} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -4455,40 +4518,6 @@
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch this card to active mode.",
         "trigger": "turn_end"
-      }
-    ],
-    "7386": [
-      {
-        "family_id": "self_activate_main:activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play",
-        "handler_id": "activate_remove_self_from_drop_bottom_deck_hand_draw_and_punish_low_power_battle_play",
-        "handler_params": {
-          "activate_total_cost": 1,
-          "low_power_threshold": 20000,
-          "max_bottom_deck_from_hand": 2,
-          "opponent_hand_to_warp": 2,
-          "required_source_zone": "drop"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "manual_override",
-        "source_text": "",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "7387": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][once per turn][burst 3] draw 1 card.",
-        "trigger": "self_activate_main"
       }
     ]
   },

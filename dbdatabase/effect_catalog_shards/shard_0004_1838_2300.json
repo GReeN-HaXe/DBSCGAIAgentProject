@@ -1,8 +1,23 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 337,
+  "effect_rule_count": 339,
   "rules": {
+    "1838": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, and this card gets +5000 power for the battle.",
+        "trigger": "self_attacks"
+      }
+    ],
     "1841": [
       {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
@@ -1216,6 +1231,22 @@
     ],
     "1953": [
       {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "HYPERBOLIC TIME CHAMBER",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {hyperbolic time chamber} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
         "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_params": {
@@ -1579,7 +1610,8 @@
           "event_required_characters": "A Ss Son Goku,Showing The Results Of Training",
           "event_required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
           "marker_amount": 2,
-          "max_targets": 1
+          "max_targets": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3197,6 +3229,22 @@
       }
     ],
     "2113": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "FORTUNETELLER BABA'S PALACE",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {fortuneteller baba's palace} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -5437,21 +5485,6 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto][limit 1] switch 1 of your earthling tokens to rest mode: when this card attacks, draw 1 card, then use up to 1 \u226asaiyan\u226b or \u226aearthling\u226b card - both mono-green and with 5000 combo power - from your drop in a combo with its skills negated for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "2301": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] switch 1 of your earthling tokens to rest mode: when this card attacks, draw 1 card, then this card gets +5000 power for the battle.",
         "trigger": "self_attacks"
       }
     ]

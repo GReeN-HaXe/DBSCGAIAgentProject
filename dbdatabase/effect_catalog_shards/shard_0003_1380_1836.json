@@ -1,8 +1,29 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 331,
+  "effect_rule_count": 332,
   "rules": {
+    "1380": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "look_count": 7,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_characters": "Lt Majin Buu Gt",
+          "required_leader_traits": "Blue &Lt;Majin Buu&Gt;",
+          "requires_leader": "if your leader is a blue &lt;majin buu&gt; card and you discard this card from your hand"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a blue &lt;majin buu&gt; card and you discard this card from your hand: look at up to 7 cards from the top of your deck, add up to 1 blue &lt;majin buu&gt; card with an energy cost of 4 or less among them to your hand, place up to 1 card among them in your drop, and shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "1381": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -2406,6 +2427,22 @@
       }
     ],
     "1607": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "PRISON PLANET",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {prison planet} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -5273,21 +5310,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if a &lt;garlic jr.&gt; is under this card: when this card is played, choose up to 1 of your opponent's battle cards, and it gets -20000 power for the turn.",
         "trigger": "self_played"
-      }
-    ],
-    "1838": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, draw 1 card, and this card gets +5000 power for the battle.",
-        "trigger": "self_attacks"
       }
     ]
   },

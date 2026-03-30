@@ -1,8 +1,76 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 373,
+  "effect_rule_count": 374,
   "rules": {
+    "8138": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Gogeta: Br,Vegeta: Br",
+          "required_traits": "Or"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue <vegeta: br> or <gogeta: br> card to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "8139": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "min_owner_z_energy": 2,
+          "power_delta": 5000,
+          "requires_leader": "if your leader is blue and you have 2 or more z-energy",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1]{u}, if your leader is blue and you have 2 or more z-energy: play this card from your hand, then choose up to 1 of your cards and it gets +5000 power for the battle.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_z_energy": 2,
+          "requires_leader": "if your leader is blue and you have 2 or more z-energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1]{u}, if your leader is blue and you have 2 or more z-energy: play this card from your hand, then choose up to 1 of your cards and it gets +5000 power for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "8140": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -5926,52 +5994,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn, and this card can't be removed from a battle area by skills until the end of your opponent's turn.",
         "trigger": "self_played"
-      }
-    ],
-    "8890": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "8891": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "min_opponent_energy": 2,
-          "requires_leader": "if your leader is red and your opponent has 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1]{r}, if your leader is red and your opponent has 2 or more energy: draw 1 card, play this card from your hand, and this card can attack active mode battle cards for the turn.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_opponent_energy": 2,
-          "requires_leader": "if your leader is red and your opponent has 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1]{r}, if your leader is red and your opponent has 2 or more energy: draw 1 card, play this card from your hand, and this card can attack active mode battle cards for the turn.",
-        "trigger": "self_activate_main"
       }
     ]
   },

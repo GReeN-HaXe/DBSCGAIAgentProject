@@ -568,6 +568,40 @@ def test_extract_activate_main_can_rest_named_host_and_place_self_and_named_deck
     assert rule.handler_params["rest_host"] is True
 
 
+def test_extract_self_placed_in_leader_area_can_activate_named_field_extra_from_deck() -> None:
+    card = _card(
+        "[Auto] When this card is placed in your Leader Area, activate up to 1 {Hyperbolic Time Chamber} from your deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_placed_in_leader_area"
+        and r.handler_id == "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "HYPERBOLIC TIME CHAMBER"
+    assert rule.handler_params["required_card_type"] == "EXTRA"
+    assert rule.handler_params["requires_field_keyword"] is True
+
+
+def test_extract_hyperbolic_leader_attack_search_with_awaken_clause() -> None:
+    card = replace(_card(
+        "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
+        "add up to 1 green ≪Saiyan≫ to your hand, then shuffle your deck. "
+        "[Awaken] When your life is at 4 or less or if you have a {SS Son Goku, Showing the Results of Training} in play: "
+        "Draw 1 card, switch up to 1 of your energy to Active Mode, then add cards from your life to your hand until you have 6 life left."
+    ), card_type="LEADER")
+    rules = extract_effect_rules_from_card(card)
+    search = next(
+        r for r in rules if r.trigger == "owner_leader_attacks" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert search.handler_params["look_count"] == 5
+    assert search.handler_params["max_add"] == 1
+    assert search.handler_params["allowed_colors"] == "green"
+    assert search.handler_params["required_traits"] == "Saiyan"
+
+
 def test_extract_activate_main_can_rest_named_host_and_place_self_and_named_vegeta_from_deck_under_it() -> None:
     card = _card(
         "[Activate: Main](Green), choose 1 {Hyperbolic Time Chamber} in your Battle Area and switch it to Rest Mode: "
@@ -2382,6 +2416,7 @@ def test_extract_owner_combo_remove_markers_from_opponent_unison_rule() -> None:
     assert rule.handler_params["max_targets"] == 1
     assert rule.handler_params["marker_amount"] == 2
     assert rule.handler_params["event_required_name_contains"] == "SS SON GOKU, SHOWING THE RESULTS OF TRAINING"
+    assert rule.handler_params["requires_source_in_battle"] is True
 
 
 def test_extract_owner_combo_can_play_self_from_under_leader_or_hand_rule() -> None:

@@ -12,6 +12,7 @@ from src.game.effect_rules import EffectRule
 
 _WS_RE = re.compile(r"\s+")
 _PLAY_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when (?:this card is played(?: from your hand)?|you play this card)")
+_LEADER_PLACED_TRIGGER_RE = re.compile(r"(?:if [^:]{1,160}:\s*)?when this card is placed in your leader area", re.IGNORECASE)
 _ATTACK_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when this card attacks")
 _COMBO_TRIGGER_RE = re.compile(r"(?:if [^:]{1,120}:\s*)?when (?:this card is used in a combo|you combo with this card)")
 _COMBO_TRIGGER_FROM_HAND_OPPONENT_BOTTOM_DECK_HAND_RE = re.compile(
@@ -212,6 +213,10 @@ _ACTIVATE_MAIN_PLAY_NAMED_FROM_OWNER_DROP_AND_GAIN_POWER_RE = re.compile(
 )
 _PLAYED_REST_NAMED_HOST_PLACE_UP_TO_N_EITHER_NAMED_FROM_HAND_UNDER_IT_THEN_KO_IF_PLACED_RE = re.compile(
     r"(?:if [^:]{1,220}:\s*)?choose 1 \{([^}]+)\} from your battle area,? and switch it to rest mode:\s*when this card is played,\s*place up to (\d+) \{([^}]+)\} or \{([^}]+)\} from your hand under the chosen card\.\s*if you placed a card,\s*choose up to (\d+) of your opponent'?s battle cards? with an energy cost of (\d+) or less and ko it",
+    re.IGNORECASE,
+)
+_LEADER_PLACED_ACTIVATE_UP_TO_N_NAMED_FIELD_EXTRA_FROM_OWNER_DECK_RE = re.compile(
+    r"(?:if [^:]{1,160}:\s*)?when this card is placed in your leader area,\s*activate up to (\d+) \{([^}]+)\} from your deck",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_BATTLE_DRAW_RE = re.compile(r"\[activate(?::)?\s*main/battle\][^.]{0,200}?(?::\s*)?draw (\d+) card")
@@ -745,6 +750,8 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
         params["requires_owner_turn"] = True
     if "if it's your opponent's turn" in text or "during your opponent's turn" in text:
         params["requires_opponent_turn"] = True
+    if "if this card is in a battle" in text.lower():
+        params["requires_source_in_battle"] = True
     return params
 
 
@@ -1427,6 +1434,26 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     handler_id="auto_draw_n",
                     handler_params={"amount": amount, **extra},
                     once_per_turn=once,
+                )
+            )
+
+        m_leader_placed_activate_named_field_extra = _LEADER_PLACED_ACTIVATE_UP_TO_N_NAMED_FIELD_EXTRA_FROM_OWNER_DECK_RE.search(branch)
+        if m_leader_placed_activate_named_field_extra:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_placed_in_leader_area",
+                    handler_id="auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+                    handler_params={
+                        "max_targets": int(m_leader_placed_activate_named_field_extra.group(1)),
+                        "required_name_contains": str(m_leader_placed_activate_named_field_extra.group(2) or "").strip().upper(),
+                        "required_card_type": "EXTRA",
+                        "requires_field_keyword": True,
+                        **extra,
+                    },
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
                 )
             )
 

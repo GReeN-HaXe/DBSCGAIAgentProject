@@ -153,6 +153,7 @@ class RulesEngine:
             "auto_draw_on_attack": self._handle_auto_draw_on_attack,
             "auto_draw_n": self._handle_auto_draw_n,
             "auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn": self._handle_auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn,
+            "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed": self._handle_auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed,
             "auto_play_up_to_n_from_owner_hand_on_main_phase_start": self._handle_auto_play_up_to_n_from_owner_hand_on_main_phase_start,
             "auto_play_up_to_n_from_owner_drop_on_main_phase_start": self._handle_auto_play_up_to_n_from_owner_drop_on_main_phase_start,
             "auto_play_up_to_n_from_owner_deck_on_main_phase_start": self._handle_auto_play_up_to_n_from_owner_deck_on_main_phase_start,
@@ -442,6 +443,16 @@ class RulesEngine:
         )
         for player_id in (1, 2):
             self._register_card_effects(state, player_id=player_id, source_zone="leader", card=state.players[player_id].leader_area)
+            self._emit_effect_event(
+                state,
+                name="card_placed_in_leader_area",
+                actor_player_id=player_id,
+                payload={
+                    "source_instance_id": int(state.players[player_id].leader_area.instance_id),
+                    "source_card_id": int(state.players[player_id].leader_area.card_id),
+                },
+            )
+        self._resolve_pending_effects(state)
 
         state.players[self._opponent_of(first_player)].energy_markers = 1
         self._checkpoint(state, "pregame_leaders_placed")
@@ -1141,6 +1152,9 @@ class RulesEngine:
             return False
         if wish_spec is not None:
             return self._wish_conditions_met(state, player_id=player_id, spec=wish_spec)
+        awaken_spec = self._parse_awaken_spec(leader.skill_text_raw)
+        if awaken_spec is not None:
+            return self._awaken_conditions_met(state, player_id=player_id, spec=awaken_spec)
         if len(player.life) <= 4:
             return True
         hidden_mode_threshold = self._parse_hidden_mode_awaken_threshold(leader.skill_text_raw)
@@ -1184,6 +1198,33 @@ class RulesEngine:
                 payload={"source_instance_id": leader.instance_id, "source_card_id": leader.card_id},
             )
             self._checkpoint(state, "leader_wished")
+            return
+        awaken_spec = self._parse_awaken_spec(leader.skill_text_raw)
+        if awaken_spec is not None:
+            draw_count = int(awaken_spec.get("draw_count", 0) or 0)
+            for _ in range(max(draw_count, 0)):
+                self._draw_one(state, player_id)
+            switch_energy_count = int(awaken_spec.get("switch_owner_energy_active_count", 0) or 0)
+            if switch_energy_count > 0:
+                switched = 0
+                for energy in player.energy:
+                    if switched >= switch_energy_count:
+                        break
+                    if energy.resting and self._can_switch_card_to_active(energy):
+                        energy.resting = False
+                        switched += 1
+            life_target = int(awaken_spec.get("life_to_hand_until", 6) or 6)
+            while len(player.life) > life_target:
+                player.hand.append(player.life.pop(0))
+            self._apply_leader_back_side(leader)
+            self._register_card_effects(state, player_id=player_id, source_zone="leader", card=leader)
+            self._emit_effect_event(
+                state,
+                name="leader_awakened",
+                actor_player_id=player_id,
+                payload={"source_instance_id": leader.instance_id, "source_card_id": leader.card_id},
+            )
+            self._checkpoint(state, "leader_awakened")
             return
         for _ in range(2):
             self._draw_one(state, player_id)
@@ -8955,6 +8996,10 @@ class RulesEngine:
     ) -> bool:
         if trigger == "self_played":
             if event.name != "card_played":
+                return False
+            return int(event.payload.get("source_instance_id") or -1) == source_instance_id
+        if trigger == "self_placed_in_leader_area":
+            if event.name != "card_placed_in_leader_area":
                 return False
             return int(event.payload.get("source_instance_id") or -1) == source_instance_id
         if trigger == "self_added_to_z_energy":
@@ -17424,6 +17469,67 @@ class RulesEngine:
                 c.resting = False
         self._checkpoint(state, "effect_auto_switch_up_to_n_owner_energy_active_on_turn_end")
 
+    def _handle_auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_placed_in_leader_area":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None or not owner.deck:
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "") or "").strip().upper()
+        requires_field_keyword = bool(reg.handler_params.get("requires_field_keyword", False))
+        required_card_types = {
+            part.strip().upper()
+            for part in str(reg.handler_params.get("required_card_type", "")).replace("|", ",").split(",")
+            if part.strip()
+        }
+        chosen_indexes: list[int] = []
+        for idx, card_id in enumerate(owner.deck):
+            temp_card = self._create_card_instance(next_instance_id=0, card_id=int(card_id), owner_id=reg.owner_player_id)
+            if not self._card_matches_effect_filters(
+                temp_card,
+                allowed_colors=set(),
+                required_traits=set(),
+                required_characters=set(),
+                required_name_contains=required_name_contains,
+                required_card_types=required_card_types,
+            ):
+                continue
+            if requires_field_keyword and not any(str(k).strip().lower() == "field" for k in (temp_card.keywords or ())):
+                continue
+            chosen_indexes.append(idx)
+            if len(chosen_indexes) >= max_targets:
+                break
+        if not chosen_indexes:
+            return
+        removed = 0
+        for idx in chosen_indexes:
+            card_id = int(owner.deck.pop(idx - removed))
+            removed += 1
+            card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=card_id, owner_id=reg.owner_player_id)
+            state.next_instance_id += 1
+            owner.battle_area.append(card)
+            self._register_card_effects(state, player_id=reg.owner_player_id, source_zone="battle", card=card)
+            self._emit_effect_event(
+                state,
+                name="field_extra_placed",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": int(card.instance_id),
+                    "source_card_id": int(card.card_id),
+                },
+            )
+        self._checkpoint(state, "effect_auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed")
+
     def _handle_auto_switch_up_to_n_owner_energy_active_on_field_extra_placed(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "field_extra_placed":
             return
@@ -19256,6 +19362,16 @@ class RulesEngine:
                 required_card_types=owner_attacker_required_card_types,
             ):
                 return False
+        if bool(reg.handler_params.get("requires_source_in_battle", False)):
+            ctx = state.attack_context
+            if ctx is None:
+                return False
+            source_in_battle = (
+                (ctx.attacker_player_id == reg.owner_player_id and ctx.attacker_zone == reg.source_zone and ctx.attacker_instance_id == reg.source_instance_id)
+                or (ctx.target_player_id == reg.owner_player_id and ctx.target_zone == reg.source_zone and ctx.target_instance_id == reg.source_instance_id)
+            )
+            if not source_in_battle:
+                return False
         mono = reg.handler_params.get("requires_mono_energy")
         if isinstance(mono, str) and mono.strip():
             required = mono.strip().lower()
@@ -19873,6 +19989,23 @@ class RulesEngine:
             checks.append(sum(1 for card in player.drop if self._card_has_runtime_label(card, "dragon ball")) >= drop_dragon_ball_count)
         if not checks:
             return False
+        if str(spec.get("condition_mode", "and")).strip().lower() == "or":
+            return any(checks)
+        return all(checks)
+
+    def _awaken_conditions_met(self, state: GameState, *, player_id: int, spec: dict[str, object]) -> bool:
+        player = state.players[player_id]
+        checks: list[bool] = []
+        life_at_most = int(spec.get("life_at_most", -1) or -1)
+        if life_at_most >= 0:
+            checks.append(len(player.life) <= life_at_most)
+        required_name_in_play = str(spec.get("required_owner_battle_name_in_play", "") or "").strip().upper()
+        if required_name_in_play:
+            checks.append(
+                any(required_name_in_play in str(card.card_name or "").upper() for card in [*player.battle_area, *player.unison_area])
+            )
+        if not checks:
+            return len(player.life) <= 4
         if str(spec.get("condition_mode", "and")).strip().lower() == "or":
             return any(checks)
         return all(checks)
@@ -20699,6 +20832,28 @@ class RulesEngine:
             "draw_count": 1 if "draw 1 card" in effect_text else 0,
             "add_desire_from_drop_to_hand": "desire" in effect_text and "add" in effect_text and "drop area" in effect_text,
             "recycle_drop_dragon_balls": "place all [dragon ball] cards from your drop area at the bottom of your deck" in effect_text,
+        }
+
+    @staticmethod
+    def _parse_awaken_spec(skill_text: object) -> dict[str, object] | None:
+        text = str(skill_text or "")
+        match = re.search(r"\[Awaken\]\s*([^:]+):\s*(.+)", text, re.IGNORECASE | re.DOTALL)
+        if match is None:
+            return None
+        condition_text = match.group(1).strip().lower()
+        effect_text = match.group(2).strip().lower()
+        life_match = re.search(r"life is at (\d+) or less", condition_text)
+        in_play_match = re.search(r"if you have a \{([^}]+)\} in play", condition_text, re.IGNORECASE)
+        draw_match = re.search(r"draw (\d+) card", effect_text)
+        switch_energy_match = re.search(r"switch up to (\d+) of your energy to active mode", effect_text)
+        life_target_match = re.search(r"until you have (\d+) life left", effect_text)
+        return {
+            "condition_mode": "or" if " or " in condition_text else "and",
+            "life_at_most": int(life_match.group(1)) if life_match else -1,
+            "required_owner_battle_name_in_play": in_play_match.group(1).strip().upper() if in_play_match else "",
+            "draw_count": int(draw_match.group(1)) if draw_match else 0,
+            "switch_owner_energy_active_count": int(switch_energy_match.group(1)) if switch_energy_match else 0,
+            "life_to_hand_until": int(life_target_match.group(1)) if life_target_match else 6,
         }
 
     @staticmethod

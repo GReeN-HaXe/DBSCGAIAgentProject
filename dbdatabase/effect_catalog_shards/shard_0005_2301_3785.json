@@ -1,8 +1,23 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 370,
+  "effect_rule_count": 369,
   "rules": {
+    "2301": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] switch 1 of your earthling tokens to rest mode: when this card attacks, draw 1 card, then this card gets +5000 power for the battle.",
+        "trigger": "self_attacks"
+      }
+    ],
     "2302": [
       {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
@@ -5916,35 +5931,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks a leader card, draw 1 card.",
         "trigger": "self_attacks"
-      }
-    ],
-    "3786": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 3
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[0][activate: main](red)(blue)(green)(yellow): draw 3 cards, this card gets +15000 power and [triple attack] for the turn, and your opponent can only activate [counter] skills one more time for the turn.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
-        "handler_id": "activate_gain_power_and_keyword_for_turn",
-        "handler_params": {
-          "grant_keyword": "Triple Attack",
-          "power_delta": 15000
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[0][activate: main](red)(blue)(green)(yellow): draw 3 cards, this card gets +15000 power and [triple attack] for the turn, and your opponent can only activate [counter] skills one more time for the turn.",
-        "trigger": "self_activate_main"
       }
     ]
   },

@@ -1,8 +1,8 @@
 {
   "candidates_scanned": 5766,
   "cards_with_diagnostics": 207,
-  "cards_with_rules": 2934,
-  "cards_without_rules": 2832,
+  "cards_with_rules": 2936,
+  "cards_without_rules": 2830,
   "coverage": {
     "by_handler": {
       "activate_add_up_to_n_from_owner_deck_to_hand": 35,
@@ -38,6 +38,7 @@
       "activate_switch_self_active_and_gain_power_for_turn": 2,
       "activate_switch_self_to_hidden_mode": 1,
       "activate_switch_up_to_n_owner_battle_active": 1,
+      "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed": 10,
       "auto_add_markers_and_self_power_for_turn_on_owner_combo": 1,
       "auto_add_markers_on_owner_activate_extra_from_hand": 1,
       "auto_add_n_life_to_hand_on_self_ko": 1,
@@ -150,6 +151,7 @@
       "self_hidden_battle_to_drop": 2,
       "self_in_hand_sent_to_drop_or_warp": 2,
       "self_koed": 7,
+      "self_placed_in_leader_area": 10,
       "self_placed_under_by_union": 2,
       "self_placed_under_owner_card": 7,
       "self_played": 1336,
@@ -805,7 +807,7 @@
       "missed_play_draw"
     ]
   },
-  "total_extracted_rules": 3864,
+  "total_extracted_rules": 3874,
   "unmatched_top_templates": [
     {
       "count": 6,

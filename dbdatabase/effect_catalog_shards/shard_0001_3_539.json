@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 323,
+  "effect_rule_count": 324,
   "rules": {
     "10": [
       {
@@ -1210,6 +1210,22 @@
     ],
     "182": [
       {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "KING KAI'S PLANET",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {king kai's planet} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -2214,7 +2230,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",

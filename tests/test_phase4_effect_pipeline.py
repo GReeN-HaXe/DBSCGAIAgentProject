@@ -7271,6 +7271,297 @@ def test_phase4_card_played_from_under_by_skill_can_gain_power_and_keyword() -> 
     assert any(cp.name == "effect_auto_self_gain_power_for_turn_on_play" for cp in state.checkpoints)
 
 
+def test_phase4_leader_placed_in_leader_area_can_activate_hyperbolic_time_chamber_from_deck() -> None:
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990240: SimpleNamespace(
+                    card_name="Son Gohan: Childhood",
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="Green",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="-",
+                    card_skill_unstyled=(
+                        "[Auto] When this card is placed in your Leader Area, activate up to 1 {Hyperbolic Time Chamber} from your deck."
+                    ),
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Gohan: Childhood"]',
+                ),
+                990241: SimpleNamespace(
+                    card_name="Hyperbolic Time Chamber",
+                    power_int=0,
+                    card_type="EXTRA",
+                    card_color="Green",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=0,
+                    keywords=("Field",),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="1",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json="[]",
+                    card_character_json="[]",
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990240: [
+                {
+                    "trigger": "self_placed_in_leader_area",
+                    "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "required_name_contains": "HYPERBOLIC TIME CHAMBER",
+                        "required_card_type": "EXTRA",
+                        "requires_field_keyword": True,
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=990240,
+        p1_deck_card_ids=[990241] + _deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+
+    field_extra = next(card for card in state.players[1].battle_area if card.card_id == 990241)
+    assert field_extra.card_type == "EXTRA"
+    assert "Field" in field_extra.keywords
+    assert all(card_id != 990241 for card_id in state.players[1].deck)
+    assert any(
+        event.name == "card_placed_in_leader_area"
+        and event.payload.get("source_instance_id") == state.players[1].leader_area.instance_id
+        for event in state.effect_events
+    )
+    assert any(
+        event.name == "field_extra_placed"
+        and event.payload.get("source_instance_id") == field_extra.instance_id
+        for event in state.effect_events
+    )
+    assert any(
+        cp.name == "effect_auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed"
+        for cp in state.checkpoints
+    )
+
+
+def test_phase4_awaken_can_require_named_card_in_play_and_restand_energy() -> None:
+    engine = RulesEngine()
+    engine._card_cache[(990242, "back")] = CardRuntimeData(
+        card_name="Son Gohan: Childhood, Awakened",
+        power=15000,
+        card_type="LEADER",
+        color="Green",
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=990242,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.skill_text_raw = (
+        "[Awaken] When your life is at 4 or less or if you have a {SS Son Goku, Showing the Results of Training} in play: "
+        "Draw 1 card, switch up to 1 of your energy to Active Mode, then add cards from your life to your hand until you have 6 life left."
+    )
+    state.players[1].leader_area.has_awaken = True
+    state.players[1].leader_area.awakened = False
+    state.players[1].battle_area = [
+        CardInstance(
+            instance_id=990243,
+            card_id=251278,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Green",
+            power=15000,
+        )
+    ]
+    state.players[1].battle_area[0].card_name = "SS Son Goku, Showing the Results of Training"
+    state.players[1].energy = [
+        CardInstance(instance_id=990244, card_id=990245, owner_id=1, card_type="ENERGY", color="Green", resting=True),
+        CardInstance(instance_id=990246, card_id=990247, owner_id=1, card_type="ENERGY", color="Green", resting=False),
+    ]
+    hand_before = len(state.players[1].hand)
+
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.AWAKEN)
+    state = engine.apply_action(state, action)
+
+    assert state.players[1].leader_area.awakened is True
+    assert len(state.players[1].hand) == hand_before + 3
+    assert state.players[1].energy[0].resting is False
+    assert any(cp.name == "leader_awakened" for cp in state.checkpoints)
+
+
+def test_phase4_hyperbolic_leader_attack_can_search_green_saiyan() -> None:
+    def _card_id(card):
+        return card.card_id if hasattr(card, "card_id") else int(card)
+
+    class Repo:
+        @staticmethod
+        def get_by_id(card_id: int, source_table: str = "cards"):
+            data = {
+                990248: SimpleNamespace(
+                    card_name="Son Gohan: Childhood",
+                    power_int=10000,
+                    card_type="LEADER",
+                    card_color="Green",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=True,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="-",
+                    card_skill_unstyled=(
+                        "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
+                        "add up to 1 green ≪Saiyan≫ to your hand, then shuffle your deck. "
+                        "[Awaken] When your life is at 4 or less or if you have a {SS Son Goku, Showing the Results of Training} in play: "
+                        "Draw 1 card, switch up to 1 of your energy to Active Mode, then add cards from your life to your hand until you have 6 life left."
+                    ),
+                    has_awaken=True,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Gohan: Childhood"]',
+                ),
+                990249: SimpleNamespace(
+                    card_name="Saiyan Search Target",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="3",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Saiyan"]',
+                    card_character_json='["Son Goku"]',
+                ),
+                990250: SimpleNamespace(
+                    card_name="Wrong Trait Target",
+                    power_int=15000,
+                    card_type="BATTLE",
+                    card_color="Green",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    keywords=(),
+                    has_counter=False,
+                    has_activate_main=False,
+                    has_activate_battle=False,
+                    has_auto=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    has_draw=False,
+                    max_draw_count=None,
+                    z_energy_cost=None,
+                    card_energy_cost="3",
+                    card_skill_unstyled="",
+                    has_awaken=False,
+                    card_traits_json='["Earthling"]',
+                    card_character_json='["Krillin"]',
+                ),
+            }
+            return data.get(card_id)
+
+    engine = RulesEngine(
+        card_repository=Repo(),
+        effect_rules={
+            990248: [
+                {
+                    "trigger": "owner_leader_attacks",
+                    "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+                    "handler_params": {
+                        "look_count": 5,
+                        "max_add": 1,
+                        "allowed_colors": "green",
+                        "required_traits": "Saiyan",
+                    },
+                }
+            ]
+        },
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=990248,
+        p1_deck_card_ids=[990250, 990249] + _deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state.players[1].hand = [card for card in state.players[1].hand if _card_id(card) not in {990249, 990250}]
+    state.players[1].deck = [card for card in state.players[1].deck if _card_id(card) not in {990249, 990250}]
+    state.players[1].deck = [990250, 990249] + state.players[1].deck
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    hand_before = len(state.players[1].hand)
+    deck_before = len(state.players[1].deck)
+
+    engine._emit_effect_event(
+        state,
+        name="attack_declared",
+        actor_player_id=1,
+        payload={
+            "attacker_instance_id": state.players[1].leader_area.instance_id,
+            "attacker_zone": "leader",
+            "target_player_id": 2,
+            "target_zone": "leader",
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert len(state.players[1].hand) == hand_before + 2
+    assert len(state.players[1].deck) == deck_before - 2
+    assert any(_card_id(card) == 990249 for card in state.players[1].hand)
+    assert any(cp.name == "effect_auto_look_top_add_up_to_one_to_hand_on_play" for cp in state.checkpoints)
+
+
 def test_phase4_card_played_under_named_host_can_gain_power_for_turn() -> None:
     class Repo:
         @staticmethod
@@ -16034,6 +16325,150 @@ def test_phase4_owner_combo_can_remove_markers_from_opponent_unison() -> None:
     opp_unison_after = next(c for c in state.players[2].unison_area if c.instance_id == 880273)
     assert opp_unison_after.markers == 1
     assert any(cp.name == "effect_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo" for cp in state.checkpoints)
+
+
+def test_phase4_hyperbolic_owner_combo_removes_markers_only_when_source_is_in_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990401: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "marker_amount": 2,
+                        "event_required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
+                        "requires_source_in_battle": True,
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        }
+    )
+    engine._card_cache[(990402, "front")] = CardRuntimeData(
+        card_name="SS Son Goku, Showing the Results of Training",
+        card_number="TST-990402",
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+        energy_cost=2,
+        combo_cost=0,
+        combo_power=5000,
+        traits=("Saiyan",),
+        characters=("Son Goku",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=9904011, card_id=990401, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    attacker = CardInstance(instance_id=9904012, card_id=4012, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    combo_card = CardInstance(
+        instance_id=9904013,
+        card_id=990402,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        combo_cost=0,
+        combo_power=5000,
+        power=5000,
+    )
+    opp_unison = CardInstance(instance_id=9904014, card_id=4014, owner_id=2, card_type="UNISON", color="Blue", power=15000, markers=3)
+    state.players[1].battle_area.extend([watcher, attacker])
+    state.players[1].hand = [combo_card]
+    state.players[2].unison_area = [opp_unison]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    opp_unison_after = next(c for c in state.players[2].unison_area if c.instance_id == 9904014)
+    assert opp_unison_after.markers == 1
+    assert any(cp.name == "effect_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo" for cp in state.checkpoints)
+
+
+def test_phase4_hyperbolic_owner_combo_does_not_remove_markers_when_source_is_not_in_battle() -> None:
+    engine = RulesEngine(
+        effect_rules={
+            990411: [
+                {
+                    "trigger": "owner_card_comboed",
+                    "handler_id": "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
+                    "handler_params": {
+                        "max_targets": 1,
+                        "marker_amount": 2,
+                        "event_required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
+                        "requires_source_in_battle": True,
+                    },
+                    "once_per_turn": True,
+                }
+            ]
+        }
+    )
+    engine._card_cache[(990412, "front")] = CardRuntimeData(
+        card_name="SS Son Goku, Showing the Results of Training",
+        card_number="TST-990412",
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+        energy_cost=2,
+        combo_cost=0,
+        combo_power=5000,
+        traits=("Saiyan",),
+        characters=("Son Goku",),
+    )
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    watcher = CardInstance(instance_id=9904111, card_id=990411, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    attacker = CardInstance(instance_id=9904112, card_id=4112, owner_id=1, card_type="BATTLE", color="Green", power=15000)
+    combo_card = CardInstance(
+        instance_id=9904113,
+        card_id=990412,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        combo_cost=0,
+        combo_power=5000,
+        power=5000,
+    )
+    opp_unison = CardInstance(instance_id=9904114, card_id=4114, owner_id=2, card_type="UNISON", color="Blue", power=15000, markers=3)
+    state.players[1].battle_area.extend([watcher, attacker])
+    state.players[1].hand = [combo_card]
+    state.players[2].unison_area = [opp_unison]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=watcher)
+
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 1 and a.target_zone == "leader"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    combo = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.COMBO_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, combo)
+
+    opp_unison_after = next(c for c in state.players[2].unison_area if c.instance_id == 9904114)
+    assert opp_unison_after.markers == 3
+    assert all(cp.name != "effect_auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo" for cp in state.checkpoints)
 
 
 def test_phase4_owner_combo_can_play_self_from_under_leader() -> None:

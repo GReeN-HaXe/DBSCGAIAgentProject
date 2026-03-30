@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 319,
+  "effect_rule_count": 320,
   "rules": {
     "1000": [
       {
@@ -436,6 +436,22 @@
       }
     ],
     "1027": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "MASTER ROSHI'S TRAINING",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {master roshi's training} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -1771,7 +1787,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -1785,7 +1802,8 @@
         "handler_id": "activate_gain_power_and_keyword_for_battle",
         "handler_params": {
           "grant_keyword": "Double Strike",
-          "power_delta": 15000
+          "power_delta": 15000,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -1845,7 +1863,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -3405,27 +3424,6 @@
         "trigger": "self_activate_battle"
       }
     ],
-    "1380": [
-      {
-        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "look_count": 7,
-          "max_add": 1,
-          "max_cost": 4,
-          "required_characters": "Lt Majin Buu Gt",
-          "required_leader_traits": "Blue &Lt;Majin Buu&Gt;",
-          "requires_leader": "if your leader is a blue &lt;majin buu&gt; card and you discard this card from your hand"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] if your leader is a blue &lt;majin buu&gt; card and you discard this card from your hand: look at up to 7 cards from the top of your deck, add up to 1 blue &lt;majin buu&gt; card with an energy cost of 4 or less among them to your hand, place up to 1 card among them in your drop, and shuffle your deck.",
-        "trigger": "self_activate_main"
-      }
-    ],
     "540": [
       {
         "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
@@ -4398,6 +4396,24 @@
         "provenance": "extractor",
         "source_text": "[auto] add 1 card from your life to your hand: when this card attacks, you may draw 1 card. if you don't, play up to 1 green unison card with a specified cost of 1 from your hand with a marker on it.",
         "trigger": "self_attacks"
+      }
+    ],
+    "646": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "BIG GETE STAR, NIGHTMARISH REGENERATION",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {big gete star, nightmarish regeneration} from your deck.",
+        "trigger": "self_placed_in_leader_area"
       }
     ],
     "648": [

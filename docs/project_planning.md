@@ -2328,6 +2328,49 @@ Resolved:
         - the existing placed-under deck-under family is now proven for both sibling training targets:
           - `{SS Son Goku, Showing the Results of Training}`
           - `{SS Son Gohan, Showing the Results of Training}`
+    - status: twelfth Hyperbolic follow-up slice complete
+      - added:
+        - `self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed`
+        - first reusable pregame leader-placement event:
+          - `card_placed_in_leader_area`
+      - first covered live wording family:
+        - `When this card is placed in your Leader Area, activate up to 1 {Hyperbolic Time Chamber} from your deck.`
+      - current semantics are explicit:
+        - leader-placement autos now resolve during game initialization after leader effects are registered
+        - the first activation slice is conservative:
+          - named `Field` Extra only
+          - from owner `deck`
+          - no counter window during pregame setup
+          - emits the existing `field_extra_placed` event so downstream field-extra watchers can compose on top
+    - status: thirteenth Hyperbolic follow-up slice complete
+      - widened:
+        - leader awaken parsing/runtime
+      - first covered live wording family:
+        - `[Awaken] When your life is at 4 or less or if you have a {SS Son Goku, Showing the Results of Training} in play: Draw 1 card, switch up to 1 of your energy to Active Mode, then add cards from your life to your hand until you have 6 life left.`
+      - current semantics are explicit:
+        - awaken now supports parsed printed effects for this family instead of the older generic fallback
+        - the first parsed awaken slice covers:
+          - life-threshold and named-card-in-play conditions
+          - printed draw counts
+          - switching up to `N` owner energy cards to `Active Mode`
+          - life-to-hand until a printed life total
+    - status: fourteenth Hyperbolic follow-up slice complete
+      - added:
+        - regression-backed leader-attack search coverage for:
+          - `When this card attacks, look at up to 5 cards from the top of your deck, add up to 1 green ≪Saiyan≫ to your hand, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing owner-leader-attack search family already supported this text
+        - this slice locks that behavior in next to the new Hyperbolic setup/awaken coverage so the whole leader package is regression-backed together
+    - status: fifteenth Hyperbolic follow-up slice complete
+      - added:
+        - explicit source-card battle gating for owner-combo watchers with text like:
+          - `If this card is in a battle: When you use a {SS Son Goku, Showing the Results of Training} in a combo, choose up to 1 of your opponent's Unisons and remove 2 markers from it.`
+        - paired runtime coverage proving:
+          - the watcher resolves when the source card is the battling card
+          - the watcher does not resolve when a different owner Battle Card is in the battle instead
+      - current semantics are explicit:
+        - `If this card is in a battle` is now modeled as a real source-instance requirement against the active `attack_context`
+        - this keeps the newer owner-combo family precise instead of treating the clause as generic flavor text
     - status: first union placed-under provenance slice complete
       - added:
         - `self_placed_under_by_union:auto_switch_up_to_n_opponent_board_rest`

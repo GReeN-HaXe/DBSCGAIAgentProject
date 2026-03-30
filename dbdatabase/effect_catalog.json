@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3014,
+  "card_rule_count": 3016,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 3968,
+  "effect_rule_count": 3978,
   "rules": {
     "10": [
       {
@@ -782,6 +782,22 @@
       }
     ],
     "10058": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "SERPENT ROAD",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {serpent road} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -1972,6 +1988,22 @@
       }
     ],
     "1027": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "MASTER ROSHI'S TRAINING",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {master roshi's training} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -3478,7 +3510,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3492,7 +3525,8 @@
         "handler_id": "activate_gain_power_and_keyword_for_battle",
         "handler_params": {
           "grant_keyword": "Double Strike",
-          "power_delta": 15000
+          "power_delta": 15000,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3552,7 +3586,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -8293,6 +8328,22 @@
     ],
     "1607": [
       {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "PRISON PLANET",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {prison planet} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -11145,6 +11196,22 @@
     ],
     "182": [
       {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "KING KAI'S PLANET",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {king kai's planet} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -12652,6 +12719,22 @@
     ],
     "1953": [
       {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "HYPERBOLIC TIME CHAMBER",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {hyperbolic time chamber} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
         "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_params": {
@@ -13028,7 +13111,8 @@
           "event_required_characters": "A Ss Son Goku,Showing The Results Of Training",
           "event_required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
           "marker_amount": 2,
-          "max_targets": 1
+          "max_targets": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -14744,6 +14828,22 @@
       }
     ],
     "2113": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "FORTUNETELLER BABA'S PALACE",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {fortuneteller baba's palace} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -23104,7 +23204,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -32922,7 +33023,8 @@
           "event_max_cost": -1,
           "event_required_card_type": "BATTLE",
           "event_required_traits": "A",
-          "max_targets": 1
+          "max_targets": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -39233,6 +39335,24 @@
         "trigger": "self_played"
       }
     ],
+    "646": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "BIG GETE STAR, NIGHTMARISH REGENERATION",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {big gete star, nightmarish regeneration} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      }
+    ],
     "6468": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -40601,6 +40721,24 @@
         "trigger": "self_comboed"
       }
     ],
+    "6678": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "KING COLD'S DYNASTY",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {king cold's dynasty} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      }
+    ],
     "6679": [
       {
         "family_id": "counter_attack:counter_negate_attack_play_self",
@@ -40951,6 +41089,22 @@
       }
     ],
     "6723": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "YOUNG INVADERS",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {young invaders} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -45241,6 +45395,22 @@
       }
     ],
     "7350": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "FOREBODING MUSIC BOX",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {foreboding music box} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
       {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -49809,7 +49979,8 @@
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",

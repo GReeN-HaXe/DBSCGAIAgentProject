@@ -1,8 +1,37 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 268,
+  "effect_rule_count": 269,
   "rules": {
+    "3786": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[0][activate: main](red)(blue)(green)(yellow): draw 3 cards, this card gets +15000 power and [triple attack] for the turn, and your opponent can only activate [counter] skills one more time for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Triple Attack",
+          "power_delta": 15000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[0][activate: main](red)(blue)(green)(yellow): draw 3 cards, this card gets +15000 power and [triple attack] for the turn, and your opponent can only activate [counter] skills one more time for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "3796": [
       {
         "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
@@ -4188,26 +4217,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
         "trigger": "self_comboed"
-      }
-    ],
-    "5026": [
-      {
-        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
-        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
-        "handler_params": {
-          "allowed_colors": "green",
-          "max_cost": 1,
-          "max_targets": 1,
-          "required_card_type": "BATTLE",
-          "required_traits": "Skill-Less",
-          "requires_skill_less": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[+1][activate: main] add up to 1 green skill-less battle card with an energy cost of 1 from your deck to your hand, then shuffle your deck.",
-        "trigger": "self_activate_main"
       }
     ]
   },

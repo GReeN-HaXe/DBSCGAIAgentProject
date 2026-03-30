@@ -3,6 +3,21 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 289,
   "rules": {
+    "5802": [
+      {
+        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
+        "handler_id": "auto_self_gain_power_for_turn_on_play",
+        "handler_params": {
+          "power_delta": 10000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your leader cards or green unison cards and it gets +10000 power for the turn.",
+        "trigger": "self_played"
+      }
+    ],
     "5803": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4471,19 +4486,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is used in a combo from your battle area or energy, draw 1 card.",
         "trigger": "self_comboed"
-      }
-    ],
-    "6679": [
-      {
-        "family_id": "counter_attack:counter_negate_attack_play_self",
-        "handler_id": "counter_negate_attack_play_self",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "manual_override",
-        "source_text": "",
-        "trigger": "counter_attack"
       }
     ]
   },

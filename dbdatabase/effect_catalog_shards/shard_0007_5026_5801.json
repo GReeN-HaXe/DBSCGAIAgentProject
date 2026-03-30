@@ -3,6 +3,26 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 281,
   "rules": {
+    "5026": [
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": 1,
+          "max_targets": 1,
+          "required_card_type": "BATTLE",
+          "required_traits": "Skill-Less",
+          "requires_skill_less": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] add up to 1 green skill-less battle card with an energy cost of 1 from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5027": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -2581,7 +2601,8 @@
           "event_max_cost": -1,
           "event_required_card_type": "BATTLE",
           "event_required_traits": "A",
-          "max_targets": 1
+          "max_targets": 1,
+          "requires_source_in_battle": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -4536,21 +4557,6 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "5802": [
-      {
-        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
-        "handler_id": "auto_self_gain_power_for_turn_on_play",
-        "handler_params": {
-          "power_delta": 10000
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your leader cards or green unison cards and it gets +10000 power for the turn.",
         "trigger": "self_played"
       }
     ]

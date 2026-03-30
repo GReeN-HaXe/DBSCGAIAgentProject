@@ -1,8 +1,71 @@
 {
-  "card_rule_count": 14,
+  "card_rule_count": 16,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 20,
+  "effect_rule_count": 24,
   "rules": {
+    "10172": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards for each rest mode card in your battle area, ignoring [barrier], ko it, choose all of your mono-yellow battle cards, switch them to active mode at the end of the turn, and they gain [barrier] until the end of your opponent's turn.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] {y}, if you have 3 or more energy: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10174": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] [limit 1] look at up to 5 cards from the top of your deck, place any number of mono-red extras into your drop, shuffle your deck, draw 1 card, then choose up to 1 of your red cards and it gets +10000 power for the battle.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "red",
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 10000,
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] [limit 1] look at up to 5 cards from the top of your deck, place any number of mono-red extras into your drop, shuffle your deck, draw 1 card, then choose up to 1 of your red cards and it gets +10000 power for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "10176": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
