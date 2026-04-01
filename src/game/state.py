@@ -482,6 +482,20 @@ class DelayedWarp:
 
 
 @dataclass(frozen=True)
+class DelayedBottomDeckIfInPlay:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+
+
+@dataclass(frozen=True)
+class DelayedPlaceUnderLeaderIfInPlay:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+
+
+@dataclass(frozen=True)
 class NonLeaderAttackRestTax:
     owner_player_id: int
     affected_player_id: int
@@ -523,6 +537,8 @@ class GameState:
     delayed_active_switches: list[DelayedActiveSwitch] = field(default_factory=list)
     delayed_main_phase_energy_switches: list[DelayedMainPhaseEnergySwitch] = field(default_factory=list)
     delayed_warps: list[DelayedWarp] = field(default_factory=list)
+    delayed_bottom_decks_if_in_play: list[DelayedBottomDeckIfInPlay] = field(default_factory=list)
+    delayed_place_under_leader_if_in_play: list[DelayedPlaceUnderLeaderIfInPlay] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)

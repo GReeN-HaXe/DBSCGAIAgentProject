@@ -26,6 +26,10 @@ _ACTIVATE_BATTLE_DROP_HIDDEN_MODE_RE = re.compile(
 _ACTIVATE_BATTLE_SELF_FROM_COMBO_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,220}?place this card in its owner'?s drop area from your combo area\s*:"
 )
+_ACTIVATE_BATTLE_SELF_FROM_LEADER_UNDER_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,260}?send this card from under your (?:<[^>]+>\s+)?z-leader to (?:its|their) owner'?s warp\s*:",
+    re.IGNORECASE,
+)
 _PLAIN_MARKER_ACTIVATE_RE = re.compile(
     r"\[\s*(?:unison\s+)?([+-]\d+)\s*\]\s*\[activate(?::)?\s*(main|battle|main/battle)\]"
 )
@@ -49,6 +53,10 @@ _ACTIVATE_MAIN_OTHER_BATTLE_TO_DROP_RE = re.compile(
 )
 _ACTIVATE_MAIN_HAND_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?send (\d+) card from your hand to (?:its|their) owner'?s warp\s*:"
+)
+_ACTIVATE_MAIN_HAND_TO_BOTTOM_DECK_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?place (\d+) card(?:s)? from your hand at the bottom of your deck(?: in any order)?\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_DISCARD_SELF_FROM_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?discard this card from your hand\s*:"
@@ -89,6 +97,10 @@ _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE = re.compile(
 )
 _AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE = re.compile(
     r"\[auto\]\((red|blue|green|yellow|black|white)\)(?:.{0,220}?)?:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
+_AUTO_ON_SELF_DROP_ENERGY_TO_DROP_RE = re.compile(
+    r"\[auto\]\{(\d+)\}(?:.{0,260}?)?:\s*when this card is placed into (?:its|their) owner'?s drop from your hand or from under your leader by your leader'?s skill",
     re.IGNORECASE,
 )
 _AUTO_ON_OWNER_COMBO_SPIRIT_BOOST_RE = re.compile(
@@ -404,6 +416,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             }
         ]
 
+    if _ACTIVATE_BATTLE_SELF_FROM_LEADER_UNDER_TO_WARP_RE.search(text):
+        rules["activate_battle_leader_under"] = [
+            {
+                "kind": "send_self_from_leader_under_to_warp",
+                "amount": 1,
+            }
+        ]
+
     for m_plain_marker_activate in _PLAIN_MARKER_ACTIVATE_RE.finditer(text):
         delta = int(m_plain_marker_activate.group(1))
         mode = str(m_plain_marker_activate.group(2) or "").strip().lower()
@@ -484,6 +504,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_main_hand_to_warp.group(1)),
             }
         ]
+    m_activate_main_hand_to_bottom_deck = _ACTIVATE_MAIN_HAND_TO_BOTTOM_DECK_RE.search(text)
+    if m_activate_main_hand_to_bottom_deck:
+        rules.setdefault("activate_main", []).append(
+            {
+                "kind": "send_owner_hand_to_bottom_deck",
+                "amount": int(m_activate_main_hand_to_bottom_deck.group(1)),
+            }
+        )
     m_activate_main_remove_self_in_drop_and_discard_hand = _ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE.search(text)
     m_activate_main_discard_hand = _ACTIVATE_MAIN_DISCARD_HAND_RE.search(text)
     if m_activate_main_discard_hand and m_activate_main_remove_self_in_drop_and_discard_hand is None:
@@ -571,6 +599,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "kind": "send_owner_energy_to_drop",
                 "amount": 1,
                 "allowed_colors": str(m_auto_on_combo_energy_to_drop.group(1) or "").strip().lower(),
+            }
+        ]
+    m_auto_on_self_drop_energy_to_drop = _AUTO_ON_SELF_DROP_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_self_drop_energy_to_drop:
+        rules["auto_on_self_drop"] = [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": int(m_auto_on_self_drop_energy_to_drop.group(1)),
             }
         ]
 

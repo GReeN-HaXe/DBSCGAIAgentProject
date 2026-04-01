@@ -38,6 +38,12 @@
     ]
   },
   "10045": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 2,
@@ -136,6 +142,14 @@
       {
         "amount": 1,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "1054": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -313,11 +327,27 @@
       }
     ]
   },
+  "1202": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "13": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "1324": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -334,6 +364,22 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1344": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1350": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -389,6 +435,14 @@
       }
     ]
   },
+  "1382": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "139": {
     "activate_main_unison": [
       {
@@ -407,6 +461,14 @@
         "amount": 1,
         "kind": "add_life_to_hand",
         "required_leader_traits": "lt android 13 gt"
+      }
+    ]
+  },
+  "1419": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -474,6 +536,14 @@
       }
     ]
   },
+  "1559": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "1596": {
     "activate_main_unison": [
       {
@@ -514,6 +584,14 @@
       }
     ]
   },
+  "1770": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "184": {
     "activate_main_unison": [
       {
@@ -530,6 +608,14 @@
       }
     ]
   },
+  "1856": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "186": {
     "activate_main_unison": [
       {
@@ -542,11 +628,35 @@
       }
     ]
   },
+  "1884": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "1889": {
     "activate_main_hand": [
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1891": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1939": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -558,8 +668,20 @@
       }
     ]
   },
+  "1968": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "1972": {
     "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      },
       {
         "amount": 1,
         "kind": "discard_hand"
@@ -571,6 +693,14 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "1981": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -656,6 +786,23 @@
       }
     ]
   },
+  "2203": {
+    "auto_on_combo_battle": [
+      {
+        "allowed_colors": "yellow",
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ]
+  },
+  "2224": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "2225": {
     "activate_main": [
       {
@@ -669,6 +816,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2248": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -693,6 +848,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2270": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -757,6 +920,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2462": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -893,6 +1064,22 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "2673": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "2675": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2689,6 +2876,14 @@
       }
     ]
   },
+  "700": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "7004": {
     "activate_main_unison": [
       {
@@ -2734,6 +2929,14 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "706": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -3065,6 +3268,12 @@
     ]
   },
   "7766": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 2,
@@ -3353,6 +3562,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "7967": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -3789,6 +4006,12 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ],
+    "auto_on_self_drop": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
       }
     ]
   },

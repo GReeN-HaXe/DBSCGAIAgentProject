@@ -349,6 +349,37 @@ class SkillCostDsl:
         return False
 
     @staticmethod
+    def _remove_source_from_leader_under(
+        player: PlayerState,
+        source_card: CardInstance,
+        *,
+        destination: str,
+    ) -> bool:
+        leader_under = list(player.leader_area.stacked_card_ids or ())
+        target_index = -1
+        if int(getattr(source_card, "instance_id", 0)) < 0:
+            encoded = abs(int(source_card.instance_id))
+            owner_prefix = int(getattr(source_card, "owner_id", player.player_id) or player.player_id) * 100000
+            maybe_index = encoded - owner_prefix - 1
+            if 0 <= maybe_index < len(leader_under) and int(leader_under[maybe_index]) == int(source_card.card_id):
+                target_index = maybe_index
+        if target_index < 0:
+            target_index = next((i for i, card_id in enumerate(leader_under) if int(card_id) == int(source_card.card_id)), -1)
+        if target_index < 0:
+            return False
+        leader_under.pop(target_index)
+        player.leader_area.stacked_card_ids = tuple(leader_under)
+        if destination == "drop":
+            player.drop.append(source_card)
+        elif destination == "warp":
+            player.warp.append(source_card)
+        elif destination == "removed":
+            player.removed_from_game.append(source_card)
+        else:
+            raise ValueError(f"Unknown destination: {destination}")
+        return True
+
+    @staticmethod
     def _remove_source_from_hand(
         player: PlayerState,
         source_card: CardInstance,
@@ -436,6 +467,13 @@ class SkillCostDsl:
                 if not any(card.instance_id == source_card.instance_id for card in player.combo_area):
                     return False
                 continue
+            if step.kind == "send_self_from_leader_under_to_warp":
+                if step.amount != 1:
+                    return False
+                leader_under = tuple(player.leader_area.stacked_card_ids or ())
+                if not any(int(card_id) == int(source_card.card_id) for card_id in leader_under):
+                    return False
+                continue
             if step.kind == "send_other_battle_to_warp":
                 available = [c for c in player.battle_area if c.instance_id != source_card.instance_id]
                 if len(available) < step.amount:
@@ -456,6 +494,10 @@ class SkillCostDsl:
                     return False
                 continue
             if step.kind == "send_owner_hand_to_warp":
+                if len(player.hand) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_owner_hand_to_bottom_deck":
                 if len(player.hand) < step.amount:
                     return False
                 continue
@@ -632,6 +674,13 @@ class SkillCostDsl:
                 metadata["cost_target_card_id"] = source_card.card_id
                 metadata["cost_target_zone"] = "combo"
                 continue
+            if step.kind == "send_self_from_leader_under_to_warp":
+                if not SkillCostDsl._remove_source_from_leader_under(player, source_card, destination="warp"):
+                    raise ValueError("Source card not found under leader for send_self_from_leader_under_to_warp.")
+                metadata["cost_target_instance_id"] = source_card.instance_id
+                metadata["cost_target_card_id"] = source_card.card_id
+                metadata["cost_target_zone"] = "leader_under"
+                continue
             if step.kind == "send_other_battle_to_warp":
                 moved = 0
                 i = 0
@@ -679,6 +728,11 @@ class SkillCostDsl:
             if step.kind == "send_owner_hand_to_warp":
                 for _ in range(min(step.amount, len(player.hand))):
                     player.warp.append(player.hand.pop(0))
+                continue
+            if step.kind == "send_owner_hand_to_bottom_deck":
+                for _ in range(min(step.amount, len(player.hand))):
+                    moved = player.hand.pop(0)
+                    player.deck.append(int(moved.card_id))
                 continue
             if step.kind == "send_owner_z_energy_to_drop":
                 for _ in range(min(step.amount, len(player.z_energy))):

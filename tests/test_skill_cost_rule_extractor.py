@@ -131,6 +131,24 @@ def test_extract_activate_battle_send_self_from_combo_to_drop_cost_rule() -> Non
     }
 
 
+def test_extract_activate_battle_send_self_from_leader_under_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Limit 1] Send this card from under your <Super 17> Z-Leader to its owner's Warp: "
+            "Up to 1 of your Leaders gets +5000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle_leader_under": [
+            {
+                "kind": "send_self_from_leader_under_to_warp",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_energy_to_drop_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -364,6 +382,24 @@ def test_extract_activate_battle_remove_self_to_removed_cost_rule() -> None:
         "activate_battle": [
             {
                 "kind": "send_self_to_removed",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_hand_to_bottom_deck_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1](Green), place 1 card from your hand at the bottom of your deck: "
+            "Play this card from under {Cell, Return of the Ultimate Lifeform}."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_hand_to_bottom_deck",
                 "amount": 1,
             }
         ]
@@ -940,6 +976,25 @@ def test_extract_auto_on_opponent_combo_z_energy_cost_rule() -> None:
             {
                 "kind": "send_owner_z_energy_to_drop",
                 "amount": 2,
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_self_drop_energy_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto]{1}, if your Leader's back side is {SSG Son Goku, Surge of Divinity}: "
+            "When this card is placed into its owner's Drop from your hand or from under your Leader by your Leader's skill, "
+            "draw 1 card and play this card from your Drop with 1 marker on it."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_self_drop": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
             }
         ]
     }
