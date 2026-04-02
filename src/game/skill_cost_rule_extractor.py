@@ -42,6 +42,14 @@ _ACTIVATE_MAIN_ENERGY_TO_DROP_RE = re.compile(
 _ACTIVATE_BATTLE_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,220}?place (\d+) of your energy into (?:its|their) owner'?s drop\s*:"
 )
+_ACTIVATE_BATTLE_DISCARD_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,220}?discard (\d+) card(?:s)? from your hand\s*:",
+    re.IGNORECASE,
+)
+_ACTIVATE_BATTLE_Z_ENERGY_UNDER_SELF_RE = re.compile(
+    r"\[activate(?::)?\s*battle\].{0,280}?place (\d+) (.+?) card from your z-energy under this card\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_BATTLE_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main/battle\].{0,220}?place (\d+) of your energy into (?:its|their) owner'?s drop\s*:"
 )
@@ -65,7 +73,7 @@ _ACTIVATE_MAIN_DISCARD_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?discard (\d+) card(?:s)? from your hand\s*:"
 )
 _ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,260}?place this card in your drop\s*:",
+    r"\[activate(?::)?\s*main\].{0,260}?place this card in (?:your drop|its owner'?s drop area)\s*:",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
@@ -99,6 +107,10 @@ _AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE = re.compile(
     r"\[auto\]\((red|blue|green|yellow|black|white)\)(?:.{0,220}?)?:\s*when (?:this card is used in a combo|you combo with this card)",
     re.IGNORECASE,
 )
+_AUTO_ON_COMBO_LEADER_UNDER_TO_DROP_RE = re.compile(
+    r"place (\d+) (.+?) from under your leader in (?:its|their) owner'?s drop\s*:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
 _AUTO_ON_SELF_DROP_ENERGY_TO_DROP_RE = re.compile(
     r"\[auto\]\{(\d+)\}(?:.{0,260}?)?:\s*when this card is placed into (?:its|their) owner'?s drop from your hand or from under your leader by your leader'?s skill",
     re.IGNORECASE,
@@ -115,6 +127,13 @@ _COUNTER_ALT_LIFE_TO_HAND_RE = re.compile(
 )
 _COUNTER_ALT_DROP_TO_WARP_ONLY_RE = re.compile(
     r"\[(?:permanent|permament)\].{0,220}?activate this card's \[counter\] skill from your hand by sending (\d+) (.+?) cards? from your drop to (?:its|their) owner'?s warp instead of paying its energy cost"
+)
+_COUNTER_ALT_LEADER_UNDER_TO_DROP_RE = re.compile(
+    r"\[(?:permanent|permament)\].{0,260}?activate this card's \[counter\] skill from your hand (?:(?:without paying (?:its|this card'?s) energy cost by placing (\d+) (.+?) from under your leader in (?:its owner'?s|their owners?') drops?)|(?:by placing (\d+) (.+?) from under your leader in (?:its owner'?s|their owners?') drops? instead of paying (?:its|this card'?s) energy cost))"
+)
+_COUNTER_ALT_OWNER_BATTLE_UNDER_TO_DROP_RE = re.compile(
+    r"\[(?:permanent|permament)\].{0,320}?activate this card's \[counter\] skill from your hand (?:(?:without paying (?:its|this card'?s) energy cost by placing (\d+) cards? from under (.+?) in your battle area in (?:its owner'?s|their owners?') drop area)|(?:by placing (\d+) cards? from under (.+?) in your battle area in (?:its owner'?s|their owners?') drop area instead of paying (?:its|this card'?s) energy cost))",
+    re.IGNORECASE,
 )
 _COUNTER_ALT_ALL_DROP_TO_WARP_RE = re.compile(
     r"\[(?:permanent|permament)\].{0,220}?activate this card's \[counter\] skill from your hand by sending all the cards in your drop to (?:its|their) owner'?s warp instead of paying its energy cost"
@@ -276,6 +295,72 @@ def _extract_owner_drop_to_warp_cost(text: str) -> dict[str, int | str | bool]:
         params["required_card_types"] = "EXTRA"
     elif "unison" in descriptor:
         params["required_card_types"] = "UNISON"
+    return params
+
+
+def _extract_leader_under_to_drop_cost(descriptor: str, amount: int) -> dict[str, int | str | bool]:
+    params: dict[str, int | str | bool] = {
+        "kind": "send_owner_leader_under_to_drop",
+        "amount": amount,
+    }
+    descriptor_lc = descriptor.lower()
+    allowed_colors = _extract_allowed_colors(descriptor_lc)
+    if allowed_colors:
+        params["allowed_colors"] = allowed_colors
+    required_traits = _extract_wrapper_values(descriptor, open_char="â‰ª", close_char="â‰«")
+    if required_traits:
+        params["required_traits"] = required_traits
+    required_characters = _extract_wrapper_values(descriptor, open_char="<", close_char=">")
+    if required_characters:
+        params["required_characters"] = required_characters
+    if "z-leader" in descriptor_lc or "z leader" in descriptor_lc:
+        params["required_card_types"] = "Z-LEADER"
+    elif "leader" in descriptor_lc and "non-leader" not in descriptor_lc and "non-leaders" not in descriptor_lc:
+        params["required_card_types"] = "LEADER"
+    elif "z-battle" in descriptor_lc or "z battle" in descriptor_lc:
+        params["required_card_types"] = "Z-BATTLE"
+    elif "battle" in descriptor_lc:
+        params["required_card_types"] = "BATTLE"
+    elif "extra" in descriptor_lc:
+        params["required_card_types"] = "EXTRA"
+    elif "unison" in descriptor_lc:
+        params["required_card_types"] = "UNISON"
+    if "non-leader" in descriptor_lc or "non-leaders" in descriptor_lc:
+        params["forbidden_card_types"] = "LEADER,Z-LEADER"
+    return params
+
+
+def _extract_owner_battle_under_to_drop_cost(descriptor: str, amount: int) -> dict[str, int | str | bool]:
+    params: dict[str, int | str | bool] = {
+        "kind": "send_owner_battle_under_to_drop",
+        "amount": amount,
+    }
+    descriptor_lc = descriptor.lower()
+    allowed_colors = _extract_allowed_colors(descriptor_lc)
+    if allowed_colors:
+        params["required_host_allowed_colors"] = allowed_colors
+    required_traits = _extract_wrapper_values(descriptor, open_char="≪", close_char="≫")
+    if required_traits:
+        params["required_host_required_traits"] = required_traits
+    required_characters = _extract_wrapper_values(descriptor, open_char="<", close_char=">")
+    if required_characters:
+        params["required_host_required_characters"] = required_characters
+    required_name_contains = _extract_required_name_tokens(descriptor)
+    if required_name_contains:
+        params["required_host_name_contains"] = required_name_contains.upper()
+    if "z-battle" in descriptor_lc or "z battle" in descriptor_lc:
+        params["required_host_card_types"] = "Z-BATTLE"
+    elif "battle" in descriptor_lc:
+        params["required_host_card_types"] = "BATTLE"
+    elif "extra" in descriptor_lc:
+        params["required_host_card_types"] = "EXTRA"
+    elif "unison" in descriptor_lc:
+        params["required_host_card_types"] = "UNISON"
+    return params
+
+
+def _extract_z_energy_under_self_cost(descriptor: str, amount: int) -> dict[str, int | str | bool]:
+    params = _extract_filtered_cost_step("send_owner_z_energy_under_self", descriptor, amount)
     return params
 
 
@@ -473,6 +558,22 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_battle_energy_to_drop.group(1)),
             }
         ]
+    m_activate_battle_discard_hand = _ACTIVATE_BATTLE_DISCARD_HAND_RE.search(text)
+    if m_activate_battle_discard_hand:
+        rules.setdefault("activate_battle", []).append(
+            {
+                "kind": "send_owner_hand_to_drop",
+                "amount": int(m_activate_battle_discard_hand.group(1)),
+            }
+        )
+    m_activate_battle_z_energy_under_self = _ACTIVATE_BATTLE_Z_ENERGY_UNDER_SELF_RE.search(text)
+    if m_activate_battle_z_energy_under_self:
+        rules.setdefault("activate_battle", []).append(
+            _extract_z_energy_under_self_cost(
+                str(m_activate_battle_z_energy_under_self.group(2) or "").strip(),
+                int(m_activate_battle_z_energy_under_self.group(1)),
+            )
+        )
 
     m_activate_main_battle_energy_to_drop = _ACTIVATE_MAIN_BATTLE_ENERGY_TO_DROP_RE.search(text)
     if m_activate_main_battle_energy_to_drop:
@@ -601,6 +702,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "allowed_colors": str(m_auto_on_combo_energy_to_drop.group(1) or "").strip().lower(),
             }
         ]
+    m_auto_on_combo_leader_under_to_drop = _AUTO_ON_COMBO_LEADER_UNDER_TO_DROP_RE.search(text)
+    if m_auto_on_combo_leader_under_to_drop:
+        rules["auto_on_combo_battle"] = [
+            _extract_leader_under_to_drop_cost(
+                str(m_auto_on_combo_leader_under_to_drop.group(2) or "").strip(),
+                int(m_auto_on_combo_leader_under_to_drop.group(1)),
+            )
+        ]
     m_auto_on_self_drop_energy_to_drop = _AUTO_ON_SELF_DROP_ENERGY_TO_DROP_RE.search(text)
     if m_auto_on_self_drop_energy_to_drop:
         rules["auto_on_self_drop"] = [
@@ -673,6 +782,43 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         requires_z_energy_at_least = _extract_requires_z_energy_at_least(text)
         if requires_z_energy_at_least is not None:
             params["requires_z_energy_at_least"] = requires_z_energy_at_least
+        rules["counter_alternate_from_hand"] = [params]
+
+    m_counter_alt_leader_under_to_drop = _COUNTER_ALT_LEADER_UNDER_TO_DROP_RE.search(text)
+    if m_counter_alt_leader_under_to_drop and "counter_alternate_from_hand" not in rules:
+        amount = int(
+            (m_counter_alt_leader_under_to_drop.group(1) or m_counter_alt_leader_under_to_drop.group(3) or "0")
+        )
+        descriptor = str(
+            m_counter_alt_leader_under_to_drop.group(2) or m_counter_alt_leader_under_to_drop.group(4) or ""
+        ).strip()
+        params = _extract_leader_under_to_drop_cost(
+            descriptor,
+            amount,
+        )
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
+        rules["counter_alternate_from_hand"] = [params]
+
+    m_counter_alt_owner_battle_under_to_drop = _COUNTER_ALT_OWNER_BATTLE_UNDER_TO_DROP_RE.search(text)
+    if m_counter_alt_owner_battle_under_to_drop and "counter_alternate_from_hand" not in rules:
+        amount = int(
+            (m_counter_alt_owner_battle_under_to_drop.group(1) or m_counter_alt_owner_battle_under_to_drop.group(3) or "0")
+        )
+        descriptor = str(
+            m_counter_alt_owner_battle_under_to_drop.group(2) or m_counter_alt_owner_battle_under_to_drop.group(4) or ""
+        ).strip()
+        params = _extract_owner_battle_under_to_drop_cost(descriptor, amount)
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
         rules["counter_alternate_from_hand"] = [params]
 
     if _COUNTER_ALT_ALL_DROP_TO_WARP_RE.search(text):

@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3048,
+  "card_rule_count": 3080,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 4036,
+  "effect_rule_count": 4126,
   "rules": {
     "10": [
       {
@@ -270,6 +270,21 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[+1][activate: main] draw 1 card, then place 1 card from your hand at the bottom of your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "ignores_barrier": true,
+          "marker_delta": -4,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-4][activate: main] choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then choose up to 1 of your opponent's battle cards with an energy cost of 3 or less, ignoring [barrier], and place it at the bottom of its owner's deck.",
         "trigger": "self_activate_main"
       }
     ],
@@ -860,6 +875,22 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main](blue)(blue), place 1 &lt;frieza&gt; card and 1 &lt;cell&gt; card from your energy in their owners' drops: play this card from your hand, then place up to 2 cards from the top of your deck in your energy in rest mode.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "required_leader_traits": "Paikuhan",
+          "requires_leader": "if your leader is a blue <paikuhan> card and you return this card to its owner's hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](blue), if your leader is a blue <paikuhan> card and you return this card to its owner's hand: play up to 1 blue &lt;paikuhan&gt; card with an energy cost of 8 from your hand. if you played a card, choose up to 1 of your opponent's battle cards, ignoring [barrier], and place it at the bottom of its owner's deck.",
         "trigger": "self_activate_main"
       }
     ],
@@ -1777,6 +1808,21 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 black \u226auniverse 7\u226b card to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_combo_self_from_owner_drop",
+        "handler_id": "activate_combo_self_from_owner_drop",
+        "handler_params": {
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "required_source_zone": "drop",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you discard 1 card from your hand: use this card from your drop in a combo"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] [limit 1] if your leader is a black \u226auniverse 7\u226b card and you discard 1 card from your hand: use this card from your drop in a combo.",
+        "trigger": "self_activate_battle"
       }
     ],
     "10195": [
@@ -1792,6 +1838,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_combo_self_from_owner_drop",
+        "handler_id": "activate_combo_self_from_owner_drop",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] [limit 1] if yourleader is a black \u226auniverse 7\u226b card and you discard 1 card from your hand: use this card from your drop in a combo.",
+        "trigger": "self_activate_battle"
       }
     ],
     "10196": [
@@ -2090,7 +2149,8 @@
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
-          "max_cost": -1
+          "max_cost": -1,
+          "min_source_markers": 5
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -3528,6 +3588,22 @@
     ],
     "1134": [
       {
+        "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
+        "handler_id": "auto_play_up_to_n_from_owner_deck_on_play",
+        "handler_params": {
+          "markers": 1,
+          "max_targets": 1,
+          "required_name_contains": "SSB VEGETA, COMMITTED TO VICTORY",
+          "requires_no_owner_unison": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] if you don't have a unison in play: when this card is played, play up to 1 {ssb vegeta, committed to victory} from your deck with a marker on it, then shuffle your deck.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_battle:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -4289,6 +4365,20 @@
       }
     ],
     "1199": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, your opponent discards 1 card from their hand.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -5545,6 +5635,20 @@
         "trigger": "self_played"
       },
       {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card, then choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -6618,6 +6722,24 @@
         "provenance": "extractor",
         "source_text": "[auto][once per turn] when you use a card in a combo, draw 1 card, and choose up to 1 of your opponent's battle cards and switch it to rest mode.",
         "trigger": "owner_card_comboed"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "grant_keyword": "Double Strike",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Lt Piccolo Sh Gt",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn](1), send 2 \u226amaster's teachings\u226b cards from your drop to your warp: choose up to 1 of your &lt;piccolo: sh&gt; cards and it gains [double strike] for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "1447": [
@@ -7100,7 +7222,8 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "min_source_markers": 3
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -7151,6 +7274,22 @@
         "provenance": "extractor",
         "source_text": "[+2][activate: main] draw 1 card, place 1 card from your hand at the bottom of your deck, and choose up to 1 of your cards with &lt;trunks&gt; in its character name and it gets +5000 power for the turn.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "1488": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "149": [
@@ -7256,6 +7395,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "1496": [
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "min_opponent_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn](blue)(blue), if your opponent has 3 or more energy: switch this card to active mode, choose up to 1 of your opponent's battle cards, ignoring [barrier], and place it at the bottom of its owner's deck, and this card gains [dual attack] for the turn.",
+        "trigger": "self_activate_main"
       }
     ],
     "1497": [
@@ -7579,6 +7735,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played from your deck, draw 1 card, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your deck, draw 1 card, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "1521": [
@@ -7768,6 +7937,22 @@
         "trigger": "self_played"
       }
     ],
+    "1532": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 2,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played,  choose up to 1 of your opponent's battle cards with an energy cost of 2 or less and place it at the bottom of its owner's deck",
+        "trigger": "self_played"
+      }
+    ],
     "1533": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -7910,6 +8095,19 @@
       }
     ],
     "1540": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -8161,6 +8359,19 @@
       }
     ],
     "156": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
         "handler_id": "activate_gain_power_and_keyword_for_turn",
@@ -9251,6 +9462,29 @@
     ],
     "1662": [
       {
+        "family_id": "self_activate_main:activate_draw_n_discard_n_and_place_up_to_n_from_owner_drop_under_owner_leader_then_switch_self_active_on_turn_end",
+        "handler_id": "activate_draw_n_discard_n_and_place_up_to_n_from_owner_drop_under_owner_leader_then_switch_self_active_on_turn_end",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "amount": 1,
+          "bonus_leader_allowed_colors": "blue",
+          "bonus_leader_required_characters": "Lt Krillin Gt,Lt Android 18 Gt",
+          "bonus_leader_requires_mono": true,
+          "discard_count": 1,
+          "marker_delta": 2,
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Lt Krillin Gt,- Both",
+          "required_traits": "Android"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+2][activate: main] draw 1 card and discard 1 card from your hand. additionally, if your leader is a &lt;krillin&gt; or &lt;android 18&gt; card - both mono-blue - place up to 1 &lt;krillin&gt; or \u226aandroid\u226b card - both blue - from your drop under your leader, and at the end of the turn, switch this card to active mode.",
+        "trigger": "self_activate_main"
+      },
+      {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -9264,9 +9498,38 @@
         "provenance": "extractor",
         "source_text": "[+2][activate: main] draw 1 card and discard 1 card from your hand. additionally, if your leader is a &lt;krillin&gt; or &lt;android 18&gt; card - both mono-blue - place up to 1 &lt;krillin&gt; or \u226aandroid\u226b card - both blue - from your drop under your leader, and at the end of the turn, switch this card to active mode.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "ignores_barrier": true,
+          "marker_delta": -4,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-4][activate: main] choose up to 1 of your opponent's battle cards, ignoring [barrier], and place it at the bottom of its owner's deck.",
+        "trigger": "self_activate_main"
       }
     ],
     "1663": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -9284,10 +9547,29 @@
     ],
     "1664": [
       {
+        "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
+        "handler_id": "auto_play_up_to_n_from_owner_deck_on_play",
+        "handler_params": {
+          "markers": 1,
+          "max_targets": 1,
+          "required_name_contains": "ANDROID 18, KRILLIN, AND MARRON, FAMILY UNITED",
+          "requires_no_owner_unison": true,
+          "rest_mode": true,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you don't have a unison in play: when this card is played, play up to 1 {android 18, krillin, and marron, family united} from your deck with a marker on it in rest mode, and shuffle your deck.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "required_leader_traits": "Blue &Lt;Android 18&Gt;",
+          "required_owner_leader_under_count_at_least": 2,
           "requires_leader": "if your leader is a blue &lt;android 18&gt; card and there are 2 or more cards under it"
         },
         "limit_per_turn": 1,
@@ -9426,6 +9708,26 @@
     ],
     "1669": [
       {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play",
+        "handler_params": {
+          "energy_allowed_colors": "blue",
+          "energy_requires_mono": true,
+          "grant_keyword": "Barrier",
+          "max_targets": 1,
+          "required_leader_traits": "Blue &Lt;Android 18&Gt;",
+          "requires_leader": "if your leader is a blue &lt;android 18&gt; card",
+          "switch_energy_max_targets": 1,
+          "switch_leader_max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a blue &lt;android 18&gt; card: when this card is played, choose up to 1 of your opponent's battle cards, place it at the bottom of its owner's deck, switch up to 1 of your leaders to active mode, switch up to 1 of your mono-blue energy to active mode, and this card gains [barrier] until the end of your opponent's next turn.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "turn_end:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end",
         "handler_id": "auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end",
         "handler_params": {
@@ -9520,6 +9822,24 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_comboed:auto_buff_up_to_n_owner_battles_for_battle_on_combo",
+        "handler_id": "auto_buff_up_to_n_owner_battles_for_battle_on_combo",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 1000,
+          "required_characters": "Lt Krillin Gt,Lt Android 18 Gt",
+          "required_leader_traits": "Blue &Lt;Android 18&Gt;",
+          "requires_leader": "if your leader is a blue &lt;android 18&gt; card and you place 1 non-leaders from under your leader in its owner's drop"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a blue &lt;android 18&gt; card and you place 1 non-leaders from under your leader in its owner's drop: when this card is used in a combo, choose up to 1 of your &lt;krillin&gt; or &lt;android 18&gt; cards and it gets +1000 power for the battle.",
+        "trigger": "self_comboed"
       }
     ],
     "1685": [
@@ -11304,6 +11624,21 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "1802": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "1804": [
@@ -14546,6 +14881,21 @@
         "trigger": "self_played"
       }
     ],
+    "2046": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, your opponent discards 1 card from their hand.",
+        "trigger": "self_played"
+      }
+    ],
     "2049": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -14742,6 +15092,24 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played from your hand, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "207": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "&Lt;Vegeta&Gt;,&Lt;Nappa&Gt;",
+          "requires_leader": "if your leader card is a &lt;vegeta&gt; or &lt;nappa&gt; card",
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a &lt;vegeta&gt; or &lt;nappa&gt; card: when this card is played from your hand, your opponent chooses 1 card in their hand and discards it.",
         "trigger": "self_played"
       }
     ],
@@ -15887,6 +16255,22 @@
         "trigger": "self_attacks"
       }
     ],
+    "2169": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 3,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 3 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
     "217": [
       {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
@@ -15995,6 +16379,22 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "2179": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if it's your turn: when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
     "2184": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -16044,6 +16444,21 @@
       }
     ],
     "2187": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and switch it to rest mode, then choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -16122,6 +16537,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](red), if your leader is a red &lt;cell max: sh&gt; card and you have 2 or more energy: play this card from your hand, add up to 1 card from your life to your hand, then choose up to 1 of your opponent's battle cards and it gets -10000 power for the turn.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "2196": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](blue), when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "2197": [
@@ -16594,6 +17025,20 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -17441,6 +17886,20 @@
     ],
     "2275": [
       {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then choose up to 1 of your opponent's battle cards with an energy cost of 4 or less, ignoring [barrier], and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -18045,6 +18504,21 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "2319": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
     "2320": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -18277,6 +18751,21 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](blue), if your leader's back side is {son goku & piccolo, rag-tag alliance} and you have a {piercing special beam cannon} in your battle area: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "2339": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then this card gets +10000 power and [double strike] for the turn.",
+        "trigger": "self_played"
       }
     ],
     "2340": [
@@ -18606,6 +19095,20 @@
       }
     ],
     "2357": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -19049,6 +19552,52 @@
         "trigger": "self_activate_main"
       }
     ],
+    "2392": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "red",
+          "grant_keyword": "Double Strike",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Lt Son Gohan Future Gt,Lt Trunks Future Gt",
+          "required_leader_traits": "Red &Lt;Son Gohan: Future&Gt;,&Lt;Gohanks: Xeno&Gt;",
+          "requires_leader": "if your leader is a red &lt;son gohan: future&gt; or &lt;gohanks: xeno&gt; card and this card is in a combo area",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](1), if your leader is a red &lt;son gohan: future&gt; or &lt;gohanks: xeno&gt; card and this card is in a combo area: choose up to 1 of your red &lt;son gohan: future&gt; or &lt;trunks: future&gt; cards and it gains [double strike] for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "2393": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "red",
+          "grant_keyword": "Critical",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Lt Son Gohan Future Gt,Lt Trunks Future Gt",
+          "required_leader_traits": "Red &Lt;Son Gohan: Future&Gt;,&Lt;Gohanks: Xeno&Gt;",
+          "requires_leader": "if your leader is a red &lt;son gohan: future&gt; or &lt;gohanks: xeno&gt; card and this card is in a combo area",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](1), if your leader is a red &lt;son gohan: future&gt; or &lt;gohanks: xeno&gt; card and this card is in a combo area: choose up to 1 of your red &lt;son gohan: future&gt; or &lt;trunks: future&gt; cards and it gains [critical] for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "2396": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -19179,7 +19728,8 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "min_source_markers": 4
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -22018,6 +22568,20 @@
     ],
     "2564": [
       {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_params": {
@@ -22206,6 +22770,20 @@
       }
     ],
     "2576": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -22513,6 +23091,7 @@
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
           "max_cost": -1,
+          "min_source_markers": 4,
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -23044,6 +23623,20 @@
       }
     ],
     "2644": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -23733,6 +24326,19 @@
         "trigger": "self_activate_main"
       },
       {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-x][activate: main] for every 2 markers you remove using this skill, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck in any order. additionally, if you removed 4 or more markers using this skill, this card gets +10000 power and [double strike] for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
         "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
         "handler_id": "activate_gain_power_and_keyword_for_turn",
         "handler_params": {
@@ -24128,13 +24734,28 @@
     ],
     "328": [
       {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "min_source_markers": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if this card has 3 or more markers: when this card is played, your opponent chooses 1 card in their hand and discards it.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_activate_up_to_n_named_field_extra_from_owner_deck",
         "handler_id": "activate_activate_up_to_n_named_field_extra_from_owner_deck",
         "handler_params": {
           "max_targets": 1,
           "required_card_type": "EXTRA",
           "required_name_contains": "THE NAMELESS PLANET",
-          "requires_field_keyword": true
+          "requires_field_keyword": true,
+          "requires_no_owner_field_extra": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -24149,7 +24770,8 @@
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
-          "max_cost": -1
+          "max_cost": -1,
+          "min_source_markers": 3
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -24165,7 +24787,8 @@
           "max_targets": 1,
           "required_card_type": "EXTRA",
           "required_name_contains": "THE NAMELESS PLANET",
-          "requires_field_keyword": true
+          "requires_field_keyword": true,
+          "requires_no_owner_field_extra": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -24422,6 +25045,24 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card and you place this card in its owner's drop area:  activate up to 1 {the nameless planet} from your deck, then shuffle your deck",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_opponent_hand_to_opponent_battle",
+        "handler_id": "activate_play_up_to_n_from_opponent_hand_to_opponent_battle",
+        "handler_params": {
+          "max_cost": 3,
+          "max_targets": 1,
+          "required_card_type": "BATTLE",
+          "required_leader_traits": "Green &Lt;Beerus&Gt;,Green &Lt;Champa&Gt;",
+          "requires_leader": "if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card and you place this card in its owner's drop area:  if your opponent has no battle cards in play",
+          "requires_no_opponent_battle": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card and you place this card in its owner's drop area:  if your opponent has no battle cards in play, your opponent reveals their hand, and you choose up to 1 battle card with an energy cost of 3 or less from it and play it in your opponent's battle area",
+        "trigger": "self_activate_main"
       }
     ],
     "347": [
@@ -24438,6 +25079,53 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main] if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card: draw 1 card, and if your opponent has more cards in their hand than you, they choose 1 card in their hand and discard it.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "348": [
+      {
+        "family_id": "owner_battle_ko_opponent_battle_battle_end:auto_place_battle_koed_by_owner_attacker_under_self_on_battle_end",
+        "handler_id": "auto_place_battle_koed_by_owner_attacker_under_self_on_battle_end",
+        "handler_params": {
+          "attacker_allowed_colors": "green",
+          "required_leader_traits": "Green &Lt;Beerus&Gt;,Green &Lt;Champa&Gt;",
+          "requires_leader": "if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card: at the end of a battle where one of your green battle cards attacks and kos an opponent's battle card, place that card under this card from your opponent's drop area.",
+        "trigger": "owner_battle_ko_opponent_battle_battle_end"
+      },
+      {
+        "family_id": "owner_opponent_battle_attacks:auto_rest_self_redirect_attack_to_matching_owner_battle_on_opponent_attack",
+        "handler_id": "auto_rest_self_redirect_attack_to_matching_owner_battle_on_opponent_attack",
+        "handler_params": {
+          "required_leader_traits": "Green &Lt;Beerus&Gt;,Green &Lt;Champa&Gt;",
+          "requires_leader": "if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card and you switch this card to rest mode",
+          "rest_mode_only": true,
+          "target_allowed_colors": "green",
+          "target_requires_shared_leader_traits": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a green &lt;beerus&gt; or green &lt;champa&gt; card and you switch this card to rest mode: when your opponent attacks, choose 1 of your green battle cards in rest mode with the same \u226auniverse\u226b special trait as your leader card and switch the target of attack to that card.",
+        "trigger": "owner_opponent_battle_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_win_game_if_opponent_owned_cards_under_self_at_least_n",
+        "handler_id": "activate_win_game_if_opponent_owned_cards_under_self_at_least_n",
+        "handler_params": {
+          "required_source_stacked_opponent_owned_at_least": 5
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if there are 5 cards owned by your opponent under this card: you win the game.",
         "trigger": "self_activate_main"
       }
     ],
@@ -26582,6 +27270,21 @@
         "trigger": "self_activate_main"
       }
     ],
+    "395": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, your opponent chooses 1 card in their hand and discards it.",
+        "trigger": "self_played"
+      }
+    ],
     "3951": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -26690,6 +27393,22 @@
         "provenance": "extractor",
         "source_text": "[+1][activate: main] you may choose 1 card in your hand and discard it. if you do, draw 1 card, then shuffle up to 4 battle cards with 10000 power and no keyword skills from your drop area into your deck.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "397": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "3980": [
@@ -27492,6 +28211,7 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "min_source_markers": 4,
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -27506,6 +28226,7 @@
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
           "max_cost": -1,
+          "min_source_markers": 4,
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -29643,6 +30364,38 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[0][activate: main] draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "466": [
+      {
+        "family_id": "self_activate_main:activate_place_up_to_n_from_under_named_owner_battle_into_drop_then_opponent_discards_same_count",
+        "handler_id": "activate_place_up_to_n_from_under_named_owner_battle_into_drop_then_opponent_discards_same_count",
+        "handler_params": {
+          "max_targets": 3,
+          "required_host_name_contains": "THE NAMELESS PLANET"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](g)(g)(g):  place up to 3 cards from under a {the nameless planet} in your battle area in their owners' drop areas; your opponent discards cards equal to the number of cards you placed in drop areas this way",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_opponent_hand_to_opponent_battle",
+        "handler_id": "activate_play_up_to_n_from_opponent_hand_to_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "BATTLE",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](g)(g)(g):  look at your opponent's hand and play up to 1 battle card from it in your opponent's battle area in rest mode",
         "trigger": "self_activate_main"
       }
     ],
@@ -32596,6 +33349,20 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is mono-green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is mono-green: when this card is played, your opponent chooses 1 card in their hand and discards it.",
+        "trigger": "self_played"
       }
     ],
     "5349": [
@@ -32815,7 +33582,8 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "min_source_markers": 4
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -35533,7 +36301,8 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "min_source_markers": 3
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -37627,6 +38396,7 @@
         "handler_params": {
           "ignores_barrier": true,
           "max_cost": -1,
+          "min_source_markers": 4,
           "rest_mode_only": true
         },
         "limit_per_turn": null,
@@ -37712,6 +38482,7 @@
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
           "max_cost": 4,
+          "min_source_markers": 3,
           "rest_mode_only": true
         },
         "limit_per_turn": 1,
@@ -37725,6 +38496,7 @@
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
         "handler_id": "auto_self_gain_power_for_turn_on_play",
         "handler_params": {
+          "min_source_markers": 3,
           "power_delta": 5000,
           "rest_mode_only": true
         },
@@ -38504,6 +39276,21 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main](blue), if you have 4 or more energy and you choose 2 non-&lt;great priest&gt; \u226agod\u226b cards in your battle area and return them to their owners' hands: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "6159": [
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 1 card in your hand and place it in your drop area: your opponent reveals the top card of their deck; if it's a battle card, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
         "trigger": "self_activate_main"
       }
     ],
@@ -40116,6 +40903,22 @@
         "trigger": "self_played"
       }
     ],
+    "647": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "min_source_markers": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if this card has 3 or more markers on it: when this card is played, your opponent discards 1 card from their hand.",
+        "trigger": "self_played"
+      }
+    ],
     "6479": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -40396,7 +41199,8 @@
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
-          "max_cost": -1
+          "max_cost": -1,
+          "min_source_markers": 4
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -41107,6 +41911,21 @@
         "trigger": "self_played"
       }
     ],
+    "6605": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
     "6613": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -41362,6 +42181,20 @@
       }
     ],
     "6666": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 7,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 7 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -43209,6 +44042,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "6931": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "required_leader_traits": "Blue &Lt;Baby&Gt;",
+          "requires_leader": "if your leader card is a blue &lt;baby&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a blue &lt;baby&gt; card: when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
     "6932": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -44261,6 +45111,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if your leader card is a yellow &lt;baby&gt; card and your opponent has added a total of 2 or more cards from their life to their hand or drop area this turn: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "7074": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 1,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 1 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "7076": [
@@ -45471,6 +46337,21 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "required_leader_traits": "Blue \u226aPhantom Demon\u226b",
+          "requires_leader": "if your leader card is a blue \u226aphantom demon\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a blue \u226aphantom demon\u226b card: when this card is played, draw 1 card, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck; at the end of the turn, switch this card and up to 1 of your energy to active mode.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
           "required_leader_traits": "Blue \u226aPhantom Demon\u226b",
           "requires_leader": "if your leader card is a blue \u226aphantom demon\u226b card"
         },
@@ -47145,6 +48026,21 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played from your hand, you may draw 1 card. if you don't, choose up to 1 of your opponent's battle cards in rest mode and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "7468": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] place 1 card from your life in your drop area: when this card is played from your hand,  choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck",
         "trigger": "self_played"
       }
     ],
@@ -49577,6 +50473,19 @@
     ],
     "7892": [
       {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's unisons and remove 2 markers from it, and your opponent discards 1 card from their hand.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
         "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
         "handler_params": {
@@ -50141,6 +51050,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 2 cards, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 2 cards, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "7925": [
@@ -50171,6 +51093,39 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card, place this card from the battle area in its owner's drop at the end of the battle, choose up to 1 yellow <son goku> card in your battle area or drop, add it to your z-energy with its skills negated for the turn, then choose up to 1 yellow <vegeta> card in your battle area or drop and place it under {spirit bomb} in your battle area.",
         "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_attacks:auto_draw_n_add_matching_from_owner_battle_or_drop_to_z_energy_then_place_matching_from_owner_battle_or_drop_under_named_host_on_attack",
+        "handler_id": "auto_draw_n_add_matching_from_owner_battle_or_drop_to_z_energy_then_place_matching_from_owner_battle_or_drop_under_named_host_on_attack",
+        "handler_params": {
+          "draw_count": 1,
+          "host_name_contains": "SPIRIT BOMB",
+          "under_allowed_colors": "yellow",
+          "under_max_cost": -1,
+          "under_max_targets": 1,
+          "under_required_characters": "vegeta",
+          "z_energy_allowed_colors": "yellow",
+          "z_energy_max_cost": -1,
+          "z_energy_max_targets": 1,
+          "z_energy_required_characters": "son goku"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, place this card from the battle area in its owner's drop at the end of the battle, choose up to 1 yellow <son goku> card in your battle area or drop, add it to your z-energy with its skills negated for the turn, then choose up to 1 yellow <vegeta> card in your battle area or drop and place it under {spirit bomb} in your battle area.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_attacks_battle_end:auto_send_self_to_owner_drop_on_attack_battle_end",
+        "handler_id": "auto_send_self_to_owner_drop_on_attack_battle_end",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, place this card from the battle area in its owner's drop at the end of the battle, choose up to 1 yellow <son goku> card in your battle area or drop, add it to your z-energy with its skills negated for the turn, then choose up to 1 yellow <vegeta> card in your battle area or drop and place it under {spirit bomb} in your battle area.",
+        "trigger": "self_attacks_battle_end"
       },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -50605,6 +51560,21 @@
         "trigger": "self_attacks"
       }
     ],
+    "7951": [
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate main][limit 1] return 1 of your blue <janemba> cards with an energy cost of 6 other than this card to its owner's hand: choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then play up to 1 blue <janemba> card with an energy cost of 6 from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "7952": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -50992,6 +51962,21 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7976": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then switch up to 1 of your energy to active mode at the end of the turn.",
+        "trigger": "self_played"
+      }
+    ],
     "8": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -51181,6 +52166,27 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 green \u226agod\u226b card to your hand, then shuffle your deck.",
         "trigger": "owner_leader_attacks"
+      }
+    ],
+    "8048": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "green",
+          "grant_keyword": "Double Strike",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_traits": "Vegito",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] [once per turn] choose up to 1 of your green <vegito> cards and it gains [double strike] for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "8049": [
@@ -52169,9 +53175,40 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 red \u226aandroid\u226b card with an energy cost of 6 or less to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_combo_self_from_owner_drop",
+        "handler_id": "activate_combo_self_from_owner_drop",
+        "handler_params": {
+          "required_leader_back_name_contains": "SUPER 17",
+          "required_source_zone": "drop",
+          "requires_leader": "if your leader's back side is a red <super 17> card and you discard 1 card from your hand: use this card from your drop in a combo"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader's back side is a red <super 17> card and you discard 1 card from your hand: use this card from your drop in a combo.",
+        "trigger": "self_activate_battle"
       }
     ],
     "8116": [
+      {
+        "family_id": "self_played:auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "POWER-INFUSED SHOCKING DEATH BALL",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, place up to 1 {power-infused shocking death ball} from your z-deck into your battle area, then choose up to 1 of your opponent's battle cards and it gets -20000 power for the turn.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
         "handler_id": "auto_power_reduce_up_to_n_on_play",
@@ -52195,6 +53232,7 @@
           "min_owner_energy": 2,
           "required_leader_back_name_contains": "SUPER 17",
           "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
+          "required_owner_combo_required_characters_each": "Android 17|Hell Fighter 17",
           "requires_leader": "if your leader's back side is a red <super 17> card"
         },
         "limit_per_turn": 1,
@@ -52229,6 +53267,17 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card and switch this card to active mode.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks_or_self_blocker_activated:auto_switch_self_active_on_attack_or_blocker",
+        "handler_id": "auto_switch_self_active_on_attack_or_blocker",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] [once per turn] when this card attacks or activates the [blocker] skill, switch this card to active mode.",
+        "trigger": "self_attacks_or_self_blocker_activated"
       }
     ],
     "8118": [
@@ -52323,6 +53372,41 @@
         "trigger": "self_activate_main"
       }
     ],
+    "8124": [
+      {
+        "family_id": "self_field_extra_placed:auto_buff_owner_leader_for_turn_on_field_extra_placed",
+        "handler_id": "auto_buff_owner_leader_for_turn_on_field_extra_placed",
+        "handler_params": {
+          "leader_allowed_colors": "red",
+          "leader_power_delta": 5000,
+          "leader_required_traits": "Super 17"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in a battle area, your red <super 17> leader gets +5000 power for the turn.",
+        "trigger": "self_field_extra_placed"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "grant_keyword": "Double Strike",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_traits": "Super 17",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] place 1 of your z-energy in its owner's drop and remove this card from the game: choose up to 1 of your <super 17> cards and it gains [double strike] for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "8125": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -52336,6 +53420,21 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_combo_self_from_owner_drop",
+        "handler_id": "activate_combo_self_from_owner_drop",
+        "handler_params": {
+          "required_leader_back_name_contains": "SUEPR 17",
+          "required_source_zone": "drop",
+          "requires_leader": "if your leader's back side is a red <suepr 17> card and you discard 1 card from your hand: use this card from your drop in a combo"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader's back side is a red <suepr 17> card and you discard 1 card from your hand: use this card from your drop in a combo.",
+        "trigger": "self_activate_battle"
       }
     ],
     "8126": [
@@ -52344,6 +53443,28 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card. additionally, you may add 1 red \u226aandroid\u226b card from your hand to your z-energy. if you do, look at up to 5 cards from the top of your deck, add up to 1 red <android 17> or <super 17> card to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "draw_amount": 1,
+          "hand_allowed_colors": "red",
+          "hand_max_cost": -1,
+          "hand_required_traits": "Android",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Android 17,Super 17",
+          "required_traits": "Or"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -52375,7 +53496,8 @@
         "handler_params": {
           "amount": 1,
           "min_opponent_energy": 3,
-          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17"
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
+          "required_owner_combo_required_characters_each": "Android 17|Hell Fighter 17"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -52389,7 +53511,25 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_opponent_energy": 3,
-          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17"
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
+          "required_owner_combo_required_characters_each": "Android 17|Hell Fighter 17"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](1), if your opponent has 3 or more energy and you have 1 or more <android 17> card and 1 or more <hell fighter 17> card in your combo area: draw 1 card, play this card from your hand, and this card gains [barrier] until the end fo your opponent's turn.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end",
+        "handler_id": "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end",
+        "handler_params": {
+          "amount": 1,
+          "grant_keyword": "Barrier",
+          "min_opponent_energy": 3,
+          "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
+          "required_owner_combo_required_characters_each": "Android 17|Hell Fighter 17"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -52403,6 +53543,21 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] (1), place 1 \u226aandroid\u226b card from your z-energy under this card: draw 1 card, switch this card to active mode, then choose up to 1 of your opponent's battle cards and it gets -20000 power for the turn.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn",
+        "handler_id": "activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn",
+        "handler_params": {
+          "amount": 1,
+          "max_targets": 1,
+          "power_delta": -20000
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -52427,12 +53582,29 @@
         "trigger": "self_played"
       },
       {
+        "family_id": "self_played:auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "POWER-INFUSED SHOCKING DEATH BALL",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card, then place up to 1 {power-infused shocking death ball} from your z-deck into your battle area.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "min_owner_energy": 2,
           "required_leader_back_name_contains": "SUPER 17",
           "required_owner_combo_required_characters": "Android 17,Hell Fighter 17",
+          "required_owner_combo_required_characters_each": "Android 17|Hell Fighter 17",
           "requires_leader": "if your leader's back side is a red <super 17> card"
         },
         "limit_per_turn": 1,
@@ -52467,6 +53639,69 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card and switch this card to active mode.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_place_up_to_n_opponent_battle_under_self_on_attack",
+        "handler_id": "auto_place_up_to_n_opponent_battle_under_self_on_attack",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and place it under this card.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "8130": [
+      {
+        "family_id": "owner_other_battle_played:auto_place_up_to_n_from_owner_combo_under_owner_leader_on_owner_matching_battle_played",
+        "handler_id": "auto_place_up_to_n_from_owner_combo_under_owner_leader_on_owner_matching_battle_played",
+        "handler_params": {
+          "allowed_colors": "red",
+          "event_allowed_colors": "red",
+          "event_required_card_type": "",
+          "event_required_characters": "Super 17",
+          "event_required_name_contains": "",
+          "event_required_traits": "",
+          "event_requires_all_characters": false,
+          "max_targets": 1,
+          "required_card_type": "",
+          "required_characters": "Android 17,Hell Fighter 17",
+          "required_name_contains": "",
+          "required_traits": "Or"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when your red <super 17> card is played, place up to 1 red <android 17> or <hell fighter 17> card from your combo area under your leader.",
+        "trigger": "owner_other_battle_played"
+      },
+      {
+        "family_id": "owner_card_left_battle_area:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_owner_matching_battle_left",
+        "handler_id": "auto_place_up_to_n_from_owner_drop_under_owner_leader_on_owner_matching_battle_left",
+        "handler_params": {
+          "allowed_colors": "red",
+          "event_allowed_colors": "",
+          "event_required_card_type": "",
+          "event_required_characters": "Power-Infused Shocking Death Ball",
+          "event_required_name_contains": "POWER-INFUSED SHOCKING DEATH BALL",
+          "event_required_traits": "",
+          "event_requires_all_characters": false,
+          "max_targets": 1,
+          "required_card_type": "",
+          "required_characters": "Android 17,Hell Fighter 17",
+          "required_name_contains": "",
+          "required_traits": "Or"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when your {power-infused shocking death ball} leaves the battle area, place up to 1 red <android 17> or <hell fighter 17> card from your drop under your leader.",
+        "trigger": "owner_card_left_battle_area"
       }
     ],
     "8131": [
@@ -52685,6 +53920,19 @@
     ],
     "8142": [
       {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 3 of your opponent's battle cards and place them at the bottom of their owner's deck in any order.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "owner_opponent_card_comboed:auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle",
         "handler_id": "auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle",
         "handler_params": {
@@ -52772,6 +54020,20 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](2), if your leader is blue or a <broly: br> card: play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "min_opponent_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck. additionally, if your opponent has 3 or more energy, switch this card to active mode, and it gains [double strike] for the turn.",
         "trigger": "self_activate_main"
       }
     ],
@@ -53383,6 +54645,19 @@
     ],
     "8206": [
       {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played using this card's skill, choose up to 3 of your opponent's battle cards and place them at the bottom of their owner's deck in any order, then switch up to the same number of \u226aphantom demon\u226b cards in your energy to active mode.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {},
@@ -53410,6 +54685,21 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 7 cards from the top of your deck, add up to 2 blue &lt;gogeta: br&gt; cards to your hand, shuffle your deck, then choose up to 1 of your opponent's battle cards and return it to its owner's hand.",
+        "trigger": "self_played"
+      }
+    ],
+    "8209": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, switch this card to active mode, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
         "trigger": "self_played"
       }
     ],
@@ -54649,6 +55939,21 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "8356": [
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] choose 1 of your \u226anamekian\u226b cards with a [revive] skill and ko it: choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "8357": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -55002,6 +56307,20 @@
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch up to 1 of your blue energy to active mode.",
         "trigger": "turn_end"
+      },
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "requires_leader": "if your leader's back side is {gamma 1 & gamma 2, justice}"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{u}{u}{u}{u}, if your leader's back side is {gamma 1 & gamma 2, justice}: choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then play this card from your energy.",
+        "trigger": "self_activate_main"
       }
     ],
     "8379": [
@@ -57259,6 +58578,21 @@
         "trigger": "self_activate_main"
       }
     ],
+    "8595": [
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{1}, place this card under a <kefla> battle card: choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "8597": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -57919,6 +59253,20 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card, then choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card, then choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
       }
     ],
     "8835": [
@@ -57969,6 +59317,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played without using skills, add the top card of your deck to your energy in rest mode, and this card gains [barrier] until the end of your opponent's turn.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn]{u}: draw 1 card, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, and this card gets +5000 power for the turn.",
+        "trigger": "self_activate_main"
       },
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -58119,6 +59480,19 @@
       }
     ],
     "8852": [
+      {
+        "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] draw 1 card, then choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_activate_main"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -61254,6 +62628,22 @@
         "trigger": "self_comboed"
       }
     ],
+    "9536": [
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto]when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
     "9537": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -63369,6 +64759,7 @@
         "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
         "handler_params": {
           "max_targets": 1,
+          "min_source_markers": 2,
           "target_policy": "first"
         },
         "limit_per_turn": 1,
@@ -64226,6 +65617,21 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_combo_self_from_owner_drop",
+        "handler_id": "activate_combo_self_from_owner_drop",
+        "handler_params": {
+          "required_leader_traits": "Bulla",
+          "required_source_zone": "drop",
+          "requires_leader": "if your leader is a white <bulla> card and you discard 1 white card from your hand : use this card from your drop in a combo"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader is a white <bulla> card and you discard 1 white card from your hand : use this card from your drop in a combo.",
+        "trigger": "self_activate_battle"
       }
     ],
     "9761": [
@@ -64443,6 +65849,34 @@
       }
     ],
     "9773": [
+      {
+        "family_id": "self_attacks:auto_place_up_to_n_opponent_battle_under_self_on_attack",
+        "handler_id": "auto_place_up_to_n_opponent_battle_under_self_on_attack",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and place it under this card.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_opponent_energy": 3,
+          "post_play_place_under_self_max_targets": 1,
+          "post_play_revealed_max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{2}, if your opponent has 3 or more energy : play this card from your hand, choose up to 1 card in your opponent's battle area and switch it to revealed mode, then choose up to 1 of your opponent's battle cards and place it under this card.",
+        "trigger": "self_activate_main"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",

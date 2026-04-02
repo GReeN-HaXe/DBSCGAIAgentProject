@@ -2616,6 +2616,139 @@ Resolved:
           - power reduction on play
           - delayed return under Leader
         - now stay live when the card is sitting in the opponent controller's board zones
+    - status: adjacent Super 17 field combo-to-under-Leader slice complete
+      - added:
+        - `owner_other_battle_played:auto_place_up_to_n_from_owner_combo_under_owner_leader_on_owner_matching_battle_played`
+      - first covered live wording family:
+        - `When your red <Super 17> card is played, place up to 1 red <Android 17> or <Hell Fighter 17> card from your Combo Area under your Leader.`
+      - current semantics are explicit:
+        - the new owner-play watcher reuses the existing `owner_other_battle_played` event seam
+        - played-card matching is filtered by shared event-card descriptors:
+          - color
+          - characters
+          - card type when present
+        - the tucked card is removed from `combo_area`, placed under `leader_area`, and emits normal `card_placed_under_card` provenance with:
+          - `placed_from="combo"`
+    - status: adjacent Shocking Death Ball battle-leave recovery slice complete
+      - added:
+        - `owner_card_left_battle_area:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_owner_matching_battle_left`
+        - reusable `card_left_battle_area` event emission for owned `battle` cards leaving play
+      - first covered live wording family:
+        - `When your {Power-Infused Shocking Death Ball} leaves the Battle Area, place up to 1 red <Android 17> or <Hell Fighter 17> card from your Drop under your Leader.`
+      - current semantics are explicit:
+        - the new event is emitted when an owned `battle` card leaves `battle_area`, before the destination append finishes
+        - current payload includes:
+          - owner/controller ids
+          - destination
+          - source card descriptors
+        - the recovery family uses shared event-card descriptor filtering for the card that left play
+        - the recovered card is removed from `drop`, placed under `leader_area`, and emits normal `card_placed_under_card` provenance with:
+          - `placed_from="drop"`
+    - status: adjacent Super 17 Z-Deck field setup slice complete
+      - added:
+        - `self_played:auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play`
+        - widened shared field-extra placement helper to source from:
+          - `deck`
+          - `z_deck`
+      - first covered live wording families:
+        - `When this card is played, draw 1 card, then place up to 1 {Power-Infused Shocking Death Ball} from your Z-Deck into your Battle Area.`
+        - `When this card is played, place up to 1 {Power-Infused Shocking Death Ball} from your Z-Deck into your Battle Area, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn.`
+      - current semantics are explicit:
+        - the placed target must currently be face-up in `z_deck`
+        - current shared filtering is still conservative:
+          - named target
+          - `[Field]` keyword
+          - `EXTRA` card type
+        - placement uses the normal `field_extra_placed` event seam, so existing field-extra watchers compose without a special-case path
+    - status: adjacent Super 17 Ultimate Masterpiece battle-activate slices complete
+      - widened:
+        - `activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end`
+          - now supports both:
+            - `self_activate_main`
+            - `self_activate_battle`
+        - shared combo-area requirements can now express:
+          - `you have 1 or more <A> card and 1 or more <B> card in your Combo Area`
+      - added:
+        - `activate_battle -> send_owner_z_energy_under_self`
+        - extractor support for:
+          - `self_activate_battle:activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn`
+          - with a leading `Draw N` clause
+      - first covered live wording family:
+        - `[Activate: Battle][Limit 1](1), if your opponent has 3 or more energy and you have 1 or more <Android 17> card and 1 or more <Hell Fighter 17> card in your Combo Area: Draw 1 card, play this card from your hand, and this card gains [Barrier] until the end fo your opponent's turn.`
+      - adjacent covered live wording family:
+        - `[Activate: Battle][Once per turn](1), place 1 ≪Android≫ card from your Z-Energy under this card: Draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn.`
+      - current semantics are explicit:
+        - the combo-area `one of each` requirement is enforced across the whole `combo_area`, not by a single card matching both tokens
+        - the new `send_owner_z_energy_under_self` cost moves matching `z_energy` directly under the source card before the battle-time effect resolves
+    - status: adjacent Power Absorption and Release / Ultimate Masterpiece exact-card slice complete
+      - locked in exact-card extraction/runtime coverage for:
+        - `Power Absorption and Release`
+        - `Super 17, Ultimate Masterpiece`
+      - current semantics are explicit:
+        - `Power Absorption and Release` is now regression-backed as a whole card, not just as two separate shared watcher families
+        - the owner-play auto and battle-leave auto both resolve through their existing shared event seams on the same source card
+        - `Ultimate Masterpiece` is now regression-backed as a whole card across both printed `Activate: Battle` lines:
+          - the hand-play `Draw 1` + self-play + delayed `[Barrier]` line
+          - the `Z-Energy`-under-self `Draw 1` + self-active + `-20000 power` line
+    - status: adjacent Super 17 Immense Power / Brainwashed Fighter exact-card slice complete
+      - added:
+        - `self_attacks:auto_place_up_to_n_opponent_battle_under_self_on_attack`
+        - post-play support on `activate_play_self_from_hand` for:
+          - `post_play_revealed_max_targets`
+          - `post_play_place_under_self_max_targets`
+      - locked in exact-card extraction/runtime coverage for:
+        - `Super 17, Immense Power`
+        - `Android 17, Brainwashed Fighter`
+        - `Super 17, Sibling Fusion`
+      - current semantics are explicit:
+        - the `Immense Power` activate branch now treats the reveal and tuck choices as distinct steps in the same resolution
+        - cards revealed by that branch are not immediately re-selected for the under-self move
+        - `Brainwashed Fighter` is explicitly aligned to the existing:
+          - `auto_look_top_add_up_to_one_to_hand_on_play`
+          shared top-of-deck search family
+    - status: adjacent Super 17 Sibling Fusion / Perfect Evolution exact-card slice complete
+      - added:
+        - `self_attacks_or_self_blocker_activated:auto_switch_self_active_on_attack_or_blocker`
+      - locked in exact-card extraction/runtime coverage for:
+        - `Super 17, Sibling Fusion`
+        - `Super 17, Perfect Evolution`
+      - current semantics are explicit:
+        - the new combined trigger keeps the printed `[Once per turn]` lock shared across:
+          - attacking
+          - activating `[Blocker]`
+        - `Perfect Evolution` is now regression-backed on the existing:
+          - on-play draw + self-active
+          - attack-time tuck-under-self
+          families
+    - status: adjacent Power-Infused Shocking Death Ball / Attack Commenced / Absorbing Power exact-card slice complete
+      - added:
+        - `self_field_extra_placed:auto_buff_owner_leader_for_turn_on_field_extra_placed`
+        - `self_activate_battle:activate_gain_power_and_keyword_for_battle`
+          with shared owner-card target selection for the printed battle-time keyword grant
+      - locked in exact-card extraction/runtime coverage for:
+        - `Power-Infused Shocking Death Ball`
+        - `Super 17, Attack Commenced`
+        - `Super 17, Absorbing Power`
+      - current semantics are explicit:
+        - the field-extra-on-place leader buff now resolves through the shared `field_extra_placed` event seam
+        - the battle-time keyword grant follows the existing deterministic `owner_cards` selection policy
+        - the hand-based `Activate: Battle` self-play line is now regression-backed for the direct `skill_activated` path
+    - status: adjacent Hell Fighter 17 Infernal Creation / Fusion Urged exact-card slice complete
+      - added:
+        - `self_played:auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play`
+        - `self_activate_battle:activate_combo_self_from_owner_drop`
+        - `activate_battle -> send_owner_hand_to_drop`
+        - legal `Activate: Battle` action discovery for `drop`-sourced public battle cards
+      - locked in exact-card extraction/runtime coverage for:
+        - `Hell Fighter 17, Infernal Creation`
+        - `Hell Fighter 17, Fusion Urged`
+      - current semantics are explicit:
+        - the new Infernal Creation family deterministically takes the first matching hand card into `Z-Energy`, then searches the current top-of-deck window
+        - the new drop-side battle activate path now uses the normal public activate flow:
+          - pay printed hand-discard cost
+          - open counter timing
+          - resolve into `combo_area`
+          - emit `card_comboed` with `comboed_from=\"drop\"`
     - status: first under-Leader leader-promotion slice complete
       - added:
         - `turn_end:auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end`
@@ -2722,6 +2855,231 @@ Resolved:
           - post-play `switch up to N opponent Battle Cards to Rest Mode`
         - the line still uses normal `Counter: Play` timing after the activate window resolves
         - then the draw resolves
+    - status: adjacent Spirit Bomb attack/payoff slice complete
+      - added:
+        - `self_attacks:auto_draw_n_add_matching_from_owner_battle_or_drop_to_z_energy_then_place_matching_from_owner_battle_or_drop_under_named_host_on_attack`
+        - `self_attacks_battle_end:auto_send_self_to_owner_drop_on_attack_battle_end`
+      - first covered live wording family:
+        - `When this card attacks, draw 1 card, place this card from the Battle Area in its owner's Drop at the end of the battle, choose up to 1 yellow <Son Goku> card in your Battle Area or Drop, add it to your Z-Energy with its skills negated for the turn, then choose up to 1 yellow <Vegeta> card in your Battle Area or Drop and place it under {Spirit Bomb} in your Battle Area.`
+      - current semantics are explicit:
+        - battle/drop sourcing is deterministic:
+          - `battle_area`
+          - then `drop`
+        - cards added to `Z-Energy` gain temporary skill negation before `card_added_to_z_energy` is emitted
+        - the battle-end rider now matches via explicit `battle_end` event payload data instead of relying on hidden `attack_context` access inside the static trigger matcher
+    - status: adjacent blue Android 18 / Krillin unison-under-Leader slice complete
+      - added:
+        - `self_activate_main:activate_draw_n_discard_n_and_place_up_to_n_from_owner_drop_under_owner_leader_then_switch_self_active_on_turn_end`
+      - first covered live wording family:
+        - `[+2][Activate: Main] Draw 1 card and discard 1 card from your hand. Additionally, if your Leader is a <Krillin> or <Android 18> card-both mono-blue-place up to 1 <Krillin> or ≪Android≫ card-both blue-from your Drop under your Leader, and at the end of the turn, switch this card to Active Mode.`
+      - current semantics are explicit:
+        - the base draw/discard always resolves
+        - the under-Leader tuck is a bonus rider gated by:
+          - mono-blue matching `<Krillin>` / `<Android 18>` leader checks
+        - the source Unison is reactivated at turn end through the existing delayed active-switch queue
+    - status: adjacent blue Android 18 / Krillin regression-hardening slice complete
+      - widened:
+        - extraction now covers:
+          - `[-4][Activate: Main] Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and place it at the bottom of its owner's deck.`
+      - regression-backed exact families now include:
+        - `Android 18, Gearing Up for Battle`
+        - `Krillin, Gearing Up for Battle`
+        - `Krillin, Accel Dance`
+        - `Android 18, Krillin, and Marron, Family United`
+      - current semantics are explicit:
+        - blue `<Krillin>` / `≪Android≫` top-deck search on play stays on the shared search/add family
+        - turn-end blue `<Android 18>` recovery under Leader stays on the shared drop-under-Leader family
+        - the `[-4]` Family United line now extracts onto the shared opponent-Battle bottom-deck activate family with `ignoring [Barrier]`
+    - status: adjacent Krillin Accel Dance on-play payoff slice complete
+      - added:
+        - `self_played:auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play`
+      - first covered live wording family:
+        - `When this card is played, choose up to 1 of your opponent's Battle Cards, place it at the bottom of its owner's deck, switch up to 1 of your Leaders to Active Mode, switch up to 1 of your mono-blue energy to Active Mode, and this card gains [Barrier] until the end of your opponent's next turn.`
+      - current semantics are explicit:
+        - the opponent Battle target is bottom-decked first
+        - the owner Leader is switched active if resting
+        - only mono-blue resting energy is reactivated by the energy rider
+        - the source gains delayed `[Barrier]` that clears at the end of the opponent's turn
+    - status: adjacent Android 18 Energy Wave exact-card slice complete
+      - regression-backed exact behavior now includes:
+        - combo-trigger play from under Leader or hand
+        - on-play blue `<Krillin>` recovery from:
+          - `Z-Energy`
+          - then `Combo Area`
+          - then `Drop`
+      - current semantics are explicit:
+        - the shared extractor family does not attach a separate `auto_cost_header` field for this card's extracted rules
+        - the hand-origin chain resolves through the same secret-auto follow-up path as the broader hand-origin seam
+    - status: adjacent Android 18 & Krillin Future Spun by Battle exact-card slice complete
+      - added:
+        - extractor support for:
+          - `If you don't have a Unison in play`
+          - `When this card is played, play up to 1 {Android 18, Krillin, and Marron, Family United} from your deck with a marker on it in Rest Mode`
+          - `if your Leader is a blue <Android 18> card and there are 2 or more cards under it`
+      - regression-backed exact behavior now includes:
+        - on-play `Family United` deck pull with `1` marker in `Rest Mode`
+        - the negative no-Unison gate
+        - activate-from-hand with `2` cards under Leader
+      - current semantics are explicit:
+        - the deck-play helper lands the named `UNISON` target correctly with markers/resting
+        - the activate-from-hand runtime path still follows the shared hand-play cost contract used elsewhere in the engine
+    - status: adjacent Krillin Absolute Guard exact-card slice confirmed
+      - regression-backed exact behavior now includes:
+        - `If your Leader is blue and your life is at 4 or less: When this card is used in a combo, draw 1 card.`
+      - current semantics are explicit:
+        - the exact-card runtime still stays on the shared `self_comboed -> auto_draw_n` family
+        - no one-off runtime path is needed for the `Super Combo` body itself
+    - status: adjacent Bulma Helpful Cheer exact-card / self-combo cost slice complete
+      - added:
+        - first self-combo printed-cost support for:
+          - `place 1 non-Leaders from under your Leader in its owner's Drop`
+        - `self_comboed:auto_buff_up_to_n_owner_battles_for_battle_on_combo`
+      - regression-backed exact behavior now includes:
+        - on-play draw
+        - combo-time under-Leader cost payment
+        - buffing up to `1` matching owner `<Krillin>` / `<Android 18>` Battle Card by `+1000` for the battle
+      - current semantics are explicit:
+        - the under-Leader cost currently resolves through a focused engine path for single-step `auto_on_combo_battle` costs
+        - the consumed under-Leader card is materialized into `Drop` and emits the normal `card_placed_into_drop` provenance
+    - status: adjacent BT20 blue Krillin exact-card slice complete
+      - regression-backed exact behavior now includes:
+        - `Krillin, Powers Expanded`
+        - `Krillin, Defensive Battler`
+      - current semantics are explicit:
+        - `Powers Expanded` stays on the shared:
+          - `self_played -> auto_bottom_deck_up_to_n_opponent_battle`
+          - `self_activate_main -> activate_play_self_from_hand`
+        - `Defensive Battler` stays on the shared:
+          - `turn_end -> auto_switch_self_active_on_turn_end`
+          - `self_activate_main -> activate_play_self_from_hand`
+    - status: adjacent Android 17 Emergency Defense alternate-counter cost slice complete
+      - added:
+        - first `counter_alternate_from_hand` support for:
+          - `place 2 blue non-Leaders from under your Leader in their owners' Drops`
+      - regression-backed exact behavior now includes:
+        - `Android 17, Emergency Defense`
+      - current semantics are explicit:
+        - the alternate counter cost reuses the shared single-step under-Leader drop helper
+        - the consumed under-Leader cards emit the normal `card_placed_into_drop` provenance before the counter resolves
+    - status: adjacent named-host alternate-counter cost slice complete
+      - added:
+        - first `counter_alternate_from_hand` support for:
+          - `place 1 card from under a {The Nameless Planet} in your Battle Area in its owner's Drop Area`
+      - regression-backed exact behavior now includes:
+        - `P-396 Planetary Manipulation`
+      - current semantics are explicit:
+        - the alternate counter cost reuses the shared owner-Battle-area under-card-to-Drop helper
+        - named host matching currently keys off the host card name in the Battle Area
+        - moved under-cards emit the normal `card_placed_into_drop` provenance before the counter resolves
+    - status: adjacent Planetary Manipulation first activate-main branch slice complete
+      - added:
+        - first `self_activate_main` support for:
+          - `place up to 3 cards from under a {The Nameless Planet} in your Battle Area in their owners' Drop Areas; your opponent discards cards equal to the number of cards you placed in Drop Areas this way`
+      - regression-backed exact behavior now includes:
+        - `P-396 Planetary Manipulation`
+      - current semantics are explicit:
+        - the activate branch reuses the shared owner-Battle-area under-card-to-Drop helper
+        - opponent discard count is derived from the actual number of cards moved this way
+        - the wider second branch:
+          - opponent hand reveal and play into the opponent's Battle Area
+          remains deferred on purpose
+    - status: adjacent no-owner-field-extra requirement slice complete
+      - added:
+        - shared requirement support for:
+          - `If a [Field] Extra Card isn't in your Battle Area`
+      - regression-backed exact behavior now includes:
+        - the green `The Nameless Planet` setup Unison line
+      - current semantics are explicit:
+        - owner Battle Area is scanned for `EXTRA` / `Z-EXTRA` cards with the `Field` keyword
+        - the requirement now blocks otherwise-legal `Activate: Main` lines that would fetch a field extra while one is already in play
+    - status: adjacent activate-main self-drop wording slice complete
+      - widened:
+        - `activate_main -> send_self_to_drop`
+        - now matches both:
+          - `place this card in your Drop`
+          - `place this card in its owner's Drop Area`
+      - regression-backed exact behavior now includes:
+        - `Referee, Introducing the Fighters`
+      - current semantics are explicit:
+        - the widened cost text still resolves through the existing self-to-Drop activate cost path
+        - the covered Referee branch stays on the shared:
+          - `activate_activate_up_to_n_named_field_extra_from_owner_deck`
+          family
+    - status: adjacent green Beerus / Champa marker-gated on-play discard slice complete
+      - added:
+        - `self_played:auto_opponent_discards_n_from_hand_on_play`
+        - shared `min_source_markers` requirement handling
+      - regression-backed exact behavior now includes:
+        - `Whis, Pre-Fight Preparations`
+      - current semantics are explicit:
+        - the on-play discard family now works generically for:
+          - `your opponent chooses 1 card in their hand and discards it`
+          - `your opponent discards 1 card from their hand`
+        - marker-gated play triggers now resolve through the shared effect requirement layer instead of one-off handler checks
+    - status: adjacent green Beerus / Champa marker-gated on-play KO slice complete
+      - widened:
+        - `auto_ko_up_to_n_opponent_battle_on_play`
+        - now honors shared `min_source_markers` requirements
+      - regression-backed exact behavior now includes:
+        - `Vados, Pre-Fight Preparations`
+      - current semantics are explicit:
+        - the existing KO-on-play family did not need a new bespoke handler
+        - it now cleanly composes with the shared marker gate used by the Beerus / Champa Unison package
+    - status: adjacent Referee second-branch slice complete
+      - added:
+        - first `self_activate_main` support for:
+          - `your opponent reveals their hand, and you choose up to 1 Battle Card with an energy cost of 3 or less from it and play it in your opponent's Battle Area`
+      - regression-backed exact behavior now includes:
+        - `Referee, Introducing the Fighters`
+      - current semantics are explicit:
+        - the effect opens a normal follow-up `Counter: Play` window after the `Activate: Main` window closes
+        - the played card is sourced from the opponent hand and enters the opponent Battle Area under the opponent's control
+        - the current shared path is intentionally conservative:
+          - `up to 1`
+          - `Battle Card` only
+    - status: adjacent Planetary Manipulation second-branch slice complete
+      - widened:
+        - the same opponent-hand-to-opponent-battle activate path now supports:
+          - `in Rest Mode`
+      - regression-backed exact behavior now includes:
+        - `P-396 Planetary Manipulation`
+      - current semantics are explicit:
+        - the branch deterministically chooses the first eligible Battle Card in the opponent's hand
+        - the selected card enters the opponent Battle Area in Rest Mode
+        - the wider hand-reveal / multi-choice UI seam remains deferred on purpose
+    - status: adjacent Nameless Planet battle-end capture slice complete
+      - added:
+        - first `owner_battle_ko_opponent_battle_battle_end` support for:
+          - `At the end of a battle where one of your green Battle Cards attacks and KOs an opponent's Battle Card, place that card under this card from your opponent's Drop Area.`
+      - regression-backed exact behavior now includes:
+        - `The Nameless Planet`
+      - current semantics are explicit:
+        - the battle-end event now carries:
+          - `attacker_zone`
+          - `target_battle_koed`
+        - the captured card is removed from the opponent `Drop`
+        - under-host owner tracking is preserved for future under-card checks
+    - status: adjacent Nameless Planet attack-redirection slice complete
+      - added:
+        - first `owner_opponent_battle_attacks` redirect family for:
+          - switching the field to `Rest Mode`
+          - retargeting the attack to a matching owner Battle Card
+      - regression-backed exact behavior now includes:
+        - `The Nameless Planet`
+      - current semantics are explicit:
+        - the redirected target must currently be:
+          - a green owner Battle Card
+          - already in `Rest Mode`
+          - sharing at least one trait with the owner Leader
+    - status: adjacent Nameless Planet win-condition slice complete
+      - added:
+        - first `self_activate_main` win-game family for:
+          - `If there are 5 cards owned by your opponent under this card: You win the game.`
+      - regression-backed exact behavior now includes:
+        - `The Nameless Planet`
+      - current semantics are explicit:
+        - activate legality now supports counting opponent-owned cards under the source
+        - under-host owner tracking falls back to the host owner for older stacks without metadata
     - status: first union placed-under provenance slice complete
       - added:
         - `self_placed_under_by_union:auto_switch_up_to_n_opponent_board_rest`

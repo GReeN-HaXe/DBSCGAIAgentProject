@@ -188,6 +188,10 @@ class SkillCostDsl:
         return [c for c in player.drop if SkillCostDsl._card_matches_filters(c, step)]
 
     @staticmethod
+    def _owner_z_energy_candidates(player: PlayerState, step: SkillCostStep) -> list[CardInstance]:
+        return [c for c in player.z_energy if SkillCostDsl._card_matches_filters(c, step)]
+
+    @staticmethod
     def _owner_battle_return_candidates(player: PlayerState, source_card: CardInstance, step: SkillCostStep) -> list[CardInstance]:
         allow_self = bool(step.params.get("allow_self", False))
         return [
@@ -497,12 +501,23 @@ class SkillCostDsl:
                 if len(player.hand) < step.amount:
                     return False
                 continue
+            if step.kind == "send_owner_hand_to_drop":
+                if len(player.hand) < step.amount:
+                    return False
+                continue
             if step.kind == "send_owner_hand_to_bottom_deck":
                 if len(player.hand) < step.amount:
                     return False
                 continue
             if step.kind == "send_owner_z_energy_to_drop":
                 if len(player.z_energy) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_owner_z_energy_under_self":
+                if not SkillCostDsl._in_battle_or_unison(player, source_card):
+                    return False
+                available = SkillCostDsl._owner_z_energy_candidates(player, step)
+                if len(available) < step.amount:
                     return False
                 continue
             if step.kind == "send_other_battle_to_removed":
@@ -729,6 +744,17 @@ class SkillCostDsl:
                 for _ in range(min(step.amount, len(player.hand))):
                     player.warp.append(player.hand.pop(0))
                 continue
+            if step.kind == "send_owner_hand_to_drop":
+                moved = 0
+                while player.hand and moved < step.amount:
+                    card = player.hand.pop(0)
+                    player.drop.append(card)
+                    moved += 1
+                    if moved == 1:
+                        metadata["cost_target_instance_id"] = int(card.instance_id)
+                        metadata["cost_target_card_id"] = int(card.card_id)
+                        metadata["cost_target_zone"] = "hand"
+                continue
             if step.kind == "send_owner_hand_to_bottom_deck":
                 for _ in range(min(step.amount, len(player.hand))):
                     moved = player.hand.pop(0)
@@ -737,6 +763,21 @@ class SkillCostDsl:
             if step.kind == "send_owner_z_energy_to_drop":
                 for _ in range(min(step.amount, len(player.z_energy))):
                     player.drop.append(player.z_energy.pop(0))
+                continue
+            if step.kind == "send_owner_z_energy_under_self":
+                candidate_ids = {
+                    card.instance_id for card in SkillCostDsl._owner_z_energy_candidates(player, step)[: step.amount]
+                }
+                moved = 0
+                i = 0
+                while i < len(player.z_energy) and moved < step.amount:
+                    card = player.z_energy[i]
+                    if card.instance_id not in candidate_ids:
+                        i += 1
+                        continue
+                    source_card.stacked_card_ids = tuple(source_card.stacked_card_ids) + (int(card.card_id),)
+                    player.z_energy.pop(i)
+                    moved += 1
                 continue
             if step.kind == "send_other_battle_to_removed":
                 moved = 0

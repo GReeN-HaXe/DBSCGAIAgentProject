@@ -149,6 +149,24 @@ def test_extract_activate_battle_send_self_from_leader_under_to_warp_cost_rule()
     }
 
 
+def test_extract_activate_battle_discard_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Limit 1] If your Leader's back side is a red <Super 17> card and you discard 1 card from your hand: "
+            "Use this card from your Drop in a combo."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle": [
+            {
+                "kind": "send_owner_hand_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_energy_to_drop_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -311,6 +329,25 @@ def test_extract_activate_main_place_self_in_drop_cost_rule() -> None:
         card_skill_unstyled=(
             "[Activate: Main](Green), place this card in your Drop: "
             "Draw 1 card and play up to 1 {SS Son Gohan, Showing the Results of Training} under a {Hyperbolic Time Chamber} in your Battle Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_self_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_place_self_in_owner_drop_area_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If your Leader Card is a green <Beerus> or green <Champa> card and you place this card in its owner's Drop Area: "
+            "Choose one?\n"
+            "・Activate up to 1 {The Nameless Planet} from your deck, then shuffle your deck."
         )
     )
     rules = extract_skill_cost_rules_from_card(card)
@@ -1019,6 +1056,85 @@ def test_extract_auto_on_combo_single_energy_cost_rule() -> None:
     }
 
 
+def test_extract_auto_on_combo_leader_under_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto][Limit 1] If your Leader is a blue <Android 18> card and you place 1 non-Leaders from under your Leader in its owner's Drop: "
+            "When this card is used in a combo, choose up to 1 of your <Krillin> or <Android 18> cards and it gets +1000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_owner_leader_under_to_drop",
+                "amount": 1,
+                "forbidden_card_types": "LEADER,Z-LEADER",
+            }
+        ]
+    }
+
+
+def test_extract_counter_alternate_leader_under_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Limit 1] If your Leader is a blue <Android 18> card: Negate the attack and play this card. "
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 2 blue non-Leaders from under your Leader in their owners' Drops."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "send_owner_leader_under_to_drop",
+                "amount": 2,
+                "allowed_colors": "blue",
+                "forbidden_card_types": "LEADER,Z-LEADER",
+                "required_leader_colors": "blue",
+                "required_leader_traits": "android 18",
+            }
+        ]
+    }
+
+
+def test_extract_counter_alternate_owner_battle_under_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack. "
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 1 card from under a {The Nameless Planet} in your Battle Area in its owner's Drop Area instead."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "send_owner_battle_under_to_drop",
+                "amount": 1,
+                "required_host_name_contains": "THE NAMELESS PLANET",
+            }
+        ]
+    }
+
+
+def test_extract_activate_battle_z_energy_under_self_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Once per turn] (1), place 1 ≪Android≫ card from your Z-Energy under this card: "
+            "Draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle": [
+            {
+                "kind": "send_owner_z_energy_under_self",
+                "amount": 1,
+                "required_traits": "android",
+            }
+        ]
+    }
+
+
 def test_extract_auto_on_owner_combo_spirit_boost_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -1073,6 +1189,82 @@ def test_engine_uses_catalog_for_counter_alternate_hidden_battle_cost() -> None:
             owner_id=2,
             card_type="EXTRA",
             color="White",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw="[Counter: Attack] Negate the attack.",
+        )
+    )
+
+    attack = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_ATTACK)
+    state = engine.apply_action(state, attack)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+
+
+def test_engine_uses_catalog_for_counter_alternate_owner_battle_under_cost() -> None:
+    catalog_path = _workspace_temp_catalog_path("skill_cost_alt_owner_battle_under")
+    save_skill_cost_rules_json(
+        catalog_path,
+        {
+            900305: {
+                "counter_alternate_from_hand": [
+                    {
+                        "kind": "send_owner_battle_under_to_drop",
+                        "amount": 1,
+                        "required_host_name_contains": "THE NAMELESS PLANET",
+                    }
+                ]
+            }
+        },
+    )
+    engine = RulesEngine(skill_cost_rules_path=catalog_path)
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=state.active_player))
+    state = _to_main(engine, state)
+    state.players[1].hand = [CardInstance(instance_id=790041, card_id=641, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    host = CardInstance(
+        instance_id=790042,
+        card_id=900306,
+        owner_id=2,
+        card_type="EXTRA",
+        color="Green",
+    )
+    host.stacked_card_ids = (790043,)
+    state.players[2].battle_area.append(host)
+    engine._card_cache[(900306, "front")] = engine._build_card_runtime_data(
+        SimpleNamespace(
+            card_name="The Nameless Planet",
+            power_int=0,
+            card_type="EXTRA",
+            card_color="Green",
+            energy_cost_int=1,
+            combo_cost_int=0,
+            combo_power_int=0,
+            keywords=[],
+            counter_modes=[],
+            skill_text_raw="",
+            card_traits=[],
+            card_character=[],
+        ),
+        side="front",
+    )
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=790044,
+            card_id=900305,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Green",
             energy_cost=1,
             has_counter=True,
             has_counter_attack=True,

@@ -1,100 +1,100 @@
 {
-  "card_rule_count": 3048,
+  "card_rule_count": 3080,
   "catalog_kind": "dbs_effect_catalog_manifest",
-  "effect_rule_count": 4036,
+  "effect_rule_count": 4126,
   "schema_version": 1,
   "shard_count": 13,
   "shards": [
     {
       "card_rule_count": 250,
-      "effect_rule_count": 327,
+      "effect_rule_count": 332,
       "first_card_id": 3,
-      "last_card_id": 528,
-      "path": "shard_0001_3_528.json"
+      "last_card_id": 447,
+      "path": "shard_0001_3_447.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 316,
-      "first_card_id": 529,
-      "last_card_id": 1362,
-      "path": "shard_0002_529_1362.json"
+      "effect_rule_count": 317,
+      "first_card_id": 451,
+      "last_card_id": 1349,
+      "path": "shard_0002_451_1349.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 335,
-      "first_card_id": 1363,
-      "last_card_id": 1797,
-      "path": "shard_0003_1363_1797.json"
+      "effect_rule_count": 347,
+      "first_card_id": 1356,
+      "last_card_id": 1788,
+      "path": "shard_0003_1356_1788.json"
     },
     {
       "card_rule_count": 250,
       "effect_rule_count": 339,
-      "first_card_id": 1799,
-      "last_card_id": 2252,
-      "path": "shard_0004_1799_2252.json"
+      "first_card_id": 1789,
+      "last_card_id": 2232,
+      "path": "shard_0004_1789_2232.json"
     },
     {
       "card_rule_count": 250,
       "effect_rule_count": 379,
-      "first_card_id": 2254,
-      "last_card_id": 3709,
-      "path": "shard_0005_2254_3709.json"
+      "first_card_id": 2234,
+      "last_card_id": 2654,
+      "path": "shard_0005_2234_2654.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 273,
-      "first_card_id": 3710,
-      "last_card_id": 4878,
-      "path": "shard_0006_3710_4878.json"
+      "effect_rule_count": 283,
+      "first_card_id": 2657,
+      "last_card_id": 4772,
+      "path": "shard_0006_2657_4772.json"
     },
     {
       "card_rule_count": 250,
       "effect_rule_count": 280,
-      "first_card_id": 4880,
-      "last_card_id": 5694,
-      "path": "shard_0007_4880_5694.json"
+      "first_card_id": 4774,
+      "last_card_id": 5625,
+      "path": "shard_0007_4774_5625.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 286,
-      "first_card_id": 5702,
-      "last_card_id": 6578,
-      "path": "shard_0008_5702_6578.json"
+      "effect_rule_count": 280,
+      "first_card_id": 5629,
+      "last_card_id": 6527,
+      "path": "shard_0008_5629_6527.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 287,
-      "first_card_id": 6581,
-      "last_card_id": 7328,
-      "path": "shard_0009_6581_7328.json"
+      "effect_rule_count": 293,
+      "first_card_id": 6530,
+      "last_card_id": 7266,
+      "path": "shard_0009_6530_7266.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 350,
-      "first_card_id": 7329,
-      "last_card_id": 8086,
-      "path": "shard_0010_7329_8086.json"
+      "effect_rule_count": 348,
+      "first_card_id": 7268,
+      "last_card_id": 8050,
+      "path": "shard_0010_7268_8050.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 375,
-      "first_card_id": 8087,
-      "last_card_id": 8841,
-      "path": "shard_0011_8087_8841.json"
+      "effect_rule_count": 385,
+      "first_card_id": 8051,
+      "last_card_id": 8593,
+      "path": "shard_0011_8051_8593.json"
     },
     {
       "card_rule_count": 250,
-      "effect_rule_count": 418,
-      "first_card_id": 8842,
-      "last_card_id": 10034,
-      "path": "shard_0012_8842_10034.json"
+      "effect_rule_count": 416,
+      "first_card_id": 8595,
+      "last_card_id": 9760,
+      "path": "shard_0012_8595_9760.json"
     },
     {
-      "card_rule_count": 48,
-      "effect_rule_count": 71,
-      "first_card_id": 10035,
+      "card_rule_count": 80,
+      "effect_rule_count": 127,
+      "first_card_id": 9761,
       "last_card_id": 10204,
-      "path": "shard_0013_10035_10204.json"
+      "path": "shard_0013_9761_10204.json"
     }
   ]
 }
