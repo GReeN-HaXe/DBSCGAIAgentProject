@@ -596,7 +596,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Towa,Resonance Of Shadow",
           "required_leader_traits": "Black \u226aShadow Dragon\u226b",
           "required_name_contains": "TOWA, RESONANCE OF SHADOW",
           "requires_leader": "if your leader card is a black \u226ashadow dragon\u226b card"
@@ -2600,7 +2599,9 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "required_leader_traits": "Blue &Lt;Whis&Gt;",
+          "requires_leader": "if your leader card is a blue &lt;whis&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -4079,7 +4080,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -5256,8 +5258,7 @@
           "max_cost": 1,
           "max_targets": 1,
           "required_card_type": "EXTRA",
-          "required_name_contains": "TREE OF MIGHT",
-          "required_traits": "And"
+          "required_name_contains": "TREE OF MIGHT"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",

@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3080,
+  "card_rule_count": 3111,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 4126,
+  "effect_rule_count": 4185,
   "rules": {
     "10": [
       {
@@ -345,7 +345,6 @@
           "max_targets": 1,
           "min_opponent_energy": 3,
           "required_name_contains": "SPIRIT",
-          "required_traits": "Spirit",
           "requires_leader": "if your leader is {super saiyans united} and your opponent has 3 or more energy"
         },
         "limit_per_turn": 1,
@@ -395,7 +394,6 @@
           "max_targets": 1,
           "min_owner_energy": 2,
           "required_name_contains": "SPIRIT",
-          "required_traits": "Spirit",
           "requires_leader": "if your leader's back side is {super saiyans united} and you have 2 or more energy"
         },
         "limit_per_turn": 1,
@@ -1754,6 +1752,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "10188": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp.",
+        "trigger": "self_played"
+      }
+    ],
     "1019": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -1782,6 +1797,23 @@
           "min_owner_energy": 2,
           "required_leader_traits": "Black \u226aUniverse 7\u226b",
           "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{b}, if your leader is a black \u226auniverse 7\u226b card and you have 2 or more energy: play this card from your hand, then choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and send it to its owner's warp.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "min_owner_energy": 2,
+          "required_leader_traits": "Black \u226aUniverse 7\u226b",
+          "requires_leader": "if your leader is a black \u226auniverse 7\u226b card and you have 2 or more energy",
+          "target_policy": "first"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -1899,6 +1931,25 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader is black, your life is at 4 or less, and all of your energy is black: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
         "trigger": "self_comboed"
+      }
+    ],
+    "10198": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "min_opponent_energy": 2,
+          "requires_leader": "if your leader is black or includes \u226auniverse\u226b in its special traits and your opponent has 2 or more energy",
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [limit 1] {1}, if your leader is black or includes \u226auniverse\u226b in its special traits and your opponent has 2 or more energy: choose up to 1 of your opponent's battle cards with an energy cost of 4 or less ignoring [barrier], send it to its owner's warp, then play this card from your hand.",
+        "trigger": "self_activate_main"
       }
     ],
     "102": [
@@ -4127,6 +4178,43 @@
         "trigger": "self_comboed"
       }
     ],
+    "1180": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "required_leader_traits": "\u226aDemon God\u226b",
+          "requires_cost_greater_than_opponent_current_energy": true,
+          "requires_leader": "if your leader is a \u226ademon god\u226b card",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose up to 1 of your opponent's battle cards with an energy cost greater than their current energy and send it to its owner's warp. additionally, if your leader is a \u226ademon god\u226b card, send up to 1 battle card from your opponent's drop to their warp.",
+        "trigger": "self_activate_extra_from_hand"
+      }
+    ],
+    "1181": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "required_leader_traits": "\u226aDemon God\u226b",
+          "requires_leader": "if your leader is a \u226ademon god\u226b card",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose up to 1 of your opponent's battle cards with an energy cost less than or equal to their current energy and send it to its owner's warp. additionally, if your leader is a \u226ademon god\u226b card, draw 1 card.",
+        "trigger": "self_activate_extra_from_hand"
+      }
+    ],
     "1185": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4320,7 +4408,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Four-Star Ball,Parasitic Darkness",
           "required_name_contains": "FOUR-STAR BALL, PARASITIC DARKNESS"
         },
         "limit_per_turn": null,
@@ -4353,7 +4440,6 @@
           "max_cost": -1,
           "max_targets": 1,
           "negate_self_skill_for_game": true,
-          "required_characters": "Hero S Mafuba",
           "required_name_contains": "HERO'S MAFUBA"
         },
         "limit_per_turn": 1,
@@ -4717,7 +4803,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Towa,Resonance Of Shadow",
           "required_leader_traits": "Black \u226aShadow Dragon\u226b",
           "required_name_contains": "TOWA, RESONANCE OF SHADOW",
           "requires_leader": "if your leader card is a black \u226ashadow dragon\u226b card"
@@ -4735,7 +4820,9 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "required_leader_traits": "&Lt;Shroom&Gt; &Lt;Salsa&Gt;",
+          "requires_leader": "if your leader is a &lt;shroom&gt; &lt;salsa&gt; card"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -4870,6 +4957,7 @@
         "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
         "handler_id": "auto_power_reduce_up_to_n_on_attack",
         "handler_params": {
+          "auto_release_under_to_drop_before": 1,
           "max_cost": -1,
           "max_targets": 1,
           "power_delta": -30000,
@@ -4881,6 +4969,22 @@
         "provenance": "extractor",
         "source_text": "[auto][limit 1] place 1 card from under this card in its owner's drop: when this card attacks, choose up to 1 of your opponent's battle cards and it gets -30000 power for the turn.",
         "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "post_play_place_owner_battle_under_self_allowed_colors": "red",
+          "post_play_place_owner_battle_under_self_max_targets": 1,
+          "post_play_place_owner_battle_under_self_required_traits": "Saiyan",
+          "post_play_place_owner_battle_under_self_target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](red), choose 1 red \u226asaiyan\u226b card in your battle area: play this card from your hand and place the chosen card under it.",
+        "trigger": "self_activate_main"
       },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -5111,6 +5215,48 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1345": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_from_owner_deck_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_from_owner_deck_to_warp_on_play",
+        "handler_params": {
+          "exact_power": 15000,
+          "max_cost": -1,
+          "max_targets": 2,
+          "require_different_character_names": true,
+          "required_card_type": "BATTLE",
+          "required_leader_traits": "Yellow &Lt;Whis&Gt;",
+          "requires_leader": "if your leader is a yellow &lt;whis&gt; card and you place 1 card from your hand at the bottom of your deck",
+          "requires_skill_less": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a yellow &lt;whis&gt; card and you place 1 card from your hand at the bottom of your deck: when this card is played, send up to 2 skill-less battle cards with 15000 power and different character names from your deck to your warp, shuffle your deck, and at the end of your opponent's next turn, play up to 1 of the cards sent to your warp by this skill in your battle area, and you may add the remaining cards to your hand.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_play_cards_warped_by_source_skill_on_play",
+        "handler_id": "auto_schedule_play_cards_warped_by_source_skill_on_play",
+        "handler_params": {
+          "affected_player_scope": "owner",
+          "max_targets": 1,
+          "require_next_turn": true,
+          "required_leader_traits": "Yellow &Lt;Whis&Gt;",
+          "requires_leader": "if your leader is a yellow &lt;whis&gt; card and you place 1 card from your hand at the bottom of your deck",
+          "return_remaining_to_hand": true,
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "opponent"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a yellow &lt;whis&gt; card and you place 1 card from your hand at the bottom of your deck: when this card is played, send up to 2 skill-less battle cards with 15000 power and different character names from your deck to your warp, shuffle your deck, and at the end of your opponent's next turn, play up to 1 of the cards sent to your warp by this skill in your battle area, and you may add the remaining cards to your hand.",
+        "trigger": "self_played"
+      }
+    ],
     "1346": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -5174,6 +5320,22 @@
         "trigger": "self_played"
       }
     ],
+    "1348": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] place 1 non-black card from your battle area in its owner's drop: choose up to 1 of your opponent's battle cards, send it to its owner's warp, and your opponent sends 1 card from their hand to their warp.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "1349": [
       {
         "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
@@ -5229,6 +5391,54 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1357": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_targets": 2,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, choose up to 2 of your opponent's battle cards, send them to their owners' warps, and this card gains [critical] for the turn. at the end of your opponent's next turn, negate the skills of all cards sent to warps by this skill for the turn and play them in their owners' battle areas.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
+        "handler_id": "auto_self_gain_power_for_turn_on_play",
+        "handler_params": {
+          "grant_keyword": "Critical",
+          "power_delta": 0
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, choose up to 2 of your opponent's battle cards, send them to their owners' warps, and this card gains [critical] for the turn. at the end of your opponent's next turn, negate the skills of all cards sent to warps by this skill for the turn and play them in their owners' battle areas.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_play_cards_warped_by_source_skill_on_play",
+        "handler_id": "auto_schedule_play_cards_warped_by_source_skill_on_play",
+        "handler_params": {
+          "affected_player_scope": "opponent",
+          "max_targets": -1,
+          "negate_skills": true,
+          "require_next_turn": true,
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "opponent"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is played, choose up to 2 of your opponent's battle cards, send them to their owners' warps, and this card gains [critical] for the turn. at the end of your opponent's next turn, negate the skills of all cards sent to warps by this skill for the turn and play them in their owners' battle areas.",
+        "trigger": "self_played"
+      }
+    ],
     "1358": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -5252,7 +5462,6 @@
           "max_cost": -1,
           "max_targets": 1,
           "negate_skills": true,
-          "required_traits": "Or",
           "source_zone": "drop",
           "target_policy": "first"
         },
@@ -6643,6 +6852,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main](black)(black), if your opponent has 3 or more energy: play this card from your hand or warp, then choose up to 1 of your opponent's battle cards, ignoring [barrier], and send it to its owner's warp.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "min_opponent_energy": 3,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main](black)(black), if your opponent has 3 or more energy: play this card from your hand or warp, then choose up to 1 of your opponent's battle cards, ignoring [barrier], and send it to its owner's warp.",
+        "trigger": "self_activate_main"
       }
     ],
     "1443": [
@@ -7841,9 +8066,41 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played from your hand,  place up to 3 cards from the top of your deck in your drop, and if there are a total of 7 or more cards in all drops, draw 2 cards",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": 7,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand,  choose up to 1 of your opponent's battle cards with an energy cost of 7 or less, ignoring [barrier], and send it to its owner's warp",
+        "trigger": "self_played"
       }
     ],
     "1529": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1,
+          "requires_owner_turn": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played,  if it's your turn, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and send it to its owner's warp",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
         "handler_id": "auto_self_gain_power_for_turn_on_play",
@@ -8285,7 +8542,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Android 18,Defender Of Heroes",
           "required_name_contains": "ANDROID 18, DEFENDER OF HEROES"
         },
         "limit_per_turn": null,
@@ -8385,6 +8641,24 @@
         "provenance": "extractor",
         "source_text": "[activate: main][once per turn] place all the cards under this card in their owners' drop areas: if you placed 1 or more cards in a drop area using this skill, this card gets +5000 power and [double strike] for the turn.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "1569": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": 4,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less, ignoring [barrier], and send it to its owner's warp.",
+        "trigger": "self_played"
       }
     ],
     "157": [
@@ -12126,7 +12400,6 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "The Return Of The Army Of Terror",
           "required_name_contains": "THE RETURN OF THE ARMY OF TERROR"
         },
         "limit_per_turn": null,
@@ -12687,10 +12960,45 @@
     ],
     "1886": [
       {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle",
+        "handler_id": "activate_place_self_under_matching_owner_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "required_owner_battle_allowed_colors": "red",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_min_cost": 3,
+          "required_owner_battle_require_mono_color": true,
+          "required_owner_battle_required_characters": "Mono- Lt Son Goku Gt",
+          "required_owner_battle_without_source_name_under": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose up to 1 of your mono-red &lt;son goku&gt; cards with an energy cost of 3 or more and without cards that have the same name as this card under it, then place this card under it.",
+        "trigger": "self_activate_main"
+      },
+      {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] this card is under a &lt;son goku&gt; battle card: draw 1 card, choose up to 1 of your opponent's battle cards with power less than or equal to the card on top of this card, then ko it.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_draw_n_and_ko_up_to_n_opponent_battle_by_source_host_power",
+        "handler_id": "activate_draw_n_and_ko_up_to_n_opponent_battle_by_source_host_power",
+        "handler_params": {
+          "amount": 1,
+          "max_targets": 1,
+          "required_source_zone": "battle_under",
+          "under_host_required_characters": "Lt Son Goku Gt"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -13846,7 +14154,6 @@
         "handler_id": "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo",
         "handler_params": {
           "event_max_cost": -1,
-          "event_required_characters": "A Ss Son Goku,Showing The Results Of Training",
           "event_required_name_contains": "SS SON GOKU, SHOWING THE RESULTS OF TRAINING",
           "marker_amount": 2,
           "max_targets": 1,
@@ -14103,7 +14410,10 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "ignores_barrier": true,
+          "required_leader_traits": "Black &Lt;Mira&Gt;,&Lt;Towa&Gt; And You Remove 3 Of Your Skill-Less Battle",
+          "requires_leader": "if your leader is a black &lt;mira&gt; or &lt;towa&gt; and you remove 3 of your skill-less battle cards from the game"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -15727,7 +16037,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Crystal Gazing",
           "required_name_contains": "CRYSTAL GAZING"
         },
         "limit_per_turn": null,
@@ -15833,7 +16142,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Hire-Dragon S Home",
           "required_leader_traits": "Yellow &Lt;Son Gohan: Youth&Gt;",
           "required_name_contains": "HIRE-DRAGON'S HOME",
           "requires_leader": "if your leader is a yellow &lt;son gohan: youth&gt; card and you discard this card from your hand"
@@ -16005,6 +16313,23 @@
         "trigger": "self_played"
       }
     ],
+    "2146": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and send it to its owner's warp.",
+        "trigger": "self_played"
+      }
+    ],
     "2147": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -16084,6 +16409,21 @@
       }
     ],
     "2151": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and send it to its owner's warp.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -16713,7 +17053,6 @@
           "discard_from_hand_before": 1,
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Son Goku,The Legendary Warrior",
           "required_name_contains": "SON GOKU, THE LEGENDARY WARRIOR"
         },
         "limit_per_turn": 1,
@@ -17282,6 +17621,27 @@
     ],
     "2239": [
       {
+        "family_id": "self_activate_main:activate_draw_n_and_place_up_to_n_from_owner_deck_or_drop_under_owner_leader",
+        "handler_id": "activate_draw_n_and_place_up_to_n_from_owner_deck_or_drop_under_owner_leader",
+        "handler_params": {
+          "allowed_colors": "green",
+          "amount": 1,
+          "max_cost": 1,
+          "max_targets": 1,
+          "required_characters": "Lt Android 18 Gt,Lt Cell Gt - Both And",
+          "required_leader_traits": "Green \u226aMachine Mutant\u226b",
+          "requires_leader": "if your leader is a green \u226amachine mutant\u226b card and you switch this card to rest mode",
+          "rest_mode_only": true,
+          "source_pool": "deck_or_drop"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a green \u226amachine mutant\u226b card and you switch this card to rest mode: draw 1 card, place up to 1 &lt;android 18&gt; or &lt;cell&gt; card - both green and with an energy cost of 1 - from your deck or drop under your leader, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      },
+      {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -17295,6 +17655,22 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1] if your leader is a green \u226amachine mutant\u226b card and you switch this card to rest mode: draw 1 card, place up to 1 &lt;android 18&gt; or &lt;cell&gt; card - both green and with an energy cost of 1 - from your deck or drop under your leader, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_place_up_to_n_opponent_battle_under_source_host_and_switch_host_active_on_turn_end",
+        "handler_id": "activate_place_up_to_n_opponent_battle_under_source_host_and_switch_host_active_on_turn_end",
+        "handler_params": {
+          "max_targets": 1,
+          "required_source_zone": "battle_under",
+          "under_host_allowed_colors": "green",
+          "under_host_required_characters": "Lt Super 17 Gt"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if this card is under a green &lt;super 17&gt; card: choose up to 1 of your opponent's battle cards and place it under a &lt;super 17&gt; card on top of this card, then switch a &lt;super 17&gt; card on top of this card to active mode at the end of the turn.",
         "trigger": "self_activate_main"
       }
     ],
@@ -18059,7 +18435,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -18102,7 +18479,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -18199,7 +18577,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -18214,7 +18593,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -18540,7 +18920,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -19970,7 +20351,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -22365,6 +22747,21 @@
         "provenance": "extractor",
         "source_text": "[auto][burst 2] when this card is played, draw 1 card, add 1 card from your hand to your z-energy, then choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and send it to its owner's warp.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][burst 2] when this card is played, draw 1 card, add 1 card from your hand to your z-energy, then choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and send it to its owner's warp.",
+        "trigger": "self_played"
       }
     ],
     "2548": [
@@ -23534,7 +23931,9 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "auto_release_under_to_drop_before": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -23547,6 +23946,7 @@
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_params": {
+          "auto_release_under_to_drop_before": 1,
           "max_cost": -1,
           "max_targets": 1,
           "rest_mode_only": true,
@@ -24606,7 +25006,9 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "required_leader_traits": "Blue &Lt;Whis&Gt;",
+          "requires_leader": "if your leader card is a blue &lt;whis&gt; card"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -26815,6 +27217,36 @@
         "trigger": "self_played"
       }
     ],
+    "3860": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "allowed_costs": "4",
+          "max_cost": 4,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "min_cost": 4,
+          "min_owner_energy": 2,
+          "play_on_top_active_mode": true,
+          "required_characters": "Lt Janemba Xeno Gt",
+          "required_owner_battle_allowed_colors": "blue",
+          "required_owner_battle_allowed_costs": "3",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_max_cost": 3,
+          "required_owner_battle_min_cost": 3,
+          "required_owner_battle_require_mono_color": true,
+          "required_owner_battle_required_characters": "Mono- Lt Janemba Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if you have 2 or more energy and you choose 1 of your mono-blue &lt;janemba&gt; cards with an energy cost of 3 and place this card under it: play up to 1 blue &lt;janemba: xeno&gt; card with an energy cost of 4 from your deck or hand on top of the chosen card in active mode, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "3863": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -27117,6 +27549,48 @@
         "provenance": "extractor",
         "source_text": "[auto]((yellow)), if you have 1 or more multicolor energy: at the end of a battle in which this card was used in a combo from your hand, play this card from your drop area.",
         "trigger": "self_comboed_battle_end"
+      }
+    ],
+    "3910": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[0][activate: main] choose 1 card in your hand and discard it: choose up to 1 of your opponent's battle cards with an energy cost of 3 or less and send it to its owner's warp.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3912": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand",
+        "handler_params": {
+          "allowed_colors": "green",
+          "allowed_costs": "9",
+          "max_cost": 9,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "min_cost": 9,
+          "required_characters": "Lt Cell Xeno Gt",
+          "required_owner_battle_allowed_costs": "7,9",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_max_cost": 9,
+          "required_owner_battle_min_cost": 7,
+          "required_owner_battle_required_characters": "Lt Cell Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose 1 of your &lt;cell&gt; cards with an energy cost of 7 or 9 and place this card under it: choose up to 1 green &lt;cell: xeno&gt; card with an energy cost of 9 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
       }
     ],
     "3918": [
@@ -28257,7 +28731,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -28468,6 +28943,20 @@
         "provenance": "extractor",
         "source_text": "[activate: main] draw 1 card, then choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] draw 1 card, then choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp.",
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "4177": [
@@ -28687,6 +29176,40 @@
         "provenance": "extractor",
         "source_text": "[activate: battle] send this card and 1 &lt;goku black&gt; card from your combo area to their owners' warps: draw 1 card.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "4232": [
+      {
+        "family_id": "counter_attack:counter_send_up_to_n_attacking_battle_to_warp",
+        "handler_id": "counter_send_up_to_n_attacking_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "requires_leader": "if your leader card is \u226auniverse 6\u226b"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[counter: attack] negate the attack. if your leader card is \u226auniverse 6\u226b, choose up to 1 attacking battle card and send it to the warp. at the end of the turn, your opponent plays the card sent to the warp with this skill in its owner's battle area from the warp. (cards stacked under the card are placed in the drop area)",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "counter_attack:counter_schedule_play_cards_warped_by_source_skill",
+        "handler_id": "counter_schedule_play_cards_warped_by_source_skill",
+        "handler_params": {
+          "affected_player_scope": "opponent",
+          "require_next_turn": false,
+          "requires_leader": "if your leader card is \u226auniverse 6\u226b",
+          "resting": false,
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "opponent"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[counter: attack] negate the attack. if your leader card is \u226auniverse 6\u226b, choose up to 1 attacking battle card and send it to the warp. at the end of the turn, your opponent plays the card sent to the warp with this skill in its owner's battle area from the warp. (cards stacked under the card are placed in the drop area)",
+        "trigger": "counter_attack"
       }
     ],
     "4236": [
@@ -29241,6 +29764,24 @@
         "trigger": "self_activate_main"
       }
     ],
+    "4340": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "requires_leader": "if your leader card is black",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is black: choose up to 1 of your opponent's battle cards, ignoring [barrier], and send it to its owner's warp.",
+        "trigger": "self_activate_extra_from_hand"
+      }
+    ],
     "4343": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -29460,6 +30001,31 @@
         "trigger": "self_played"
       }
     ],
+    "4397": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": 4,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "play_on_top_active_mode": true,
+          "required_characters": "Lt Frieza Xeno Gt",
+          "required_owner_battle_allowed_costs": "4",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_max_cost": 4,
+          "required_owner_battle_min_cost": 4,
+          "required_owner_battle_required_characters": "Lt Frieza Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose 1 &lt;frieza&gt; card with an energy cost of 4 in your battle area and place this card under it: play up to 1 green &lt;frieza: xeno&gt; card in your deck or hand on top of the chosen card in active mode, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "4399": [
       {
         "family_id": "turn_end:auto_switch_self_active_on_turn_end",
@@ -29565,6 +30131,33 @@
         "trigger": "self_activate_main"
       }
     ],
+    "4432": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": 5,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "play_on_top_active_mode": true,
+          "required_characters": "Lt Majin Buu Xeno Gt",
+          "required_owner_battle_allowed_colors": "green",
+          "required_owner_battle_allowed_costs": "3",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_max_cost": 3,
+          "required_owner_battle_min_cost": 3,
+          "required_owner_battle_require_mono_color": true,
+          "required_owner_battle_required_characters": "Mono- Lt Majin Buu Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose 1 mono-green &lt;majin buu&gt; card with an energy cost of 3 in your battle area and place this card under it: choose up to 1 green &lt;majin buu: xeno&gt; card with an energy cost of 5 or less in your deck or hand, play it on top of the chosen card in active mode, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "4440": [
       {
         "family_id": "counter_attack:counter_negate_attack",
@@ -29653,7 +30246,7 @@
     ],
     "4449": [
       {
-        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
         "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
         "handler_params": {
           "max_targets": 1,
@@ -29664,7 +30257,7 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main] choose up to 1 of your opponent's battle cards and send it to its owner's warp; at the end of your opponent's next turn, play the card sent to their warp with this skill to their battle area with its skills negated for the turn.",
-        "trigger": "self_activate_main"
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "4455": [
@@ -29942,7 +30535,6 @@
           "max_cost": -1,
           "max_targets": 1,
           "negate_self_skill_for_game": true,
-          "required_characters": "Piccolo,Savior From The Beyond",
           "required_name_contains": "PICCOLO, SAVIOR FROM THE BEYOND"
         },
         "limit_per_turn": null,
@@ -30223,7 +30815,9 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "required_leader_traits": "\u226aMachine Mutant\u226b,Draw 1",
+          "requires_leader": "if your leader card is a \u226amachine mutant\u226b"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -31700,6 +32294,40 @@
         "trigger": "self_activate_main"
       }
     ],
+    "5061": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose up to 1 of your opponent's battle cards, negate its skills for the duration of the turn, and send it to its owner's warp. at the end of your opponent's next turn, play the card sent to the warp by this skill from the warp in its owner's battle area in rest mode.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_schedule_play_cards_warped_by_source_skill",
+        "handler_id": "activate_schedule_play_cards_warped_by_source_skill",
+        "handler_params": {
+          "affected_player_scope": "opponent",
+          "rest_mode_only": true,
+          "resting": true,
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "opponent"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose up to 1 of your opponent's battle cards, negate its skills for the duration of the turn, and send it to its owner's warp. at the end of your opponent's next turn, play the card sent to the warp by this skill from the warp in its owner's battle area in rest mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5066": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -31723,8 +32351,7 @@
           "allowed_colors": "blue",
           "max_cost": 3,
           "max_targets": 1,
-          "required_name_contains": "TAPION",
-          "required_traits": "Mono"
+          "required_name_contains": "TAPION"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -31994,6 +32621,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "5162": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 3 black battle cards with energy costs between 3 and 7 in your drop area and place them at the bottom of your deck in any order: choose up to 1 of your opponent's battle cards ignoring [barrier] and send it to its owner's warp.",
+        "trigger": "self_activate_main"
       }
     ],
     "5163": [
@@ -33022,7 +33666,9 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "requires_leader": "if your leader card is an \u226aandroid\u226b card",
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -34800,6 +35446,36 @@
         "trigger": "self_comboed"
       }
     ],
+    "5488": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_params": {
+          "allowed_colors": "green",
+          "allowed_costs": "4",
+          "max_cost": 4,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "min_cost": 4,
+          "min_opponent_energy": 3,
+          "play_on_top_active_mode": true,
+          "required_characters": "Lt Lord Slug Xeno Gt",
+          "required_owner_battle_allowed_colors": "green",
+          "required_owner_battle_allowed_costs": "3,4",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_max_cost": 4,
+          "required_owner_battle_min_cost": 3,
+          "required_owner_battle_require_mono_color": true,
+          "required_owner_battle_required_characters": "Mono- Lt Lord Slug Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your opponent has 3 or more energy and you choose 1 of your mono-green &lt;lord slug&gt; cards with an energy cost of 3 or 4 and place this card under it: choose up to 1 green &lt;lord slug: xeno&gt; card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in active mode, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5489": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -34909,7 +35585,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Makyo Star",
           "required_leader_traits": "Yellow \u226aDemon Clan\u226b",
           "required_name_contains": "MAKYO STAR",
           "requires_leader": "if your leader card is a yellow \u226ademon clan\u226b card and you discard this card from your hand"
@@ -35333,6 +36008,22 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main] if you have 3 or more energy and you choose 1 of your blue skill-less battle cards with an energy cost of 2 or 3 and return it to its owner's hand: play this card from your hand, and you can't activate the [activate: main] skill of copies of this card for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "5556": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] send this card to its owner's warp, and you can't play copies of this card for the turn: choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp.",
         "trigger": "self_activate_main"
       }
     ],
@@ -35826,6 +36517,43 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main][burst 1] discard this card: look at up to 5 cards from the top of your deck, add up to 1 mono-yellow \u226ashadow dragon\u226b card with an energy cost of 8 or less among them to your hand, then shuffle your deck. you can't activate the [activate: main] skill on copies of this card for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "5615": [
+      {
+        "family_id": "self_activate_main:activate_schedule_play_cards_warped_by_source_skill",
+        "handler_id": "activate_schedule_play_cards_warped_by_source_skill",
+        "handler_params": {
+          "affected_player_scope": "owner",
+          "mark_source_in_owner_warp": true,
+          "requires_leader": "if your leader card is \u226auniverse 6\u226b",
+          "trigger_kind": "main_phase_start",
+          "trigger_player_scope": "owner"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] send this card to the warp: at the beginning of your next turn, if your leader card is \u226auniverse 6\u226b, play this card from the warp in its owner's battle area.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "5618": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "required_leader_traits": "Black \u226aSaiyan\u226b",
+          "requires_leader": "if your leader card is a black \u226asaiyan\u226b card, you send this card from your drop area to your warp, and you choose 1 of your black unison cards and place it in its owner's drop area",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a black \u226asaiyan\u226b card, you send this card from your drop area to your warp, and you choose 1 of your black unison cards and place it in its owner's drop area: choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp, and you can't activate the [activate: main] skill on copies of this card for the turn.",
         "trigger": "self_activate_main"
       }
     ],
@@ -36886,6 +37614,23 @@
         "provenance": "extractor",
         "source_text": "[activate: main](red)\u2460, if your leader card is a red &lt;son goten&gt; card and you choose this card and 1 of your unison cards and switch them to rest mode: draw 1 card. if you have a red unison card with a specified cost of 3 or more in play, you may have 1 of your leader cards get +15000 power and [triple strike] until the end of a battle or the end of the turn, whichever comes first.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "580": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 4,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp.",
+        "trigger": "self_played"
       }
     ],
     "5801": [
@@ -39309,6 +40054,21 @@
         "trigger": "self_activate_main"
       },
       {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](red)(blue)(green)(yellow): play this card from your hand, then choose up to 1 of your opponent's battle cards, ignoring [barrier], and send it to its owner's warp.",
+        "trigger": "self_activate_main"
+      },
+      {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -39930,7 +40690,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -41339,6 +42100,36 @@
     ],
     "6535": [
       {
+        "family_id": "self_played:auto_send_up_to_n_opponent_hand_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_hand_battle_to_warp_on_play",
+        "handler_params": {
+          "max_power": 15000,
+          "max_targets": 1,
+          "min_owner_energy": 2,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 2 or more energy and all of your opponent's energy is in rest mode: when this card is played, your opponent reveals their hand. you choose up to 1 battle card with 15000 power or less from it and send it to its owner's warp. at the end of your opponent's next turn, return the card sent to the warp by this skill to its owner's hand.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play",
+        "handler_id": "auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play",
+        "handler_params": {
+          "min_owner_energy": 2,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 2 or more energy and all of your opponent's energy is in rest mode: when this card is played, your opponent reveals their hand. you choose up to 1 battle card with 15000 power or less from it and send it to its owner's warp. at the end of your opponent's next turn, return the card sent to the warp by this skill to its owner's hand.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {},
@@ -41911,6 +42702,36 @@
         "trigger": "self_played"
       }
     ],
+    "6604": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host",
+        "handler_params": {
+          "allowed_colors": "green",
+          "allowed_costs": "4",
+          "max_cost": 4,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "min_cost": 4,
+          "min_opponent_energy": 2,
+          "play_on_top_active_mode": true,
+          "required_characters": "Lt Turles Xeno Gt",
+          "required_owner_battle_allowed_colors": "green",
+          "required_owner_battle_allowed_costs": "3,4",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_max_cost": 4,
+          "required_owner_battle_min_cost": 3,
+          "required_owner_battle_require_mono_color": true,
+          "required_owner_battle_required_characters": "Mono- Lt Turles Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your opponent has 2 or more energy and you choose 1 of your mono-green &lt;turles&gt; cards with an energy cost of 3 or 4 and place this card under it: choose up to 1 green &lt;turles: xeno&gt; card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in active mode, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "6605": [
       {
         "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
@@ -42164,6 +42985,19 @@
         "trigger": "self_attacks"
       }
     ],
+    "6660": [
+      {
+        "family_id": "owner_card_left_battle_area:auto_return_cards_warped_by_source_skill_to_owner_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_return_cards_warped_by_source_skill_to_owner_hand_on_owner_matching_battle_left",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card leaves the battle area, your opponent adds all cards sent to the warp with this card's skill to their hand.",
+        "trigger": "owner_card_left_battle_area"
+      }
+    ],
     "6662": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -42405,7 +43239,6 @@
           "markers": 2,
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Frieza Cell,A Match Made In Hell",
           "required_name_contains": "FRIEZA & CELL, A MATCH MADE IN HELL",
           "requires_leader": "if your leader card and energy are all mono-blue and you choose 1 card in your hand and discard it",
           "requires_mono_energy": "blue",
@@ -42752,6 +43585,40 @@
       }
     ],
     "6726": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 3,
+          "max_targets": 1,
+          "send_self_to_warp": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose this card and up to 1 of your opponent's battle cards with an energy cost of 3 or less and send them to their owners' warps; at the end of the turn, negate the skills of all cards sent to warps by this skill for the turn and play them to their owners' battle areas.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_play_cards_warped_by_source_skill_on_play",
+        "handler_id": "auto_schedule_play_cards_warped_by_source_skill_on_play",
+        "handler_params": {
+          "affected_player_scope": "both",
+          "max_targets": -1,
+          "negate_skills": true,
+          "require_next_turn": false,
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "current"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose this card and up to 1 of your opponent's battle cards with an energy cost of 3 or less and send them to their owners' warps; at the end of the turn, negate the skills of all cards sent to warps by this skill for the turn and play them to their owners' battle areas.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -43287,6 +44154,36 @@
         "trigger": "self_activate_main"
       }
     ],
+    "6789": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_hand_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_hand_battle_to_warp_on_play",
+        "handler_params": {
+          "max_power": 35000,
+          "max_targets": 2,
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card from your hand, your opponent reveals their hand. choose up to 2 battle cards with 35000 or less power from their hand and send them to the warp. at the end of your opponent's next turn, return all cards sent to the warp with this skill to their hand.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play",
+        "handler_id": "auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play",
+        "handler_params": {
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card from your hand, your opponent reveals their hand. choose up to 2 battle cards with 35000 or less power from their hand and send them to the warp. at the end of your opponent's next turn, return all cards sent to the warp with this skill to their hand.",
+        "trigger": "self_played"
+      }
+    ],
     "6790": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -43633,7 +44530,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -45371,6 +46269,22 @@
         "trigger": "self_played"
       }
     ],
+    "7102": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] place this card at the bottom of its owner's deck: choose up to 1 of your opponent's battle cards, send it to its owner's warp, and place 2 cards from the top of your opponent's deck in their drop area.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "7106": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -45692,6 +46606,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card, if your leader card is a yellow \u226agoku's lineage\u226b and your life is at 4 or less, draw 1 card and this card gains +10000 combo power for the duration of the turn.",
         "trigger": "self_comboed"
+      }
+    ],
+    "7150": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][spirit boost 1] (you must remove a marker from your unison card to activate this skill.) [limit 1] (you can only activate this skill once per turn across all copies of this card.) \u2460, unison card with a specified cost, remove this card in your drop area from the game: choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and send it to its owner's warp.",
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "7151": [
@@ -46600,6 +47530,22 @@
         "provenance": "extractor",
         "source_text": "[offering] (when you play this card, your opponent may choose 1 card from their life and place it in their drop area. if they don't, draw 2 cards.)",
         "trigger": "self_played"
+      }
+    ],
+    "7278": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle][limit 1] (you can only activate this skill once per turn across all copies of this card.) if your opponent has a unison card in play: your opponent places the top card of their deck in their drop area. your opponent may choose 1 of their unison cards and remove 2 markers from it. if they don't, draw 1 card, then choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "7283": [
@@ -47634,6 +48580,33 @@
         "trigger": "self_played"
       }
     ],
+    "7406": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp_and_schedule_play_warped_cards_later",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp_and_schedule_play_warped_cards_later",
+        "handler_params": {
+          "affected_player_scope": "opponent",
+          "drop_instead_if_affected_deck_at_most": 15,
+          "max_targets": -1,
+          "negate_skills": true,
+          "require_next_turn": false,
+          "required_leader_traits": "\u226aShadow Dragon\u226b",
+          "requires_cost_greater_than_opponent_current_energy": true,
+          "requires_leader": "if your leader card is a \u226ashadow dragon\u226b card",
+          "resting": false,
+          "send_max_targets": 1,
+          "target_policy": "first",
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "current"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "",
+        "trigger": "self_activate_extra_from_hand"
+      }
+    ],
     "7411": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -48395,8 +49368,7 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "Gotenks,Son Goten,Trunks: Youth",
-          "required_traits": "Or"
+          "required_characters": "Gotenks,Son Goten,Trunks: Youth"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -50491,7 +51463,6 @@
         "handler_params": {
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Vegito,Fusion In The Future",
           "required_leader_traits": "Green",
           "required_name_contains": "VEGITO, FUSION IN THE FUTURE",
           "requires_leader": "if your leader is a green card with both <trunks: future> and <mai: future>, you have {vegeta, fusion in the future} in play, and you discard this card from your hand"
@@ -51485,7 +52456,6 @@
           "auto_cost_header": "{r}",
           "max_cost": -1,
           "max_targets": 1,
-          "required_characters": "Great Ape Son Goku,The Aggressor",
           "required_name_contains": "GREAT APE SON GOKU, THE AGGRESSOR"
         },
         "limit_per_turn": 1,
@@ -52019,8 +52989,7 @@
           "max_cost": -1,
           "max_targets": 1,
           "negate_self_skill_for_game": true,
-          "required_name_contains": "POTARA",
-          "required_traits": "Potara"
+          "required_name_contains": "POTARA"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -53463,8 +54432,7 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "Android 17,Super 17",
-          "required_traits": "Or"
+          "required_characters": "Android 17,Super 17"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -53670,7 +54638,7 @@
           "required_card_type": "",
           "required_characters": "Android 17,Hell Fighter 17",
           "required_name_contains": "",
-          "required_traits": "Or"
+          "required_traits": ""
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -53686,7 +54654,7 @@
           "allowed_colors": "red",
           "event_allowed_colors": "",
           "event_required_card_type": "",
-          "event_required_characters": "Power-Infused Shocking Death Ball",
+          "event_required_characters": "",
           "event_required_name_contains": "POWER-INFUSED SHOCKING DEATH BALL",
           "event_required_traits": "",
           "event_requires_all_characters": false,
@@ -53694,7 +54662,7 @@
           "required_card_type": "",
           "required_characters": "Android 17,Hell Fighter 17",
           "required_name_contains": "",
-          "required_traits": "Or"
+          "required_traits": ""
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -53808,8 +54776,7 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "Gogeta: Br,Vegeta: Br",
-          "required_traits": "Or"
+          "required_characters": "Gogeta: Br,Vegeta: Br"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -53907,8 +54874,7 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "Gogeta: Br,Son Goku: Br",
-          "required_traits": "Or"
+          "required_characters": "Gogeta: Br,Son Goku: Br"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -54907,7 +55873,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "ignores_barrier": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -55061,6 +56028,23 @@
       }
     ],
     "8243": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1,
+          "required_leader_traits": "&Lt;Pan: Xeno&Gt;",
+          "requires_leader": "if your leader is a &lt;pan: xeno&gt; card",
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a &lt;pan: xeno&gt; card: when this card is played, for every z-energy cost of the z-cards in your battle area and unison area, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and send it to its owner's warp.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -55980,6 +56964,24 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] choose 1 of your \u226anamekian\u226b battle cards with a [revive] skill and place this card under it: draw 1 card, then choose up to 1 of your opponent's battle cards and return it to its owner's hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_draw_n_and_return_up_to_n_opponent_battle_to_hand",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_draw_n_and_return_up_to_n_opponent_battle_to_hand",
+        "handler_params": {
+          "amount": 1,
+          "max_host_targets": 1,
+          "max_targets": 1,
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_required_traits": "Namekian",
+          "required_owner_battle_skill_text_contains": "[revive"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -57928,6 +58930,24 @@
         "trigger": "self_played"
       }
     ],
+    "8465": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": 4,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less, ignoring [barrier], and send it to its owner's warp.",
+        "trigger": "self_played"
+      }
+    ],
     "8467": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -58075,7 +59095,6 @@
         "handler_id": "auto_reduce_next_matching_z_awaken_cost_in_z_deck_on_play",
         "handler_params": {
           "reduction_cost_token": "y",
-          "target_required_characters": "Golden Frieza,Shining Emperor",
           "target_required_name_contains": "GOLDEN FRIEZA, SHINING EMPEROR",
           "uses_remaining": 1,
           "z_energy_reduction": 1
@@ -58584,6 +59603,21 @@
         "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
           "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{1}, place this card under a <kefla> battle card: choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_bottom_deck_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_required_characters": "Kefla"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -59118,8 +60152,7 @@
           "max_cost": 1,
           "max_targets": 1,
           "required_card_type": "EXTRA",
-          "required_name_contains": "TREE OF MIGHT",
-          "required_traits": "And"
+          "required_name_contains": "TREE OF MIGHT"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -60344,7 +61377,6 @@
           "max_targets": 1,
           "power_delta": 5000,
           "required_characters": "Krillin,Son Gohan: Youth",
-          "required_traits": "Or",
           "rest_mode_only": true,
           "target_policy": "first",
           "target_scope": "owner_cards"
@@ -61538,7 +62570,6 @@
           "max_cost": -1,
           "max_targets": 1,
           "negate_self_skill_for_game": true,
-          "required_characters": "Stop You Fiend",
           "required_name_contains": "STOP YOU FIEND!"
         },
         "limit_per_turn": null,
@@ -61694,8 +62725,7 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "Son Gohan: Adolescence,Videl",
-          "required_traits": "Or"
+          "required_characters": "Son Gohan: Adolescence,Videl"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
@@ -62727,7 +63757,6 @@
           "max_cost": -1,
           "max_targets": 1,
           "negate_self_skill_for_game": true,
-          "required_characters": "Yes,Time To Die",
           "required_name_contains": "YES, TIME TO DIE!"
         },
         "limit_per_turn": null,
@@ -63656,7 +64685,6 @@
           "max_cost": -1,
           "required_characters": "Son Goten,Trunks : Youth",
           "required_leader_traits": "Krillin",
-          "required_traits": "Or",
           "requires_leader": "if your leader is a red <krillin> card : the next time you activate [ex-evolve] on your red <son goten> or <trunks : youth> card during this turn",
           "uses_remaining": 1
         },
@@ -64423,7 +65451,8 @@
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -64874,6 +65903,24 @@
     ],
     "9730": [
       {
+        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1,
+          "required_leader_traits": "Son Goku",
+          "requires_leader": "if your leader is a black <son goku>-only card",
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is a black <son goku>-only card : when this card is played, play up to 1 {son goku, predicament} from your warp in rest mode, then choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and send it to its owner's warp.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_warp",
         "handler_id": "activate_play_self_from_warp",
         "handler_params": {
@@ -64913,8 +65960,7 @@
           "max_power": 15000,
           "max_targets": 1,
           "mirror_destination_zone": true,
-          "required_card_type": "BATTLE",
-          "required_traits": "Or"
+          "required_card_type": "BATTLE"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
@@ -64997,6 +66043,22 @@
         "handler_params": {
           "ignores_barrier": true,
           "min_owner_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{b}{b}, if you have 3 or more energy and you send 2 black cards from your drop to their owner's warp : draw 1 card, play this card from your hand, then choose up to 1 of your opponent's battle cards, ignoring [barrier], and send it to its owner's warp.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_targets": 1,
+          "min_owner_energy": 3,
+          "target_policy": "first"
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",

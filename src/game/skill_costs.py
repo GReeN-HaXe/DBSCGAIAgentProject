@@ -422,6 +422,10 @@ class SkillCostDsl:
                 if player.leader_area.resting:
                     return False
                 continue
+            if step.kind == "rest_self":
+                if source_card.resting:
+                    return False
+                continue
             if step.kind == "send_owner_energy_to_drop":
                 allowed_colors = SkillCostDsl._parse_param_set(step.params.get("allowed_colors"))
                 available = [
@@ -608,6 +612,10 @@ class SkillCostDsl:
             if step.kind == "rest_owner_leader":
                 player.leader_area.resting = True
                 metadata["alternate_cost_kind"] = "rest_owner_leader"
+                continue
+            if step.kind == "rest_self":
+                source_card.resting = True
+                metadata["alternate_cost_kind"] = "rest_self"
                 continue
             if step.kind == "send_owner_energy_to_drop":
                 allowed_colors = SkillCostDsl._parse_param_set(step.params.get("allowed_colors"))

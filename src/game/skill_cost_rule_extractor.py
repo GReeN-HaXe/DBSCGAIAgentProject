@@ -39,6 +39,10 @@ _ACTIVATE_MAIN_Z_ENERGY_TO_DROP_RE = re.compile(
 _ACTIVATE_MAIN_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?place (\d+) of your energy into (?:its|their) owner'?s drop(?:[^:]{0,120})?\s*:"
 )
+_ACTIVATE_MAIN_REST_SELF_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?switch this card to rest mode\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_BATTLE_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,220}?place (\d+) of your energy into (?:its|their) owner'?s drop\s*:"
 )
@@ -79,6 +83,10 @@ _ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE = re.compile(
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:"
 )
+_ACTIVATE_MAIN_SEND_SELF_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?send this card to (?:(?:the )?warp|(?:its|their )?owner'?s warp)\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,320}?remove this card in the drop from the game,\s*and you discard (\d+) card(?:s)? from your hand\s*:",
     re.IGNORECASE,
@@ -97,6 +105,10 @@ _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE = re.compile(
 )
 _AUTO_ON_PLAY_Z_ENERGY_TO_DROP_RE = re.compile(
     r"place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:\s*when this card is played,\s*activate this skill",
+    re.IGNORECASE,
+)
+_AUTO_ON_PLAY_HAND_TO_BOTTOM_DECK_RE = re.compile(
+    r"place (\d+) card(?:s)? from your hand at the bottom of your deck(?: in any order)?\s*:\s*when this card is played",
     re.IGNORECASE,
 )
 _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE = re.compile(
@@ -549,6 +561,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_main_energy_to_drop.group(1)),
             }
         ]
+    if _ACTIVATE_MAIN_REST_SELF_RE.search(text):
+        rules.setdefault("activate_main", []).insert(
+            0,
+            {
+                "kind": "rest_self",
+                "amount": 1,
+            },
+        )
 
     m_activate_battle_energy_to_drop = _ACTIVATE_BATTLE_ENERGY_TO_DROP_RE.search(text)
     if m_activate_battle_energy_to_drop:
@@ -650,6 +670,8 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         amount = int(m_activate_main_drop_to_warp.group(1))
         descriptor = str(m_activate_main_drop_to_warp.group(2) or "").strip()
         rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_owner_drop_to_warp", descriptor, amount))
+    if _ACTIVATE_MAIN_SEND_SELF_TO_WARP_RE.search(text):
+        rules.setdefault("activate_main", []).append({"kind": "send_self_to_warp", "amount": 1})
     if m_activate_main_remove_self_in_drop_and_discard_hand:
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
         rules.setdefault("activate_main", []).append(
@@ -674,6 +696,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             {
                 "kind": "send_owner_z_energy_to_drop",
                 "amount": int(m_auto_on_play_z_energy_to_drop.group(1)),
+            }
+        ]
+    m_auto_on_play_hand_to_bottom_deck = _AUTO_ON_PLAY_HAND_TO_BOTTOM_DECK_RE.search(text)
+    if m_auto_on_play_hand_to_bottom_deck:
+        rules["auto_on_play_battle"] = [
+            {
+                "kind": "send_owner_hand_to_bottom_deck",
+                "amount": int(m_auto_on_play_hand_to_bottom_deck.group(1)),
             }
         ]
     m_auto_on_opponent_combo_z_energy_to_drop = _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE.search(text)

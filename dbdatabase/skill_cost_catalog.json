@@ -63,6 +63,14 @@
       }
     ]
   },
+  "1008": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "10091": {
     "activate_main": [
       {
@@ -168,6 +176,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "1075": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -367,6 +383,14 @@
       }
     ]
   },
+  "1337": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "1340": {
     "activate_main_hand": [
       {
@@ -377,6 +401,22 @@
   },
   "1344": {
     "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1345": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1349": {
+    "auto_on_play_battle": [
       {
         "amount": 1,
         "kind": "send_owner_hand_to_bottom_deck"
@@ -404,6 +444,14 @@
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "1359": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -460,6 +508,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "1391": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -552,6 +608,14 @@
       }
     ]
   },
+  "1592": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "1596": {
     "activate_main_unison": [
       {
@@ -580,6 +644,30 @@
       }
     ]
   },
+  "1633": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1638": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1639": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "1662": {
     "activate_main_unison": [
       {
@@ -604,11 +692,35 @@
       }
     ]
   },
+  "1760": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1769": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "1770": {
     "activate_main": [
       {
         "amount": 2,
         "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1834": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -724,6 +836,14 @@
       }
     ]
   },
+  "2001": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "2004": {
     "activate_main_hand": [
       {
@@ -745,6 +865,46 @@
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "2043": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2056": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2071": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2113": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2127": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -831,6 +991,14 @@
       }
     ]
   },
+  "2239": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "2243": {
     "activate_main": [
       {
@@ -875,6 +1043,10 @@
     "activate_main": [
       {
         "amount": 1,
+        "kind": "rest_self"
+      },
+      {
+        "amount": 1,
         "kind": "send_self_to_drop"
       }
     ]
@@ -911,6 +1083,22 @@
       }
     ]
   },
+  "2305": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2306": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "238": {
     "activate_main": [
       {
@@ -940,6 +1128,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2432": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -980,6 +1176,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2517": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1055,6 +1259,14 @@
       }
     ]
   },
+  "2600": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "2604": {
     "activate_main_unison": [
       {
@@ -1064,6 +1276,12 @@
     ]
   },
   "2649": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ],
     "activate_main_hand": [
       {
         "amount": 1,
@@ -1111,6 +1329,14 @@
       }
     ]
   },
+  "296": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "297": {
     "activate_main_unison": [
       {
@@ -1120,6 +1346,14 @@
       {
         "amount": 7,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "301": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1137,6 +1371,20 @@
         "amount": 1,
         "kind": "add_markers"
       }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "32": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
     ]
   },
   "320": {
@@ -1144,6 +1392,22 @@
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "326": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "327": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1465,6 +1729,14 @@
       }
     ]
   },
+  "387": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "3870": {
     "activate_main_unison": [
       {
@@ -1509,6 +1781,14 @@
       }
     ]
   },
+  "390": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "3905": {
     "activate_main_unison": [
       {
@@ -1542,6 +1822,22 @@
       {
         "amount": 6,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "3931": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "3944": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1730,6 +2026,14 @@
       }
     ]
   },
+  "4061": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4063": {
     "activate_main_unison": [
       {
@@ -1887,6 +2191,14 @@
       }
     ]
   },
+  "4206": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4207": {
     "activate_main": [
       {
@@ -1924,11 +2236,27 @@
       }
     ]
   },
+  "4254": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4311": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "4326": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1957,6 +2285,22 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "4366": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "4408": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2036,6 +2380,14 @@
       }
     ]
   },
+  "4643": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4657": {
     "activate_main_unison": [
       {
@@ -2050,6 +2402,14 @@
         "amount": 1,
         "kind": "send_owner_battle_under_to_drop",
         "required_host_name_contains": "THE NAMELESS PLANET"
+      }
+    ]
+  },
+  "4667": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2477,6 +2837,14 @@
       }
     ]
   },
+  "5615": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_warp"
+      }
+    ]
+  },
   "5618": {
     "activate_main": [
       {
@@ -2553,6 +2921,14 @@
       }
     ]
   },
+  "5651": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "5660": {
     "activate_main_unison": [
       {
@@ -2575,6 +2951,14 @@
       }
     ]
   },
+  "569": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "570": {
     "activate_main_unison": [
       {
@@ -2588,6 +2972,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5740": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2608,6 +3000,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5767": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2632,6 +3032,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5923": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2709,6 +3117,14 @@
       }
     ]
   },
+  "6060": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "607": {
     "activate_main_unison": [
       {
@@ -2760,6 +3176,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "6156": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3329,6 +3753,14 @@
       }
     ]
   },
+  "7045": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "705": {
     "activate_main_unison": [
       {
@@ -3643,6 +4075,14 @@
       }
     ]
   },
+  "7402": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "7404": {
     "activate_main_unison": [
       {
@@ -3713,6 +4153,14 @@
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "7763": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3815,6 +4263,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7845": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3974,6 +4430,14 @@
       }
     ]
   },
+  "7929": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "7940": {
     "counter_alternate_from_hand": [
       {
@@ -4070,6 +4534,22 @@
       }
     ]
   },
+  "8060": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "8066": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "8070": {
     "activate_main": [
       {
@@ -4101,6 +4581,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8097": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -4439,6 +4927,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "8605": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },

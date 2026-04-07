@@ -76,6 +76,24 @@ def test_extract_activate_main_without_colon_hidden_mode_skill_cost_rule() -> No
     }
 
 
+def test_extract_activate_main_rest_self_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1] If your Leader is a green ≪Machine Mutant≫ card and you switch this card to Rest Mode: "
+            "Draw 1 card, place up to 1 <Android 18> or <Cell> card-both green and with an energy cost of 1-from your deck or Drop under your Leader, then shuffle your deck if you looked through it."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "rest_self",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_hidden_mode_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -224,6 +242,17 @@ def test_extract_zamasu_scheme_activate_main_costs_are_source_zone_specific() ->
     }
 
 
+def test_extract_activate_main_send_self_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Send this card to the Warp: "
+            "At the beginning of your next turn, if your Leader Card is ≪Universe 6≫, play this card from the Warp in its owner's Battle Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"] == [{"kind": "send_self_to_warp", "amount": 1}]
+
+
 def test_extract_auto_on_play_z_energy_to_drop_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -237,6 +266,26 @@ def test_extract_auto_on_play_z_energy_to_drop_cost_rule() -> None:
             {
                 "kind": "send_owner_z_energy_to_drop",
                 "amount": 2,
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_play_hand_to_bottom_deck_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto][Limit 1] If your Leader is a yellow <Whis> card and you place 1 card from your hand at the bottom of your deck: "
+            "When this card is played, send up to 2 skill-less Battle Cards with 15000 power and different character names from your deck to your Warp, "
+            "shuffle your deck, and at the end of your opponent's next turn, play up to 1 of the cards sent to your Warp by this skill in your Battle Area, "
+            "and you may add the remaining cards to your hand."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_play_battle": [
+            {
+                "kind": "send_owner_hand_to_bottom_deck",
+                "amount": 1,
             }
         ]
     }

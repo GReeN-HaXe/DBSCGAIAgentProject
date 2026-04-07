@@ -2586,6 +2586,108 @@ Resolved:
         - activate legality now supports matching-card requirements under your Leader via reusable filtered leader-under checks
         - the effect can move matching under-Leader cards into `Z-Energy` before resolving the source placement
         - `drop` is now a real source zone for the under-Leader placement family
+    - status: adjacent under-Leader deck-or-Drop setup slice complete
+      - added:
+        - `activate_main -> rest_self`
+        - `self_activate_main:activate_draw_n_and_place_up_to_n_from_owner_deck_or_drop_under_owner_leader`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1] If your Leader is a green ≪Machine Mutant≫ card and you switch this card to Rest Mode: Draw 1 card, place up to 1 <Android 18> or <Cell> card-both green and with an energy cost of 1-from your deck or Drop under your Leader, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - `rest_self` is now a reusable activate cost for public battle-card sources
+        - the new under-Leader setup family currently resolves deterministically:
+          - `deck` first
+          - then `drop`
+        - the tucked card emits the normal `card_placed_under_card` provenance with:
+          - `placed_from="deck"` or `placed_from="drop"`
+      - parked for later:
+        - the second `Power Distilled` line still wants a wider:
+          - `activate from under a Battle host`
+          seam
+    - status: adjacent under-Battle-host activate slice complete
+      - added:
+        - `battle_under` public source registration / legality bridge
+        - `self_activate_main:activate_place_up_to_n_opponent_battle_under_source_host_and_switch_host_active_on_turn_end`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1] If this card is under a green <Super 17> card: Choose up to 1 of your opponent's Battle Cards and place it under a <Super 17> card on top of this card, then switch a <Super 17> card on top of this card to Active Mode at the end of the turn.`
+      - current semantics are explicit:
+        - tucked owner-owned cards under your Battle Cards can now be real public `Activate` sources
+        - the current action bridge scans owner-owned under-cards in `battle_area` deterministically
+        - the `Power Distilled` follow-up tucks the chosen opponent Battle Card under the host above the source and schedules that host to switch to `Active Mode` at end of turn
+    - status: adjacent owner-controlled `battle_under` setup / payoff slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle`
+        - `self_activate_main:activate_draw_n_and_ko_up_to_n_opponent_battle_by_source_host_power`
+      - first covered live wording family:
+        - `[Activate: Main] Choose up to 1 of your mono-red <Son Goku> cards with an energy cost of 3 or more and without cards that have the same name as this card under it, then place this card under it.`
+        - `[Activate: Main][Limit 1] This card is under a <Son Goku> Battle Card: Draw 1 card, choose up to 1 of your opponent's Battle Cards with power less than or equal to the card on top of this card, then KO it.`
+      - current semantics are explicit:
+        - owner Battle hosts can now be filtered by:
+          - min cost
+          - mono-color
+          - shared descriptor filters
+          - excluding the source instance
+          - excluding hosts that already have a same-name under-card
+        - the under-host payoff reads the current power of the host above the source, then applies the KO threshold from that live value
+    - status: adjacent owner-controlled `battle_under` sibling payoff slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_draw_n_and_return_up_to_n_opponent_battle_to_hand`
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_bottom_deck_up_to_n_opponent_battle`
+      - first covered live wording families:
+        - `[Activate: Main][Limit 1] Choose 1 of your ≪Namekian≫ Battle Cards with a [Revive] skill and place this card under it: Draw 1 card, then choose up to 1 of your opponent's Battle Cards and return it to its owner's hand.`
+        - `[Activate: Main]{1}, place this card under a <Kefla> Battle Card: Choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.`
+      - current semantics are explicit:
+        - the shared setup helper now supports host matching by skill-text substring as well as the earlier color / trait / character / cost filters
+        - the Piccolo family bounces the selected opponent Battle Card to hand after the source is tucked under the chosen host
+        - the Kefla family reuses the same host placement helper, then bottom-decks the selected opponent Battle Card
+    - status: adjacent owner-controlled `battle_under` on-top promotion slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host`
+      - first covered live wording families:
+        - `[Activate: Main] Choose 1 <Frieza> card with an energy cost of 4 in your Battle Area and place this card under it: Play up to 1 green <Frieza: Xeno> card in your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+        - `[Activate: Main] Choose 1 mono-green <Majin Buu> card with an energy cost of 3 in your Battle Area and place this card under it: Choose up to 1 green <Majin Buu: Xeno> card with an energy cost of 5 or less in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - the shared owner-Battle setup helper is reused to choose the host and tuck the source before promotion
+        - on-top promotion now searches `deck` first, then falls back to `hand`
+        - exact host-cost matching now supports both minimum and maximum bounds for this seam
+        - `in Active Mode` is modeled directly instead of inheriting the host's current rest state
+    - status: adjacent owner-controlled `battle_under` on-top promotion discrete-cost hardening slice complete
+      - added:
+        - discrete host-cost filtering through:
+          - `required_owner_battle_allowed_costs`
+        - discrete promoted-target cost filtering through:
+          - `allowed_costs`
+      - first covered live wording family:
+        - `[Activate: Main] If your opponent has 2 or more energy and you choose 1 of your mono-green <Turles> cards with an energy cost of 3 or 4 and place this card under it: Choose up to 1 green <Turles: Xeno> card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - discrete `3 or 4` style host costs are modeled as exact allowed-cost sets, not loose min/max ranges
+        - exact promoted-target costs like `energy cost of 4` now stay exact inside this seam instead of allowing cheaper same-name variants
+    - status: adjacent owner-controlled `battle_under` on-top promotion exact-sibling slice complete
+      - regression-backed exact siblings:
+        - `Janemba`
+        - `Lord Slug`
+      - first covered live wording families:
+        - `[Activate: Main] If you have 2 or more energy and you choose 1 of your mono-blue <Janemba> cards with an energy cost of 3 and place this card under it: Play up to 1 blue <Janemba: Xeno> card with an energy cost of 4 from your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+        - `[Activate: Main] If your opponent has 3 or more energy and you choose 1 of your mono-green <Lord Slug> cards with an energy cost of 3 or 4 and place this card under it: Choose up to 1 green <Lord Slug: Xeno> card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+      - current semantics are unchanged:
+        - both lines ride the same shared owner-Battle setup and on-top promotion path as the Frieza / Majin Buu / Turles siblings
+    - status: adjacent owner-controlled `battle_under` plain-play promotion slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand`
+      - first covered live wording family:
+        - `[Activate: Main] Choose 1 of your <Cell> cards with an energy cost of 7 or 9 and place this card under it: Choose up to 1 green <Cell: Xeno> card with an energy cost of 9 in your deck or hand, play it, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - the same shared owner-Battle setup helper is reused to choose the host and tuck the source under it first
+        - matching follow-up plays search `deck` first, then fall back to `hand`
+        - unlike the on-top promotion family, the chosen host stays in play and the promoted card is played as a separate Battle Card
+    - status: adjacent under-host hand-play setup slice complete
+      - widened:
+        - `self_activate_main:activate_play_self_from_hand`
+      - first covered live wording family:
+        - `[Activate: Main](Red), choose 1 red ≪Saiyan≫ card in your Battle Area: Play this card from your hand and place the chosen card under it.`
+      - current semantics are explicit:
+        - the normal `Counter: Play` window is still used
+        - after the play resolves, the chosen matching owner Battle Card is tucked under the played card
+        - the under-card keeps normal `card_placed_under_card` provenance instead of using a one-off movement path
     - status: adjacent self-played under-Leader return slice complete
       - added:
         - `self_played:auto_schedule_place_self_under_owner_leader_on_turn_end_on_play`
@@ -2690,6 +2792,18 @@ Resolved:
         - `Ultimate Masterpiece` is now regression-backed as a whole card across both printed `Activate: Battle` lines:
           - the hand-play `Draw 1` + self-play + delayed `[Barrier]` line
           - the `Z-Energy`-under-self `Draw 1` + self-active + `-20000 power` line
+    - status: adjacent Super 17 descriptor-normalization hardening slice complete
+      - tightened:
+        - shared descriptor cleanup no longer synthesizes:
+          - `required_characters` from pure `{Name}` tokens
+          - `required_traits="Or"` from dangling conjunction remnants after `<A> or <B>` cleanup
+      - current semantics are explicit:
+        - name-token descriptors like:
+          - `{Power-Infused Shocking Death Ball}`
+        - now resolve only through:
+          - `required_name_contains`
+        - the rebuilt effect catalog now matches the exact-card regression contract for:
+          - `Power Absorption and Release`
     - status: adjacent Super 17 Immense Power / Brainwashed Fighter exact-card slice complete
       - added:
         - `self_attacks:auto_place_up_to_n_opponent_battle_under_self_on_attack`
@@ -3431,6 +3545,17 @@ Current recommendation:
 
 ## Decision Log
 
+### Incremental Progress
+
+- completed the shared self-attack auto-cost seam for `place N card(s) from under this card in its owner's Drop:` headers
+- regression-backed both attack-time draw and attack-time power-reduction families using that shared cost path
+- widened that same shared self-attack cost seam to attack-time KO and self power-gain families
+- widened the shared self-attack cost seam again to attack-time combo-from-zone and place-under-self families
+- widened the shared self-attack cost seam again to the Hyperbolic under-host combo attack and the Spirit Bomb attack payoff family
+- widened the same battle-event cost seam to mixed `attack or blocker` self-active triggers
+- opened a new shared `opponent hand -> warp -> return later` seam for self-played Battle cards
+- covered delayed next-opponent-turn returns and leave-play returns for cards warped by the source skill
+
 ### Freeze Decision
 
 Decision:
@@ -3469,3 +3594,55 @@ When adding a new TODO:
 3. if it replaces a canonical artifact or baseline, update `Canonical Artifacts`
 4. if it resolves a blocker, move the old blocker out of `Current Known Gaps`
 
+
+## Incremental Progress
+
+- widened the new warp-provenance seam from `return later` into `play later`
+- added a reusable delayed `play warped card marked by this skill` queue for:
+  - `turn_end`
+  - `main_phase_start`
+- covered the first two shared sibling lines:
+  - yellow `Hit` replaying an opponent Battle Card from Warp in Rest Mode at the end of the opponent's next turn
+  - the `Universe 6` self-warp line that replays itself from Warp at the beginning of your next turn
+- opened a real `counter_attack` event seam for extracted public counter effects resolving from `drop`
+- widened the same skill-linked warp provenance seam to cover:
+  - `Counter: Attack` lines that warp the attacking Battle Card and replay it at end of turn
+  - `self_played` counter lines that replay cards warped by that skill at turn end with their skills negated
+- widened the same counter warp replay seam to support:
+  - replay scheduling for both players at once
+  - multi-card replay from cards warped by the same skill
+- covered the green `Earthling` counter sibling:
+  - draw 1
+  - warp up to 1 each of `≪Saiyan≫` and `≪Earthling≫` from both Battle Areas
+  - replay all warped cards at end of turn with their skills negated
+- widened the same warp replay seam for `Activate: Main/Battle` timing:
+  - added current-turn end-step replay scheduling
+  - added optional fallback from `Warp` to `Drop` when the affected player deck is at or below a printed threshold
+- covered `Ultimate Dragon Quake`:
+  - warp an opponent Battle Card with an energy cost greater than their current energy
+  - at the end of the current turn, replay cards warped by that skill with their skills negated
+  - if the affected player has `15` or fewer cards in deck, place those cards in `Drop` instead
+- widened the same skill-linked warp seam for `self_played` cards that warp both:
+  - the source card itself
+  - and opponent Battle Cards
+- generalized `self_played` end-of-turn warp replay scheduling to trigger on the current turn owner rather than assuming `opponent`
+- covered the yellow `Trunks: Future` sibling:
+  - when played, send this card and up to 1 opponent Battle Card with cost `3` or less to their owners' Warps
+  - at end of turn, negate the skills of all cards warped by that skill and replay them to their owners' Battle Areas
+- widened the same `self_played` warp replay seam to cover opponent-next-turn replay for:
+  - all cards sent to Warps by the skill
+  - `play them in their owners' Battle Areas` wording
+- covered the black sibling:
+  - when played, choose up to 2 opponent Battle Cards and send them to their owners' Warps
+  - this card gains `[Critical]` for the turn
+  - at the end of the opponent's next turn, negate the skills of all cards warped by that skill and replay them to their owners' Battle Areas
+- widened the same skill-linked warp provenance seam from:
+  - battle -> warp -> replay later
+  to:
+  - deck -> warp -> play up to 1 later -> add the remaining cards to hand
+- added shared `auto_on_play_battle` cost extraction for:
+  - placing cards from hand at the bottom of your deck before an on-play auto resolves
+- covered the yellow `Whis` sibling:
+  - when played, send up to 2 skill-less 15000-power Battle Cards with different character names from your deck to your Warp
+  - at the end of your opponent's next turn, play up to 1 of those cards in your Battle Area
+  - add the remaining marked cards to your hand

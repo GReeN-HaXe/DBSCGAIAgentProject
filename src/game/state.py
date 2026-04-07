@@ -496,6 +496,31 @@ class DelayedPlaceUnderLeaderIfInPlay:
 
 
 @dataclass(frozen=True)
+class DelayedReturnWarpedCardsToHand:
+    owner_player_id: int
+    affected_player_id: int
+    source_instance_id: int
+    trigger_player_id: int
+    created_turn_number: int
+
+
+@dataclass(frozen=True)
+class DelayedPlayWarpedCard:
+    owner_player_id: int
+    affected_player_id: int
+    source_instance_id: int
+    trigger_kind: str
+    trigger_player_id: int
+    created_turn_number: int
+    resting: bool = False
+    negate_skills: bool = False
+    max_targets: int = 1
+    require_next_turn: bool = True
+    drop_instead_if_affected_deck_at_most: int = -1
+    return_remaining_to_hand: bool = False
+
+
+@dataclass(frozen=True)
 class NonLeaderAttackRestTax:
     owner_player_id: int
     affected_player_id: int
@@ -539,6 +564,8 @@ class GameState:
     delayed_warps: list[DelayedWarp] = field(default_factory=list)
     delayed_bottom_decks_if_in_play: list[DelayedBottomDeckIfInPlay] = field(default_factory=list)
     delayed_place_under_leader_if_in_play: list[DelayedPlaceUnderLeaderIfInPlay] = field(default_factory=list)
+    delayed_return_warped_cards_to_hand: list[DelayedReturnWarpedCardsToHand] = field(default_factory=list)
+    delayed_play_warped_cards: list[DelayedPlayWarpedCard] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)
