@@ -153,6 +153,16 @@
       }
     ]
   },
+  "1053": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "GHOST TOKEN"
+      }
+    ]
+  },
   "1054": {
     "activate_main": [
       {
@@ -212,14 +222,6 @@
       {
         "amount": 2,
         "kind": "add_markers"
-      }
-    ]
-  },
-  "111": {
-    "activate_main": [
-      {
-        "amount": 1,
-        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -356,6 +358,14 @@
       {
         "amount": 1,
         "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "127": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_warp"
       }
     ]
   },
@@ -716,6 +726,26 @@
       }
     ]
   },
+  "1771": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "1774": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "1834": {
     "activate_main": [
       {
@@ -926,12 +956,6 @@
   },
   "2142": {
     "activate_battle": [
-      {
-        "amount": 1,
-        "kind": "send_self_to_removed"
-      }
-    ],
-    "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_removed"
@@ -1479,6 +1503,16 @@
       }
     ]
   },
+  "3661": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "370": {
     "activate_main": [
       {
@@ -1628,6 +1662,16 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "3818": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -1822,6 +1866,16 @@
       {
         "amount": 6,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "3924": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -2099,6 +2153,12 @@
       {
         "amount": 1,
         "kind": "remove_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "SAIBAIMAN TOKEN"
       }
     ]
   },
@@ -2169,6 +2229,14 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "4166": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_drop"
       }
     ]
   },
@@ -2418,6 +2486,12 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "GHOST TOKEN"
       }
     ]
   },
@@ -2555,6 +2629,16 @@
       }
     ]
   },
+  "5173": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "5178": {
     "activate_main": [
       {
@@ -2563,11 +2647,43 @@
       }
     ]
   },
-  "5204": {
+  "5181": {
     "activate_main": [
       {
         "amount": 1,
-        "kind": "send_self_to_drop"
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5185": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5187": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5211": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -2837,6 +2953,18 @@
       }
     ]
   },
+  "5601": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_drop"
+      },
+      {
+        "amount": 1,
+        "kind": "send_self_to_warp"
+      }
+    ]
+  },
   "5615": {
     "activate_main": [
       {
@@ -3000,6 +3128,11 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE"
       }
     ]
   },
@@ -3011,11 +3144,31 @@
       }
     ]
   },
+  "581": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "TOKEN"
+      }
+    ]
+  },
   "5827": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "583": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "TOKEN"
       }
     ]
   },
@@ -3059,6 +3212,15 @@
       }
     ]
   },
+  "595": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
   "5959": {
     "activate_main_hand": [
       {
@@ -3072,6 +3234,16 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5969": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -3092,6 +3264,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "6044": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_warp"
       }
     ]
   },
@@ -3270,6 +3450,14 @@
       {
         "amount": 2,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "6417": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -3549,6 +3737,15 @@
       }
     ]
   },
+  "6782": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
   "686": {
     "activate_main_hand": [
       {
@@ -3590,6 +3787,14 @@
       {
         "amount": 7,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "6933": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_drop"
       }
     ]
   },
@@ -3729,6 +3934,16 @@
       }
     ]
   },
+  "7010": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "7017": {
     "activate_main_unison": [
       {
@@ -3857,6 +4072,16 @@
       }
     ]
   },
+  "7174": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "7216": {
     "activate_main_unison": [
       {
@@ -3890,6 +4115,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ],
     "activate_main_unison": [
@@ -4198,12 +4431,20 @@
     "activate_main": [
       {
         "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      },
+      {
+        "amount": 1,
         "kind": "send_self_to_removed"
       }
     ]
   },
   "7770": {
     "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      },
       {
         "amount": 1,
         "kind": "send_self_to_removed"
@@ -4223,6 +4464,16 @@
       {
         "amount": 1,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7787": {
+    "activate_main": [
+      {
+        "allowed_colors": "blue",
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_characters": "majin buu"
       }
     ]
   },
@@ -4503,6 +4754,17 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "7971": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_characters": "cumber",
+        "required_traits": "great ape"
       }
     ]
   },
@@ -4799,11 +5061,15 @@
         "amount": 1,
         "kind": "send_self_to_removed"
       }
-    ],
+    ]
+  },
+  "8408": {
     "activate_main": [
       {
         "amount": 1,
-        "kind": "send_self_to_removed"
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "META-COOLER TOKEN"
       }
     ]
   },
@@ -4871,6 +5137,15 @@
       {
         "amount": 1,
         "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "8465": {
+    "activate_main": [
+      {
+        "allowed_colors": "black",
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed"
       }
     ]
   },
@@ -5291,10 +5566,6 @@
       {
         "amount": 1,
         "kind": "discard_hand"
-      },
-      {
-        "amount": 1,
-        "kind": "send_self_to_removed"
       }
     ]
   },

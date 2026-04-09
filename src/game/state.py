@@ -407,7 +407,8 @@ class DelayedActivateSkillRestriction:
 @dataclass(frozen=True)
 class ScheduledAttackRestriction:
     active_player_id: int
-    target_instance_id: int
+    target_instance_id: int = -1
+    required_name_contains: str = ""
 
 
 @dataclass(frozen=True)
@@ -502,6 +503,10 @@ class DelayedReturnWarpedCardsToHand:
     source_instance_id: int
     trigger_player_id: int
     created_turn_number: int
+    trigger_kind: str = "turn_end"
+    require_next_turn: bool = True
+    require_source_in_play: bool = False
+    required_source_zone: str = ""
 
 
 @dataclass(frozen=True)
@@ -518,6 +523,37 @@ class DelayedPlayWarpedCard:
     require_next_turn: bool = True
     drop_instead_if_affected_deck_at_most: int = -1
     return_remaining_to_hand: bool = False
+    add_to_z_energy_max_targets: int = 0
+    first_allowed_colors: str = ""
+    first_required_traits: str = ""
+    first_required_characters: str = ""
+    first_required_name_contains: str = ""
+    second_allowed_colors: str = ""
+    second_required_traits: str = ""
+    second_required_characters: str = ""
+    second_required_name_contains: str = ""
+    min_cost: int = -1
+    max_cost: int = -1
+
+
+@dataclass(frozen=True)
+class DelayedPlayToken:
+    owner_player_id: int
+    controller_player_id: int
+    trigger_kind: str
+    trigger_player_id: int
+    created_turn_number: int
+    token_name: str
+    power: int
+    combo_cost: int = 0
+    combo_power: int = 0
+    resting: bool = False
+    require_next_turn: bool = True
+    temporary_keywords: Tuple[str, ...] = ()
+    created_by_source_instance_id: int = -1
+    created_by_source_card_id: int = -1
+    created_by_source_zone: str = ""
+    created_by_source_card_type: str = ""
 
 
 @dataclass(frozen=True)
@@ -566,6 +602,7 @@ class GameState:
     delayed_place_under_leader_if_in_play: list[DelayedPlaceUnderLeaderIfInPlay] = field(default_factory=list)
     delayed_return_warped_cards_to_hand: list[DelayedReturnWarpedCardsToHand] = field(default_factory=list)
     delayed_play_warped_cards: list[DelayedPlayWarpedCard] = field(default_factory=list)
+    delayed_play_tokens: list[DelayedPlayToken] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)
@@ -594,6 +631,7 @@ class GameState:
     battle_ko_protected_instance_ids: set[int] = field(default_factory=set)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
+    attack_restricted_name_contains: set[str] = field(default_factory=set)
     remaining_attack_declarations: dict[int, int] = field(default_factory=dict)
     unison_marker_skill_usage: set[int] = field(default_factory=set)
     unison_growth_usage: set[int] = field(default_factory=set)

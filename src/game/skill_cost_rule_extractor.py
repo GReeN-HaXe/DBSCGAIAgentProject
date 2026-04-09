@@ -8,6 +8,18 @@ from src.domain.models import CardData
 
 
 _WS_RE = re.compile(r"\s+")
+_CIRCLED_NUMERIC_COSTS = {
+    "①": 1,
+    "②": 2,
+    "③": 3,
+    "④": 4,
+    "⑤": 5,
+    "⑥": 6,
+    "⑦": 7,
+    "⑧": 8,
+    "⑨": 9,
+    "⑩": 10,
+}
 _COUNTER_HIDDEN_COST_RE = re.compile(
     r"\[counter:\s*(?:attack|play|counter|battle card attack)\].{0,260}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:"
 )
@@ -35,6 +47,10 @@ _PLAIN_MARKER_ACTIVATE_RE = re.compile(
 )
 _ACTIVATE_MAIN_Z_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?place (\d+) of your z-energy into (?:its|their) owner'?s drop\s*:"
+)
+_ACTIVATE_MAIN_BATTLE_Z_ENERGY_TO_DROP_AND_REMOVE_SELF_RE = re.compile(
+    r"\[activate(?::)?\s*(main|battle)\].{0,340}?(?:you\s+)?place (\d+) of your z-energy (?:into|in) (?:(?:its|their) owner'?s drop|your drop(?: area)?)\s*,?\s*(?:then|and)?\s*(?:you\s+)?remove this card from the game\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?place (\d+) of your energy into (?:its|their) owner'?s drop(?:[^:]{0,120})?\s*:"
@@ -66,33 +82,53 @@ _ACTIVATE_MAIN_OTHER_BATTLE_TO_DROP_RE = re.compile(
 _ACTIVATE_MAIN_HAND_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?send (\d+) card from your hand to (?:its|their) owner'?s warp\s*:"
 )
+_ACTIVATE_MAIN_SEND_SELF_FROM_HAND_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?send this card from your hand to (?:(?:your|the) warp|(?:its|their )?owner'?s warp)\s*:",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_HAND_TO_DROP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?place (\d+) card(?:s)? from your hand in (?:the )?drop area\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_HAND_TO_BOTTOM_DECK_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?place (\d+) card(?:s)? from your hand at the bottom of your deck(?: in any order)?\s*:",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_DISCARD_SELF_FROM_HAND_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,220}?discard this card from your hand\s*:"
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,220}?discard this card from your hand\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_DISCARD_HAND_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,220}?discard (\d+) card(?:s)? from your hand\s*:"
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,220}?discard (\d+) card(?:s)? from your hand\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,260}?place this card in (?:your drop|its owner'?s drop area)\s*:",
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,260}?place this card in (?:your drop|it'?s owner'?s drop area|its owner'?s drop area)\s*:",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_REMOVE_OPPONENT_BATTLE_TO_REMOVED_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,320}?(?:remove (\d+) of your opponent'?s (.+?) from the game|choose (\d+) of your opponent'?s (.+?) and remove (?:it|them) from the game|choose (\d+) (.+?) (?:in|from) your opponent'?s battle area and remove (?:it|them) from the game)\s*:",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_REMOVE_OWNER_BATTLE_TO_REMOVED_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,320}?(?:remove (\d+) of your (.+?) from the game|choose (\d+) of your (.+?) and remove (?:it|them) from the game|choose (\d+) (.+?) (?:in|from) your battle area and remove (?:it|them) from the game)\s*:",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:"
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_SEND_SELF_TO_WARP_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,260}?send this card to (?:(?:the )?warp|(?:its|their )?owner'?s warp)\s*:",
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,260}?send this card to (?:(?:the )?warp|(?:its|their )?owner'?s warp)(?:\s*:|,\s*and\b)",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,320}?remove this card in the drop from the game,\s*and you discard (\d+) card(?:s)? from your hand\s*:",
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,320}?remove this card in the drop from the game,\s*and you discard (\d+) card(?:s)? from your hand\s*:",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE = re.compile(
-    r"\[activate(?::)?\s*main\].{0,260}?remove this card from the game\s*:"
+    r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,260}?remove this card from the game\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,260}?remove this card from the game\s*:"
@@ -117,6 +153,10 @@ _AUTO_ON_OPPONENT_COMBO_Z_ENERGY_TO_DROP_RE = re.compile(
 )
 _AUTO_ON_COMBO_SINGLE_ENERGY_TO_DROP_RE = re.compile(
     r"\[auto\]\((red|blue|green|yellow|black|white)\)(?:.{0,220}?)?:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
+_AUTO_ON_COMBO_GENERIC_ENERGY_TO_DROP_RE = re.compile(
+    r"\[auto\]\s*([①②③④⑤⑥⑦⑧⑨⑩])(?:.{0,220}?)?:\s*when (?:this card is used in a combo|you combo with this card)",
     re.IGNORECASE,
 )
 _AUTO_ON_COMBO_LEADER_UNDER_TO_DROP_RE = re.compile(
@@ -423,6 +463,23 @@ def _extract_required_name_tokens(descriptor: str) -> str:
     return ""
 
 
+def _extract_plain_token_name(descriptor: str) -> str:
+    cleaned = str(descriptor or "").strip()
+    cleaned_lc = cleaned.lower()
+    if "token" not in cleaned_lc or "non-token" in cleaned_lc:
+        return ""
+    cleaned = re.sub(r"^(?:of\s+)?your opponent'?s\s+", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"^(?:of\s+)?your\s+", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bin your opponent'?s battle area\b", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bin your battle area\b", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bfrom your opponent'?s battle area\b", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bfrom your battle area\b", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,.")
+    if cleaned.lower().endswith("tokens"):
+        cleaned = cleaned[:-1]
+    return cleaned.strip()
+
+
 def _extract_filtered_cost_step(kind: str, descriptor: str, amount: int) -> dict[str, int | str | bool]:
     params: dict[str, int | str | bool] = {
         "kind": kind,
@@ -440,12 +497,18 @@ def _extract_filtered_cost_step(kind: str, descriptor: str, amount: int) -> dict
     required_name_contains = _extract_required_name_tokens(descriptor)
     if required_name_contains:
         params["required_name_contains"] = required_name_contains
+    elif "token" in descriptor.lower():
+        token_name = _extract_plain_token_name(descriptor)
+        if token_name:
+            params["required_name_contains"] = token_name.upper()
     if "battle" in descriptor:
         params["required_card_types"] = "BATTLE"
     elif "extra" in descriptor:
         params["required_card_types"] = "EXTRA"
     elif "unison" in descriptor:
         params["required_card_types"] = "UNISON"
+    elif "token" in descriptor.lower():
+        params["required_card_types"] = "BATTLE"
     if "multicolor" in descriptor:
         params["requires_multicolor"] = True
     energy_cost_match = re.search(r"energy cost of (\d+) or more", descriptor)
@@ -545,7 +608,17 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         rules.setdefault("activate_battle_unison", []).append(dict(step))
 
     m_activate_main_z_energy_to_drop = _ACTIVATE_MAIN_Z_ENERGY_TO_DROP_RE.search(text)
-    if m_activate_main_z_energy_to_drop:
+    m_activate_main_battle_z_energy_to_drop_and_remove_self = _ACTIVATE_MAIN_BATTLE_Z_ENERGY_TO_DROP_AND_REMOVE_SELF_RE.search(text)
+    if m_activate_main_battle_z_energy_to_drop_and_remove_self:
+        context = "activate_battle" if str(m_activate_main_battle_z_energy_to_drop_and_remove_self.group(1) or "").strip().lower() == "battle" else "activate_main"
+        rules.setdefault(context, []).append(
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": int(m_activate_main_battle_z_energy_to_drop_and_remove_self.group(2)),
+            }
+        )
+        rules.setdefault(context, []).append({"kind": "send_self_to_removed", "amount": 1})
+    elif m_activate_main_z_energy_to_drop:
         rules["activate_main_warp"] = [
             {
                 "kind": "send_owner_z_energy_to_drop",
@@ -617,6 +690,40 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         descriptor = str(m_activate_main_other_battle_to_drop.group(2) or "").strip()
         rules["activate_main"] = [_extract_filtered_cost_step("send_other_battle_to_drop", descriptor, amount)]
 
+    m_activate_main_remove_opponent_battle_to_removed = _ACTIVATE_MAIN_REMOVE_OPPONENT_BATTLE_TO_REMOVED_RE.search(text)
+    if m_activate_main_remove_opponent_battle_to_removed:
+        amount = int(
+            m_activate_main_remove_opponent_battle_to_removed.group(1)
+            or m_activate_main_remove_opponent_battle_to_removed.group(3)
+            or m_activate_main_remove_opponent_battle_to_removed.group(5)
+            or 0
+        )
+        descriptor = str(
+            m_activate_main_remove_opponent_battle_to_removed.group(2)
+            or m_activate_main_remove_opponent_battle_to_removed.group(4)
+            or m_activate_main_remove_opponent_battle_to_removed.group(6)
+            or ""
+        ).strip()
+        rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_opponent_battle_to_removed", descriptor, amount))
+
+    m_activate_main_remove_owner_battle_to_removed = _ACTIVATE_MAIN_REMOVE_OWNER_BATTLE_TO_REMOVED_RE.search(text)
+    if m_activate_main_remove_owner_battle_to_removed:
+        amount = int(
+            m_activate_main_remove_owner_battle_to_removed.group(1)
+            or m_activate_main_remove_owner_battle_to_removed.group(3)
+            or m_activate_main_remove_owner_battle_to_removed.group(5)
+            or 0
+        )
+        descriptor = str(
+            m_activate_main_remove_owner_battle_to_removed.group(2)
+            or m_activate_main_remove_owner_battle_to_removed.group(4)
+            or m_activate_main_remove_owner_battle_to_removed.group(6)
+            or ""
+        ).strip()
+        if "opponent" not in descriptor.lower():
+            target_context = "activate_main_unison" if _PLAIN_MARKER_ACTIVATE_RE.search(text) else "activate_main"
+            rules.setdefault(target_context, []).append(_extract_filtered_cost_step("send_owner_battle_to_removed", descriptor, amount))
+
     m_activate_main_hand_to_warp = _ACTIVATE_MAIN_HAND_TO_WARP_RE.search(text)
     if m_activate_main_hand_to_warp:
         rules["activate_main_unison"] = [
@@ -625,6 +732,21 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_main_hand_to_warp.group(1)),
             }
         ]
+    if _ACTIVATE_MAIN_SEND_SELF_FROM_HAND_TO_WARP_RE.search(text):
+        rules["activate_main_hand"] = [
+            {
+                "kind": "send_self_from_hand_to_warp",
+                "amount": 1,
+            }
+        ]
+    m_activate_main_hand_to_drop = _ACTIVATE_MAIN_HAND_TO_DROP_RE.search(text)
+    if m_activate_main_hand_to_drop:
+        rules.setdefault("activate_main", []).append(
+            {
+                "kind": "send_owner_hand_to_drop",
+                "amount": int(m_activate_main_hand_to_drop.group(1)),
+            }
+        )
     m_activate_main_hand_to_bottom_deck = _ACTIVATE_MAIN_HAND_TO_BOTTOM_DECK_RE.search(text)
     if m_activate_main_hand_to_bottom_deck:
         rules.setdefault("activate_main", []).append(
@@ -677,9 +799,12 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         rules.setdefault("activate_main", []).append(
             {"kind": "discard_hand", "amount": int(m_activate_main_remove_self_in_drop_and_discard_hand.group(1))}
         )
-    if _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE.search(text):
+    if _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE.search(text) and m_activate_main_battle_z_energy_to_drop_and_remove_self is None:
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
-    if _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE.search(text):
+    if _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE.search(text) and (
+        m_activate_main_battle_z_energy_to_drop_and_remove_self is None
+        or str(m_activate_main_battle_z_energy_to_drop_and_remove_self.group(1) or "").strip().lower() != "battle"
+    ):
         rules.setdefault("activate_battle", []).append({"kind": "send_self_to_removed", "amount": 1})
     m_activate_main_remove_total_drop_and_warp = _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE.search(text)
     if m_activate_main_remove_total_drop_and_warp:
@@ -730,6 +855,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "kind": "send_owner_energy_to_drop",
                 "amount": 1,
                 "allowed_colors": str(m_auto_on_combo_energy_to_drop.group(1) or "").strip().lower(),
+            }
+        ]
+    m_auto_on_combo_generic_energy_to_drop = _AUTO_ON_COMBO_GENERIC_ENERGY_TO_DROP_RE.search(text)
+    if m_auto_on_combo_generic_energy_to_drop:
+        rules["auto_on_combo_battle"] = [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": int(_CIRCLED_NUMERIC_COSTS.get(str(m_auto_on_combo_generic_energy_to_drop.group(1) or "").strip(), 0)),
             }
         ]
     m_auto_on_combo_leader_under_to_drop = _AUTO_ON_COMBO_LEADER_UNDER_TO_DROP_RE.search(text)

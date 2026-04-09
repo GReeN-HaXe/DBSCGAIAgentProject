@@ -147,6 +147,745 @@ def test_extract_ss_broly_unchained_might_can_warp_opponent_hand_battle_and_retu
     )
 
 
+def test_extract_broly_br_servant_can_add_marker_and_warp_opponent_hand_then_return_it_next_turn() -> None:
+    card = _card(
+        "[Swap 5](Red): Mono-red <Broly: Br> with an energy cost of 5. "
+        "[Servant] "
+        "[Auto] If your Leader Card is red: When this card is played, choose up to 1 of your red Unison Cards, add a marker to it, "
+        "then your opponent chooses 1 card in their hand and sends it to their Warp. "
+        "At the end of your opponent's next turn, they add the card sent to their Warp by this skill from their Warp to their hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    marker_rule = next(r for r in rules if r.handler_id == "auto_add_markers_to_matching_owner_unison_on_play")
+    assert marker_rule.trigger == "self_played"
+    assert marker_rule.handler_params["max_targets"] == 1
+    assert marker_rule.handler_params["amount"] == 1
+    assert marker_rule.handler_params["allowed_colors"] == "red"
+    warp_rule = next(r for r in rules if r.handler_id == "auto_send_up_to_n_opponent_hand_to_warp_on_play")
+    assert warp_rule.trigger == "self_played"
+    assert warp_rule.handler_params["max_targets"] == 1
+    delayed_rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play"
+    )
+    assert delayed_rule.trigger == "self_played"
+
+
+def test_extract_kahseral_the_righteous_can_draw_and_send_opponent_hand_to_warp_on_play() -> None:
+    card = _card(
+        "[Auto] When you play this card, draw 1 card, then your opponent chooses 1 card in their hand and sends it to their Warp. "
+        "[Auto][Sparking 5] When this card attacks, choose up to 1 Leader Card and up to 1 Battle Card other than this card, and those cards get +5000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
+    warp_rule = next(r for r in rules if r.handler_id == "auto_send_up_to_n_opponent_hand_to_warp_on_play")
+    assert warp_rule.trigger == "self_played"
+    assert warp_rule.handler_params["max_targets"] == 1
+
+
+def test_extract_vegeta_the_cruel_can_ko_and_send_opponent_hand_to_warp_on_play_during_opponent_turn() -> None:
+    card = _card(
+        "[Counter: Play] Play this card. "
+        "[Auto] When you play this card during your opponent's turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less, KO it, "
+        "then your opponent chooses 1 card in their hand and sends it to their Warp."
+    )
+    rules = extract_effect_rules_from_card(card)
+    ko_rule = next(r for r in rules if r.handler_id in {"auto_ko_up_to_n_opponent_battle_on_play", "auto_ko_opponent_battle_on_play"})
+    assert ko_rule.trigger == "self_played"
+    assert ko_rule.handler_params["max_cost"] == 4
+    assert ko_rule.handler_params["requires_opponent_turn"] is True
+    warp_rule = next(r for r in rules if r.handler_id == "auto_send_up_to_n_opponent_hand_to_warp_on_play")
+    assert warp_rule.trigger == "self_played"
+    assert warp_rule.handler_params["max_targets"] == 1
+    assert warp_rule.handler_params["requires_opponent_turn"] is True
+
+
+def test_extract_android_21_the_ringleader_can_schedule_clone_token_on_opponent_next_turn_end() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is an ≪Android≫ card: When you play this card, draw 1 card, "
+        "then at the end of your opponent's next turn, play 1 Clone Token with 10000 power in your opponent's Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_token_in_battle_on_play")
+    assert token_rule.trigger == "self_played"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["trigger_kind"] == "turn_end"
+    assert token_rule.handler_params["trigger_player_scope"] == "opponent"
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+
+
+def test_extract_play_can_create_earthling_token_on_play() -> None:
+    card = _card(
+        "[Auto] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>: "
+        "When this card is played, draw 1 card, then play 1 Earthling Token (1000 power, 0 combo cost, and 0 combo power)."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.trigger == "self_played"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "earthling token"
+    assert token_rule.handler_params["power"] == 1000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 0
+
+
+def test_extract_owner_union_activated_can_play_ghost_token_in_rest_mode() -> None:
+    card = _card(
+        "[Auto] When you activate a [Union] skill, play 1 Ghost Token with 15000 power in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_owner_union_activated")
+    assert token_rule.trigger == "owner_union_activated"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "ghost token"
+    assert token_rule.handler_params["power"] == 15000
+    assert token_rule.handler_params["resting"] is True
+
+
+def test_extract_activate_main_can_switch_self_active_and_play_two_saibaiman_tokens() -> None:
+    card = _card(
+        "[Activate: Main][Once per turn](Blue): Switch this card to Active Mode and play 2 Saibaiman Tokens. "
+        "(Saibaiman Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_token_in_battle")
+    assert token_rule.trigger == "self_activate_main"
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "saibaiman token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["switch_self_active"] is True
+
+
+def test_extract_activate_main_can_play_earthling_token_with_barrier_until_opponent_turn_end() -> None:
+    card = _card(
+        "[Activate: Main][Once per turn] If your Leader is a yellow <Son Goku> Z-Leader and you send 1 yellow Battle Card from your Drop to your Warp: "
+        "Play 1 Earthling Token (1000 power, 0 combo cost, 0 combo power), and it gains [Barrier] until the end of your opponent's next turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_token_in_battle")
+    assert token_rule.trigger == "self_activate_main"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "earthling token"
+    assert token_rule.handler_params["power"] == 1000
+    assert token_rule.handler_params["temporary_keywords"] == "barrier"
+    assert token_rule.handler_params["keyword_duration"] == "opponent_turn"
+
+
+def test_extract_activate_main_can_play_ghost_tokens_then_buff_all_ghost_tokens() -> None:
+    card = _card(
+        "[Activate: Main] Place 1 of your Z-Energy in your Drop, and remove this card from the game: "
+        "If your Leader is a blue <Frieza's Army> card and you have 2 or more blue Z-Extra Cards in your Battle Area, "
+        "play 2 Ghost Tokens with 15000 power, then choose all of your Ghost Tokens and they gain [Revenge] until the end of your opponent's next turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_token_in_battle")
+    assert token_rule.trigger == "self_activate_main"
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "ghost token"
+    assert token_rule.handler_params["power"] == 15000
+    assert "temporary_keywords" not in token_rule.handler_params
+    assert token_rule.handler_params["post_play_buff_owner_battle_target_policy"] == "all"
+    assert token_rule.handler_params["post_play_buff_owner_battle_grant_keyword"] == "Revenge"
+    assert token_rule.handler_params["post_play_buff_owner_battle_keyword_duration"] == "opponent_turn"
+    assert token_rule.handler_params["post_play_buff_owner_battle_required_name_contains"] == "GHOST TOKEN"
+
+
+def test_extract_activate_main_can_schedule_friezas_army_token_for_turn_end() -> None:
+    card = _card(
+        "[+1][Activate: Main] Add up to 1 card from your life to your hand; at the end of the turn, play 1 Frieza's Army Token with 10000 power."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_token_in_battle")
+    assert token_rule.trigger == "self_activate_main"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "frieza's army token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["trigger_kind"] == "turn_end"
+    assert token_rule.handler_params["trigger_player_scope"] == "current"
+    assert token_rule.handler_params["require_next_turn"] is False
+    assert token_rule.handler_params["add_from_life_to_hand_max_targets"] == 1
+
+
+def test_extract_activate_main_can_play_self_from_hand_then_play_saibaiman_token() -> None:
+    card = _card(
+        "[Activate: Main][Limit 1](Blue), if your Leader is a blue <Nappa> card and you have 2 or more energy: "
+        "Play this card from your hand, then play 1 Saibaiman Token (5000 power, 0 combo cost, and 5000 combo power)."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_self_from_hand")
+    assert token_rule.trigger == "self_activate_main"
+    assert token_rule.handler_params["post_play_token_amount"] == 1
+    assert token_rule.handler_params["post_play_token_name"] == "saibaiman token"
+    assert token_rule.handler_params["post_play_token_power"] == 5000
+    assert token_rule.handler_params["post_play_token_combo_cost"] == 0
+    assert token_rule.handler_params["post_play_token_combo_power"] == 5000
+
+
+def test_extract_activate_battle_can_play_saibaiman_token_then_combo_from_drop() -> None:
+    card = _card(
+        "[Activate: Battle][Once per turn](Blue), if it's your turn: "
+        "Play 1 Saibaiman Token, then use up to 1 mono-blue card with 5000 combo power from your Drop in a combo with its skills negated for the turn. "
+        "(Saibaiman Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_token_in_battle")
+    assert token_rule.trigger == "self_activate_battle"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "saibaiman token"
+    assert token_rule.handler_params["combo_max_targets"] == 1
+    assert token_rule.handler_params["combo_source_zone"] == "drop"
+    assert token_rule.handler_params["combo_allowed_colors"] == "blue"
+    assert token_rule.handler_params["combo_exact_combo_power"] == 5000
+    assert token_rule.handler_params["combo_negate_skills"] is True
+    assert token_rule.handler_params["combo_require_mono_color"] is True
+
+
+def test_extract_self_played_from_hand_can_play_majin_token_then_place_opponent_battle_under_self() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, play 1 Majin Token, then choose up to 1 of your opponent's Battle Cards and place it under this card. "
+        "(Majin Tokens have 15000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.trigger == "self_played"
+    assert token_rule.handler_params["requires_played_from"] == "hand"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "majin token"
+    assert token_rule.handler_params["post_play_place_under_self_max_targets"] == 1
+
+
+def test_extract_self_played_can_play_saibaiman_token_with_blocker_and_revenge() -> None:
+    card = _card(
+        "[Auto] When this card is played, play 1 Saibaiman Token (5000 power, 0 combo cost, and 5000 combo power) "
+        "and it gains [Blocker] and [Revenge] until the end of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.trigger == "self_played"
+    assert token_rule.handler_params["token_name"] == "saibaiman token"
+    assert token_rule.handler_params["temporary_keywords"] == "blocker,revenge"
+    assert token_rule.handler_params["keyword_duration"] == "turn"
+
+
+def test_extract_activate_main_can_play_majin_token_then_add_life_to_hand() -> None:
+    card = _card(
+        "[Activate: Main][Limit 1] [Spirit Boost 1] "
+        "Play 1 Majin Token, then add up to 1 card from your life to your hand. "
+        "(Majin Tokens have 15000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_token_in_battle")
+    assert token_rule.trigger == "self_activate_main"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "majin token"
+    assert token_rule.handler_params["add_from_life_to_hand_max_targets"] == 1
+
+
+def test_extract_self_attacks_can_play_demon_realm_soldier_token() -> None:
+    card = _card(
+        "[Auto] Add 1 card from your life to your hand: When this card attacks, play up to 1 Demon Realm Soldier Token, "
+        "and this card gets +10000 power for the turn. "
+        "(Demon Realm Soldier Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_attack")
+    assert token_rule.trigger == "self_attacks"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "demon realm soldier token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+
+
+def test_extract_self_attacks_can_play_majin_token_in_rest_mode() -> None:
+    card = _card(
+        "[Auto] When this card attacks, play 1 Majin Token in Rest Mode. "
+        "[em](Majin Tokens have 15000 power, 0 combo cost, and 5000 combo power.)[/em]"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_attack")
+    assert token_rule.trigger == "self_attacks"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "majin token"
+    assert token_rule.handler_params["power"] == 15000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["resting"] is True
+
+
+def test_extract_owner_main_phase_start_can_play_multiform_tokens_until_three() -> None:
+    card = _card(
+        "[Auto] If your Leader is a green <Tien Shinhan> card and you discard 1 card from your hand: "
+        "At the start of your Main Phase, play Multi-Form Tokens until you have 3 Multi-Form Tokens in your Battle Area. "
+        "[em](Multi-Form Tokens have 10000 power, 0 combo cost, and 5000 combo power.)[/em]"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_main_phase_start")
+    assert token_rule.trigger == "owner_main_phase_start"
+    assert token_rule.handler_params["until_battle_count"] == 3
+    assert token_rule.handler_params["token_name"] == "multi-form token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["auto_discard_hand_before"] == 1
+
+
+def test_extract_owner_opponent_main_phase_start_can_play_clone_token_to_opponent_battle() -> None:
+    card = _card(
+        "[Auto][Limit 1] At the start of your opponent's Main Phase, play 2 Clone Tokens with 10000 power in your opponent's Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_main_phase_start")
+    assert token_rule.trigger == "owner_opponent_main_phase_start"
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+
+
+def test_extract_owner_card_left_battle_area_can_play_multiform_token() -> None:
+    card = _card(
+        "[Auto][Limit 1] When your Multi-Form Token is removed from a Battle Area, play 1 Multi-Form Token. "
+        "[em](Multi-Form Tokens have 10000 power, 0 combo cost, and 5000 combo power.)[/em]"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_owner_matching_battle_left")
+    assert token_rule.trigger == "owner_card_left_battle_area"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "multi-form token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["event_required_name_contains"] == "MULTI-FORM TOKEN"
+
+
+def test_extract_owner_other_battle_played_can_play_shadow_token() -> None:
+    card = _card(
+        "[Auto] When you play a <Goku Black> card in your Battle Area, play 1 Shadow Token. "
+        "(Shadow Tokens have 10000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_other_battle_played"
+        and rule.handler_id == "auto_play_token_in_battle_on_owner_matching_battle_played"
+    )
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "shadow token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["event_required_characters"] == "Goku Black"
+
+
+def test_extract_owner_other_battle_played_can_play_clone_tokens_when_token_is_played_by_owner_extra() -> None:
+    card = _card(
+        "[Unique]<br>[Permanent] This card can't be used in a combo from the Battle Area and your opponent's Clone Tokens can't attack.<br>"
+        "[Auto][Once per turn] When a Clone Token is played by the skill on one of your Extra Cards, play 2 Clone Tokens to your opponent's Battle Area.<br>"
+        "[Activate: Main] Remove 1 of your opponent's Clone Tokens from the game: Play this card from your hand or Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_other_battle_played"
+        and rule.handler_id == "auto_play_token_in_battle_on_owner_matching_battle_played"
+    )
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["event_required_name_contains"] == "CLONE TOKEN"
+    assert token_rule.handler_params["event_required_played_from"] == "token"
+    assert token_rule.handler_params["event_required_created_by_source_card_type"] == "EXTRA"
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+
+
+def test_extract_activate_main_can_remove_clone_token_to_play_self_from_hand_or_drop() -> None:
+    card = _card(
+        "[Activate: Main] Remove 1 of your opponent's Clone Tokens from the game: Play this card from your hand or Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_self_from_hand")
+    assert play_rule.handler_params == {}
+
+
+def test_extract_activate_main_can_remove_clone_token_to_play_self_from_hand_in_rest_with_marker() -> None:
+    card = _card(
+        "[Activate: Main] If you don't have a Unison Card in play and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+        "Play this card from your hand in Rest Mode with a marker on it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_self_from_hand")
+    assert play_rule.handler_params["resting"] is True
+    assert play_rule.handler_params["markers"] == 1
+    assert play_rule.handler_params["requires_no_owner_unison"] is True
+
+
+def test_extract_activate_main_can_remove_clone_token_to_gain_power_and_critical_for_duration() -> None:
+    card = _card(
+        "[Activate: Main][Once per turn] Choose 1 Clone Token from your opponent's Battle Area and remove it from the game: "
+        "This card gets +10000 power and [Critical] for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    buff_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert buff_rule.handler_params["power_delta"] == 10000
+    assert buff_rule.handler_params["grant_keyword"] == "Critical"
+
+
+def test_extract_activate_main_can_remove_clone_token_to_gain_power_and_double_strike_for_duration() -> None:
+    card = _card(
+        "[Activate: Main][Once per turn] Choose 1 Clone Token from your opponent's Battle Area and remove it from the game: "
+        "This card gets +10000 power and [Double Strike] for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    buff_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert buff_rule.handler_params["power_delta"] == 10000
+    assert buff_rule.handler_params["grant_keyword"] == "Double Strike"
+
+
+def test_extract_activate_main_unison_can_remove_saibaiman_token_to_bottom_deck_cost_two_or_less() -> None:
+    card = _card(
+        "[-1][Activate: Main] Remove 1 of your Saibaiman Tokens from the game: "
+        "Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and place it at the bottom of its owner's deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_bottom_deck_up_to_n_opponent_battle")
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 2
+
+
+def test_extract_exact_android_21_leader_clone_token_activate_line() -> None:
+    card = replace(
+        _card(
+            "[Auto] When you place this card in your Leader Area, choose up to 1 {Android 21's Scheme} from your deck and activate it. "
+            "<br>[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "Draw 1 card, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and return it to its owner's hand, "
+            "then at the start of your opponent's next Main Phase, choose up to 1 Blue/Green multicolor card in your energy and switch it to Active Mode."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 1
+    assert rule.handler_params["schedule_main_phase_energy_max_targets"] == 1
+    assert rule.handler_params["schedule_main_phase_energy_allowed_colors"] == "blue,green"
+    assert rule.handler_params["schedule_main_phase_energy_requires_multicolor"] is True
+
+
+def test_extract_exact_android_18_leader_clone_token_activate_line() -> None:
+    card = replace(
+        _card(
+            "[Auto] When you place this card in your Leader Area, choose up to 1 {Android 21's Scheme} from your deck and activate it. "
+            "<br>[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "Draw 1 card, choose 1 card in your life and add it to your hand, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and return it to its owner's hand."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["life_to_hand_amount"] == 1
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 1
+    assert "schedule_main_phase_energy_max_targets" not in rule.handler_params
+
+
+def test_extract_exact_the_android_creator_draws_and_buffs_owner_battle() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "Draw 1 card, then choose 1 of your Battle Cards and it gets +10000 power for the duration of the turn."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    buff_rule = next(r for r in rules if r.trigger == "self_activate_extra_from_hand" and r.handler_id == "activate_buff_owner_battle_cards")
+    assert not any(r.trigger == "self_activate_extra_from_hand" and r.handler_id == "auto_draw_n" for r in rules)
+    assert buff_rule.handler_params["amount"] == 1
+    assert buff_rule.handler_params["target_scope"] == "owner_battle"
+    assert buff_rule.handler_params["max_targets"] == 1
+    assert buff_rule.handler_params["power_delta"] == 10000
+
+
+def test_extract_exact_maleficent_technique_frieza_play_and_bounce_lines() -> None:
+    card = _card(
+        "[Activate: Main] Choose 2 Clone Tokens in your opponent's Battle Area and remove them from the game: Play this card from your hand. "
+        "<br>[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and return it to its owner's hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    activate_rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_play_self_from_hand")
+    bounce_rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_return_up_to_n_opponent_battle_to_hand_on_play")
+    assert activate_rule.handler_params == {}
+    assert bounce_rule.handler_params["max_targets"] == 1
+    assert bounce_rule.handler_params["max_cost"] == 3
+
+
+def test_extract_exact_frieza_common_enemy_clone_token_play_line() -> None:
+    card = _card(
+        "[Unique][Double Strike]<br>[Activate: Main][Limit 1](Blue), if you have 3 or more energy and you choose 3 of your opponent's Clone Tokens and remove them from the game: "
+        "Play this card from your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    activate_rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_play_self_from_hand")
+    assert activate_rule.handler_params["min_owner_energy"] == 3
+    assert activate_rule.limit_per_turn == 1
+
+
+def test_extract_exact_clone_token_blocker_play_line() -> None:
+    card = _card(
+        "[Blocker]<br>[Activate: Main][Limit 1] Choose 3 of your opponent's Clone Tokens and remove them from the game: Play this card from your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    activate_rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_play_self_from_hand")
+    assert activate_rule.handler_params == {}
+    assert activate_rule.limit_per_turn == 1
+
+
+def test_extract_exact_clone_token_unison_plus_two_line() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] If you don't have a Unison Card in play and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+            "Play this card from your hand in Rest Mode with a marker on it.<br>"
+            "[+2][Activate: Main] 1 of your mono-blue Leader Cards gets +5000 power for the turn; your opponent's Clone Tokens can't attack during your opponent's next turn.<br>"
+            "[-4][Activate: Battle] This card gets +11000 power and [Double Strike] for the turn."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_buff_owner_leader_for_turn")
+    assert rule.handler_params["leader_power_delta"] == 5000
+    assert rule.handler_params["leader_allowed_colors"] == "blue"
+    assert rule.handler_params["schedule_attack_restriction_name_contains"] == "CLONE TOKEN"
+
+
+def test_extract_exact_clone_token_unison_minus_four_line() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] If you don't have a Unison Card in play and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+            "Play this card from your hand in Rest Mode with a marker on it.<br>"
+            "[+2][Activate: Main] 1 of your mono-blue Leader Cards gets +5000 power for the turn; your opponent's Clone Tokens can't attack during your opponent's next turn.<br>"
+            "[-4][Activate: Battle] This card gets +11000 power and [Double Strike] for the turn."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_activate_battle" and r.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert rule.handler_params["power_delta"] == 11000
+    assert rule.handler_params["grant_keyword"] == "Double Strike"
+
+
+def test_extract_self_played_can_play_shadow_token_and_grant_blocker_for_turn() -> None:
+    card = _card(
+        "[Counter: Attack] Negate the attack and play this card.<br>[Permanent] If it's your opponent's turn and your Leader is a Z-Leader, "
+        "reduce the energy cost of this card in your hand by 1.<br>[Auto](Blue), if your Leader is a blue <Goku Black>: "
+        "When this card is played, draw 1 card, play 1 Shadow Token (10000 power, 0 combo cost, and 5000 combo power), and that card gains [Blocker] for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "shadow token"
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+    assert token_rule.handler_params["keyword_duration"] == "turn"
+
+
+def test_extract_self_played_from_hand_can_play_shadow_tokens_with_blocker_until_opponent_turn() -> None:
+    card = _card(
+        "[Energy-Exhaust][Deflect][Double Strike]<br>[Auto] At the end of your turn, switch up to 1 of your Blue/Yellow multicolor energy to Active Mode.<br>"
+        "[Auto] When this card is played from your hand, play 4 Shadow Tokens, and they gain [Blocker] until the end of your opponent's next turn. "
+        "(Shadow Tokens have 10000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.handler_params["amount"] == 4
+    assert token_rule.handler_params["token_name"] == "shadow token"
+    assert token_rule.handler_params["requires_played_from"] == "hand"
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+    assert token_rule.handler_params["keyword_duration"] == "opponent_turn"
+
+
+def test_extract_self_played_can_play_cell_jr_tokens_from_when_you_play_this_card_if_clause() -> None:
+    card = _card(
+        "[Auto] When you play this card, if your Leader Card is <Cell>, play 2 Cell Jr. tokens. "
+        "(Cell Jr. tokens have 10000 power, 0 combo cost, 5000 combo power)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "cell jr. token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+
+
+def test_extract_self_played_can_draw_two_and_play_two_cell_jr_tokens() -> None:
+    card = _card(
+        "[Auto] When you play this card, if your Leader Card is an ≪Android≫ , draw 2 cards and play 2 Cell Jr. tokens. "
+        "(Cell Jr. tokens have 10000 power, 0 combo cost, and 5000 combo power)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert draw_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "cell jr. token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+
+
+def test_extract_self_played_can_play_earthling_token_with_leader_condition() -> None:
+    card = _card(
+        "[Auto] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>: "
+        "When this card is played, play 1 Earthling Token (1000 power, 0 combo cost, and 0 combo power)."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "earthling token"
+    assert token_rule.handler_params["power"] == 1000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 0
+
+
+def test_extract_activate_main_can_play_self_from_hand_and_play_earthling_token() -> None:
+    card = _card(
+        "[Activate: Main][Limit 1](Green), if your Leader is green and you have 3 or more energy: "
+        "Play this card from your hand, and play 1 Earthling Token. (Earthling Tokens have 1000 power, 0 combo cost, and 0 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(rule for rule in rules if rule.handler_id == "activate_play_self_from_hand")
+    assert play_rule.handler_params["post_play_token_amount"] == 1
+    assert play_rule.handler_params["post_play_token_name"] == "earthling token"
+    assert play_rule.handler_params["post_play_token_power"] == 1000
+    assert play_rule.handler_params["post_play_token_combo_cost"] == 0
+    assert play_rule.handler_params["post_play_token_combo_power"] == 0
+
+
+def test_extract_self_comboed_from_battle_can_play_multiform_token_in_rest_mode() -> None:
+    card = _card(
+        "[Counter: Attack]Negate the attack and play this card in Rest Mode.<br>"
+        "[Auto] When this card is used in a combo from your Battle Area, play 1 Multi-Form Token in Rest Mode. "
+        "(Multi-Form Tokens have 10000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_combo")
+    assert token_rule.trigger == "self_comboed"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "multi-form token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["resting"] is True
+    assert token_rule.handler_params["requires_comboed_from"] == "battle"
+
+
+def test_extract_self_comboed_from_battle_can_play_four_multiform_tokens_on_opponent_turn() -> None:
+    card = _card(
+        "[Auto] When this card is played, draw 1 card.<br>"
+        "[Auto] \u2461, if it's your opponent's turn: When this card is used in a combo from your Battle Area, "
+        "play 4 Multi-Form Tokens. (Multi-Form Tokens have 10000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_combo")
+    assert token_rule.trigger == "self_comboed"
+    assert token_rule.handler_params["amount"] == 4
+    assert token_rule.handler_params["token_name"] == "multi-form token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["requires_opponent_turn"] is True
+    assert token_rule.handler_params["requires_comboed_from"] == "battle"
+
+
+def test_extract_self_comboed_from_hand_can_play_saibaiman_with_unique_and_blocker() -> None:
+    card = _card(
+        "[Super Combo][Energy-Exhaust]\n"
+        "[Auto] If your Leader Card is red or green: When this card is used in a combo from your hand, "
+        "play 1 Saibaiman Token, and it gains [Unique] and [Blocker] for the turn. "
+        "(Saibaiman Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_combo")
+    assert token_rule.trigger == "self_comboed"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "saibaiman token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["temporary_keywords"] == "unique,blocker"
+    assert token_rule.handler_params["keyword_duration"] == "turn"
+    assert token_rule.handler_params["requires_comboed_from"] == "hand"
+
+
+def test_extract_self_played_can_play_chilleds_army_tokens_with_power_only_text() -> None:
+    card = _card(
+        "[Deflect]<br>[Auto] When this card is played, play 2 Chilled's Army Tokens with 10000 power.<br>"
+        "[Activate: Main](Green)(Green), discard this card from your hand: Choose up to 1 of your opponent's Battle Cards "
+        "with an energy cost less than or equal to the number of cards in their hand, ignoring [Barrier], and KO it.<br>"
+        "[Activate: Main][Once per turn] Choose up to 2 of your Chilled's Army Tokens and they get +5000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.trigger == "self_played"
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "chilled's army token"
+    assert token_rule.handler_params["power"] == 10000
+
+
+def test_extract_self_played_can_play_meda_token_exact_card() -> None:
+    card = _card(
+        "[Permanent][Bond 3] This card gains [Dual Attack].<br>"
+        "[Auto] When this card is played, play 1 Meda Token. (Meda Tokens have 5000 power, 0 combo cost, and 5000 combo power.)<br>"
+        "[Activate: Main][Limit 1](Yellow), if a <Medamatcha> card with an energy cost of 3 and combo cost of 1 is in your Z-Energy: Play this card from your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.trigger == "self_played"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "meda token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+
+
+def test_extract_self_played_can_ko_then_play_ghost_tokens_then_discard() -> None:
+    card = _card(
+        "[Deflect][Dual Attack]<br>"
+        "[Union-Fusion](Green)(Green)(Green)(Green), if you have 4 or more energy and draw 2 cards: Green <Son Goten> and green <Trunks: Youth>.<br>"
+        "[Permanent] If your Leader is a Z-Leader or you have a Z-Battle Card in play, reduce the skill cost of this card's [Union] skill in your hand by (Green).<br>"
+        "[Auto] If your Leader is green and has <Gotenks> in its character name: When this card is played, choose up to 1 of your opponent's Battle Cards, "
+        "ignoring [Barrier], KO it, play 2 Ghost Tokens with 15000 power, and your opponent discards 1 card from their hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    ko_rule = next(r for r in rules if r.handler_id in {"auto_ko_up_to_n_opponent_battle_on_play", "auto_ko_opponent_battle_on_play"})
+    token_rule = next(r for r in rules if r.handler_id == "auto_play_token_in_battle_on_play")
+    discard_rule = next(r for r in rules if r.handler_id == "auto_opponent_discards_n_from_hand_on_play")
+    assert ko_rule.trigger == "self_played"
+    assert token_rule.trigger == "self_played"
+    assert discard_rule.trigger == "self_played"
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "ghost token"
+    assert token_rule.handler_params["power"] == 15000
+    assert discard_rule.handler_params["amount"] == 1
+
+
 def test_extract_dark_duo_dabura_can_return_cards_warped_by_its_skill_when_it_leaves_battle() -> None:
     card = _card(
         "[Auto] When you play this card, choose up to 2 cards in your opponent's hand and send them to their Warp. "
@@ -2249,7 +2988,7 @@ def test_extract_ultimate_dragon_quake_can_warp_then_replay_or_drop_at_end_of_cu
     assert rule.handler_params["send_max_targets"] == 1
     assert rule.handler_params["max_targets"] == -1
     assert rule.handler_params["requires_cost_greater_than_opponent_current_energy"] is True
-    assert rule.handler_params["required_leader_traits"] == "≪Shadow Dragon≫"
+    assert rule.handler_params["required_leader_traits"] == "Shadow Dragon"
     assert rule.handler_params["trigger_kind"] == "turn_end"
     assert rule.handler_params["trigger_player_scope"] == "current"
     assert rule.handler_params["require_next_turn"] is False
@@ -2273,6 +3012,58 @@ def test_extract_counter_attack_can_warp_attacking_battle_and_replay_it_at_turn_
     assert schedule_rule.handler_params["trigger_player_scope"] == "opponent"
     assert schedule_rule.handler_params["require_next_turn"] is False
     assert schedule_rule.handler_params["resting"] is True
+
+
+def test_extract_counter_attack_can_schedule_clone_token_at_turn_end() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader is a blue ≪Android≫ card: Negate the attack and switch up to 1 of your blue energy to Active Mode. "
+        "Additionally, at the end of the turn, play 1 Clone Token with 10000 power in your opponent's Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_schedule_play_token_in_battle")
+    assert token_rule.trigger == "counter_attack"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["trigger_kind"] == "turn_end"
+    assert token_rule.handler_params["trigger_player_scope"] == "current"
+    assert token_rule.handler_params["require_next_turn"] is False
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+    assert token_rule.handler_params["switch_owner_energy_active_max_targets"] == 1
+    assert token_rule.handler_params["switch_owner_energy_active_allowed_colors"] == "blue"
+
+
+def test_extract_counter_attack_can_play_demon_realm_soldier_token_with_blocker() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader Card is mono-black: Negate the attack, then play 1 Demon Realm Soldier Token "
+        "and it gains [Blocker] for the turn. (Demon Realm Soldier Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_play_token_in_battle")
+    assert token_rule.trigger == "counter_attack"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "demon realm soldier token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+
+
+def test_extract_counter_attack_can_play_meda_token_with_blocker_in_next_sentence() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader Card is mono-green: Negate the attack, then play 1 Meda Token. "
+        "That Token gains [Blocker] for the turn. (Meda Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_play_token_in_battle")
+    assert token_rule.trigger == "counter_attack"
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "meda token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+    assert token_rule.handler_params["keyword_duration"] == "turn"
 
 
 def test_extract_counter_played_card_can_replay_warped_cards_at_turn_end() -> None:
@@ -2369,6 +3160,166 @@ def test_extract_played_card_can_send_matching_deck_cards_to_warp_then_play_one_
     assert schedule_rule.handler_params["require_next_turn"] is True
     assert schedule_rule.handler_params["max_targets"] == 1
     assert schedule_rule.handler_params["return_remaining_to_hand"] is True
+
+
+def test_extract_played_card_can_send_matching_deck_card_to_warp_then_add_it_to_hand_next_turn_if_still_in_play() -> None:
+    card = _card(
+        "[Auto] When you play this card, choose up to 1 black Battle Card with an energy cost of 5 or less from your deck and send it to your Warp and shuffle your deck. "
+        "Then, at the beginning of your next turn, if this card is in play in your Battle Area, add the card that was sent to your Warp by this skill to your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    warp_rule = next(rule for rule in rules if rule.handler_id == "auto_send_up_to_n_from_owner_deck_to_warp_on_play")
+    return_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_return_cards_warped_by_source_skill_on_play")
+    assert warp_rule.trigger == "self_played"
+    assert warp_rule.handler_params["max_targets"] == 1
+    assert warp_rule.handler_params["allowed_colors"] == "black"
+    assert warp_rule.handler_params["required_card_type"] == "BATTLE"
+    assert warp_rule.handler_params["max_cost"] == 5
+    assert return_rule.trigger == "self_played"
+    assert return_rule.handler_params["affected_player_scope"] == "owner"
+    assert return_rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert return_rule.handler_params["trigger_player_scope"] == "owner"
+    assert return_rule.handler_params["require_next_turn"] is True
+    assert return_rule.handler_params["require_source_in_play"] is True
+    assert return_rule.handler_params["required_source_zone"] == "battle"
+
+
+def test_extract_played_card_can_send_matching_deck_card_to_warp_then_add_it_to_hand_next_turn() -> None:
+    card = _card(
+        "[Auto] When you play this card, choose up to 1 ≪World Tournament≫ card with an energy cost of 5 or less from your deck, "
+        "send it your Warp, shuffle your deck, and at the start of your next turn, add that card sent to your Warp by this skill to your hand from the Warp."
+    )
+    rules = extract_effect_rules_from_card(card)
+    warp_rule = next(rule for rule in rules if rule.handler_id == "auto_send_up_to_n_from_owner_deck_to_warp_on_play")
+    return_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_return_cards_warped_by_source_skill_on_play")
+    assert warp_rule.trigger == "self_played"
+    assert warp_rule.handler_params["max_targets"] == 1
+    assert warp_rule.handler_params["required_traits"] == "World Tournament"
+    assert warp_rule.handler_params["max_cost"] == 5
+    assert return_rule.trigger == "self_played"
+    assert return_rule.handler_params["affected_player_scope"] == "owner"
+    assert return_rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert return_rule.handler_params["trigger_player_scope"] == "owner"
+    assert return_rule.handler_params["require_next_turn"] is True
+    assert "require_source_in_play" not in return_rule.handler_params
+
+
+def test_extract_activate_main_can_send_matching_hand_card_to_warp_then_play_it_next_turn() -> None:
+    card = _card(
+        "[Activate: Main]②, if your Leader Card is a ≪World Tournament≫ card and you place this card in it's owner's Drop Area: "
+        "Choose up to 1 ≪World Tournament≫ card with an energy cost of 3 or less from your hand, send it to your Warp, "
+        "and at the start of your next turn, play the card sent to your Warp by this skill from your Warp."
+    )
+    rules = extract_effect_rules_from_card(card)
+    warp_rule = next(rule for rule in rules if rule.handler_id == "activate_send_up_to_n_from_owner_hand_to_warp")
+    schedule_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_cards_warped_by_source_skill")
+    assert warp_rule.trigger == "self_activate_main"
+    assert warp_rule.handler_params["max_targets"] == 1
+    assert warp_rule.handler_params["required_traits"] == "World Tournament"
+    assert warp_rule.handler_params["max_cost"] == 3
+    assert schedule_rule.trigger == "self_activate_main"
+    assert schedule_rule.handler_params["affected_player_scope"] == "owner"
+    assert schedule_rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert schedule_rule.handler_params["trigger_player_scope"] == "owner"
+    assert schedule_rule.handler_params["require_next_turn"] is True
+
+
+def test_extract_played_card_can_send_named_deck_card_to_warp_then_play_it_next_turn_in_rest_mode() -> None:
+    card = _card(
+        "[Auto][Limit 1] If your Leader is a yellow non-≪Great Ape≫ <Son Goku: Childhood> card: "
+        "When this card is played, send up to 1 yellow {Bora} from your deck to your Warp, shuffle your deck, "
+        "and at the start of your next turn, play that card from your Warp in Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    warp_rule = next(rule for rule in rules if rule.handler_id == "auto_send_up_to_n_from_owner_deck_to_warp_on_play")
+    schedule_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_cards_warped_by_source_skill_on_play")
+    assert warp_rule.trigger == "self_played"
+    assert warp_rule.handler_params["max_targets"] == 1
+    assert warp_rule.handler_params["allowed_colors"] == "yellow"
+    assert warp_rule.handler_params["required_name_contains"] == "BORA"
+    assert schedule_rule.trigger == "self_played"
+    assert schedule_rule.handler_params["affected_player_scope"] == "owner"
+    assert schedule_rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert schedule_rule.handler_params["trigger_player_scope"] == "owner"
+    assert schedule_rule.handler_params["require_next_turn"] is True
+    assert schedule_rule.handler_params["max_targets"] == 1
+    assert schedule_rule.handler_params["resting"] is True
+
+
+def test_extract_activate_main_can_send_self_to_warp_and_play_it_next_turn_without_colon_cost() -> None:
+    card = _card(
+        "[Activate: Main] Place 1 card from your hand in the Drop Area: "
+        "Send this card to the Warp, and play it from the Warp in its owner's Battle Area at the beginning of your next turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    schedule_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_cards_warped_by_source_skill")
+    assert schedule_rule.trigger == "self_activate_main"
+    assert schedule_rule.handler_params["affected_player_scope"] == "owner"
+    assert schedule_rule.handler_params["mark_source_in_owner_warp"] is True
+    assert schedule_rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert schedule_rule.handler_params["trigger_player_scope"] == "owner"
+
+
+def test_extract_activate_main_can_send_self_from_hand_to_warp_then_play_it_on_opponent_next_turn_end() -> None:
+    card = _card(
+        "[Activate: Main] (Green), send this card from your hand to your Warp: "
+        "At the end of your opponent's next turn, play the card you sent to your Warp with this skill from your Warp. "
+        "[Auto] When you play this card, choose up to 2 cards in your life and add them to your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    schedule_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_cards_warped_by_source_skill")
+    life_rule = next(rule for rule in rules if rule.handler_id == "auto_add_up_to_n_from_owner_life_to_hand_on_play")
+    assert schedule_rule.trigger == "self_activate_main"
+    assert schedule_rule.handler_params["affected_player_scope"] == "owner"
+    assert schedule_rule.handler_params["mark_source_in_owner_warp"] is True
+    assert schedule_rule.handler_params["trigger_kind"] == "turn_end"
+    assert schedule_rule.handler_params["trigger_player_scope"] == "opponent"
+    assert schedule_rule.handler_params["require_next_turn"] is True
+    assert life_rule.trigger == "self_played"
+    assert life_rule.handler_params["max_targets"] == 2
+
+
+def test_extract_activate_main_can_warp_opponent_battle_then_replay_it_next_opponent_turn() -> None:
+    card = _card(
+        "[Activate: Main] Choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp; "
+        "at the end of your opponent's next turn, play the card sent to their Warp with this skill to their Battle Area with its skills negated for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    warp_rule = next(rule for rule in rules if rule.handler_id == "activate_send_up_to_n_opponent_battle_to_warp")
+    schedule_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_cards_warped_by_source_skill")
+    assert warp_rule.trigger == "self_activate_main"
+    assert warp_rule.handler_params["max_targets"] == 1
+    assert schedule_rule.trigger == "self_activate_main"
+    assert schedule_rule.handler_params["affected_player_scope"] == "opponent"
+    assert schedule_rule.handler_params["trigger_kind"] == "turn_end"
+    assert schedule_rule.handler_params["trigger_player_scope"] == "opponent"
+    assert schedule_rule.handler_params["negate_skills"] is True
+
+
+def test_extract_attack_can_send_under_self_to_warp_then_play_one_and_add_one_to_z_energy_next_turn() -> None:
+    card = _card(
+        "[Blocker][Auto] Send 2 cards from under this card to your Warp: When this card attacks, your opponent discards 1 card from their hand, "
+        "and at the start of your next turn, you choose up to 1 each of <Android 17> and <Hell Fighter 17> cards with an energy cost of 1 from your Warp, "
+        "then play up to 1 of them and add up to 1 of them to your Z-Energy."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.handler_id == "auto_opponent_discards_n_and_schedule_play_and_add_marked_warped_cards_on_attack"
+    )
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["auto_release_under_to_warp_before"] == 2
+    assert rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert rule.handler_params["trigger_player_scope"] == "owner"
+    assert rule.handler_params["affected_player_scope"] == "owner"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["add_to_z_energy_max_targets"] == 1
+    assert rule.handler_params["first_required_characters"] == "Android 17"
+    assert rule.handler_params["second_required_characters"] == "Hell Fighter 17"
+    assert rule.handler_params["min_cost"] == 1
+    assert rule.handler_params["max_cost"] == 1
 
 
 def test_extract_counter_attack_can_warp_one_each_from_both_battle_areas_and_replay_all() -> None:
@@ -2526,6 +3477,59 @@ def test_extract_combo_battle_end_play_self_from_drop_rule() -> None:
     assert rule.handler_id == "auto_play_self_from_combo_on_battle_end"
     assert rule.handler_params["resting"] is True
     assert "if your leader card is a yellow card" in str(rule.handler_params["requires_leader"]).lower()
+
+
+def test_extract_activate_main_can_send_self_to_warp_play_black_multicolor_from_hand_and_return_self_next_turn() -> None:
+    card = _card(
+        "[Energy-Exhaust]<br>[Activate: Main](Black), send this card to its owner's Warp: "
+        "Choose up to 1 black multicolor Battle Card with an energy cost of 2 in your hand and play it. "
+        "At the start of your next turn, add this card to your hand from your Warp."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(r for r in rules if r.handler_id == "activate_play_up_to_n_from_owner_hand")
+    return_rule = next(r for r in rules if r.handler_id == "activate_schedule_return_cards_warped_by_source_skill_to_owner_hand")
+    assert play_rule.trigger == "self_activate_main"
+    assert play_rule.handler_params["max_targets"] == 1
+    assert play_rule.handler_params["allowed_colors"] == "black"
+    assert play_rule.handler_params["required_card_type"] == "BATTLE"
+    assert play_rule.handler_params["requires_multicolor"] is True
+    assert play_rule.handler_params["allowed_costs"] == "2"
+    assert return_rule.trigger == "self_activate_main"
+    assert return_rule.handler_params["mark_source_in_owner_warp"] is True
+    assert return_rule.handler_params["trigger_kind"] == "main_phase_start"
+    assert return_rule.handler_params["trigger_player_scope"] == "owner"
+    assert return_rule.handler_params["require_next_turn"] is True
+
+
+def test_extract_combo_battle_end_can_play_self_then_negate_opponent_unison_for_turn_with_total_energy_gate() -> None:
+    card = _card(
+        "[Energy-Exhaust]<br>[Auto](Black), if your Leader Card is a black ≪Saiyan≫ card and there's a total of 3 or more energy between you and your opponent: "
+        "At the end of a battle in which this card was used in a combo from your hand, play this card from your Drop Area in Rest Mode, "
+        "then choose up to 1 of your opponent's Unison Cards and negate its skills for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_self_from_combo_on_battle_end_then_negate_up_to_n_opponent_unisons_for_turn")
+    assert rule.trigger == "self_comboed_battle_end"
+    assert rule.handler_params["resting"] is True
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["min_total_players_energy"] == 3
+
+
+def test_extract_combo_battle_end_can_play_self_then_return_opponent_battle_to_hand_with_total_energy_gate() -> None:
+    card = _card(
+        "[Energy-Exhaust]<br>[Auto](Black), if your Leader Card is a black ≪Saiyan≫ card and there's a total of 3 or more energy between you and your opponent: "
+        "At the end of a battle in which this card was used in a combo from your hand, play this card from your Drop Area in Rest Mode, "
+        "then choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and return it to its owner's hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_play_self_from_combo_on_battle_end_then_return_up_to_n_opponent_battle_to_hand")
+    assert rule.trigger == "self_comboed_battle_end"
+    assert rule.handler_params["resting"] is True
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 3
+    assert rule.handler_params["min_total_players_energy"] == 3
 
 
 def test_extract_turn_end_switch_self_active_rule() -> None:
@@ -3224,7 +4228,7 @@ def test_extract_activate_main_switch_self_to_hidden_rule() -> None:
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "activate_switch_self_to_hidden_mode")
     assert rule.trigger == "self_activate_main"
-    assert rule.handler_params["required_leader_traits"] == "White ≪God≫"
+    assert rule.handler_params["required_leader_traits"] == "God"
 
 
 def test_extract_activate_main_without_colon_hidden_cost_draw_rule() -> None:
@@ -4631,3 +5635,284 @@ def test_extract_self_placed_under_by_union_can_schedule_opponent_next_main_ener
     )
     assert rule.handler_params["max_targets"] == 1
     assert rule.handler_params["allowed_colors"] == "blue"
+
+
+def test_extract_exact_chilleds_army_reinforcements_counter_token_rule() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader Card is mono-blue: Negate the attack, then play 1 Chilled's Army Token with 10000 power; "
+        "it gains [Blocker] for the turn.<br>"
+        "[Permanent] If your life is at 5 or less, you can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_play_token_in_battle")
+    assert token_rule.handler_params["token_name"] == "chilled's army token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+    assert token_rule.handler_params["requires_leader"] == "if your leader card is mono-blue"
+
+
+def test_extract_exact_frieza_army_reinforcements_counter_token_rule() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader Card is mono-yellow: Negate the attack, then play 1 Frieza's Army Token with 10000 power and it gains [Blocker] for the turn.<br>"
+        "[Permanent] If your life is at 5 or less, you can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_play_token_in_battle")
+    assert token_rule.handler_params["token_name"] == "frieza's army token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+    assert token_rule.handler_params["requires_leader"] == "if your leader card is mono-yellow"
+
+
+def test_extract_exact_testing_the_opposition_counter_token_rule() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader Card is mono-red: Negate the attack, then play 1 Saibaiman Token. "
+        "(Saibaiman Tokens have 5000 power, 0 combo cost, and 5000 combo power.) That Token gains [Blocker] for the turn.<br>"
+        "[Permanent] If your life is at 5 or less, you can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_play_token_in_battle")
+    assert token_rule.handler_params["token_name"] == "saibaiman token"
+    assert token_rule.handler_params["power"] == 5000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["temporary_keywords"] == "blocker"
+
+
+def test_extract_exact_invasion_of_chilleds_army_counter_token_rule() -> None:
+    card = _card("[Counter: Attack] Negate the attack, then play 1 Chilled's Army Token with 10000 power.")
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_play_token_in_battle")
+    assert token_rule.handler_params["token_name"] == "chilled's army token"
+    assert token_rule.handler_params["power"] == 10000
+    assert "temporary_keywords" not in token_rule.handler_params
+
+
+def test_extract_exact_bt2_chilled_attack_token_rule() -> None:
+    card = _card(
+        "[Auto] When this card attacks, play 1 Chilled's Army token. (Chilled's Army token has 10000 power) <br>"
+        "[Awaken] When your life is at 6 or less: You may draw 2 cards and flip this card over."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_attack")
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "chilled's army token"
+    assert token_rule.handler_params["power"] == 10000
+
+
+def test_extract_exact_bt13_chilled_attack_life_then_token_rule() -> None:
+    card = _card(
+        "[Permanent] All of your Chilled's Army Tokens gain the following effect:<br>"
+        "・ [Permanent] This card gains ≪Chilled's Army≫.<br>"
+        "[Auto] When this card attacks, add up to 1 card from your life to your hand, then play a Chilled's Army Token with 10000 power.<br>"
+        "[Awaken] When your life is at 3 or less: You may draw 2 cards, switch up to 1 of your energy to Active Mode, then flip this card over."
+    )
+    rules = extract_effect_rules_from_card(card)
+    life_rule = next(rule for rule in rules if rule.handler_id == "auto_add_up_to_n_from_owner_life_to_hand_on_attack")
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_attack")
+    assert life_rule.handler_params["max_targets"] == 1
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "chilled's army token"
+    assert token_rule.handler_params["power"] == 10000
+
+
+def test_extract_exact_cell_pursuit_of_despair_plays_up_to_two_cell_jr_tokens_and_buffs_them() -> None:
+    card = _card(
+        "[Double Strike]<br>"
+        "[Auto] When this card is played from your hand, play up to 2 Cell Jr. Tokens (10000 power, 0 combo cost, and 5000 combo power), "
+        "and those cards get +5000 power for the turn.<br>"
+        "[Activate: Main][Limit 1](Green)(Green), if your Leader is green and your opponent has 3 or more energy: Play this card from your hand.<br>"
+        "[Activate: Main] If you or your opponent removes 1 token with combo power from the game: Remove 2 markers from your opponent's Unison."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert token_rule.handler_params["requires_played_from"] == "hand"
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "cell jr. token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["combo_cost"] == 0
+    assert token_rule.handler_params["combo_power"] == 5000
+    assert token_rule.handler_params["post_created_tokens_power_delta"] == 5000
+
+
+def test_extract_exact_bulma_sacrifice_draws_then_plays_earthling_token() -> None:
+    card = _card(
+        "[Auto] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>: "
+        "When this card is played, draw 1 card, then play 1 Earthling Token (1000 power, 0 combo cost, and 0 combo power).<br>"
+        "[Auto] When one of your opponent's multicolor ≪God≫ cards attacks, place this card in your Drop, then negate the attack."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_play_token_in_battle_on_play")
+    assert draw_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "earthling token"
+    assert token_rule.handler_params["power"] == 1000
+
+
+def test_extract_exact_android_21_total_audacity_draws_then_schedules_clone_token() -> None:
+    card = _card(
+        "[Deflect][Double Strike]<br>"
+        "[Auto][Limit 1] When this card is played, draw 2 cards, and at the end of your opponent's next turn, "
+        "play 1 Clone Token with 10000 power in your opponent's Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_token_in_battle_on_play")
+    assert draw_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+    assert token_rule.handler_params["trigger_player_scope"] == "opponent"
+
+
+def test_extract_exact_unstoppable_technique_restands_blue_energy_then_schedules_clone_token() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader is a blue â‰ªAndroidâ‰« card: Negate the attack and switch up to 1 of your blue energy to Active Mode. "
+        "Additionally, at the end of the turn, play 1 Clone Token with 10000 power in your opponent's Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "counter_schedule_play_token_in_battle")
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+    assert token_rule.handler_params["switch_owner_energy_active_max_targets"] == 1
+    assert token_rule.handler_params["switch_owner_energy_active_allowed_colors"] == "blue"
+
+
+def test_extract_exact_frieza_invader_from_another_dimension_adds_life_then_schedules_token() -> None:
+    card = _card(
+        "[+1][Activate: Main] Add up to 1 card from your life to your hand; at the end of the turn, play 1 Frieza's Army Token with 10000 power."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_token_in_battle")
+    assert token_rule.handler_params["token_name"] == "frieza's army token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["add_from_life_to_hand_max_targets"] == 1
+    assert token_rule.handler_params["trigger_kind"] == "turn_end"
+
+
+def test_extract_exact_android_21_mandatory_gathering_searches_then_schedules_clone_token() -> None:
+    card = _card(
+        "[Auto] If your Leader is an â‰ªAndroidâ‰« card: When this card is played, look at up to 5 cards from the top of your deck, "
+        "add up to 1 blue â‰ªAndroidâ‰« card with an energy cost of 5 or less among them to your hand, shuffle your deck, and at the end of your opponent's next turn, "
+        "play 1 Clone Token with 10000 power in your opponent's Battle Area.<br>"
+        "[Auto] If your Leader is a blue â‰ªAndroidâ‰« card: When this card is used in a combo from your hand, play 1 Clone Token in your opponent's Battle Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    search_rule = next(rule for rule in rules if rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_token_in_battle_on_play")
+    assert search_rule.handler_params["look_count"] == 5
+    assert search_rule.handler_params["max_add"] == 1
+    assert search_rule.handler_params["allowed_colors"] == "blue"
+    assert search_rule.handler_params["required_traits"] == "Android"
+    assert search_rule.handler_params["max_cost"] == 5
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+    assert token_rule.handler_params["trigger_player_scope"] == "opponent"
+
+
+def test_extract_exact_android_21_the_ringleader_draws_then_schedules_clone_token() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is an â‰ªAndroidâ‰« card: When you play this card, draw 1 card, then at the end of your opponent's next turn, "
+        "play 1 Clone Token with 10000 power in your opponent's Battle Area.<br>"
+        "[Activate: Main][Once per turn](Blue)(Green), your Leader Card is an â‰ªAndroidâ‰« card: Choose 1 {Android 21's Scheme} in your Drop Area and activate it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_token_in_battle_on_play")
+    assert draw_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+
+
+def test_extract_exact_android_21_a_brilliant_idea_schedules_two_clone_tokens() -> None:
+    card = _card(
+        "[Auto] When you play this card, activate this skill. At the end of your opponent's next turn, play 2 Clone Tokens with 10000 power in your opponent's Battle Area.<br>"
+        "[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Choose one-<br>"
+        "ï½¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
+        "ï½¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    token_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_token_in_battle_on_play")
+    assert token_rule.handler_params["amount"] == 2
+    assert token_rule.handler_params["token_name"] == "clone token"
+    assert token_rule.handler_params["power"] == 10000
+    assert token_rule.handler_params["controller_player_scope"] == "opponent"
+    assert token_rule.handler_params["trigger_player_scope"] == "opponent"
+
+
+def test_extract_exact_android_21_a_brilliant_idea_can_ko_on_choice_branch() -> None:
+    card = _card(
+        "[Auto] When you play this card, activate this skill. At the end of your opponent's next turn, play 2 Clone Tokens with 10000 power in your opponent's Battle Area.<br>"
+        "[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Choose one-<br>"
+        "ï½¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
+        "ï½¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    ko_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_ko_up_to_n_opponent_battle")
+    assert ko_rule.handler_params["max_targets"] == 1
+    assert ko_rule.handler_params["target_policy"] == "first"
+
+
+def test_extract_exact_android_21_a_brilliant_idea_can_buff_leader_or_battle_on_choice_branch() -> None:
+    card = _card(
+        "[Auto] When you play this card, activate this skill. At the end of your opponent's next turn, play 2 Clone Tokens with 10000 power in your opponent's Battle Area.<br>"
+        "[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Choose one-<br>"
+        "ï½¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
+        "ï½¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    buff_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_buff_owner_battle_cards")
+    assert buff_rule.handler_params["target_scope"] == "owner_cards"
+    assert buff_rule.handler_params["max_targets"] == 1
+    assert buff_rule.handler_params["power_delta"] == 10000
+    assert buff_rule.handler_params["grant_keyword"] == "Critical"
+
+
+def test_extract_exact_android_21_scholarly_gambit_requires_no_copy_in_battle() -> None:
+    card = _card(
+        "[Blocker]<br>[Barrier]<br>[Activate: Main] If a copy of this card isn't in play in your Battle Area, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Play this card from your hand.<br>"
+        "[Auto] If you have 5 or more energy and place this card in its owner's Drop Area: When your opponent plays a Battle Card with an energy cost greater than their current energy, you may choose that Battle Card and place it at the bottom of its owner's deck."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_self_from_hand")
+    assert play_rule.handler_params["requires_no_owner_battle_with_source_card_id"] is True
+
+
+def test_extract_exact_the_android_creator_draws_and_buffs_owner_battle_only() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Draw 1 card, then choose 1 of your Battle Cards and it gets +10000 power for the duration of the turn."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    buff_rule = next(rule for rule in rules if rule.trigger == "self_activate_extra_from_hand" and rule.handler_id == "activate_buff_owner_battle_cards")
+    assert not any(rule.trigger == "self_activate_extra_from_hand" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert buff_rule.handler_params["amount"] == 1
+    assert buff_rule.handler_params["target_scope"] == "owner_battle"
+    assert buff_rule.handler_params["max_targets"] == 1
+    assert buff_rule.handler_params["power_delta"] == 10000
+    assert "required_traits" not in buff_rule.handler_params
+
+
+def test_extract_exact_mai_link_of_hope_draws_and_activate_main_plays_earthling_token() -> None:
+    card = _card(
+        "[Auto] When this card is played, draw 1 card.<br>"
+        "[Activate: Main][Limit 1] If your Leader is a green card with both <Trunks: Future> and <Mai: Future> and you switch this card to Rest Mode: "
+        "Play 1 Earthling Token (1000 power, 0 combo cost, and 0 combo power)."
+    )
+    rules = extract_effect_rules_from_card(card)
+    draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
+    token_rule = next(rule for rule in rules if rule.handler_id == "activate_play_token_in_battle")
+    assert draw_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["amount"] == 1
+    assert token_rule.handler_params["token_name"] == "earthling token"
+    assert token_rule.handler_params["power"] == 1000
+    assert "rest_mode_only" not in token_rule.handler_params

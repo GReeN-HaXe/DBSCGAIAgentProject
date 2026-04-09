@@ -201,6 +201,10 @@ class SkillCostDsl:
         ]
 
     @staticmethod
+    def _opponent_battle_candidates(opponent: PlayerState, step: SkillCostStep) -> list[CardInstance]:
+        return [c for c in opponent.battle_area if SkillCostDsl._card_matches_filters(c, step)]
+
+    @staticmethod
     def _leader_color_matches(player: PlayerState, step: SkillCostStep) -> bool:
         required = SkillCostDsl._parse_param_set(step.params.get("required_leader_colors"))
         if not required:
@@ -505,6 +509,12 @@ class SkillCostDsl:
                 if len(player.hand) < step.amount:
                     return False
                 continue
+            if step.kind == "send_self_from_hand_to_warp":
+                if step.amount != 1:
+                    return False
+                if not SkillCostDsl._in_hand(player, source_card):
+                    return False
+                continue
             if step.kind == "send_owner_hand_to_drop":
                 if len(player.hand) < step.amount:
                     return False
@@ -526,6 +536,18 @@ class SkillCostDsl:
                 continue
             if step.kind == "send_other_battle_to_removed":
                 available = [c for c in player.battle_area if c.instance_id != source_card.instance_id]
+                if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_owner_battle_to_removed":
+                available = SkillCostDsl._owner_battle_return_candidates(player, source_card, step)
+                if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "send_opponent_battle_to_removed":
+                if opponent is None:
+                    return False
+                available = SkillCostDsl._opponent_battle_candidates(opponent, step)
                 if len(available) < step.amount:
                     return False
                 continue
@@ -752,6 +774,13 @@ class SkillCostDsl:
                 for _ in range(min(step.amount, len(player.hand))):
                     player.warp.append(player.hand.pop(0))
                 continue
+            if step.kind == "send_self_from_hand_to_warp":
+                if not SkillCostDsl._remove_source_from_hand(player, source_card, destination="warp"):
+                    raise ValueError("Source card not found in hand for send_self_from_hand_to_warp.")
+                metadata["cost_target_instance_id"] = source_card.instance_id
+                metadata["cost_target_card_id"] = source_card.card_id
+                metadata["cost_target_zone"] = "hand"
+                continue
             if step.kind == "send_owner_hand_to_drop":
                 moved = 0
                 while player.hand and moved < step.amount:
@@ -795,8 +824,56 @@ class SkillCostDsl:
                     if card.instance_id == source_card.instance_id:
                         i += 1
                         continue
-                    player.removed_from_game.append(player.battle_area.pop(i))
+                    removed = player.battle_area.pop(i)
+                    player.removed_from_game.append(removed)
                     moved += 1
+                    if moved == 1:
+                        metadata["removed_source_instance_id"] = int(removed.instance_id)
+                        metadata["removed_source_card_id"] = int(removed.card_id)
+                        metadata["removed_source_zone"] = "battle"
+                        metadata["removed_source_owner_player_id"] = int(player.player_id)
+                continue
+            if step.kind == "send_owner_battle_to_removed":
+                moved = 0
+                candidate_ids = {
+                    card.instance_id for card in SkillCostDsl._owner_battle_return_candidates(player, source_card, step)[: step.amount]
+                }
+                i = 0
+                while i < len(player.battle_area) and moved < step.amount:
+                    card = player.battle_area[i]
+                    if card.instance_id not in candidate_ids:
+                        i += 1
+                        continue
+                    removed = player.battle_area.pop(i)
+                    player.removed_from_game.append(removed)
+                    moved += 1
+                    if moved == 1:
+                        metadata["removed_source_instance_id"] = int(removed.instance_id)
+                        metadata["removed_source_card_id"] = int(removed.card_id)
+                        metadata["removed_source_zone"] = "battle"
+                        metadata["removed_source_owner_player_id"] = int(player.player_id)
+                continue
+            if step.kind == "send_opponent_battle_to_removed":
+                if opponent is None:
+                    raise ValueError("Opponent state required for send_opponent_battle_to_removed.")
+                moved = 0
+                candidate_ids = {
+                    card.instance_id for card in SkillCostDsl._opponent_battle_candidates(opponent, step)[: step.amount]
+                }
+                i = 0
+                while i < len(opponent.battle_area) and moved < step.amount:
+                    card = opponent.battle_area[i]
+                    if card.instance_id not in candidate_ids:
+                        i += 1
+                        continue
+                    removed = opponent.battle_area.pop(i)
+                    opponent.removed_from_game.append(removed)
+                    moved += 1
+                    if moved == 1:
+                        metadata["removed_source_instance_id"] = int(removed.instance_id)
+                        metadata["removed_source_card_id"] = int(removed.card_id)
+                        metadata["removed_source_zone"] = "battle"
+                        metadata["removed_source_owner_player_id"] = int(opponent.player_id)
                 continue
             if step.kind == "send_self_to_warp":
                 if not SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="warp"):

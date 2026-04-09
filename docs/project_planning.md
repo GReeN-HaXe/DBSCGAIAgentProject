@@ -3646,3 +3646,328 @@ When adding a new TODO:
   - when played, send up to 2 skill-less 15000-power Battle Cards with different character names from your deck to your Warp
   - at the end of your opponent's next turn, play up to 1 of those cards in your Battle Area
   - add the remaining marked cards to your hand
+- widened the same deck-to-warp return seam to support:
+  - `at the start of your next turn`
+  - typo variants like `send it your Warp`
+  - return-to-hand without requiring the source card to remain in play
+- covered the `World Tournament` on-play sibling:
+  - when played, send up to 1 matching `≪World Tournament≫` card with cost `5` or less from deck to Warp
+  - at the start of your next turn, add that marked card from Warp to hand
+- opened a new shared activate family on the same warp-provenance seam:
+  - `self_activate_main:activate_send_up_to_n_from_owner_hand_to_warp`
+- covered the `World Tournament` activate sibling:
+  - place the source card in its owner's Drop
+  - send up to 1 matching `≪World Tournament≫` card with cost `3` or less from hand to Warp
+  - at the start of your next turn, play the marked card from Warp
+- widened the self-warp next-turn replay seam to support comma-form wording:
+  - `Send this card to the Warp, and play it from the Warp ... at the beginning of your next turn`
+- added shared activate-main cost extraction for:
+  - `place 1 card from your hand in the Drop Area:`
+- covered the `Maiden Squadron` self-warp sibling:
+  - hand-to-Drop cost
+  - source to Warp
+  - replay source from Warp at the beginning of your next turn
+- regression-locked the adjacent `Activate: Main` opponent-warp replay sibling:
+  - warp up to 1 opponent Battle Card
+  - replay it at the end of your opponent's next turn with skills negated
+- widened the same warp-provenance seam to support delayed next-turn splits from marked Warp cards:
+  - play up to `N`
+  - add up to `N` remaining marked cards to `Z-Energy`
+  - filtered by first/second descriptor matching
+- widened shared self-attack auto-costs to support:
+  - `send N cards from under this card to your Warp`
+- covered the green `Machine Mutant` attack sibling:
+  - pay by sending `2` cards from under the attacker to Warp
+  - opponent discards `1`
+  - at the start of your next turn, choose up to `1` each of `<Android 17>` and `<Hell Fighter 17>` with cost `1` from the marked Warp cards
+  - play up to `1` of them
+  - add up to `1` of them to your `Z-Energy`
+- widened the same deck-to-warp replay seam to support:
+  - `when played, send up to N named cards from your deck to your Warp`
+  - `at the start of your next turn, play that marked card from your Warp in Rest Mode`
+- covered the yellow `Bora` sibling:
+  - when played, send up to `1` yellow `{Bora}` from your deck to your Warp
+  - at the start of your next turn, play that marked card from your Warp in `Rest Mode`
+- added a new hand-source activate cost on the same warp-provenance seam:
+  - `activate_main_hand -> send_self_from_hand_to_warp`
+- widened the self-warp delayed replay extractor to support:
+  - `send this card from your hand to your Warp`
+  - `at the end of your opponent's next turn, play the card you sent to your Warp with this skill from your Warp`
+- added a new shared on-play family:
+  - `self_played:auto_add_up_to_n_from_owner_life_to_hand_on_play`
+- covered the green hand-to-warp replay sibling:
+  - activate from `hand`
+  - send the source to Warp as the activate cost
+  - replay the marked source from Warp at the end of your opponent's next turn
+  - on play, add up to `2` cards from your life to your hand
+- widened the same warp-provenance seam to support:
+  - `send this card to its owner's Warp`
+  - `play up to 1 black multicolor Battle Card with an energy cost of 2 in your hand`
+  - `at the start of your next turn, add this card to your hand from your Warp`
+- added shared support for:
+  - `activate_play_up_to_n_from_owner_hand`
+  - `activate_schedule_return_cards_warped_by_source_skill_to_owner_hand`
+- tightened common requirement extraction/runtime for:
+  - `there's a total of 3 or more energy between you and your opponent`
+- widened the combo battle-end replay seam to support follow-up payoffs after self replay:
+  - play self from combo at battle end, then negate up to `1` opponent Unison's skills for the turn
+  - play self from combo at battle end, then return up to `1` opponent Battle Card with cost `3` or less to hand
+- covered the adjacent black `Saiyan` siblings on the shared path:
+  - activate main self-warp -> play 2-cost black multicolor from hand -> next-turn self return
+  - combo battle-end self replay -> opponent Unison skill negation
+  - combo battle-end self replay -> opponent Battle bounce
+- widened the self-played warp seam with two new shared on-play families:
+  - `auto_add_markers_to_matching_owner_unison_on_play`
+  - `auto_send_up_to_n_opponent_hand_to_warp_on_play`
+- widened delayed next-opponent-turn hand return extraction to also accept:
+  - `they add the card sent to their Warp by this skill from their Warp to their hand`
+- covered the adjacent red `Broly: Br` servant sibling on the shared path:
+  - add a marker to a matching red Unison
+  - opponent sends `1` hand card to Warp
+  - the marked card returns from Warp to hand at the end of the opponent's next turn
+- locked exact-card regression coverage for adjacent free-rider siblings using the same new hand-to-Warp family:
+  - `Kahseral, the Righteous`
+  - `Vegeta the Cruel`
+- opened the delayed token seam with a reusable queue plus shared token creation/play helpers
+- added shared delayed token families for:
+  - `self_played -> auto_schedule_play_token_in_battle_on_play`
+  - `counter_attack -> counter_schedule_play_token_in_battle`
+- added shared immediate token families for:
+  - `self_played -> auto_play_token_in_battle_on_play`
+  - `counter_attack -> counter_play_token_in_battle`
+- first covered live token siblings:
+  - delayed `Clone Token` to opponent Battle Area on play
+  - delayed `Clone Token` to opponent Battle Area at turn end from `Counter: Attack`
+  - immediate `Earthling Token` on play
+  - immediate `Demon Realm Soldier Token` with battle-turn `[Blocker]` from `Counter: Attack`
+- widened the token seam with a shared owner-Union token family:
+  - `owner_union_activated -> auto_play_token_in_battle_on_owner_union_activated`
+- widened the token seam with shared activate token families:
+  - `self_activate_main/self_activate_battle -> activate_play_token_in_battle`
+  - `self_activate_main -> activate_schedule_play_token_in_battle`
+- widened `activate_play_self_from_hand` so pending hand-play resolution can spawn token follow-ups after the real `Counter: Play` window
+- first covered adjacent token siblings on the shared path:
+  - `When you activate a [Union] skill, play 1 Ghost Token with 15000 power in Rest Mode`
+  - `Switch this card to Active Mode and play 2 Saibaiman Tokens`
+  - `Play 1 Earthling Token ... and it gains [Barrier] until the end of your opponent's next turn`
+  - `At the end of the turn, play 1 Frieza's Army Token with 10000 power`
+  - `Play this card from your hand, then play 1 Saibaiman Token`
+- widened the token seam with a shared attack trigger family:
+  - `self_attacks -> auto_play_token_in_battle_on_attack`
+- widened the token seam with a shared phase-start family:
+  - `owner_main_phase_start/owner_opponent_main_phase_start -> auto_play_token_in_battle_on_main_phase_start`
+  - supports both fixed token counts and:
+    - `play ... until you have N ... Tokens in your Battle Area`
+- widened the token seam with a shared leave-battle family:
+  - `owner_card_left_battle_area -> auto_play_token_in_battle_on_owner_matching_battle_left`
+- first covered adjacent token siblings on the shared path:
+  - `When this card attacks, play up to 1 Demon Realm Soldier Token`
+  - `When this card attacks, play 1 Majin Token in Rest Mode`
+  - `At the start of your Main Phase, play Multi-Form Tokens until you have 3 Multi-Form Tokens in your Battle Area`
+  - `At the start of your opponent's Main Phase, play 2 Clone Tokens with 10000 power in your opponent's Battle Area`
+  - `When your Multi-Form Token is removed from a Battle Area, play 1 Multi-Form Token`
+- widened the token seam with a shared owner-battle-played token family:
+  - `owner_other_battle_played -> auto_play_token_in_battle_on_owner_matching_battle_played`
+- added token creator provenance to `card_played` token events and delayed token replay so owner-skill token follow-ups can match on:
+  - `event_required_played_from`
+  - `event_required_created_by_source_card_type`
+- first covered adjacent token siblings on the shared path:
+  - `When you play a <Goku Black> card in your Battle Area, play 1 Shadow Token`
+  - `When a Clone Token is played by the skill on one of your Extra Cards, play 2 Clone Tokens to your opponent's Battle Area`
+  - `When this card is played, draw 1 card, play 1 Shadow Token ... and that card gains [Blocker] for the turn`
+  - `When this card is played from your hand, play 4 Shadow Tokens, and they gain [Blocker] until the end of your opponent's next turn`
+- widened shared token-name parsing so token families now support dotted token names like:
+  - `Cell Jr. token`
+- locked exact token siblings that reuse the current shared path:
+  - `When you play this card, if your Leader Card is <Cell>, play 2 Cell Jr. tokens`
+  - `When you play this card, if your Leader Card is an ≪Android≫, draw 2 cards and play 2 Cell Jr. tokens`
+  - `When this card is played, play 1 Earthling Token`
+  - `Play this card from your hand, and play 1 Earthling Token`
+- widened the existing token families instead of opening bespoke branches:
+  - `self_activate_main/self_activate_battle -> activate_play_token_in_battle`
+    - can now follow token creation with:
+      - `use up to 1 ... from your Drop/Warp in a combo`
+      - `add up to 1 card from your life to your hand`
+  - `self_played -> auto_play_token_in_battle_on_play`
+    - can now follow token creation with:
+      - `choose up to 1 of your opponent's Battle Cards and place it under this card`
+- widened token keyword extraction/normalization so existing token families now support:
+  - multi-keyword tails like:
+    - `[Blocker] and [Revenge]`
+  - while preserving the older normalized extractor contract
+- first covered adjacent exact siblings on the shared token path:
+  - `[Activate: Battle] Play 1 Saibaiman Token, then use up to 1 mono-blue card with 5000 combo power from your Drop in a combo with its skills negated for the turn`
+  - `When this card is played from your hand, play 1 Majin Token, then choose up to 1 of your opponent's Battle Cards and place it under this card`
+  - `When this card is played, play 1 Saibaiman Token ... and it gains [Blocker] and [Revenge] until the end of the turn`
+  - `[Activate: Main] Play 1 Majin Token, then add up to 1 card from your life to your hand`
+- widened the token seam across adjacent exact-card siblings and one shared combo-cost fix:
+  - `self_comboed -> auto_play_token_in_battle_on_combo`
+    - locked exact battle-origin `Multi-Form Token` siblings
+    - locked exact hand-origin `Saibaiman Token` sibling with `[Unique]` and `[Blocker]`
+  - widened `auto_on_combo_battle` skill-cost extraction so plain circled generic costs like `②` now map to:
+    - `send_owner_energy_to_drop`
+  - widened on-play token/discard extraction so bracketed inline text like `[Barrier]` between the trigger and the rider no longer blocks:
+    - token creation
+    - opponent discard
+- first covered adjacent exact token siblings on the shared path:
+  - `When this card is used in a combo from your Battle Area, play 1 Multi-Form Token in Rest Mode`
+  - `②, if it's your opponent's turn: When this card is used in a combo from your Battle Area, play 4 Multi-Form Tokens`
+  - `When this card is used in a combo from your hand, play 1 Saibaiman Token, and it gains [Unique] and [Blocker] for the turn`
+  - `When this card is played, play 2 Chilled's Army Tokens with 10000 power`
+  - `When this card is played, play 1 Meda Token`
+  - `When this card is played, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], KO it, play 2 Ghost Tokens with 15000 power, and your opponent discards 1 card from their hand`
+- widened the token seam across adjacent exact `Counter: Attack` and `Activate: Main` siblings without opening a new branch:
+  - widened shared token keyword extraction so sentence-separated tails like:
+    - `That Token gains [Blocker] for the turn`
+    now resolve through the existing counter token family
+  - widened the shared leader-condition parser so counter text like:
+    - `If your Leader Card is mono-green: Negate the attack...`
+    no longer leaks `Negate the attack` into `requires_leader`
+  - locked the adjacent exact siblings:
+    - `[Counter: Attack] ... play 1 Meda Token. That Token gains [Blocker] for the turn`
+    - `[Activate: Main] Place 1 of your Z-Energy in your Drop, and remove this card from the game: ... play 2 Ghost Tokens with 15000 power, then choose all of your Ghost Tokens and they gain [Revenge] until the end of your opponent's next turn`
+  - locked the combined activate cost shape for the Ghost Token line:
+    - `send_owner_z_energy_to_drop`
+    - `send_self_to_removed`
+- widened the shared on-play token seam to accept:
+  - `play up to N ... Tokens`
+  - this unlocked the exact `Cell, Pursuit of Despair` sibling without adding a one-off branch
+- widened shared token-stat fallback and exact-card coverage across adjacent token siblings:
+  - `Chilled's Army Reinforcements`
+  - `Frieza Army Reinforcements`
+  - `Testing the Opposition`
+  - `Invasion of Chilled's Army`
+  - `Chilled`
+  - `Cell, Pursuit of Despair`
+- widened the leader awaken payoff seam to support token payloads from parsed awaken text at runtime
+- first exact awaken sibling locked on that path:
+  - `Tien Shinhan`
+    - play `3` `Multi-Form Tokens`
+    - switch up to `1` energy to `Active Mode`
+- widened awaken condition parsing/runtime so token-adjacent awaken lines can now require:
+  - owner energy thresholds
+  - matching owner token counts in play
+  - matching owner Unison color + specified cost in play
+  - matching owner Battle Area card type/color/energy cost in play
+- locked adjacent exact awaken siblings on that shared path:
+  - `Towa`
+    - black Unison with specified cost `3` in play
+    - play `1` `Demon Realm Soldier Token`
+    - restand `2` energy
+  - `Tien Shinhan`
+    - `2` or more energy
+    - green `Z-Extra` with cost `2` in play
+    - play `3` `Multi-Form Tokens`
+  - `Trunks & Mai`
+    - `3` or more `Earthling Token`s in play
+    - awaken draw + energy restand + life-to-hand
+- locked adjacent exact token siblings that already reuse the current shared path:
+  - `Bulma, Sacrifice`
+    - on-play draw `1`
+    - play `1` `Earthling Token`
+  - `Android 21, Total Audacity`
+    - on-play draw `2`
+    - delayed `Clone Token` to the opponent Battle Area at end of the opponent's next turn
+  - `Mai, Link of Hope`
+    - on-play draw `1`
+    - activate-main `rest self`
+    - play `1` `Earthling Token`
+- widened delayed token rider support on the shared token seam:
+  - counter delayed token families can now restand filtered owner energy before scheduling the token
+  - activate delayed token families can now add cards from life to hand before scheduling the token
+- fixed a shared leader-requirement parsing/runtime seam so fallback `?trait?` strings still match live leader traits
+- fixed shared delayed on-play token extraction so plural token names normalize cleanly before runtime token creation
+- fixed shared on-play deck-search runtime so top-deck filters fall back to live `CardInstance` color / cost / trait data when catalog runtime data is absent
+- locked adjacent exact delayed-token siblings on that shared path:
+  - `Unstoppable Technique`
+    - counter restands `1` blue energy
+    - delayed `Clone Token` into the opponent Battle Area at end of turn
+  - `Frieza, Invader from Another Dimension`
+    - add `1` from life to hand
+    - delayed `Frieza's Army Token` at end of turn
+  - `Android 21, Mandatory Gathering`
+    - top-`5` search for blue `≪Android≫` cost `5` or less
+    - delayed `Clone Token` into the opponent Battle Area at end of the opponent's next turn
+  - `Android 21, the Ringleader`
+    - on-play draw `1`
+    - delayed `Clone Token` into the opponent Battle Area at end of the opponent's next turn
+  - `Android 21, a Brilliant Idea`
+    - delayed `2` `Clone Tokens` into the opponent Battle Area at end of the opponent's next turn
+- tightened shared common-condition extraction so source-card costs like:
+  - `you switch this card to Rest Mode`
+  no longer leak a bogus `rest_mode_only` target-state requirement into token activate families
+- opened the next token-cost seam:
+  - shared `Activate: Main` cost support for removing matching owner or opponent Battle cards from the game
+  - first token-backed siblings now ride that shared path:
+    - opponent `Clone Token` removal to play this card from `hand`
+    - opponent `Clone Token` removal to play this card from `Drop`
+    - opponent `Clone Token` removal to play a `Unison` from `hand` in `Rest Mode` with `1` marker
+    - opponent `Clone Token` removal to give this card `+10000 power` and `[Critical]` for the duration of the turn
+  - widened shared activate extraction for:
+    - `play this card from your hand in Rest Mode with a marker on it`
+    - `for the duration of the turn`
+    - bottom-deck opponent Battle lines with explicit max-cost clauses like `energy cost of 2 or less`
+- hardened the adjacent Android 21 / Clone Token seam:
+  - added a shared activate-main family for:
+    - draw
+    - optional life-to-hand
+    - bounce up to `N` opponent Battle cards by cost
+    - optional delayed opponent-next-main energy restand
+  - locked exact leader siblings on that path:
+    - `BT8-024 Android 21`
+      - draw `1`
+      - bounce opponent Battle cost `1`
+      - restand up to `1` blue/green multicolor energy at the start of the opponent's next Main Phase
+    - `BT8-023 Android 18`
+      - draw `1`
+      - add `1` from life to hand
+      - bounce opponent Battle cost `1`
+  - widened shared activate-main owner-buff extraction so:
+    - `choose 1 of your Battle Cards and it gets +10000 power for the duration of the turn`
+      now rides `activate_buff_owner_battle_cards`
+  - opened the adjacent on-play bounce family:
+    - `When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of N or less and return it to its owner's hand`
+  - fixed a real play-from-hand registration bug:
+    - deferred hand-zone autos now clear before public battle/unison registration
+    - that keeps extracted on-play follow-ups live after a card is played from hand
+  - locked adjacent exact Frieza siblings on the shared path:
+    - `BT8-035 Maleficent Technique Frieza`
+      - remove `2` opponent `Clone Token`s
+      - play from hand
+      - on-play bounce opponent Battle cost `3` or less
+    - `BT20-049 Frieza, Common Enemy`
+      - require `3` or more energy
+      - remove `3` opponent `Clone Token`s
+      - play from hand
+  - hardened the adjacent Android 21 / Clone Token exact-card seam:
+    - `P-202 Android 21, Scholarly Gambit`
+      - added shared `requires_no_owner_battle_with_source_card_id`
+      - fixed the false activate-main self-drop cost leak from the later `[Auto]` header
+    - `BT8-062 The Android Creator`
+      - collapsed the line into a real composite extra-from-hand activate path:
+        - remove opponent `Clone Token`
+        - draw `1`
+        - buff `1` owner Battle by `+10000`
+      - removed the old noisy `required_traits="Battle"` artifact
+    - `BT8-055 Android 21, a Brilliant Idea`
+      - fixed `Choose one-` bullet splitting for the mojibake token package
+      - opened exact choice-branch extraction/runtime for:
+        - KO `1` opponent Battle
+        - buff owner Leader or Battle by `+10000` and `[Critical]`
+    - widened shared runtime support so:
+      - `activate_extra_from_hand` can reuse `activate_main` cost specs when the printed card is an Extra
+      - `activate_ko_up_to_n_opponent_battle` now works on `self_activate_main` as well as battle timing
+  - widened the adjacent Clone Token / blue Unison seam:
+    - locked the next exact Clone Token siblings that already reuse the shared removal cost path:
+      - `remove 3 Clone Tokens -> play this card from your hand` with `[Blocker][Limit 1]`
+      - `remove 1 Clone Token -> this card gets +10000 power and [Double Strike] for the turn`
+    - widened shared stacked-header parsing so exact Unison lines now extract cleanly from:
+      - `[+2][Activate: Main]`
+      - `[-4][Activate: Battle]`
+    - opened the blue Clone Token Unison support on the shared path:
+      - owner mono-blue Leader gets `+5000` power for the turn
+      - opponent `Clone Token`s can't attack during the opponent's next turn
+      - `[-4][Activate: Battle]` gives the Unison `+11000` power and `[Double Strike]`
+    - widened shared runtime support so:
+      - `activate_buff_owner_leader_for_turn` now honors leader filters and can schedule name-based next-turn attack restrictions
+      - `activate_gain_power_and_keyword_for_turn` now also resolves for `self_activate_battle`
