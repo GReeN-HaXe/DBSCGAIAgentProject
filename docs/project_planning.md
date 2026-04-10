@@ -1902,6 +1902,17 @@ Resolved:
         - it becomes available again in a later battle
       - first covered live wording family:
         - `Place 2 of your Z-Energy into their owner's Drop: When your opponent uses cards in a combo, your opponent places 1 card from their hand at the bottom of their deck, then you negate this skill for the battle.`
+    - status: adjacent owner-opponent-combo hardening slice complete
+      - the older opponent-combo watchers now reuse the same shared combo-event matcher as the modern owner-combo seam
+      - checked-in runtime coverage now proves they honor:
+        - `event_requires_comboed_from`
+        - `event_allowed_colors`
+        - `event_required_card_type`
+        - `event_max_energy_cost`
+      - the hardened live families are:
+        - `owner_opponent_card_comboed:auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle`
+        - `owner_opponent_card_comboed:auto_send_up_to_n_opponent_combo_to_drop_on_opponent_combo`
+      - negative regressions now prove those families stay off when the opponent combo event comes from the wrong origin or misses the printed filters
     - status: adjacent self-combo support slice complete
       - generic runtime/extraction now also covers:
         - `When you combo with this card from your hand, your opponent chooses 1 card in their hand and places it at the bottom of their deck.`
@@ -1940,6 +1951,49 @@ Resolved:
       - `self_comboed:auto_power_reduce_up_to_n_on_combo` now explicitly preserves:
         - `requires_comboed_from="hand"` when the source wording says `from your hand`
       - this keeps the established `-10000 power on combo` family from leaking onto future non-hand combo sources
+    - status: adjacent battle-origin self-combo hardening slice complete
+      - generic runtime is now regression-backed for:
+        - `self_comboed:auto_self_gain_combo_power_on_combo` with `requires_comboed_from="battle"`
+      - current semantics are explicit:
+        - battle-origin combo cards already in `combo_area` can resolve their self-combo power gain without relying on the hand-combo path
+    - status: adjacent combo-provenance hardening slice complete
+      - widened:
+        - generic `self_comboed:auto_draw_n`
+      - regression-backed negative cases now include:
+        - battle-only self-combo draw / `Z-Energy` follow-ups staying off on hand-origin combo events
+        - hand-only self-combo warp / combo-buff follow-ups staying off on battle-origin combo events
+        - hand-only owner-combo buff / draw follow-ups staying off on battle-origin combo events
+      - current semantics are explicit:
+        - the shared `auto_draw_n` path now honors `requires_comboed_from` for `self_comboed`
+        - nearby owner-combo and self-combo provenance families are now regression-backed on both the positive and negative path
+    - status: adjacent self-combo ownership/provenance hardening slice complete
+      - widened:
+        - `self_comboed:auto_play_up_to_n_from_owner_hand_on_self_combo`
+        - `self_comboed:auto_switch_up_to_n_owner_energy_active_on_combo`
+        - `self_comboed:auto_place_up_to_n_from_owner_deck_into_drop_on_combo`
+        - `self_comboed:auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo`
+      - current semantics are explicit:
+        - these older self-combo families now require the triggering `card_comboed` event to belong to the source instance
+        - `requires_comboed_from` is now enforced consistently across hand-origin and battle-origin combo events on these paths
+        - the seam is now regression-backed for both:
+          - wrong-source combo events
+          - hand-only families staying off on battle-origin combo events
+    - status: adjacent self-combo provenance hardening slice complete
+      - widened:
+        - `self_comboed:auto_power_reduce_up_to_n_on_combo`
+      - current semantics are explicit:
+        - this older combo-time power-reduction family now also requires the triggering `card_comboed` event to belong to the source instance
+        - `requires_comboed_from` is now regression-backed on the negative path here too
+        - the remaining older self-combo handlers in this neighborhood now follow the same source-instance/provenance contract
+    - status: adjacent self-combo provenance hardening slice extended
+      - widened:
+        - `self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo`
+      - current semantics are explicit:
+        - this older optional bottom-deck / draw family now also honors `requires_comboed_from`
+        - wrong-source combo events are now regression-backed on this path too
+        - the older self-combo families in this seam now uniformly enforce:
+          - source-instance ownership
+          - hand-origin vs battle-origin combo provenance where present
     - status: fifth adjacent self-combo support slice complete
       - generic runtime/extraction now also covers:
         - `When you combo with this card from your hand, this card gets +1000 combo power for the duration of the turn for each card in your Drop Area and Warp.`
@@ -2075,6 +2129,27 @@ Resolved:
       - current semantics are explicit:
         - the owner-combo watcher deterministically moves the source card from Battle Area into Combo Area
         - the paired battle-end replay uses the existing `self_comboed_battle_end:auto_play_self_from_combo_on_battle_end` path with `requires_comboed_from="battle"`
+    - status: seventh owner-card-combo hardening slice complete
+      - added:
+        - explicit `requires_source_in_battle` enforcement for battle-gated owner-combo watchers
+      - regression-backed live wording families now include:
+        - `If this card is in a battle: When you use a {SS Son Goku, Showing the Results of Training} in a combo, choose up to 1 of your opponent's Unisons and remove 2 markers from it.`
+        - `If this card is in a battle: When you use a black Battle Card in a combo, your opponent sends 1 Battle Card from their Drop Area to their Warp; if there are no Battle Cards in your opponent's Drop Area, draw 1 card.`
+        - battle-origin trigger handling for:
+          - `play this card from under your Leader or from your hand`
+          - `use this card from a Battle Area in a combo` and replay it at battle end
+      - current semantics are explicit:
+        - `If this card is in a battle` now checks the source instance against the live `attack_context`
+        - battle-origin combo provenance is now regression-backed on both public and secret owner-combo follow-ups
+    - status: eighth owner-card-combo hardening slice complete
+      - widened:
+        - `owner_card_comboed:auto_place_up_to_n_from_owner_drop_under_named_owner_battle_on_combo`
+      - current semantics are explicit:
+        - this older owner-combo recovery family now reuses the shared owner-combo event matcher
+        - `event_requires_comboed_from` is now honored on this path for both:
+          - hand-origin combo triggers
+          - battle-origin combo triggers
+        - owner-combo header costs on this path now go through the normal once-per-event combo cost payment flow
     - status: first added-to-z-energy trigger slice complete
       - added:
         - `self_added_to_z_energy:auto_draw_n`
@@ -2328,6 +2403,797 @@ Resolved:
         - the existing placed-under deck-under family is now proven for both sibling training targets:
           - `{SS Son Goku, Showing the Results of Training}`
           - `{SS Son Gohan, Showing the Results of Training}`
+    - status: twelfth Hyperbolic follow-up slice complete
+      - added:
+        - `self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed`
+        - first reusable pregame leader-placement event:
+          - `card_placed_in_leader_area`
+      - first covered live wording family:
+        - `When this card is placed in your Leader Area, activate up to 1 {Hyperbolic Time Chamber} from your deck.`
+      - current semantics are explicit:
+        - leader-placement autos now resolve during game initialization after leader effects are registered
+        - the first activation slice is conservative:
+          - named `Field` Extra only
+          - from owner `deck`
+          - no counter window during pregame setup
+          - emits the existing `field_extra_placed` event so downstream field-extra watchers can compose on top
+    - status: thirteenth Hyperbolic follow-up slice complete
+      - widened:
+        - leader awaken parsing/runtime
+      - first covered live wording family:
+        - `[Awaken] When your life is at 4 or less or if you have a {SS Son Goku, Showing the Results of Training} in play: Draw 1 card, switch up to 1 of your energy to Active Mode, then add cards from your life to your hand until you have 6 life left.`
+      - current semantics are explicit:
+        - awaken now supports parsed printed effects for this family instead of the older generic fallback
+        - the first parsed awaken slice covers:
+          - life-threshold and named-card-in-play conditions
+          - printed draw counts
+          - switching up to `N` owner energy cards to `Active Mode`
+          - life-to-hand until a printed life total
+    - status: fourteenth Hyperbolic follow-up slice complete
+      - added:
+        - regression-backed leader-attack search coverage for:
+          - `When this card attacks, look at up to 5 cards from the top of your deck, add up to 1 green ≪Saiyan≫ to your hand, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing owner-leader-attack search family already supported this text
+        - this slice locks that behavior in next to the new Hyperbolic setup/awaken coverage so the whole leader package is regression-backed together
+    - status: fifteenth Hyperbolic follow-up slice complete
+      - added:
+        - explicit source-card battle gating for owner-combo watchers with text like:
+          - `If this card is in a battle: When you use a {SS Son Goku, Showing the Results of Training} in a combo, choose up to 1 of your opponent's Unisons and remove 2 markers from it.`
+        - paired runtime coverage proving:
+          - the watcher resolves when the source card is the battling card
+          - the watcher does not resolve when a different owner Battle Card is in the battle instead
+      - current semantics are explicit:
+        - `If this card is in a battle` is now modeled as a real source-instance requirement against the active `attack_context`
+        - this keeps the newer owner-combo family precise instead of treating the clause as generic flavor text
+    - status: sixteenth Hyperbolic follow-up slice complete
+      - added:
+        - `self_activate_main:activate_buff_owner_leader_for_turn`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1](Green), if your Leader is a green <Son Gohan: Childhood> Z-Leader, you have 4 or more energy, and you remove this card from the game: Choose up to 1 of your Leaders, and it gets +10000 power for the turn.`
+      - current semantics are explicit:
+        - the new activate-main slice is intentionally conservative:
+          - owner leader only
+          - temporary power gain for the turn
+          - normal activate requirements like leader matching and minimum energy still come from the shared requirement matcher
+          - self-removal costs continue to flow through the existing activate cost extractor/runtime path
+    - status: seventeenth Hyperbolic follow-up slice complete
+      - added:
+        - regression-backed extractor/runtime coverage for:
+          - `When this card is played, look at up to 5 cards from the top of your deck, add up to 1 green ≪Saiyan≫ with an energy cost of 4 or less to your hand, then shuffle your deck.`
+      - current semantics are explicit:
+        - the existing on-play top-deck search family already handled:
+          - color filters
+          - trait filters
+          - energy-cost caps
+        - this slice locks that behavior in for the Hyperbolic `Krillin, Battle Support` package specifically
+    - status: eighteenth Hyperbolic follow-up slice complete
+      - added:
+        - regression-backed extractor/runtime coverage for:
+          - `When this card is played, choose up to 1 of your opponent's Battle Cards and KO it.`
+      - current semantics are explicit:
+        - the existing on-play KO family already supported the `SS Son Gohan, Showing the Results of Training` sibling
+        - this slice locks that behavior into the Hyperbolic package so the surrounding setup/payoff lines stay regression-backed together
+    - status: adjacent Cell on-play recovery slice complete
+      - added:
+        - regression-backed extractor/runtime coverage for:
+          - `When this card is played, choose up to 1 of your opponent's Battle Cards and KO it, then play up to 1 green <Cell> card with an energy cost of 1 from your Drop.`
+      - current semantics are explicit:
+        - the generic on-play Drop-play family now honors descriptor filters beyond color, including:
+          - exact energy costs
+          - character filters
+          - name filters
+        - this keeps the reusable recovery family aligned with the real Cell wording instead of over-playing the first legal Drop target
+    - status: adjacent Cell leader-under activate slice complete
+      - added:
+        - `self_activate_main:activate_play_self_from_under_owner_leader`
+        - `send_owner_hand_to_bottom_deck` skill-cost support for `Activate: Main`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1](Green), place 1 card from your hand at the bottom of your deck: Play this card from under {Cell, Return of the Ultimate Lifeform}.`
+      - current semantics are explicit:
+        - activate actions can now originate from `leader_under`
+        - the resulting play uses the normal `Counter: Play` window and resolves as:
+          - `played_from="under"`
+          - `played_via="skill"`
+        - counter preview/replacement families now also understand pending plays coming from `leader_under`
+    - status: first leader-under `Activate: Battle` play slice complete
+      - added:
+        - `self_activate_battle:activate_play_self_from_under_owner_leader`
+        - delayed `bottom deck this card if still in play at turn end`
+      - first covered live wording family:
+        - `[Activate: Battle][Limit 1](Blue), if your Leader is a blue <Android 18> card and an <Android 18> card is in your Combo Area: Play this card from under your Leader, and at the end of the turn, if this card is in play, place it at the bottom of its owner's deck.`
+      - current semantics are explicit:
+        - `leader_under` cards can now be real `Activate: Battle` sources
+        - the resulting play still uses the normal nested `Counter: Play` window
+        - a conservative delayed queue handles:
+          - `if this card is in play at the end of the turn, place it at the bottom of its owner's deck`
+    - status: adjacent leader-under `Activate: Battle` buff slice complete
+      - added:
+        - `if this card is under your <...> Leader` extraction support
+        - battle-time `leader_under` source legality for public activate choices
+      - first covered live wording family:
+        - `[Activate: Battle][Limit 1](Yellow), if this card is under your <Piccolo: SH> Leader: Choose up to 1 of your Battle Cards with <Son Gohan> in its character name and it gets +5000 power for the turn.`
+      - current semantics are explicit:
+        - under-Leader host requirements are now reusable runtime filters, not one-off handler checks
+        - existing owner-battle buff families can now fire from `leader_under` sources during battle
+    - status: adjacent leader-under battle-cost warp slice complete
+      - added:
+        - `activate_battle_leader_under -> send_self_from_leader_under_to_warp`
+        - first reusable `Super 17` under-Leader battle-time leader-buff / keyword slice
+      - first covered live wording families:
+        - `[Activate: Battle][Limit 1] Send this card from under your <Super 17> Z-Leader to its owner's Warp: Up to 1 of your Leaders gets +5000 power for the battle.`
+        - `[Activate: Battle][Limit 1](Green), send this card from under your <Super 17> Z-Leader to its owner's Warp: Your Leader gains [Double Strike] for the battle.`
+      - current semantics are explicit:
+        - under-Leader `Activate: Battle` lines can now pay self-to-`Warp` costs directly from `leader_under`
+        - the existing reusable owner-Leader battle buff handler now also works from these `Super 17` under-Leader source lines
+    - status: first under-owner-Leader placement seam slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_owner_leader`
+        - first reusable `placed under your Leader` event follow-ups for:
+          - draw
+          - buff owner Leader for the turn
+      - first covered live wording families:
+        - `[Activate: Main][Limit 1][Burst 1] If your Leader is a blue <Android 18> card: Place this card under your Leader.`
+        - `[Activate: Main] If your Leader Card is a mono-green <Cell> card and you place this card under your Leader Card: Draw 1 card.`
+        - `[Auto][Limit 1] When this card in your hand or Battle Area is placed under your green <Mai: Future>-only Leader, your Leader gets +10000 power for the turn.`
+      - current semantics are explicit:
+        - `battle` and `hand` sources can now move themselves under the owner Leader through a reusable activate family
+        - existing `card_placed_under_card` provenance is reused with `host_zone="leader"` so leader-under follow-ups compose with the older placed-under seam
+    - status: second under-owner-Leader placement seam slice complete
+      - added:
+        - `turn_end:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end`
+      - first covered live wording family:
+        - `[Auto] At the end of your turn, place up to 1 blue <Android 18> card from your Drop under your Leader.`
+      - current semantics are explicit:
+        - turn-end Drop-to-Leader recovery now reuses the same under-Leader placement event path
+        - moved cards are immediately available to the `leader_under` registration bridge for later under-Leader actions or autos
+    - status: adjacent self-drop provenance slice complete
+      - added:
+        - `self_placed_into_drop`
+        - `auto_combo_self_from_drop_on_placed_into_drop`
+        - widened `auto_play_self_from_drop_on_hand_drop` for `self_placed_into_drop` plus marker counts
+      - first covered live wording families:
+        - `If your {SSG Son Goku, Crimson Warrior} is in a battle and there are no cards in your Combo Area: When your Leader Card's skill places this card in a Drop Area from under your Leader Card, use this card in a combo from your Drop Area.`
+        - `If your Leader's back side is {SSG Son Goku, Surge of Divinity}: When this card is placed into its owner's Drop from your hand or from under your Leader by your Leader's skill, draw 1 card and play this card from your Drop with 1 marker on it.`
+      - current semantics are explicit:
+        - hand and `leader_under` sources can now keep their public autos alive through a self-drop event
+        - leader-skill drop provenance is modeled conservatively with `drop_cause="leader_skill"`
+        - the first follow-ups now cover:
+          - self-combo from `Drop`
+          - draw
+          - self-play from `Drop` with markers
+    - status: adjacent self-drop cost-and-payoff hardening slice complete
+      - added:
+        - `auto_on_self_drop -> send_owner_energy_to_drop`
+        - `self_comboed:auto_return_up_to_n_opponent_combo_to_hand_on_combo`
+      - first covered live wording families:
+        - `[Auto]{1}, if your Leader's back side is {SSG Son Goku, Surge of Divinity}: When this card is placed into its owner's Drop from your hand or from under your Leader by your Leader's skill, draw 1 card and play this card from your Drop with 1 marker on it.`
+        - `[Auto] When this card is used in a combo, choose up to 1 card in your opponent's Combo Area and return it to its owner's hand.`
+      - current semantics are explicit:
+        - self-drop auto skill costs now pay once per event even when multiple follow-up handlers resolve
+        - `drop` and `leader_under` sourced public autos now stay live through `combo_area` for:
+          - `self_comboed`
+          - `self_comboed_battle_end`
+        - drop-origin combo chains now cover:
+          - opponent Combo Area bounce to hand
+          - battle-end self-play from `Drop` in `Rest Mode`
+    - status: adjacent under-Leader `Drop -> Leader` recovery slice complete
+      - widened:
+        - `self_activate_main:activate_place_self_under_owner_leader`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1] If your Leader is a green <Broly: Br> card: You may add 1 green Extra from under your Leader to your Z-Energy. If you do, place this card from your Drop under your Leader.`
+      - current semantics are explicit:
+        - activate legality now supports matching-card requirements under your Leader via reusable filtered leader-under checks
+        - the effect can move matching under-Leader cards into `Z-Energy` before resolving the source placement
+        - `drop` is now a real source zone for the under-Leader placement family
+    - status: adjacent under-Leader deck-or-Drop setup slice complete
+      - added:
+        - `activate_main -> rest_self`
+        - `self_activate_main:activate_draw_n_and_place_up_to_n_from_owner_deck_or_drop_under_owner_leader`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1] If your Leader is a green ≪Machine Mutant≫ card and you switch this card to Rest Mode: Draw 1 card, place up to 1 <Android 18> or <Cell> card-both green and with an energy cost of 1-from your deck or Drop under your Leader, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - `rest_self` is now a reusable activate cost for public battle-card sources
+        - the new under-Leader setup family currently resolves deterministically:
+          - `deck` first
+          - then `drop`
+        - the tucked card emits the normal `card_placed_under_card` provenance with:
+          - `placed_from="deck"` or `placed_from="drop"`
+      - parked for later:
+        - the second `Power Distilled` line still wants a wider:
+          - `activate from under a Battle host`
+          seam
+    - status: adjacent under-Battle-host activate slice complete
+      - added:
+        - `battle_under` public source registration / legality bridge
+        - `self_activate_main:activate_place_up_to_n_opponent_battle_under_source_host_and_switch_host_active_on_turn_end`
+      - first covered live wording family:
+        - `[Activate: Main][Limit 1] If this card is under a green <Super 17> card: Choose up to 1 of your opponent's Battle Cards and place it under a <Super 17> card on top of this card, then switch a <Super 17> card on top of this card to Active Mode at the end of the turn.`
+      - current semantics are explicit:
+        - tucked owner-owned cards under your Battle Cards can now be real public `Activate` sources
+        - the current action bridge scans owner-owned under-cards in `battle_area` deterministically
+        - the `Power Distilled` follow-up tucks the chosen opponent Battle Card under the host above the source and schedules that host to switch to `Active Mode` at end of turn
+    - status: adjacent owner-controlled `battle_under` setup / payoff slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle`
+        - `self_activate_main:activate_draw_n_and_ko_up_to_n_opponent_battle_by_source_host_power`
+      - first covered live wording family:
+        - `[Activate: Main] Choose up to 1 of your mono-red <Son Goku> cards with an energy cost of 3 or more and without cards that have the same name as this card under it, then place this card under it.`
+        - `[Activate: Main][Limit 1] This card is under a <Son Goku> Battle Card: Draw 1 card, choose up to 1 of your opponent's Battle Cards with power less than or equal to the card on top of this card, then KO it.`
+      - current semantics are explicit:
+        - owner Battle hosts can now be filtered by:
+          - min cost
+          - mono-color
+          - shared descriptor filters
+          - excluding the source instance
+          - excluding hosts that already have a same-name under-card
+        - the under-host payoff reads the current power of the host above the source, then applies the KO threshold from that live value
+    - status: adjacent owner-controlled `battle_under` sibling payoff slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_draw_n_and_return_up_to_n_opponent_battle_to_hand`
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_bottom_deck_up_to_n_opponent_battle`
+      - first covered live wording families:
+        - `[Activate: Main][Limit 1] Choose 1 of your ≪Namekian≫ Battle Cards with a [Revive] skill and place this card under it: Draw 1 card, then choose up to 1 of your opponent's Battle Cards and return it to its owner's hand.`
+        - `[Activate: Main]{1}, place this card under a <Kefla> Battle Card: Choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.`
+      - current semantics are explicit:
+        - the shared setup helper now supports host matching by skill-text substring as well as the earlier color / trait / character / cost filters
+        - the Piccolo family bounces the selected opponent Battle Card to hand after the source is tucked under the chosen host
+        - the Kefla family reuses the same host placement helper, then bottom-decks the selected opponent Battle Card
+    - status: adjacent owner-controlled `battle_under` on-top promotion slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand_on_top_of_host`
+      - first covered live wording families:
+        - `[Activate: Main] Choose 1 <Frieza> card with an energy cost of 4 in your Battle Area and place this card under it: Play up to 1 green <Frieza: Xeno> card in your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+        - `[Activate: Main] Choose 1 mono-green <Majin Buu> card with an energy cost of 3 in your Battle Area and place this card under it: Choose up to 1 green <Majin Buu: Xeno> card with an energy cost of 5 or less in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - the shared owner-Battle setup helper is reused to choose the host and tuck the source before promotion
+        - on-top promotion now searches `deck` first, then falls back to `hand`
+        - exact host-cost matching now supports both minimum and maximum bounds for this seam
+        - `in Active Mode` is modeled directly instead of inheriting the host's current rest state
+    - status: adjacent owner-controlled `battle_under` on-top promotion discrete-cost hardening slice complete
+      - added:
+        - discrete host-cost filtering through:
+          - `required_owner_battle_allowed_costs`
+        - discrete promoted-target cost filtering through:
+          - `allowed_costs`
+      - first covered live wording family:
+        - `[Activate: Main] If your opponent has 2 or more energy and you choose 1 of your mono-green <Turles> cards with an energy cost of 3 or 4 and place this card under it: Choose up to 1 green <Turles: Xeno> card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - discrete `3 or 4` style host costs are modeled as exact allowed-cost sets, not loose min/max ranges
+        - exact promoted-target costs like `energy cost of 4` now stay exact inside this seam instead of allowing cheaper same-name variants
+    - status: adjacent owner-controlled `battle_under` on-top promotion exact-sibling slice complete
+      - regression-backed exact siblings:
+        - `Janemba`
+        - `Lord Slug`
+      - first covered live wording families:
+        - `[Activate: Main] If you have 2 or more energy and you choose 1 of your mono-blue <Janemba> cards with an energy cost of 3 and place this card under it: Play up to 1 blue <Janemba: Xeno> card with an energy cost of 4 from your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+        - `[Activate: Main] If your opponent has 3 or more energy and you choose 1 of your mono-green <Lord Slug> cards with an energy cost of 3 or 4 and place this card under it: Choose up to 1 green <Lord Slug: Xeno> card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.`
+      - current semantics are unchanged:
+        - both lines ride the same shared owner-Battle setup and on-top promotion path as the Frieza / Majin Buu / Turles siblings
+    - status: adjacent owner-controlled `battle_under` plain-play promotion slice complete
+      - added:
+        - `self_activate_main:activate_place_self_under_matching_owner_battle_then_play_up_to_n_from_owner_deck_or_hand`
+      - first covered live wording family:
+        - `[Activate: Main] Choose 1 of your <Cell> cards with an energy cost of 7 or 9 and place this card under it: Choose up to 1 green <Cell: Xeno> card with an energy cost of 9 in your deck or hand, play it, then shuffle your deck if you looked through it.`
+      - current semantics are explicit:
+        - the same shared owner-Battle setup helper is reused to choose the host and tuck the source under it first
+        - matching follow-up plays search `deck` first, then fall back to `hand`
+        - unlike the on-top promotion family, the chosen host stays in play and the promoted card is played as a separate Battle Card
+    - status: adjacent under-host hand-play setup slice complete
+      - widened:
+        - `self_activate_main:activate_play_self_from_hand`
+      - first covered live wording family:
+        - `[Activate: Main](Red), choose 1 red ≪Saiyan≫ card in your Battle Area: Play this card from your hand and place the chosen card under it.`
+      - current semantics are explicit:
+        - the normal `Counter: Play` window is still used
+        - after the play resolves, the chosen matching owner Battle Card is tucked under the played card
+        - the under-card keeps normal `card_placed_under_card` provenance instead of using a one-off movement path
+    - status: adjacent self-played under-Leader return slice complete
+      - added:
+        - `self_played:auto_schedule_place_self_under_owner_leader_on_turn_end_on_play`
+        - delayed `place under Leader if still in play` queue
+      - first covered live wording family:
+        - `When this card is played, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], it gets -35000 power for the turn, then place this card under your Leader at the end of the turn.`
+      - current semantics are explicit:
+        - the delayed resolver searches all players' `battle_area` / `unison_area` by instance before returning the card under its owner's Leader
+        - that keeps the return behavior reusable for future lines that temporarily place your card outside your own Battle Area
+    - status: adjacent under-Leader trap slice complete
+      - added:
+        - `owner_opponent_battle_played:auto_play_self_from_under_owner_leader_to_opponent_battle`
+        - pending play resolution for:
+          - `play_from_leader_under_to_opponent_battle`
+      - first covered live wording family:
+        - `If your opponent has 4 or more energy: When your opponent plays a red Battle Card with both <Son Goku> and <Piccolo>, play this card from under your Leader into your opponent's Battle Area.`
+      - current semantics are explicit:
+        - the trap card is played by its owner but enters the opponent controller's `battle_area`
+        - the play still uses normal `Counter: Play` timing
+        - the resulting `card_played` event records:
+          - `played_from="under"`
+          - `controller_player_id=<opponent>`
+    - status: adjacent opponent-controlled self-played source-activity hardening slice complete
+      - widened:
+        - generic public-effect source liveness for owned `battle` / `unison` cards that are currently controlled by another player
+      - current semantics are explicit:
+        - owned self-played follow-ups like:
+          - power reduction on play
+          - delayed return under Leader
+        - now stay live when the card is sitting in the opponent controller's board zones
+    - status: adjacent Super 17 field combo-to-under-Leader slice complete
+      - added:
+        - `owner_other_battle_played:auto_place_up_to_n_from_owner_combo_under_owner_leader_on_owner_matching_battle_played`
+      - first covered live wording family:
+        - `When your red <Super 17> card is played, place up to 1 red <Android 17> or <Hell Fighter 17> card from your Combo Area under your Leader.`
+      - current semantics are explicit:
+        - the new owner-play watcher reuses the existing `owner_other_battle_played` event seam
+        - played-card matching is filtered by shared event-card descriptors:
+          - color
+          - characters
+          - card type when present
+        - the tucked card is removed from `combo_area`, placed under `leader_area`, and emits normal `card_placed_under_card` provenance with:
+          - `placed_from="combo"`
+    - status: adjacent Shocking Death Ball battle-leave recovery slice complete
+      - added:
+        - `owner_card_left_battle_area:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_owner_matching_battle_left`
+        - reusable `card_left_battle_area` event emission for owned `battle` cards leaving play
+      - first covered live wording family:
+        - `When your {Power-Infused Shocking Death Ball} leaves the Battle Area, place up to 1 red <Android 17> or <Hell Fighter 17> card from your Drop under your Leader.`
+      - current semantics are explicit:
+        - the new event is emitted when an owned `battle` card leaves `battle_area`, before the destination append finishes
+        - current payload includes:
+          - owner/controller ids
+          - destination
+          - source card descriptors
+        - the recovery family uses shared event-card descriptor filtering for the card that left play
+        - the recovered card is removed from `drop`, placed under `leader_area`, and emits normal `card_placed_under_card` provenance with:
+          - `placed_from="drop"`
+    - status: adjacent Super 17 Z-Deck field setup slice complete
+      - added:
+        - `self_played:auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play`
+        - widened shared field-extra placement helper to source from:
+          - `deck`
+          - `z_deck`
+      - first covered live wording families:
+        - `When this card is played, draw 1 card, then place up to 1 {Power-Infused Shocking Death Ball} from your Z-Deck into your Battle Area.`
+        - `When this card is played, place up to 1 {Power-Infused Shocking Death Ball} from your Z-Deck into your Battle Area, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn.`
+      - current semantics are explicit:
+        - the placed target must currently be face-up in `z_deck`
+        - current shared filtering is still conservative:
+          - named target
+          - `[Field]` keyword
+          - `EXTRA` card type
+        - placement uses the normal `field_extra_placed` event seam, so existing field-extra watchers compose without a special-case path
+    - status: adjacent Super 17 Ultimate Masterpiece battle-activate slices complete
+      - widened:
+        - `activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end`
+          - now supports both:
+            - `self_activate_main`
+            - `self_activate_battle`
+        - shared combo-area requirements can now express:
+          - `you have 1 or more <A> card and 1 or more <B> card in your Combo Area`
+      - added:
+        - `activate_battle -> send_owner_z_energy_under_self`
+        - extractor support for:
+          - `self_activate_battle:activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn`
+          - with a leading `Draw N` clause
+      - first covered live wording family:
+        - `[Activate: Battle][Limit 1](1), if your opponent has 3 or more energy and you have 1 or more <Android 17> card and 1 or more <Hell Fighter 17> card in your Combo Area: Draw 1 card, play this card from your hand, and this card gains [Barrier] until the end fo your opponent's turn.`
+      - adjacent covered live wording family:
+        - `[Activate: Battle][Once per turn](1), place 1 ≪Android≫ card from your Z-Energy under this card: Draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn.`
+      - current semantics are explicit:
+        - the combo-area `one of each` requirement is enforced across the whole `combo_area`, not by a single card matching both tokens
+        - the new `send_owner_z_energy_under_self` cost moves matching `z_energy` directly under the source card before the battle-time effect resolves
+    - status: adjacent Power Absorption and Release / Ultimate Masterpiece exact-card slice complete
+      - locked in exact-card extraction/runtime coverage for:
+        - `Power Absorption and Release`
+        - `Super 17, Ultimate Masterpiece`
+      - current semantics are explicit:
+        - `Power Absorption and Release` is now regression-backed as a whole card, not just as two separate shared watcher families
+        - the owner-play auto and battle-leave auto both resolve through their existing shared event seams on the same source card
+        - `Ultimate Masterpiece` is now regression-backed as a whole card across both printed `Activate: Battle` lines:
+          - the hand-play `Draw 1` + self-play + delayed `[Barrier]` line
+          - the `Z-Energy`-under-self `Draw 1` + self-active + `-20000 power` line
+    - status: adjacent Super 17 descriptor-normalization hardening slice complete
+      - tightened:
+        - shared descriptor cleanup no longer synthesizes:
+          - `required_characters` from pure `{Name}` tokens
+          - `required_traits="Or"` from dangling conjunction remnants after `<A> or <B>` cleanup
+      - current semantics are explicit:
+        - name-token descriptors like:
+          - `{Power-Infused Shocking Death Ball}`
+        - now resolve only through:
+          - `required_name_contains`
+        - the rebuilt effect catalog now matches the exact-card regression contract for:
+          - `Power Absorption and Release`
+    - status: adjacent Super 17 Immense Power / Brainwashed Fighter exact-card slice complete
+      - added:
+        - `self_attacks:auto_place_up_to_n_opponent_battle_under_self_on_attack`
+        - post-play support on `activate_play_self_from_hand` for:
+          - `post_play_revealed_max_targets`
+          - `post_play_place_under_self_max_targets`
+      - locked in exact-card extraction/runtime coverage for:
+        - `Super 17, Immense Power`
+        - `Android 17, Brainwashed Fighter`
+        - `Super 17, Sibling Fusion`
+      - current semantics are explicit:
+        - the `Immense Power` activate branch now treats the reveal and tuck choices as distinct steps in the same resolution
+        - cards revealed by that branch are not immediately re-selected for the under-self move
+        - `Brainwashed Fighter` is explicitly aligned to the existing:
+          - `auto_look_top_add_up_to_one_to_hand_on_play`
+          shared top-of-deck search family
+    - status: adjacent Super 17 Sibling Fusion / Perfect Evolution exact-card slice complete
+      - added:
+        - `self_attacks_or_self_blocker_activated:auto_switch_self_active_on_attack_or_blocker`
+      - locked in exact-card extraction/runtime coverage for:
+        - `Super 17, Sibling Fusion`
+        - `Super 17, Perfect Evolution`
+      - current semantics are explicit:
+        - the new combined trigger keeps the printed `[Once per turn]` lock shared across:
+          - attacking
+          - activating `[Blocker]`
+        - `Perfect Evolution` is now regression-backed on the existing:
+          - on-play draw + self-active
+          - attack-time tuck-under-self
+          families
+    - status: adjacent Power-Infused Shocking Death Ball / Attack Commenced / Absorbing Power exact-card slice complete
+      - added:
+        - `self_field_extra_placed:auto_buff_owner_leader_for_turn_on_field_extra_placed`
+        - `self_activate_battle:activate_gain_power_and_keyword_for_battle`
+          with shared owner-card target selection for the printed battle-time keyword grant
+      - locked in exact-card extraction/runtime coverage for:
+        - `Power-Infused Shocking Death Ball`
+        - `Super 17, Attack Commenced`
+        - `Super 17, Absorbing Power`
+      - current semantics are explicit:
+        - the field-extra-on-place leader buff now resolves through the shared `field_extra_placed` event seam
+        - the battle-time keyword grant follows the existing deterministic `owner_cards` selection policy
+        - the hand-based `Activate: Battle` self-play line is now regression-backed for the direct `skill_activated` path
+    - status: adjacent Hell Fighter 17 Infernal Creation / Fusion Urged exact-card slice complete
+      - added:
+        - `self_played:auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play`
+        - `self_activate_battle:activate_combo_self_from_owner_drop`
+        - `activate_battle -> send_owner_hand_to_drop`
+        - legal `Activate: Battle` action discovery for `drop`-sourced public battle cards
+      - locked in exact-card extraction/runtime coverage for:
+        - `Hell Fighter 17, Infernal Creation`
+        - `Hell Fighter 17, Fusion Urged`
+      - current semantics are explicit:
+        - the new Infernal Creation family deterministically takes the first matching hand card into `Z-Energy`, then searches the current top-of-deck window
+        - the new drop-side battle activate path now uses the normal public activate flow:
+          - pay printed hand-discard cost
+          - open counter timing
+          - resolve into `combo_area`
+          - emit `card_comboed` with `comboed_from=\"drop\"`
+    - status: first under-Leader leader-promotion slice complete
+      - added:
+        - `turn_end:auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end`
+        - reusable leader-under promotion helper for moving a stacked Leader card to the top of `leader_area`
+      - first covered live wording family:
+        - `At the end of your opponent's turn, place this card from under your Z-Leader on top of your Leader.`
+      - current semantics are explicit:
+        - the old top Leader is preserved underneath the promoted card
+        - the engine re-emits:
+          - `card_placed_in_leader_area`
+        - that lets `self_placed_in_leader_area` follow-ups on the promoted Leader fire immediately
+    - status: second under-Leader leader-promotion slice complete
+      - widened:
+        - the same leader-under promotion family now supports both:
+          - `At the end of your turn...`
+          - `At the end of your opponent's turn...`
+        - both host wording variants:
+          - `under your Leader`
+          - `under your Z-Leader`
+      - hardened:
+        - leader promotion no longer auto-reactivates the old top Leader as a fresh `leader_under` source
+      - current semantics are explicit:
+        - the promoted Leader is re-registered in `leader_area`
+        - the previous top Leader stays stacked underneath as material without leaking its old public autos on later turn-end events
+    - status: first activate-based under-Leader leader-promotion slice complete
+      - added:
+        - `self_activate_main:activate_place_self_from_under_owner_leader_on_top_of_owner_leader`
+        - reusable owner-battle-under payment helper for:
+          - moving cards from under a matching owner Battle Card into `Drop`
+      - first covered live wording family:
+        - `If a <Cell> card is under your Leader and you place 1 card from under a <Super 17> card in your Battle Area in its owner's Drop: Place this card from under your Leader on top of your Leader.`
+      - current semantics are explicit:
+        - `leader_under` activate legality now supports Leader cards, not only Battle Cards
+        - the payment moves the required under-card from the matching owner Battle host into `Drop`
+        - then the source Leader card is promoted on top of `leader_area`
+    - status: second activate-based under-Leader leader-promotion slice complete
+      - widened:
+        - the same activate promotion helper now supports the optional tail:
+          - `and if you placed a card, you may switch your Leader to Active Mode`
+      - current semantics are explicit:
+        - after a successful promotion, the owner Leader can immediately switch to `Active Mode`
+    - status: third under-Leader leader-promotion slice complete
+      - widened:
+        - the turn-end promotion family now also supports the same shared clause:
+          - `If an <...> card is under your Leader and you place 1 card from under a <...> card in your Battle Area in its owner's Drop:`
+      - first covered live wording family:
+        - `If an <Android 18> card is under your Leader and you place 1 card from under a <Super 17> card in your Battle Area in its owner's Drop: At the end of your turn, place this card from under your Leader on top of your Leader.`
+      - current semantics are explicit:
+        - the turn-end auto can consume the matching under-card from the required owner Battle host
+        - then promote the source card from `leader_under` on top of `leader_area`
+    - status: fourth under-Leader leader-promotion slice complete
+      - added:
+        - `self_activate_main:activate_remove_self_and_place_up_to_n_from_under_owner_leader_on_top_of_owner_leader`
+      - widened:
+        - shared condition extraction now supports:
+          - `If there are N or more cards under a {Spirit Bomb} in your Battle Area:`
+        - leader-promotion target descriptors from under Leader now support:
+          - `Z-Leader`
+      - first covered live wording family:
+        - `If there are 7 or more cards under a {Spirit Bomb} in your Battle Area: Remove this card from the game, place up to 1 <Son Goku> Z-Leader from under your Leader on top of your Leader, and if you placed a card, you may switch your Leader to Active Mode.`
+      - current semantics are explicit:
+        - leader-source `Remove this card from the game` now works for this activate seam by revealing the next stacked Leader first
+        - then a matching under-Leader target can be promoted onto `leader_area`
+        - the optional `switch your Leader to Active Mode` tail resolves after successful promotion
+    - status: adjacent Spirit Bomb leader setup slice complete
+      - added:
+        - `self_activate_main:activate_activate_up_to_n_named_field_extra_from_owner_deck`
+      - first covered live wording family:
+        - `Activate up to 1 {Spirit Bomb} from your deck, shuffle your deck, and negate this skill for the game.`
+      - current semantics are explicit:
+        - the same named Field-Extra activation path used on leader placement is now reusable from `Activate: Main`
+        - `field_extra_placed` is emitted for downstream watchers
+        - `negate this skill for the game` applies after successful resolution
+    - status: adjacent Spirit Bomb hand-under setup slice complete
+      - added:
+        - `self_activate_main:activate_place_up_to_n_from_owner_hand_under_named_host_then_draw_n`
+        - reusable requirement support for:
+          - `required_owner_hand_count_at_least`
+      - first covered live wording family:
+        - `Place 1 card from your hand under a {Spirit Bomb} in your Battle Area: Draw 2 cards.`
+      - current semantics are explicit:
+        - the activate action requires both:
+          - a matching host in `battle_area`
+          - enough cards in hand
+        - the moved hand card is placed under the named host with normal `card_placed_under_card` provenance
+    - status: adjacent Spirit Bomb rest-and-charge slice complete
+      - added:
+        - `self_activate_main:activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host`
+      - first covered live wording family:
+        - `Switch this card to Rest Mode: You may choose any number of your Battle Cards and switch them to Rest Mode. If you do, for each Battle Card switched to Rest Mode by this skill other than this card, you may place the top card of your deck under a {Spirit Bomb} in your Battle Area.`
+      - current semantics are explicit:
+        - the activate handler deterministically rests all other active owner `Battle` cards
+        - it then places one top-deck card under the named host for each of those other cards
+        - non-Battle hosts like the `Spirit Bomb` field itself are not counted as rested payment cards
+    - status: adjacent Spirit Bomb ambush-play slice complete
+      - widened:
+        - `self_activate_main:activate_play_self_from_hand`
+      - first covered live wording family:
+        - `If you have {Spirit Bomb} in your Battle Area: Play this card from your hand, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.`
+      - current semantics are explicit:
+        - common-condition extraction now recognizes:
+          - `If you have {Name} in your Battle Area`
+        - pending hand-play resolution now supports:
+          - post-play `switch up to N opponent Battle Cards to Rest Mode`
+        - the line still uses normal `Counter: Play` timing after the activate window resolves
+        - then the draw resolves
+    - status: adjacent Spirit Bomb attack/payoff slice complete
+      - added:
+        - `self_attacks:auto_draw_n_add_matching_from_owner_battle_or_drop_to_z_energy_then_place_matching_from_owner_battle_or_drop_under_named_host_on_attack`
+        - `self_attacks_battle_end:auto_send_self_to_owner_drop_on_attack_battle_end`
+      - first covered live wording family:
+        - `When this card attacks, draw 1 card, place this card from the Battle Area in its owner's Drop at the end of the battle, choose up to 1 yellow <Son Goku> card in your Battle Area or Drop, add it to your Z-Energy with its skills negated for the turn, then choose up to 1 yellow <Vegeta> card in your Battle Area or Drop and place it under {Spirit Bomb} in your Battle Area.`
+      - current semantics are explicit:
+        - battle/drop sourcing is deterministic:
+          - `battle_area`
+          - then `drop`
+        - cards added to `Z-Energy` gain temporary skill negation before `card_added_to_z_energy` is emitted
+        - the battle-end rider now matches via explicit `battle_end` event payload data instead of relying on hidden `attack_context` access inside the static trigger matcher
+    - status: adjacent blue Android 18 / Krillin unison-under-Leader slice complete
+      - added:
+        - `self_activate_main:activate_draw_n_discard_n_and_place_up_to_n_from_owner_drop_under_owner_leader_then_switch_self_active_on_turn_end`
+      - first covered live wording family:
+        - `[+2][Activate: Main] Draw 1 card and discard 1 card from your hand. Additionally, if your Leader is a <Krillin> or <Android 18> card-both mono-blue-place up to 1 <Krillin> or ≪Android≫ card-both blue-from your Drop under your Leader, and at the end of the turn, switch this card to Active Mode.`
+      - current semantics are explicit:
+        - the base draw/discard always resolves
+        - the under-Leader tuck is a bonus rider gated by:
+          - mono-blue matching `<Krillin>` / `<Android 18>` leader checks
+        - the source Unison is reactivated at turn end through the existing delayed active-switch queue
+    - status: adjacent blue Android 18 / Krillin regression-hardening slice complete
+      - widened:
+        - extraction now covers:
+          - `[-4][Activate: Main] Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and place it at the bottom of its owner's deck.`
+      - regression-backed exact families now include:
+        - `Android 18, Gearing Up for Battle`
+        - `Krillin, Gearing Up for Battle`
+        - `Krillin, Accel Dance`
+        - `Android 18, Krillin, and Marron, Family United`
+      - current semantics are explicit:
+        - blue `<Krillin>` / `≪Android≫` top-deck search on play stays on the shared search/add family
+        - turn-end blue `<Android 18>` recovery under Leader stays on the shared drop-under-Leader family
+        - the `[-4]` Family United line now extracts onto the shared opponent-Battle bottom-deck activate family with `ignoring [Barrier]`
+    - status: adjacent Krillin Accel Dance on-play payoff slice complete
+      - added:
+        - `self_played:auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play`
+      - first covered live wording family:
+        - `When this card is played, choose up to 1 of your opponent's Battle Cards, place it at the bottom of its owner's deck, switch up to 1 of your Leaders to Active Mode, switch up to 1 of your mono-blue energy to Active Mode, and this card gains [Barrier] until the end of your opponent's next turn.`
+      - current semantics are explicit:
+        - the opponent Battle target is bottom-decked first
+        - the owner Leader is switched active if resting
+        - only mono-blue resting energy is reactivated by the energy rider
+        - the source gains delayed `[Barrier]` that clears at the end of the opponent's turn
+    - status: adjacent Android 18 Energy Wave exact-card slice complete
+      - regression-backed exact behavior now includes:
+        - combo-trigger play from under Leader or hand
+        - on-play blue `<Krillin>` recovery from:
+          - `Z-Energy`
+          - then `Combo Area`
+          - then `Drop`
+      - current semantics are explicit:
+        - the shared extractor family does not attach a separate `auto_cost_header` field for this card's extracted rules
+        - the hand-origin chain resolves through the same secret-auto follow-up path as the broader hand-origin seam
+    - status: adjacent Android 18 & Krillin Future Spun by Battle exact-card slice complete
+      - added:
+        - extractor support for:
+          - `If you don't have a Unison in play`
+          - `When this card is played, play up to 1 {Android 18, Krillin, and Marron, Family United} from your deck with a marker on it in Rest Mode`
+          - `if your Leader is a blue <Android 18> card and there are 2 or more cards under it`
+      - regression-backed exact behavior now includes:
+        - on-play `Family United` deck pull with `1` marker in `Rest Mode`
+        - the negative no-Unison gate
+        - activate-from-hand with `2` cards under Leader
+      - current semantics are explicit:
+        - the deck-play helper lands the named `UNISON` target correctly with markers/resting
+        - the activate-from-hand runtime path still follows the shared hand-play cost contract used elsewhere in the engine
+    - status: adjacent Krillin Absolute Guard exact-card slice confirmed
+      - regression-backed exact behavior now includes:
+        - `If your Leader is blue and your life is at 4 or less: When this card is used in a combo, draw 1 card.`
+      - current semantics are explicit:
+        - the exact-card runtime still stays on the shared `self_comboed -> auto_draw_n` family
+        - no one-off runtime path is needed for the `Super Combo` body itself
+    - status: adjacent Bulma Helpful Cheer exact-card / self-combo cost slice complete
+      - added:
+        - first self-combo printed-cost support for:
+          - `place 1 non-Leaders from under your Leader in its owner's Drop`
+        - `self_comboed:auto_buff_up_to_n_owner_battles_for_battle_on_combo`
+      - regression-backed exact behavior now includes:
+        - on-play draw
+        - combo-time under-Leader cost payment
+        - buffing up to `1` matching owner `<Krillin>` / `<Android 18>` Battle Card by `+1000` for the battle
+      - current semantics are explicit:
+        - the under-Leader cost currently resolves through a focused engine path for single-step `auto_on_combo_battle` costs
+        - the consumed under-Leader card is materialized into `Drop` and emits the normal `card_placed_into_drop` provenance
+    - status: adjacent BT20 blue Krillin exact-card slice complete
+      - regression-backed exact behavior now includes:
+        - `Krillin, Powers Expanded`
+        - `Krillin, Defensive Battler`
+      - current semantics are explicit:
+        - `Powers Expanded` stays on the shared:
+          - `self_played -> auto_bottom_deck_up_to_n_opponent_battle`
+          - `self_activate_main -> activate_play_self_from_hand`
+        - `Defensive Battler` stays on the shared:
+          - `turn_end -> auto_switch_self_active_on_turn_end`
+          - `self_activate_main -> activate_play_self_from_hand`
+    - status: adjacent Android 17 Emergency Defense alternate-counter cost slice complete
+      - added:
+        - first `counter_alternate_from_hand` support for:
+          - `place 2 blue non-Leaders from under your Leader in their owners' Drops`
+      - regression-backed exact behavior now includes:
+        - `Android 17, Emergency Defense`
+      - current semantics are explicit:
+        - the alternate counter cost reuses the shared single-step under-Leader drop helper
+        - the consumed under-Leader cards emit the normal `card_placed_into_drop` provenance before the counter resolves
+    - status: adjacent named-host alternate-counter cost slice complete
+      - added:
+        - first `counter_alternate_from_hand` support for:
+          - `place 1 card from under a {The Nameless Planet} in your Battle Area in its owner's Drop Area`
+      - regression-backed exact behavior now includes:
+        - `P-396 Planetary Manipulation`
+      - current semantics are explicit:
+        - the alternate counter cost reuses the shared owner-Battle-area under-card-to-Drop helper
+        - named host matching currently keys off the host card name in the Battle Area
+        - moved under-cards emit the normal `card_placed_into_drop` provenance before the counter resolves
+    - status: adjacent Planetary Manipulation first activate-main branch slice complete
+      - added:
+        - first `self_activate_main` support for:
+          - `place up to 3 cards from under a {The Nameless Planet} in your Battle Area in their owners' Drop Areas; your opponent discards cards equal to the number of cards you placed in Drop Areas this way`
+      - regression-backed exact behavior now includes:
+        - `P-396 Planetary Manipulation`
+      - current semantics are explicit:
+        - the activate branch reuses the shared owner-Battle-area under-card-to-Drop helper
+        - opponent discard count is derived from the actual number of cards moved this way
+        - the wider second branch:
+          - opponent hand reveal and play into the opponent's Battle Area
+          remains deferred on purpose
+    - status: adjacent no-owner-field-extra requirement slice complete
+      - added:
+        - shared requirement support for:
+          - `If a [Field] Extra Card isn't in your Battle Area`
+      - regression-backed exact behavior now includes:
+        - the green `The Nameless Planet` setup Unison line
+      - current semantics are explicit:
+        - owner Battle Area is scanned for `EXTRA` / `Z-EXTRA` cards with the `Field` keyword
+        - the requirement now blocks otherwise-legal `Activate: Main` lines that would fetch a field extra while one is already in play
+    - status: adjacent activate-main self-drop wording slice complete
+      - widened:
+        - `activate_main -> send_self_to_drop`
+        - now matches both:
+          - `place this card in your Drop`
+          - `place this card in its owner's Drop Area`
+      - regression-backed exact behavior now includes:
+        - `Referee, Introducing the Fighters`
+      - current semantics are explicit:
+        - the widened cost text still resolves through the existing self-to-Drop activate cost path
+        - the covered Referee branch stays on the shared:
+          - `activate_activate_up_to_n_named_field_extra_from_owner_deck`
+          family
+    - status: adjacent green Beerus / Champa marker-gated on-play discard slice complete
+      - added:
+        - `self_played:auto_opponent_discards_n_from_hand_on_play`
+        - shared `min_source_markers` requirement handling
+      - regression-backed exact behavior now includes:
+        - `Whis, Pre-Fight Preparations`
+      - current semantics are explicit:
+        - the on-play discard family now works generically for:
+          - `your opponent chooses 1 card in their hand and discards it`
+          - `your opponent discards 1 card from their hand`
+        - marker-gated play triggers now resolve through the shared effect requirement layer instead of one-off handler checks
+    - status: adjacent green Beerus / Champa marker-gated on-play KO slice complete
+      - widened:
+        - `auto_ko_up_to_n_opponent_battle_on_play`
+        - now honors shared `min_source_markers` requirements
+      - regression-backed exact behavior now includes:
+        - `Vados, Pre-Fight Preparations`
+      - current semantics are explicit:
+        - the existing KO-on-play family did not need a new bespoke handler
+        - it now cleanly composes with the shared marker gate used by the Beerus / Champa Unison package
+    - status: adjacent Referee second-branch slice complete
+      - added:
+        - first `self_activate_main` support for:
+          - `your opponent reveals their hand, and you choose up to 1 Battle Card with an energy cost of 3 or less from it and play it in your opponent's Battle Area`
+      - regression-backed exact behavior now includes:
+        - `Referee, Introducing the Fighters`
+      - current semantics are explicit:
+        - the effect opens a normal follow-up `Counter: Play` window after the `Activate: Main` window closes
+        - the played card is sourced from the opponent hand and enters the opponent Battle Area under the opponent's control
+        - the current shared path is intentionally conservative:
+          - `up to 1`
+          - `Battle Card` only
+    - status: adjacent Planetary Manipulation second-branch slice complete
+      - widened:
+        - the same opponent-hand-to-opponent-battle activate path now supports:
+          - `in Rest Mode`
+      - regression-backed exact behavior now includes:
+        - `P-396 Planetary Manipulation`
+      - current semantics are explicit:
+        - the branch deterministically chooses the first eligible Battle Card in the opponent's hand
+        - the selected card enters the opponent Battle Area in Rest Mode
+        - the wider hand-reveal / multi-choice UI seam remains deferred on purpose
+    - status: adjacent Nameless Planet battle-end capture slice complete
+      - added:
+        - first `owner_battle_ko_opponent_battle_battle_end` support for:
+          - `At the end of a battle where one of your green Battle Cards attacks and KOs an opponent's Battle Card, place that card under this card from your opponent's Drop Area.`
+      - regression-backed exact behavior now includes:
+        - `The Nameless Planet`
+      - current semantics are explicit:
+        - the battle-end event now carries:
+          - `attacker_zone`
+          - `target_battle_koed`
+        - the captured card is removed from the opponent `Drop`
+        - under-host owner tracking is preserved for future under-card checks
+    - status: adjacent Nameless Planet attack-redirection slice complete
+      - added:
+        - first `owner_opponent_battle_attacks` redirect family for:
+          - switching the field to `Rest Mode`
+          - retargeting the attack to a matching owner Battle Card
+      - regression-backed exact behavior now includes:
+        - `The Nameless Planet`
+      - current semantics are explicit:
+        - the redirected target must currently be:
+          - a green owner Battle Card
+          - already in `Rest Mode`
+          - sharing at least one trait with the owner Leader
+    - status: adjacent Nameless Planet win-condition slice complete
+      - added:
+        - first `self_activate_main` win-game family for:
+          - `If there are 5 cards owned by your opponent under this card: You win the game.`
+      - regression-backed exact behavior now includes:
+        - `The Nameless Planet`
+      - current semantics are explicit:
+        - activate legality now supports counting opponent-owned cards under the source
+        - under-host owner tracking falls back to the host owner for older stacks without metadata
     - status: first union placed-under provenance slice complete
       - added:
         - `self_placed_under_by_union:auto_switch_up_to_n_opponent_board_rest`
@@ -2679,6 +3545,17 @@ Current recommendation:
 
 ## Decision Log
 
+### Incremental Progress
+
+- completed the shared self-attack auto-cost seam for `place N card(s) from under this card in its owner's Drop:` headers
+- regression-backed both attack-time draw and attack-time power-reduction families using that shared cost path
+- widened that same shared self-attack cost seam to attack-time KO and self power-gain families
+- widened the shared self-attack cost seam again to attack-time combo-from-zone and place-under-self families
+- widened the shared self-attack cost seam again to the Hyperbolic under-host combo attack and the Spirit Bomb attack payoff family
+- widened the same battle-event cost seam to mixed `attack or blocker` self-active triggers
+- opened a new shared `opponent hand -> warp -> return later` seam for self-played Battle cards
+- covered delayed next-opponent-turn returns and leave-play returns for cards warped by the source skill
+
 ### Freeze Decision
 
 Decision:
@@ -2717,3 +3594,476 @@ When adding a new TODO:
 3. if it replaces a canonical artifact or baseline, update `Canonical Artifacts`
 4. if it resolves a blocker, move the old blocker out of `Current Known Gaps`
 
+
+## Incremental Progress
+
+- widened the new warp-provenance seam from `return later` into `play later`
+- added a reusable delayed `play warped card marked by this skill` queue for:
+  - `turn_end`
+  - `main_phase_start`
+- covered the first two shared sibling lines:
+  - yellow `Hit` replaying an opponent Battle Card from Warp in Rest Mode at the end of the opponent's next turn
+  - the `Universe 6` self-warp line that replays itself from Warp at the beginning of your next turn
+- opened a real `counter_attack` event seam for extracted public counter effects resolving from `drop`
+- widened the same skill-linked warp provenance seam to cover:
+  - `Counter: Attack` lines that warp the attacking Battle Card and replay it at end of turn
+  - `self_played` counter lines that replay cards warped by that skill at turn end with their skills negated
+- widened the same counter warp replay seam to support:
+  - replay scheduling for both players at once
+  - multi-card replay from cards warped by the same skill
+- covered the green `Earthling` counter sibling:
+  - draw 1
+  - warp up to 1 each of `≪Saiyan≫` and `≪Earthling≫` from both Battle Areas
+  - replay all warped cards at end of turn with their skills negated
+- widened the same warp replay seam for `Activate: Main/Battle` timing:
+  - added current-turn end-step replay scheduling
+  - added optional fallback from `Warp` to `Drop` when the affected player deck is at or below a printed threshold
+- covered `Ultimate Dragon Quake`:
+  - warp an opponent Battle Card with an energy cost greater than their current energy
+  - at the end of the current turn, replay cards warped by that skill with their skills negated
+  - if the affected player has `15` or fewer cards in deck, place those cards in `Drop` instead
+- widened the same skill-linked warp seam for `self_played` cards that warp both:
+  - the source card itself
+  - and opponent Battle Cards
+- generalized `self_played` end-of-turn warp replay scheduling to trigger on the current turn owner rather than assuming `opponent`
+- covered the yellow `Trunks: Future` sibling:
+  - when played, send this card and up to 1 opponent Battle Card with cost `3` or less to their owners' Warps
+  - at end of turn, negate the skills of all cards warped by that skill and replay them to their owners' Battle Areas
+- widened the same `self_played` warp replay seam to cover opponent-next-turn replay for:
+  - all cards sent to Warps by the skill
+  - `play them in their owners' Battle Areas` wording
+- covered the black sibling:
+  - when played, choose up to 2 opponent Battle Cards and send them to their owners' Warps
+  - this card gains `[Critical]` for the turn
+  - at the end of the opponent's next turn, negate the skills of all cards warped by that skill and replay them to their owners' Battle Areas
+- widened the same skill-linked warp provenance seam from:
+  - battle -> warp -> replay later
+  to:
+  - deck -> warp -> play up to 1 later -> add the remaining cards to hand
+- added shared `auto_on_play_battle` cost extraction for:
+  - placing cards from hand at the bottom of your deck before an on-play auto resolves
+- covered the yellow `Whis` sibling:
+  - when played, send up to 2 skill-less 15000-power Battle Cards with different character names from your deck to your Warp
+  - at the end of your opponent's next turn, play up to 1 of those cards in your Battle Area
+  - add the remaining marked cards to your hand
+- widened the same deck-to-warp return seam to support:
+  - `at the start of your next turn`
+  - typo variants like `send it your Warp`
+  - return-to-hand without requiring the source card to remain in play
+- covered the `World Tournament` on-play sibling:
+  - when played, send up to 1 matching `≪World Tournament≫` card with cost `5` or less from deck to Warp
+  - at the start of your next turn, add that marked card from Warp to hand
+- opened a new shared activate family on the same warp-provenance seam:
+  - `self_activate_main:activate_send_up_to_n_from_owner_hand_to_warp`
+- covered the `World Tournament` activate sibling:
+  - place the source card in its owner's Drop
+  - send up to 1 matching `≪World Tournament≫` card with cost `3` or less from hand to Warp
+  - at the start of your next turn, play the marked card from Warp
+- widened the self-warp next-turn replay seam to support comma-form wording:
+  - `Send this card to the Warp, and play it from the Warp ... at the beginning of your next turn`
+- added shared activate-main cost extraction for:
+  - `place 1 card from your hand in the Drop Area:`
+- covered the `Maiden Squadron` self-warp sibling:
+  - hand-to-Drop cost
+  - source to Warp
+  - replay source from Warp at the beginning of your next turn
+- regression-locked the adjacent `Activate: Main` opponent-warp replay sibling:
+  - warp up to 1 opponent Battle Card
+  - replay it at the end of your opponent's next turn with skills negated
+- widened the same warp-provenance seam to support delayed next-turn splits from marked Warp cards:
+  - play up to `N`
+  - add up to `N` remaining marked cards to `Z-Energy`
+  - filtered by first/second descriptor matching
+- widened shared self-attack auto-costs to support:
+  - `send N cards from under this card to your Warp`
+- covered the green `Machine Mutant` attack sibling:
+  - pay by sending `2` cards from under the attacker to Warp
+  - opponent discards `1`
+  - at the start of your next turn, choose up to `1` each of `<Android 17>` and `<Hell Fighter 17>` with cost `1` from the marked Warp cards
+  - play up to `1` of them
+  - add up to `1` of them to your `Z-Energy`
+- widened the same deck-to-warp replay seam to support:
+  - `when played, send up to N named cards from your deck to your Warp`
+  - `at the start of your next turn, play that marked card from your Warp in Rest Mode`
+- covered the yellow `Bora` sibling:
+  - when played, send up to `1` yellow `{Bora}` from your deck to your Warp
+  - at the start of your next turn, play that marked card from your Warp in `Rest Mode`
+- added a new hand-source activate cost on the same warp-provenance seam:
+  - `activate_main_hand -> send_self_from_hand_to_warp`
+- widened the self-warp delayed replay extractor to support:
+  - `send this card from your hand to your Warp`
+  - `at the end of your opponent's next turn, play the card you sent to your Warp with this skill from your Warp`
+- added a new shared on-play family:
+  - `self_played:auto_add_up_to_n_from_owner_life_to_hand_on_play`
+- covered the green hand-to-warp replay sibling:
+  - activate from `hand`
+  - send the source to Warp as the activate cost
+  - replay the marked source from Warp at the end of your opponent's next turn
+  - on play, add up to `2` cards from your life to your hand
+- widened the same warp-provenance seam to support:
+  - `send this card to its owner's Warp`
+  - `play up to 1 black multicolor Battle Card with an energy cost of 2 in your hand`
+  - `at the start of your next turn, add this card to your hand from your Warp`
+- added shared support for:
+  - `activate_play_up_to_n_from_owner_hand`
+  - `activate_schedule_return_cards_warped_by_source_skill_to_owner_hand`
+- tightened common requirement extraction/runtime for:
+  - `there's a total of 3 or more energy between you and your opponent`
+- widened the combo battle-end replay seam to support follow-up payoffs after self replay:
+  - play self from combo at battle end, then negate up to `1` opponent Unison's skills for the turn
+  - play self from combo at battle end, then return up to `1` opponent Battle Card with cost `3` or less to hand
+- covered the adjacent black `Saiyan` siblings on the shared path:
+  - activate main self-warp -> play 2-cost black multicolor from hand -> next-turn self return
+  - combo battle-end self replay -> opponent Unison skill negation
+  - combo battle-end self replay -> opponent Battle bounce
+- widened the self-played warp seam with two new shared on-play families:
+  - `auto_add_markers_to_matching_owner_unison_on_play`
+  - `auto_send_up_to_n_opponent_hand_to_warp_on_play`
+- widened delayed next-opponent-turn hand return extraction to also accept:
+  - `they add the card sent to their Warp by this skill from their Warp to their hand`
+- covered the adjacent red `Broly: Br` servant sibling on the shared path:
+  - add a marker to a matching red Unison
+  - opponent sends `1` hand card to Warp
+  - the marked card returns from Warp to hand at the end of the opponent's next turn
+- locked exact-card regression coverage for adjacent free-rider siblings using the same new hand-to-Warp family:
+  - `Kahseral, the Righteous`
+  - `Vegeta the Cruel`
+- opened the delayed token seam with a reusable queue plus shared token creation/play helpers
+- added shared delayed token families for:
+  - `self_played -> auto_schedule_play_token_in_battle_on_play`
+  - `counter_attack -> counter_schedule_play_token_in_battle`
+- added shared immediate token families for:
+  - `self_played -> auto_play_token_in_battle_on_play`
+  - `counter_attack -> counter_play_token_in_battle`
+- first covered live token siblings:
+  - delayed `Clone Token` to opponent Battle Area on play
+  - delayed `Clone Token` to opponent Battle Area at turn end from `Counter: Attack`
+  - immediate `Earthling Token` on play
+  - immediate `Demon Realm Soldier Token` with battle-turn `[Blocker]` from `Counter: Attack`
+- widened the token seam with a shared owner-Union token family:
+  - `owner_union_activated -> auto_play_token_in_battle_on_owner_union_activated`
+- widened the token seam with shared activate token families:
+  - `self_activate_main/self_activate_battle -> activate_play_token_in_battle`
+  - `self_activate_main -> activate_schedule_play_token_in_battle`
+- widened `activate_play_self_from_hand` so pending hand-play resolution can spawn token follow-ups after the real `Counter: Play` window
+- first covered adjacent token siblings on the shared path:
+  - `When you activate a [Union] skill, play 1 Ghost Token with 15000 power in Rest Mode`
+  - `Switch this card to Active Mode and play 2 Saibaiman Tokens`
+  - `Play 1 Earthling Token ... and it gains [Barrier] until the end of your opponent's next turn`
+  - `At the end of the turn, play 1 Frieza's Army Token with 10000 power`
+  - `Play this card from your hand, then play 1 Saibaiman Token`
+- widened the token seam with a shared attack trigger family:
+  - `self_attacks -> auto_play_token_in_battle_on_attack`
+- widened the token seam with a shared phase-start family:
+  - `owner_main_phase_start/owner_opponent_main_phase_start -> auto_play_token_in_battle_on_main_phase_start`
+  - supports both fixed token counts and:
+    - `play ... until you have N ... Tokens in your Battle Area`
+- widened the token seam with a shared leave-battle family:
+  - `owner_card_left_battle_area -> auto_play_token_in_battle_on_owner_matching_battle_left`
+- first covered adjacent token siblings on the shared path:
+  - `When this card attacks, play up to 1 Demon Realm Soldier Token`
+  - `When this card attacks, play 1 Majin Token in Rest Mode`
+  - `At the start of your Main Phase, play Multi-Form Tokens until you have 3 Multi-Form Tokens in your Battle Area`
+  - `At the start of your opponent's Main Phase, play 2 Clone Tokens with 10000 power in your opponent's Battle Area`
+  - `When your Multi-Form Token is removed from a Battle Area, play 1 Multi-Form Token`
+- widened the token seam with a shared owner-battle-played token family:
+  - `owner_other_battle_played -> auto_play_token_in_battle_on_owner_matching_battle_played`
+- added token creator provenance to `card_played` token events and delayed token replay so owner-skill token follow-ups can match on:
+  - `event_required_played_from`
+  - `event_required_created_by_source_card_type`
+- first covered adjacent token siblings on the shared path:
+  - `When you play a <Goku Black> card in your Battle Area, play 1 Shadow Token`
+  - `When a Clone Token is played by the skill on one of your Extra Cards, play 2 Clone Tokens to your opponent's Battle Area`
+  - `When this card is played, draw 1 card, play 1 Shadow Token ... and that card gains [Blocker] for the turn`
+  - `When this card is played from your hand, play 4 Shadow Tokens, and they gain [Blocker] until the end of your opponent's next turn`
+- widened shared token-name parsing so token families now support dotted token names like:
+  - `Cell Jr. token`
+- locked exact token siblings that reuse the current shared path:
+  - `When you play this card, if your Leader Card is <Cell>, play 2 Cell Jr. tokens`
+  - `When you play this card, if your Leader Card is an ≪Android≫, draw 2 cards and play 2 Cell Jr. tokens`
+  - `When this card is played, play 1 Earthling Token`
+  - `Play this card from your hand, and play 1 Earthling Token`
+- widened the existing token families instead of opening bespoke branches:
+  - `self_activate_main/self_activate_battle -> activate_play_token_in_battle`
+    - can now follow token creation with:
+      - `use up to 1 ... from your Drop/Warp in a combo`
+      - `add up to 1 card from your life to your hand`
+  - `self_played -> auto_play_token_in_battle_on_play`
+    - can now follow token creation with:
+      - `choose up to 1 of your opponent's Battle Cards and place it under this card`
+- widened token keyword extraction/normalization so existing token families now support:
+  - multi-keyword tails like:
+    - `[Blocker] and [Revenge]`
+  - while preserving the older normalized extractor contract
+- first covered adjacent exact siblings on the shared token path:
+  - `[Activate: Battle] Play 1 Saibaiman Token, then use up to 1 mono-blue card with 5000 combo power from your Drop in a combo with its skills negated for the turn`
+  - `When this card is played from your hand, play 1 Majin Token, then choose up to 1 of your opponent's Battle Cards and place it under this card`
+  - `When this card is played, play 1 Saibaiman Token ... and it gains [Blocker] and [Revenge] until the end of the turn`
+  - `[Activate: Main] Play 1 Majin Token, then add up to 1 card from your life to your hand`
+- widened the token seam across adjacent exact-card siblings and one shared combo-cost fix:
+  - `self_comboed -> auto_play_token_in_battle_on_combo`
+    - locked exact battle-origin `Multi-Form Token` siblings
+    - locked exact hand-origin `Saibaiman Token` sibling with `[Unique]` and `[Blocker]`
+  - widened `auto_on_combo_battle` skill-cost extraction so plain circled generic costs like `②` now map to:
+    - `send_owner_energy_to_drop`
+  - widened on-play token/discard extraction so bracketed inline text like `[Barrier]` between the trigger and the rider no longer blocks:
+    - token creation
+    - opponent discard
+- first covered adjacent exact token siblings on the shared path:
+  - `When this card is used in a combo from your Battle Area, play 1 Multi-Form Token in Rest Mode`
+  - `②, if it's your opponent's turn: When this card is used in a combo from your Battle Area, play 4 Multi-Form Tokens`
+  - `When this card is used in a combo from your hand, play 1 Saibaiman Token, and it gains [Unique] and [Blocker] for the turn`
+  - `When this card is played, play 2 Chilled's Army Tokens with 10000 power`
+  - `When this card is played, play 1 Meda Token`
+  - `When this card is played, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], KO it, play 2 Ghost Tokens with 15000 power, and your opponent discards 1 card from their hand`
+- widened the token seam across adjacent exact `Counter: Attack` and `Activate: Main` siblings without opening a new branch:
+  - widened shared token keyword extraction so sentence-separated tails like:
+    - `That Token gains [Blocker] for the turn`
+    now resolve through the existing counter token family
+  - widened the shared leader-condition parser so counter text like:
+    - `If your Leader Card is mono-green: Negate the attack...`
+    no longer leaks `Negate the attack` into `requires_leader`
+  - locked the adjacent exact siblings:
+    - `[Counter: Attack] ... play 1 Meda Token. That Token gains [Blocker] for the turn`
+    - `[Activate: Main] Place 1 of your Z-Energy in your Drop, and remove this card from the game: ... play 2 Ghost Tokens with 15000 power, then choose all of your Ghost Tokens and they gain [Revenge] until the end of your opponent's next turn`
+  - locked the combined activate cost shape for the Ghost Token line:
+    - `send_owner_z_energy_to_drop`
+    - `send_self_to_removed`
+- widened the shared on-play token seam to accept:
+  - `play up to N ... Tokens`
+  - this unlocked the exact `Cell, Pursuit of Despair` sibling without adding a one-off branch
+- widened shared token-stat fallback and exact-card coverage across adjacent token siblings:
+  - `Chilled's Army Reinforcements`
+  - `Frieza Army Reinforcements`
+  - `Testing the Opposition`
+  - `Invasion of Chilled's Army`
+  - `Chilled`
+  - `Cell, Pursuit of Despair`
+- widened the leader awaken payoff seam to support token payloads from parsed awaken text at runtime
+- first exact awaken sibling locked on that path:
+  - `Tien Shinhan`
+    - play `3` `Multi-Form Tokens`
+    - switch up to `1` energy to `Active Mode`
+- widened awaken condition parsing/runtime so token-adjacent awaken lines can now require:
+  - owner energy thresholds
+  - matching owner token counts in play
+  - matching owner Unison color + specified cost in play
+  - matching owner Battle Area card type/color/energy cost in play
+- locked adjacent exact awaken siblings on that shared path:
+  - `Towa`
+    - black Unison with specified cost `3` in play
+    - play `1` `Demon Realm Soldier Token`
+    - restand `2` energy
+  - `Tien Shinhan`
+    - `2` or more energy
+    - green `Z-Extra` with cost `2` in play
+    - play `3` `Multi-Form Tokens`
+  - `Trunks & Mai`
+    - `3` or more `Earthling Token`s in play
+    - awaken draw + energy restand + life-to-hand
+- locked adjacent exact token siblings that already reuse the current shared path:
+  - `Bulma, Sacrifice`
+    - on-play draw `1`
+    - play `1` `Earthling Token`
+  - `Android 21, Total Audacity`
+    - on-play draw `2`
+    - delayed `Clone Token` to the opponent Battle Area at end of the opponent's next turn
+  - `Mai, Link of Hope`
+    - on-play draw `1`
+    - activate-main `rest self`
+    - play `1` `Earthling Token`
+- widened delayed token rider support on the shared token seam:
+  - counter delayed token families can now restand filtered owner energy before scheduling the token
+  - activate delayed token families can now add cards from life to hand before scheduling the token
+- fixed a shared leader-requirement parsing/runtime seam so fallback `?trait?` strings still match live leader traits
+- fixed shared delayed on-play token extraction so plural token names normalize cleanly before runtime token creation
+- fixed shared on-play deck-search runtime so top-deck filters fall back to live `CardInstance` color / cost / trait data when catalog runtime data is absent
+- locked adjacent exact delayed-token siblings on that shared path:
+  - `Unstoppable Technique`
+    - counter restands `1` blue energy
+    - delayed `Clone Token` into the opponent Battle Area at end of turn
+  - `Frieza, Invader from Another Dimension`
+    - add `1` from life to hand
+    - delayed `Frieza's Army Token` at end of turn
+  - `Android 21, Mandatory Gathering`
+    - top-`5` search for blue `≪Android≫` cost `5` or less
+    - delayed `Clone Token` into the opponent Battle Area at end of the opponent's next turn
+  - `Android 21, the Ringleader`
+    - on-play draw `1`
+    - delayed `Clone Token` into the opponent Battle Area at end of the opponent's next turn
+  - `Android 21, a Brilliant Idea`
+    - delayed `2` `Clone Tokens` into the opponent Battle Area at end of the opponent's next turn
+- tightened shared common-condition extraction so source-card costs like:
+  - `you switch this card to Rest Mode`
+  no longer leak a bogus `rest_mode_only` target-state requirement into token activate families
+- opened the next token-cost seam:
+  - shared `Activate: Main` cost support for removing matching owner or opponent Battle cards from the game
+  - first token-backed siblings now ride that shared path:
+    - opponent `Clone Token` removal to play this card from `hand`
+    - opponent `Clone Token` removal to play this card from `Drop`
+    - opponent `Clone Token` removal to play a `Unison` from `hand` in `Rest Mode` with `1` marker
+    - opponent `Clone Token` removal to give this card `+10000 power` and `[Critical]` for the duration of the turn
+  - widened shared activate extraction for:
+    - `play this card from your hand in Rest Mode with a marker on it`
+    - `for the duration of the turn`
+    - bottom-deck opponent Battle lines with explicit max-cost clauses like `energy cost of 2 or less`
+- hardened the adjacent Android 21 / Clone Token seam:
+  - added a shared activate-main family for:
+    - draw
+    - optional life-to-hand
+    - bounce up to `N` opponent Battle cards by cost
+    - optional delayed opponent-next-main energy restand
+  - locked exact leader siblings on that path:
+    - `BT8-024 Android 21`
+      - draw `1`
+      - bounce opponent Battle cost `1`
+      - restand up to `1` blue/green multicolor energy at the start of the opponent's next Main Phase
+    - `BT8-023 Android 18`
+      - draw `1`
+      - add `1` from life to hand
+      - bounce opponent Battle cost `1`
+  - widened shared activate-main owner-buff extraction so:
+    - `choose 1 of your Battle Cards and it gets +10000 power for the duration of the turn`
+      now rides `activate_buff_owner_battle_cards`
+  - opened the adjacent on-play bounce family:
+    - `When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of N or less and return it to its owner's hand`
+  - fixed a real play-from-hand registration bug:
+    - deferred hand-zone autos now clear before public battle/unison registration
+    - that keeps extracted on-play follow-ups live after a card is played from hand
+  - locked adjacent exact Frieza siblings on the shared path:
+    - `BT8-035 Maleficent Technique Frieza`
+      - remove `2` opponent `Clone Token`s
+      - play from hand
+      - on-play bounce opponent Battle cost `3` or less
+    - `BT20-049 Frieza, Common Enemy`
+      - require `3` or more energy
+      - remove `3` opponent `Clone Token`s
+      - play from hand
+  - hardened the adjacent Android 21 / Clone Token exact-card seam:
+    - `P-202 Android 21, Scholarly Gambit`
+      - added shared `requires_no_owner_battle_with_source_card_id`
+      - fixed the false activate-main self-drop cost leak from the later `[Auto]` header
+    - `BT8-062 The Android Creator`
+      - collapsed the line into a real composite extra-from-hand activate path:
+        - remove opponent `Clone Token`
+        - draw `1`
+        - buff `1` owner Battle by `+10000`
+      - removed the old noisy `required_traits="Battle"` artifact
+    - `BT8-055 Android 21, a Brilliant Idea`
+      - fixed `Choose one-` bullet splitting for the mojibake token package
+      - opened exact choice-branch extraction/runtime for:
+        - KO `1` opponent Battle
+        - buff owner Leader or Battle by `+10000` and `[Critical]`
+    - widened shared runtime support so:
+      - `activate_extra_from_hand` can reuse `activate_main` cost specs when the printed card is an Extra
+      - `activate_ko_up_to_n_opponent_battle` now works on `self_activate_main` as well as battle timing
+  - widened the adjacent Clone Token / blue Unison seam:
+    - locked the next exact Clone Token siblings that already reuse the shared removal cost path:
+      - `remove 3 Clone Tokens -> play this card from your hand` with `[Blocker][Limit 1]`
+      - `remove 1 Clone Token -> this card gets +10000 power and [Double Strike] for the turn`
+    - widened shared stacked-header parsing so exact Unison lines now extract cleanly from:
+      - `[+2][Activate: Main]`
+      - `[-4][Activate: Battle]`
+    - opened the blue Clone Token Unison support on the shared path:
+      - owner mono-blue Leader gets `+5000` power for the turn
+      - opponent `Clone Token`s can't attack during the opponent's next turn
+      - `[-4][Activate: Battle]` gives the Unison `+11000` power and `[Double Strike]`
+    - widened shared runtime support so:
+      - `activate_buff_owner_leader_for_turn` now honors leader filters and can schedule name-based next-turn attack restrictions
+      - `activate_gain_power_and_keyword_for_turn` now also resolves for `self_activate_battle`
+  - widened the adjacent Clone Token combo/removal seam:
+    - fixed the real shared combo runtime gap:
+      - flat `self_comboed -> auto_self_gain_combo_power_on_combo` now pays printed `auto_on_combo_battle` costs
+    - widened shared Clone Token removal cost extraction so it now also handles:
+      - `choose 1 of your opponent's Clone Tokens and remove it from the game`
+      - on both:
+        - `auto_on_combo_battle`
+        - `auto_on_play_battle`
+    - opened the shared combo search family:
+      - `self_comboed:auto_add_up_to_n_from_owner_deck_to_hand_on_combo`
+    - widened shared combo owner-battle buff handling so it can also:
+      - require the current owner attacker
+      - grant a keyword for the battle without needing a power rider
+    - widened generic combo battle-end self replay so it also accepts:
+      - `this card is used in a combo`
+      - not only `was used in a combo`
+    - fixed the shared battle-end replay seam:
+      - combo battle-end self replay now only pays the later auto header cost
+      - it no longer incorrectly tries to re-pay the earlier combo-time Clone Token removal cost
+    - widened shared on-play discard extraction/runtime so:
+      - `When you play this card, your opponent chooses 1 card from their hand and places it in their Drop Area`
+        now reuses `auto_opponent_discards_n_from_hand_on_play`
+      - that family now also pays printed `auto_on_play_battle` costs when present
+    - locked adjacent exact Clone Token siblings on the shared path:
+      - `P-297 Pincer Attack Android 18`
+        - combo-time Clone Token removal cost
+        - add `{Supreme Technique Krillin}` from deck to hand
+        - battle-end self replay from Drop
+      - `BT8-030 Supreme Technique Krillin`
+        - combo-time Clone Token removal cost
+        - grant the attacking `<Android 18>` `[Double Strike]` for the battle
+        - battle-end self replay
+      - `BT8-117 Supreme Technique Son Goku`
+        - on-play remove `2` opponent `Clone Token`s
+        - opponent chooses `1` card from hand and places it in Drop
+  - widened the adjacent Android 21 / Clone Token field-extra seam:
+    - added the shared `Activate: Main` family:
+      - `activate_activate_up_to_n_named_field_extra_from_owner_drop`
+    - widened named field-extra activation so it can now source from:
+      - `Drop`
+      - not only `deck` / `z_deck`
+    - locked adjacent exact Android 21 siblings on the shared path:
+      - `BT20-029 Android 21, Mandatory Gathering`
+        - exact combo-from-hand line now regression-backed:
+          - play `1` `Clone Token` in the opponent's Battle Area
+      - `BT8-023 Android 21, the Ringleader`
+        - exact `Activate: Main` line now regression-backed:
+          - choose `1` `{Android 21's Scheme}` in your Drop and activate it
+        - exact runtime now proves the full chain:
+          - `Scheme` moves from `Drop` into play
+          - `Scheme` registers correctly
+          - `Scheme` fires at the start of the opponent's Main Phase and plays `2` `Clone Tokens`
+## Adjacent Android 21 leader front/back slice complete
+
+- widened shared `Activate: Main` skill-cost extraction with:
+  - `add_life_to_hand`
+- widened shared `self_activate_main -> auto_look_top_add_up_to_one_to_hand_on_play`
+  - it now supports an optional self `power_delta` rider for the turn
+- added a new shared activate family:
+  - `self_activate_main:activate_draw_n_and_switch_up_to_n_opponent_battle_or_unison_active`
+- locked exact front/back coverage for:
+  - `BT20-024 Android 21`
+  - `Android 21, the Nature of Evil`
+- exact runtime now proves:
+  - front-side life cost
+  - top-5 blue `≪Android≫` search
+  - self `+5000` for the turn
+  - adjacent blue-energy restand at owner turn end with an `Android 21` Z-Battle in play
+  - awaken draw + energy restand
+  - back-side draw + switch up to 3 opponent Battle Cards and/or Unisons to Active Mode ignoring `[Barrier]`
+
+## Adjacent Android 21 hunger / despair slice complete
+
+- widened the Android 21 extractor seam so exact `BT20-028 Android 21, in the Name of Hunger` now maps onto the existing shared families:
+  - `self_played:auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play`
+  - `self_activate_main:activate_gain_keyword_from_under_self_until_opponent_turn_end`
+- added a new shared self-played family:
+  - `self_played:auto_place_any_number_opponent_battle_into_drop_on_play`
+  - first locked with:
+    - `Android 21, Ceaseless Despair`
+- added a new shared trigger/event seam:
+  - `owner_opponent_counter_activated`
+  - driven by a real `counter_skill_activated` engine event emitted on counter declaration
+- added a new shared punishment family on that seam:
+  - `owner_opponent_counter_activated:auto_opponent_discards_n_from_hand_on_opponent_counter_activated`
+  - first locked with:
+    - `Android 21, Ceaseless Despair`
+- exact runtime now proves:
+  - `In the Name of Hunger`
+    - top-deck to energy in Rest Mode
+    - bottom-deck opponent Battle
+    - gains a keyword from under itself until the end of the opponent's next turn
+  - `Ceaseless Despair`
+    - sends all opponent Battle Cards to Drop ignoring `[Barrier]`
+    - punishes real opponent counter declarations with discard 2
+    - restands up to 5 energy at end of turn

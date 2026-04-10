@@ -76,6 +76,83 @@ def test_extract_activate_main_without_colon_hidden_mode_skill_cost_rule() -> No
     }
 
 
+def test_extract_activate_main_rest_self_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1] If your Leader is a green ≪Machine Mutant≫ card and you switch this card to Rest Mode: "
+            "Draw 1 card, place up to 1 <Android 18> or <Cell> card-both green and with an energy cost of 1-from your deck or Drop under your Leader, then shuffle your deck if you looked through it."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "rest_self",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_hand_to_drop_and_send_self_to_warp_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Place 1 card from your hand in the Drop Area: "
+            "Send this card to the Warp, and play it from the Warp in its owner's Battle Area at the beginning of your next turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_hand_to_drop",
+                "amount": 1,
+            },
+            {
+                "kind": "send_self_to_warp",
+                "amount": 1,
+            },
+        ]
+    }
+
+
+def test_extract_activate_main_send_self_from_hand_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] (Green), send this card from your hand to your Warp: "
+            "At the end of your opponent's next turn, play the card you sent to your Warp with this skill from your Warp."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_hand": [
+            {
+                "kind": "send_self_from_hand_to_warp",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_typo_owner_drop_self_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main]②, if your Leader Card is a ≪World Tournament≫ card and you place this card in it's owner's Drop Area: "
+            "Choose up to 1 ≪World Tournament≫ card with an energy cost of 3 or less from your hand, send it to your Warp, "
+            "and at the start of your next turn, play the card sent to your Warp by this skill from your Warp."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_self_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_hidden_mode_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -125,6 +202,42 @@ def test_extract_activate_battle_send_self_from_combo_to_drop_cost_rule() -> Non
         "activate_battle_combo": [
             {
                 "kind": "send_self_from_combo_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_battle_send_self_from_leader_under_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Limit 1] Send this card from under your <Super 17> Z-Leader to its owner's Warp: "
+            "Up to 1 of your Leaders gets +5000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle_leader_under": [
+            {
+                "kind": "send_self_from_leader_under_to_warp",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_battle_discard_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Limit 1] If your Leader's back side is a red <Super 17> card and you discard 1 card from your hand: "
+            "Use this card from your Drop in a combo."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle": [
+            {
+                "kind": "send_owner_hand_to_drop",
                 "amount": 1,
             }
         ]
@@ -188,6 +301,17 @@ def test_extract_zamasu_scheme_activate_main_costs_are_source_zone_specific() ->
     }
 
 
+def test_extract_activate_main_send_self_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Send this card to the Warp: "
+            "At the beginning of your next turn, if your Leader Card is ≪Universe 6≫, play this card from the Warp in its owner's Battle Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"] == [{"kind": "send_self_to_warp", "amount": 1}]
+
+
 def test_extract_auto_on_play_z_energy_to_drop_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -201,6 +325,26 @@ def test_extract_auto_on_play_z_energy_to_drop_cost_rule() -> None:
             {
                 "kind": "send_owner_z_energy_to_drop",
                 "amount": 2,
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_play_hand_to_bottom_deck_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto][Limit 1] If your Leader is a yellow <Whis> card and you place 1 card from your hand at the bottom of your deck: "
+            "When this card is played, send up to 2 skill-less Battle Cards with 15000 power and different character names from your deck to your Warp, "
+            "shuffle your deck, and at the end of your opponent's next turn, play up to 1 of the cards sent to your Warp by this skill in your Battle Area, "
+            "and you may add the remaining cards to your hand."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_play_battle": [
+            {
+                "kind": "send_owner_hand_to_bottom_deck",
+                "amount": 1,
             }
         ]
     }
@@ -306,6 +450,25 @@ def test_extract_activate_main_place_self_in_drop_cost_rule() -> None:
     }
 
 
+def test_extract_activate_main_place_self_in_owner_drop_area_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If your Leader Card is a green <Beerus> or green <Champa> card and you place this card in its owner's Drop Area: "
+            "Choose one?\n"
+            "・Activate up to 1 {The Nameless Planet} from your deck, then shuffle your deck."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_self_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_battle_energy_to_drop_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -370,6 +533,24 @@ def test_extract_activate_battle_remove_self_to_removed_cost_rule() -> None:
     }
 
 
+def test_extract_activate_main_hand_to_bottom_deck_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1](Green), place 1 card from your hand at the bottom of your deck: "
+            "Play this card from under {Cell, Return of the Ultimate Lifeform}."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_hand_to_bottom_deck",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_remove_self_in_drop_and_discard_hand_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -389,6 +570,218 @@ def test_extract_activate_main_remove_self_in_drop_and_discard_hand_cost_rule() 
             "amount": 1,
         },
     ]
+
+
+def test_extract_activate_main_z_energy_to_drop_and_remove_self_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Place 1 of your Z-Energy in your Drop, and remove this card from the game: "
+            "If your Leader is a blue <Frieza's Army> card and you have 2 or more blue Z-Extra Cards in your Battle Area, "
+            "play 2 Ghost Tokens with 15000 power, then choose all of your Ghost Tokens and they gain [Revenge] until the end of your opponent's next turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_z_energy_to_drop",
+                "amount": 1,
+            },
+            {
+                "kind": "send_self_to_removed",
+                "amount": 1,
+            },
+        ]
+    }
+
+
+def test_extract_activate_main_remove_two_opponent_clone_tokens_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Choose 2 Clone Tokens in your opponent's Battle Area and remove them from the game: "
+            "Play this card from your hand."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 2,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_remove_three_opponent_clone_tokens_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main][Limit 1](Blue), if you have 3 or more energy and you choose 3 of your opponent's Clone Tokens and remove them from the game: "
+            "Play this card from your hand."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 3,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_remove_three_opponent_clone_tokens_blocker_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Blocker]<br>[Activate: Main][Limit 1] Choose 3 of your opponent's Clone Tokens and remove them from the game: "
+            "Play this card from your hand."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 3,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_clone_token_unison_marker_and_removal_cost_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If you don't have a Unison Card in play and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+            "Play this card from your hand in Rest Mode with a marker on it.<br>"
+            "[+2][Activate: Main] 1 of your mono-blue Leader Cards gets +5000 power for the turn; your opponent's Clone Tokens can't attack during your opponent's next turn.<br>"
+            "[-4][Activate: Battle] This card gets +11000 power and [Double Strike] for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ],
+        "activate_main_unison": [{"kind": "add_markers", "amount": 2}],
+        "activate_battle_unison": [{"kind": "remove_markers", "amount": 4}],
+    }
+
+
+def test_extract_exact_clone_token_combo_draw_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] If it's your turn, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "When you combo with this card, draw 1 card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_clone_token_combo_power_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] If it's your turn, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "When you combo with this card, this card gets +5000 combo power for the duration of the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_pincer_attack_android_18_combo_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] If your Leader Card is a blue <Android 18> card and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+            "When this card is used in a combo from your hand, add up to 1 {Supreme Technique Krillin} from your deck to your hand, then shuffle your deck.<br>"
+            "[Auto](Blue), if your Leader Card is a blue <Android 18> card: At the end of a battle in which this card is used in a combo from your hand, play this card from your Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_supreme_technique_krillin_combo_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card.)<br>"
+            "[Auto] If it's your turn, choose 1 Clone Token from your opponent's Battle Area and remove it from the game: "
+            "When you combo with this card, choose up to 1 attacking <Android 18> card and it gains [Double Strike] for the duration of the battle. <br>"
+            "[Auto](Blue), during your turn: When you combo with this card from your hand with an <Android 18> card in battle, play this card at the end of the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_supreme_technique_son_goku_play_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Blocker] <br>[Arrival Blue/Green](Blue) (Play this card from your hand when you have blue and green cards in your Combo Area.)<br>"
+            "[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)<br>"
+            "[Auto] Choose 2 Clone Tokens in your opponent's Battle Area and remove them from the game: "
+            "When you play this card, your opponent chooses 1 card from their hand and places it in their Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_play_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 2,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
 
 
 def test_extract_activate_main_discard_hand_cost_rule() -> None:
@@ -445,6 +838,62 @@ def test_extract_activate_main_remove_total_drop_and_warp_to_removed_cost_rule()
                 "kind": "send_owner_drop_and_warp_to_removed",
                 "amount": 10,
             }
+        ]
+    }
+
+
+def test_extract_activate_main_remove_opponent_clone_token_to_removed_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Remove 1 of your opponent's Clone Tokens from the game: Play this card from your hand or Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_bt20_android_21_front_activate_life_to_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Permanent] You can't activate Extras, and during your turn, you can't use skills to play Battle Cards. "
+            "[Auto] If you have an <Android 21> Z-Battle Card in play: At the end of your turn, switch up to 1 of your blue energy to Active Mode. "
+            "[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue ≪Android≫ card among them to your hand, shuffle your deck, and this card gets +5000 power for the turn. "
+            "[Awaken] When your life is at 4 or less: Draw 1 card, and switch up to 1 of your energy to Active Mode."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"] == [{"kind": "add_life_to_hand", "amount": 1}]
+
+
+def test_extract_activate_main_unison_remove_owner_saibaiman_token_to_removed_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[-1][Activate: Main] Remove 1 of your Saibaiman Tokens from the game: "
+            "Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and place it at the bottom of its owner's deck."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_unison": [
+            {
+                "kind": "remove_markers",
+                "amount": 1,
+            },
+            {
+                "kind": "send_owner_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "SAIBAIMAN TOKEN",
+                "required_card_types": "BATTLE",
+            },
         ]
     }
 
@@ -945,6 +1394,25 @@ def test_extract_auto_on_opponent_combo_z_energy_cost_rule() -> None:
     }
 
 
+def test_extract_auto_on_self_drop_energy_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto]{1}, if your Leader's back side is {SSG Son Goku, Surge of Divinity}: "
+            "When this card is placed into its owner's Drop from your hand or from under your Leader by your Leader's skill, "
+            "draw 1 card and play this card from your Drop with 1 marker on it."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_self_drop": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_auto_on_combo_single_energy_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -959,6 +1427,104 @@ def test_extract_auto_on_combo_single_energy_cost_rule() -> None:
                 "kind": "send_owner_energy_to_drop",
                 "amount": 1,
                 "allowed_colors": "blue",
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_combo_leader_under_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto][Limit 1] If your Leader is a blue <Android 18> card and you place 1 non-Leaders from under your Leader in its owner's Drop: "
+            "When this card is used in a combo, choose up to 1 of your <Krillin> or <Android 18> cards and it gets +1000 power for the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_owner_leader_under_to_drop",
+                "amount": 1,
+                "forbidden_card_types": "LEADER,Z-LEADER",
+            }
+        ]
+    }
+
+
+def test_extract_auto_on_combo_circled_generic_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] When this card is played, draw 1 card.<br>"
+            "[Auto] \u2461, if it's your opponent's turn: When this card is used in a combo from your Battle Area, "
+            "play 4 Multi-Form Tokens. (Multi-Form Tokens have 10000 power, 0 combo cost, and 5000 combo power.)"
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_owner_energy_to_drop",
+                "amount": 2,
+            }
+        ]
+    }
+
+
+def test_extract_counter_alternate_leader_under_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Limit 1] If your Leader is a blue <Android 18> card: Negate the attack and play this card. "
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 2 blue non-Leaders from under your Leader in their owners' Drops."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "send_owner_leader_under_to_drop",
+                "amount": 2,
+                "allowed_colors": "blue",
+                "forbidden_card_types": "LEADER,Z-LEADER",
+                "required_leader_colors": "blue",
+                "required_leader_traits": "android 18",
+            }
+        ]
+    }
+
+
+def test_extract_counter_alternate_owner_battle_under_to_drop_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack. "
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 1 card from under a {The Nameless Planet} in your Battle Area in its owner's Drop Area instead."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "send_owner_battle_under_to_drop",
+                "amount": 1,
+                "required_host_name_contains": "THE NAMELESS PLANET",
+            }
+        ]
+    }
+
+
+def test_extract_activate_battle_z_energy_under_self_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle][Once per turn] (1), place 1 ≪Android≫ card from your Z-Energy under this card: "
+            "Draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_battle": [
+            {
+                "kind": "send_owner_z_energy_under_self",
+                "amount": 1,
+                "required_traits": "android",
             }
         ]
     }
@@ -1018,6 +1584,82 @@ def test_engine_uses_catalog_for_counter_alternate_hidden_battle_cost() -> None:
             owner_id=2,
             card_type="EXTRA",
             color="White",
+            energy_cost=1,
+            has_counter=True,
+            has_counter_attack=True,
+            counter_modes=("Counter: Attack",),
+            skill_text_raw="[Counter: Attack] Negate the attack.",
+        )
+    )
+
+    attack = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.DECLARE_ATTACK)
+    state = engine.apply_action(state, attack)
+    legal = engine.get_legal_actions(state, 2)
+    assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
+
+
+def test_engine_uses_catalog_for_counter_alternate_owner_battle_under_cost() -> None:
+    catalog_path = _workspace_temp_catalog_path("skill_cost_alt_owner_battle_under")
+    save_skill_cost_rules_json(
+        catalog_path,
+        {
+            900305: {
+                "counter_alternate_from_hand": [
+                    {
+                        "kind": "send_owner_battle_under_to_drop",
+                        "amount": 1,
+                        "required_host_name_contains": "THE NAMELESS PLANET",
+                    }
+                ]
+            }
+        },
+    )
+    engine = RulesEngine(skill_cost_rules_path=catalog_path)
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=state.active_player))
+    state = _to_main(engine, state)
+    state.players[1].hand = [CardInstance(instance_id=790041, card_id=641, owner_id=1, card_type="BATTLE", energy_cost=0)]
+    host = CardInstance(
+        instance_id=790042,
+        card_id=900306,
+        owner_id=2,
+        card_type="EXTRA",
+        color="Green",
+    )
+    host.stacked_card_ids = (790043,)
+    state.players[2].battle_area.append(host)
+    engine._card_cache[(900306, "front")] = engine._build_card_runtime_data(
+        SimpleNamespace(
+            card_name="The Nameless Planet",
+            power_int=0,
+            card_type="EXTRA",
+            card_color="Green",
+            energy_cost_int=1,
+            combo_cost_int=0,
+            combo_power_int=0,
+            keywords=[],
+            counter_modes=[],
+            skill_text_raw="",
+            card_traits=[],
+            card_character=[],
+        ),
+        side="front",
+    )
+    state.players[2].hand.append(
+        CardInstance(
+            instance_id=790044,
+            card_id=900305,
+            owner_id=2,
+            card_type="EXTRA",
+            color="Green",
             energy_cost=1,
             has_counter=True,
             has_counter_attack=True,

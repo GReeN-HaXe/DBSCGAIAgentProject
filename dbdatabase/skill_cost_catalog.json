@@ -38,6 +38,12 @@
     ]
   },
   "10045": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 2,
@@ -54,6 +60,22 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "10059": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "1008": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -139,6 +161,24 @@
       }
     ]
   },
+  "1053": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "GHOST TOKEN"
+      }
+    ]
+  },
+  "1054": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "1055": {
     "counter_alternate_from_hand": [
       {
@@ -154,6 +194,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "1075": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -313,11 +361,35 @@
       }
     ]
   },
+  "1202": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "127": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_warp"
+      }
+    ]
+  },
   "13": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "1324": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -329,11 +401,51 @@
       }
     ]
   },
+  "1337": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "1340": {
     "activate_main_hand": [
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1344": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1345": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1349": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1350": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -350,6 +462,14 @@
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "1359": {
+    "auto_on_play_battle": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -389,6 +509,14 @@
       }
     ]
   },
+  "1382": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "139": {
     "activate_main_unison": [
       {
@@ -401,12 +529,28 @@
       }
     ]
   },
+  "1391": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "1411": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "required_leader_traits": "lt android 13 gt"
+      }
+    ]
+  },
+  "1419": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -474,6 +618,22 @@
       }
     ]
   },
+  "1559": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1592": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "1596": {
     "activate_main_unison": [
       {
@@ -502,6 +662,30 @@
       }
     ]
   },
+  "1633": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1638": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1639": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "1662": {
     "activate_main_unison": [
       {
@@ -514,6 +698,78 @@
       }
     ]
   },
+  "1684": {
+    "counter_alternate_from_hand": [
+      {
+        "allowed_colors": "blue",
+        "amount": 2,
+        "forbidden_card_types": "LEADER,Z-LEADER",
+        "kind": "send_owner_leader_under_to_drop",
+        "required_leader_colors": "blue",
+        "required_leader_traits": "lt android 18 gt"
+      }
+    ]
+  },
+  "1689": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "1760": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1769": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "1770": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1771": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "1774": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "1834": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "184": {
     "activate_main_unison": [
       {
@@ -522,11 +778,27 @@
       }
     ]
   },
+  "1847": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "1849": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "1856": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -542,11 +814,35 @@
       }
     ]
   },
+  "1884": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "1889": {
     "activate_main_hand": [
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "1891": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "1939": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -558,8 +854,20 @@
       }
     ]
   },
+  "1968": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "1972": {
     "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_removed"
+      },
       {
         "amount": 1,
         "kind": "discard_hand"
@@ -571,6 +879,22 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "1981": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "2001": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -598,6 +922,46 @@
       }
     ]
   },
+  "2043": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2056": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2071": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2113": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2127": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "2133": {
     "activate_main_hand": [
       {
@@ -616,12 +980,6 @@
   },
   "2142": {
     "activate_battle": [
-      {
-        "amount": 1,
-        "kind": "send_self_to_removed"
-      }
-    ],
-    "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_removed"
@@ -656,6 +1014,23 @@
       }
     ]
   },
+  "2203": {
+    "auto_on_combo_battle": [
+      {
+        "allowed_colors": "yellow",
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
+      }
+    ]
+  },
+  "2224": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "2225": {
     "activate_main": [
       {
@@ -664,11 +1039,27 @@
       }
     ]
   },
+  "2239": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "2243": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2248": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
       }
     ]
   },
@@ -693,6 +1084,18 @@
       {
         "amount": 1,
         "kind": "send_self_to_removed"
+      }
+    ]
+  },
+  "2270": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      },
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -728,6 +1131,22 @@
       }
     ]
   },
+  "2305": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2306": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "238": {
     "activate_main": [
       {
@@ -760,6 +1179,22 @@
       }
     ]
   },
+  "2432": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "2462": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "2481": {
     "activate_main_unison": [
       {
@@ -769,6 +1204,14 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2503": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -789,6 +1232,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2517": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -864,6 +1315,14 @@
       }
     ]
   },
+  "2600": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "2604": {
     "activate_main_unison": [
       {
@@ -873,6 +1332,12 @@
     ]
   },
   "2649": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ],
     "activate_main_hand": [
       {
         "amount": 1,
@@ -896,11 +1361,35 @@
       }
     ]
   },
+  "2673": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "2675": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "29": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "296": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -913,6 +1402,14 @@
       {
         "amount": 7,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "301": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -930,6 +1427,44 @@
         "amount": 1,
         "kind": "add_markers"
       }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "32": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "320": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "326": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "327": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
     ]
   },
   "328": {
@@ -945,6 +1480,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "346": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -992,11 +1535,29 @@
       }
     ]
   },
+  "3661": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "370": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "3712": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -1096,6 +1657,14 @@
       }
     ]
   },
+  "3803": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "3808": {
     "activate_main_unison": [
       {
@@ -1125,6 +1694,16 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "3818": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -1226,6 +1805,14 @@
       }
     ]
   },
+  "387": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "3870": {
     "activate_main_unison": [
       {
@@ -1270,6 +1857,14 @@
       }
     ]
   },
+  "390": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "3905": {
     "activate_main_unison": [
       {
@@ -1303,6 +1898,32 @@
       {
         "amount": 6,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "3924": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "3931": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "3944": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1415,6 +2036,14 @@
       }
     ]
   },
+  "3986": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "3991": {
     "activate_main_unison": [
       {
@@ -1483,6 +2112,22 @@
       }
     ]
   },
+  "4056": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "4061": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4063": {
     "activate_main_unison": [
       {
@@ -1548,6 +2193,12 @@
       {
         "amount": 1,
         "kind": "remove_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "SAIBAIMAN TOKEN"
       }
     ]
   },
@@ -1621,6 +2272,14 @@
       }
     ]
   },
+  "4166": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_drop"
+      }
+    ]
+  },
   "4167": {
     "counter_alternate_from_hand": [
       {
@@ -1629,6 +2288,22 @@
         "required_leader_colors": "yellow",
         "requires_life_at_most": 4,
         "requires_multicolor_in_energy": true
+      }
+    ]
+  },
+  "4179": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "4206": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1669,6 +2344,30 @@
       }
     ]
   },
+  "4254": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "4311": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "4326": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4337": {
     "activate_main_unison": [
       {
@@ -1694,6 +2393,22 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "4366": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "4408": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -1773,6 +2488,14 @@
       }
     ]
   },
+  "4643": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4657": {
     "activate_main_unison": [
       {
@@ -1781,11 +2504,34 @@
       }
     ]
   },
+  "466": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_under_to_drop",
+        "required_host_name_contains": "THE NAMELESS PLANET"
+      }
+    ]
+  },
+  "4667": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "4672": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "GHOST TOKEN"
       }
     ]
   },
@@ -1794,6 +2540,30 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "4786": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "4854": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "4885": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -1817,6 +2587,22 @@
       }
     ]
   },
+  "4942": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "4945": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "4949": {
     "counter_from_hand": [
       {
@@ -1835,11 +2621,51 @@
       }
     ]
   },
+  "5034": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5048": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "5074": {
     "activate_main_unison": [
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "5112": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5121": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5169": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -1851,12 +2677,110 @@
       }
     ]
   },
+  "5173": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5178": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5181": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5185": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5187": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5211": {
+    "activate_main": [
+      {
+        "amount": 3,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
+  "5224": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5225": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "5232": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "send_other_battle_to_drop",
         "required_card_types": "BATTLE"
+      }
+    ]
+  },
+  "5243": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5246": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5267": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -1896,11 +2820,35 @@
       }
     ]
   },
+  "5354": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5355": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "5356": {
     "activate_main_hand": [
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5371": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -1921,6 +2869,14 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "5400": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2005,6 +2961,22 @@
       }
     ]
   },
+  "5508": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5515": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "5525": {
     "activate_main_hand": [
       {
@@ -2021,6 +2993,34 @@
       }
     ]
   },
+  "5596": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5601": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_drop"
+      },
+      {
+        "amount": 1,
+        "kind": "send_self_to_warp"
+      }
+    ]
+  },
+  "5615": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_warp"
+      }
+    ]
+  },
   "5618": {
     "activate_main": [
       {
@@ -2031,11 +3031,27 @@
       }
     ]
   },
+  "5626": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "5630": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5632": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2055,6 +3071,14 @@
       }
     ]
   },
+  "5640": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "5642": {
     "activate_main": [
       {
@@ -2070,6 +3094,14 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "5651": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2095,11 +3127,43 @@
       }
     ]
   },
+  "569": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "570": {
     "activate_main_unison": [
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "5717": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5740": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "5745": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2112,6 +3176,71 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      },
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
+  "5767": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "581": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "TOKEN"
+      }
+    ]
+  },
+  "5827": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "583": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "TOKEN"
+      }
+    ]
+  },
+  "5898": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5913": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "5923": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2131,6 +3260,15 @@
       }
     ]
   },
+  "595": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
   "5959": {
     "activate_main_hand": [
       {
@@ -2144,6 +3282,16 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "5969": {
+    "activate_main": [
+      {
+        "amount": 2,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -2167,6 +3315,14 @@
       }
     ]
   },
+  "6044": {
+    "activate_main_hand": [
+      {
+        "amount": 1,
+        "kind": "send_self_from_hand_to_warp"
+      }
+    ]
+  },
   "605": {
     "activate_battle_unison": [
       {
@@ -2186,6 +3342,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "6060": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -2232,6 +3396,30 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "610": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "6156": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "6184": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2289,11 +3477,43 @@
       }
     ]
   },
+  "6369": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "6376": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "6386": {
     "activate_main_unison": [
       {
         "amount": 2,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "6417": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "6464": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2382,6 +3602,22 @@
         "amount": 1,
         "kind": "send_other_battle_to_drop",
         "required_card_types": "BATTLE"
+      }
+    ]
+  },
+  "6571": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "6573": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2549,6 +3785,31 @@
       }
     ]
   },
+  "6782": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE"
+      }
+    ]
+  },
+  "6783": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "6841": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "686": {
     "activate_main_hand": [
       {
@@ -2573,6 +3834,14 @@
       }
     ]
   },
+  "6888": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "6900": {
     "activate_main_unison": [
       {
@@ -2585,7 +3854,21 @@
       }
     ]
   },
+  "6933": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_drop"
+      }
+    ]
+  },
   "6940": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 1,
@@ -2646,6 +3929,14 @@
       }
     ]
   },
+  "6964": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "6974": {
     "activate_main_unison": [
       {
@@ -2665,6 +3956,14 @@
         "kind": "add_life_to_hand",
         "required_leader_colors": "blue",
         "requires_life_at_most": 5
+      }
+    ]
+  },
+  "6992": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -2689,11 +3988,37 @@
       }
     ]
   },
+  "700": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
+  "7001": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "7004": {
     "activate_main_unison": [
       {
         "amount": 7,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7010": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ]
   },
@@ -2721,6 +4046,14 @@
       }
     ]
   },
+  "7045": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "705": {
     "activate_main_unison": [
       {
@@ -2737,11 +4070,27 @@
       }
     ]
   },
+  "706": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "7061": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "7062": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
       }
     ]
   },
@@ -2793,6 +4142,24 @@
       }
     ]
   },
+  "7172": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "7174": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
+      }
+    ]
+  },
   "7216": {
     "activate_main_unison": [
       {
@@ -2826,6 +4193,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ],
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_opponent_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "CLONE TOKEN"
       }
     ],
     "activate_main_unison": [
@@ -2921,6 +4296,18 @@
       }
     ]
   },
+  "7354": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      },
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "7359": {
     "activate_main_unison": [
       {
@@ -3003,6 +4390,14 @@
       }
     ]
   },
+  "7402": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "7404": {
     "activate_main_unison": [
       {
@@ -3015,12 +4410,36 @@
       }
     ]
   },
+  "7405": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "7422": {
     "counter_alternate_from_hand": [
       {
         "amount": 1,
         "kind": "add_life_to_hand",
         "requires_sparking": 5
+      }
+    ]
+  },
+  "7425": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "7443": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -3044,11 +4463,27 @@
       }
     ]
   },
+  "75": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_self_to_drop"
+      }
+    ]
+  },
   "7760": {
     "activate_main": [
       {
         "amount": 1,
         "kind": "discard_hand"
+      }
+    ]
+  },
+  "7763": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3065,6 +4500,12 @@
     ]
   },
   "7766": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 2,
@@ -3080,12 +4521,20 @@
     "activate_main": [
       {
         "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      },
+      {
+        "amount": 1,
         "kind": "send_self_to_removed"
       }
     ]
   },
   "7770": {
     "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_z_energy_to_drop"
+      },
       {
         "amount": 1,
         "kind": "send_self_to_removed"
@@ -3105,6 +4554,16 @@
       {
         "amount": 1,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7787": {
+    "activate_main": [
+      {
+        "allowed_colors": "blue",
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_characters": "majin buu"
       }
     ]
   },
@@ -3145,6 +4604,14 @@
       {
         "amount": 3,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "7845": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3304,6 +4771,14 @@
       }
     ]
   },
+  "7929": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "7940": {
     "counter_alternate_from_hand": [
       {
@@ -3356,11 +4831,38 @@
       }
     ]
   },
+  "7967": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_hand_to_bottom_deck"
+      }
+    ]
+  },
   "7969": {
     "activate_main_hand": [
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "7971": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_characters": "cumber",
+        "required_traits": "great ape"
+      }
+    ]
+  },
+  "8035": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -3389,6 +4891,22 @@
       {
         "amount": 1,
         "kind": "send_self_from_hand_to_drop"
+      }
+    ]
+  },
+  "8060": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
+  "8066": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3423,6 +4941,14 @@
       {
         "amount": 4,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8097": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
       }
     ]
   },
@@ -3517,6 +5043,14 @@
       }
     ]
   },
+  "8314": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "8316": {
     "counter_alternate_from_hand": [
       {
@@ -3535,11 +5069,27 @@
       }
     ]
   },
+  "8333": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "8342": {
     "activate_main_unison": [
       {
         "amount": 7,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8348": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -3633,11 +5183,15 @@
         "amount": 1,
         "kind": "send_self_to_removed"
       }
-    ],
+    ]
+  },
+  "8408": {
     "activate_main": [
       {
         "amount": 1,
-        "kind": "send_self_to_removed"
+        "kind": "send_owner_battle_to_removed",
+        "required_card_types": "BATTLE",
+        "required_name_contains": "META-COOLER TOKEN"
       }
     ]
   },
@@ -3708,6 +5262,15 @@
       }
     ]
   },
+  "8465": {
+    "activate_main": [
+      {
+        "allowed_colors": "black",
+        "amount": 1,
+        "kind": "send_owner_battle_to_removed"
+      }
+    ]
+  },
   "8476": {
     "activate_main_unison": [
       {
@@ -3764,6 +5327,14 @@
       }
     ]
   },
+  "8605": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "rest_self"
+      }
+    ]
+  },
   "8606": {
     "activate_main_hand": [
       {
@@ -3789,6 +5360,12 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ],
+    "auto_on_self_drop": [
+      {
+        "amount": 1,
+        "kind": "send_owner_energy_to_drop"
       }
     ]
   },
@@ -4111,10 +5688,6 @@
       {
         "amount": 1,
         "kind": "discard_hand"
-      },
-      {
-        "amount": 1,
-        "kind": "send_self_to_removed"
       }
     ]
   },
