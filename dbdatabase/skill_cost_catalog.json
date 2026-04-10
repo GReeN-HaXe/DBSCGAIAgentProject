@@ -63,6 +63,14 @@
       }
     ]
   },
+  "10059": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "1008": {
     "activate_main": [
       {
@@ -702,6 +710,14 @@
       }
     ]
   },
+  "1689": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "1760": {
     "activate_main": [
       {
@@ -759,6 +775,14 @@
       {
         "amount": 1,
         "kind": "add_markers"
+      }
+    ]
+  },
+  "1847": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -1180,6 +1204,14 @@
       {
         "amount": 2,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "2503": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -2080,6 +2112,14 @@
       }
     ]
   },
+  "4056": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "4061": {
     "activate_main": [
       {
@@ -2500,6 +2540,14 @@
       {
         "amount": 1,
         "kind": "remove_owner_unison_markers"
+      }
+    ]
+  },
+  "4786": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -3746,6 +3794,22 @@
       }
     ]
   },
+  "6783": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
+  "6841": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "686": {
     "activate_main_hand": [
       {
@@ -3799,6 +3863,12 @@
     ]
   },
   "6940": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ],
     "activate_main_unison": [
       {
         "amount": 1,
@@ -3886,6 +3956,14 @@
         "kind": "add_life_to_hand",
         "required_leader_colors": "blue",
         "requires_life_at_most": 5
+      }
+    ]
+  },
+  "6992": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -4222,6 +4300,10 @@
     "activate_main": [
       {
         "amount": 1,
+        "kind": "add_life_to_hand"
+      },
+      {
+        "amount": 1,
         "kind": "send_self_to_drop"
       }
     ]
@@ -4350,6 +4432,14 @@
       {
         "amount": 1,
         "kind": "send_self_to_drop"
+      }
+    ]
+  },
+  "7443": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },
@@ -4768,6 +4858,14 @@
       }
     ]
   },
+  "8035": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "8036": {
     "activate_main_unison": [
       {
@@ -4945,6 +5043,14 @@
       }
     ]
   },
+  "8314": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "8316": {
     "counter_alternate_from_hand": [
       {
@@ -4963,11 +5069,27 @@
       }
     ]
   },
+  "8333": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
+      }
+    ]
+  },
   "8342": {
     "activate_main_unison": [
       {
         "amount": 7,
         "kind": "remove_markers"
+      }
+    ]
+  },
+  "8348": {
+    "activate_main": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand"
       }
     ]
   },

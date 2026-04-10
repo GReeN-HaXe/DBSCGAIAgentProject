@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3215,
+  "card_rule_count": 3237,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 4449,
+  "effect_rule_count": 4490,
   "rules": {
     "10": [
       {
@@ -2362,6 +2362,22 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1039": [
+      {
+        "family_id": "owner_opponent_counter_activated:auto_opponent_discards_n_from_hand_on_opponent_counter_activated",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_opponent_counter_activated",
+        "handler_params": {
+          "amount": 1,
+          "requires_source_in_battle": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if this card is in a battle: when your opponent activates a [counter] skill, they discard 1 card from their hand.",
+        "trigger": "owner_opponent_counter_activated"
+      }
+    ],
     "104": [
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
@@ -4664,6 +4680,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "(black)",
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -9111,6 +9128,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -10594,6 +10612,7 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
+          "power_delta": 5000,
           "required_traits": "Android"
         },
         "limit_per_turn": null,
@@ -10618,6 +10637,32 @@
       }
     ],
     "1698": [
+      {
+        "family_id": "self_played:auto_place_any_number_opponent_battle_into_drop_on_play",
+        "handler_id": "auto_place_any_number_opponent_battle_into_drop_on_play",
+        "handler_params": {
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose any number of your opponent's battle cards, ignoring [barrier], and place them in their owners' drops.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_opponent_counter_activated:auto_opponent_discards_n_from_hand_on_opponent_counter_activated",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_opponent_counter_activated",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when your opponent activates a [counter] skill, they discard 2 cards from their hand.",
+        "trigger": "owner_opponent_counter_activated"
+      },
       {
         "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
@@ -12767,6 +12812,23 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] if your leader is blue and your life is at 4 or less: when this card is used in a combo,  draw 1 card",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_add_up_to_n_from_owner_deck_to_hand_on_combo",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_combo",
+        "handler_params": {
+          "max_cost": -1,
+          "max_owner_life": 4,
+          "max_targets": 1,
+          "required_name_contains": "BREAKING A TABOO",
+          "requires_leader": "if your leader is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is blue and your life is at 4 or less: when this card is used in a combo,  add up to 1 {breaking a taboo} from your deck to your hand, then shuffle your deck",
         "trigger": "self_comboed"
       }
     ],
@@ -19178,6 +19240,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "required_leader_traits": "Universe 6",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a \u226auniverse 6\u226b card",
           "rest_mode_only": true,
           "resting": true
@@ -20497,6 +20560,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "\u2461",
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -20535,6 +20599,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "\u2461",
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": null,
@@ -25608,6 +25673,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "min_owner_energy": 2,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader is yellow and you have 2 or more energy",
           "resting": false
         },
@@ -25924,6 +25990,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -25940,6 +26007,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is blue",
           "rest_mode_only": true,
           "resting": true
@@ -26399,6 +26467,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "min_owner_energy": 3,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is green and you have 3 or more energy",
           "resting": false
         },
@@ -28753,6 +28822,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "required_leader_traits": "&Lt;Great Priest&Gt;",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a &lt;great priest&gt; card and you have 1 or more multicolor energy",
           "resting": false
         },
@@ -28825,6 +28895,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": 1,
@@ -28912,6 +28983,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": null,
@@ -31268,6 +31340,7 @@
           "auto_cost_header": "(black)",
           "min_total_players_energy": 3,
           "required_leader_traits": "Saiyan",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
           "rest_mode_only": true,
           "resting": true
@@ -32475,6 +32548,22 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "max_owner_life": 5,
+          "required_leader_traits": "Namekian",
+          "requires_leader": "if your leader card is a yellow \u226anamekian\u226b card and your life is at 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is a yellow \u226anamekian\u226b card and your life is at 5 or less, draw 1 card, and this card gets +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
           "max_owner_life": 5,
           "required_leader_traits": "Namekian",
           "requires_leader": "if your leader card is a yellow \u226anamekian\u226b card and your life is at 5 or less"
@@ -33745,6 +33834,21 @@
         "trigger": "self_played"
       }
     ],
+    "4911": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card,  your opponent chooses 1 card in their hand and places it in their drop area",
+        "trigger": "self_played"
+      }
+    ],
     "4913": [
       {
         "family_id": "turn_end:auto_switch_self_active_on_turn_end",
@@ -33774,6 +33878,23 @@
       }
     ],
     "4918": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "\u2460",
+          "ignores_barrier": true,
+          "requires_comboed_from": "hand",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto]\u2460: at the end of a battle in which this card is used in a combo from your hand, play this card from your drop area. if you do, choose any number of your opponent's leader cards, battle cards, and unison cards equal to or less than their current energy, ignoring [barrier], and switch them to rest mode.",
+        "trigger": "self_comboed_battle_end"
+      },
       {
         "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
         "handler_id": "activate_gain_power_and_keyword_for_turn",
@@ -33900,6 +34021,21 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, choose 1 card from your hand and send it to your warp, then draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "4947": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, your opponent chooses 1 card from their hand and places it in their drop area.",
         "trigger": "self_played"
       }
     ],
@@ -34075,6 +34211,7 @@
           "auto_cost_header": "(black)",
           "min_total_players_energy": 3,
           "required_leader_traits": "Saiyan",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
           "rest_mode_only": true,
           "resting": true
@@ -34556,6 +34693,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card, if your leader card is a \u226auniverse 6\u226b card and your life is at 5 or less, draw 1 card and this card gets +10000 combo power for the duration of the turn.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 5,
+          "required_leader_traits": "Universe 6",
+          "requires_leader": "if your leader card is a \u226auniverse 6\u226b card and your life is at 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is a \u226auniverse 6\u226b card and your life is at 5 or less, draw 1 card and this card gets +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
       }
     ],
     "5106": [
@@ -34699,6 +34852,21 @@
         "trigger": "self_activate_main"
       }
     ],
+    "5144": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, your opponent chooses 1 card from their hand and places it in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
     "5150": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -34778,7 +34946,41 @@
         "trigger": "self_comboed"
       }
     ],
+    "5166": [
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 5000,
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if it's your turn, choose 1 clone token in your opponent's battle area and remove it from the game: when you combo with this card, this card gets +5000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      }
+    ],
     "5168": [
+      {
+        "family_id": "self_comboed:auto_buff_up_to_n_owner_battles_for_battle_on_combo",
+        "handler_id": "auto_buff_up_to_n_owner_battles_for_battle_on_combo",
+        "handler_params": {
+          "grant_keyword": "Double Strike",
+          "max_cost": -1,
+          "max_targets": 1,
+          "require_owner_attacker": true,
+          "required_characters": "Lt Android 18 Gt",
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if it's your turn, choose 1 clone token from your opponent's battle area and remove it from the game: when you combo with this card, choose up to 1 attacking &lt;android 18&gt; card and it gains [double strike] for the duration of the battle.",
+        "trigger": "self_comboed"
+      },
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
@@ -35461,6 +35663,21 @@
         "trigger": "self_played"
       }
     ],
+    "5242": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] choose 2 clone tokens in your opponent's battle area and remove them from the game: when you play this card, your opponent chooses 1 card from their hand and places it in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
     "5243": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -35702,6 +35919,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "5286": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "required_leader_traits": "Universe 11",
+          "requires_leader": "if your leader card is a \u226auniverse 11\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a \u226auniverse 11\u226b card: when you play this card or it is placed in a drop area from a battle area by a skill, your opponent chooses 1 card in their hand and places it in their drop area; you can't activate {toppo, gaze of justice}'s skill for the duration of the turn.",
+        "trigger": "self_played"
+      }
+    ],
     "5288": [
       {
         "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_turn",
@@ -35879,6 +36113,20 @@
       }
     ],
     "5306": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card with [successor], choose up to 1 of your opponent's battle cards, ignoring [barrier], ko it, then your opponent chooses 1 card in their hand and places it in their drop area.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
@@ -39535,6 +39783,22 @@
         "trigger": "self_played"
       }
     ],
+    "5705": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is \u226aworld tournament\u226b and your opponent has 5 or more cards in their hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, if your leader card is \u226aworld tournament\u226b and your opponent has 5 or more cards in their hand, your opponent chooses 1 card in their hand and places it in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
     "571": [
       {
         "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
@@ -39667,12 +39931,43 @@
         "trigger": "self_played"
       }
     ],
+    "5732": [
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 5000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if one of your blue &lt;bardock&gt; cards is being attacked, this card gets +5000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      }
+    ],
     "5733": [
       {
         "family_id": "self_comboed:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "max_owner_life": 5,
+          "required_leader_traits": "Frieza'S Army",
+          "requires_leader": "if your leader card is a red \u226afrieza's army\u226b card and your life is at 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is a red \u226afrieza's army\u226b card and your life is at 5 or less, draw 1 card, and this card gets +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
           "max_owner_life": 5,
           "required_leader_traits": "Frieza'S Army",
           "requires_leader": "if your leader card is a red \u226afrieza's army\u226b card and your life is at 5 or less"
@@ -40046,6 +40341,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card, if your leader card is a \u226ashenron\u226b card or a green \u226asaiyan\u226b card and your life is at 5 or less, draw 1 card, and this card gets +10000 combo power for the duration of the turn.",
         "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 5,
+          "required_leader_traits": "Shenron",
+          "requires_leader": "if your leader card is a \u226ashenron\u226b card or a green \u226asaiyan\u226b card and your life is at 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is a \u226ashenron\u226b card or a green \u226asaiyan\u226b card and your life is at 5 or less, draw 1 card, and this card gets +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
       }
     ],
     "579": [
@@ -40266,6 +40577,22 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
+          "max_owner_life": 5,
+          "required_leader_traits": "Bardock'S Crew",
+          "requires_leader": "if your leader card is a \u226abardock's crew\u226b card and your life is at 5 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is a \u226abardock's crew\u226b card and your life is at 5 or less, draw 1 card, and this card gets +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
           "max_owner_life": 5,
           "required_leader_traits": "Bardock'S Crew",
           "requires_leader": "if your leader card is a \u226abardock's crew\u226b card and your life is at 5 or less"
@@ -40601,6 +40928,19 @@
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, if there is a card that is both red and green in your energy, draw 1 card, then your opponent chooses 1 card from their hand and places it in their drop area.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
         "handler_params": {
           "amount": 1
         },
@@ -41283,6 +41623,21 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "5930": [
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 5000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 5 or less cards in your hand: when this card is used in a combo, this card gets +5000 combo power for the battle.",
+        "trigger": "self_comboed"
+      }
+    ],
     "5934": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -41895,6 +42250,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is green or yellow",
           "resting": false
         },
@@ -43226,6 +43582,21 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] if you have a green battle card in play other than this card: when you play this card, choose up to 1 of your opponent's battle cards with an energy cost of 2 or less and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "6168": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, your opponent chooses 2 cards in their hand and places them in their drop area.",
         "trigger": "self_played"
       }
     ],
@@ -44715,6 +45086,22 @@
         "trigger": "self_activate_main"
       }
     ],
+    "6418": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is green or yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card using [over realm], if your leader card is green or yellow, choose 1 of your leader cards and it gains +5000 power for the duration of the turn, and your opponent chooses 1 card in their hand and places it in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
     "6421": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -45136,6 +45523,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -46026,6 +46414,21 @@
     ],
     "6605": [
       {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "(blue)\u2460",
+          "requires_comboed_from": "hand",
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue)\u2460: at the end of a battle in which this card is used in a combo from your hand or energy, you may play this card from your drop area.",
+        "trigger": "self_comboed_battle_end"
+      },
+      {
         "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
         "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
@@ -46836,6 +47239,23 @@
     ],
     "6711": [
       {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "\u2460",
+          "required_leader_traits": "Boujack Brigade",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is a \u226aboujack brigade\u226b card",
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto]\u2460, if your leader card is a \u226aboujack brigade\u226b card: at the end of a battle in which this card is used in a combo from your hand or energy, you may play this card from your drop area.",
+        "trigger": "self_comboed_battle_end"
+      },
+      {
         "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
         "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
@@ -47498,6 +47918,22 @@
         "trigger": "self_played"
       }
     ],
+    "6777": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 2,
+          "requires_leader": "if your leader card is green or a \u226aheroine\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is green or a \u226aheroine\u226b card: when you play this card from your hand, your opponent chooses 2 cards in their hand and discards them. this card gains [triple attack] for the turn.",
+        "trigger": "self_played"
+      }
+    ],
     "6778": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -47814,6 +48250,22 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is an \u226aandroid\u226b card: when you play this card, draw 1 card, then at the end of your opponent's next turn, play 1 clone token with 10000 power in your opponent's battle area.",
         "trigger": "owner_other_battle_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_activate_up_to_n_named_field_extra_from_owner_drop",
+        "handler_id": "activate_activate_up_to_n_named_field_extra_from_owner_drop",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "ANDROID 21'S SCHEME",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn](blue)(green), your leader card is an \u226aandroid\u226b card: choose 1 {android 21's scheme} in your drop area and activate it.",
+        "trigger": "self_activate_main"
       }
     ],
     "681": [
@@ -48291,6 +48743,22 @@
         "trigger": "self_activate_main"
       }
     ],
+    "6877": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 3,
+          "min_owner_energy": 5
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 5 or more energy: when you play this card, your opponent chooses 3 cards in their hand and places them in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
     "6878": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -48632,6 +49100,24 @@
         "provenance": "extractor",
         "source_text": "[auto][sparking 5] (this skill takes effect when you have 5 or more cards in your drop area.) when you combo with this card, if your leader card is blue, draw 1 card.",
         "trigger": "self_comboed"
+      }
+    ],
+    "6937": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "(blue)\u2462",
+          "requires_comboed_from": "hand",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto](blue)\u2462: at the end of a battle in which this card is used in a combo from your hand or energy, draw 1 card, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then play this card from your drop area in rest mode.",
+        "trigger": "self_comboed_battle_end"
       }
     ],
     "6940": [
@@ -49061,6 +49547,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose any number of your opponent's battle cards, ignoring [barrier], and place them in their owners' drop areas; at the end of the turn, switch up to 1 of your blue energy to active mode.",
         "trigger": "turn_end"
+      },
+      {
+        "family_id": "self_played:auto_place_any_number_opponent_battle_into_drop_on_play",
+        "handler_id": "auto_place_any_number_opponent_battle_into_drop_on_play",
+        "handler_params": {
+          "ignores_barrier": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose any number of your opponent's battle cards, ignoring [barrier], and place them in their owners' drop areas; at the end of the turn, switch up to 1 of your blue energy to active mode.",
+        "trigger": "self_played"
       }
     ],
     "6994": [
@@ -49347,6 +49846,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7018": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 3,
+          "required_leader_traits": "World Tournament",
+          "requires_leader": "if your leader card is a green \u226aworld tournament\u226b and \uff5btien shinhan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, if your leader card is a green \u226aworld tournament\u226b and \uff5btien shinhan, trading moves\uff5d is in play in your battle area, your opponent chooses 3 cards from their hand and places them in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
     "7019": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -49425,6 +49941,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if your leader card is a green/yellow multicolor &lt;cell&gt; card, you have 4 or more energy, and you choose all of your non-token battle cards and place them in their owners' drop areas: play this card from your hand, and you can't play copies of this card for the turn.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "7028": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader card is blue or green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue or green: when you play this card or use it in a combo from your hand,  your opponent chooses 1 card in their hand and discards it",
+        "trigger": "self_played"
       }
     ],
     "7029": [
@@ -49543,6 +50075,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is yellow or a \u226abardock's crew\u226b card and you choose 1 of your opponent's skill-less battle cards with an energy cost of 4 or less in rest mode",
           "rest_mode_only": true,
           "resting": true
@@ -49838,6 +50371,21 @@
       }
     ],
     "7074": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "(blue)",
+          "requires_comboed_from": "hand",
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue): at the end of a battle in which this card is used in a combo from your hand or energy, you may play this card from your drop area.",
+        "trigger": "self_comboed_battle_end"
+      },
       {
         "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
         "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
@@ -50769,6 +51317,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is yellow, a &lt;son gohan: adolescence&gt; card, or a &lt;piccolo&gt; card",
           "resting": false
         },
@@ -51678,6 +52227,26 @@
         "trigger": "self_comboed_battle_end"
       }
     ],
+    "7314": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "\u2460",
+          "required_leader_traits": "Boujack Brigade",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is a \u226aboujack brigade\u226b card or has {agent of destruction} in its card name",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto]\u2460, if your leader card is a \u226aboujack brigade\u226b card or has {agent of destruction} in its card name: at the end of a battle in which this card is used in a combo from your hand or energy, you may play this card from your drop area in rest mode.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "7316": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -51736,6 +52305,21 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if your leader card is a black &lt;mechikabura&gt;-only card and you choose 1 \u226adark dragon ball\u226b card, 1 black \u226ademon realm race\u226b card, or 1 black \u226ademon god\u226b card in your hand and discard it: draw 2 cards, then your opponent sends 1 battle card from their drop area to their warp.",
         "trigger": "self_activate_extra_from_hand"
+      }
+    ],
+    "7324": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, if there is a &lt;cheelai: br&gt; card in play in your battle area, your opponent chooses 1 card from their hand and places it in their drop area.",
+        "trigger": "self_played"
       }
     ],
     "7327": [
@@ -51854,6 +52438,43 @@
         "trigger": "counter_attack"
       }
     ],
+    "7335": [
+      {
+        "family_id": "self_comboed:auto_add_up_to_n_from_owner_deck_to_hand_on_combo",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_combo",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_leader_traits": "Blue &Lt;Android 18&Gt;",
+          "required_name_contains": "SUPREME TECHNIQUE KRILLIN",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is a blue &lt;android 18&gt; card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is a blue &lt;android 18&gt; card and you choose 1 of your opponent's clone tokens and remove it from the game: when this card is used in a combo from your hand, add up to 1 {supreme technique krillin} from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "auto_cost_header": "(blue)",
+          "required_leader_traits": "Blue &Lt;Android 18&Gt;",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is a blue &lt;android 18&gt; card",
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto](blue), if your leader card is a blue &lt;android 18&gt; card: at the end of a battle in which this card is used in a combo from your hand, play this card from your drop area.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "7337": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -51944,6 +52565,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, add up to 1 card from your life to your hand, look at up to 5 cards from the top of your deck, add up to 1 card among them to your hand, then shuffle your deck. if you added a card to your hand, choose 1 card in your hand and discard it.",
         "trigger": "self_attacks"
+      }
+    ],
+    "7348": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 of your opponent's battle cards with an energy cost of 5 or less, place it in its owner's energy in rest mode, then your opponent chooses 1 card in their hand and places it in their drop area.",
+        "trigger": "self_played"
       }
     ],
     "7350": [
@@ -53169,6 +53806,23 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7495": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card has &lt;vegeta&gt; in its character name",
+          "resting": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card has &lt;vegeta&gt; in its character name: at the end of a battle in which this card is used in a combo from your hand, play this card from your drop area.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
     "7496": [
       {
         "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
@@ -53829,6 +54483,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "required_leader_traits": "Z-Leader,If You Have A Blue Z-Card In Play: At The End Of A Battle In Which This",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader is blue, and if your leader is a z-leader or if you have a blue z-card in play",
           "resting": false
         },
@@ -54447,6 +55102,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader's back side is {vegeta, awakened feelings}, your opponent has 2 oor more energy, and it's your opponen",
           "resting": false
         },
@@ -59361,6 +60017,22 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_comboed:auto_add_up_to_n_from_owner_deck_to_hand_on_combo",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_combo",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "max_cost": 3,
+          "max_targets": 1,
+          "required_characters": "Broly: Br"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] place 1 card from your hand at the bottom of your deck: when this card is used in a combo, add up to 1 blue <broly: br> card with an energy cost of 3 from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_comboed"
       }
     ],
     "8160": [
@@ -61984,6 +62656,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": 1,
@@ -62000,6 +62673,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "required_leader_traits": "Boujack Brigade",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader is a blue \u226aboujack brigade\u226b card",
           "resting": false
         },
@@ -62062,6 +62736,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "{u}{g}",
+          "requires_comboed_from": "hand",
           "requires_owner_turn": true,
           "rest_mode_only": true,
           "resting": true
@@ -63287,6 +63962,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": 1,

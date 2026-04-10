@@ -398,6 +398,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "(black)",
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -1088,6 +1089,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -1736,6 +1738,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "required_leader_traits": "Universe 6",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a \u226auniverse 6\u226b card",
           "rest_mode_only": true,
           "resting": true
@@ -1788,6 +1791,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "\u2461",
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -1805,6 +1809,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "auto_cost_header": "\u2461",
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": null,
@@ -2455,6 +2460,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },
@@ -2471,6 +2477,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is blue",
           "rest_mode_only": true,
           "resting": true
@@ -2930,6 +2937,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "min_owner_energy": 3,
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is green and you have 3 or more energy",
           "resting": false
         },
@@ -3939,6 +3947,7 @@
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
           "required_leader_traits": "&Lt;Great Priest&Gt;",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a &lt;great priest&gt; card and you have 1 or more multicolor energy",
           "resting": false
         },
@@ -3968,6 +3977,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": 1,
@@ -3983,6 +3993,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "resting": false
         },
         "limit_per_turn": null,
@@ -4547,6 +4558,7 @@
           "auto_cost_header": "(black)",
           "min_total_players_energy": 3,
           "required_leader_traits": "Saiyan",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
           "rest_mode_only": true,
           "resting": true
@@ -4802,6 +4814,7 @@
           "auto_cost_header": "(black)",
           "min_total_players_energy": 3,
           "required_leader_traits": "Saiyan",
+          "requires_comboed_from": "hand",
           "requires_leader": "if your leader card is a black \u226asaiyan\u226b card and there's a total of 3 or more energy between you and your opponent",
           "rest_mode_only": true,
           "resting": true
@@ -5096,6 +5109,7 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
+          "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
         },

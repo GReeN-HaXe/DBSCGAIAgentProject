@@ -607,6 +607,50 @@ def test_extract_exact_android_18_leader_clone_token_activate_line() -> None:
     assert "schedule_main_phase_energy_max_targets" not in rule.handler_params
 
 
+def test_extract_exact_bt20_android_21_front_activate_searches_and_buffs_self() -> None:
+    card = replace(
+        _card(
+            "[Permanent] You can't activate Extras, and during your turn, you can't use skills to play Battle Cards.<br>"
+            "[Auto] If you have an <Android 21> Z-Battle Card in play: At the end of your turn, switch up to 1 of your blue energy to Active Mode.<br>"
+            "[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue ≪Android≫ card among them to your hand, shuffle your deck, and this card gets +5000 power for the turn.<br>"
+            "[Awaken] When your life is at 4 or less: Draw 1 card, and switch up to 1 of your energy to Active Mode."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert rule.handler_params["look_count"] == 5
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert str(rule.handler_params["required_traits"]).lower() == "android"
+    assert rule.handler_params["power_delta"] == 5000
+
+
+def test_extract_exact_bt20_android_21_back_draws_and_switches_opponent_board_active() -> None:
+    card = replace(
+        _card(
+            "[Permanent] During your turn, you can't use skills to play Battle Cards.<br>"
+            "[Permanent] When paying energy costs for your <Android 21> cards, you can use your <Android 21> Z-Battle Cards and your opponent's Battle Cards and Unisons as energy.<br>"
+            "[Activate: Main][Once per turn] Draw 1 card, and choose up to 3 of your opponent's Battle Cards and/or Unisons, ignoring [Barrier], and switch them to Active Mode."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_draw_n_and_switch_up_to_n_opponent_battle_or_unison_active"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["max_targets"] == 3
+    assert rule.handler_params["ignores_barrier"] is True
+
+
 def test_extract_exact_the_android_creator_draws_and_buffs_owner_battle() -> None:
     card = replace(
         _card(
@@ -689,6 +733,71 @@ def test_extract_exact_clone_token_unison_minus_four_line() -> None:
     rule = next(r for r in rules if r.trigger == "self_activate_battle" and r.handler_id == "activate_gain_power_and_keyword_for_turn")
     assert rule.handler_params["power_delta"] == 11000
     assert rule.handler_params["grant_keyword"] == "Double Strike"
+
+
+def test_extract_exact_clone_token_combo_draw_line() -> None:
+    card = _card(
+        "[Auto] If it's your turn, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+        "When you combo with this card, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_draw_n")
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["requires_owner_turn"] is True
+
+
+def test_extract_exact_clone_token_combo_power_line() -> None:
+    card = _card(
+        "[Auto] If it's your turn, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+        "When you combo with this card, this card gets +5000 combo power for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_self_gain_combo_power_on_combo")
+    assert rule.handler_params["combo_power_delta"] == 5000
+    assert rule.handler_params["requires_owner_turn"] is True
+    assert "requires_comboed_from" not in rule.handler_params
+
+
+def test_extract_exact_pincer_attack_android_18_combo_line() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a blue <Android 18> card and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+        "When this card is used in a combo from your hand, add up to 1 {Supreme Technique Krillin} from your deck to your hand, then shuffle your deck.<br>"
+        "[Auto](Blue), if your Leader Card is a blue <Android 18> card: At the end of a battle in which this card is used in a combo from your hand, play this card from your Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    combo_rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_on_combo")
+    assert combo_rule.handler_params["max_targets"] == 1
+    assert combo_rule.handler_params["requires_comboed_from"] == "hand"
+    assert combo_rule.handler_params["required_name_contains"] == "SUPREME TECHNIQUE KRILLIN"
+    battle_end_rule = next(r for r in rules if r.trigger == "self_comboed_battle_end" and r.handler_id == "auto_play_self_from_combo_on_battle_end")
+    assert battle_end_rule.handler_params["requires_comboed_from"] == "hand"
+
+
+def test_extract_exact_supreme_technique_krillin_combo_line() -> None:
+    card = _card(
+        "[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card.)<br>"
+        "[Auto] If it's your turn, choose 1 Clone Token from your opponent's Battle Area and remove it from the game: "
+        "When you combo with this card, choose up to 1 attacking <Android 18> card and it gains [Double Strike] for the duration of the battle. <br>"
+        "[Auto](Blue), during your turn: When you combo with this card from your hand with an <Android 18> card in battle, play this card at the end of the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    combo_rule = next(r for r in rules if r.trigger == "self_comboed" and r.handler_id == "auto_buff_up_to_n_owner_battles_for_battle_on_combo")
+    assert combo_rule.handler_params["max_targets"] == 1
+    assert combo_rule.handler_params["grant_keyword"] == "Double Strike"
+    assert combo_rule.handler_params["require_owner_attacker"] is True
+    assert combo_rule.handler_params["required_characters"] == "Android 18"
+
+
+def test_extract_exact_supreme_technique_son_goku_play_line() -> None:
+    card = _card(
+        "[Blocker] <br>[Arrival Blue/Green](Blue) (Play this card from your hand when you have blue and green cards in your Combo Area.)<br>"
+        "[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)<br>"
+        "[Auto] Choose 2 Clone Tokens in your opponent's Battle Area and remove them from the game: "
+        "When you play this card, your opponent chooses 1 card from their hand and places it in their Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_opponent_discards_n_from_hand_on_play")
+    assert rule.handler_params["amount"] == 1
 
 
 def test_extract_self_played_can_play_shadow_token_and_grant_blocker_for_turn() -> None:
@@ -5538,6 +5647,41 @@ def test_extract_power_absorption_and_release_rules() -> None:
     assert leave_rule.handler_params["required_characters"] == "Android 17,Hell Fighter 17"
 
 
+def test_extract_exact_android_21_in_the_name_of_hunger_rules() -> None:
+    card = _card(
+        "[Unique][Blocker]<br>[Z-Stack 2] Battle Cards.<br>"
+        "[Permanent] You may choose up to 1 of your opponent's Battle Cards when choosing cards for this card's [Z-Stack] conditions.<br>"
+        "[Auto] When this card is played, you may place the top card of your deck in your energy in Rest Mode, and choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.<br>"
+        "[Activate: Main][Once per turn] Choose up to 1 keyword skill on a card placed under this card, and this card gains that skill until the end of your opponent's next turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    auto_rule = next(r for r in rules if r.handler_id == "auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play")
+    assert auto_rule.trigger == "self_played"
+    assert auto_rule.handler_params["max_targets"] == 1
+    activate_rule = next(r for r in rules if r.handler_id == "activate_gain_keyword_from_under_self_until_opponent_turn_end")
+    assert activate_rule.trigger == "self_activate_main"
+    assert activate_rule.handler_params["min_source_stacked_cards"] == 1
+
+
+def test_extract_exact_android_21_ceaseless_despair_rules() -> None:
+    card = _card(
+        "[Energy-Exhaust][Deflect][Double Strike][Dual Attack]<br>"
+        "[Permanent] While your Leader is a blue <Android 21> card, reduce the combo cost of this card in your hand by 1.<br>"
+        "[Auto] When this card is played, choose any number of your opponent's Battle Cards, ignoring [Barrier], and place them in their owners' Drops.<br>"
+        "[Auto][Once per turn] When your opponent activates a [Counter] skill, they discard 2 cards from their hand.<br>"
+        "[Auto] At the end of your turn, switch up to 5 of your energy to Active Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(r for r in rules if r.handler_id == "auto_place_any_number_opponent_battle_into_drop_on_play")
+    assert play_rule.trigger == "self_played"
+    assert play_rule.handler_params["ignores_barrier"] is True
+    counter_rule = next(r for r in rules if r.handler_id == "auto_opponent_discards_n_from_hand_on_opponent_counter_activated")
+    assert counter_rule.trigger == "owner_opponent_counter_activated"
+    assert counter_rule.handler_params["amount"] == 2
+    turn_end_rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_owner_energy_active_on_turn_end")
+    assert turn_end_rule.handler_params["max_targets"] == 5
+
+
 def test_extract_super_17_ultimate_masterpiece_rules() -> None:
     card = _card(
         "[Blocker] "
@@ -5813,6 +5957,11 @@ def test_extract_exact_android_21_mandatory_gathering_searches_then_schedules_cl
     assert token_rule.handler_params["power"] == 10000
     assert token_rule.handler_params["controller_player_scope"] == "opponent"
     assert token_rule.handler_params["trigger_player_scope"] == "opponent"
+    combo_token_rule = next(rule for rule in rules if rule.trigger == "self_comboed" and rule.handler_id == "auto_play_token_in_battle_on_combo")
+    assert combo_token_rule.handler_params["amount"] == 1
+    assert combo_token_rule.handler_params["token_name"] == "clone token"
+    assert combo_token_rule.handler_params["requires_comboed_from"] == "hand"
+    assert combo_token_rule.handler_params["controller_player_scope"] == "opponent"
 
 
 def test_extract_exact_android_21_the_ringleader_draws_then_schedules_clone_token() -> None:
@@ -5829,6 +5978,14 @@ def test_extract_exact_android_21_the_ringleader_draws_then_schedules_clone_toke
     assert token_rule.handler_params["token_name"] == "clone token"
     assert token_rule.handler_params["power"] == 10000
     assert token_rule.handler_params["controller_player_scope"] == "opponent"
+    activate_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main" and rule.handler_id == "activate_activate_up_to_n_named_field_extra_from_owner_drop"
+    )
+    assert activate_rule.handler_params["max_targets"] == 1
+    assert activate_rule.handler_params["required_name_contains"] == "ANDROID 21'S SCHEME"
+    assert activate_rule.handler_params["required_card_type"] == "EXTRA"
+    assert activate_rule.handler_params["requires_field_keyword"] is True
 
 
 def test_extract_exact_android_21_a_brilliant_idea_schedules_two_clone_tokens() -> None:

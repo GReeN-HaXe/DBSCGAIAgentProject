@@ -679,6 +679,111 @@ def test_extract_exact_clone_token_unison_marker_and_removal_cost_rules() -> Non
     }
 
 
+def test_extract_exact_clone_token_combo_draw_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] If it's your turn, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "When you combo with this card, draw 1 card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_clone_token_combo_power_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] If it's your turn, choose 1 Clone Token in your opponent's Battle Area and remove it from the game: "
+            "When you combo with this card, this card gets +5000 combo power for the duration of the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_pincer_attack_android_18_combo_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Auto] If your Leader Card is a blue <Android 18> card and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
+            "When this card is used in a combo from your hand, add up to 1 {Supreme Technique Krillin} from your deck to your hand, then shuffle your deck.<br>"
+            "[Auto](Blue), if your Leader Card is a blue <Android 18> card: At the end of a battle in which this card is used in a combo from your hand, play this card from your Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_supreme_technique_krillin_combo_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card.)<br>"
+            "[Auto] If it's your turn, choose 1 Clone Token from your opponent's Battle Area and remove it from the game: "
+            "When you combo with this card, choose up to 1 attacking <Android 18> card and it gains [Double Strike] for the duration of the battle. <br>"
+            "[Auto](Blue), during your turn: When you combo with this card from your hand with an <Android 18> card in battle, play this card at the end of the battle."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_combo_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 1,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
+def test_extract_exact_supreme_technique_son_goku_play_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Blocker] <br>[Arrival Blue/Green](Blue) (Play this card from your hand when you have blue and green cards in your Combo Area.)<br>"
+            "[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)<br>"
+            "[Auto] Choose 2 Clone Tokens in your opponent's Battle Area and remove them from the game: "
+            "When you play this card, your opponent chooses 1 card from their hand and places it in their Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "auto_on_play_battle": [
+            {
+                "kind": "send_opponent_battle_to_removed",
+                "amount": 2,
+                "required_name_contains": "CLONE TOKEN",
+                "required_card_types": "BATTLE",
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_discard_hand_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -754,6 +859,19 @@ def test_extract_activate_main_remove_opponent_clone_token_to_removed_cost_rule(
             }
         ]
     }
+
+
+def test_extract_exact_bt20_android_21_front_activate_life_to_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Permanent] You can't activate Extras, and during your turn, you can't use skills to play Battle Cards. "
+            "[Auto] If you have an <Android 21> Z-Battle Card in play: At the end of your turn, switch up to 1 of your blue energy to Active Mode. "
+            "[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue ≪Android≫ card among them to your hand, shuffle your deck, and this card gets +5000 power for the turn. "
+            "[Awaken] When your life is at 4 or less: Draw 1 card, and switch up to 1 of your energy to Active Mode."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules["activate_main"] == [{"kind": "add_life_to_hand", "amount": 1}]
 
 
 def test_extract_activate_main_unison_remove_owner_saibaiman_token_to_removed_cost_rule() -> None:

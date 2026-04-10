@@ -3971,3 +3971,99 @@ When adding a new TODO:
     - widened shared runtime support so:
       - `activate_buff_owner_leader_for_turn` now honors leader filters and can schedule name-based next-turn attack restrictions
       - `activate_gain_power_and_keyword_for_turn` now also resolves for `self_activate_battle`
+  - widened the adjacent Clone Token combo/removal seam:
+    - fixed the real shared combo runtime gap:
+      - flat `self_comboed -> auto_self_gain_combo_power_on_combo` now pays printed `auto_on_combo_battle` costs
+    - widened shared Clone Token removal cost extraction so it now also handles:
+      - `choose 1 of your opponent's Clone Tokens and remove it from the game`
+      - on both:
+        - `auto_on_combo_battle`
+        - `auto_on_play_battle`
+    - opened the shared combo search family:
+      - `self_comboed:auto_add_up_to_n_from_owner_deck_to_hand_on_combo`
+    - widened shared combo owner-battle buff handling so it can also:
+      - require the current owner attacker
+      - grant a keyword for the battle without needing a power rider
+    - widened generic combo battle-end self replay so it also accepts:
+      - `this card is used in a combo`
+      - not only `was used in a combo`
+    - fixed the shared battle-end replay seam:
+      - combo battle-end self replay now only pays the later auto header cost
+      - it no longer incorrectly tries to re-pay the earlier combo-time Clone Token removal cost
+    - widened shared on-play discard extraction/runtime so:
+      - `When you play this card, your opponent chooses 1 card from their hand and places it in their Drop Area`
+        now reuses `auto_opponent_discards_n_from_hand_on_play`
+      - that family now also pays printed `auto_on_play_battle` costs when present
+    - locked adjacent exact Clone Token siblings on the shared path:
+      - `P-297 Pincer Attack Android 18`
+        - combo-time Clone Token removal cost
+        - add `{Supreme Technique Krillin}` from deck to hand
+        - battle-end self replay from Drop
+      - `BT8-030 Supreme Technique Krillin`
+        - combo-time Clone Token removal cost
+        - grant the attacking `<Android 18>` `[Double Strike]` for the battle
+        - battle-end self replay
+      - `BT8-117 Supreme Technique Son Goku`
+        - on-play remove `2` opponent `Clone Token`s
+        - opponent chooses `1` card from hand and places it in Drop
+  - widened the adjacent Android 21 / Clone Token field-extra seam:
+    - added the shared `Activate: Main` family:
+      - `activate_activate_up_to_n_named_field_extra_from_owner_drop`
+    - widened named field-extra activation so it can now source from:
+      - `Drop`
+      - not only `deck` / `z_deck`
+    - locked adjacent exact Android 21 siblings on the shared path:
+      - `BT20-029 Android 21, Mandatory Gathering`
+        - exact combo-from-hand line now regression-backed:
+          - play `1` `Clone Token` in the opponent's Battle Area
+      - `BT8-023 Android 21, the Ringleader`
+        - exact `Activate: Main` line now regression-backed:
+          - choose `1` `{Android 21's Scheme}` in your Drop and activate it
+        - exact runtime now proves the full chain:
+          - `Scheme` moves from `Drop` into play
+          - `Scheme` registers correctly
+          - `Scheme` fires at the start of the opponent's Main Phase and plays `2` `Clone Tokens`
+## Adjacent Android 21 leader front/back slice complete
+
+- widened shared `Activate: Main` skill-cost extraction with:
+  - `add_life_to_hand`
+- widened shared `self_activate_main -> auto_look_top_add_up_to_one_to_hand_on_play`
+  - it now supports an optional self `power_delta` rider for the turn
+- added a new shared activate family:
+  - `self_activate_main:activate_draw_n_and_switch_up_to_n_opponent_battle_or_unison_active`
+- locked exact front/back coverage for:
+  - `BT20-024 Android 21`
+  - `Android 21, the Nature of Evil`
+- exact runtime now proves:
+  - front-side life cost
+  - top-5 blue `≪Android≫` search
+  - self `+5000` for the turn
+  - adjacent blue-energy restand at owner turn end with an `Android 21` Z-Battle in play
+  - awaken draw + energy restand
+  - back-side draw + switch up to 3 opponent Battle Cards and/or Unisons to Active Mode ignoring `[Barrier]`
+
+## Adjacent Android 21 hunger / despair slice complete
+
+- widened the Android 21 extractor seam so exact `BT20-028 Android 21, in the Name of Hunger` now maps onto the existing shared families:
+  - `self_played:auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play`
+  - `self_activate_main:activate_gain_keyword_from_under_self_until_opponent_turn_end`
+- added a new shared self-played family:
+  - `self_played:auto_place_any_number_opponent_battle_into_drop_on_play`
+  - first locked with:
+    - `Android 21, Ceaseless Despair`
+- added a new shared trigger/event seam:
+  - `owner_opponent_counter_activated`
+  - driven by a real `counter_skill_activated` engine event emitted on counter declaration
+- added a new shared punishment family on that seam:
+  - `owner_opponent_counter_activated:auto_opponent_discards_n_from_hand_on_opponent_counter_activated`
+  - first locked with:
+    - `Android 21, Ceaseless Despair`
+- exact runtime now proves:
+  - `In the Name of Hunger`
+    - top-deck to energy in Rest Mode
+    - bottom-deck opponent Battle
+    - gains a keyword from under itself until the end of the opponent's next turn
+  - `Ceaseless Despair`
+    - sends all opponent Battle Cards to Drop ignoring `[Barrier]`
+    - punishes real opponent counter declarations with discard 2
+    - restands up to 5 energy at end of turn

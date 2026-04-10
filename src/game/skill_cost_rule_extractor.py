@@ -55,6 +55,10 @@ _ACTIVATE_MAIN_BATTLE_Z_ENERGY_TO_DROP_AND_REMOVE_SELF_RE = re.compile(
 _ACTIVATE_MAIN_ENERGY_TO_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,220}?place (\d+) of your energy into (?:its|their) owner'?s drop(?:[^:]{0,120})?\s*:"
 )
+_ACTIVATE_MAIN_LIFE_TO_HAND_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?add (\d+) card(?:s)? from your life to your hand\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_REST_SELF_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?switch this card to rest mode\s*:",
     re.IGNORECASE,
@@ -161,6 +165,14 @@ _AUTO_ON_COMBO_GENERIC_ENERGY_TO_DROP_RE = re.compile(
 )
 _AUTO_ON_COMBO_LEADER_UNDER_TO_DROP_RE = re.compile(
     r"place (\d+) (.+?) from under your leader in (?:its|their) owner'?s drop\s*:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
+_AUTO_ON_COMBO_OPPONENT_BATTLE_TO_REMOVED_RE = re.compile(
+    r"(?:remove (\d+) of your opponent'?s (.+?) from the game|choose (\d+) of your opponent'?s (.+?) and remove (?:it|them) from the game|choose (\d+) (.+?) (?:in|from) your opponent'?s battle area and remove (?:it|them) from the game)\s*:\s*when (?:this card is used in a combo|you combo with this card)",
+    re.IGNORECASE,
+)
+_AUTO_ON_PLAY_OPPONENT_BATTLE_TO_REMOVED_RE = re.compile(
+    r"(?:remove (\d+) of your opponent'?s (.+?) from the game|choose (\d+) of your opponent'?s (.+?) and remove (?:it|them) from the game|choose (\d+) (.+?) (?:in|from) your opponent'?s battle area and remove (?:it|them) from the game)\s*:\s*when (?:this card is played|you play this card)",
     re.IGNORECASE,
 )
 _AUTO_ON_SELF_DROP_ENERGY_TO_DROP_RE = re.compile(
@@ -634,6 +646,14 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
                 "amount": int(m_activate_main_energy_to_drop.group(1)),
             }
         ]
+    m_activate_main_life_to_hand = _ACTIVATE_MAIN_LIFE_TO_HAND_RE.search(text)
+    if m_activate_main_life_to_hand:
+        rules.setdefault("activate_main", []).append(
+            {
+                "kind": "add_life_to_hand",
+                "amount": int(m_activate_main_life_to_hand.group(1)),
+            }
+        )
     if _ACTIVATE_MAIN_REST_SELF_RE.search(text):
         rules.setdefault("activate_main", []).insert(
             0,
@@ -871,6 +891,44 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             _extract_leader_under_to_drop_cost(
                 str(m_auto_on_combo_leader_under_to_drop.group(2) or "").strip(),
                 int(m_auto_on_combo_leader_under_to_drop.group(1)),
+            )
+        ]
+    m_auto_on_combo_opponent_battle_to_removed = _AUTO_ON_COMBO_OPPONENT_BATTLE_TO_REMOVED_RE.search(text)
+    if m_auto_on_combo_opponent_battle_to_removed:
+        rules["auto_on_combo_battle"] = [
+            _extract_filtered_cost_step(
+                "send_opponent_battle_to_removed",
+                str(
+                    m_auto_on_combo_opponent_battle_to_removed.group(2)
+                    or m_auto_on_combo_opponent_battle_to_removed.group(4)
+                    or m_auto_on_combo_opponent_battle_to_removed.group(6)
+                    or ""
+                ).strip(),
+                int(
+                    m_auto_on_combo_opponent_battle_to_removed.group(1)
+                    or m_auto_on_combo_opponent_battle_to_removed.group(3)
+                    or m_auto_on_combo_opponent_battle_to_removed.group(5)
+                    or 0
+                ),
+            )
+        ]
+    m_auto_on_play_opponent_battle_to_removed = _AUTO_ON_PLAY_OPPONENT_BATTLE_TO_REMOVED_RE.search(text)
+    if m_auto_on_play_opponent_battle_to_removed:
+        rules["auto_on_play_battle"] = [
+            _extract_filtered_cost_step(
+                "send_opponent_battle_to_removed",
+                str(
+                    m_auto_on_play_opponent_battle_to_removed.group(2)
+                    or m_auto_on_play_opponent_battle_to_removed.group(4)
+                    or m_auto_on_play_opponent_battle_to_removed.group(6)
+                    or ""
+                ).strip(),
+                int(
+                    m_auto_on_play_opponent_battle_to_removed.group(1)
+                    or m_auto_on_play_opponent_battle_to_removed.group(3)
+                    or m_auto_on_play_opponent_battle_to_removed.group(5)
+                    or 0
+                ),
             )
         ]
     m_auto_on_self_drop_energy_to_drop = _AUTO_ON_SELF_DROP_ENERGY_TO_DROP_RE.search(text)
