@@ -13,6 +13,7 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
     unmatched_rows = extractor_report.get("unmatched_top_templates", [])
     candidates: dict[str, dict[str, Any]] = {}
     family_index: dict[str, dict[str, Any]] = {}
+    family_prefix_index: list[tuple[str, dict[str, Any]]] = []
 
     def _merge_family_stats(candidate: dict[str, Any], row: dict[str, Any]) -> None:
         implemented = int(row.get("implemented_card_count", 0))
@@ -55,6 +56,9 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
             },
         )
         family_row = family_index.get(template)
+        if family_row is None and template.endswith("..."):
+            prefix = template[:-3].rstrip()
+            family_row = next((row for family_template, row in family_prefix_index if family_template.startswith(prefix)), None)
         if family_row is not None:
             _merge_family_stats(candidate, family_row)
         return candidate
@@ -66,6 +70,7 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
         if not template:
             continue
         family_index[template] = row
+        family_prefix_index.append((template, row))
 
     for row in priority_rows:
         if not isinstance(row, dict):

@@ -862,6 +862,74 @@ def test_extract_blocker_keyword_only_noop() -> None:
     assert rule.source_text.strip().lower() == "[blocker]"
 
 
+def test_extract_field_reminder_text_noop() -> None:
+    card = _card(
+        "[Field] (Place and activate this card in your Battle Area. It remains in your Battle Area until you activate another [Field]. "
+        "When you do, place this card in its owner's Drop Area.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    assert "[field]" in rule.source_text.lower()
+
+
+def test_extract_aegis_reminder_text_noop() -> None:
+    card = _card(
+        "[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand "
+        "in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)"
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_aegis_activated" and r.handler_id == "noop_auto")
+    assert "[aegis blue/yellow]" in rule.source_text.lower()
+
+
+def test_extract_counter_attack_play_this_card_reminder_noop() -> None:
+    card = _card("[Counter: Attack] Negate the attack and play this card. ([Counter] is activated from your hand by paying the card's energy cost.)")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "counter_attack" and r.handler_id == "noop_auto")
+    assert "negate the attack and play this card" in rule.source_text.lower()
+
+
+def test_extract_double_strike_reminder_text_noop() -> None:
+    card = _card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_attacks" and r.handler_id == "noop_auto")
+    assert "[double strike]" in rule.source_text.lower()
+
+
+def test_extract_dual_attack_reminder_text_noop() -> None:
+    card = _card("[Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle.)")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_attacks_battle_end" and r.handler_id == "noop_auto")
+    assert "[dual attack]" in rule.source_text.lower()
+
+
+def test_extract_energy_exhaust_reminder_text_noop() -> None:
+    card = _card("[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)")
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    assert "[energy-exhaust]" in rule.source_text.lower()
+
+
+def test_extract_field_extra_placed_add_matching_from_owner_deck_to_hand() -> None:
+    card = _card(
+        "[Field] (Place and activate this card in your Battle Area. It remains in your Battle Area until you activate another [Field]. "
+        "When you do, place this card in its owner's Drop Area.)<br>"
+        "[Auto] When this card is placed in a Battle Area, choose up to 1 green ≪Great Ape≫ card from your deck, add it to your hand, then shuffle your deck.<br>"
+        "[Activate: Main] Switch this card to Rest Mode: Choose up to 1 red or green ≪Saiyan≫ card in your Battle Area, and it gets +5000 power for the duration of the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_field_extra_placed"
+        and r.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_on_play"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "green"
+    assert rule.handler_params["required_traits"] == "Great Ape"
+    assert rule.handler_params["shuffle_deck_after"] is True
+
+
 def test_extract_activate_main_add_dragon_ball_from_deck_or_life_to_hand() -> None:
     card = _card(
         "[Permanent] This card can't attack.<br>"
@@ -4391,6 +4459,56 @@ def test_extract_self_ko_can_play_up_to_n_named_from_owner_drop_rule() -> None:
     assert rule.handler_params["required_name_contains"] == "NEGATIVE ENERGY FOUR-STAR BALL"
 
 
+def test_extract_self_left_battle_choose_play_hirudegarn_or_draw_rule() -> None:
+    card = _card(
+        "[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, choose one-<br>"
+        "・ Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 3 from your deck or hand, play it, then shuffle your deck if you looked through it.<br>"
+        "・ Draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r for r in rules
+        if r.trigger == "self_left_battle_area"
+        and r.handler_id == "auto_choose_play_up_to_n_from_owner_deck_or_hand_or_secondary_on_self_left_battle"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_characters"] == "Hirudegarn"
+    assert rule.handler_params["min_cost"] == 3
+    assert rule.handler_params["max_cost"] == 3
+    assert rule.handler_params["secondary_mode"] == "draw"
+    assert rule.handler_params["secondary_amount"] == 1
+
+
+def test_extract_self_left_battle_choose_play_hirudegarn_or_opponent_discard_rule() -> None:
+    card = _card(
+        "[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, choose one-<br>"
+        "・ Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 4 from your deck or hand, play it, then shuffle your deck if you looked through it.<br>"
+        "・ Your opponent chooses 1 card in their hand and discards it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r for r in rules
+        if r.trigger == "self_left_battle_area"
+        and r.handler_id == "auto_choose_play_up_to_n_from_owner_deck_or_hand_or_secondary_on_self_left_battle"
+    )
+    assert rule.handler_params["required_characters"] == "Hirudegarn"
+    assert rule.handler_params["min_cost"] == 4
+    assert rule.handler_params["max_cost"] == 4
+    assert rule.handler_params["secondary_mode"] == "opponent_discard"
+    assert rule.handler_params["secondary_amount"] == 1
+
+
+def test_extract_on_play_switch_up_to_n_opponent_battle_rest_rule() -> None:
+    card = _card(
+        "[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_switch_up_to_n_opponent_battle_rest_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_cost"] == 4
+
+
 def test_extract_activate_main_battle_can_play_self_from_hand_rule() -> None:
     card = _card(
         "[Activate: Main/Battle][Limit 1]{1}, if your Leader is a card with <SH> in its character name and you or your opponent has 3 or more energy: Play this card from your hand."
@@ -6178,6 +6296,48 @@ def test_extract_leader_attack_discard_matching_hand_then_draw_from_hand_variant
     assert rule.handler_params["required_card_type"] == "BATTLE"
 
 
+def test_extract_owner_battle_attack_gain_power_then_add_dragon_ball_from_deck_or_life() -> None:
+    card = replace(
+        _card(
+            "[Auto][Once per turn] When one of your Battle Cards attacks, it gets +5000 power for the duration of the turn, "
+            "then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. "
+            "Then shuffle any areas you looked through.<br>"
+            "[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 ≪Desire≫ card in your Drop Area, add it to your hand, and flip this card over."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_battle_attacks"
+        and r.handler_id == "auto_owner_battle_gain_power_then_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_attack"
+    )
+    assert rule.handler_params["power_delta"] == 5000
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["source_pool"] == "deck_or_life"
+    assert rule.handler_params["required_runtime_labels"] == "dragon ball"
+    assert rule.handler_params["shuffle_searched_zones"] is True
+
+
+def test_extract_self_aegis_mill_if_no_other_matching_owner_battle() -> None:
+    card = _card(
+        "[Barrier]<br>"
+        "[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)<br>"
+        "[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)<br>"
+        "[Auto] When this card activates [Aegis], if there are no ≪Evil Incarnate≫ cards in play in your Battle Area other than this card, place 1 card from the top of your opponent's deck in their Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_aegis_activated"
+        and r.handler_id == "auto_place_top_n_from_opponent_deck_into_drop_on_aegis"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["required_no_other_owner_traits"] == "Evil Incarnate"
+
+
 def test_extract_on_play_add_matching_red_extra_without_keywords_from_drop_to_hand() -> None:
     card = _card(
         "[Auto] When this card is played, add up to 1 red Extra Card with an energy cost of 1 and no keyword skills from your Drop Area to your hand.<br>"
@@ -6191,6 +6351,19 @@ def test_extract_on_play_add_matching_red_extra_without_keywords_from_drop_to_ha
     assert rule.handler_params["required_card_type"] == "EXTRA"
     assert rule.handler_params["max_cost"] == 1
     assert rule.handler_params["requires_no_keywords"] is True
+
+
+def test_extract_when_discarded_by_union_fusion_can_add_life_to_hand() -> None:
+    card = _card(
+        "[Auto] When this card is played, add up to 1 red Extra Card with an energy cost of 1 and no keyword skills from your Drop Area to your hand.<br>"
+        "[Auto] When this card is discarded from your hand by a [Union-Fusion] skill, add up to 1 card from your life to your hand."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_add_up_to_n_from_owner_life_to_hand_on_hand_drop")
+    assert rule.trigger == "self_in_hand_sent_to_drop_or_warp"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_destination_zone"] == "drop"
+    assert rule.handler_params["required_drop_causes"] == "union_fusion"
 
 
 def test_extract_exact_cell_pursuit_of_despair_plays_up_to_two_cell_jr_tokens_and_buffs_them() -> None:

@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 358,
+  "effect_rule_count": 364,
   "rules": {
     "10": [
       {
@@ -1795,6 +1795,17 @@
     ],
     "216": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_params": {
@@ -1861,6 +1872,19 @@
         "provenance": "extractor",
         "source_text": "[auto][limit 1] if your leader card is a blue \u226abardock's crew\u226b card, your life is at 3 or less, and you have 3 or more energy: when this card is used in a combo from your hand, choose up to 1 mono-blue <bardock> card with an energy cost of 5 or less in your hand and play it in rest mode.",
         "trigger": "self_comboed"
+      }
+    ],
+    "222": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
       }
     ],
     "224": [
@@ -1942,6 +1966,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](green)/(yellow), if there are 2 or more \u226aturles crusher corps\u226b cards in play in your battle area: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "227": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
       }
     ],
     "228": [
@@ -4260,6 +4297,19 @@
         "trigger": "self_played"
       }
     ],
+    "387": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
     "388": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -4303,6 +4353,17 @@
     ],
     "390": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
@@ -4334,6 +4395,17 @@
       }
     ],
     "391": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
@@ -4382,6 +4454,17 @@
     ],
     "397": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
         "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
@@ -4393,6 +4476,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "399": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       }
     ],
@@ -4434,6 +4530,17 @@
       }
     ],
     "400": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
@@ -4633,23 +4740,6 @@
         "trigger": "self_played"
       }
     ],
-    "416": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "min_owner_drop": 5,
-          "requires_leader": "if your leader card is yellow"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][sparking 5] if your leader card is yellow: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
     "42": [
       {
         "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
@@ -4688,72 +4778,18 @@
         "trigger": "self_played"
       }
     ],
-    "420": [
+    "43": [
       {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 3,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_traits": "God"
-        },
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
         "limit_per_turn": null,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 3 cards from the top of your deck, add up to 1 \u226agod\u226b card among them to your hand, then place the remaining cards at the bottom of your deck in any order.",
+        "source_text": "[energy-exhaust]",
         "trigger": "self_played"
-      }
-    ],
-    "421": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "rest_mode_only": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main](1), send this card to its owner's warp: draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
-        "trigger": "self_activate_main"
       },
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle](2), if you have 2 or more blue and/or yellow cards in your battle area and/or combo area: play this card from your hand or warp.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "422": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_warp",
-        "handler_id": "activate_play_self_from_warp",
-        "handler_params": {
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Goku Black,Zamasu,Shenron",
-          "leader_required_traits": "Shenron",
-          "required_leader_traits": "Zamasu,Goku Black",
-          "required_source_zone": "warp",
-          "requires_leader": "if your leader card is a yellow \u226ashenron\u226b <zamasu> or yellow \u226ashenron\u226b <goku black> card"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] if your leader card is a yellow \u226ashenron\u226b <zamasu> or yellow \u226ashenron\u226b <goku black> card: play this card from your warp, and you can't play non-<zamasu> and non-<goku black> battle cards for the game.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "43": [
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end_then_return_up_to_n_opponent_battle_to_hand",
         "handler_id": "auto_play_self_from_combo_on_battle_end_then_return_up_to_n_opponent_battle_to_hand",
@@ -4931,6 +4967,17 @@
       }
     ],
     "50": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end_then_negate_up_to_n_opponent_unisons_for_turn",
         "handler_id": "auto_play_self_from_combo_on_battle_end_then_negate_up_to_n_opponent_unisons_for_turn",

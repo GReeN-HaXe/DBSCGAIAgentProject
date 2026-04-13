@@ -4291,7 +4291,85 @@ When adding a new TODO:
 - locked with focused runtime coverage proving:
   - the matching red 1-cost Extra with no keywords is recovered from Drop
   - a similar Extra with a keyword stays in Drop
-- note:
-  - the second `P-246 / P-247` branch
-    - `When this card is discarded from your hand by a [Union-Fusion] skill, add up to 1 card from your life to your hand.`
-  - still needs hand-zone trigger registration support before it can resolve during the Union-Fusion material discard event
+
+## Godly Aura Union-Fusion discard slice complete
+
+- added a shared `self_in_hand_sent_to_drop_or_warp` family for:
+  - `When this card is discarded from your hand by a [Union-Fusion] skill, add up to 1 card from your life to your hand.`
+- widened Union-Fusion resolution so material cards:
+  - register eligible hand-zone triggers before they leave hand
+  - emit `card_placed_into_drop` with `drop_cause=union_fusion`
+- kept hand-origin discard autos on the deferred secret-auto path so existing hidden-zone timing stays intact
+- locked with a focused phase4 Union-Fusion integration proving:
+  - the `P-246` material is discarded as a Union-Fusion cost
+  - the follow-on life card is added to hand
+  - the fusion Battle Card is still played normally
+
+## Hirudegarn battle-leave choose-one slice complete
+
+- added a dedicated full-text `self_left_battle_area` family for the DB3 Hirudegarn choose-one autos:
+  - preferred branch: play up to 1 matching `<Hirudegarn>` from your deck or hand
+  - fallback branch: draw 1 or make the opponent discard 1, depending on the card
+- kept this as a single rule instead of branch-splitting so the engine does not resolve both choose-one outcomes
+- added battle-leave trigger support so self-origin autos can still resolve after the source leaves the Battle Area
+- locked with focused runtime coverage proving:
+  - the play branch is taken when a legal `<Hirudegarn>` target exists
+  - the fallback branch fires when no legal play target exists
+
+## On-play opponent battle rest slice complete
+
+- added a shared `self_played` extraction for:
+  - `When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode.`
+  - `When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode.`
+- routed both phrasings into the existing `auto_switch_up_to_n_opponent_battle_rest_on_play` runtime handler
+- locked with a focused extractor test for the `BT6-084 Son Gohan, Ready for a Match` wording
+- relied on the existing phase4 runtime coverage for the shared handler instead of adding a redundant synthetic play harness
+
+## Owner battle attack Dragon Ball search slice complete
+
+- added a shared `owner_battle_attacks` leader family for:
+  - `When one of your Battle Cards attacks, it gets +5000 power for the duration of the turn, then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. Then shuffle any areas you looked through.`
+- kept this as a shared Sorbet/Pilaf branch instead of a card-specific exception
+- added owner-side battle attack trigger support so leader autos can react to one of their Battle Cards attacking
+- runtime now proves:
+  - the attacking Battle Card gets the temporary power boost
+  - the matching `[Dragon Ball]` card is added from deck or life using the shared descriptor filters
+  - searched zones are still eligible for the existing shuffle behavior
+
+## Aegis reminder and Janemba follow-up slice complete
+
+- added shared noop extraction for:
+  - `[Aegis Blue/Yellow][Once per turn] (...)`
+  - `[Energy-Exhaust] (...)`
+  - plain `[Energy-Exhaust]`
+- added a shared `self_aegis_activated` extraction for:
+  - `When this card activates [Aegis], if there are no ≪Evil Incarnate≫ cards in play in your Battle Area other than this card, place 1 card from the top of your opponent's deck in their Drop Area.`
+- kept the runtime on the existing `auto_place_top_n_from_opponent_deck_into_drop_on_aegis` handler and aligned extractor param names with the handler's `required_no_other_owner_*` filters
+- locked with focused coverage proving:
+  - Janemba's full extracted text now registers the Aegis reminder and follow-up auto correctly
+  - the extracted Janemba card can activate Aegis and mill the opponent's deck without manual effect registration
+
+## Counter/Damage keyword reminder slice complete
+
+- added shared noop extraction for:
+  - `[Counter: Attack] Negate the attack and play this card. ([Counter] is activated from your hand by paying the card's energy cost.)`
+  - `[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)`
+  - `[Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle.)`
+- kept these as extractor-only accounting slices because:
+  - counter-play runtime was already supported through the existing counter window and skill-cost paths
+  - double strike and dual attack keyword behavior were already supported in battle resolution
+- locked with focused extractor coverage so these reminder-only families can fall out of the shortlist once the audit is rebuilt
+
+## Field reminder and Power Ball placement slice complete
+
+- added shared noop extraction for the standard `[Field]` reminder text:
+  - `Place and activate this card in your Battle Area... until you activate another [Field]...`
+- added a shared `self_field_extra_placed` extraction for:
+  - `When this card is placed in a Battle Area, choose up to 1 ... from your deck, add it to your hand, then shuffle your deck.`
+- widened the existing owner-deck-to-hand runtime so the same handler now supports:
+  - normal `self_played` deck search
+  - `self_field_extra_placed` deck search
+  - optional post-search deck shuffle
+- locked with focused coverage proving:
+  - `Power Ball` now extracts the field reminder and the on-placement Great Ape search
+  - the extracted field event adds the matching green `≪Great Ape≫` card from deck to hand and shuffles cleanly

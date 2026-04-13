@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 322,
+  "effect_rule_count": 327,
   "rules": {
     "1000": [
       {
@@ -1807,6 +1807,17 @@
     ],
     "1119": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
         "handler_id": "auto_power_reduce_up_to_n_on_attack",
         "handler_params": {
@@ -2288,6 +2299,24 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1155": [
+      {
+        "family_id": "self_played:auto_switch_up_to_n_opponent_battle_rest_on_play",
+        "handler_id": "auto_switch_up_to_n_opponent_battle_rest_on_play",
+        "handler_params": {
+          "max_cost": 7,
+          "max_targets": 1,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 7 or less and switch it to rest mode.",
+        "trigger": "self_played"
+      }
+    ],
     "1156": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -2485,22 +2514,56 @@
         "trigger": "self_activate_battle"
       }
     ],
-    "1174": [
+    "416": [
       {
-        "family_id": "self_attacks:auto_draw_n",
+        "family_id": "self_comboed:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1
+          "amount": 1,
+          "min_owner_drop": 5,
+          "requires_leader": "if your leader card is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][sparking 5] if your leader card is yellow: when this card is used in a combo, draw 1 card.",
+        "trigger": "self_comboed"
+      }
+    ],
+    "420": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "God"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 3 cards from the top of your deck, add up to 1 \u226agod\u226b card among them to your hand, then place the remaining cards at the bottom of your deck in any order.",
+        "trigger": "self_played"
+      }
+    ],
+    "421": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "rest_mode_only": true
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[auto][limit 1] when this card attacks, draw 1 card, then send up to 2 cards from the top of your deck to your warp.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "1176": [
+        "source_text": "[activate: main](1), send this card to its owner's warp: draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
+        "trigger": "self_activate_main"
+      },
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -2509,175 +2572,28 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: battle](black), if there are 1 or more <shroom> cards in your combo area and you send 1 card other than this card from your hand to your warp: play this card from your hand or warp.",
+        "source_text": "[activate: battle](2), if you have 2 or more blue and/or yellow cards in your battle area and/or combo area: play this card from your hand or warp.",
         "trigger": "self_activate_battle"
       }
     ],
-    "1177": [
+    "422": [
       {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "family_id": "self_activate_main:activate_play_self_from_warp",
+        "handler_id": "activate_play_self_from_warp",
         "handler_params": {
-          "leader_allowed_colors": "black",
-          "leader_required_traits": "Demon Realm Race",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_leader_traits": "Demon Realm Race",
-          "required_traits": "Demon God,Demon Realm Race",
-          "requires_leader": "if your leader is a black \u226ademon realm race\u226b card",
-          "shuffle_deck_after": true
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Goku Black,Zamasu,Shenron",
+          "leader_required_traits": "Shenron",
+          "required_leader_traits": "Zamasu,Goku Black",
+          "required_source_zone": "warp",
+          "requires_leader": "if your leader card is a yellow \u226ashenron\u226b <zamasu> or yellow \u226ashenron\u226b <goku black> card"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 \u226ademon realm race\u226b or \u226ademon god\u226b card among them to your hand, then shuffle your deck. additionally, if your leader is a black \u226ademon realm race\u226b card, send up to 2 cards from the top of your deck to your warp.",
-        "trigger": "self_played"
-      }
-    ],
-    "1178": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader is black and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is black and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "1180": [
-      {
-        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
-        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
-        "handler_params": {
-          "leader_required_traits": "Demon God",
-          "max_targets": 1,
-          "required_leader_traits": "Demon God",
-          "requires_cost_greater_than_opponent_current_energy": true,
-          "requires_leader": "if your leader is a \u226ademon god\u226b card",
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] choose up to 1 of your opponent's battle cards with an energy cost greater than their current energy and send it to its owner's warp. additionally, if your leader is a \u226ademon god\u226b card, send up to 1 battle card from your opponent's drop to their warp.",
-        "trigger": "self_activate_extra_from_hand"
-      }
-    ],
-    "1181": [
-      {
-        "family_id": "self_activate_extra_from_hand:activate_send_up_to_n_opponent_battle_to_warp",
-        "handler_id": "activate_send_up_to_n_opponent_battle_to_warp",
-        "handler_params": {
-          "leader_required_traits": "Demon God",
-          "max_targets": 1,
-          "required_leader_traits": "Demon God",
-          "requires_leader": "if your leader is a \u226ademon god\u226b card",
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] choose up to 1 of your opponent's battle cards with an energy cost less than or equal to their current energy and send it to its owner's warp. additionally, if your leader is a \u226ademon god\u226b card, draw 1 card.",
-        "trigger": "self_activate_extra_from_hand"
-      }
-    ],
-    "1185": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, draw 1 card.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "red",
-          "leader_required_traits": "Saiyan",
-          "min_owner_energy": 3,
-          "required_leader_traits": "Saiyan",
-          "requires_leader": "if your leader is a mono-red \u226asaiyan\u226b card and you have 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](red), if your leader is a mono-red \u226asaiyan\u226b card and you have 3 or more energy: play this card from your hand.",
+        "source_text": "[activate: main][limit 1] if your leader card is a yellow \u226ashenron\u226b <zamasu> or yellow \u226ashenron\u226b <goku black> card: play this card from your warp, and you can't play non-<zamasu> and non-<goku black> battle cards for the game.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "1186": [
-      {
-        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "leader_allowed_colors": "blue",
-          "leader_required_traits": "Another World Budokai",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 3,
-          "required_leader_traits": "Another World Budokai",
-          "required_traits": "Another World Budokai",
-          "requires_leader": "if your leader is a blue \u226aanother world budokai\u226b card and you discard this card from your hand"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] if your leader is a blue \u226aanother world budokai\u226b card and you discard this card from your hand: look at up to 5 cards from the top of your deck, add up to 1 blue \u226aanother world budokai\u226b card with an energy cost of 3 or less among them to your hand, then shuffle your deck.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1188": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Son Gohan: Childhood",
-          "required_leader_traits": "Son Gohan: Childhood",
-          "requires_leader": "if your leader is a blue <son gohan: childhood> card: you may play 1 skill-less battle card with an energy cost of 2 from your energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](blue)(1), if your leader is a blue <son gohan: childhood> card: you may play 1 skill-less battle card with an energy cost of 2 from your energy. if you do, play this card from your hand, and add the top card of your deck to your energy.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1189": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played from your hand, draw 1 card.",
-        "trigger": "self_played"
       }
     ],
     "423": [
@@ -2904,6 +2820,17 @@
     ],
     "441": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -2919,6 +2846,17 @@
     ],
     "442": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_send_up_to_n_opponent_hand_to_warp_on_play",
         "handler_id": "auto_send_up_to_n_opponent_hand_to_warp_on_play",
         "handler_params": {
@@ -2929,6 +2867,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto][limit 1][burst 1] when this card is played or your opponent attacks, if the card placed in your drop area using this skill is a black \u226asaiyan\u226b card, your opponent chooses 1 card in their hand and sends it to their warp.",
+        "trigger": "self_played"
+      }
+    ],
+    "443": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       }
     ],
@@ -3020,6 +2971,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      }
+    ],
+    "460": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       }
     ],
@@ -3686,6 +3650,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto][spirit boost 1] when this card is played, choose up to 1 of your opponent's battle cards in rest mode and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "573": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       }
     ],
@@ -4674,6 +4651,17 @@
     ],
     "663": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_params": {
@@ -5028,6 +5016,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "692": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
     "696": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -5135,7 +5136,31 @@
         "trigger": "self_activate_main"
       }
     ],
+    "709": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
     "710": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",

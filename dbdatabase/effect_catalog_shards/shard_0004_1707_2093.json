@@ -1,8 +1,254 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 351,
+  "effect_rule_count": 350,
   "rules": {
+    "1707": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 6,
+          "required_characters": "Or - Both And",
+          "required_traits": "Android,Machine Mutant"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 \u226aandroid\u226b or \u226amachine mutant\u226b card - both green and with an energy cost of 6 or less - among them to your hand, and shuffle your deck.",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "1708": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "green",
+          "leader_required_characters": "Super 17",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Super 17",
+          "requires_leader": "if your leader is a green <super 17> card or green <hell fighter 17> card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](green), if your leader is a green <super 17> card or green <hell fighter 17> card and you have 2 or more energy: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1709": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 4
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](green)(green), if you have 4 or more energy and you choose 1 <hell fighter 17> card in your z-energy and 1 <android 17> card in your battle area: play this card from your hand, place all of the chosen cards under it, and this card gains [double strike], [barrier], and [dual attack] for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1710": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "1711": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](green), if you have 3 or more energy and you choose 1 <hell fighter 17> card in your z-energy and 1 <android 17> card in your battle area: draw 1 card, play this card from your hand, place the cards chosen with this skill under this card, and this card gains [double strike] and [barrier] for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keywords": "Double Strike,Barrier",
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](green), if you have 3 or more energy and you choose 1 <hell fighter 17> card in your z-energy and 1 <android 17> card in your battle area: draw 1 card, play this card from your hand, place the cards chosen with this skill under this card, and this card gains [double strike] and [barrier] for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](green), if you have 3 or more energy and you choose 1 <hell fighter 17> card in your z-energy and 1 <android 17> card in your battle area: draw 1 card, play this card from your hand, place the cards chosen with this skill under this card, and this card gains [double strike] and [barrier] for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1712": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "green",
+          "leader_required_characters": "Super 17",
+          "required_leader_traits": "Super 17",
+          "requires_leader": "if your leader is a green <super 17> card or green <hell fighter 17> card and you have an <android 17> card in play"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](green), if your leader is a green <super 17> card or green <hell fighter 17> card and you have an <android 17> card in play: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1714": [
+      {
+        "family_id": "owner_main_phase_start:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "green",
+          "leader_required_characters": "Son Goku: Gt",
+          "required_leader_traits": "Son Goku: Gt",
+          "requires_leader": "if your leader is a green <son goku: gt> card, this card and {dr. myuu, vengeful alliance} are in your warp, and you send 1 green <son goku: gt> card from your hand to your warp"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a green <son goku: gt> card, this card and {dr. myuu, vengeful alliance} are in your warp, and you send 1 green <son goku: gt> card from your hand to your warp: at the start of your main phase, draw 1 card.",
+        "trigger": "owner_main_phase_start"
+      }
+    ],
+    "1715": [
+      {
+        "family_id": "opponent_turn_end:auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end",
+        "handler_id": "auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end",
+        "handler_params": {
+          "required_source_zone": "leader_under",
+          "under_host_required_card_type": "Z-LEADER"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of your opponent's turn, place this card from under your z-leader on top of your leader.",
+        "trigger": "opponent_turn_end"
+      }
+    ],
+    "1716": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 6,
+          "required_traits": "Android",
+          "requires_played_from": "hand",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, look at up to 5 cards from the top of your deck, add up to 1 green \u226aandroid\u226b card with an energy cost of 6 or less among them to your hand, and shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "1717": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 5000,
+          "required_source_zone": "leader_under",
+          "target_scope": "owner_leader",
+          "under_host_required_characters": "super 17"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] send this card from under your <super 17> z-leader to its owner's warp: up to 1 of your leaders gets +5000 power for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "1718": [
+      {
+        "family_id": "turn_end:auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end",
+        "handler_id": "auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end",
+        "handler_params": {
+          "move_under_owner_battle_to_drop_before": 1,
+          "required_owner_battle_under_count_at_least": 1,
+          "required_owner_battle_under_host_required_traits": "Super 17",
+          "required_owner_leader_under_count_at_least": 1,
+          "required_owner_leader_under_required_characters": "Android 18",
+          "required_source_zone": "leader_under"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] if an <android 18> card is under your leader and you place 1 card from under a <super 17> card in your battle area in its owner's drop: at the end of your turn, place this card from under your leader on top of your leader.",
+        "trigger": "turn_end"
+      }
+    ],
     "1720": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -603,6 +849,17 @@
     ],
     "1754": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_params": {
@@ -640,6 +897,19 @@
         "trigger": "self_played"
       }
     ],
+    "1756": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
     "1757": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -674,6 +944,17 @@
       }
     ],
     "1758": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_extra_from_hand:activate_buff_owner_battle_cards",
         "handler_id": "activate_buff_owner_battle_cards",
@@ -4104,6 +4385,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1992": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
     "1993": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4138,6 +4432,17 @@
       }
     ],
     "1994": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -4844,6 +5149,19 @@
         "trigger": "self_played"
       }
     ],
+    "2047": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
     "2049": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -5469,359 +5787,6 @@
         "provenance": "extractor",
         "source_text": "[auto][limit 1] when this card attacks, use up to 1 red \u226ared ribbon army\u226b card with 5000 combo power from your drop in a combo with its skills negated for the turn.",
         "trigger": "self_attacks"
-      }
-    ],
-    "2095": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_opponent_energy": 3
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](red)(red), if your opponent has 3 or more energy and you have a red <gamma 1: sh> card in play: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2097": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_opponent_energy": 3,
-          "requires_leader": "if your leader is red and your opponent has 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](red), if your leader is red and your opponent has 3 or more energy: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2100": [
-      {
-        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
-        "handler_id": "auto_self_gain_power_for_turn_on_play",
-        "handler_params": {
-          "power_delta": 5000
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your red \u226ared ribbon army\u226b cards, and it gets +5000 power for the turn.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_battle:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "min_any_player_energy": 3,
-          "min_opponent_energy": 3,
-          "requires_leader": "if your leader is red and you or your opponent has 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](red), if your leader is red and you or your opponent has 3 or more energy: draw 1 card, play this card from your hand, choose up to 1 of your red cards, and it gets +10000 power for the battle.",
-        "trigger": "self_activate_battle"
-      },
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_any_player_energy": 3,
-          "min_opponent_energy": 3,
-          "requires_leader": "if your leader is red and you or your opponent has 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](red), if your leader is red and you or your opponent has 3 or more energy: draw 1 card, play this card from your hand, choose up to 1 of your red cards, and it gets +10000 power for the battle.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2111": [
-      {
-        "family_id": "self_activate_extra_from_hand:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 2
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] if you discard 1 of your skill-less battle cards from your hand: draw 2 cards, and you can't send cards from your drop to your warp for the game.",
-        "trigger": "self_activate_extra_from_hand"
-      }
-    ],
-    "2112": [
-      {
-        "family_id": "self_activate_battle:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_required_characters": "Z-Leader,Your Opponent S Battle",
-          "required_leader_traits": "Z-Leader,Your Opponent'S Battle",
-          "requires_leader": "if your leader is a z-leader"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle] draw 1 card, choose up to 1 of your leaders with its back face up, place up to 1 of your z-leaders from your z-deck with 20000 power or less and exactly the same color and character name as the chosen card on top of your leader, then choose up to 1 of your leaders, and it gets +20000 power for the battle. additionally, if your leader is a z-leader, your opponent's battle cards and unisons can't attack for the turn if they have 25000 power or more, then you remove your z-leader from the game at the end of your turn.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2113": [
-      {
-        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
-        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
-        "handler_params": {
-          "max_targets": 1,
-          "required_card_type": "EXTRA",
-          "required_name_contains": "FORTUNETELLER BABA'S PALACE",
-          "requires_field_keyword": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {fortuneteller baba's palace} from your deck.",
-        "trigger": "self_placed_in_leader_area"
-      },
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] switch this card to rest mode: draw 1 card, look at up to 2 cards from the top of your opponent's deck and place them on top of their deck in any order.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2117": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](2), if you have an originally skill-less battle card with an energy cost of 3 in play: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2119": [
-      {
-        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
-        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, add up to 1 [dragon ball] card from your deck to your hand, then shuffle your deck.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Goku: Childhood,Great Ape",
-          "leader_required_traits": "Great Ape",
-          "required_leader_traits": "Son Goku: Childhood",
-          "required_owner_battle_allowed_colors": "yellow",
-          "required_owner_battle_min_cost": 2,
-          "required_owner_battle_required_characters": "Originally Skill-Less Battle",
-          "requires_leader": "if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card and you have a yellow originally skill-less battle card with an energy cost of 2 or more in play"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card and you have a yellow originally skill-less battle card with an energy cost of 2 or more in play: play this card from your hand, and add up to 1 card from your life to your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2120": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](yellow), if there are 4 cards under a {fortuneteller baba's palace} in your battle area: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2121": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader is yellow and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is yellow and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "2122": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      }
-    ],
-    "2124": [
-      {
-        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
-        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "required_name_contains": "CRYSTAL GAZING"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main] place this card in its owner's drop:  add up to 1 {crystal gazing} from your deck to your hand, then shuffle your deck",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2125": [
-      {
-        "family_id": "self_played:auto_send_up_to_n_from_owner_deck_to_warp_on_play",
-        "handler_id": "auto_send_up_to_n_from_owner_deck_to_warp_on_play",
-        "handler_params": {
-          "allowed_colors": "yellow",
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Goku: Childhood,Great Ape",
-          "leader_required_traits": "Great Ape",
-          "max_cost": -1,
-          "max_targets": 1,
-          "required_leader_traits": "Son Goku: Childhood",
-          "required_name_contains": "BORA",
-          "required_traits": "Bora",
-          "requires_leader": "if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card",
-          "rest_mode_only": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card: when this card is played, send up to 1 yellow {bora} from your deck to your warp, shuffle your deck, and at the start of your next turn, play that card from your warp in rest mode.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_schedule_play_cards_warped_by_source_skill_on_play",
-        "handler_id": "auto_schedule_play_cards_warped_by_source_skill_on_play",
-        "handler_params": {
-          "affected_player_scope": "owner",
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Goku: Childhood,Great Ape",
-          "leader_required_traits": "Great Ape",
-          "max_targets": 1,
-          "require_next_turn": true,
-          "required_leader_traits": "Son Goku: Childhood",
-          "requires_leader": "if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card",
-          "rest_mode_only": true,
-          "resting": true,
-          "trigger_kind": "main_phase_start",
-          "trigger_player_scope": "owner"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card: when this card is played, send up to 1 yellow {bora} from your deck to your warp, shuffle your deck, and at the start of your next turn, play that card from your warp in rest mode.",
-        "trigger": "self_played"
-      }
-    ],
-    "2126": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
-        "handler_id": "auto_self_gain_power_for_turn_on_play",
-        "handler_params": {
-          "max_owner_life": 4,
-          "power_delta": 5000
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when your life is at 4 or less: when this card is played, choose up to 1 of your leaders, and it gets +5000 power for the turn.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Korin",
-          "required_leader_traits": "Korin",
-          "requires_leader": "if your leader is a yellow <korin> card and you add 1 yellow skill-less battle card from your drop to your hand"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](yellow), if your leader is a yellow <korin> card and you add 1 yellow skill-less battle card from your drop to your hand: play this card from your hand.",
-        "trigger": "self_activate_battle"
       }
     ]
   },
