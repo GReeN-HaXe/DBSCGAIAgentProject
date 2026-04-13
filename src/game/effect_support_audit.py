@@ -200,6 +200,7 @@ def build_effect_support_audit(
                 "cards_with_diagnostics": priority_cards_with_diagnostics,
             },
         },
+        "families": serialized_families,
         "top_global_families": serialized_families[: max(int(top_families), 0)],
         "top_priority_families": top_priority_families,
         "priority_unimplemented_cards": priority_unimplemented_cards,

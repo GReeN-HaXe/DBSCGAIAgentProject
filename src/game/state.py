@@ -564,6 +564,15 @@ class NonLeaderAttackRestTax:
     expires_on_turn_end_player_id: int = 1
 
 
+@dataclass(frozen=True)
+class NonLeaderAttackHandAndZTax:
+    owner_player_id: int
+    affected_player_id: int
+    hand_count: int = 1
+    z_energy_count: int = 1
+    expires_on_turn_end_player_id: int = 1
+
+
 @dataclass
 class GameState:
     players: dict[int, PlayerState]
@@ -621,6 +630,7 @@ class GameState:
     low_power_battle_play_hand_warp_penalties: list[LowPowerBattlePlayHandWarpPenalty] = field(default_factory=list)
     attack_power_taxes: list[AttackPowerTax] = field(default_factory=list)
     non_leader_attack_rest_taxes: list[NonLeaderAttackRestTax] = field(default_factory=list)
+    non_leader_attack_hand_z_taxes: list[NonLeaderAttackHandAndZTax] = field(default_factory=list)
     active_counter_hand_restrictions: list[CounterHandActivationRestriction] = field(default_factory=list)
     active_temporary_skill_activation_restrictions: list[TemporarySkillActivationRestriction] = field(default_factory=list)
     active_battle_skill_activation_restrictions: list[BattleSkillActivationRestriction] = field(default_factory=list)
