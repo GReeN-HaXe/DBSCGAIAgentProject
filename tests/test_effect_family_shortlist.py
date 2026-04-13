@@ -97,3 +97,38 @@ def test_build_effect_family_shortlist_script_writes_json(tmp_path: Path) -> Non
     payload = json.loads(output_path.read_text(encoding="utf-8"))
     assert payload["summary"]["shortlist_count"] == 1
     assert payload["shortlist"][0]["template"] == "priority missing"
+
+
+def test_build_effect_family_shortlist_merges_stats_for_truncated_unmatched_template() -> None:
+    audit = {
+        "families": [
+            {
+                "template": "long implemented family text with extra suffix",
+                "card_count": 2,
+                "implemented_card_count": 2,
+                "priority_card_count": 0,
+                "priority_implemented_card_count": 0,
+                "example_card_id": 7,
+                "example_card_number": "DB3-071",
+                "example_card_name": "Implemented",
+                "handler_counts": {"z": 2},
+                "trigger_counts": {"self_left_battle_area": 2},
+                "diagnostic_counts": {},
+            }
+        ],
+        "top_priority_families": [],
+        "extractor_report": {
+            "unmatched_top_templates": [
+                {
+                    "template": "long implemented family text...",
+                    "count": 2,
+                    "example_card_id": 7,
+                }
+            ]
+        },
+    }
+    payload = build_effect_family_shortlist(audit, top_n=5)
+    row = payload["shortlist"][0]
+    assert row["implemented_card_count"] == 2
+    assert row["recommended_action"] == "extend_existing_family"
+    assert row["handler_counts"] == {"z": 2}

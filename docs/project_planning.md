@@ -4067,3 +4067,309 @@ When adding a new TODO:
     - sends all opponent Battle Cards to Drop ignoring `[Barrier]`
     - punishes real opponent counter declarations with discard 2
     - restands up to 5 energy at end of turn
+
+## Adjacent Android 21 transcendental predator slice complete
+
+- added a new shared self-played family:
+  - `self_played:auto_place_all_opponent_battle_and_unison_under_self_and_add_top_deck_to_life_on_play`
+- the new family:
+  - chooses all opponent Battle Cards and Unisons
+  - ignores `[Barrier]`
+  - places them under the source card
+  - then adds the top card of deck to life for every `N` cards moved, with a printed cap
+- first locked with:
+  - `BT20-149 Android 21, Transcendental Predator`
+- exact runtime now proves:
+  - blue/green Leader gating
+  - both opponent Battle Cards and Unisons are moved under the source
+  - `[Barrier]` does not stop the move
+  - life gain scales from the number of moved cards and respects the printed cap
+
+## Adjacent Son Gohan blue control slice complete
+
+- added a new shared self-played family:
+  - `self_played:auto_return_all_opponent_battle_and_unison_to_hand_and_bottom_deck_opponent_life_if_more_hand_on_play`
+- added a new shared activate family:
+  - `self_activate_main/self_activate_battle:activate_switch_up_to_n_owner_cards_active_and_gain_keyword_if_self_switched`
+- locked the first exact sibling:
+  - `BT19-152_PR2 Son Gohan, Beyond the Ultimate`
+- exact runtime now proves:
+  - hand-bottom-deck activate cost into real play from hand
+  - mass bounce of opponent Battle Cards and Unisons ignoring `[Barrier]`
+  - conditional opponent-life bottom-deck rider when the opponent still has more cards in hand
+  - `Activate: Main/Battle` can switch up to `2` owner cards to Active Mode and grant self `[Critical]` if self was switched
+
+## Adjacent Zamasu mass-drop slice complete
+
+- added a new shared self-played family:
+  - `self_played:auto_place_all_opponent_battle_and_unison_into_drop_on_play`
+- added a new shared owner watcher family:
+  - `owner_opponent_battle_played:auto_opponent_discards_n_from_hand_on_owner_opponent_battle_played`
+- first locked with:
+  - `BT23-090 Zamasu, Final Tenacity`
+- exact runtime now proves:
+  - opponent Battle Cards and Unisons are both moved to `Drop` on play
+  - the same source then punishes the next real opponent Battle-card play with discard `1`
+
+## Adjacent Android 21 full-power counter slice complete
+
+- added a new shared self-played family:
+  - `self_played:auto_place_up_to_n_opponent_battle_into_drop_on_play`
+- added a new shared self-played family:
+  - `self_played:auto_apply_non_leader_attack_hand_and_z_tax_on_play`
+- first locked with:
+  - `BT20-145 Android 21, Full-Power Counter`
+- exact runtime now proves:
+  - on play, up to `1` opponent Battle Card is placed in `Drop` ignoring `[Barrier]`
+  - the opponent’s non-Leader attacks require discarding `1` from hand and `1` from `Z-Energy` each time
+
+## Adjacent Prince of Destruction Vegeta prideful psyche slice complete
+
+- widened shared activate-play-from-hand support so it can follow a play with:
+  - choosing all opponent Rest Mode Battle Cards and Unisons
+  - ignoring `[Barrier]`
+  - placing them into their owners' Drops
+- added a new shared activate family:
+  - `self_activate_main:activate_negate_opponent_leader_skills_and_restrict_up_to_n_opponent_rest_cards_switch_active_until_opponent_turn_end`
+- first locked with:
+  - `BT28-149 Prince of Destruction Vegeta, Prideful Psyche`
+- exact runtime now proves:
+  - yellow Leader + 4 energy gate into play from hand
+  - mass drop of opponent Rest Mode Battle Cards and Unisons ignoring `[Barrier]`
+  - opponent Leader skills are negated until the end of the opponent's turn
+  - a chosen opponent Rest Mode card can’t switch to Active Mode until the end of the opponent's turn
+
+## Blocker reminder text slice complete
+
+- added shared extractor handling for `[Blocker]` reminder text:
+  - now maps to a no-op `self_blocker_activated` family to mark the reminder line as supported
+- this keeps blocker behavior driven by keyword detection and the existing blocker activation path
+
+## Over Realm reminder text slice complete
+
+- added shared extractor handling for `[Over Realm N]` reminder text:
+  - now maps to a no-op `self_played` family to mark the reminder line as supported
+- Over Realm gameplay remains driven by the keyword/action path in the engine
+
+## Critical keyword damage slice complete
+
+- added battle-damage runtime support for `Critical`
+  - life cards are placed into Drop instead of hand when the attacker has `Critical`
+- added shared extractor handling for `[Critical]` reminder text
+  - now maps to a no-op `self_attacks` family to mark the reminder line as supported
+
+## Universe look-top shuffle slice complete
+
+- widened shared on-play top-deck search extraction to support:
+  - `When you play this card, look at up to N cards from the top of your deck. Choose up to N ≪Universe X≫ among them and add it to your hand. Then, shuffle your deck.`
+- added optional shuffle support to the shared top-deck search handler
+
+## Barrier reminder text slice complete
+
+- added shared extractor handling for `[Barrier]` reminder text
+  - now maps to a no-op `self_played` family to mark the reminder line as supported
+
+## Unlimited copies permanent slice complete
+
+- added shared extractor handling for the deckbuilding-only permanent:
+  - `[Permanent] You can include as many copies of this card in your deck as you like.`
+  - now maps to a no-op `self_played` family to mark the reminder line as supported
+
+## Activate main compliment slice complete
+
+- added shared extractor handling for the placeholder `Activate: Main` line:
+  - `You and your opponent compliment each other.`
+  - now maps to a no-op `self_activate_main` family to mark the line as supported
+
+## Blocker keyword-only slice complete
+
+- added shared extractor handling for the standalone `[Blocker]` line
+  - now maps to a no-op `self_played` family to mark the keyword-only line as supported
+
+## Dragon Ball deck-or-life activate slice complete
+
+- widened the shared `Activate: Main` search family to support:
+  - `Choose up to N [Dragon Ball] cards from your deck or life and add them to your hand`
+  - both sentence and comma joins before `Then shuffle any areas you looked through`
+- widened runtime handling for the shared search action to support:
+  - `source_pool=deck_or_life`
+  - deterministic reshuffle of every searched hidden zone after resolution
+- locked with a focused phase4 leader test proving:
+  - the leader can rest itself as the activation cost
+  - matching `[Dragon Ball]` cards can be taken from both deck and life
+  - searched zones are shuffled after the search resolves
+
+## Janemba Z-Deck field-extra slice complete
+
+- added shared `Activate: Main/Battle` extraction for:
+  - `Place up to 1 {Demonic Blade} or {Dimensional Hole}/{Lightning Shower Rain} from your Z-Deck in the Battle Area`
+  - routed through a shared `activate_activate_up_to_n_named_field_extra_from_owner_z_deck` family
+- widened shared requirement parsing/runtime support for:
+  - `If your Leader is a <Janemba> card`
+  - `you have a blue <Janemba> card with an energy cost of 6 or more in play`
+- widened shared switching support so `Activate: Main/Battle` can:
+  - choose up to 1 of your blue `<Janemba>` Battle Cards and switch it to Active Mode
+- widened skill-cost extraction so plain `Activate: Main/Battle ... remove this card from the game:` pays the remove-self cost in both windows
+- locked with:
+  - extractor coverage for the shared Janemba Z-Deck setup branch
+  - extractor coverage for `BT22-038 Lightning Shower Rain`
+  - phase4 runtime proving `Lightning Shower Rain` removes itself, places the named Field Extra from Z-Deck, and switches a matching Janemba active
+- note:
+  - `BT22-037 Dimensional Hole` still needs its keyword-transfer tail modeled beyond the shared setup branch
+
+## Gotenks drop-to-hand activate slice complete
+
+- added a shared `Activate: Main` extraction for:
+  - `Add this card from your Drop Area to your hand`
+- widened shared `Activate: Main` discard-cost extraction to support:
+  - `choose 1 yellow card in your hand and discard it`
+- exact runtime now proves:
+  - yellow `<Gotenks: Adolescence>` leader gating is honored
+  - the source card moves from `Drop` to hand on resolution
+  - the discarded yellow hand card is paid as a real cost
+  - `you can't activate the [Activate: Main] skill on copies of this card for the turn` is enforced
+- compatibility note:
+  - normalized legacy leader-trait requirement checks so angle-bracket leader requirements can match leader characters as intended
+
+## HTML entity normalization slice complete
+
+- normalized extractor text decoding so HTML-escaped card text like:
+  - `&lt;Gotenks: Adolescence&gt;`
+  - is treated the same as raw angle-bracket character requirements
+- widened both effect-rule and skill-cost normalization to unescape the DB text before parsing
+- this fixes catalog/filter drift where implemented families were still surfacing as unmatched because escaped leader requirements were being serialized incorrectly
+
+## Android partner attack-restand slice complete
+
+- added a shared `self_attacks` family for:
+  - `When this card attacks, you may place 1 card from your hand in the Drop Area. If you do so, choose up to 1 <partner> in your Battle Area and switch it to Active Mode.`
+- the shared family now supports:
+  - optional hand-drop payment through the existing self-attack auto-cost path
+  - character-filtered owner Battle Card targeting
+  - deterministic first-target selection through the shared target policy
+- locked with the Android 17 / Android 18 sibling line:
+  - the attack-triggered discard is paid as a real cost
+  - the matching owner Android partner is switched to Active Mode after the counter window closes
+
+## Leader attack life-then-draw slice complete
+
+- refreshed the audit + shortlist from current code before implementation:
+  - the Android shortlist head was stale artifact output, not a missing family
+  - the real next unmatched family was the leader attack `life -> hand, then draw` line
+- added a shared `owner_leader_attacks` family for:
+  - `When this card attacks a Leader Card, you may choose 1 card in your life and add it to your hand. If you do so, draw 1 card.`
+- kept the awaken half on the existing generic leader-awaken path:
+  - `Choose up to 1 of your energy, switch it to Active Mode, and flip this card over`
+  - was already covered by runtime awaken parsing and did not need a new effect-rule family
+- locked with focused coverage proving:
+  - the life card moves to hand first
+  - the follow-on draw only happens when the life move succeeds
+  - the combined leader line no longer falls through to an incorrect standalone attack-draw extraction
+
+## Leader attack hand-to-drop then draw slice complete
+
+- added a shared `owner_leader_attacks` family for:
+  - `When this card attacks a Leader Card, you may choose 1 <matching card> in your hand and place it in your Drop Area. If you do so, draw 2 cards.`
+- widened the shared leader-attack discard branch so it supports:
+  - trait-filtered hand cards like `≪Universe 11≫`
+  - generic card-type filters like `Battle Card`
+  - deterministic first-match targeting through the shared effect target picker
+- runtime now proves:
+  - the matching hand card is moved to Drop
+  - nonmatching hand cards are left alone
+  - the draw happens after the discard succeeds
+- guarded against false positives by suppressing the generic standalone attack-draw extraction on this combined branch
+
+## Godly Aura on-play recovery slice complete
+
+- added a shared `self_played` family for:
+  - `When this card is played, add up to 1 red Extra Card with an energy cost of 1 and no keyword skills from your Drop Area to your hand.`
+- widened recovery filtering so the shared on-play drop-to-hand path can enforce:
+  - `required_card_type=EXTRA`
+  - color and max-cost gates
+  - `requires_no_keywords=True` for text that says `no keyword skills`
+- locked with focused runtime coverage proving:
+  - the matching red 1-cost Extra with no keywords is recovered from Drop
+  - a similar Extra with a keyword stays in Drop
+
+## Godly Aura Union-Fusion discard slice complete
+
+- added a shared `self_in_hand_sent_to_drop_or_warp` family for:
+  - `When this card is discarded from your hand by a [Union-Fusion] skill, add up to 1 card from your life to your hand.`
+- widened Union-Fusion resolution so material cards:
+  - register eligible hand-zone triggers before they leave hand
+  - emit `card_placed_into_drop` with `drop_cause=union_fusion`
+- kept hand-origin discard autos on the deferred secret-auto path so existing hidden-zone timing stays intact
+- locked with a focused phase4 Union-Fusion integration proving:
+  - the `P-246` material is discarded as a Union-Fusion cost
+  - the follow-on life card is added to hand
+  - the fusion Battle Card is still played normally
+
+## Hirudegarn battle-leave choose-one slice complete
+
+- added a dedicated full-text `self_left_battle_area` family for the DB3 Hirudegarn choose-one autos:
+  - preferred branch: play up to 1 matching `<Hirudegarn>` from your deck or hand
+  - fallback branch: draw 1 or make the opponent discard 1, depending on the card
+- kept this as a single rule instead of branch-splitting so the engine does not resolve both choose-one outcomes
+- added battle-leave trigger support so self-origin autos can still resolve after the source leaves the Battle Area
+- locked with focused runtime coverage proving:
+  - the play branch is taken when a legal `<Hirudegarn>` target exists
+  - the fallback branch fires when no legal play target exists
+
+## On-play opponent battle rest slice complete
+
+- added a shared `self_played` extraction for:
+  - `When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode.`
+  - `When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode.`
+- routed both phrasings into the existing `auto_switch_up_to_n_opponent_battle_rest_on_play` runtime handler
+- locked with a focused extractor test for the `BT6-084 Son Gohan, Ready for a Match` wording
+- relied on the existing phase4 runtime coverage for the shared handler instead of adding a redundant synthetic play harness
+
+## Owner battle attack Dragon Ball search slice complete
+
+- added a shared `owner_battle_attacks` leader family for:
+  - `When one of your Battle Cards attacks, it gets +5000 power for the duration of the turn, then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. Then shuffle any areas you looked through.`
+- kept this as a shared Sorbet/Pilaf branch instead of a card-specific exception
+- added owner-side battle attack trigger support so leader autos can react to one of their Battle Cards attacking
+- runtime now proves:
+  - the attacking Battle Card gets the temporary power boost
+  - the matching `[Dragon Ball]` card is added from deck or life using the shared descriptor filters
+  - searched zones are still eligible for the existing shuffle behavior
+
+## Aegis reminder and Janemba follow-up slice complete
+
+- added shared noop extraction for:
+  - `[Aegis Blue/Yellow][Once per turn] (...)`
+  - `[Energy-Exhaust] (...)`
+  - plain `[Energy-Exhaust]`
+- added a shared `self_aegis_activated` extraction for:
+  - `When this card activates [Aegis], if there are no ≪Evil Incarnate≫ cards in play in your Battle Area other than this card, place 1 card from the top of your opponent's deck in their Drop Area.`
+- kept the runtime on the existing `auto_place_top_n_from_opponent_deck_into_drop_on_aegis` handler and aligned extractor param names with the handler's `required_no_other_owner_*` filters
+- locked with focused coverage proving:
+  - Janemba's full extracted text now registers the Aegis reminder and follow-up auto correctly
+  - the extracted Janemba card can activate Aegis and mill the opponent's deck without manual effect registration
+
+## Counter/Damage keyword reminder slice complete
+
+- added shared noop extraction for:
+  - `[Counter: Attack] Negate the attack and play this card. ([Counter] is activated from your hand by paying the card's energy cost.)`
+  - `[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)`
+  - `[Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle.)`
+- kept these as extractor-only accounting slices because:
+  - counter-play runtime was already supported through the existing counter window and skill-cost paths
+  - double strike and dual attack keyword behavior were already supported in battle resolution
+- locked with focused extractor coverage so these reminder-only families can fall out of the shortlist once the audit is rebuilt
+
+## Field reminder and Power Ball placement slice complete
+
+- added shared noop extraction for the standard `[Field]` reminder text:
+  - `Place and activate this card in your Battle Area... until you activate another [Field]...`
+- added a shared `self_field_extra_placed` extraction for:
+  - `When this card is placed in a Battle Area, choose up to 1 ... from your deck, add it to your hand, then shuffle your deck.`
+- widened the existing owner-deck-to-hand runtime so the same handler now supports:
+  - normal `self_played` deck search
+  - `self_field_extra_placed` deck search
+  - optional post-search deck shuffle
+- locked with focused coverage proving:
+  - `Power Ball` now extracts the field reminder and the on-placement Great Ape search
+  - the extracted field event adds the matching green `≪Great Ape≫` card from deck to hand and shuffles cleanly

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import re
 from typing import Iterable
 
@@ -106,6 +107,10 @@ _ACTIVATE_MAIN_DISCARD_HAND_RE = re.compile(
     r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,220}?discard (\d+) card(?:s)? from your hand\s*:",
     re.IGNORECASE,
 )
+_ACTIVATE_MAIN_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?choose (\d+) (.+?) cards? in your hand and discard (?:it|them)\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_PLACE_SELF_IN_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,260}?place this card in (?:your drop|it'?s owner'?s drop area|its owner'?s drop area)\s*:",
     re.IGNORECASE,
@@ -136,6 +141,10 @@ _ACTIVATE_MAIN_REMOVE_SELF_TO_REMOVED_RE = re.compile(
 )
 _ACTIVATE_BATTLE_REMOVE_SELF_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,260}?remove this card from the game\s*:"
+)
+_ACTIVATE_MAIN_BATTLE_REMOVE_SELF_TO_REMOVED_RE = re.compile(
+    r"\[activate(?::)?\s*(main|battle|main/battle)\].{0,260}?remove this card from the game\s*:",
+    re.IGNORECASE,
 )
 _ACTIVATE_MAIN_SPIRIT_BOOST_RE = re.compile(
     r"\[activate(?::)?\s*main\](?:.{0,120}?)?\[spirit boost\s+(\d+)\]"
@@ -223,7 +232,7 @@ _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
 
 
 def _normalize_text(raw: str | None) -> str:
-    text = (raw or "").lower()
+    text = html.unescape(raw or "").lower()
     text = text.replace("<br>", ". ").replace("[br]", ". ").replace("—", " - ").replace("―", " - ")
     return _WS_RE.sub(" ", text.strip())
 
@@ -777,6 +786,12 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         )
     m_activate_main_remove_self_in_drop_and_discard_hand = _ACTIVATE_MAIN_REMOVE_SELF_IN_DROP_AND_DISCARD_HAND_RE.search(text)
     m_activate_main_discard_hand = _ACTIVATE_MAIN_DISCARD_HAND_RE.search(text)
+    m_activate_main_direct_discard_hand = _ACTIVATE_MAIN_DIRECT_DISCARD_HAND_TO_DROP_RE.search(text)
+    if m_activate_main_direct_discard_hand:
+        descriptor = str(m_activate_main_direct_discard_hand.group(2) or "").strip()
+        rules["activate_main"] = [
+            _extract_filtered_cost_step("discard_hand", descriptor, int(m_activate_main_direct_discard_hand.group(1)))
+        ]
     if m_activate_main_discard_hand and m_activate_main_remove_self_in_drop_and_discard_hand is None:
         rules["activate_main"] = [
             {
@@ -826,6 +841,17 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         or str(m_activate_main_battle_z_energy_to_drop_and_remove_self.group(1) or "").strip().lower() != "battle"
     ):
         rules.setdefault("activate_battle", []).append({"kind": "send_self_to_removed", "amount": 1})
+    m_activate_main_battle_remove_self = _ACTIVATE_MAIN_BATTLE_REMOVE_SELF_TO_REMOVED_RE.search(text)
+    if m_activate_main_battle_remove_self and m_activate_main_battle_z_energy_to_drop_and_remove_self is None:
+        mode = str(m_activate_main_battle_remove_self.group(1) or "").strip().lower()
+        contexts = (
+            ["activate_main", "activate_battle"]
+            if mode == "main/battle"
+            else [f"activate_{mode}"]
+        )
+        for context in contexts:
+            if not any(step.get("kind") == "send_self_to_removed" for step in rules.get(context, [])):
+                rules.setdefault(context, []).append({"kind": "send_self_to_removed", "amount": 1})
     m_activate_main_remove_total_drop_and_warp = _ACTIVATE_MAIN_REMOVE_TOTAL_DROP_AND_WARP_TO_REMOVED_RE.search(text)
     if m_activate_main_remove_total_drop_and_warp:
         rules["activate_main"] = [

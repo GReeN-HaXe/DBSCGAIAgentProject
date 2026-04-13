@@ -7,13 +7,36 @@ EFFECT_FAMILY_SHORTLIST_SCHEMA_VERSION = "effect_family_shortlist.v1"
 
 
 def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> dict[str, Any]:
+    family_rows = audit.get("families", [])
     priority_rows = audit.get("top_priority_families", [])
     extractor_report = audit.get("extractor_report", {})
     unmatched_rows = extractor_report.get("unmatched_top_templates", [])
     candidates: dict[str, dict[str, Any]] = {}
+    family_index: dict[str, dict[str, Any]] = {}
+    family_prefix_index: list[tuple[str, dict[str, Any]]] = []
+
+    def _merge_family_stats(candidate: dict[str, Any], row: dict[str, Any]) -> None:
+        implemented = int(row.get("implemented_card_count", 0))
+        priority_implemented = int(row.get("priority_implemented_card_count", 0))
+        candidate["card_count"] = max(int(candidate["card_count"]), int(row.get("card_count", 0)))
+        candidate["priority_card_count"] = max(int(candidate["priority_card_count"]), int(row.get("priority_card_count", 0)))
+        candidate["implemented_card_count"] = max(int(candidate["implemented_card_count"]), implemented)
+        candidate["priority_implemented_card_count"] = max(
+            int(candidate["priority_implemented_card_count"]),
+            priority_implemented,
+        )
+        if candidate.get("example_card_id") is None:
+            candidate["example_card_id"] = row.get("example_card_id")
+            candidate["example_card_number"] = str(row.get("example_card_number", ""))
+            candidate["example_card_name"] = str(row.get("example_card_name", ""))
+        candidate["handler_counts"] = dict(row.get("handler_counts", {}))
+        candidate["trigger_counts"] = dict(row.get("trigger_counts", {}))
+        candidate["diagnostic_counts"] = dict(row.get("diagnostic_counts", {}))
+        if implemented > 0:
+            candidate["recommended_action"] = "extend_existing_family"
 
     def _candidate(template: str) -> dict[str, Any]:
-        return candidates.setdefault(
+        candidate = candidates.setdefault(
             template,
             {
                 "template": template,
@@ -32,6 +55,22 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
                 "diagnostic_counts": {},
             },
         )
+        family_row = family_index.get(template)
+        if family_row is None and template.endswith("..."):
+            prefix = template[:-3].rstrip()
+            family_row = next((row for family_template, row in family_prefix_index if family_template.startswith(prefix)), None)
+        if family_row is not None:
+            _merge_family_stats(candidate, family_row)
+        return candidate
+
+    for row in family_rows:
+        if not isinstance(row, dict):
+            continue
+        template = str(row.get("template", ""))
+        if not template:
+            continue
+        family_index[template] = row
+        family_prefix_index.append((template, row))
 
     for row in priority_rows:
         if not isinstance(row, dict):

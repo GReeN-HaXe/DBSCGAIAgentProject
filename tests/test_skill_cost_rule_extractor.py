@@ -533,6 +533,31 @@ def test_extract_activate_battle_remove_self_to_removed_cost_rule() -> None:
     }
 
 
+def test_extract_activate_main_battle_remove_self_to_removed_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main/Battle][Limit 1] If your Leader is a <Janemba> card, "
+            "you have a blue <Janemba> card with an energy cost of 6 or more in play, and you remove this card from the game: "
+            "Place up to 1 {Demonic Blade} or {Dimensional Hole} from your Z-Deck in the Battle Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_self_to_removed",
+                "amount": 1,
+            }
+        ],
+        "activate_battle": [
+            {
+                "kind": "send_self_to_removed",
+                "amount": 1,
+            }
+        ],
+    }
+
+
 def test_extract_activate_main_hand_to_bottom_deck_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -797,6 +822,25 @@ def test_extract_activate_main_discard_hand_cost_rule() -> None:
             {
                 "kind": "discard_hand",
                 "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_activate_main_direct_discard_yellow_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If your Leader Card is a yellow &lt;Gotenks: Adolescence&gt; card and you choose 1 yellow card in your hand and discard it: "
+            "Add this card from your Drop Area to your hand, and you can't activate the [Activate: Main] skill on copies of this card for the turn."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "discard_hand",
+                "amount": 1,
+                "allowed_colors": "yellow",
             }
         ]
     }
