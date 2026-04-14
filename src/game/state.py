@@ -461,6 +461,8 @@ class BattleSkillActivationRestriction:
 class PermanentSkillActivationRestriction:
     owner_player_id: int
     restricted_card_id: int
+    restricted_instance_id: int = -1
+    source_instance_id: int = -1
     scope: str = "activate"
     trigger: str = ""
     handler_id: str = ""

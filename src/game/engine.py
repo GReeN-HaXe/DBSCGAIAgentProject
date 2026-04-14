@@ -260,6 +260,10 @@ class RulesEngine:
             "auto_switch_up_to_n_owner_energy_active_on_field_extra_placed": self._handle_auto_switch_up_to_n_owner_energy_active_on_field_extra_placed,
             "auto_switch_up_to_n_owner_leader_active_on_field_extra_placed": self._handle_auto_switch_up_to_n_owner_leader_active_on_field_extra_placed,
             "auto_buff_owner_leader_for_turn_on_field_extra_placed": self._handle_auto_buff_owner_leader_for_turn_on_field_extra_placed,
+            "auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed": self._handle_auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed,
+            "auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed": self._handle_auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed,
+            "auto_clear_target_keyword_on_self_left_battle": self._handle_auto_clear_target_keyword_on_self_left_battle,
+            "auto_clear_target_skill_activation_restriction_on_self_left_battle": self._handle_auto_clear_target_skill_activation_restriction_on_self_left_battle,
             "auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play": self._handle_auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play,
             "auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play": self._handle_auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play,
             "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power": self._handle_auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power,
@@ -1672,6 +1676,7 @@ class RulesEngine:
             state,
             player_id=reg.owner_player_id,
             card_id=reg.source_card_id,
+            instance_id=reg.source_instance_id,
             scope="activate",
             trigger=str(reg.trigger),
             handler_id=str(reg.handler_id),
@@ -1726,6 +1731,7 @@ class RulesEngine:
         *,
         player_id: int,
         card_id: int,
+        instance_id: int = -1,
         scope: str,
         trigger: str = "",
         handler_id: str = "",
@@ -1734,6 +1740,7 @@ class RulesEngine:
         return any(
             int(row.owner_player_id) == int(player_id)
             and int(row.restricted_card_id) == int(card_id)
+            and int(getattr(row, "restricted_instance_id", -1) or -1) in {-1, int(instance_id)}
             and str(row.scope) in {str(scope), "any"}
             and (not str(row.trigger) or str(row.trigger) == str(trigger))
             and (not str(row.handler_id) or str(row.handler_id) == str(handler_id))
@@ -8346,6 +8353,8 @@ class RulesEngine:
         *,
         owner_player_id: int,
         restricted_card_id: int,
+        restricted_instance_id: int = -1,
+        source_instance_id: int = -1,
         scope: str,
         trigger: str = "",
         handler_id: str = "",
@@ -8354,6 +8363,8 @@ class RulesEngine:
         if any(
             int(row.owner_player_id) == int(owner_player_id)
             and int(row.restricted_card_id) == int(restricted_card_id)
+            and int(getattr(row, "restricted_instance_id", -1) or -1) == int(restricted_instance_id)
+            and int(getattr(row, "source_instance_id", -1) or -1) == int(source_instance_id)
             and str(row.scope) == str(scope)
             and str(row.trigger) == str(trigger)
             and str(row.handler_id) == str(handler_id)
@@ -8365,6 +8376,8 @@ class RulesEngine:
             PermanentSkillActivationRestriction(
                 owner_player_id=int(owner_player_id),
                 restricted_card_id=int(restricted_card_id),
+                restricted_instance_id=int(restricted_instance_id),
+                source_instance_id=int(source_instance_id),
                 scope=str(scope),
                 trigger=str(trigger),
                 handler_id=str(handler_id),
@@ -8379,6 +8392,7 @@ class RulesEngine:
             state,
             player_id=reg.owner_player_id,
             card_id=reg.source_card_id,
+            instance_id=reg.source_instance_id,
             scope=scope,
             trigger=str(reg.trigger),
             handler_id=str(reg.handler_id),
@@ -25594,6 +25608,178 @@ class RulesEngine:
             return
         self._apply_temporary_power_delta(state, card=leader, delta=leader_delta, reason="effect_owner_leader_buff")
         self._checkpoint(state, "effect_auto_buff_owner_leader_for_turn_on_field_extra_placed")
+
+    def _handle_auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "field_extra_placed":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        targets = self._select_opponent_battle_targets(
+            state,
+            reg,
+            max_targets=self._resolve_effect_int_param(state, reg, "max_targets", default=1),
+            max_cost=-1,
+            policy=str(reg.handler_params.get("target_policy", "first")),
+        )
+        if not targets:
+            return
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        for target in targets:
+            if not self._add_permanent_skill_activation_restriction(
+                state,
+                owner_player_id=opponent_id,
+                restricted_card_id=target.card_id,
+                restricted_instance_id=target.instance_id,
+                source_instance_id=reg.source_instance_id,
+                scope="any",
+            ):
+                continue
+            state.effect_registry.append(
+                EffectRegistration(
+                    effect_id=state.next_effect_id,
+                    owner_player_id=reg.owner_player_id,
+                    source_instance_id=reg.source_instance_id,
+                    source_card_id=reg.source_card_id,
+                    source_zone="battle",
+                    trigger="self_left_battle_area",
+                    handler_id="auto_clear_target_skill_activation_restriction_on_self_left_battle",
+                    handler_params={
+                        "target_owner_player_id": opponent_id,
+                        "target_instance_id": target.instance_id,
+                    },
+                    source_skill_text=reg.source_skill_text,
+                    source_card_number=reg.source_card_number,
+                )
+            )
+            state.next_effect_id += 1
+        self._checkpoint(state, "effect_auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed")
+
+    def _handle_auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "field_extra_placed":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None:
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        grant_keyword = str(reg.handler_params.get("grant_keyword", "") or "").strip()
+        if not grant_keyword:
+            return
+        required_colors = {
+            part.strip().lower()
+            for part in str(reg.handler_params.get("allowed_colors", "")).replace("|", ",").replace("/", ",").split(",")
+            if part.strip()
+        }
+        required_traits = {
+            part.strip().lower()
+            for part in str(reg.handler_params.get("required_traits", "")).replace("|", ",").split(",")
+            if part.strip()
+        }
+        required_characters = {
+            part.strip().lower()
+            for part in str(reg.handler_params.get("required_characters", "")).replace("|", ",").split(",")
+            if part.strip()
+        }
+        required_name_contains = str(reg.handler_params.get("required_name_contains", "") or "").strip().upper()
+        candidates = [
+            card
+            for card in owner.battle_area
+            if self._card_matches_effect_filters(
+                card,
+                allowed_colors=required_colors,
+                required_traits=required_traits,
+                required_characters=required_characters,
+                required_name_contains=required_name_contains,
+            )
+        ]
+        if not candidates:
+            return
+        indexes = self._choose_effect_target_indexes(state, reg, candidates, max_targets, str(reg.handler_params.get("target_policy", "first")))
+        if not indexes:
+            return
+        for idx in indexes:
+            target = candidates[idx]
+            if grant_keyword not in tuple(target.delayed_temporary_keywords or ()):
+                target.delayed_temporary_keywords = tuple(list(target.delayed_temporary_keywords or ()) + [grant_keyword])
+            state.effect_registry.append(
+                EffectRegistration(
+                    effect_id=state.next_effect_id,
+                    owner_player_id=reg.owner_player_id,
+                    source_instance_id=reg.source_instance_id,
+                    source_card_id=reg.source_card_id,
+                    source_zone="battle",
+                    trigger="self_left_battle_area",
+                    handler_id="auto_clear_target_keyword_on_self_left_battle",
+                    handler_params={
+                        "target_owner_player_id": reg.owner_player_id,
+                        "target_instance_id": target.instance_id,
+                        "grant_keyword": grant_keyword,
+                    },
+                    source_skill_text=reg.source_skill_text,
+                    source_card_number=reg.source_card_number,
+                )
+            )
+            state.next_effect_id += 1
+        self._checkpoint(state, "effect_auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed")
+
+    def _handle_auto_clear_target_keyword_on_self_left_battle(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_left_battle_area":
+            return
+        owner = state.players.get(int(reg.handler_params.get("target_owner_player_id") or reg.owner_player_id))
+        if owner is None:
+            return
+        target_instance_id = int(reg.handler_params.get("target_instance_id") or -1)
+        target = self._find_board_card_by_instance(owner, target_instance_id)
+        if target is None:
+            return
+        keyword = str(reg.handler_params.get("grant_keyword", "") or "").strip().lower()
+        if not keyword:
+            return
+        filtered = tuple(item for item in tuple(target.delayed_temporary_keywords or ()) if str(item).strip().lower() != keyword)
+        if filtered != target.delayed_temporary_keywords:
+            target.delayed_temporary_keywords = filtered
+            self._checkpoint(state, "effect_auto_clear_target_keyword_on_self_left_battle")
+
+    def _handle_auto_clear_target_skill_activation_restriction_on_self_left_battle(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "card_left_battle_area":
+            return
+        target_owner_player_id = int(reg.handler_params.get("target_owner_player_id") or self._opponent_of(reg.owner_player_id))
+        target_instance_id = int(reg.handler_params.get("target_instance_id") or -1)
+        filtered = [
+            row
+            for row in state.permanent_skill_activation_restrictions
+            if not (
+                int(row.owner_player_id) == target_owner_player_id
+                and int(getattr(row, "restricted_instance_id", -1) or -1) == target_instance_id
+                and int(getattr(row, "source_instance_id", -1) or -1) == reg.source_instance_id
+            )
+        ]
+        if len(filtered) != len(state.permanent_skill_activation_restrictions):
+            state.permanent_skill_activation_restrictions = filtered
+            self._checkpoint(state, "effect_auto_clear_target_skill_activation_restriction_on_self_left_battle")
 
     def _handle_auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "card_played":

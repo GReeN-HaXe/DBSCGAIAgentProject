@@ -1,8 +1,8 @@
 {
   "candidates_scanned": 5766,
   "cards_with_diagnostics": 218,
-  "cards_with_rules": 3654,
-  "cards_without_rules": 2112,
+  "cards_with_rules": 3656,
+  "cards_without_rules": 2110,
   "coverage": {
     "by_handler": {
       "activate_activate_up_to_n_named_field_extra_from_owner_deck": 5,
@@ -119,6 +119,7 @@
       "auto_gain_control_opponent_battle_on_play": 1,
       "auto_gain_control_opponent_unison_on_play": 1,
       "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
+      "auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed": 1,
       "auto_host_gain_keywords_until_opponent_turn_on_placed_under": 1,
       "auto_ko_opponent_battle_on_play": 231,
       "auto_ko_up_to_n_opponent_battle_on_attack": 62,
@@ -187,6 +188,7 @@
       "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power": 1,
       "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_switch_target_rest": 1,
       "auto_rest_self_redirect_attack_to_matching_owner_battle_on_opponent_attack": 1,
+      "auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed": 1,
       "auto_return_all_opponent_battle_and_unison_to_hand_and_bottom_deck_opponent_life_if_more_hand_on_play": 1,
       "auto_return_cards_warped_by_source_skill_to_owner_hand_on_owner_matching_battle_left": 1,
       "auto_return_up_to_n_opponent_battle_to_hand_on_play": 21,
@@ -267,7 +269,7 @@
       "self_blocker_activated": 37,
       "self_comboed": 260,
       "self_comboed_battle_end": 53,
-      "self_field_extra_placed": 2,
+      "self_field_extra_placed": 4,
       "self_hidden_battle_to_drop": 2,
       "self_in_hand_sent_to_drop_or_warp": 3,
       "self_koed": 7,
@@ -963,7 +965,7 @@
       "missed_play_draw"
     ]
   },
-  "total_extracted_rules": 5207,
+  "total_extracted_rules": 5209,
   "unmatched_top_templates": [
     {
       "count": 2,
@@ -984,11 +986,6 @@
       "count": 2,
       "example_card_id": 7063,
       "template": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.. [activate: main/battle] choose <n> of your black battle card with an energy c..."
-    },
-    {
-      "count": 2,
-      "example_card_id": 9675,
-      "template": "[field] if your leader is a blue <cooler> card : [permanent] the [field] skill on this card in your hand can also be activated at [activate: battle] timings. [auto] when this card is placed in a battle area, choose up to..."
     },
     {
       "count": 1,
@@ -1064,6 +1061,11 @@
       "count": 1,
       "example_card_id": 79,
       "template": "[counter: attack] choose up to <n> skill-less \u226amonster\u226b card in your hand with an energy cost of <n> or less and play it in rest mode. if you played a card, it becomes the target of attack."
+    },
+    {
+      "count": 1,
+      "example_card_id": 83,
+      "template": "[permanent] if your leader card is a mono-red \u226asaiyan\u226b card, reduce the energy cost of this card in your hand by <n>.. [activate: battle][limit <n>] choose one-. \u30fbif it's your turn, choose any number of your opponent's b..."
     }
   ]
 }
