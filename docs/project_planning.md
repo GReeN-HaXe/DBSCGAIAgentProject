@@ -4373,3 +4373,14 @@ When adding a new TODO:
 - locked with focused coverage proving:
   - `Power Ball` now extracts the field reminder and the on-placement Great Ape search
   - the extracted field event adds the matching green `≪Great Ape≫` card from deck to hand and shuffles cleanly
+
+## Cooler field persistence slice complete
+
+- added shared `self_field_extra_placed` extraction for the BT29 Cooler field family:
+  - `Fearsome Conquest` now restricts a chosen opponent Battle Card from activating skills while the Field stays in play
+  - `Loyalty to Cooler` now grants `[Barrier]` to a chosen matching blue owner Battle Card while the Field stays in play
+- kept the in-hand `[Activate: Battle]` field-timing permanent out of runtime scope for now; this slice closes the on-placement branch and family accounting without broadening extra-card timing rules
+- added a narrow source-linked cleanup path so both effects are removed when the Field leaves the Battle Area
+- locked with focused coverage proving:
+  - the restricted opponent card regains its `Activate: Main` action after `Fearsome Conquest` leaves play
+  - the granted `[Barrier]` is removed after `Loyalty to Cooler` leaves play

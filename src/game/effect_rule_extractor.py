@@ -241,6 +241,14 @@ _FIELD_EXTRA_PLACED_ADD_UP_TO_N_FROM_OWNER_DECK_TO_HAND_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card is placed in a battle area,\s*choose up to (\d+) (.+?) from your deck,\s*add (?:it|them) to your hand(?:,\s*then shuffle your deck)?",
     re.IGNORECASE,
 )
+_FIELD_EXTRA_PLACED_RESTRICT_UP_TO_N_OPPONENT_BATTLE_SKILLS_WHILE_SELF_IN_BATTLE_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?when this card is placed in a battle area,\s*choose up to (\d+) of your opponent'?s battle cards? and (?:it|they) can'?t activate skills while this card is in a battle area",
+    re.IGNORECASE,
+)
+_FIELD_EXTRA_PLACED_GRANT_KEYWORD_TO_UP_TO_N_OWNER_BATTLE_WHILE_SELF_IN_BATTLE_RE = re.compile(
+    r"(?:if [^:]{1,120}:\s*)?when this card is placed in a battle area,\s*choose up to (\d+) of your (.+?) battle cards? and (?:it|they) gains? \[([^\]]+)\] while this card is in a battle area",
+    re.IGNORECASE,
+)
 _ATTACK_PLACE_UP_TO_N_OPPONENT_BATTLE_UNDER_SELF_RE = re.compile(
     r"(?:if [^:]{1,120}:\s*)?when this card attacks,\s*choose up to (\d+) of your opponent'?s battle cards? and place it under this card",
     re.IGNORECASE,
@@ -2545,6 +2553,63 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_field_extra_placed",
                     handler_id="auto_add_up_to_n_from_owner_deck_to_hand_on_play",
                     handler_params=params,
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_field_placed_restrict_skills = _FIELD_EXTRA_PLACED_RESTRICT_UP_TO_N_OPPONENT_BATTLE_SKILLS_WHILE_SELF_IN_BATTLE_RE.search(branch)
+        if m_field_placed_restrict_skills:
+            extra = _extract_common_conditions(branch)
+            if "if your leader is a blue <cooler> card" in text.lower():
+                extra = {
+                    **extra,
+                    "leader_allowed_colors": "blue",
+                    "leader_required_characters": "Cooler",
+                }
+            rules.append(
+                EffectRule(
+                    trigger="self_field_extra_placed",
+                    handler_id="auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed",
+                    handler_params={
+                        "max_targets": int(m_field_placed_restrict_skills.group(1)),
+                        "target_policy": "first",
+                        **extra,
+                    },
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_field_placed_grant_keyword = _FIELD_EXTRA_PLACED_GRANT_KEYWORD_TO_UP_TO_N_OWNER_BATTLE_WHILE_SELF_IN_BATTLE_RE.search(branch)
+        if m_field_placed_grant_keyword:
+            descriptor = str(m_field_placed_grant_keyword.group(2) or "").strip().lower()
+            extra = _extract_common_conditions(branch)
+            filters = _descriptor_filters(descriptor, branch)
+            if "cooler's armored squadron" in descriptor and "<cooler>" in descriptor:
+                filters = {
+                    "allowed_colors": "blue",
+                    "required_name_contains": "COOLER",
+                }
+            if "if your leader is a blue <cooler> card" in text.lower():
+                extra = {
+                    **extra,
+                    "leader_allowed_colors": "blue",
+                    "leader_required_characters": "Cooler",
+                }
+            rules.append(
+                EffectRule(
+                    trigger="self_field_extra_placed",
+                    handler_id="auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed",
+                    handler_params={
+                        "max_targets": int(m_field_placed_grant_keyword.group(1)),
+                        "grant_keyword": str(m_field_placed_grant_keyword.group(3) or "").strip(),
+                        "target_policy": "first",
+                        **filters,
+                        **extra,
+                    },
                     source_text=branch,
                     once_per_turn=once,
                     limit_per_turn=limit,

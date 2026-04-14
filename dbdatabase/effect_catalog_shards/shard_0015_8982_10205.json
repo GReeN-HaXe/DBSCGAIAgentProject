@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 207,
+  "card_rule_count": 209,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 357,
+  "effect_rule_count": 359,
   "rules": {
     "10025": [
       {
@@ -3416,6 +3416,45 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue <cooler> card, blue \u226acooler's armored squadron\u226b card, or blue extra with an energy cost of 0 to your hand, then shuffle your deck.",
         "trigger": "self_played"
+      }
+    ],
+    "9675": [
+      {
+        "family_id": "self_field_extra_placed:auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed",
+        "handler_id": "auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed",
+        "handler_params": {
+          "leader_allowed_colors": "blue",
+          "leader_required_characters": "Cooler",
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in a battle area, choose up to 1 of your opponent's battle cards and it can't activate skills while this card is in a battle area.",
+        "trigger": "self_field_extra_placed"
+      }
+    ],
+    "9676": [
+      {
+        "family_id": "self_field_extra_placed:auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed",
+        "handler_id": "auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "grant_keyword": "barrier",
+          "leader_allowed_colors": "blue",
+          "leader_required_characters": "Cooler",
+          "max_targets": 1,
+          "required_name_contains": "COOLER",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in a battle area, choose up to 1 of your blue <cooler> or \u226acooler's armored squadron\u226b battle cards and it gains [barrier] while this card is in a battle area.",
+        "trigger": "self_field_extra_placed"
       }
     ],
     "9677": [

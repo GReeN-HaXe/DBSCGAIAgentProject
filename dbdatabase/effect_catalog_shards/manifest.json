@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3707,
+  "card_rule_count": 3709,
   "catalog_kind": "dbs_effect_catalog_manifest",
-  "effect_rule_count": 5282,
+  "effect_rule_count": 5284,
   "schema_version": 1,
   "shard_count": 15,
   "shards": [
@@ -104,8 +104,8 @@
       "path": "shard_0014_8343_8981.json"
     },
     {
-      "card_rule_count": 207,
-      "effect_rule_count": 357,
+      "card_rule_count": 209,
+      "effect_rule_count": 359,
       "first_card_id": 8982,
       "last_card_id": 10205,
       "path": "shard_0015_8982_10205.json"

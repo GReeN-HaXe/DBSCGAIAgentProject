@@ -37345,6 +37345,173 @@ def test_phase4_power_ball_field_extra_placed_can_add_matching_card_from_deck_to
     assert any(cp.name == "effect_auto_add_up_to_n_from_owner_deck_to_hand_on_play" for cp in state.checkpoints)
 
 
+def test_phase4_fearsome_conquest_field_extra_placed_restricts_target_activate_skills_until_field_leaves() -> None:
+    field_card_id = 9675
+    target_card_id = 995324
+    field_text = (
+        "[Field] If your Leader is a blue <Cooler> card :\n"
+        "[Permanent] The [Field] skill on this card in your hand can also be activated at [Activate: Battle] timings.\n"
+        "[Auto] When this card is placed in a Battle Area, choose up to 1 of your opponent's Battle Cards and it can't activate skills while this card is in a Battle Area."
+    )
+    engine = RulesEngine(
+        effect_rules={
+            field_card_id: extract_effect_rules_from_card(SimpleNamespace(card_skill_unstyled=field_text, card_type="EXTRA")),
+            target_card_id: [
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_draw_n_and_gain_keyword_for_turn",
+                    handler_params={"amount": 1},
+                    family_id="self_activate_main:activate_draw_n_and_gain_keyword_for_turn",
+                    provenance="test",
+                )
+            ],
+        }
+    )
+    engine._card_cache[(1, "front")] = CardRuntimeData(card_name="Cooler", card_type="LEADER", color="Blue", characters=("Cooler",))
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(12000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(13000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    field_extra = CardInstance(
+        instance_id=995325,
+        card_id=field_card_id,
+        owner_id=1,
+        card_type="EXTRA",
+        keywords=("Field",),
+        has_auto=True,
+        has_permanent=True,
+        skill_text_raw=field_text,
+    )
+    target = CardInstance(
+        instance_id=995326,
+        card_id=target_card_id,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Red",
+        has_activate_main=True,
+        skill_text_raw="[Activate: Main] Draw 1 card.",
+    )
+    state.players[1].battle_area = [field_extra]
+    state.players[2].battle_area = [target]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=field_extra)
+    engine._register_card_effects(state, player_id=2, source_zone="battle", card=target)
+
+    engine._emit_effect_event(
+        state,
+        name="field_extra_placed",
+        actor_player_id=1,
+        payload={"source_instance_id": field_extra.instance_id, "source_card_id": field_extra.card_id},
+    )
+    engine._resolve_pending_effects(state)
+
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_main(engine, state)
+
+    legal = engine.get_legal_actions(state, 2)
+    assert not any(
+        action.action_type == ActionType.ACTIVATE_MAIN_SKILL
+        and action.source_zone == "battle"
+        and state.players[2].battle_area[action.source_index].instance_id == target.instance_id
+        for action in legal
+    )
+
+    engine._send_board_card_to_owner_out_of_play(
+        state,
+        controller_player_id=1,
+        zone="battle",
+        instance_id=field_extra.instance_id,
+        destination="drop",
+    )
+    engine._resolve_pending_effects(state)
+
+    legal = engine.get_legal_actions(state, 2)
+    assert any(
+        action.action_type == ActionType.ACTIVATE_MAIN_SKILL
+        and action.source_zone == "battle"
+        and state.players[2].battle_area[action.source_index].instance_id == target.instance_id
+        for action in legal
+    )
+    assert any(
+        cp.name == "effect_auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed"
+        for cp in state.checkpoints
+    )
+    assert any(cp.name == "effect_auto_clear_target_skill_activation_restriction_on_self_left_battle" for cp in state.checkpoints)
+
+
+def test_phase4_loyalty_to_cooler_field_extra_placed_grants_barrier_until_field_leaves() -> None:
+    field_card_id = 9676
+    target_card_id = 995327
+    field_text = (
+        "[Field] If your Leader is a blue <Cooler> card :\n"
+        "[Permanent] The [Field] skill on this card in your hand can also be activated at [Activate: Battle] timings.\n"
+        "[Auto] When this card is placed in a Battle Area, choose up to 1 of your blue <Cooler> or ≪Cooler's Armored Squadron≫ Battle Cards and it gains [Barrier] while this card is in a Battle Area."
+    )
+    engine = RulesEngine(effect_rules={field_card_id: extract_effect_rules_from_card(SimpleNamespace(card_skill_unstyled=field_text, card_type="EXTRA"))})
+    engine._card_cache[(1, "front")] = CardRuntimeData(card_name="Cooler", card_type="LEADER", color="Blue", characters=("Cooler",))
+    engine._card_cache[(target_card_id, "front")] = CardRuntimeData(card_name="Cooler Ally", card_type="BATTLE", color="Blue", characters=("Cooler",))
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(14000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(15000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    field_extra = CardInstance(
+        instance_id=995328,
+        card_id=field_card_id,
+        owner_id=1,
+        card_type="EXTRA",
+        keywords=("Field",),
+        has_auto=True,
+        has_permanent=True,
+        skill_text_raw=field_text,
+    )
+    target = CardInstance(
+        instance_id=995329,
+        card_id=target_card_id,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        skill_text_raw="",
+    )
+    state.players[1].battle_area = [field_extra, target]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=field_extra)
+
+    engine._emit_effect_event(
+        state,
+        name="field_extra_placed",
+        actor_player_id=1,
+        payload={"source_instance_id": field_extra.instance_id, "source_card_id": field_extra.card_id},
+    )
+    engine._resolve_pending_effects(state)
+
+    target_after = next(card for card in state.players[1].battle_area if card.instance_id == target.instance_id)
+    assert "barrier" in tuple(target_after.delayed_temporary_keywords or ())
+
+    engine._send_board_card_to_owner_out_of_play(
+        state,
+        controller_player_id=1,
+        zone="battle",
+        instance_id=field_extra.instance_id,
+        destination="drop",
+    )
+    engine._resolve_pending_effects(state)
+
+    target_after = next(card for card in state.players[1].battle_area if card.instance_id == target.instance_id)
+    assert "barrier" not in tuple(target_after.delayed_temporary_keywords or ())
+    assert any(
+        cp.name == "effect_auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed"
+        for cp in state.checkpoints
+    )
+    assert any(cp.name == "effect_auto_clear_target_keyword_on_self_left_battle" for cp in state.checkpoints)
+
+
 def test_phase4_self_played_can_play_from_hand_with_markers_and_rest() -> None:
     class Repo:
         def get_by_id(self, card_id: int, source_table: str = "cards"):

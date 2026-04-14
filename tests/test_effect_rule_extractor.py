@@ -930,6 +930,51 @@ def test_extract_field_extra_placed_add_matching_from_owner_deck_to_hand() -> No
     assert rule.handler_params["shuffle_deck_after"] is True
 
 
+def test_extract_field_extra_placed_restrict_opponent_battle_skills_while_self_in_battle() -> None:
+    card = replace(
+        _card(
+            "[Field] If your Leader is a blue <Cooler> card :\n"
+            "[Permanent] The [Field] skill on this card in your hand can also be activated at [Activate: Battle] timings.\n"
+            "[Auto] When this card is placed in a Battle Area, choose up to 1 of your opponent's Battle Cards and it can't activate skills while this card is in a Battle Area."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_field_extra_placed"
+        and r.handler_id == "auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["leader_allowed_colors"] == "blue"
+    assert rule.handler_params["leader_required_characters"] == "Cooler"
+
+
+def test_extract_field_extra_placed_grants_barrier_to_matching_owner_battle_while_self_in_battle() -> None:
+    card = replace(
+        _card(
+            "[Field] If your Leader is a blue <Cooler> card :\n"
+            "[Permanent] The [Field] skill on this card in your hand can also be activated at [Activate: Battle] timings.\n"
+            "[Auto] When this card is placed in a Battle Area, choose up to 1 of your blue <Cooler> or ≪Cooler's Armored Squadron≫ Battle Cards and it gains [Barrier] while this card is in a Battle Area."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_field_extra_placed"
+        and r.handler_id == "auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["grant_keyword"] == "barrier"
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["required_name_contains"] == "COOLER"
+    assert rule.handler_params["leader_allowed_colors"] == "blue"
+    assert rule.handler_params["leader_required_characters"] == "Cooler"
+
+
 def test_extract_activate_main_add_dragon_ball_from_deck_or_life_to_hand() -> None:
     card = _card(
         "[Permanent] This card can't attack.<br>"
