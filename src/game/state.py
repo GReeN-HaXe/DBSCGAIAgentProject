@@ -26,6 +26,7 @@ class CardInstance:
     card_number: str = ""
     resting: bool = False
     hidden_mode: bool = False
+    life_reveal_energy_replacement_turn_number: Optional[int] = None
     attacked_this_turn: bool = False
     attack_count_this_turn: int = 0
     power: int = 15000

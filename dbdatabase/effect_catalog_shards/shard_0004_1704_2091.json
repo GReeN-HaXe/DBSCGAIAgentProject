@@ -3,6 +3,33 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 350,
   "rules": {
+    "1704": [
+      {
+        "family_id": "counter_attack:counter_schedule_play_token_in_battle",
+        "handler_id": "counter_schedule_play_token_in_battle",
+        "handler_params": {
+          "amount": 1,
+          "controller_player_scope": "opponent",
+          "leader_allowed_colors": "blue",
+          "leader_required_traits": "Android",
+          "power": 10000,
+          "require_next_turn": false,
+          "required_leader_traits": "Android",
+          "requires_leader": "if your leader is a blue \u226aandroid\u226b card",
+          "switch_owner_energy_active_allowed_colors": "blue",
+          "switch_owner_energy_active_max_targets": 1,
+          "token_name": "clone token",
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "current"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[counter: attack] if your leader is a blue \u226aandroid\u226b card: negate the attack and switch up to 1 of your blue energy to active mode. additionally, at the end of the turn, play 1 clone token with 10000 power in your opponent's battle area.",
+        "trigger": "counter_attack"
+      }
+    ],
     "1707": [
       {
         "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -3930,6 +3957,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1967": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card is in rest mode, your opponent's battle cards can't attack leaders.",
+        "trigger": "self_played"
+      }
+    ],
     "1968": [
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
@@ -5742,50 +5782,6 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "2092": [
-      {
-        "family_id": "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
-        "handler_id": "auto_combo_up_to_n_from_owner_zone_on_attack",
-        "handler_params": {
-          "allowed_colors": "red",
-          "exact_combo_power": 5000,
-          "max_cost": -1,
-          "max_targets": 1,
-          "negate_skills": true,
-          "required_traits": "Red Ribbon Army",
-          "source_zone": "drop",
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] when this card attacks, use up to 1 red \u226ared ribbon army\u226b card with 5000 combo power from your drop in a combo with its skills negated for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "2093": [
-      {
-        "family_id": "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
-        "handler_id": "auto_combo_up_to_n_from_owner_zone_on_attack",
-        "handler_params": {
-          "allowed_colors": "red",
-          "exact_combo_power": 5000,
-          "max_cost": -1,
-          "max_targets": 1,
-          "negate_skills": true,
-          "required_traits": "Red Ribbon Army",
-          "source_zone": "drop",
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] when this card attacks, use up to 1 red \u226ared ribbon army\u226b card with 5000 combo power from your drop in a combo with its skills negated for the turn.",
         "trigger": "self_attacks"
       }
     ]

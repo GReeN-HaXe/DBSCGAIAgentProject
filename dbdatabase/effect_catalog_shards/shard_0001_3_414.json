@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 364,
+  "effect_rule_count": 366,
   "rules": {
     "10": [
       {
@@ -765,6 +765,65 @@
         "provenance": "extractor",
         "source_text": "[+1][activate: main] draw 1 card.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "139": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "marker_delta": 1,
+          "post_return_max_cost": 2,
+          "post_return_max_targets": 1,
+          "post_return_target_policy": "first",
+          "power_delta": 5000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] this card gets +5000 power for the turn, then choose up to 1 of your opponent's battle cards with an energy cost of 2 or less and return it to its owner's hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_place_self_under_owner_leader",
+        "handler_id": "activate_place_self_under_owner_leader",
+        "handler_params": {
+          "leader_allowed_colors": "blue",
+          "leader_required_characters": "Kale",
+          "marker_delta": -3,
+          "min_owner_energy": 5,
+          "required_leader_traits": "Kale",
+          "requires_leader": "if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main] if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card. if you do, play up to 1 <kefla> card with 30000 power or less from your deck, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_placed_under_owner_card:auto_play_up_to_n_from_owner_deck_on_placed_under",
+        "handler_id": "auto_play_up_to_n_from_owner_deck_on_placed_under",
+        "handler_params": {
+          "leader_allowed_colors": "blue",
+          "leader_required_characters": "Kale",
+          "max_power": 30000,
+          "max_targets": 1,
+          "min_owner_energy": 5,
+          "required_host_zone": "leader",
+          "required_leader_traits": "Kale",
+          "required_name_contains": "KEFLA",
+          "requires_leader": "if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card",
+          "requires_placed_from_zones": "unison"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main] if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card. if you do, play up to 1 <kefla> card with 30000 power or less from your deck, then shuffle your deck.",
+        "trigger": "self_placed_under_owner_card"
       }
     ],
     "14": [
@@ -4716,28 +4775,6 @@
         "provenance": "extractor",
         "source_text": "[auto][once per turn][spirit boost 1] when this card attacks, draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
         "trigger": "self_attacks"
-      }
-    ],
-    "415": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "yellow",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 4,
-          "required_card_type": "UNISON",
-          "required_characters": "Or 1 A Specified Cost Of 1",
-          "required_traits": "Saiyan",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow \u226asaiyan\u226b card with an energy cost of 4 or less or 1 yellow unison card with a specified cost of 1 among them to your hand, then shuffle your deck.",
-        "trigger": "self_played"
       }
     ],
     "42": [

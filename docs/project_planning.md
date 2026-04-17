@@ -4384,3 +4384,88 @@ When adding a new TODO:
 - locked with focused coverage proving:
   - the restricted opponent card regains its `Activate: Main` action after `Fearsome Conquest` leaves play
   - the granted `[Barrier]` is removed after `Loyalty to Cooler` leaves play
+
+## Mono-blue life reveal replacement slice complete
+
+- added shared `turn_end` extraction for:
+  - `At the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's Drop Area.`
+- added a narrow life-damage replacement path for the `BT10-036 / BT10-040` family so:
+  - during the opponent's turn
+  - if all of the owner's energy is mono-blue
+  - revealing the card from life now places it in Rest Mode energy instead of hand
+  - the owner then draws the listed card count
+- registered the delayed cleanup as a normal energy-zone public auto instead of a bespoke scheduler, and added energy-zone liveness so the registry can resolve it on the owner's next `turn_end`
+- locked with focused coverage proving:
+  - the life card goes to Rest Mode energy, not hand
+  - the draw still happens
+  - the card moves from energy to Drop at the end of the owner's next turn
+
+## Z-Energy Son Goku lock/KO slice complete
+
+- added shared extraction for the `BT23-111 / BT23-112` Z-Energy activate family:
+  - `Play this card from your Z-Energy, then choose up to 1 of your opponent's Battle Cards or Unisons, switch it to Rest Mode, and that card can't switch to Active Mode until the end of your opponent's turn.`
+  - `Play this card from your Z-Energy, then choose up to 1 of your opponent's Rest Mode Battle Cards and KO it.`
+- added noop accounting for the two shared permanents:
+  - `If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.`
+  - `If this card would leave the Battle Area, remove it from the game instead.`
+- widened activate-main legality and pending-play resolution so public activate skills can legally originate from `z_energy` and complete through the normal counter-window flow
+- added the post-play follow-up runtime for this family so the played card can:
+  - rest a chosen opponent Battle Card or Unison and prevent it from switching Active until the end of the opponent's turn
+  - or KO a chosen opponent Rest Mode Battle Card
+- added the permanent runtime hooks so:
+  - a resting copy blocks opponent Battle Cards from declaring attacks on Leaders
+  - a copy that would leave the Battle Area is removed from the game instead
+- locked with focused coverage proving both exact extracted cards now:
+  - play themselves from `z_energy`
+  - resolve the rest/lock or KO follow-up correctly
+  - enforce the two permanent clauses once in play
+
+## Shadow Dragon negative-energy ball slice complete
+
+- added shared extraction for the Shadow Dragon ball extras that:
+  - `place this card in its owner's Drop Area`
+  - then `choose up to 1 <named Shenron> card with an energy cost of ... in your deck or hand, play it, then shuffle your deck if you looked through it`
+- the shared extractor now covers the `BT10/BT11/BT12` Negative Energy ball family, including:
+  - exact costs
+  - `between X and Y`
+  - `X or Y`
+  - named `<...>` Shenron targets
+- added a shared activate runtime handler that resolves after the self-drop cost is paid and then plays the first legal matching card from deck or hand
+- added direct text-based attack prevention for cards whose skill text says:
+  - `This card can't attack`
+- locked with focused coverage proving:
+  - `Negative Energy Two-Star Ball` cannot declare attacks while in play
+  - its activate skill sends itself to Drop as cost
+  - it then plays `Haze Shenron` from deck through the extracted family handler
+
+## Nigrisshi self-replay slice complete
+
+- added shared extraction for the `DB2` self-replay family:
+  - `[Permanent] When this card is placed in a Drop Area from a Battle Area or Combo Area, it is placed at the bottom of its owner's deck instead.`
+  - `[Activate: Main/Battle] Choose 1 of your black Battle Cards with an energy cost of N and send it to its owner's Warp: Play this card from your Drop Area.`
+- widened the skill-cost DSL with `send_owner_battle_to_warp` and exact-cost filtering so the shared cost path can pay:
+  - choose 1 matching black Battle Card in your Battle Area
+  - send it to Warp
+- reused the existing `activate_play_self_from_hand` runtime with `required_source_zone = drop` instead of creating a bespoke drop-play handler
+- added a narrow text-based replacement hook so this family now bottoms itself instead of entering Drop when it would be placed there from:
+  - the Battle Area
+  - the Combo Area
+- locked with focused coverage proving:
+  - `Nigrisshi, from the Shadows` can warp an exact-cost black Battle Card and play itself from Drop
+  - the permanent replacement bottoms the card instead of sending it to Drop from both Battle and Combo
+
+## SS Caulifla activate-main slice complete
+
+- added shared extraction for `BT15-034 SS Caulifla, Spirited Striker`:
+  - `[+1][Activate: Main]` self gains `+5000` power for the turn, then returns up to 1 opponent Battle Card with energy cost 2 or less to hand
+  - `[-3][Activate: Main]` if the owner Leader is a blue `<Kale>` and the owner has 5 or more energy, place self under the Leader and then play up to 1 `<Kefla>` with power 30000 or less from deck
+- extended `activate_gain_power_and_keyword_for_turn` so the shared activate-main path can:
+  - adjust Unison markers
+  - apply the temporary self power buff
+  - resolve the post-buff opponent bounce branch
+- extended `activate_place_self_under_owner_leader` so the shared tuck path can spend markers before placing the source under the owner Leader
+- added `auto_play_up_to_n_from_owner_deck_on_placed_under` and wired it to `self_placed_under_owner_card` so under-Leader follow-ups can play matching Battle Cards from deck
+- hardened `unison -> self_placed_under_owner_card` source liveness so the original Unison source remains active for the placed-under follow-up after it moves under a Leader or Battle host
+- locked with focused coverage proving:
+  - the `+1` line buffs the source and bounces the legal opposing Battle Card
+  - the `-3` line places the source under the Leader and plays a matching `<Kefla>` from deck

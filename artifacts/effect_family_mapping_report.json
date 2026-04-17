@@ -1446,23 +1446,26 @@
       "deck_count": 2,
       "family_ids": [
         "self_activate_main:activate_play_self_from_warp",
-        "self_in_hand_sent_to_drop_or_warp:auto_place_up_to_n_from_owner_deck_to_destination_zone"
+        "self_in_hand_sent_to_drop_or_warp:auto_place_up_to_n_from_owner_deck_to_destination_zone",
+        "self_played:noop_auto"
       ],
       "handlers": {
         "activate_play_self_from_warp": 1,
-        "auto_place_up_to_n_from_owner_deck_to_destination_zone": 1
+        "auto_place_up_to_n_from_owner_deck_to_destination_zone": 1,
+        "noop_auto": 1
       },
       "intentionally_skipped": false,
       "mapped": true,
       "provenances": {
-        "extractor": 2
+        "extractor": 3
       },
-      "rule_count": 2,
+      "rule_count": 3,
       "skip_reason": "",
       "trace_count": 4,
       "triggers": {
         "self_activate_main": 1,
-        "self_in_hand_sent_to_drop_or_warp": 1
+        "self_in_hand_sent_to_drop_or_warp": 1,
+        "self_played": 1
       }
     },
     {
@@ -7072,36 +7075,13 @@
       }
     },
     {
-      "combined_count": 113,
-      "deck_count": 18,
-      "family_id": "self_activate_main:activate_send_top_deck_to_owner_warp",
-      "handlers": {
-        "activate_send_top_deck_to_owner_warp": 5
-      },
-      "priority_card_count": 5,
-      "priority_card_ids": [
-        9721,
-        9723,
-        9724,
-        9725,
-        9728
-      ],
-      "provenances": {
-        "extractor": 5
-      },
-      "trace_count": 95,
-      "triggers": {
-        "self_activate_main": 5
-      }
-    },
-    {
-      "combined_count": 110,
-      "deck_count": 55,
+      "combined_count": 116,
+      "deck_count": 57,
       "family_id": "self_played:noop_auto",
       "handlers": {
-        "noop_auto": 22
+        "noop_auto": 23
       },
-      "priority_card_count": 21,
+      "priority_card_count": 22,
       "priority_card_ids": [
         10,
         17,
@@ -7123,14 +7103,38 @@
         7928,
         7947,
         8127,
-        8239
+        8239,
+        9732
       ],
       "provenances": {
-        "extractor": 22
+        "extractor": 23
       },
-      "trace_count": 55,
+      "trace_count": 59,
       "triggers": {
-        "self_played": 22
+        "self_played": 23
+      }
+    },
+    {
+      "combined_count": 113,
+      "deck_count": 18,
+      "family_id": "self_activate_main:activate_send_top_deck_to_owner_warp",
+      "handlers": {
+        "activate_send_top_deck_to_owner_warp": 5
+      },
+      "priority_card_count": 5,
+      "priority_card_ids": [
+        9721,
+        9723,
+        9724,
+        9725,
+        9728
+      ],
+      "provenances": {
+        "extractor": 5
+      },
+      "trace_count": 95,
+      "triggers": {
+        "self_activate_main": 5
       }
     },
     {

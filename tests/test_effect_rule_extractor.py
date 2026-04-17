@@ -2020,6 +2020,46 @@ def test_extract_activate_main_can_play_self_from_hand_then_switch_opponent_batt
     assert rule.handler_params["required_owner_battle_required_name_contains"] == "SPIRIT BOMB"
 
 
+def test_extract_activate_main_can_play_self_from_z_energy_then_rest_and_lock_opponent_board() -> None:
+    card = _card(
+        "[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.<br>"
+        "[Permanent] If this card would leave the Battle Area, remove it from the game instead.<br>"
+        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have 3 or more Z-Energy: "
+        "Play this card from your Z-Energy, then choose up to 1 of your opponent's Battle Cards or Unisons, switch it to Rest Mode, and that card can't switch to Active Mode until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    noop_rules = [r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto"]
+    play_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_play_self_from_hand"
+        and r.handler_params.get("required_source_zone") == "z_energy"
+    )
+    assert len(noop_rules) >= 2
+    assert play_rule.handler_params["post_play_rest_board_max_targets"] == 1
+    assert play_rule.handler_params["post_play_rest_prevent_active_until_opponent_turn"] is True
+    assert play_rule.handler_params["min_owner_z_energy"] == 3
+
+
+def test_extract_activate_main_can_play_self_from_z_energy_then_ko_rest_battle() -> None:
+    card = _card(
+        "[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.<br>"
+        "[Permanent] If this card would leave the Battle Area, remove it from the game instead.<br>"
+        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have 3 or more Z-Energy: "
+        "Play this card from your Z-Energy, then choose up to 1 of your opponent's Rest Mode Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_play_self_from_hand"
+        and r.handler_params.get("required_source_zone") == "z_energy"
+    )
+    assert play_rule.handler_params["post_play_ko_rest_battle_max_targets"] == 1
+
+
 def test_extract_attack_can_add_matching_to_z_energy_then_place_matching_under_spirit_bomb() -> None:
     card = _card(
         "[Auto] When this card attacks, draw 1 card, place this card from the Battle Area in its owner's Drop at the end of the battle, "
@@ -2385,6 +2425,24 @@ def test_extract_turn_end_can_place_self_from_under_leader_on_top_of_owner_leade
     assert rule.trigger == "turn_end"
     assert rule.handler_params["required_source_zone"] == "leader_under"
     assert "under_host_required_card_type" not in rule.handler_params
+
+
+def test_extract_turn_end_can_send_self_from_energy_to_drop_after_life_reveal_replacement() -> None:
+    card = _card(
+        "[Permanent] During your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, "
+        "you may place it in your energy in Rest Mode instead. If you do, draw 1 card.<br>"
+        "[Auto] At the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    noop_rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "turn_end"
+        and r.handler_id == "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life"
+    )
+    assert "would reveal this card from your life" in str(noop_rule.source_text or "").lower()
+    assert "next turn" in str(rule.source_text or "").lower()
 
 
 def test_extract_activate_main_can_draw_discard_place_from_drop_under_leader_and_switch_self_active() -> None:
@@ -6037,6 +6095,50 @@ def test_extract_exact_son_gohan_beyond_the_ultimate_rules() -> None:
     assert play_self_rule.handler_params["min_owner_energy"] == 3
 
 
+def test_extract_nigrisshi_from_the_shadows_rules() -> None:
+    card = _card(
+        "[Permanent] When this card is placed in a Drop Area from a Battle Area or Combo Area, it is placed at the bottom of its owner's deck instead.<br>"
+        "[Activate: Main/Battle] Choose 1 of your black Battle Cards with an energy cost of 3 and send it to its owner's Warp: "
+        "Play this card from your Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    permanent_rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    assert "combo area" in permanent_rule.source_text.lower()
+    activate_rules = [r for r in rules if r.handler_id == "activate_play_self_from_hand"]
+    assert {r.trigger for r in activate_rules} == {"self_activate_main", "self_activate_battle"}
+    assert all(r.handler_params["required_source_zone"] == "drop" for r in activate_rules)
+
+
+def test_extract_ss_caulifla_spirited_striker_rules() -> None:
+    card = replace(
+        _card(
+            "[+1][Activate: Main] This card gets +5000 power for the turn, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and return it to its owner's hand.<br>"
+            "[-3][Activate: Main] If your Leader Card is a blue &lt;Kale&gt; card and you have 5 or more energy: You may place this card under your Leader Card. "
+            "If you do, play up to 1 &lt;Kefla&gt; card with 30000 power or less from your deck, then shuffle your deck."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    plus_rule = next(r for r in rules if r.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert plus_rule.trigger == "self_activate_main"
+    assert plus_rule.handler_params["power_delta"] == 5000
+    assert plus_rule.handler_params["post_return_max_targets"] == 1
+    assert plus_rule.handler_params["post_return_max_cost"] == 2
+    assert plus_rule.handler_params["marker_delta"] == 1
+    minus_rule = next(r for r in rules if r.handler_id == "activate_place_self_under_owner_leader")
+    assert minus_rule.trigger == "self_activate_main"
+    assert minus_rule.handler_params["marker_delta"] == -3
+    assert "blue" in str(minus_rule.handler_params.get("requires_leader", "")).lower()
+    assert "kale" in str(minus_rule.handler_params.get("requires_leader", "")).lower()
+    assert minus_rule.handler_params["min_owner_energy"] == 5
+    placed_under_rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_deck_on_placed_under")
+    assert placed_under_rule.trigger == "self_placed_under_owner_card"
+    assert placed_under_rule.handler_params["required_host_zone"] == "leader"
+    assert placed_under_rule.handler_params["requires_placed_from_zones"] == "unison"
+    assert placed_under_rule.handler_params["required_name_contains"] == "KEFLA"
+    assert placed_under_rule.handler_params["max_power"] == 30000
+
+
 def test_extract_exact_zamasu_final_tenacity_rules() -> None:
     card = _card(
         "[Indestructible]<br>"
@@ -6624,3 +6726,25 @@ def test_extract_exact_mai_link_of_hope_draws_and_activate_main_plays_earthling_
     assert token_rule.handler_params["token_name"] == "earthling token"
     assert token_rule.handler_params["power"] == 1000
     assert "rest_mode_only" not in token_rule.handler_params
+
+
+def test_extract_negative_energy_two_star_ball_can_send_self_to_drop_and_play_named_from_deck_or_hand() -> None:
+    card = _card(
+        "[Permanent] This card can't attack and isn't affected by your opponent's skills.<br>"
+        "[Activate: Main](Yellow), if your Leader Card is a ≪Shadow Dragon≫ card and you place this card in its owner's Drop Area: "
+        "Choose up to 1 <Haze Shenron> card with an energy cost of 2 or 3 in your deck or hand, play it, then shuffle your deck if you looked through it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    noop_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert "can't attack and isn't affected by your opponent's skills" in noop_rule.source_text.lower()
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop"
+    )
+    assert rule.handler_params["leader_required_traits"] == "Shadow Dragon"
+    assert rule.handler_params["required_characters"] == "Haze Shenron"
+    assert rule.handler_params["allowed_costs"] == "2,3"
+    assert rule.handler_params["min_cost"] == 2
+    assert rule.handler_params["max_cost"] == 3

@@ -2501,17 +2501,26 @@
         "trigger": "self_played"
       }
     ],
-    "1173": [
+    "415": [
       {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": 1,
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_card_type": "UNISON",
+          "required_characters": "Or 1 A Specified Cost Of 1",
+          "required_traits": "Saiyan",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
         "limit_scope": "card_number",
-        "once_per_turn": false,
+        "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[activate: battle](black), if there are 1 or more <salsa> cards in your combo area and you send 1 card other than this card from your hand to your warp: play this card from your hand or warp.",
-        "trigger": "self_activate_battle"
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow \u226asaiyan\u226b card with an energy cost of 4 or less or 1 yellow unison card with a specified cost of 1 among them to your hand, then shuffle your deck.",
+        "trigger": "self_played"
       }
     ],
     "416": [

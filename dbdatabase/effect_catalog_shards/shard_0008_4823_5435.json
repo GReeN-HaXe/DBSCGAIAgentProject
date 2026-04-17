@@ -3,6 +3,76 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 322,
   "rules": {
+    "4823": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier] (this card can't be chosen by the skills of your opponent's cards)",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 1 {mercenary tao, trading moves} in your battle area and ko it: if your leader card is a green \u226aworld tournament\u226b, switch this card to active mode and for the duration of the turn this card gains +5000 power and [double strike] (this card inflicts 2 damage instead of 1 when attacking).",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4824": [
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -5000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 of your opponent's battle cards and it gets -5000 power for the duration of the turn.",
+        "trigger": "self_played"
+      }
+    ],
+    "4830": [
+      {
+        "family_id": "self_blocker_activated:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[blocker] (when one of your other cards is attacked, you may switch this card to rest mode and change the target of the attack to this card.)",
+        "trigger": "self_blocker_activated"
+      }
+    ],
+    "4834": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] choose 1 card in your life and add it to your hand: when this card attacks,  draw 1 card and this card gets +5000 power for the duration of the turn",
+        "trigger": "self_attacks"
+      }
+    ],
     "4837": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -390,6 +460,30 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch this card to active mode.",
+        "trigger": "turn_end"
+      }
+    ],
+    "4915": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] during your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, you may place it in your energy in rest mode instead. if you do, draw 1 card.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "turn_end:auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life",
+        "handler_id": "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's drop area.",
         "trigger": "turn_end"
       }
     ],
@@ -1465,6 +1559,37 @@
         "provenance": "extractor",
         "source_text": "[energy-exhaust] (if this card is placed in an energy area from any area, it must be placed there in rest mode.)",
         "trigger": "self_played"
+      }
+    ],
+    "5121": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2,3",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 3,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Haze Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](yellow), if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <haze shenron> card with an energy cost of 2 or 3 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
       }
     ],
     "5126": [
@@ -4389,6 +4514,37 @@
         "trigger": "self_attacks"
       }
     ],
+    "5400": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2,3,4",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 4,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Syn Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](yellow), if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <syn shenron> card with an energy cost between 2 and 4 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5401": [
       {
         "family_id": "self_activate_main:activate_add_self_from_owner_drop_to_hand",
@@ -4814,176 +4970,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is blue and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
         "trigger": "self_comboed"
-      }
-    ],
-    "5437": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main](red), choose 1 skill-less <vegeta: br> card with an energy cost of 1 in your battle area and return it to its owner's hand: play this card from your hand and it gets +10000 power for the turn.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "5441": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      }
-    ],
-    "5444": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is red and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is red and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "5446": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 2,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is green, your life is at 4 or less, and all of your energy is green"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
-        "trigger": "self_comboed"
-      },
-      {
-        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
-        "handler_id": "auto_self_gain_combo_power_on_combo",
-        "handler_params": {
-          "combo_power_delta": 10000,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is green, your life is at 4 or less, and all of your energy is green"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
-        "trigger": "self_comboed"
-      },
-      {
-        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
-        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
-        "handler_params": {
-          "amount": 2,
-          "bottom_deck_from_hand": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is green, your life is at 4 or less, and all of your energy is green"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is green, your life is at 4 or less, and all of your energy is green: when this card is used in a combo, it gets +10000 combo power for the battle, then you may choose 1 card in your hand and place it at the bottom of your deck. if you do, draw 2 cards.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "5448": [
-      {
-        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
-        "handler_id": "activate_gain_power_and_keyword_for_battle",
-        "handler_params": {
-          "max_cost": 2,
-          "max_targets": 1,
-          "power_delta": 15000,
-          "required_traits": "Evil Incarnate",
-          "target_policy": "first",
-          "target_scope": "owner_cards"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle] choose up to 1 of your \u226aevil incarnate\u226b cards and it gets +15000 power for the battle, then play up to 1 blue \u226aevil incarnate\u226b card with an energy cost of 2 from your drop area.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "5449": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played using [union], draw 1 card.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "yellow",
-          "leader_required_characters": "Super 17",
-          "look_count": 7,
-          "max_add": 2,
-          "max_cost": 5,
-          "required_leader_traits": "Super 17",
-          "required_traits": "Android",
-          "requires_leader": "if your leader card is a <super 17> card and you choose this card and an \u226aandroid\u226b card in your hand and discard them"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] (you can only activate this skill once per turn across all copies of this card.) if your leader card is a <super 17> card and you choose this card and an \u226aandroid\u226b card in your hand and discard them: look at up to 7 cards from the top of your deck, add up to 2 yellow \u226aandroid\u226b cards with energy costs of 5 or less among them to your hand, then shuffle your deck.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "5450": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main/battle](red)(red), choose 1 red <broly: br> card in your battle area and return it to its owner's hand: play this card from your hand.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main/battle](red)(red), choose 1 red <broly: br> card in your battle area and return it to its owner's hand: play this card from your hand.",
-        "trigger": "self_activate_battle"
       }
     ]
   },

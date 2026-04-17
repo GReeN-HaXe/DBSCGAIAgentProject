@@ -123,6 +123,10 @@ _ACTIVATE_MAIN_REMOVE_OWNER_BATTLE_TO_REMOVED_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,320}?(?:remove (\d+) of your (.+?) from the game|choose (\d+) of your (.+?) and remove (?:it|them) from the game|choose (\d+) (.+?) (?:in|from) your battle area and remove (?:it|them) from the game)\s*:",
     re.IGNORECASE,
 )
+_ACTIVATE_MAIN_BATTLE_OWNER_BATTLE_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*(main|battle|main/battle)\].{0,360}?choose 1 of your (.+?) battle cards? with an energy cost of (\d+)\s+and send it to (?:its|their) owner'?s warp\s*:",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_DROP_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\](?:(?!<br>|\[(?:auto|activate|counter|permanent|blocker|barrier)\b).){0,260}?send (\d+) (?:(.+?) )?cards? from your drop to (?:its|their) owner'?s warp\s*:",
     re.IGNORECASE,
@@ -752,6 +756,23 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         if "opponent" not in descriptor.lower():
             target_context = "activate_main_unison" if _PLAIN_MARKER_ACTIVATE_RE.search(text) else "activate_main"
             rules.setdefault(target_context, []).append(_extract_filtered_cost_step("send_owner_battle_to_removed", descriptor, amount))
+
+    m_activate_main_battle_owner_battle_to_warp = _ACTIVATE_MAIN_BATTLE_OWNER_BATTLE_TO_WARP_RE.search(text)
+    if m_activate_main_battle_owner_battle_to_warp:
+        mode = str(m_activate_main_battle_owner_battle_to_warp.group(1) or "").strip().lower()
+        descriptor = str(m_activate_main_battle_owner_battle_to_warp.group(2) or "").strip()
+        exact_energy_cost = int(m_activate_main_battle_owner_battle_to_warp.group(3) or 0)
+        step = _extract_filtered_cost_step("send_owner_battle_to_warp", descriptor, 1)
+        step["required_card_types"] = "BATTLE"
+        if exact_energy_cost > 0:
+            step["exact_energy_cost"] = exact_energy_cost
+        contexts = (
+            ["activate_main", "activate_battle"]
+            if mode == "main/battle"
+            else [f"activate_{mode}"]
+        )
+        for context in contexts:
+            rules.setdefault(context, []).append(dict(step))
 
     m_activate_main_hand_to_warp = _ACTIVATE_MAIN_HAND_TO_WARP_RE.search(text)
     if m_activate_main_hand_to_warp:

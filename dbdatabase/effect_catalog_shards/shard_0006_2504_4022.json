@@ -1,8 +1,113 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 346,
+  "effect_rule_count": 349,
   "rules": {
+    "2504": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn][spirit boost 1] draw 1 card, then choose up to 1 of your green <frieza> battle cards and switch it to active mode.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_switch_up_to_n_owner_battle_active",
+        "handler_id": "activate_switch_up_to_n_owner_battle_active",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Frieza",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn][spirit boost 1] draw 1 card, then choose up to 1 of your green <frieza> battle cards and switch it to active mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2505": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_leader": "if your leader is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[0][activate: main] if your leader is green: draw 1 card, then choose up to 1 of your green \u226asaiyan\u226b, \u226aearthling\u226b, or \u226anamekian\u226b battle cards and it gains [blocker] until the end of your opponent's turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_opponent_discards_n_from_hand",
+        "handler_id": "activate_opponent_discards_n_from_hand",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[0][activate: main] place 1 of your z-energy in its owner's drop: your opponent discards 1 card from their hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2506": [
+      {
+        "family_id": "self_activate_main:activate_opponent_discards_n_from_hand",
+        "handler_id": "activate_opponent_discards_n_from_hand",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main] your opponent discards 1 card from their hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2509": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose all of your opponent's battle cards, ignoring [barrier], and ko them.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](green)(green)(green)(green), if your leader is green: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "2510": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -1462,6 +1567,17 @@
       }
     ],
     "2582": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
         "handler_id": "auto_self_gain_power_for_turn_on_play",
@@ -5445,80 +5561,6 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[auto] [once per turn] when this card attacks, you may place 1 card from your hand in the drop area. if you do so, choose up to 1 <android 17> in your battle area and switch it to active mode.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "4024": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main] [once per turn] choose 1 {four-star ball} from your hand and reveal it: draw 1 card and this card gets +5000 power for the duration of the turn.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "4025": [
-      {
-        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
-        "handler_id": "activate_gain_power_and_keyword_for_turn",
-        "handler_params": {
-          "grant_keyword": "Triple Attack",
-          "power_delta": 5000
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[-3][activate: main] this card gets +5000 power and [triple attack] for the turn.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "4027": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, draw 1 card, and this card gains +5000 power for the duration of the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "4029": [
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": -1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, choose 1 of your battle cards and ko it. then, choose any number of your opponent's battle cards of which the total cost adds up to 5 or less and ko them.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, if you have 5 or less cards in your hand, draw 1 card.",
         "trigger": "self_attacks"
       }
     ]

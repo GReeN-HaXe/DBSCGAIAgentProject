@@ -3,6 +3,19 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 382,
   "rules": {
+    "1173": [
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle](black), if there are 1 or more <salsa> cards in your combo area and you send 1 card other than this card from your hand to your warp: play this card from your hand or warp.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "1174": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -6218,33 +6231,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader is a blue \u226aandroid\u226b card: when this card is used in a combo from your hand, play 1 clone token in your opponent's battle area.",
         "trigger": "self_comboed"
-      }
-    ],
-    "1704": [
-      {
-        "family_id": "counter_attack:counter_schedule_play_token_in_battle",
-        "handler_id": "counter_schedule_play_token_in_battle",
-        "handler_params": {
-          "amount": 1,
-          "controller_player_scope": "opponent",
-          "leader_allowed_colors": "blue",
-          "leader_required_traits": "Android",
-          "power": 10000,
-          "require_next_turn": false,
-          "required_leader_traits": "Android",
-          "requires_leader": "if your leader is a blue \u226aandroid\u226b card",
-          "switch_owner_energy_active_allowed_colors": "blue",
-          "switch_owner_energy_active_max_targets": 1,
-          "token_name": "clone token",
-          "trigger_kind": "turn_end",
-          "trigger_player_scope": "current"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[counter: attack] if your leader is a blue \u226aandroid\u226b card: negate the attack and switch up to 1 of your blue energy to active mode. additionally, at the end of the turn, play 1 clone token with 10000 power in your opponent's battle area.",
-        "trigger": "counter_attack"
       }
     ]
   },

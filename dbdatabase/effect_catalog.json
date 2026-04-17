@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3709,
+  "card_rule_count": 3727,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 5284,
+  "effect_rule_count": 5330,
   "rules": {
     "10": [
       {
@@ -6586,6 +6586,65 @@
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch this card to active mode.",
         "trigger": "turn_end"
+      }
+    ],
+    "139": [
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "marker_delta": 1,
+          "post_return_max_cost": 2,
+          "post_return_max_targets": 1,
+          "post_return_target_policy": "first",
+          "power_delta": 5000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] this card gets +5000 power for the turn, then choose up to 1 of your opponent's battle cards with an energy cost of 2 or less and return it to its owner's hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_place_self_under_owner_leader",
+        "handler_id": "activate_place_self_under_owner_leader",
+        "handler_params": {
+          "leader_allowed_colors": "blue",
+          "leader_required_characters": "Kale",
+          "marker_delta": -3,
+          "min_owner_energy": 5,
+          "required_leader_traits": "Kale",
+          "requires_leader": "if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main] if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card. if you do, play up to 1 <kefla> card with 30000 power or less from your deck, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_placed_under_owner_card:auto_play_up_to_n_from_owner_deck_on_placed_under",
+        "handler_id": "auto_play_up_to_n_from_owner_deck_on_placed_under",
+        "handler_params": {
+          "leader_allowed_colors": "blue",
+          "leader_required_characters": "Kale",
+          "max_power": 30000,
+          "max_targets": 1,
+          "min_owner_energy": 5,
+          "required_host_zone": "leader",
+          "required_leader_traits": "Kale",
+          "required_name_contains": "KEFLA",
+          "requires_leader": "if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card",
+          "requires_placed_from_zones": "unison"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main] if your leader card is a blue <kale> card and you have 5 or more energy: you may place this card under your leader card. if you do, play up to 1 <kefla> card with 30000 power or less from your deck, then shuffle your deck.",
+        "trigger": "self_placed_under_owner_card"
       }
     ],
     "1391": [
@@ -15933,6 +15992,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1967": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card is in rest mode, your opponent's battle cards can't attack leaders.",
+        "trigger": "self_played"
+      }
+    ],
     "1968": [
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
@@ -23833,6 +23905,97 @@
         "trigger": "self_activate_main"
       }
     ],
+    "2435": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card is in rest mode, your opponent's battle cards can't attack leaders.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Goku,Universe 7",
+          "leader_required_traits": "Universe 7",
+          "min_owner_z_energy": 3,
+          "post_play_rest_board_max_targets": 1,
+          "post_play_rest_prevent_active_until_opponent_turn": true,
+          "required_leader_traits": "Son Goku",
+          "required_source_zone": "z_energy",
+          "requires_leader": "if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have 3 or more z-energy",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have 3 or more z-energy: play this card from your z-energy, then choose up to 1 of your opponent's battle cards or unisons, switch it to rest mode, and that card can't switch to active mode until the end of your opponent's turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2436": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card is in rest mode, your opponent's battle cards can't attack leaders.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Goku,Universe 7",
+          "leader_required_traits": "Universe 7",
+          "min_owner_z_energy": 3,
+          "post_play_ko_rest_battle_max_targets": 1,
+          "required_leader_traits": "Son Goku",
+          "required_source_zone": "z_energy",
+          "requires_leader": "if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have 3 or more z-energy",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have 3 or more z-energy: play this card from your z-energy, then choose up to 1 of your opponent's rest mode battle cards and ko it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "2437": [
       {
         "family_id": "self_played:noop_auto",
@@ -23843,6 +24006,17 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card is in rest mode, your opponent's battle cards can't attack leaders.",
         "trigger": "self_played"
       }
     ],
@@ -26854,6 +27028,17 @@
       }
     ],
     "2582": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
         "handler_id": "auto_self_gain_power_for_turn_on_play",
@@ -38874,6 +39059,30 @@
         "trigger": "turn_end"
       }
     ],
+    "4915": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] during your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, you may place it in your energy in rest mode instead. if you do, draw 1 card.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "turn_end:auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life",
+        "handler_id": "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's drop area.",
+        "trigger": "turn_end"
+      }
+    ],
     "4916": [
       {
         "family_id": "self_played:noop_auto",
@@ -40089,6 +40298,37 @@
         "provenance": "extractor",
         "source_text": "[energy-exhaust] (if this card is placed in an energy area from any area, it must be placed there in rest mode.)",
         "trigger": "self_played"
+      }
+    ],
+    "5121": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2,3",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 3,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Haze Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](yellow), if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <haze shenron> card with an energy cost of 2 or 3 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
       }
     ],
     "5126": [
@@ -43298,6 +43538,37 @@
         "trigger": "self_played"
       }
     ],
+    "5400": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2,3,4",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 4,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Syn Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](yellow), if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <syn shenron> card with an energy cost between 2 and 4 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5401": [
       {
         "family_id": "self_activate_main:activate_add_self_from_owner_drop_to_hand",
@@ -44731,6 +45002,37 @@
         "trigger": "self_played"
       }
     ],
+    "5508": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Naturon Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <naturon shenron> card with an energy cost of 2 from your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5511": [
       {
         "family_id": "self_played:noop_auto",
@@ -44800,6 +45102,37 @@
         "provenance": "extractor",
         "source_text": "[barrier] (this card can't be chosen by the skills of your opponent's cards.)",
         "trigger": "self_played"
+      }
+    ],
+    "5515": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Eis Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <eis shenron> card with an energy cost of 2 from your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
       }
     ],
     "5517": [
@@ -45914,6 +46247,37 @@
         "trigger": "self_comboed"
       }
     ],
+    "5626": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Rage Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <rage shenron> card with an energy cost of 2 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5627": [
       {
         "family_id": "self_played:noop_auto",
@@ -45982,6 +46346,37 @@
         "provenance": "extractor",
         "source_text": "[auto] add 1 card from your life to your hand: when this card attacks, it gets +10000 power for the turn.",
         "trigger": "self_attacks"
+      }
+    ],
+    "5632": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Nuova Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <nuova shenron> card with an energy cost of 2 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
       }
     ],
     "5636": [
@@ -46089,6 +46484,37 @@
         "provenance": "extractor",
         "source_text": "[activate: main] choose 1 {spaceship, vessel of hope} in your unison area: draw 1 card, add a marker to the chosen card, then place up to 1 red \u226asaiyan\u226b card from your deck under the chosen card and shuffle your deck.",
         "trigger": "self_activate_extra_from_hand"
+      }
+    ],
+    "5640": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] this card can't attack and isn't affected by your opponent's skills.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_id": "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop",
+        "handler_params": {
+          "allowed_costs": "2",
+          "leader_required_traits": "Shadow Dragon",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 2,
+          "required_characters": "Oceanus Shenron"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226ashadow dragon\u226b card and you place this card in its owner's drop area: choose up to 1 <oceanus shenron> card with an energy cost of 2 in your deck or hand, play it, then shuffle your deck if you looked through it.",
+        "trigger": "self_activate_main"
       }
     ],
     "5641": [
@@ -59167,6 +59593,45 @@
         "trigger": "self_played"
       }
     ],
+    "6958": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 5 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 5 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "696": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -60321,6 +60786,45 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: battle][spirit boost 1] (you must remove a marker from your unison card to activate this skill.) (yellow): play this card from your hand.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "7063": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 3 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 3 and send it to its owner's warp: play this card from your drop area.",
         "trigger": "self_activate_battle"
       }
     ],
@@ -62566,6 +63070,30 @@
         "trigger": "self_played"
       }
     ],
+    "7284": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] during your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, you may place it in your energy in rest mode instead. if you do, draw 1 card.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "turn_end:auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life",
+        "handler_id": "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's drop area.",
+        "trigger": "turn_end"
+      }
+    ],
     "7286": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -62898,6 +63426,45 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7317": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 4 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 4 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "7319": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -63157,6 +63724,45 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and it gets -4000 power for the turn for each red \u226asaiyan\u226b card and/or \u226abardock's crew\u226b card in your battle area.",
         "trigger": "self_attacks"
+      }
+    ],
+    "7341": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 2 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "required_source_zone": "drop"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle] choose 1 of your black battle cards with an energy cost of 2 and send it to its owner's warp: play this card from your drop area.",
+        "trigger": "self_activate_battle"
       }
     ],
     "7343": [
@@ -68035,6 +68641,17 @@
       }
     ],
     "7927": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_warp",
         "handler_id": "activate_play_self_from_warp",
@@ -75708,6 +76325,17 @@
     ],
     "8465": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
         "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
         "handler_params": {
@@ -77379,6 +78007,19 @@
         "provenance": "extractor",
         "source_text": "[activate: battle][limit 1]{u}, if your opponent has 2 or more energy: play this card from your hand.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "8850": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
       }
     ],
     "8852": [
@@ -83479,6 +84120,17 @@
       }
     ],
     "9732": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_in_hand_sent_to_drop_or_warp:auto_place_up_to_n_from_owner_deck_to_destination_zone",
         "handler_id": "auto_place_up_to_n_from_owner_deck_to_destination_zone",

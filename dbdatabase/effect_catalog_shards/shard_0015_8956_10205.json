@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 209,
+  "card_rule_count": 227,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 359,
+  "effect_rule_count": 389,
   "rules": {
     "10025": [
       {
@@ -1662,6 +1662,514 @@
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] when this card is played, look at up to 5 cards from the top of your deck, choose up to 2 \u226auniverse 2\u226b cards, add up to 1 card to your hand, send up to 1 card to your warp, then shuffle your deck.",
         "trigger": "self_played"
+      }
+    ],
+    "8956": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Gohan: Adolescence",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Son Gohan: Adolescence",
+          "requires_leader": "if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{y}, if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Gohan: Adolescence",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Son Gohan: Adolescence",
+          "requires_leader": "if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{y}, if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8957": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Son Gohan: Adolescence,Videl",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow <son gohan: adolescence> or <videl> card to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "8958": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Gohan: Adolescence",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Son Gohan: Adolescence",
+          "requires_leader": "if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] {y}, if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Gohan: Adolescence",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Son Gohan: Adolescence",
+          "requires_leader": "if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] {y}, if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8959": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
+        "trigger": "self_comboed"
+      }
+    ],
+    "8960": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "8961": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 5,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's rest mode battle cards with an energy cost of 5 or less and ko it.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Vegito",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Vegito",
+          "requires_leader": "if your leader is a yellow <vegito> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is a yellow <vegito> card and your opponent has 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Vegito",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Vegito",
+          "requires_leader": "if your leader is a yellow <vegito> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is a yellow <vegito> card and your opponent has 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8962": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Or Up To 1 Unison A Specified Cost Of 2",
+          "required_traits": "Vegito",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow <vegito> card or up to 1 yellow unison with a specified cost of 2 to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "8963": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_traits": "Saiyan",
+          "min_owner_energy": 3,
+          "required_leader_traits": "Saiyan",
+          "requires_leader": "if your leader is a yellow \u226asaiyan\u226b card and you have 3 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is a yellow \u226asaiyan\u226b card and you have 3 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_traits": "Saiyan",
+          "min_owner_energy": 3,
+          "required_leader_traits": "Saiyan",
+          "requires_leader": "if your leader is a yellow \u226asaiyan\u226b card and you have 3 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is a yellow \u226asaiyan\u226b card and you have 3 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8964": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Vegito",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Vegito",
+          "requires_leader": "if your leader is a yellow <vegito> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is a yellow <vegito> card and your opponent has 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Vegito",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Vegito",
+          "requires_leader": "if your leader is a yellow <vegito> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is a yellow <vegito> card and your opponent has 2 or more energy: draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8965": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "8966": [
+      {
+        "family_id": "self_played:auto_ko_up_to_n_opponent_battle_on_play",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 2,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played by a [union] skill, choose up to 2 of your opponent's battle cards, negate their skills for the turn, and ko them.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_buff_owner_battle_cards",
+        "handler_id": "activate_buff_owner_battle_cards",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 5000,
+          "rest_mode_only": true,
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] if this card is in rest mode: choose up to 1 of your yellow cards and it gets +5000 power for the turn.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "8967": [
+      {
+        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and switch it to rest mode, then choose up to 1 of your opponent's rest mode battle cards and ko it.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "8968": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if there are no cards under this card: at the end of your turn, switch this card to active mode.",
+        "trigger": "turn_end"
+      }
+    ],
+    "8970": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Vegito",
+          "required_leader_traits": "Vegito",
+          "requires_leader": "if your leader is a yellow <vegito> card and you have a {vegito, strongest coffee-flavored fighter} in play"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a yellow <vegito> card and you have a {vegito, strongest coffee-flavored fighter} in play: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8975": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "ignores_barrier": true,
+          "min_owner_energy": 4,
+          "post_play_drop_opponent_rest_battle_unison": true,
+          "post_play_drop_opponent_rest_ignores_barrier": true,
+          "requires_leader": "if your leader is yellow and you have 4 or more energy",
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{y}{y}{y}, if your leader is yellow and you have 4 or more energy: play this card from your hand then choose all of your opponent's rest mode battle cards and unisons, ignoring [barrier], and place them into their owner's drop.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "ignores_barrier": true,
+          "min_owner_energy": 4,
+          "requires_leader": "if your leader is yellow and you have 4 or more energy",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{y}{y}{y}, if your leader is yellow and you have 4 or more energy: play this card from your hand then choose all of your opponent's rest mode battle cards and unisons, ignoring [barrier], and place them into their owner's drop.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_negate_opponent_leader_skills_and_restrict_up_to_n_opponent_rest_cards_switch_active_until_opponent_turn_end",
+        "handler_id": "activate_negate_opponent_leader_skills_and_restrict_up_to_n_opponent_rest_cards_switch_active_until_opponent_turn_end",
+        "handler_params": {
+          "max_targets": 1,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] remove this card from the game: negate the skills of your opponent's leader until the end of your opponent's turn, then choose up to 1 of your opponent's rest mode cards and it can't switch to active mode until the end of your opponent's turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8976": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_ko_up_to_n_opponent_battle",
+        "handler_id": "activate_ko_up_to_n_opponent_battle",
+        "handler_params": {
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 1 hidden mode card in your battle area and place it into its owner's drop: choose up to 1 of your opponent's battle cards and ko it.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8978": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "white",
+          "leader_required_characters": "Beerus",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Beerus",
+          "requires_leader": "if your leader is a white <beerus> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1]{1}, if your leader is a white <beerus> card and your opponent has 2 or more energy : play this card from your hand.<br/>[activate: main][limit 1] play up to 1 white battle card with an energy cost of 1 from your drop, choose up to 1 of your white battle cards and switch it to hidden mode, and this card gains [barrier] until the end of your opponent's turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "8981": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "red",
+          "leader_required_characters": "Bardock",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Bardock",
+          "requires_leader": "if your leader is a red <bardock> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] all your red \u226abardock's crew\u226b cards with original energy costs of 1 gain [barrier].<br/>[permanent][bond 3] red \u226asaiyan\u226b or \u226abardock's crew\u226b card : your leader gets +10000 power.<br/>[activate: main][limit 1]{r}, if your leader is a red <bardock> card and your opponent has 2 or more energy : draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "red",
+          "leader_required_characters": "Bardock",
+          "min_opponent_energy": 2,
+          "required_leader_traits": "Bardock",
+          "requires_leader": "if your leader is a red <bardock> card and your opponent has 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] all your red \u226abardock's crew\u226b cards with original energy costs of 1 gain [barrier].<br/>[permanent][bond 3] red \u226asaiyan\u226b or \u226abardock's crew\u226b card : your leader gets +10000 power.<br/>[activate: main][limit 1]{r}, if your leader is a red <bardock> card and your opponent has 2 or more energy : draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
       }
     ],
     "8982": [
@@ -4534,6 +5042,17 @@
       }
     ],
     "9732": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[permanent] if this card would leave the battle area, remove it from the game instead.",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_in_hand_sent_to_drop_or_warp:auto_place_up_to_n_from_owner_deck_to_destination_zone",
         "handler_id": "auto_place_up_to_n_from_owner_deck_to_destination_zone",
