@@ -47343,6 +47343,167 @@ def test_phase4_ss_caulifla_spirited_striker_minus_activate_places_under_leader_
     assert any(cp.name == "effect_auto_play_up_to_n_from_owner_deck_on_placed_under" for cp in state.checkpoints)
 
 
+def test_phase4_ss3_nappa_golden_invader_plus_and_minus_two_activate() -> None:
+    card_text = (
+        "[+1][Activate: Main] Your opponent chooses 1 card in their hand and sends it to their Warp.<br>"
+        "[-2][Activate: Main] Choose up to 2 of your opponent's Battle Cards with energy costs greater than or equal to their current energy and KO them.<br>"
+        "[-3][Activate: Main](Green)(Green)②, if your Leader Card is a &lt;Nappa&gt; card or a green ≪Saiyan≫ card: Choose up to 1 Red/Green multicolor &lt;Raditz&gt; card with an original energy cost of 8 in your hand and play it."
+    )
+    extracted_card = SimpleNamespace(card_skill_unstyled=card_text, card_type="UNISON")
+    engine = RulesEngine(effect_rules={226: extract_effect_rules_from_card(extracted_card)})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=997226,
+        card_id=226,
+        owner_id=1,
+        card_type="UNISON",
+        color="Green",
+        power=15000,
+        markers=3,
+        skill_text_raw=card_text,
+    )
+    opponent_hand_card = CardInstance(instance_id=997227, card_id=17226, owner_id=2, card_type="BATTLE", power=5000)
+    ko_target = CardInstance(instance_id=997228, card_id=17227, owner_id=2, card_type="BATTLE", power=15000, energy_cost=3)
+    stay_target = CardInstance(instance_id=997229, card_id=17228, owner_id=2, card_type="BATTLE", power=15000, energy_cost=1)
+    state.players[1].unison_area = [source]
+    state.players[2].hand = [opponent_hand_card]
+    state.players[2].battle_area = [ko_target, stay_target]
+    state.players[2].energy = [
+        CardInstance(instance_id=997230, card_id=18230, owner_id=2, card_type="ENERGY", color="Blue"),
+        CardInstance(instance_id=997231, card_id=18231, owner_id=2, card_type="ENERGY", color="Blue"),
+    ]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    plus_effect_id = next(
+        reg.effect_id
+        for reg in state.effect_registry
+        if reg.source_instance_id == source.instance_id and reg.handler_id == "activate_send_up_to_n_opponent_hand_to_warp"
+    )
+
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": source.instance_id,
+            "source_card_id": source.card_id,
+            "source_zone": "unison",
+            "skill_kind": "activate_main",
+            "selected_effect_id": plus_effect_id,
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert source.markers == 4
+    assert not state.players[2].hand
+    assert any(card.instance_id == opponent_hand_card.instance_id for card in state.players[2].warp)
+    assert any(cp.name == "effect_activate_send_up_to_n_opponent_hand_to_warp" for cp in state.checkpoints)
+
+    minus_two_effect_id = next(
+        reg.effect_id
+        for reg in state.effect_registry
+        if reg.source_instance_id == source.instance_id
+        and reg.handler_id == "activate_ko_up_to_n_opponent_battle"
+        and bool(reg.handler_params.get("requires_cost_at_least_opponent_current_energy"))
+    )
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": source.instance_id,
+            "source_card_id": source.card_id,
+            "source_zone": "unison",
+            "skill_kind": "activate_main",
+            "selected_effect_id": minus_two_effect_id,
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert source.markers == 2
+    assert all(card.instance_id != ko_target.instance_id for card in state.players[2].battle_area)
+    assert any(card.instance_id == ko_target.instance_id for card in state.players[2].drop)
+    assert any(card.instance_id == stay_target.instance_id for card in state.players[2].battle_area)
+    assert any(cp.name == "effect_activate_ko_up_to_n_opponent_battle" for cp in state.checkpoints)
+
+
+def test_phase4_ss3_nappa_golden_invader_minus_three_activate_plays_raditz_from_hand() -> None:
+    card_text = (
+        "[+1][Activate: Main] Your opponent chooses 1 card in their hand and sends it to their Warp.<br>"
+        "[-2][Activate: Main] Choose up to 2 of your opponent's Battle Cards with energy costs greater than or equal to their current energy and KO them.<br>"
+        "[-3][Activate: Main](Green)(Green)②, if your Leader Card is a &lt;Nappa&gt; card or a green ≪Saiyan≫ card: Choose up to 1 Red/Green multicolor &lt;Raditz&gt; card with an original energy cost of 8 in your hand and play it."
+    )
+    extracted_card = SimpleNamespace(card_skill_unstyled=card_text, card_type="UNISON")
+    engine = RulesEngine(effect_rules={226: extract_effect_rules_from_card(extracted_card)})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].leader_area.color = "Green"
+    state.players[1].leader_area.traits = ("Saiyan",)
+    state.players[1].leader_area.characters = ("Nappa",)
+    source = CardInstance(
+        instance_id=997232,
+        card_id=226,
+        owner_id=1,
+        card_type="UNISON",
+        color="Green",
+        power=15000,
+        markers=3,
+        skill_text_raw=card_text,
+    )
+    raditz = CardInstance(
+        instance_id=997233,
+        card_id=997234,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Red/Green",
+        energy_cost=8,
+        power=30000,
+    )
+    raditz.card_name = "Raditz, Saiyan Invader"
+    raditz.characters = ("Raditz",)
+    state.players[1].unison_area = [source]
+    state.players[1].hand = [raditz]
+    engine._register_card_effects(state, player_id=1, source_zone="unison", card=source)
+    minus_three_effect_id = next(
+        reg.effect_id
+        for reg in state.effect_registry
+        if reg.source_instance_id == source.instance_id and reg.handler_id == "activate_play_up_to_n_from_owner_hand"
+    )
+
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=1,
+        payload={
+            "source_instance_id": source.instance_id,
+            "source_card_id": source.card_id,
+            "source_zone": "unison",
+            "skill_kind": "activate_main",
+            "selected_effect_id": minus_three_effect_id,
+        },
+    )
+    engine._resolve_pending_effects(state)
+
+    assert source.markers == 0
+    assert not state.players[1].hand
+    assert any(card.instance_id == raditz.instance_id for card in state.players[1].battle_area)
+    assert any(cp.name == "effect_activate_play_up_to_n_from_owner_hand" for cp in state.checkpoints)
+
+
 def test_phase4_activate_main_can_remove_clone_token_to_play_unison_from_hand_in_rest_with_marker() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

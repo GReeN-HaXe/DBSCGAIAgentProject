@@ -2,8 +2,8 @@
   "coverage": {
     "db": {
       "cards_with_diagnostics": 218,
-      "cards_with_rules": 3801,
-      "cards_without_rules": 2200
+      "cards_with_rules": 3802,
+      "cards_without_rules": 2199
     },
     "priority": {
       "cards_with_diagnostics": 0,
@@ -15,8 +15,8 @@
   "extractor_report": {
     "candidates_scanned": 6001,
     "cards_with_diagnostics": 218,
-    "cards_with_rules": 3801,
-    "cards_without_rules": 2200,
+    "cards_with_rules": 3802,
+    "cards_without_rules": 2199,
     "coverage": {
       "by_handler": {
         "activate_activate_up_to_n_named_field_extra_from_owner_deck": 5,
@@ -41,7 +41,7 @@
         "activate_gain_power_and_keyword_for_turn": 46,
         "activate_gain_power_by_hidden_cost_target_original_power_for_turn": 1,
         "activate_grant_next_ex_evolve_from_owner_drop": 1,
-        "activate_ko_up_to_n_opponent_battle": 41,
+        "activate_ko_up_to_n_opponent_battle": 42,
         "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1,
         "activate_look_top_send_up_to_n_to_owner_warp": 1,
         "activate_negate_opponent_leader_skills_and_restrict_up_to_n_opponent_rest_cards_switch_active_until_opponent_turn_end": 1,
@@ -66,7 +66,7 @@
         "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1,
         "activate_play_up_to_n_from_opponent_hand_to_opponent_battle": 2,
         "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop": 7,
-        "activate_play_up_to_n_from_owner_hand": 2,
+        "activate_play_up_to_n_from_owner_hand": 4,
         "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1,
         "activate_play_up_to_n_from_under_self_and_place_self_under_played_card": 3,
         "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn": 1,
@@ -82,6 +82,7 @@
         "activate_send_up_to_n_opponent_battle_to_warp": 30,
         "activate_send_up_to_n_opponent_battle_to_warp_and_schedule_play_warped_cards_later": 2,
         "activate_send_up_to_n_opponent_drop_battle_to_warp": 2,
+        "activate_send_up_to_n_opponent_hand_to_warp": 1,
         "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n": 1,
         "activate_switch_owner_battle_to_hidden_mode": 3,
         "activate_switch_owner_board_to_revealed_mode": 1,
@@ -277,7 +278,7 @@
         "owner_union_activated": 1,
         "self_activate_battle": 381,
         "self_activate_extra_from_hand": 90,
-        "self_activate_main": 1518,
+        "self_activate_main": 1522,
         "self_added_to_z_energy": 6,
         "self_aegis_activated": 5,
         "self_attacks": 531,
@@ -308,7 +309,7 @@
       "missed_play_ko": 68,
       "missed_play_power_reduce": 23
     },
-    "total_extracted_rules": 5394,
+    "total_extracted_rules": 5398,
     "unmatched_top_templates": [
       {
         "count": 1,
@@ -582,11 +583,6 @@
       },
       {
         "count": 1,
-        "example_card_id": 226,
-        "template": "[+<n>][activate: main] your opponent chooses <n> card in their hand and sends it to their warp.. [-<n>][activate: main] choose up to <n> of your opponent's battle card with energy costs greater than or equal to their cur..."
-      },
-      {
-        "count": 1,
         "example_card_id": 231,
         "template": "[counter: attack] negate the attack and play this card. if a <son gohan: adolescence> card is in play in your battle area, this card gains [blocker] for the turn.. [permanent][bond <n>] \u226aheroine\u226b: this card gets +<n> pow..."
       },
@@ -609,6 +605,11 @@
         "count": 1,
         "example_card_id": 235,
         "template": "[ultimate]. [counter: attack] for each card color among card in battle areas and energy areas, choose up to <n> of your opponent's battle card, ignoring [barrier], and send it to its owner's warp; for each card sent to a..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 238,
+        "template": "[ultimate]. [counter: attack] if you have <n> or more energy: play this card. your opponent can't attack with battle card for the turn. you can't activate the [counter] skill on copies of this card for the game.. [perman..."
       }
     ]
   },
@@ -3642,15 +3643,21 @@
       "example_card_id": 226,
       "example_card_name": "SS3 Nappa, Golden Invader",
       "example_card_number": "P-339",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_ko_up_to_n_opponent_battle": 1,
+        "activate_play_up_to_n_from_owner_hand": 1,
+        "activate_send_up_to_n_opponent_hand_to_warp": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[+<n>][activate: main] your opponent chooses <n> card in their hand and sends it to their warp.. [-<n>][activate: main] choose up to <n> of your opponent's battle card with energy costs greater than or equal to their cur...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 3
+      }
     },
     {
       "card_count": 1,
@@ -102874,6 +102881,7 @@
       "example_card_number": "BT12-057",
       "handler_counts": {
         "activate_play_self_from_hand": 1,
+        "activate_play_up_to_n_from_owner_hand": 1,
         "auto_draw_n": 1
       },
       "implemented_card_count": 1,
@@ -102884,7 +102892,7 @@
       "priority_implemented_rate": 0.0,
       "template": "[rejuvenate][once per turn] if your leader card is green and you remove <n> markers from this card. (place <n> card under this card in its owner's drop area and pay the skill cost: place the top card of your deck in your...",
       "trigger_counts": {
-        "self_activate_main": 2
+        "self_activate_main": 3
       }
     },
     {
@@ -115827,8 +115835,8 @@
   "schema_version": "effect_support_audit.v1",
   "summary": {
     "cards_with_diagnostics": 218,
-    "cards_with_rules": 3801,
-    "cards_without_rules": 2200,
+    "cards_with_rules": 3802,
+    "cards_without_rules": 2199,
     "family_count": 5775,
     "priority_card_count": 0,
     "priority_cards_with_diagnostics": 0,

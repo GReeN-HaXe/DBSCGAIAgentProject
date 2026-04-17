@@ -6139,6 +6139,38 @@ def test_extract_ss_caulifla_spirited_striker_rules() -> None:
     assert placed_under_rule.handler_params["max_power"] == 30000
 
 
+def test_extract_ss3_nappa_golden_invader_rules() -> None:
+    card = replace(
+        _card(
+            "[+1][Activate: Main] Your opponent chooses 1 card in their hand and sends it to their Warp.<br>"
+            "[-2][Activate: Main] Choose up to 2 of your opponent's Battle Cards with energy costs greater than or equal to their current energy and KO them.<br>"
+            "[-3][Activate: Main](Green)(Green)②, if your Leader Card is a &lt;Nappa&gt; card or a green ≪Saiyan≫ card: Choose up to 1 Red/Green multicolor &lt;Raditz&gt; card with an original energy cost of 8 in your hand and play it."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    plus_rule = next(r for r in rules if r.handler_id == "activate_send_up_to_n_opponent_hand_to_warp")
+    assert plus_rule.trigger == "self_activate_main"
+    assert plus_rule.handler_params["max_targets"] == 1
+    assert plus_rule.handler_params["marker_delta"] == 1
+    minus_two_rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_ko_up_to_n_opponent_battle"
+        and r.handler_params.get("requires_cost_at_least_opponent_current_energy") is True
+    )
+    assert minus_two_rule.trigger == "self_activate_main"
+    assert minus_two_rule.handler_params["max_targets"] == 2
+    assert minus_two_rule.handler_params["marker_delta"] == -2
+    minus_three_rule = next(r for r in rules if r.handler_id == "activate_play_up_to_n_from_owner_hand")
+    assert minus_three_rule.trigger == "self_activate_main"
+    assert minus_three_rule.handler_params["marker_delta"] == -3
+    assert minus_three_rule.handler_params["allowed_costs"] == "8"
+    assert minus_three_rule.handler_params["requires_multicolor"] is True
+    assert minus_three_rule.handler_params["required_card_type"] == "BATTLE"
+    assert minus_three_rule.handler_params["required_name_contains"] == "RADITZ"
+
+
 def test_extract_exact_zamasu_final_tenacity_rules() -> None:
     card = _card(
         "[Indestructible]<br>"

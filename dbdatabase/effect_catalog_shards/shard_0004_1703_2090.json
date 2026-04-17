@@ -1,8 +1,72 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 350,
+  "effect_rule_count": 352,
   "rules": {
+    "1703": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 5,
+          "required_traits": "Android",
+          "requires_leader": "if your leader is an \u226aandroid\u226b card",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is an \u226aandroid\u226b card: when this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue \u226aandroid\u226b card with an energy cost of 5 or less among them to your hand, shuffle your deck, and at the end of your opponent's next turn, play 1 clone token with 10000 power in your opponent's battle area.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_play_token_in_battle_on_play",
+        "handler_id": "auto_schedule_play_token_in_battle_on_play",
+        "handler_params": {
+          "amount": 1,
+          "controller_player_scope": "opponent",
+          "power": 10000,
+          "requires_leader": "if your leader is an \u226aandroid\u226b card",
+          "token_name": "clone token",
+          "trigger_kind": "turn_end",
+          "trigger_player_scope": "opponent"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is an \u226aandroid\u226b card: when this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue \u226aandroid\u226b card with an energy cost of 5 or less among them to your hand, shuffle your deck, and at the end of your opponent's next turn, play 1 clone token with 10000 power in your opponent's battle area.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_comboed:auto_play_token_in_battle_on_combo",
+        "handler_id": "auto_play_token_in_battle_on_combo",
+        "handler_params": {
+          "amount": 1,
+          "combo_cost": 0,
+          "combo_power": 0,
+          "controller_player_scope": "opponent",
+          "leader_allowed_colors": "blue",
+          "leader_required_traits": "Android",
+          "power": 0,
+          "required_leader_traits": "Android",
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader is a blue \u226aandroid\u226b card",
+          "resting": false,
+          "token_name": "clone token"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is a blue \u226aandroid\u226b card: when this card is used in a combo from your hand, play 1 clone token in your opponent's battle area.",
+        "trigger": "self_comboed"
+      }
+    ],
     "1704": [
       {
         "family_id": "counter_attack:counter_schedule_play_token_in_battle",
@@ -5765,24 +5829,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
-      }
-    ],
-    "2091": [
-      {
-        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
-        "handler_id": "auto_power_reduce_up_to_n_on_attack",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": -15000,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn.",
-        "trigger": "self_attacks"
       }
     ]
   },

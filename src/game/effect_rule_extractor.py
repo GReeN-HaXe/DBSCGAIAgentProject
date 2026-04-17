@@ -702,8 +702,20 @@ _ACTIVATE_MAIN_SELF_GAIN_POWER_THEN_RETURN_UP_TO_N_OPPONENT_BATTLE_TO_HAND_RE = 
     r"\[[+-]\d+\]\[activate(?::)?\s*main\].{0,320}?this card gets \+(\d+) power for the turn,\s*then choose up to (\d+) of your opponent'?s battle cards? with an energy cost of (\d+) or less and return (?:it|them) to (?:its|their) owner'?s hand",
     re.IGNORECASE,
 )
+_ACTIVATE_MAIN_OPPONENT_CHOOSES_N_HAND_TO_WARP_RE = re.compile(
+    r"\[[+-]\d+\]\[activate(?::)?\s*main\].{0,220}?your opponent chooses (\d+) cards? in their hand and sends (?:it|them) to their warp",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_KO_UP_TO_N_OPPONENT_BATTLE_AT_LEAST_CURRENT_ENERGY_RE = re.compile(
+    r"\[[+-]\d+\]\[activate(?::)?\s*main\].{0,260}?choose up to (\d+) of your opponent'?s battle cards? with energy costs? greater than or equal to their current energy and ko them",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_PLACE_SELF_UNDER_OWNER_LEADER_IF_DO_PLAY_UP_TO_N_FROM_DECK_RE = re.compile(
     r"\[[+-]\d+\]\[activate(?::)?\s*main\].{0,420}?you may place this card under your leader card\.\s*if you do,\s*play up to (\d+) (.+?) with (\d+) power or less from your deck,\s*then shuffle your deck",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_PLAY_UP_TO_N_FROM_OWNER_HAND_WITH_ORIGINAL_COST_RE = re.compile(
+    r"\[[+-]\d+\]\[activate(?::)?\s*main\].{0,360}?choose up to (\d+) (.+?) with an original energy cost of (\d+) in your hand and play it\.?",
     re.IGNORECASE,
 )
 _AUTO_OWNER_ACTIVATE_EXTRA_FROM_HAND_ADD_MARKERS_RE = re.compile(
@@ -4105,6 +4117,50 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_activate_main_opponent_chooses_hand_to_warp = _ACTIVATE_MAIN_OPPONENT_CHOOSES_N_HAND_TO_WARP_RE.search(branch)
+        if m_activate_main_opponent_chooses_hand_to_warp:
+            extra = _extract_common_conditions(branch)
+            marker_delta = _extract_unison_marker_delta(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": int(m_activate_main_opponent_chooses_hand_to_warp.group(1)),
+                **extra,
+            }
+            if marker_delta is not None:
+                params["marker_delta"] = marker_delta
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_send_up_to_n_opponent_hand_to_warp",
+                    handler_params=params,
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_activate_main_ko_at_least_current_energy = _ACTIVATE_MAIN_KO_UP_TO_N_OPPONENT_BATTLE_AT_LEAST_CURRENT_ENERGY_RE.search(branch)
+        if m_activate_main_ko_at_least_current_energy:
+            extra = _extract_common_conditions(branch)
+            marker_delta = _extract_unison_marker_delta(branch)
+            params: dict[str, int | str | bool] = {
+                "max_targets": int(m_activate_main_ko_at_least_current_energy.group(1)),
+                "target_policy": "first",
+                "requires_cost_at_least_opponent_current_energy": True,
+                **extra,
+            }
+            if marker_delta is not None:
+                params["marker_delta"] = marker_delta
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_ko_up_to_n_opponent_battle",
+                    handler_params=params,
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         m_activate_main_place_self_under_owner_leader_if_do_play_from_deck = _ACTIVATE_MAIN_PLACE_SELF_UNDER_OWNER_LEADER_IF_DO_PLAY_UP_TO_N_FROM_DECK_RE.search(branch)
         if m_activate_main_place_self_under_owner_leader_if_do_play_from_deck:
             max_targets = int(m_activate_main_place_self_under_owner_leader_if_do_play_from_deck.group(1))
@@ -4148,6 +4204,43 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="self_placed_under_owner_card",
                     handler_id="auto_play_up_to_n_from_owner_deck_on_placed_under",
                     handler_params=followup_params,
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_activate_main_play_from_owner_hand_original_cost = _ACTIVATE_MAIN_PLAY_UP_TO_N_FROM_OWNER_HAND_WITH_ORIGINAL_COST_RE.search(branch)
+        if m_activate_main_play_from_owner_hand_original_cost:
+            max_targets = int(m_activate_main_play_from_owner_hand_original_cost.group(1))
+            descriptor = str(m_activate_main_play_from_owner_hand_original_cost.group(2) or "").strip().lower()
+            exact_cost = int(m_activate_main_play_from_owner_hand_original_cost.group(3))
+            extra = _extract_common_conditions(branch)
+            marker_delta = _extract_unison_marker_delta(branch)
+            target_filters = _descriptor_filters(descriptor, branch)
+            play_params: dict[str, int | str | bool] = {
+                "max_targets": max_targets,
+                "allowed_costs": str(exact_cost),
+                "max_cost": exact_cost,
+                **target_filters,
+                **extra,
+            }
+            if "battle card" in descriptor or " card " in f" {descriptor} ":
+                play_params["required_card_type"] = "BATTLE"
+            if "multicolor" in descriptor or "multi-color" in descriptor:
+                play_params["requires_multicolor"] = True
+            m_named_character = re.search(r"<([^>]+)>", descriptor)
+            if m_named_character is not None:
+                play_params.pop("required_traits", None)
+                play_params.pop("required_characters", None)
+                play_params["required_name_contains"] = str(m_named_character.group(1) or "").strip().upper()
+            if marker_delta is not None:
+                play_params["marker_delta"] = marker_delta
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_main",
+                    handler_id="activate_play_up_to_n_from_owner_hand",
+                    handler_params=play_params,
                     source_text=branch,
                     once_per_turn=once,
                     limit_per_turn=limit,

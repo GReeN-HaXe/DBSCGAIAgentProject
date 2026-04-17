@@ -3,6 +3,25 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 300,
   "rules": {
+    "4022": [
+      {
+        "family_id": "self_attacks:auto_discard_n_then_switch_up_to_n_owner_battle_active_on_attack",
+        "handler_id": "auto_discard_n_then_switch_up_to_n_owner_battle_active_on_attack",
+        "handler_params": {
+          "auto_discard_hand_before": 1,
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Android 17",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] [once per turn] when this card attacks, you may place 1 card from your hand in the drop area. if you do so, choose up to 1 <android 17> in your battle area and switch it to active mode.",
+        "trigger": "self_attacks"
+      }
+    ],
     "4024": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -4612,21 +4631,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, look at up to 3 cards from the top of your deck, choose up to 1 <veku: br> card or red <vegeta: br> card among them and add it to your hand, place the remaining cards at the bottom of your deck in any order, then at the end of the turn, return this card to its owner's hand.",
         "trigger": "self_played"
-      }
-    ],
-    "4819": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] place this card in your drop area: draw 1 card, then choose up to 1 <frieza> card with an energy cost of 4 or less from your deck and place it in your drop area. then shuffle your deck.",
-        "trigger": "self_activate_main"
       }
     ]
   },

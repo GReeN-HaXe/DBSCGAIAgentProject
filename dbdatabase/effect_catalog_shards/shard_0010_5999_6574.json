@@ -3,6 +3,25 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 321,
   "rules": {
+    "5999": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": 1,
+          "required_card_type": "EXTRA",
+          "requires_played_from": "hand"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card from your hand, look at up to 3 cards from the top of your deck, choose up to 1 extra card with an energy cost of 1 among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order.",
+        "trigger": "self_played"
+      }
+    ],
     "6000": [
       {
         "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
@@ -4790,21 +4809,6 @@
         "provenance": "extractor",
         "source_text": "[activate: battle] if your leader card is a yellow <broly: br> card and you place this card in its owner's drop area from your combo area: draw 1 card.",
         "trigger": "self_activate_battle"
-      }
-    ],
-    "6578": [
-      {
-        "family_id": "self_activate_extra_from_hand:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main/battle]  choose up to 1 of your opponent's battle cards with an energy cost of 3 or less, ko it, then draw 1 card",
-        "trigger": "self_activate_extra_from_hand"
       }
     ]
   },

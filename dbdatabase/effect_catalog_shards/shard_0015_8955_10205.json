@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 227,
+  "card_rule_count": 228,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 389,
+  "effect_rule_count": 390,
   "rules": {
     "10025": [
       {
@@ -1662,6 +1662,26 @@
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] when this card is played, look at up to 5 cards from the top of your deck, choose up to 2 \u226auniverse 2\u226b cards, add up to 1 card to your hand, send up to 1 card to your warp, then shuffle your deck.",
         "trigger": "self_played"
+      }
+    ],
+    "8955": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Gohan: Adolescence",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Son Gohan: Adolescence",
+          "requires_leader": "if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]{y}, if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy: draw 1 card and play this card from our hand.",
+        "trigger": "self_activate_main"
       }
     ],
     "8956": [

@@ -3,6 +3,24 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 422,
   "rules": {
+    "8317": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_required_characters": "Mechikabura",
+          "required_leader_traits": "Mechikabura",
+          "requires_leader": "if your leader is a <mechikabura> card draw 1 card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[dark over realm 4]{b}, on play, if your leader is a <mechikabura> card draw 1 card",
+        "trigger": "self_played"
+      }
+    ],
     "8318": [
       {
         "family_id": "owner_other_battle_played_by_dark_over_realm:auto_draw_n",
@@ -6863,26 +6881,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, switch it to active mode, then choose up to 1 of your opponent's rest mode battle cards and ko it.",
         "trigger": "self_played"
-      }
-    ],
-    "8955": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Gohan: Adolescence",
-          "min_owner_energy": 2,
-          "required_leader_traits": "Son Gohan: Adolescence",
-          "requires_leader": "if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main]{y}, if your leader is a yellow <son gohan: adolescence> card and you have 2 or more energy: draw 1 card and play this card from our hand.",
-        "trigger": "self_activate_main"
       }
     ]
   },

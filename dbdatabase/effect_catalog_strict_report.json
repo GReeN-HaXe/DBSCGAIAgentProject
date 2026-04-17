@@ -1,8 +1,8 @@
 {
   "candidates_scanned": 5766,
   "cards_with_diagnostics": 218,
-  "cards_with_rules": 3674,
-  "cards_without_rules": 2092,
+  "cards_with_rules": 3675,
+  "cards_without_rules": 2091,
   "coverage": {
     "by_handler": {
       "activate_activate_up_to_n_named_field_extra_from_owner_deck": 5,
@@ -27,7 +27,7 @@
       "activate_gain_power_and_keyword_for_turn": 46,
       "activate_gain_power_by_hidden_cost_target_original_power_for_turn": 1,
       "activate_grant_next_ex_evolve_from_owner_drop": 1,
-      "activate_ko_up_to_n_opponent_battle": 41,
+      "activate_ko_up_to_n_opponent_battle": 42,
       "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1,
       "activate_look_top_send_up_to_n_to_owner_warp": 1,
       "activate_negate_opponent_leader_skills_and_restrict_up_to_n_opponent_rest_cards_switch_active_until_opponent_turn_end": 1,
@@ -52,7 +52,7 @@
       "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1,
       "activate_play_up_to_n_from_opponent_hand_to_opponent_battle": 2,
       "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop": 7,
-      "activate_play_up_to_n_from_owner_hand": 2,
+      "activate_play_up_to_n_from_owner_hand": 4,
       "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1,
       "activate_play_up_to_n_from_under_self_and_place_self_under_played_card": 3,
       "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn": 1,
@@ -68,6 +68,7 @@
       "activate_send_up_to_n_opponent_battle_to_warp": 30,
       "activate_send_up_to_n_opponent_battle_to_warp_and_schedule_play_warped_cards_later": 2,
       "activate_send_up_to_n_opponent_drop_battle_to_warp": 2,
+      "activate_send_up_to_n_opponent_hand_to_warp": 1,
       "activate_switch_all_opponent_battle_to_revealed_then_ko_up_to_n": 1,
       "activate_switch_owner_battle_to_hidden_mode": 3,
       "activate_switch_owner_board_to_revealed_mode": 1,
@@ -263,7 +264,7 @@
       "owner_union_activated": 1,
       "self_activate_battle": 381,
       "self_activate_extra_from_hand": 90,
-      "self_activate_main": 1518,
+      "self_activate_main": 1522,
       "self_added_to_z_energy": 6,
       "self_aegis_activated": 5,
       "self_attacks": 503,
@@ -968,7 +969,7 @@
       "missed_play_draw"
     ]
   },
-  "total_extracted_rules": 5255,
+  "total_extracted_rules": 5259,
   "unmatched_top_templates": [
     {
       "count": 1,

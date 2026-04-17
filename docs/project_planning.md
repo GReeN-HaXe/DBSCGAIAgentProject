@@ -4469,3 +4469,20 @@ When adding a new TODO:
 - locked with focused coverage proving:
   - the `+1` line buffs the source and bounces the legal opposing Battle Card
   - the `-3` line places the source under the Leader and plays a matching `<Kefla>` from deck
+
+## SS3 Nappa unison activate slice complete
+
+- added shared extraction for `P-339 SS3 Nappa, Golden Invader`:
+  - `[+1][Activate: Main]` opponent chooses 1 card in hand and sends it to Warp
+  - `[-2][Activate: Main]` KOs up to 2 opponent Battle Cards with energy costs greater than or equal to their current energy
+  - `[-3][Activate: Main]` under green `<Nappa>` / `≪Saiyan≫` Leader gating, plays up to 1 red/green multicolor `<Raditz>` with original energy cost 8 from hand
+- extended the shared activate-main runtime so these paths can spend or gain Unison markers while resolving:
+  - opponent-hand-to-warp activate branch
+  - opponent-battle KO activate branch
+  - play-from-hand activate branch
+- widened opponent Battle target selection with `requires_cost_at_least_opponent_current_energy` for the `current energy` threshold wording
+- normalized the `<Raditz>` descriptor branch to use explicit name matching so `Red/Green multicolor <Raditz>` does not get misparsed into a broken trait filter
+- locked with focused coverage proving:
+  - the `+1` branch warps an opponent hand card and adds a marker
+  - the `-2` branch spends markers and KOs only legal Battle Cards
+  - the `-3` branch spends markers and plays the matching multicolor `Raditz` from hand

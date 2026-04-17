@@ -1,8 +1,25 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 324,
+  "effect_rule_count": 325,
   "rules": {
+    "5435": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is blue and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader card is blue and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
+        "trigger": "self_comboed"
+      }
+    ],
     "5437": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -2029,6 +2046,24 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[activate: main](green), if your leader card is mono-green and your opponent has 7 or more cards in their hand: play this card from your hand with a marker on it, and you can't play unison cards for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_hand",
+        "handler_id": "activate_play_up_to_n_from_owner_hand",
+        "handler_params": {
+          "allowed_colors": "green",
+          "allowed_costs": "1",
+          "marker_delta": 1,
+          "max_cost": 1,
+          "max_targets": 1,
+          "required_card_type": "BATTLE"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] choose 1 card in your hand and place it under this card: you and your opponent draw 1 card, then you choose up to 1 green battle card with an original energy cost of 1 in your hand and play it. at the end of the turn, your opponent chooses up to 1 card in their hand and places it at the bottom of their deck.",
         "trigger": "self_activate_main"
       },
       {
@@ -5112,25 +5147,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card, if your leader card is \u226auniverse 7\u226b and you have 5 or less life, draw 1 card and this card gains +10000 combo power for the duration of the turn.",
         "trigger": "self_comboed"
-      }
-    ],
-    "5999": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 3,
-          "max_add": 1,
-          "max_cost": 1,
-          "required_card_type": "EXTRA",
-          "requires_played_from": "hand"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card from your hand, look at up to 3 cards from the top of your deck, choose up to 1 extra card with an energy cost of 1 among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order.",
-        "trigger": "self_played"
       }
     ]
   },

@@ -3,6 +3,21 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 322,
   "rules": {
+    "4819": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] place this card in your drop area: draw 1 card, then choose up to 1 <frieza> card with an energy cost of 4 or less from your deck and place it in your drop area. then shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "4823": [
       {
         "family_id": "self_played:noop_auto",
@@ -4953,23 +4968,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is a blue <baby> card: when this card is played, look at up to 3 cards from the top of your deck, add up to 1 mono-blue card with a [counter] skill among them to your hand, then place the remaining cards at the bottom of your deck in any order.",
         "trigger": "self_played"
-      }
-    ],
-    "5435": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is blue and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is blue and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
       }
     ]
   },

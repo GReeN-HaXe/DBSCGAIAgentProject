@@ -3,6 +3,24 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 400,
   "rules": {
+    "2091": [
+      {
+        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
+        "handler_id": "auto_power_reduce_up_to_n_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -15000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn.",
+        "trigger": "self_attacks"
+      }
+    ],
     "2092": [
       {
         "family_id": "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
@@ -6714,26 +6732,6 @@
         "provenance": "extractor",
         "source_text": "[activate: battle] draw 1 card, then choose up to 1 of your red z-unisons and it gets +5000 power and [critical] for the battle.",
         "trigger": "self_activate_battle"
-      }
-    ],
-    "2502": [
-      {
-        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "green",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 4,
-          "required_characters": "Or - All And",
-          "required_traits": "Earthling,Namekian,Saiyan"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 \u226asaiyan\u226b, \u226aearthling\u226b, or \u226anamekian\u226b card - all green and with an energy cost of 4 or less - to your hand, then shuffle your deck.",
-        "trigger": "owner_leader_attacks"
       }
     ]
   },

@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 366,
+  "effect_rule_count": 367,
   "rules": {
     "10": [
       {
@@ -2024,6 +2024,61 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](green)/(yellow), if there are 2 or more \u226aturles crusher corps\u226b cards in play in your battle area: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "226": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_hand_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_hand_to_warp",
+        "handler_params": {
+          "marker_delta": 1,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] your opponent chooses 1 card in their hand and sends it to their warp.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_ko_up_to_n_opponent_battle",
+        "handler_id": "activate_ko_up_to_n_opponent_battle",
+        "handler_params": {
+          "marker_delta": -2,
+          "max_targets": 2,
+          "requires_cost_at_least_opponent_current_energy": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-2][activate: main] choose up to 2 of your opponent's battle cards with energy costs greater than or equal to their current energy and ko them.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_hand",
+        "handler_id": "activate_play_up_to_n_from_owner_hand",
+        "handler_params": {
+          "allowed_colors": "green,red",
+          "allowed_costs": "8",
+          "leader_required_characters": "Nappa",
+          "marker_delta": -3,
+          "max_cost": 8,
+          "max_targets": 1,
+          "required_card_type": "BATTLE",
+          "required_leader_traits": "Nappa",
+          "required_name_contains": "RADITZ",
+          "requires_leader": "if your leader card is a <nappa> card or a green \u226asaiyan\u226b card",
+          "requires_multicolor": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main](green)(green)\u2461, if your leader card is a <nappa> card or a green \u226asaiyan\u226b card: choose up to 1 red/green multicolor <raditz> card with an original energy cost of 8 in your hand and play it.",
         "trigger": "self_activate_main"
       }
     ],
@@ -4743,38 +4798,6 @@
         "provenance": "extractor",
         "source_text": "[auto] if this card has 4 or more markers: when this card is played, draw 1 card, then choose all of your opponent's battle cards in rest mode and ko them.",
         "trigger": "self_played"
-      }
-    ],
-    "414": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "rest_mode_only": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto][once per turn][spirit boost 1] when this card attacks, draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
-        "trigger": "self_attacks"
-      },
-      {
-        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "rest_mode_only": true,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto][once per turn][spirit boost 1] when this card attacks, draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
-        "trigger": "self_attacks"
       }
     ],
     "42": [

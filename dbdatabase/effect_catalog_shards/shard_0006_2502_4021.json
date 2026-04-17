@@ -3,6 +3,26 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 349,
   "rules": {
+    "2502": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_characters": "Or - All And",
+          "required_traits": "Earthling,Namekian,Saiyan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 \u226asaiyan\u226b, \u226aearthling\u226b, or \u226anamekian\u226b card - all green and with an energy cost of 4 or less - to your hand, then shuffle your deck.",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
     "2504": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -5543,25 +5563,6 @@
         "provenance": "extractor",
         "source_text": "[blocker] (when one of your other cards is attacked, you may switch this card to rest mode and change the target of the attack to this card)",
         "trigger": "self_blocker_activated"
-      }
-    ],
-    "4022": [
-      {
-        "family_id": "self_attacks:auto_discard_n_then_switch_up_to_n_owner_battle_active_on_attack",
-        "handler_id": "auto_discard_n_then_switch_up_to_n_owner_battle_active_on_attack",
-        "handler_params": {
-          "auto_discard_hand_before": 1,
-          "max_cost": -1,
-          "max_targets": 1,
-          "required_characters": "Android 17",
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] [once per turn] when this card attacks, you may place 1 card from your hand in the drop area. if you do so, choose up to 1 <android 17> in your battle area and switch it to active mode.",
-        "trigger": "self_attacks"
       }
     ]
   },

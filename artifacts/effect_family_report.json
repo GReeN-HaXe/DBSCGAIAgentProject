@@ -1555,9 +1555,9 @@
         1102,
         1123,
         1137,
-        1173,
         421,
         437,
+        1173,
         1176,
         1379,
         1400,
@@ -2720,8 +2720,9 @@
       }
     },
     {
-      "card_count": 38,
+      "card_count": 39,
       "card_ids": [
+        139,
         156,
         240,
         302,
@@ -2763,14 +2764,14 @@
       ],
       "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
       "handlers": {
-        "activate_gain_power_and_keyword_for_turn": 38
+        "activate_gain_power_and_keyword_for_turn": 39
       },
       "provenances": {
-        "extractor": 38
+        "extractor": 39
       },
-      "rule_count": 38,
+      "rule_count": 39,
       "triggers": {
-        "self_activate_main": 38
+        "self_activate_main": 39
       }
     },
     {
@@ -3082,8 +3083,9 @@
       }
     },
     {
-      "card_count": 5,
+      "card_count": 6,
       "card_ids": [
+        139,
         528,
         530,
         1439,
@@ -3092,14 +3094,14 @@
       ],
       "family_id": "self_activate_main:activate_place_self_under_owner_leader",
       "handlers": {
-        "activate_place_self_under_owner_leader": 5
+        "activate_place_self_under_owner_leader": 6
       },
       "provenances": {
-        "extractor": 5
+        "extractor": 6
       },
-      "rule_count": 5,
+      "rule_count": 6,
       "triggers": {
-        "self_activate_main": 5
+        "self_activate_main": 6
       }
     },
     {
@@ -3801,7 +3803,6 @@
         8941,
         8946,
         8952,
-        8956,
         10027,
         10028,
         10029,
@@ -3822,6 +3823,7 @@
         10183,
         10184,
         10193,
+        8956,
         8958,
         8961,
         8963,
@@ -4959,7 +4961,6 @@
         8941,
         8949,
         8955,
-        8956,
         10027,
         10034,
         10040,
@@ -4977,6 +4978,7 @@
         10180,
         10182,
         10183,
+        8956,
         8958,
         8961,
         8963,
@@ -7229,6 +7231,23 @@
     {
       "card_count": 1,
       "card_ids": [
+        139
+      ],
+      "family_id": "self_placed_under_owner_card:auto_play_up_to_n_from_owner_deck_on_placed_under",
+      "handlers": {
+        "auto_play_up_to_n_from_owner_deck_on_placed_under": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_placed_under_owner_card": 1
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
         8460
       ],
       "family_id": "self_placed_under_owner_card:auto_power_reduce_up_to_n_on_placed_under",
@@ -8537,7 +8556,6 @@
         376,
         378,
         4,
-        415,
         62,
         66,
         91,
@@ -8552,6 +8570,7 @@
         1115,
         1128,
         1159,
+        415,
         420,
         425,
         446,
@@ -10748,11 +10767,11 @@
   ],
   "schema_version": "effect_family_report.v1",
   "summary": {
-    "card_rule_count": 3726,
-    "effect_rule_count": 5327,
-    "family_count": 342,
+    "card_rule_count": 3727,
+    "effect_rule_count": 5330,
+    "family_count": 343,
     "provenance_counts": {
-      "extractor": 5220,
+      "extractor": 5223,
       "manual_override": 107
     }
   }

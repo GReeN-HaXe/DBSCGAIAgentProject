@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 327,
+  "effect_rule_count": 328,
   "rules": {
     "1000": [
       {
@@ -2482,23 +2482,36 @@
         "trigger": "self_activate_main"
       }
     ],
-    "1172": [
+    "414": [
       {
-        "family_id": "self_played:auto_draw_n",
+        "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "leader_allowed_colors": "black",
-          "leader_required_traits": "Demon Realm Race",
-          "required_leader_traits": "Demon Realm Race",
-          "requires_leader": "if your leader is a black \u226ademon realm race\u226b card"
+          "rest_mode_only": true
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[auto] when this card is played, draw 1 card. additionally, if your leader is a black \u226ademon realm race\u226b card, send up to 2 cards from the top of your deck to your warp.",
-        "trigger": "self_played"
+        "source_text": "[auto][once per turn][spirit boost 1] when this card attacks, draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn][spirit boost 1] when this card attacks, draw 1 card, then choose up to 1 of your opponent's battle cards in rest mode and ko it.",
+        "trigger": "self_attacks"
       }
     ],
     "415": [

@@ -3,6 +3,19 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 412,
   "rules": {
+    "7839": [
+      {
+        "family_id": "owner_opponent_card_attacks:auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle",
+        "handler_id": "auto_remove_self_prevent_leader_damage_and_battle_ko_for_battle",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "source_instance",
+        "once_per_turn": false,
+        "provenance": "manual_override",
+        "source_text": "",
+        "trigger": "owner_opponent_card_attacks"
+      }
+    ],
     "7840": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -6575,24 +6588,6 @@
         "provenance": "manual_override",
         "source_text": "",
         "trigger": "counter_attack"
-      }
-    ],
-    "8317": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_required_characters": "Mechikabura",
-          "required_leader_traits": "Mechikabura",
-          "requires_leader": "if your leader is a <mechikabura> card draw 1 card"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[dark over realm 4]{b}, on play, if your leader is a <mechikabura> card draw 1 card",
-        "trigger": "self_played"
       }
     ]
   },

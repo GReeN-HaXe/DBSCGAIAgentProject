@@ -379,6 +379,7 @@ class RulesEngine:
             "activate_reduce_next_matching_z_awaken_cost_in_z_deck": self._handle_activate_reduce_next_matching_z_awaken_cost_in_z_deck,
             "activate_optional_send_owner_hand_to_warp_draw_n": self._handle_activate_optional_send_owner_hand_to_warp_draw_n,
             "activate_send_up_to_n_from_owner_hand_to_warp": self._handle_activate_send_up_to_n_from_owner_hand_to_warp,
+            "activate_send_up_to_n_opponent_hand_to_warp": self._handle_activate_send_up_to_n_opponent_hand_to_warp,
             "activate_play_up_to_n_from_owner_hand": self._handle_activate_play_up_to_n_from_owner_hand,
             "activate_opponent_discards_n_from_hand": self._handle_activate_opponent_discards_n_from_hand,
             "activate_place_up_to_n_from_under_named_owner_battle_into_drop_then_opponent_discards_same_count": self._handle_activate_place_up_to_n_from_under_named_owner_battle_into_drop_then_opponent_discards_same_count,
@@ -21644,6 +21645,41 @@ class RulesEngine:
             self._append_to_owner_warp(state, owner_player_id=reg.owner_player_id, card=moved, source_zone="hand")
         self._checkpoint(state, "effect_activate_send_up_to_n_from_owner_hand_to_warp")
 
+    def _handle_activate_send_up_to_n_opponent_hand_to_warp(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        if str(event.payload.get("skill_kind") or "") != "activate_main":
+            return
+        owner = state.players.get(reg.owner_player_id)
+        source = self._find_by_instance(owner, str(reg.source_zone or "").strip().lower(), reg.source_instance_id) if owner is not None else None
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta < 0 and source is not None and source.card_type in {"UNISON", "Z-UNISON"} and int(getattr(source, "markers", 0) or 0) < abs(marker_delta):
+            return
+        if marker_delta != 0 and source is not None and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
+        opponent_id = self._opponent_of(reg.owner_player_id)
+        opponent = state.players.get(opponent_id)
+        if opponent is None or not opponent.hand:
+            return
+        max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
+        if max_targets <= 0:
+            return
+        moved = 0
+        while moved < max_targets and opponent.hand:
+            moved_card = opponent.hand.pop(0)
+            self._mark_warp_card_with_source_skill(moved_card, reg=reg)
+            self._append_to_owner_warp(state, owner_player_id=opponent_id, card=moved_card, source_zone="hand")
+            moved += 1
+        if moved > 0:
+            self._checkpoint(state, "effect_activate_send_up_to_n_opponent_hand_to_warp")
+
     def _handle_activate_play_up_to_n_from_owner_hand(
         self,
         state: GameState,
@@ -21657,6 +21693,13 @@ class RulesEngine:
         required_skill_kind = "activate_battle" if reg.trigger == "self_activate_battle" else "activate_main"
         if str(event.payload.get("skill_kind") or "") != required_skill_kind:
             return
+        owner = state.players.get(reg.owner_player_id)
+        source = self._find_by_instance(owner, str(reg.source_zone or "").strip().lower(), reg.source_instance_id) if owner is not None else None
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta < 0 and source is not None and source.card_type in {"UNISON", "Z-UNISON"} and int(getattr(source, "markers", 0) or 0) < abs(marker_delta):
+            return
+        if marker_delta != 0 and source is not None and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
         raw_colors = str(reg.handler_params.get("allowed_colors", "")).strip().lower()
         allowed_colors = {c.strip() for c in raw_colors.replace("|", ",").replace("/", ",").split(",") if c.strip()}
         raw_traits = str(reg.handler_params.get("required_traits", "")).strip().lower()
@@ -23691,6 +23734,13 @@ class RulesEngine:
         expected_skill_kind = "activate_battle" if reg.trigger == "self_activate_battle" else "activate_main"
         if str(event.payload.get("skill_kind") or "") != expected_skill_kind:
             return
+        owner = state.players.get(reg.owner_player_id)
+        source = self._find_by_instance(owner, str(reg.source_zone or "").strip().lower(), reg.source_instance_id) if owner is not None else None
+        marker_delta = self._resolve_effect_int_param(state, reg, "marker_delta", default=0)
+        if marker_delta < 0 and source is not None and source.card_type in {"UNISON", "Z-UNISON"} and int(getattr(source, "markers", 0) or 0) < abs(marker_delta):
+            return
+        if marker_delta != 0 and source is not None and source.card_type in {"UNISON", "Z-UNISON"}:
+            source.markers += marker_delta
         max_targets = self._resolve_effect_int_param(state, reg, "max_targets", default=1)
         if max_targets <= 0:
             return
@@ -28894,6 +28944,9 @@ class RulesEngine:
         if bool(reg.handler_params.get("requires_cost_greater_than_opponent_current_energy", False)):
             opponent_energy = len(state.players[opponent_id].energy)
             candidates = [c for c in candidates if int(c.energy_cost or 0) > opponent_energy]
+        if bool(reg.handler_params.get("requires_cost_at_least_opponent_current_energy", False)):
+            opponent_energy = len(state.players[opponent_id].energy)
+            candidates = [c for c in candidates if int(c.energy_cost or 0) >= opponent_energy]
         if bool(reg.handler_params.get("rest_mode_only", False)):
             candidates = [c for c in candidates if c.resting]
         if not bool(reg.handler_params.get("ignores_barrier", False)):

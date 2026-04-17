@@ -3,6 +3,21 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 327,
   "rules": {
+    "6578": [
+      {
+        "family_id": "self_activate_extra_from_hand:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main/battle]  choose up to 1 of your opponent's battle cards with an energy cost of 3 or less, ko it, then draw 1 card",
+        "trigger": "self_activate_extra_from_hand"
+      }
+    ],
     "6579": [
       {
         "family_id": "self_attacks:noop_auto",
@@ -5035,23 +5050,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
-      }
-    ],
-    "7084": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is red and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you combo with this card, if your leader card is red and your life is at 4 or less, draw 1 card.",
-        "trigger": "self_comboed"
       }
     ]
   },

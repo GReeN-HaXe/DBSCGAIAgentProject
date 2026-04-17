@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3727,
+  "card_rule_count": 3728,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 5330,
+  "effect_rule_count": 5334,
   "rules": {
     "10": [
       {
@@ -20834,6 +20834,61 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1] place 1 of your z-energy in your drop:  choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it at the bottom of its owner's deck",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "226": [
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_opponent_hand_to_warp",
+        "handler_id": "activate_send_up_to_n_opponent_hand_to_warp",
+        "handler_params": {
+          "marker_delta": 1,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] your opponent chooses 1 card in their hand and sends it to their warp.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_ko_up_to_n_opponent_battle",
+        "handler_id": "activate_ko_up_to_n_opponent_battle",
+        "handler_params": {
+          "marker_delta": -2,
+          "max_targets": 2,
+          "requires_cost_at_least_opponent_current_energy": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-2][activate: main] choose up to 2 of your opponent's battle cards with energy costs greater than or equal to their current energy and ko them.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_hand",
+        "handler_id": "activate_play_up_to_n_from_owner_hand",
+        "handler_params": {
+          "allowed_colors": "green,red",
+          "allowed_costs": "8",
+          "leader_required_characters": "Nappa",
+          "marker_delta": -3,
+          "max_cost": 8,
+          "max_targets": 1,
+          "required_card_type": "BATTLE",
+          "required_leader_traits": "Nappa",
+          "required_name_contains": "RADITZ",
+          "requires_leader": "if your leader card is a <nappa> card or a green \u226asaiyan\u226b card",
+          "requires_multicolor": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-3][activate: main](green)(green)\u2461, if your leader card is a <nappa> card or a green \u226asaiyan\u226b card: choose up to 1 red/green multicolor <raditz> card with an original energy cost of 8 in your hand and play it.",
         "trigger": "self_activate_main"
       }
     ],
@@ -46316,6 +46371,24 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[activate: main](green), if your leader card is mono-green and your opponent has 7 or more cards in their hand: play this card from your hand with a marker on it, and you can't play unison cards for the turn.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_up_to_n_from_owner_hand",
+        "handler_id": "activate_play_up_to_n_from_owner_hand",
+        "handler_params": {
+          "allowed_colors": "green",
+          "allowed_costs": "1",
+          "marker_delta": 1,
+          "max_cost": 1,
+          "max_targets": 1,
+          "required_card_type": "BATTLE"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] choose 1 card in your hand and place it under this card: you and your opponent draw 1 card, then you choose up to 1 green battle card with an original energy cost of 1 in your hand and play it. at the end of the turn, your opponent chooses up to 1 card in their hand and places it at the bottom of their deck.",
         "trigger": "self_activate_main"
       },
       {
