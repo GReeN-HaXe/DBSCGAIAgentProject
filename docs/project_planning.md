@@ -4486,3 +4486,64 @@ When adding a new TODO:
   - the `+1` branch warps an opponent hand card and adds a marker
   - the `-2` branch spends markers and KOs only legal Battle Cards
   - the `-3` branch spends markers and plays the matching multicolor `Raditz` from hand
+
+## Broly combo-area activate slice complete
+
+- added shared extraction for `EX19-12 Broly, Omen of Evolution`:
+  - `[Activate: Battle] Place this card in its owner's Drop Area from your Combo Area: Choose up to 1 Battle Card with a combo cost of 0 in your opponent's Combo Area and place it in its owner's Drop Area.`
+- reused the existing `activate_send_up_to_n_opponent_combo_to_drop` runtime handler instead of introducing a new combo-area effect path
+- paired the extracted effect with the already-supported `activate_battle_combo -> send_self_from_combo_to_drop` cost rule so the exact card now resolves end to end from the Combo Area
+- locked with focused coverage proving:
+  - the extractor emits the shared activate-battle combo-drop handler
+  - the exact extracted card pays its combo-area self-drop cost
+  - the legal opponent combo-area target is placed into Drop while non-matching combo cards remain in the Combo Area
+
+## Five-item shortlist slice complete
+
+- added shared extraction for `P-343 Get That Monster!`:
+  - both `Choose one-` activate-battle search branches now map to the existing deck-to-hand activate path
+  - widened `activate_add_up_to_n_from_owner_deck_to_hand` so it also resolves `self_activate_battle`
+- added shared extraction and runtime for `BT15-089 King Kai's Training`:
+  - place self under `{King Kai's Planet}`
+  - then add up to 1 `{Son Goku, Confronting Invasion}` from deck to hand and shuffle
+- added shared extraction and runtime for `BT15-117 Scout`:
+  - leader gate is now modeled as yellow-or-`≪Turles Crusher Corps≫`
+  - the deterministic runtime resolves the opponent-preferred branch by switching the first legal active opponent Battle Card to Rest Mode
+- added shared extraction and runtime for `BT15-079 Chiaotzu, Confronting Invasion`:
+  - send self to Warp
+  - then opponent chooses a Battle Card and non-`≪Saiyan≫` targets are KO'd
+- added shared extraction and runtime for `P-338 Raditz`:
+  - `When this card attacks...` now reuses the existing opponent-hand-to-warp auto path on attack
+  - widened activate-main top-deck search extraction to support `choose up to ... among them and add it to your hand`
+- locked with focused coverage proving:
+  - each of the five shortlist items now extracts into a concrete supported family
+  - `King Kai's Training`, `Scout`, `Chiaotzu`, and `Raditz` resolve through runtime with exact card text
+
+## Erase a Universe head slice complete
+
+- added shared extraction for `BT16-017 Erase a Universe`:
+  - `[Activate: Main]` now maps to a shared damage-and-win handler that:
+    - counts colors on owner `≪God≫` Battle Cards
+    - deals capped damage to the opponent
+    - wins the game if the owner has 12 or more multicolor `≪God≫` cards in play
+  - `[Activate: Battle]` now maps to the shared battle-time power buff path for owner `≪God≫` cards
+- added runtime support for the activate-main branch in the shared engine handler
+- removed the duplicate text-derived leader requirement from this family so the explicit `Great Priest` leader filter controls resolution without a second brittle gate
+- locked with focused coverage proving:
+  - the extractor emits both the activate-main damage/win rule and the activate-battle buff rule
+  - the exact extracted card deals the capped 2 damage and wins the game when the 12 multicolor `≪God≫` condition is met
+
+## BT15 Vegeta leader slice complete
+
+- normalized DBS HTML badge markup in extractor text preprocessing so badge-based leader skills now parse as standard `[Auto]`, `[Activate: Battle]`, and `[Awaken]` branches
+- added shared extraction for `BT15-062 Vegeta`:
+  - opponent-turn `owner_card_left_battle_area` auto when one of your Battle Cards is removed by an opponent's skill
+  - self `[Activate: Battle]` power buff gated by `your life <= your opponent's life`
+- added runtime support for the new owner-battle-left discard family:
+  - `auto_opponent_discards_n_from_hand_on_owner_matching_battle_left`
+  - `card_left_battle_area` events now carry `removed_by_opponent_skill` so the trigger can distinguish ordinary battle leaves from opponent-skill removal
+- added a shared `requires_owner_life_less_or_equal_opponent` requirement so exact life-comparison activate skills resolve without a one-off handler
+- locked with focused coverage proving:
+  - the exact HTML leader text extracts into the expected auto and activate-battle rules
+  - the discard auto fires when an owner Battle Card is removed by an opponent's skill during the opponent's turn
+  - the activate-battle line gives the leader `+5000` for the battle when the life condition is met

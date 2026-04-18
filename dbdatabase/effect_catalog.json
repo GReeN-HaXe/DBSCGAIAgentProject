@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3728,
+  "card_rule_count": 3751,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 5334,
+  "effect_rule_count": 5370,
   "rules": {
     "10": [
       {
@@ -3458,6 +3458,24 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "110": [
+      {
+        "family_id": "self_activate_main:activate_rest_opponent_active_else_gain_control_opponent_battle",
+        "handler_id": "activate_rest_opponent_active_else_gain_control_opponent_battle",
+        "handler_params": {
+          "leader_or_allowed_colors": "yellow",
+          "leader_or_required_traits": "Turles Crusher Corps",
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is yellow or a \u226aturles crusher corps\u226b card and you choose 1 of your opponent's cards in active mode: your opponent may switch the chosen card to rest mode. if they don't, choose up to 1 of your opponent's battle cards and gain control of it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "1101": [
       {
         "family_id": "self_activate_extra_from_hand:auto_draw_n",
@@ -4232,6 +4250,20 @@
         "provenance": "extractor",
         "source_text": "[auto][once per turn] when you use a \u226abardock's crew\u226b card in a combo, draw 1 card.",
         "trigger": "owner_card_comboed"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 3000,
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] if it's your turn: for each \u226abardock's crew\u226b card with different character names in your z-energy, this card gets +3000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "1151": [
@@ -4948,6 +4980,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](green), if you have 3 or more mono-green energy: play this card from your hand.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 10000
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn](green): this card gets +10000 power for the battle, and -10000 power during the next turn.",
+        "trigger": "self_activate_battle"
       }
     ],
     "120": [
@@ -9398,6 +9443,20 @@
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch this card to active mode.",
         "trigger": "turn_end"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 10000,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] place 1 card from under this card in its owner's drop: switch this card to active mode, choose up to 1 of your opponent's battle cards and switch it to rest mode, and this card gets +10000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "1543": [
@@ -9467,6 +9526,22 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1] discard 1 other mono-red extra from your hand: draw 1 card, and add up to 1 card from your life to your hand.",
         "trigger": "self_activate_extra_from_hand"
+      },
+      {
+        "family_id": "self_activate_battle:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_cost": 6,
+          "max_targets": 1,
+          "required_characters": "The Same Name As The Chosen",
+          "shuffle_searched_zones": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] choose up to 1 mono-red <broly> card in your battle area with an energy cost of 6 or less, add up to 1 card with the same name as the chosen card from your deck to your hand, and shuffle your deck.",
+        "trigger": "self_activate_battle"
       }
     ],
     "1546": [
@@ -12757,6 +12832,52 @@
         "trigger": "self_activate_extra_from_hand"
       }
     ],
+    "176": [
+      {
+        "family_id": "self_activate_battle:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "leader_allowed_colors": "red",
+          "leader_required_traits": "Shenron",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_leader_traits": "Shenron",
+          "required_runtime_labels": "dragon ball",
+          "requires_leader": "if your leader card is a red \u226ashenron\u226b card",
+          "shuffle_searched_zones": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader card is a red \u226ashenron\u226b card:  add up to 1 [dragon ball] card from your deck to your hand, then shuffle your deck",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "allowed_colors": "red",
+          "allowed_costs": "1,2",
+          "leader_allowed_colors": "red",
+          "leader_required_traits": "Shenron",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 1,
+          "required_characters": "Or 2",
+          "required_leader_traits": "Shenron",
+          "required_traits": "Desire",
+          "requires_leader": "if your leader card is a red \u226ashenron\u226b card",
+          "shuffle_searched_zones": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader card is a red \u226ashenron\u226b card:  add up to 1 red \u226adesire\u226b card with an energy cost of 1 or 2 from your deck to your hand, then shuffle your deck",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "1761": [
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
@@ -13031,6 +13152,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main](red), if your leader is a red \u226auniverse 3\u226b card and your opponent has 2 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 10000
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](red): this card gets +10000 power for the battle, and during the next turn, this card gets -10000 power.",
+        "trigger": "self_activate_battle"
       }
     ],
     "178": [
@@ -14021,6 +14155,37 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader is blue and your life is at 4 or less: when this card is used in a combo,  add up to 1 {breaking a taboo} from your deck to your hand, then shuffle your deck",
         "trigger": "self_comboed"
+      }
+    ],
+    "183": [
+      {
+        "family_id": "owner_card_left_battle_area:auto_opponent_discards_n_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "amount": 1,
+          "event_removed_by_opponent_skill": true,
+          "requires_opponent_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] if it's your opponent's turn: when one of your battle cards is removed from your battle area by an opponent's skill, your opponent chooses 1 card in their hand and discards it.",
+        "trigger": "owner_card_left_battle_area"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 5000,
+          "requires_owner_life_less_or_equal_opponent": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] if your life is less than or equal to your opponent's, this card gets +5000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "1830": [
@@ -16849,6 +17014,21 @@
         "trigger": "self_played"
       }
     ],
+    "202": [
+      {
+        "family_id": "self_activate_main:activate_send_self_to_warp_then_opponent_choose_battle_ko_if_not_trait",
+        "handler_id": "activate_send_self_to_warp_then_opponent_choose_battle_ko_if_not_trait",
+        "handler_params": {
+          "excluded_trait": "Saiyan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] send this card to its owner's warp: your opponent chooses 1 of their battle cards; if it's a non-\u226asaiyan\u226b card, ko it.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "2021": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -18250,6 +18430,25 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow non-\u226agreat ape\u226b <son goku: childhood> card and you have a yellow originally skill-less battle card with an energy cost of 2 or more in play: play this card from your hand, and add up to 1 card from your life to your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "212": [
+      {
+        "family_id": "self_activate_main:activate_place_self_under_matching_owner_battle_then_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_place_self_under_matching_owner_battle_then_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_targets": 1,
+          "required_name_contains": "SON GOKU, CONFRONTING INVASION",
+          "required_owner_battle_exclude_source_instance": true,
+          "required_owner_battle_required_name_contains": "KING KAI'S PLANET",
+          "shuffle_searched_zones": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose 1 {king kai's planet} in your battle area: place this card under the chosen card, add up to 1 {son goku, confronting invasion} from your deck to your hand, then shuffle your deck.",
         "trigger": "self_activate_main"
       }
     ],
@@ -20690,6 +20889,39 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played from your hand, draw 1 card, then place up to 1 card from your warp in your drop.",
         "trigger": "self_played"
+      }
+    ],
+    "225": [
+      {
+        "family_id": "self_attacks:auto_send_up_to_n_opponent_hand_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_hand_to_warp_on_play",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, your opponent chooses 1 card in their hand and sends it to their warp.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green,red",
+          "discard_after_add": 1,
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Nappa,Raditz,Vegeta"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] look at up to 5 cards from the top of your deck, choose up to 1 red or green <raditz>, <vegeta>, or <nappa> card among them and add it to your hand, shuffle your deck, and if you added a card to your hand, choose 1 card in your hand and discard it.",
+        "trigger": "self_activate_main"
       }
     ],
     "2250": [
@@ -28540,6 +28772,46 @@
         "trigger": "self_activate_main"
       }
     ],
+    "299": [
+      {
+        "family_id": "self_activate_main:activate_deal_damage_to_opponent_per_owner_matching_battle_colors_and_optionally_win",
+        "handler_id": "activate_deal_damage_to_opponent_per_owner_matching_battle_colors_and_optionally_win",
+        "handler_params": {
+          "colors_per_damage": 2,
+          "damage_per": 1,
+          "leader_required_characters": "Great Priest",
+          "max_damage": 2,
+          "required_owner_battle_traits": "God",
+          "win_if_owner_in_play_matching_count_at_least": 12,
+          "win_required_traits": "God",
+          "win_requires_multicolor": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]((red))((blue))((green))((yellow))(\uff11), if your leader card is a <great priest> card: deal 1 damage to your opponent for every 2 colors on \u226agod\u226b cards in your battle area. (2 damage max.) additionally, if you have 12 or more multicolor \u226agod\u226b cards in play, you win the game.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": 6000,
+          "required_traits": "God",
+          "target_policy": "first",
+          "target_scope": "owner_cards"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] choose up to 1 \u226agod\u226b card and it gets +6000 power for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "3": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -29875,6 +30147,24 @@
         "trigger": "self_attacks"
       }
     ],
+    "3685": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 10,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Bulma"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [once per turn] look at up to 10 cards from the top of your deck, choose up to 1 <bulma> among them and add it to your hand. then, shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "3687": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -31162,6 +31452,25 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
         "trigger": "self_played"
+      }
+    ],
+    "3811": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green,yellow",
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Android"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] look at up to 3 cards from the top of your deck, choose up to 1 green or yellow \u226aandroid\u226b card among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order.",
+        "trigger": "self_activate_main"
       }
     ],
     "3813": [
@@ -33194,6 +33503,25 @@
         "trigger": "self_attacks"
       }
     ],
+    "4028": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Baby,Brainwashed",
+          "required_traits": "Brainwashed"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 2 cards in your life and add them to your hand: look at up to 3 cards from the top of your deck, choose up to 1 <baby> or \u226abrainwashed\u226b card among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "4029": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -33307,6 +33635,25 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "4036": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_card_type": "EXTRA"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [once per turn] look at up to 5 cards from the top of your deck, choose up to 1 red extra card among them, and add it to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
       }
     ],
     "4037": [
@@ -33441,6 +33788,26 @@
         "provenance": "extractor",
         "source_text": "[blocker] (when one of your other cards is attacked, you may switch this card to rest mode and change the target of the attack to this card.)",
         "trigger": "self_blocker_activated"
+      }
+    ],
+    "4051": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "look_count": 2,
+          "max_add": 1,
+          "max_cost": -1,
+          "move_unpicked_to_bottom": true,
+          "required_traits": "Frieza'S Army"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 1 card from your life and add it to your hand: look at up to 2 cards from the top of your deck, choose up to 1 red \u226afrieza's army\u226b card from among them and add it to your hand, then place the rest at the bottom of your deck in any order.",
+        "trigger": "self_activate_main"
       }
     ],
     "4056": [
@@ -33903,6 +34270,23 @@
         "provenance": "extractor",
         "source_text": "[activate: battle] if your leader card is a \u226auniverse 11\u226b card and it's your turn: choose up to 1 of your leader cards or up to 1 of your yellow unison cards with a specified cost of 2 and it gets +10000 power for the turn.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "4114": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] look at up to 5 cards from the top of your deck, choose up to 1 card among them, add it to your hand, shuffle your deck, and if you added a card to your hand, choose 1 card in your hand and place it in your drop area.",
+        "trigger": "self_activate_main"
       }
     ],
     "4123": [
@@ -34613,6 +34997,26 @@
         "trigger": "owner_leader_attacks"
       }
     ],
+    "4214": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "leader_required_characters": "Dr. Uiro",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Dr. Kochin,Dr. Uiro",
+          "requires_leader": "if your leader card is a <dr. uiro> card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a <dr. uiro> card: look at up to 5 cards from the top of your deck, choose up to 1 <dr. uiro> or <dr. kochin> card among them, add it to your hand, then shuffle your deck. if you added a card to your hand, choose up to 1 of your green energy and switch it to active mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "422": [
       {
         "family_id": "self_activate_main:activate_play_self_from_warp",
@@ -34897,6 +35301,24 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is placed in a battle area, choose up to 1 green \u226agreat ape\u226b card from your deck, add it to your hand, then shuffle your deck.",
         "trigger": "self_field_extra_placed"
+      }
+    ],
+    "4255": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Fu,Mira"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn][burst 3] look at up to 5 cards from the top of your deck, choose up to 1 <mira> or <fu> card among them, add it to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
       }
     ],
     "426": [
@@ -36759,6 +37181,26 @@
         "trigger": "self_played"
       }
     ],
+    "4506": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "look_count": 7,
+          "max_add": 2,
+          "max_cost": 4,
+          "required_characters": "Or More",
+          "required_traits": "Frieza'S Army"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] look at up to 7 cards from the top of your deck, choose up to 2 red \u226afrieza's army\u226b cards with energy costs of 4 or more among them and add them to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "4509": [
       {
         "family_id": "self_played:noop_auto",
@@ -36873,6 +37315,27 @@
         "trigger": "self_attacks"
       }
     ],
+    "4521": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "leader_required_characters": "Baby",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_leader_traits": "Baby",
+          "required_traits": "Baby",
+          "requires_leader": "if your leader card is a <baby> card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a <baby> card: look at up to 5 cards from the top of your deck, choose up to 1 <baby> card among them, add it to your hand, then shuffle your deck. if you added a card to your hand, choose up to 1 of your yellow energy and switch it to active mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "4525": [
       {
         "family_id": "self_played:noop_auto",
@@ -36928,6 +37391,26 @@
         "provenance": "extractor",
         "source_text": "[activate: main] if your leader card is a \u226ashenron\u226b card, draw 1 card, then choose 1 card from your hand and place it in your drop area, and your opponent chooses 1 card from their hand and places it in their drop area.",
         "trigger": "self_activate_extra_from_hand"
+      }
+    ],
+    "4535": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green,red",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Or Or King Vegeta S Dynasty",
+          "required_traits": "Saiyan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 1 card from your life and add it to your hand: look at up to 5 cards from the top of your deck, choose up to 1 red or green \u226asaiyan\u226b card or {king vegeta's dynasty} among them and add it to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
       }
     ],
     "4538": [
@@ -41232,6 +41715,23 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, draw 1 card.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red,yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Pan,Son Goku: Gt"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn](yellow): look at up to 5 cards from the top of your deck, choose up to 1 red or yellow <son goku: gt> or <pan> card among them, add it to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
       }
     ],
     "5207": [
@@ -45412,6 +45912,28 @@
         "trigger": "self_played"
       }
     ],
+    "5541": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "leader_required_traits": "Majin",
+          "look_count": 10,
+          "max_add": 1,
+          "max_cost": 3,
+          "required_characters": "Majin Buu",
+          "required_leader_traits": "Majin",
+          "requires_leader": "if your leader card is a \u226amajin\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226amajin\u226b card: look at up to 10 cards from the top of your deck, choose up to 1 blue <majin buu> card with an energy cost of 3 or less among them and add it to your hand, then shuffle your deck. if you add a card to your hand, choose up to 1 of your blue energy and switch it to active mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "5543": [
       {
         "family_id": "self_activate_main:activate_buff_owner_battle_cards",
@@ -46250,6 +46772,24 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[activate: main]\u2460, if your leader card is a black \u226asaiyan\u226b card and you send 1 <son gohan: xeno> card and 1 <trunks: xeno> card from your drop area to your warp: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "5621": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Frieza Clan"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] look at up to 3 cards from the top of your deck, choose up to 1 \u226afrieza clan\u226b card among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order.",
         "trigger": "self_activate_main"
       }
     ],
@@ -47738,6 +48278,20 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "min_owner_energy": 3,
+          "power_delta": 6000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn](black), if you have 3 or more energy and you place 1 card from under this card in its owner's drop area: play up to 1 skill-less black battle card with an energy cost of 2 or less from your drop area, and this card gets +6000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "5771": [
@@ -49051,6 +49605,27 @@
         "provenance": "extractor",
         "source_text": "[energy-exhaust]",
         "trigger": "self_played"
+      }
+    ],
+    "5888": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "leader_required_characters": "Ginyu",
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": 2,
+          "required_leader_traits": "Ginyu",
+          "required_traits": "Ginyu Force",
+          "requires_leader": "if your leader card is a <ginyu> card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]\u2460, place this card in your drop area from your hand: if your leader card is a <ginyu> card, look at up to 3 cards from the top of your deck, choose up to 1 \u226aginyu force\u226b card among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order. if you added a card to your hand, choose up to 1 \u226aginyu force\u226b card from your hand with an energy cost of 2 or less and play it.",
+        "trigger": "self_activate_main"
       }
     ],
     "589": [
@@ -54512,6 +55087,21 @@
         "provenance": "extractor",
         "source_text": "[auto] if your leader card is a green \u226afrieza clan\u226b card and this card has 3 or more markers on it: when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 7 or less and ko it.",
         "trigger": "self_played"
+      }
+    ],
+    "6484": [
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 10000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] choose 1 card in your hand and discard it: this card gets +10000 power for the battle; at the end of the turn, switch 1 of your mono-blue energy to active mode.",
+        "trigger": "self_activate_battle"
       }
     ],
     "6485": [
@@ -60593,6 +61183,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played using [over realm] or [dark over realm], draw 1 card, then choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_send_up_to_n_opponent_hand_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_hand_to_warp_on_play",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, your opponent chooses 1 card in their hand and sends it to their warp.",
+        "trigger": "self_attacks"
       }
     ],
     "7036": [
@@ -61725,6 +62328,21 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, draw 1 card, then choose up to 1 card in your hand and add it to your energy.",
         "trigger": "self_played"
+      }
+    ],
+    "7137": [
+      {
+        "family_id": "self_attacks:auto_send_up_to_n_opponent_hand_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_opponent_hand_to_warp_on_play",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, your opponent chooses 1 card in their hand and sends it to their warp. if the card your opponent sent to their warp was a battle card, combo it with this card.",
+        "trigger": "self_attacks"
       }
     ],
     "7139": [
@@ -81082,7 +81700,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: main][limit 1]{1}, if your leader is a white <beerus> card and your opponent has 2 or more energy : play this card from your hand.<br/>[activate: main][limit 1] play up to 1 white battle card with an energy cost of 1 from your drop, choose up to 1 of your white battle cards and switch it to hidden mode, and this card gains [barrier] until the end of your opponent's turn.",
+        "source_text": "[activate: main][limit 1]{1}, if your leader is a white <beerus> card and your opponent has 2 or more energy : play this card from your hand.",
         "trigger": "self_activate_main"
       }
     ],
@@ -81102,7 +81720,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[permanent] all your red \u226abardock's crew\u226b cards with original energy costs of 1 gain [barrier].<br/>[permanent][bond 3] red \u226asaiyan\u226b or \u226abardock's crew\u226b card : your leader gets +10000 power.<br/>[activate: main][limit 1]{r}, if your leader is a red <bardock> card and your opponent has 2 or more energy : draw 1 card and play this card from your hand.",
+        "source_text": "[activate: main][limit 1]{r}, if your leader is a red <bardock> card and your opponent has 2 or more energy : draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
       },
       {
@@ -81119,11 +81737,22 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[permanent] all your red \u226abardock's crew\u226b cards with original energy costs of 1 gain [barrier].<br/>[permanent][bond 3] red \u226asaiyan\u226b or \u226abardock's crew\u226b card : your leader gets +10000 power.<br/>[activate: main][limit 1]{r}, if your leader is a red <bardock> card and your opponent has 2 or more energy : draw 1 card and play this card from your hand.",
+        "source_text": "[activate: main][limit 1]{r}, if your leader is a red <bardock> card and your opponent has 2 or more energy : draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
       }
     ],
     "8982": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -81137,7 +81766,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[blocker]<br/>[auto][once per turn][spirit boost 2] when this card is played or activates the [blocker] skill, choose up to 1 of your \u226apower wish\u226b cards and switch it to active mode.<br/>[auto] when this card is removed from a battle area by a skill, your leader gets +5000 power for the turn.<br/>[activate: main/battle][limit 1]{1}, if your leader is a \u226apower wish\u226b card and your opponent has 2 or more energy : play this card from your hand, then add up to 2 \u226apower wish\u226b cards from your drop to your z-energy.",
+        "source_text": "[activate: main/battle][limit 1]{1}, if your leader is a \u226apower wish\u226b card and your opponent has 2 or more energy : play this card from your hand, then add up to 2 \u226apower wish\u226b cards from your drop to your z-energy.",
         "trigger": "self_activate_main"
       },
       {
@@ -81153,7 +81782,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[blocker]<br/>[auto][once per turn][spirit boost 2] when this card is played or activates the [blocker] skill, choose up to 1 of your \u226apower wish\u226b cards and switch it to active mode.<br/>[auto] when this card is removed from a battle area by a skill, your leader gets +5000 power for the turn.<br/>[activate: main/battle][limit 1]{1}, if your leader is a \u226apower wish\u226b card and your opponent has 2 or more energy : play this card from your hand, then add up to 2 \u226apower wish\u226b cards from your drop to your z-energy.",
+        "source_text": "[activate: main/battle][limit 1]{1}, if your leader is a \u226apower wish\u226b card and your opponent has 2 or more energy : play this card from your hand, then add up to 2 \u226apower wish\u226b cards from your drop to your z-energy.",
         "trigger": "self_activate_battle"
       }
     ],
@@ -81163,7 +81792,7 @@
         "handler_id": "activate_buff_owner_battle_cards",
         "handler_params": {
           "allowed_colors": "blue",
-          "max_cost": 1,
+          "max_cost": -1,
           "max_targets": 1,
           "min_opponent_energy": 2,
           "power_delta": 5000,
@@ -81176,7 +81805,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect][blocker][revenge]<br/>[auto] send this card from its owner's drop to its owner's warp : at the end of you or your opponent's turn, choose all of your \u226ahero\u226b cards with energy costs of 1 and switch them to active mode.<br/>[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
+        "source_text": "[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
         "trigger": "self_activate_main"
       },
       {
@@ -81184,7 +81813,7 @@
         "handler_id": "activate_buff_owner_battle_cards",
         "handler_params": {
           "allowed_colors": "blue",
-          "max_cost": 1,
+          "max_cost": -1,
           "max_targets": 1,
           "min_opponent_energy": 2,
           "power_delta": 5000,
@@ -81197,7 +81826,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect][blocker][revenge]<br/>[auto] send this card from its owner's drop to its owner's warp : at the end of you or your opponent's turn, choose all of your \u226ahero\u226b cards with energy costs of 1 and switch them to active mode.<br/>[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
+        "source_text": "[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
         "trigger": "self_activate_battle"
       },
       {
@@ -81210,7 +81839,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect][blocker][revenge]<br/>[auto] send this card from its owner's drop to its owner's warp : at the end of you or your opponent's turn, choose all of your \u226ahero\u226b cards with energy costs of 1 and switch them to active mode.<br/>[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
+        "source_text": "[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
         "trigger": "self_activate_main"
       },
       {
@@ -81223,26 +81852,22 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect][blocker][revenge]<br/>[auto] send this card from its owner's drop to its owner's warp : at the end of you or your opponent's turn, choose all of your \u226ahero\u226b cards with energy costs of 1 and switch them to active mode.<br/>[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
+        "source_text": "[activate: main/battle][limit 1]{b}, if your opponent has 2 or more energy, you choose 1 of your blue \u226ahero\u226b or \u226aphantom demon\u226b cards, and place it into its owner's drop : play this card from your hand, then choose up to 1 of your blue \u226ahero\u226b cards and it gets +5000 power for the turn.",
         "trigger": "self_activate_battle"
       }
     ],
     "8984": [
       {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
+        "family_id": "self_played:auto_return_up_to_n_opponent_battle_to_hand_on_play",
+        "handler_id": "auto_return_up_to_n_opponent_battle_to_hand_on_play",
         "handler_params": {
-          "amount": 1,
-          "leader_required_traits": "Hero",
-          "min_owner_energy": 2,
-          "required_leader_traits": "Hero",
-          "requires_leader": "if your leader is a \u226ahero\u226b card and you have 2 or more energy"
+          "max_targets": 1
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect]<br/>[auto][limit 1] when this card is placed into its owner's drop by one of your skills, play this card from your drop.<br/>[auto] when this card is played, choose up to 1 of your opponent's battle cards and return it to its owner's hand.<br/>[activate: main][limit 1]{b}, if your leader is a \u226ahero\u226b card and you have 2 or more energy : draw 1 card and play this card from your hand.",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and return it to its owner's hand.",
         "trigger": "self_played"
       },
       {
@@ -81259,7 +81884,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect]<br/>[auto][limit 1] when this card is placed into its owner's drop by one of your skills, play this card from your drop.<br/>[auto] when this card is played, choose up to 1 of your opponent's battle cards and return it to its owner's hand.<br/>[activate: main][limit 1]{b}, if your leader is a \u226ahero\u226b card and you have 2 or more energy : draw 1 card and play this card from your hand.",
+        "source_text": "[activate: main][limit 1]{b}, if your leader is a \u226ahero\u226b card and you have 2 or more energy : draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
       },
       {
@@ -81275,25 +81900,8 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect]<br/>[auto][limit 1] when this card is placed into its owner's drop by one of your skills, play this card from your drop.<br/>[auto] when this card is played, choose up to 1 of your opponent's battle cards and return it to its owner's hand.<br/>[activate: main][limit 1]{b}, if your leader is a \u226ahero\u226b card and you have 2 or more energy : draw 1 card and play this card from your hand.",
+        "source_text": "[activate: main][limit 1]{b}, if your leader is a \u226ahero\u226b card and you have 2 or more energy : draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_played:auto_return_up_to_n_opponent_battle_to_hand_on_play",
-        "handler_id": "auto_return_up_to_n_opponent_battle_to_hand_on_play",
-        "handler_params": {
-          "leader_required_traits": "Hero",
-          "max_targets": 1,
-          "min_owner_energy": 2,
-          "required_leader_traits": "Hero",
-          "requires_leader": "if your leader is a \u226ahero\u226b card and you have 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[deflect]<br/>[auto][limit 1] when this card is placed into its owner's drop by one of your skills, play this card from your drop.<br/>[auto] when this card is played, choose up to 1 of your opponent's battle cards and return it to its owner's hand.<br/>[activate: main][limit 1]{b}, if your leader is a \u226ahero\u226b card and you have 2 or more energy : draw 1 card and play this card from your hand.",
-        "trigger": "self_played"
       }
     ],
     "8987": [
@@ -81301,17 +81909,13 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "green",
-          "leader_required_characters": "King Piccolo,Piccolo Jr.",
-          "min_owner_energy": 3,
-          "requires_leader": "if your leader is a green <king piccolo> or <piccolo jr"
+          "amount": 1
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[deflect]<br/>[permanent] if your leader is a green <king piccolo> or <piccolo jr.> card and you have 3 or more energy, reduce the energy cost of this card in your hand by 5.<br/>[auto][limit 1] when this card is played, draw 1 card, play up to 1 green \u226ademon clan\u226b card with an energy cost of 3 or less and 15000 power or less from your hand, then choose all \u226anamekian\u226b and \u226ademon clan\u226b cards with 20000 power or less in your battle area and they get +5000 power until the end of your opponent's turn.",
+        "source_text": "[auto][limit 1] when this card is played, draw 1 card, play up to 1 green \u226ademon clan\u226b card with an energy cost of 3 or less and 15000 power or less from your hand, then choose all \u226anamekian\u226b and \u226ademon clan\u226b cards with 20000 power or less in your battle area and they get +5000 power until the end of your opponent's turn.",
         "trigger": "self_played"
       }
     ],
@@ -81330,11 +81934,22 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: main][limit 1]{g}, if your leader is a green \u226aboujack brigade\u226b card and you have 3 or more energy : play this card from your hand, then choose up to 1 of your {boujack, assisting the brigade} and it gets +11000 power for the turn.<br/>[activate: main][limit 1] add 1 face-up \u226aboujack brigade\u226b card from your z-deck to your z-energy and ko this card : play up to 1 green <boujack> card with an energy cost of 8 from your hand.",
+        "source_text": "[activate: main][limit 1]{g}, if your leader is a green \u226aboujack brigade\u226b card and you have 3 or more energy : play this card from your hand, then choose up to 1 of your {boujack, assisting the brigade} and it gets +11000 power for the turn.",
         "trigger": "self_activate_main"
       }
     ],
     "8990": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -81343,7 +81958,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[blocker]<br/>[auto][limit 1] when this card is removed from a battle area by a skill or ko'd, add up to 1 green \u226aboujack brigade\u226b card with an energy cost of 1 from your drop to your hand.<br/>[activate: main/battle][limit 1]{g}, if you have 2 or more face-up \u226aboujack brigade\u226b cards in your z-deck : play this card from your hand.",
+        "source_text": "[activate: main/battle][limit 1]{g}, if you have 2 or more face-up \u226aboujack brigade\u226b cards in your z-deck : play this card from your hand.",
         "trigger": "self_activate_main"
       },
       {
@@ -81354,7 +81969,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[blocker]<br/>[auto][limit 1] when this card is removed from a battle area by a skill or ko'd, add up to 1 green \u226aboujack brigade\u226b card with an energy cost of 1 from your drop to your hand.<br/>[activate: main/battle][limit 1]{g}, if you have 2 or more face-up \u226aboujack brigade\u226b cards in your z-deck : play this card from your hand.",
+        "source_text": "[activate: main/battle][limit 1]{g}, if you have 2 or more face-up \u226aboujack brigade\u226b cards in your z-deck : play this card from your hand.",
         "trigger": "self_activate_battle"
       }
     ],
@@ -81364,33 +81979,28 @@
         "handler_id": "auto_draw_n",
         "handler_params": {
           "amount": 1,
-          "ignores_barrier": true,
           "min_opponent_energy": 3,
-          "requires_leader": "if your leader is yellow and your opponent has 3 or more energy",
-          "rest_mode_only": true
+          "requires_leader": "if your leader is yellow and your opponent has 3 or more energy"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[barrier]<br/>[activate: main][limit 1]{y}, if your leader is yellow and your opponent has 3 or more energy : draw 1 card and play this card from your hand.<br/>[activate: main][limit 1] choose 1 of your battle cards or unisons and switch it to rest mode : choose up to 1 of your opponent's battle cards, ignoring [barrier], and negate its skills for the turn.",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is yellow and your opponent has 3 or more energy : draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
       },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "ignores_barrier": true,
           "min_opponent_energy": 3,
-          "requires_leader": "if your leader is yellow and your opponent has 3 or more energy",
-          "rest_mode_only": true,
-          "resting": true
+          "requires_leader": "if your leader is yellow and your opponent has 3 or more energy"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[barrier]<br/>[activate: main][limit 1]{y}, if your leader is yellow and your opponent has 3 or more energy : draw 1 card and play this card from your hand.<br/>[activate: main][limit 1] choose 1 of your battle cards or unisons and switch it to rest mode : choose up to 1 of your opponent's battle cards, ignoring [barrier], and negate its skills for the turn.",
+        "source_text": "[activate: main][limit 1]{y}, if your leader is yellow and your opponent has 3 or more energy : draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
       }
     ],
@@ -81399,17 +82009,29 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 2,
-          "leader_required_traits": "Power Wish",
-          "min_opponent_energy": 3,
-          "required_leader_traits": "Power Wish",
-          "requires_leader": "if your leader is a \u226apower wish\u226b card and your opponent has 3 or more energy"
+          "amount": 2
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[permanent] this card can't attack.<br/>[auto][spirit boost 2] when this card is played, draw 2 cards, add 1 card from your hand to your z-energy, then play up to 1 non-<shenron> \u226apower wish\u226b card from your drop.<br/>[activate: main][limit 1]{2}, if your leader is a \u226apower wish\u226b card and your opponent has 3 or more energy : play this card from your hand.",
+        "source_text": "[auto][spirit boost 2] when this card is played, draw 2 cards, add 1 card from your hand to your z-energy, then play up to 1 non-<shenron> \u226apower wish\u226b card from your drop.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_play_up_to_n_from_owner_drop_on_play",
+        "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_characters": "Shenron,Power Wish",
+          "required_traits": "Power Wish"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][spirit boost 2] when this card is played, draw 2 cards, add 1 card from your hand to your z-energy, then play up to 1 non-<shenron> \u226apower wish\u226b card from your drop.",
         "trigger": "self_played"
       },
       {
@@ -81425,28 +82047,8 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[permanent] this card can't attack.<br/>[auto][spirit boost 2] when this card is played, draw 2 cards, add 1 card from your hand to your z-energy, then play up to 1 non-<shenron> \u226apower wish\u226b card from your drop.<br/>[activate: main][limit 1]{2}, if your leader is a \u226apower wish\u226b card and your opponent has 3 or more energy : play this card from your hand.",
+        "source_text": "[activate: main][limit 1]{2}, if your leader is a \u226apower wish\u226b card and your opponent has 3 or more energy : play this card from your hand.",
         "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_played:auto_play_up_to_n_from_owner_drop_on_play",
-        "handler_id": "auto_play_up_to_n_from_owner_drop_on_play",
-        "handler_params": {
-          "leader_required_traits": "Power Wish",
-          "max_cost": -1,
-          "max_targets": 1,
-          "min_opponent_energy": 3,
-          "required_characters": "Shenron,Power Wish",
-          "required_leader_traits": "Power Wish",
-          "required_traits": "Power Wish",
-          "requires_leader": "if your leader is a \u226apower wish\u226b card and your opponent has 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[permanent] this card can't attack.<br/>[auto][spirit boost 2] when this card is played, draw 2 cards, add 1 card from your hand to your z-energy, then play up to 1 non-<shenron> \u226apower wish\u226b card from your drop.<br/>[activate: main][limit 1]{2}, if your leader is a \u226apower wish\u226b card and your opponent has 3 or more energy : play this card from your hand.",
-        "trigger": "self_played"
       }
     ],
     "8995": [
@@ -81461,7 +82063,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[critical]<br/>[overlord][once per turn]<br/>[auto]{b}, when this card is played, look at up to 1 card from the bottom of your deck, play up to 1 <shroom> or <salsa> card with a [servant] skill, then place the remaining cards at the bottom of their owner's deck.<br/>[activate: main][limit 1]{b}, if your leader has both <shroom> and <salsa> and your opponent has 3 or more energy : play this card from your hand, then choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
+        "source_text": "[activate: main][limit 1]{b}, if your leader has both <shroom> and <salsa> and your opponent has 3 or more energy : play this card from your hand, then choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
         "trigger": "self_activate_main"
       },
       {
@@ -81477,7 +82079,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[critical]<br/>[overlord][once per turn]<br/>[auto]{b}, when this card is played, look at up to 1 card from the bottom of your deck, play up to 1 <shroom> or <salsa> card with a [servant] skill, then place the remaining cards at the bottom of their owner's deck.<br/>[activate: main][limit 1]{b}, if your leader has both <shroom> and <salsa> and your opponent has 3 or more energy : play this card from your hand, then choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
+        "source_text": "[activate: main][limit 1]{b}, if your leader has both <shroom> and <salsa> and your opponent has 3 or more energy : play this card from your hand, then choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
         "trigger": "self_activate_main"
       }
     ],
@@ -81496,7 +82098,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: main][limit 1]{b}, if your leader is a <salsa> card and you have 2 or more energy : play this card from your hand, draw 2 cards, then send the top card of your deck and 1 card from your hand to their owner's warp.<br/>[activate: battle][limit 1] if your leader is a <shroom> card and this card is in the combo area : use up to 1 non-[super combo] <shroom> or <salsa> card from your warp in a combo, and during this turn, the next time you activate an [activate: battle] skill on a <shroom> or <salsa> card from your warp, reduce the skill cost by {b}.",
+        "source_text": "[activate: main][limit 1]{b}, if your leader is a <salsa> card and you have 2 or more energy : play this card from your hand, draw 2 cards, then send the top card of your deck and 1 card from your hand to their owner's warp.",
         "trigger": "self_activate_main"
       },
       {
@@ -81512,7 +82114,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: main][limit 1]{b}, if your leader is a <salsa> card and you have 2 or more energy : play this card from your hand, draw 2 cards, then send the top card of your deck and 1 card from your hand to their owner's warp.<br/>[activate: battle][limit 1] if your leader is a <shroom> card and this card is in the combo area : use up to 1 non-[super combo] <shroom> or <salsa> card from your warp in a combo, and during this turn, the next time you activate an [activate: battle] skill on a <shroom> or <salsa> card from your warp, reduce the skill cost by {b}.",
+        "source_text": "[activate: main][limit 1]{b}, if your leader is a <salsa> card and you have 2 or more energy : play this card from your hand, draw 2 cards, then send the top card of your deck and 1 card from your hand to their owner's warp.",
         "trigger": "self_activate_main"
       }
     ],
@@ -81521,15 +82123,13 @@
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
-          "amount": 1,
-          "required_leader_back_name_contains": "GOGETA : GT",
-          "requires_leader": "if your leader's back side is a yellow <gogeta : gt> card and you have 2 or more multicolor cards in your energy : play this card from your hand"
+          "amount": 1
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[energy-exhaust][revive blue/green]<br/>[auto][limit 1] when this card is played, draw 1 card.<br/>[activate: main][limit 1]{1}, if your leader's back side is a yellow <gogeta : gt> card and you have 2 or more multicolor cards in your energy : play this card from your hand.<br/>[activate: main][limit 1] ko this card : play up to 1 multicolor card with an energy cost of 8, an original combo power of 5000, and <gt> in its character name from your drop.",
+        "source_text": "[auto][limit 1] when this card is played, draw 1 card.",
         "trigger": "self_played"
       },
       {
@@ -81543,7 +82143,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[energy-exhaust][revive blue/green]<br/>[auto][limit 1] when this card is played, draw 1 card.<br/>[activate: main][limit 1]{1}, if your leader's back side is a yellow <gogeta : gt> card and you have 2 or more multicolor cards in your energy : play this card from your hand.<br/>[activate: main][limit 1] ko this card : play up to 1 multicolor card with an energy cost of 8, an original combo power of 5000, and <gt> in its character name from your drop.",
+        "source_text": "[activate: main][limit 1]{1}, if your leader's back side is a yellow <gogeta : gt> card and you have 2 or more multicolor cards in your energy : play this card from your hand.",
         "trigger": "self_activate_main"
       }
     ],

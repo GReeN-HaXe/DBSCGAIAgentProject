@@ -1,8 +1,126 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 349,
+  "effect_rule_count": 348,
   "rules": {
+    "2495": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_characters": "Or - Both And",
+          "required_traits": "Earthling,Saiyan",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 \u226asaiyan\u226b or \u226aearthling\u226b card - both red and with an energy cost of 4 or less - to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "2496": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "2497": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_owner_z_energy": 2,
+          "requires_leader": "if your leader is red and you have 2 or more z-energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is red and you have 2 or more z-energy: when this card is used in a combo, draw 1 card.",
+        "trigger": "self_comboed"
+      }
+    ],
+    "2498": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "2499": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "red",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 5,
+          "required_traits": "God",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 red \u226agod\u226b card with an energy cost of 5 or less to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "2500": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "2501": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle] draw 1 card, then choose up to 1 of your red z-unisons and it gets +5000 power and [critical] for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "2502": [
       {
         "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -2954,6 +3072,24 @@
         "trigger": "self_attacks"
       }
     ],
+    "3685": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 10,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Bulma"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [once per turn] look at up to 10 cards from the top of your deck, choose up to 1 <bulma> among them and add it to your hand. then, shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "3687": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -3958,6 +4094,25 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "3811": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green,yellow",
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Android"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] look at up to 3 cards from the top of your deck, choose up to 1 green or yellow \u226aandroid\u226b card among them, add it to your hand, then place the remaining cards at the bottom of your deck in any order.",
+        "trigger": "self_activate_main"
       }
     ],
     "3813": [
@@ -5415,154 +5570,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, choose any number of your opponent's battle cards with energy costs of 2 or less for which the total cost adds up to 3 or less and ko them.",
         "trigger": "self_played"
-      }
-    ],
-    "4004": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "4005": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 5
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, negate all other battle card skills, then choose all cards in both players' hands as well as all other battle cards and return them to their decks. shuffle both decks afterwards. then, both players draw 5 cards. (cards stacked under other cards are placed in the drop area)",
-        "trigger": "self_played"
-      }
-    ],
-    "4012": [
-      {
-        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
-        "handler_id": "auto_play_self_from_combo_on_battle_end",
-        "handler_params": {
-          "requires_comboed_from": "hand",
-          "requires_leader": "if your leader card is green",
-          "resting": false
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is green, play this card.",
-        "trigger": "self_comboed_battle_end"
-      }
-    ],
-    "4013": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card with [union], draw 1 card, then choose up to 1 opponent battle card and ko that card.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": -1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card with [union], draw 1 card, then choose up to 1 opponent battle card and ko that card.",
-        "trigger": "self_played"
-      }
-    ],
-    "4014": [
-      {
-        "family_id": "self_blocker_activated:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker] (when one of your other cards is attacked, you may switch this card to rest mode and change the target of the attack to this card)",
-        "trigger": "self_blocker_activated"
-      }
-    ],
-    "4016": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 3,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_traits": "God",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, look at up to 3 cards from the top of your deck. choose up to 1 \u226agod\u226b among them and add it to your hand. then, shuffle your deck.",
-        "trigger": "self_played"
-      }
-    ],
-    "4019": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] add 1 card from your life to your hand: when this card attacks, draw 1 card, and this card gets +5000 power and [double strike] for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "4020": [
-      {
-        "family_id": "self_attacks:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[critical] (when this card inflicts damage to your opponent's life, they place that many cards in their drop area instead of their hand.)",
-        "trigger": "self_attacks"
-      }
-    ],
-    "4021": [
-      {
-        "family_id": "self_blocker_activated:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[blocker] (when one of your other cards is attacked, you may switch this card to rest mode and change the target of the attack to this card)",
-        "trigger": "self_blocker_activated"
       }
     ]
   },

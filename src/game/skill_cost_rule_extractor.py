@@ -236,8 +236,11 @@ _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
 
 
 def _normalize_text(raw: str | None) -> str:
-    text = html.unescape(raw or "").lower()
-    text = text.replace("<br>", ". ").replace("[br]", ". ").replace("—", " - ").replace("―", " - ")
+    text = str(raw or "")
+    text = re.sub(r"<badge[^>]*>\s*([^<]+?)\s*</badge>", lambda m: f"[{m.group(1)}]", text, flags=re.IGNORECASE)
+    text = re.sub(r"<br\s*/?>", ". ", text, flags=re.IGNORECASE)
+    text = html.unescape(text).lower()
+    text = text.replace("[br]", ". ").replace("—", " - ").replace("―", " - ")
     return _WS_RE.sub(" ", text.strip())
 
 
@@ -1212,3 +1215,4 @@ def build_skill_cost_rules_for_cards(
         if rules:
             mapped[card.id] = rules
     return mapped
+

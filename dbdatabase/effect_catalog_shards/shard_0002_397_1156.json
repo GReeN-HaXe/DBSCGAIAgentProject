@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 328,
+  "effect_rule_count": 332,
   "rules": {
     "1000": [
       {
@@ -2218,6 +2218,20 @@
         "provenance": "extractor",
         "source_text": "[auto][once per turn] when you use a \u226abardock's crew\u226b card in a combo, draw 1 card.",
         "trigger": "owner_card_comboed"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 3000,
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] if it's your turn: for each \u226abardock's crew\u226b card with different character names in your z-energy, this card gets +3000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "1151": [
@@ -2334,23 +2348,74 @@
         "trigger": "self_activate_main"
       }
     ],
-    "1158": [
+    "397": [
       {
-        "family_id": "self_played:auto_place_up_to_n_from_owner_drop_under_self_on_play",
-        "handler_id": "auto_place_up_to_n_from_owner_drop_under_self_on_play",
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle",
+        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
-          "max_cost": -1,
-          "max_targets": 4,
-          "required_characters": "Bardock,Bardock'S Crew",
-          "required_traits": "Bardock'S Crew"
+          "max_cost": 6,
+          "max_targets": 1
         },
         "limit_per_turn": null,
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[auto] when this card is played from your hand, place up to 4 non-<bardock> \u226abardock's crew\u226b cards with different character names from your drop under this card, and you can't play battle cards for the turn.",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 6 or less and place it at the bottom of its owner's deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "399": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
+    "400": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 4,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if you have 1 or more multicolor energy: when this card is played from your hand, or at the end of a battle where this card was used in a combo from your hand, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less in rest mode and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "402": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -2359,127 +2424,89 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: main](3), if there are 4 or more \u226abardock's crew\u226b cards with different character names in your energy, z-energy, battle area, and/or drop: play this card from your hand.",
+        "source_text": "[activate: main](red)(red)(red)(red): play this card from your hand, and you may have 1 of your opponent's leader cards get -5000 power for the turn.",
         "trigger": "self_activate_main"
       }
     ],
-    "1159": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "yellow",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 4,
-          "required_characters": "Or 1 Unison A Specified Cost Of 2",
-          "required_traits": "Bardock'S Crew",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 yellow \u226abardock's crew\u226b card with an energy cost of 4 or less or 1 yellow unison with a specified cost of 2 among them to your hand, then shuffle your deck.",
-        "trigger": "self_played"
-      }
-    ],
-    "1162": [
-      {
-        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
-        "handler_id": "activate_gain_power_and_keyword_for_battle",
-        "handler_params": {
-          "grant_keyword": "Double Strike",
-          "target_scope": "owner_leader"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1]  your leader gains [double strike] for the battle",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "1164": [
-      {
-        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "black",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_traits": "Demon God,Demon Realm Race"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] send the top 2 cards of your deck to your warp: when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 black \u226ademon realm race\u226b or black \u226ademon god\u226b card among them to your hand, then shuffle your deck.",
-        "trigger": "owner_leader_attacks"
-      }
-    ],
-    "1169": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played from your hand, draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "1170": [
-      {
-        "family_id": "self_played:auto_send_up_to_n_opponent_battle_to_warp_on_play",
-        "handler_id": "auto_send_up_to_n_opponent_battle_to_warp_on_play",
-        "handler_params": {
-          "max_targets": 1,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_warp",
-        "handler_id": "activate_play_self_from_warp",
-        "handler_params": {
-          "required_source_zone": "warp",
-          "requires_leader": "if your leader is black"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main](2), if your leader is black: play this card from your warp.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1171": [
+    "403": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "leader_allowed_colors": "black",
-          "leader_required_traits": "Demon Realm Race",
-          "required_leader_traits": "Demon Realm Race",
-          "requires_leader": "if your leader is a black \u226ademon realm race\u226b card and there are 6 or more cards in your warp"
+          "leader_required_traits": "Android",
+          "required_leader_traits": "Android",
+          "requires_leader": "if your leader card is a black \u226aandroid\u226b card"
         },
-        "limit_per_turn": 1,
+        "limit_per_turn": null,
         "limit_scope": "card_number",
-        "once_per_turn": true,
+        "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[activate: main](black), if your leader is a black \u226ademon realm race\u226b card and there are 6 or more cards in your warp: play this card from your hand.",
+        "source_text": "[activate: main](4), if your leader card is a black \u226aandroid\u226b card: play this card from your hand with 4 markers on it.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
+        "handler_id": "activate_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "grant_keyword": "Double Strike",
+          "ignores_barrier": true,
+          "power_delta": 15000,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-4][activate: main] choose all of your opponent's battle cards in rest mode, ignoring [barrier], and ko them, then choose up to 2 of your opponent's cards and switch them to rest mode, and this card gets +15000 power and [double strike] for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "404": [
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle](\u9ed2), if you have 3 or more energy: play this card from your hand.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "413": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "min_source_markers": 4,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if this card has 4 or more markers: when this card is played, draw 1 card, then choose all of your opponent's battle cards in rest mode and ko them.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "min_source_markers": 4,
+          "rest_mode_only": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if this card has 4 or more markers: when this card is played, draw 1 card, then choose all of your opponent's battle cards in rest mode and ko them.",
+        "trigger": "self_played"
       }
     ],
     "414": [
@@ -3794,6 +3821,20 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and send it to its owner's warp.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "min_owner_energy": 3,
+          "power_delta": 6000
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn](black), if you have 3 or more energy and you place 1 card from under this card in its owner's drop area: play up to 1 skill-less black battle card with an energy cost of 2 or less from your drop area, and this card gets +6000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "578": [
