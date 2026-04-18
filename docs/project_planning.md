@@ -4547,3 +4547,52 @@ When adding a new TODO:
   - the exact HTML leader text extracts into the expected auto and activate-battle rules
   - the discard auto fires when an owner Battle Card is removed by an opponent's skill during the opponent's turn
   - the activate-battle line gives the leader `+5000` for the battle when the life condition is met
+
+## BT16 Son Gohan, the Interceptor slice complete
+
+- added shared support for `BT16-026 Son Gohan, the Interceptor`
+- extended badge-html normalization so standalone keyword badges like `[Barrier]` also survive into branch extraction as bare keyword lines
+- added shared extraction for:
+  - `owner_takes_damage_from_opponent_attack -> auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage`
+  - keyword-only `[Barrier]` as a noop family
+- added a new public event trigger path:
+  - `player_took_damage`
+  - `owner_takes_damage_from_opponent_attack`
+- added runtime support for the exact auto branch:
+  - rests the source as cost
+  - switches up to `N` matching owner energy to Active Mode
+  - returns up to `N` opponent Battle Cards with cost greater than the opponent's current energy to hand
+- `card_left_battle_area` and damage-event plumbing now distinguish opponent-attack damage and opponent-skill removal as first-class trigger signals instead of relying on fragile text inference
+- locked with focused coverage proving:
+  - exact HTML card text extracts into `Barrier` noop plus the owner-damage auto
+  - taking damage from an opponent's attack rests the source, restands blue energy, and bounces the legal overcost opposing Battle Card
+## P-341 Raditz, Invitation to Battle slice complete
+
+- Added extraction for the exact badge-html `Barrier` / `Blocker` / on-play gain-control line on `P-341 Raditz, Invitation to Battle`.
+- Extended `auto_gain_control_opponent_battle_on_play` so it can filter by shared target descriptors like `required_traits`, `required_characters`, `allowed_colors`, and `max_power`, not just `max_cost`.
+- Tightened text-based hand cost reduction requirement parsing so leader trait checks only apply to explicit leader clauses, and added support for the opponent-battle-area condition used by this card's permanent reduction text.
+- Added focused extractor and exact phase4 coverage to prove the cost reduction only turns on with an opposing `≪Saiyan≫` Battle Card in play and that the 5000-power-or-less target is gained correctly on play.
+
+## BT16 Beerus, Belligerent God slice complete
+
+- Added shared extraction for `BT16-038 Beerus, Belligerent God` by mapping its life-payment attack auto onto the existing `auto_pay_life_on_attack_gain_power_and_keyword_for_turn` family.
+- Extended shared runtime requirement handling with `required_attack_target_zone` so attack-trigger autos can distinguish leader attacks from battle-card attacks without a one-off handler.
+- Extended the shared attack-time power handler so it can restand the source and apply battle-duration power using the existing battle temporary power path.
+- Added focused extractor and exact phase4 coverage proving the card pays 1 life, restands itself, and gains `+15000` for the battle only when it attacks an opponent Battle Card.
+
+## BT16 Whis, Beerus's Backup slice complete
+
+- Added shared extraction for `BT16-039 Whis, Beerus's Backup`:
+  - on play, grant a blue `<Beerus>` Battle Card the ability to attack active opponent Battle Cards without `[Barrier]` for the turn
+  - from the Combo Area, draw 1 when a blue `<Beerus>` Battle Card attacks and KOs an opponent Battle Card
+- Added runtime support for the temporary active-battle attack grant by teaching legal attack generation to surface active non-`[Barrier]` Battle Cards only while the turn-scoped flag is present.
+- Extended the shared `auto_draw_n` handler so battle-end KO triggers from combo-area secret autos can resolve on the existing draw path instead of requiring a dedicated handler.
+- Added focused extractor and exact phase4 coverage proving the granted active-battle attack becomes legal after Whis is played and that the combo-area trigger draws when the matching `Beerus` KO happens.
+
+## BT15 Son Gohan, Simian Revenge slice complete
+
+- Added shared extraction for `BT15-070 Son Gohan, Simian Revenge`:
+  - hidden-hand `owner_card_left_battle_area` auto that plays the source from hand when a matching owner Battle Card is removed by an opponent's skill
+- Added runtime support for `auto_play_self_from_hand_on_owner_matching_battle_left` on top of the existing deferred secret-auto system, so the exact card declares from hand and plays itself only after the matching removal event occurs.
+- Extended owner-battle-left event matching with shared `event_required_keywords` and `event_excluded_traits` filters so exact trigger text like green non-`≪Great Ape≫` `<Son Gohan: Youth>` with `[Blocker]` can be modeled without a bespoke matcher.
+- Added focused extractor and exact phase4 coverage proving the secret auto opportunity appears from hand and the card plays itself after the matching `[Blocker]` Battle Card is removed by an opponent's skill.

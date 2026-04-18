@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3751,
+  "card_rule_count": 3810,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 5370,
+  "effect_rule_count": 5525,
   "rules": {
     "10": [
       {
@@ -909,6 +909,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1007": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1008": [
       {
         "family_id": "self_activate_battle:activate_buff_owner_battle_cards",
@@ -1021,6 +1034,17 @@
       }
     ],
     "10094": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -2259,6 +2283,17 @@
     ],
     "1022": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_add_top_deck_to_energy_rest_on_play",
         "handler_id": "auto_add_top_deck_to_energy_rest_on_play",
         "handler_params": {
@@ -2275,6 +2310,17 @@
       }
     ],
     "1023": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_add_top_deck_to_energy_rest_on_play",
         "handler_id": "auto_add_top_deck_to_energy_rest_on_play",
@@ -2386,6 +2432,17 @@
       }
     ],
     "103": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -2655,6 +2712,17 @@
     ],
     "1046": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -2771,6 +2839,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 \u226anamekian\u226b or \u226ademon clan\u226b card - both green and with an energy cost of 4 or less - or 1 green unison with a specified cost of 2 among them to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "1051": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -3624,6 +3705,17 @@
     ],
     "1110": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -3931,6 +4023,17 @@
       }
     ],
     "1128": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -5686,6 +5789,19 @@
         "trigger": "owner_leader_attacks"
       }
     ],
+    "1326": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1337": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -5878,6 +5994,17 @@
       }
     ],
     "1346": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -8114,6 +8241,17 @@
     ],
     "1463": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -8128,6 +8266,17 @@
       }
     ],
     "1464": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -8179,6 +8328,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow <piccolo: sh> card and you have 3 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "1469": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "1470": [
@@ -8594,6 +8756,17 @@
     ],
     "1496": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
         "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
@@ -8648,6 +8821,17 @@
       }
     ],
     "1500": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
@@ -9610,6 +9794,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1552": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1553": [
       {
         "family_id": "self_played:noop_auto",
@@ -9945,6 +10142,19 @@
         "trigger": "self_attacks"
       }
     ],
+    "1591": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1597": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -9974,6 +10184,17 @@
       }
     ],
     "1599": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -10723,6 +10944,17 @@
       }
     ],
     "1638": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host",
         "handler_id": "activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host",
@@ -12032,6 +12264,17 @@
     ],
     "1716": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_params": {
@@ -12458,6 +12701,24 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto][limit 1] if your leader is a red \u226auniverse 3\u226b card: when this card is played from your hand, add up to 1 <panchia> or <bollarator> card - both red and with an energy cost of 1 - from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "174": [
+      {
+        "family_id": "self_played:auto_gain_control_opponent_battle_on_play",
+        "handler_id": "auto_gain_control_opponent_battle_on_play",
+        "handler_params": {
+          "max_power": 5000,
+          "max_targets": 1,
+          "required_traits": "Saiyan",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, choose up to 1 \u226asaiyan\u226b card with 5000 power or less in your opponent's battle area and gain control of it.",
         "trigger": "self_played"
       }
     ],
@@ -13179,6 +13440,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "1780": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -15475,6 +15749,25 @@
         "trigger": "self_played"
       }
     ],
+    "193": [
+      {
+        "family_id": "owner_card_left_battle_area:auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "event_allowed_colors": "green",
+          "event_excluded_traits": "Great Ape",
+          "event_removed_by_opponent_skill": true,
+          "event_required_characters": "son gohan: youth",
+          "event_required_keywords": "blocker"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](green): when one of your green non-\u226agreat ape\u226b <son gohan: youth> cards with [blocker] is removed from your battle area by an opponent's skill, you may play this card from your hand.",
+        "trigger": "owner_card_left_battle_area"
+      }
+    ],
     "1930": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -15931,6 +16224,17 @@
     ],
     "1959": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -15959,6 +16263,23 @@
         "provenance": "extractor",
         "source_text": "[blocker]",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_card_left_battle_area:auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "event_allowed_colors": "green",
+          "event_excluded_traits": "Great Ape",
+          "event_removed_by_opponent_skill": true,
+          "event_required_characters": "vegeta",
+          "event_required_keywords": "blocker"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](green): when one of your green non-\u226agreat ape\u226b <vegeta> cards with [blocker] is removed from your battle area by an opponent's skill, you may play this card from your hand.",
+        "trigger": "owner_card_left_battle_area"
       },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -16171,6 +16492,17 @@
       }
     ],
     "1968": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
         "handler_id": "auto_self_gain_power_for_turn_on_play",
@@ -17535,6 +17867,17 @@
       }
     ],
     "2056": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
         "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
@@ -19357,6 +19700,23 @@
     ],
     "217": [
       {
+        "family_id": "owner_card_left_battle_area:auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "event_allowed_colors": "green,red",
+          "event_excluded_traits": "Great Ape",
+          "event_removed_by_opponent_skill": true,
+          "event_required_characters": "raditz",
+          "event_required_keywords": "blocker"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](red)/(green): when one of your red or green non-\u226agreat ape\u226b <raditz> cards with [blocker] is removed from your battle area by an opponent's skill, you may play this card from your hand.",
+        "trigger": "owner_card_left_battle_area"
+      },
+      {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_params": {
@@ -20299,6 +20659,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card, choose up to 1 of your opponent's battle cards and add it to its owner's hand, then this card gets +5000 power for the turn.",
         "trigger": "self_attacks"
+      }
+    ],
+    "2225": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "2226": [
@@ -27565,6 +27938,17 @@
     ],
     "2595": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_attacks:auto_combo_up_to_n_from_owner_zone_on_attack",
         "handler_id": "auto_combo_up_to_n_from_owner_zone_on_attack",
         "handler_params": {
@@ -28966,6 +29350,36 @@
         "trigger": "self_comboed_battle_end"
       }
     ],
+    "306": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_takes_damage_from_opponent_attack:auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage",
+        "handler_id": "auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage",
+        "handler_params": {
+          "max_targets": 1,
+          "owner_energy_allowed_colors": "blue",
+          "owner_energy_targets": 1,
+          "requires_cost_greater_than_opponent_current_energy": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] switch this card to rest mode: when you take damage from an opponent's attack, switch up to 1 of your blue energy to active mode, then choose up to 1 of your opponent's battle cards with an energy cost greater than their current energy and return it to its owner's hand.",
+        "trigger": "owner_takes_damage_from_opponent_attack"
+      }
+    ],
     "307": [
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
@@ -29215,6 +29629,58 @@
         "provenance": "extractor",
         "source_text": "[auto][once per turn] if your leader card is a blue <whis> card: when this card attacks and kos an opponent's battle card, draw 1 card, then switch this card and up to 1 blue <beerus> card in your energy to active mode.",
         "trigger": "self_attacks"
+      }
+    ],
+    "318": [
+      {
+        "family_id": "self_attacks:auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+        "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "life_to_hand": 1,
+          "power_delta": 15000,
+          "power_duration": "battle",
+          "required_attack_target_zone": "battle",
+          "switch_self_active": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] add 1 card from your life to your hand: when this card attacks an opponent's battle card, switch this card to active mode, and it gets +15000 power for the battle.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "319": [
+      {
+        "family_id": "self_played:auto_grant_attack_active_battle_without_barrier_for_turn_on_play",
+        "handler_id": "auto_grant_attack_active_battle_without_barrier_for_turn_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "max_targets": 1,
+          "required_characters": "Beerus",
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, choose up to 1 blue <beerus> card in your battle area, and it can attack battle cards without [barrier] in active mode for the turn.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_battle_ko_opponent_battle_battle_end:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "attacker_allowed_colors": "blue",
+          "attacker_required_characters": "Beerus"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if this card is in your combo area: when a blue <beerus> card in your battle area attacks and kos an opponent's battle card, draw 1 card.",
+        "trigger": "owner_battle_ko_opponent_battle_battle_end"
       }
     ],
     "32": [
@@ -29840,6 +30306,17 @@
     ],
     "354": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -29887,6 +30364,17 @@
       }
     ],
     "357": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -35414,6 +35902,17 @@
     ],
     "4263": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_params": {
@@ -37216,6 +37715,17 @@
     ],
     "451": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -37857,6 +38367,17 @@
     ],
     "4617": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_ko_up_to_n_opponent_battle",
         "handler_id": "activate_ko_up_to_n_opponent_battle",
         "handler_params": {
@@ -38132,6 +38653,19 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "4649": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "4650": [
       {
         "family_id": "self_played:auto_play_token_in_battle_on_play",
@@ -38311,6 +38845,19 @@
         "trigger": "self_played"
       }
     ],
+    "4679": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "468": [
       {
         "family_id": "self_played:noop_auto",
@@ -38334,6 +38881,19 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[over realm 3] (if you have at least 3 cards in your drop area, you can play this card by sending all cards in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [over realm] can only be activated once per turn)",
+        "trigger": "self_played"
+      }
+    ],
+    "4686": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -38418,6 +38978,17 @@
       }
     ],
     "4695": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -38570,6 +39141,19 @@
         "trigger": "self_played"
       }
     ],
+    "4728": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "4733": [
       {
         "family_id": "self_blocker_activated:noop_auto",
@@ -38642,6 +39226,17 @@
     ],
     "4743": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
@@ -38653,6 +39248,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto][sparking 5] (this skill takes effect when you have 5 or more cards in your drop area.) when you play this card, choose up to 1 of your opponent's battle cards and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "4744": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -38942,6 +39550,19 @@
         "trigger": "self_comboed"
       }
     ],
+    "4794": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "4797": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -38995,6 +39616,17 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -39242,6 +39874,17 @@
     ],
     "4844": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_token_in_battle",
         "handler_id": "activate_play_token_in_battle",
         "handler_params": {
@@ -39314,6 +39957,17 @@
     ],
     "4873": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "turn_end:auto_switch_self_active_on_turn_end",
         "handler_id": "auto_switch_self_active_on_turn_end",
         "handler_params": {},
@@ -39326,6 +39980,17 @@
       }
     ],
     "4878": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
@@ -39353,6 +40018,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, choose all of your opponent's battle cards with energy costs of 1 and ko them.",
+        "trigger": "self_played"
+      }
+    ],
+    "4887": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -40358,6 +41036,17 @@
       }
     ],
     "5044": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -41593,6 +42282,17 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
         "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       }
@@ -41732,6 +42432,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main][once per turn](yellow): look at up to 5 cards from the top of your deck, choose up to 1 red or yellow <son goku: gt> or <pan> card among them, add it to your hand, then shuffle your deck.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "5206": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "5207": [
@@ -42648,6 +43361,17 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
         "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       },
@@ -42678,6 +43402,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      }
+    ],
+    "5297": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -42972,6 +43709,17 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
         "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       },
@@ -43199,6 +43947,17 @@
       }
     ],
     "5328": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:noop_auto",
         "handler_id": "noop_auto",
@@ -43858,6 +44617,17 @@
       }
     ],
     "5385": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_aegis_activated:noop_auto",
         "handler_id": "noop_auto",
@@ -44714,6 +45484,17 @@
     ],
     "5449": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -44748,6 +45529,17 @@
       }
     ],
     "545": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -44922,6 +45714,17 @@
       }
     ],
     "546": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
         "handler_id": "auto_power_reduce_up_to_n_on_play",
@@ -45180,6 +45983,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto]when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "5480": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -46241,6 +47057,19 @@
         "trigger": "self_played"
       }
     ],
+    "557": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "5571": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -46432,6 +47261,17 @@
       }
     ],
     "5591": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -47196,6 +48036,17 @@
     ],
     "565": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -47210,6 +48061,17 @@
       }
     ],
     "5655": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
@@ -47500,6 +48362,19 @@
         "trigger": "self_played"
       }
     ],
+    "5691": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "5694": [
       {
         "family_id": "self_activate_main:auto_draw_n",
@@ -47514,6 +48389,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main] choose this card and 1 \u226aworld tournament\u226b in your battle area and switch them to rest mode: draw 1 card.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "5696": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "5699": [
@@ -47634,6 +48522,17 @@
     ],
     "571": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
         "handler_id": "activate_gain_power_and_keyword_for_battle",
         "handler_params": {
@@ -47654,6 +48553,19 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "5710": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "5712": [
       {
         "family_id": "self_played:noop_auto",
@@ -47664,6 +48576,19 @@
         "once_per_turn": true,
         "provenance": "extractor",
         "source_text": "[barrier] (this card can't be chosen by the skills of your opponent's cards)",
+        "trigger": "self_played"
+      }
+    ],
+    "5716": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -47740,6 +48665,17 @@
         "provenance": "extractor",
         "source_text": "[blocker]",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "5723": [
@@ -47787,6 +48723,19 @@
         "provenance": "extractor",
         "source_text": "[auto][sparking 5] (this skill takes effect when you have 5 or more cards in your drop area.) when you combo with this card, if your leader card is yellow, draw 1 card.",
         "trigger": "self_comboed"
+      }
+    ],
+    "5725": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "5726": [
@@ -47884,6 +48833,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card, if your leader card is a red \u226afrieza's army\u226b card and your life is at 5 or less, draw 1 card, and this card gets +10000 combo power for the duration of the turn.",
         "trigger": "self_comboed"
+      }
+    ],
+    "5734": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "5736": [
@@ -48387,6 +49349,17 @@
       }
     ],
     "5782": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -49041,6 +50014,17 @@
     ],
     "584": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_play_token_in_battle_on_play",
         "handler_id": "auto_play_token_in_battle_on_play",
         "handler_params": {
@@ -49340,6 +50324,17 @@
     ],
     "5860": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_play_token_in_battle_on_play",
         "handler_id": "auto_play_token_in_battle_on_play",
         "handler_params": {
@@ -49494,6 +50489,17 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
         "source_text": "[blocker]",
         "trigger": "self_played"
       }
@@ -49515,6 +50521,17 @@
       }
     ],
     "5874": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:noop_auto",
         "handler_id": "noop_auto",
@@ -50338,6 +51355,17 @@
     ],
     "5954": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_aegis_activated:noop_auto",
         "handler_id": "noop_auto",
         "handler_params": {},
@@ -50473,6 +51501,19 @@
         "trigger": "self_played"
       }
     ],
+    "5965": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "5968": [
       {
         "family_id": "self_played:noop_auto",
@@ -50548,6 +51589,17 @@
     ],
     "5975": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_params": {
@@ -50612,6 +51664,19 @@
         "trigger": "self_played"
       }
     ],
+    "5989": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "5990": [
       {
         "family_id": "self_played:noop_auto",
@@ -50622,6 +51687,17 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -50877,6 +51953,19 @@
         "trigger": "self_attacks"
       }
     ],
+    "6005": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "601": [
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
@@ -50959,6 +52048,19 @@
         "provenance": "extractor",
         "source_text": "[auto] at the end of your turn, switch this card to active mode and it gets +5000 power until the end of your opponent's next turn.",
         "trigger": "turn_end"
+      }
+    ],
+    "6017": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "6018": [
@@ -51144,6 +52246,17 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       },
       {
@@ -52169,6 +53282,17 @@
     ],
     "6126": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -52391,6 +53515,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "6156": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "6158": [
       {
         "family_id": "self_activate_main:activate_buff_owner_battle_cards",
@@ -52498,6 +53635,19 @@
         "trigger": "self_played"
       }
     ],
+    "6166": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "6168": [
       {
         "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
@@ -52510,6 +53660,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, your opponent chooses 2 cards in their hand and places them in their drop area.",
+        "trigger": "self_played"
+      }
+    ],
+    "6170": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -52585,6 +53748,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when you combo with this card from your battle area, draw 1 card.",
         "trigger": "self_comboed"
+      }
+    ],
+    "6190": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "6195": [
@@ -53094,6 +54270,17 @@
     ],
     "6233": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -53458,6 +54645,17 @@
     ],
     "6283": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -53610,6 +54808,17 @@
     ],
     "6296": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -53624,6 +54833,17 @@
       }
     ],
     "6298": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -53692,6 +54912,17 @@
       }
     ],
     "6303": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -54304,7 +55535,31 @@
         "trigger": "turn_end"
       }
     ],
+    "6369": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "6374": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_attacks:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -54398,6 +55653,19 @@
         "trigger": "self_played"
       }
     ],
+    "6394": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "64": [
       {
         "family_id": "self_attacks:auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
@@ -54462,6 +55730,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[barrier] (this card can't be chosen by the skills of your opponent's cards)",
+        "trigger": "self_played"
+      }
+    ],
+    "6409": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -54721,6 +56002,17 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -55203,6 +56495,17 @@
         "trigger": "self_played"
       },
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {},
@@ -55258,6 +56561,17 @@
       }
     ],
     "6500": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:noop_auto",
         "handler_id": "noop_auto",
@@ -55344,6 +56658,17 @@
         "trigger": "self_played"
       },
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -55382,6 +56707,17 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -55613,6 +56949,17 @@
       }
     ],
     "6535": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_send_up_to_n_opponent_hand_battle_to_warp_on_play",
         "handler_id": "auto_send_up_to_n_opponent_hand_battle_to_warp_on_play",
@@ -56626,6 +57973,19 @@
         "trigger": "self_played"
       }
     ],
+    "6627": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "663": [
       {
         "family_id": "self_played:noop_auto",
@@ -57008,6 +58368,17 @@
       }
     ],
     "6669": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -58159,6 +59530,17 @@
         "provenance": "extractor",
         "source_text": "[blocker]",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "676": [
@@ -58413,6 +59795,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, draw 1 card.",
         "trigger": "self_attacks"
+      }
+    ],
+    "678": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "6780": [
@@ -58756,6 +60151,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "6805": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "6807": [
       {
         "family_id": "self_played:noop_auto",
@@ -58809,6 +60217,17 @@
       }
     ],
     "6814": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_aegis_activated:noop_auto",
         "handler_id": "noop_auto",
@@ -58911,6 +60330,17 @@
       }
     ],
     "6821": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:noop_auto",
         "handler_id": "noop_auto",
@@ -59168,6 +60598,17 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
         "source_text": "[energy-exhaust]",
         "trigger": "self_played"
       }
@@ -59186,6 +60627,17 @@
       }
     ],
     "6851": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:noop_auto",
         "handler_id": "noop_auto",
@@ -59639,6 +61091,19 @@
         "trigger": "self_played"
       }
     ],
+    "6899": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "69": [
       {
         "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
@@ -59686,6 +61151,19 @@
         "provenance": "extractor",
         "source_text": "[+1][activate: main] draw 1 card, then choose 1 card in your hand and up to 3 \u226ashadow dragon\u226b extra cards in your drop area and place them at the bottom of your deck in any order.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "6902": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "6904": [
@@ -60096,6 +61574,19 @@
         "trigger": "self_played"
       }
     ],
+    "6944": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "6945": [
       {
         "family_id": "self_played:noop_auto",
@@ -60265,6 +61756,17 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
         "source_text": "[permanent] when this card is placed in a drop area from a battle area or combo area, it is placed at the bottom of its owner's deck instead.",
         "trigger": "self_played"
       },
@@ -60324,6 +61826,17 @@
       }
     ],
     "6963": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -60743,6 +62256,17 @@
     ],
     "7000": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_buff_owner_battle_cards",
         "handler_id": "activate_buff_owner_battle_cards",
         "handler_params": {
@@ -60761,6 +62285,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main][once per turn] choose 1 of your <saibaiman> cards and ko it: draw 1 card, then choose up to 2 of your red <saibaiman> cards and they get +11000 power for the turn.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "7001": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "7002": [
@@ -60898,6 +62435,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main](yellow), choose 1 mono-yellow \u226ashadow dragon\u226b card with an energy cost of 4 or less in your battle area and place it in its owner's drop area: draw 1 card, then play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "7014": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "7015": [
@@ -61437,6 +62987,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7061": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "7062": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -61605,6 +63168,17 @@
       }
     ],
     "7072": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -62194,6 +63768,17 @@
     ],
     "7127": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
         "handler_id": "auto_ko_opponent_battle_on_play",
         "handler_params": {
@@ -62594,6 +64179,25 @@
         "provenance": "extractor",
         "source_text": "[activate: main] choose all red \u226asaiyan\u226b cards in your battle area. they gain [barrier] (they can't be chosen by the skills of your opponent's cards) until the end of your opponent's next turn.",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_extra_from_hand:activate_buff_owner_battle_cards",
+        "handler_id": "activate_buff_owner_battle_cards",
+        "handler_params": {
+          "allowed_colors": "red",
+          "grant_keyword": "Barrier",
+          "keyword_duration": "opponent_turn",
+          "max_cost": -1,
+          "required_traits": "Saiyan",
+          "target_policy": "all",
+          "target_scope": "owner_battle"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] choose all red \u226asaiyan\u226b cards in your battle area. they gain [barrier] (they can't be chosen by the skills of your opponent's cards) until the end of your opponent's next turn.",
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "7167": [
@@ -62740,6 +64344,17 @@
       }
     ],
     "7180": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_gain_power_and_keyword_for_turn",
         "handler_id": "activate_gain_power_and_keyword_for_turn",
@@ -62975,6 +64590,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, look at up to 3 cards from the top of your deck. choose up to 1 \u226auniverse 9\u226b among them and add it to your hand. then, shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "7205": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -64604,6 +66232,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "7355": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "7358": [
       {
         "family_id": "counter_attack:counter_negate_attack",
@@ -65456,6 +67097,17 @@
     ],
     "7451": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_comboed:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -66277,6 +67929,19 @@
         "trigger": "self_activate_battle"
       }
     ],
+    "7772": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "7773": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -66681,6 +68346,17 @@
       }
     ],
     "7795": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
@@ -69765,6 +71441,17 @@
     ],
     "7945": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -70042,6 +71729,17 @@
       }
     ],
     "7958": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_battle:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -71467,6 +73165,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and it gets -10000 power for the turn.",
+        "trigger": "self_played"
+      }
+    ],
+    "8106": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -73593,6 +75304,17 @@
     ],
     "8221": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -73704,6 +75426,19 @@
         "trigger": "counter_attack"
       }
     ],
+    "8235": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "8236": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -73722,6 +75457,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto][limit 1] if your leader is a green <majin buu> card and you have 3 or more energy: when this card is played, draw 1 card, play up to 1 {majin buu, unadulterated destruction} from under your green <majin buu> card in active mode or rest mode, and it gains [double strike] for the turn.",
+        "trigger": "self_played"
+      }
+    ],
+    "8237": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -75717,6 +77465,17 @@
     ],
     "8399": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -77220,6 +78979,17 @@
     ],
     "8487": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
@@ -78019,6 +79789,17 @@
     ],
     "8614": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -78489,6 +80270,19 @@
         "trigger": "self_played"
       }
     ],
+    "8834": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "8835": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -78666,6 +80460,19 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] discard 1 card from your hand: when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "8846": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ],
@@ -79091,6 +80898,17 @@
       }
     ],
     "8868": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -81975,6 +83793,17 @@
     ],
     "8991": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -82534,6 +84363,17 @@
       }
     ],
     "9633": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "owner_activate_extra_from_hand:auto_add_markers_on_owner_activate_extra_from_hand",
         "handler_id": "auto_add_markers_on_owner_activate_extra_from_hand",
@@ -83127,6 +84967,17 @@
       }
     ],
     "9651": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -84334,6 +86185,19 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's rest mode battle cards and ko it.",
         "trigger": "self_attacks"
+      }
+    ],
+    "9711": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "9712": [
@@ -85829,6 +87693,17 @@
       }
     ],
     "9772": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",

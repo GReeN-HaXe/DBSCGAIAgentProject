@@ -1,8 +1,218 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 379,
+  "effect_rule_count": 383,
   "rules": {
+    "1136": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_required_characters": "Pan",
+          "min_owner_energy": 2,
+          "required_leader_traits": "Pan",
+          "requires_leader": "if your leader is a <pan> card and you have 2 or more energy"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1][burst 2](red), if your leader is a <pan> card and you have 2 or more energy: play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "requires_source_in_battle": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](red), if this card is in a battle: draw 1 card, switch this card to active mode, and it gets +5000 power for the turn.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "1137": [
+      {
+        "family_id": "self_activate_battle:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_required_characters": "Pan",
+          "required_leader_traits": "Pan",
+          "requires_leader": "if your leader is a <pan> card and there are 1 or more red cards in your combo area"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](red), if your leader is a <pan> card and there are 1 or more red cards in your combo area: draw 1 card, and play this card from your hand.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_required_characters": "Pan",
+          "required_leader_traits": "Pan",
+          "requires_leader": "if your leader is a <pan> card and there are 1 or more red cards in your combo area"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1](red), if your leader is a <pan> card and there are 1 or more red cards in your combo area: draw 1 card, and play this card from your hand.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "1145": [
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_traits": "Bardock'S Crew"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when you use a \u226abardock's crew\u226b card in a combo, draw 1 card.",
+        "trigger": "owner_card_comboed"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "power_delta": 3000,
+          "requires_owner_turn": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][once per turn] if it's your turn: for each \u226abardock's crew\u226b card with different character names in your z-energy, this card gets +3000 power for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "1151": [
+      {
+        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "leader_allowed_colors": "yellow",
+          "leader_required_traits": "Bardock'S Crew",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": 4,
+          "required_characters": "Or 1 Unison A Specified Cost Of 2",
+          "required_leader_traits": "Bardock'S Crew",
+          "required_traits": "Bardock'S Crew",
+          "requires_leader": "if your leader is a yellow \u226abardock's crew\u226b card and you discard this card from your hand"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] if your leader is a yellow \u226abardock's crew\u226b card and you discard this card from your hand: look at up to 5 cards from the top of your deck, add up to 1 yellow \u226abardock's crew\u226b card with an energy cost of 4 or less or 1 yellow unison with a specified cost of 2 among them to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1152": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_traits": "Bardock'S Crew",
+          "required_leader_traits": "Bardock'S Crew",
+          "requires_leader": "if your leader is a yellow \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop: play this card from your hand, and choose up to 1 of your opponent's battle cards in rest mode and ko it.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1153": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "1154": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "yellow",
+          "leader_required_traits": "Bardock'S Crew",
+          "required_leader_traits": "Bardock'S Crew",
+          "requires_leader": "if your leader is a yellow \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop",
+          "rest_mode_only": true,
+          "resting": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop: play this card from your hand, and choose up to 1 of your opponent's battle cards and switch it to rest mode.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "1155": [
+      {
+        "family_id": "self_played:auto_switch_up_to_n_opponent_battle_rest_on_play",
+        "handler_id": "auto_switch_up_to_n_opponent_battle_rest_on_play",
+        "handler_params": {
+          "max_cost": 7,
+          "max_targets": 1,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 7 or less and switch it to rest mode.",
+        "trigger": "self_played"
+      }
+    ],
+    "1156": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_required_traits": "Bardock'S Crew",
+          "required_leader_traits": "Bardock'S Crew",
+          "requires_leader": "if your leader is a \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1](yellow), if your leader is a \u226abardock's crew\u226b card and there are 4 or more \u226abardock's crew\u226b cards with different card names in your energy, z-energy, battle area, and/or drop: play this card from your hand, draw 1 card, and place 1 card from your hand at the bottom of your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "1158": [
       {
         "family_id": "self_played:auto_place_up_to_n_from_owner_drop_under_self_on_play",
@@ -943,6 +1153,19 @@
         "trigger": "owner_leader_attacks"
       }
     ],
+    "1326": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1337": [
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -1135,6 +1358,17 @@
       }
     ],
     "1346": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -3094,6 +3328,17 @@
     ],
     "1463": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -3108,6 +3353,17 @@
       }
     ],
     "1464": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
         "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
@@ -3159,6 +3415,19 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](yellow), if your leader is a yellow <piccolo: sh> card and you have 3 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "1469": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
       }
     ],
     "1470": [
@@ -3535,6 +3804,17 @@
     ],
     "1496": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_bottom_deck_up_to_n_opponent_battle",
         "handler_id": "activate_bottom_deck_up_to_n_opponent_battle",
         "handler_params": {
@@ -3589,6 +3869,17 @@
       }
     ],
     "1500": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
         "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
@@ -4458,6 +4749,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "1552": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1553": [
       {
         "family_id": "self_played:noop_auto",
@@ -4685,6 +4989,19 @@
         "trigger": "self_attacks"
       }
     ],
+    "1591": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "1597": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -4714,6 +5031,17 @@
       }
     ],
     "1599": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -5379,6 +5707,17 @@
     ],
     "1638": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_activate_main:activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host",
         "handler_id": "activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host",
         "handler_params": {
@@ -5856,331 +6195,6 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](blue), if your leader is blue and you have 3 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "1666": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, draw 1 card.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_place_self_under_owner_leader",
-        "handler_id": "activate_place_self_under_owner_leader",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "required_leader_traits": "Android 18",
-          "requires_leader": "if your leader is a blue <android 18> card"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1][burst 1] if your leader is a blue <android 18> card: place this card under your leader.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1667": [
-      {
-        "family_id": "owner_card_comboed:auto_play_self_from_under_leader_or_owner_hand_on_owner_combo",
-        "handler_id": "auto_play_self_from_under_leader_or_owner_hand_on_owner_combo",
-        "handler_params": {
-          "event_allowed_colors": "blue",
-          "event_max_cost": -1,
-          "event_required_characters": "Krillin",
-          "min_owner_energy": 3,
-          "requires_leader": "if your leader is blue and you have 3 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1](blue), if your leader is blue and you have 3 or more energy: when you use a blue <krillin> card from your hand or battle area in a combo, play this card from under your leader or from your hand.",
-        "trigger": "owner_card_comboed"
-      },
-      {
-        "family_id": "self_played:auto_play_up_to_n_from_owner_z_energy_combo_or_drop_on_play",
-        "handler_id": "auto_play_up_to_n_from_owner_z_energy_combo_or_drop_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "auto_cost_header": "(blue)",
-          "max_cost": 3,
-          "max_targets": 1,
-          "required_characters": "Krillin"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto](blue): when this card is played, play up to 1 mono-blue <krillin> card with an energy cost of 3 from your z-energy, combo area, or drop.",
-        "trigger": "self_played"
-      }
-    ],
-    "1668": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 5,
-          "required_characters": "Krillin,Android",
-          "required_traits": "Android",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 <krillin> or \u226aandroid\u226b card - both blue and with an energy cost of 5 or less - from among them to your hand, and shuffle your deck.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_place_self_under_owner_leader",
-        "handler_id": "activate_place_self_under_owner_leader",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "required_leader_traits": "Android 18",
-          "requires_leader": "if your leader is a blue <android 18> card"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1][burst 1] if your leader is a blue <android 18> card: place this card under your leader.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1669": [
-      {
-        "family_id": "self_played:auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play",
-        "handler_id": "auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play",
-        "handler_params": {
-          "energy_allowed_colors": "blue",
-          "energy_requires_mono": true,
-          "grant_keyword": "Barrier",
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "max_targets": 1,
-          "required_leader_traits": "Android 18",
-          "requires_leader": "if your leader is a blue <android 18> card",
-          "switch_energy_max_targets": 1,
-          "switch_leader_max_targets": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] if your leader is a blue <android 18> card: when this card is played, choose up to 1 of your opponent's battle cards, place it at the bottom of its owner's deck, switch up to 1 of your leaders to active mode, switch up to 1 of your mono-blue energy to active mode, and this card gains [barrier] until the end of your opponent's next turn.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "turn_end:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end",
-        "handler_id": "auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "max_cost": -1,
-          "max_targets": 1,
-          "required_traits": "Android 18"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] at the end of your turn, place up to 1 blue <android 18> card from your drop under your leader.",
-        "trigger": "turn_end"
-      }
-    ],
-    "1670": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto][once per turn] when this card attacks, draw 1 card, and place up to 1 blue card from your drop under this card.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "1671": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader is blue and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is blue and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "1672": [
-      {
-        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
-        "handler_id": "auto_self_gain_power_for_turn_on_play",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "power_delta": 10000,
-          "required_leader_traits": "Android 18",
-          "requires_leader": "if your leader is a blue <android 18> card"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] if your leader is a blue <android 18> card: when this card is played, switch up to 1 of your mono-blue energy to active mode, switch up to 1 of your leaders to active mode, and it gets +10000 power for the turn.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "turn_end:auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end",
-        "handler_id": "auto_place_up_to_n_from_owner_drop_under_owner_leader_on_turn_end",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "max_cost": -1,
-          "max_targets": 1,
-          "required_traits": "Android 18"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] at the end of your turn, place up to 1 blue <android 18> card from your drop under your leader.",
-        "trigger": "turn_end"
-      }
-    ],
-    "1673": [
-      {
-        "family_id": "self_activate_main:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate main] you and your opponent compliment each other.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1674": [
-      {
-        "family_id": "self_activate_main:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate main] you and your opponent compliment each other.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1675": [
-      {
-        "family_id": "self_activate_main:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate main] you and your opponent compliment each other.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "1680": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, draw 1 card.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_comboed:auto_buff_up_to_n_owner_battles_for_battle_on_combo",
-        "handler_id": "auto_buff_up_to_n_owner_battles_for_battle_on_combo",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": 1000,
-          "required_characters": "Android 18,Krillin",
-          "required_leader_traits": "Android 18",
-          "requires_leader": "if your leader is a blue <android 18> card and you place 1 non-leaders from under your leader in its owner's drop"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] if your leader is a blue <android 18> card and you place 1 non-leaders from under your leader in its owner's drop: when this card is used in a combo, choose up to 1 of your <krillin> or <android 18> cards and it gets +1000 power for the battle.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "1685": [
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_under_owner_leader",
-        "handler_id": "activate_play_self_from_under_owner_leader",
-        "handler_params": {
-          "bottom_deck_self_at_turn_end": true,
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "required_leader_traits": "Android 18",
-          "required_owner_combo_required_characters": "Android 18",
-          "required_source_zone": "leader_under",
-          "requires_leader": "if your leader is a blue <android 18> card and an <android 18> card is in your combo area"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](blue), if your leader is a blue <android 18> card and an <android 18> card is in your combo area: play this card from under your leader, and at the end of the turn, if this card is in play, place it at the bottom of its owner's deck.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "1686": [
-      {
-        "family_id": "self_activate_extra_from_hand:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Android 18",
-          "required_leader_traits": "Android 18",
-          "requires_leader": "if your leader is a blue <android 18> card"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] if your leader is a blue <android 18> card: draw 1 card, look at up to 7 cards from the top of your deck, place up to 1 <krillin> or <android 18> card - both blue - among them in your drop, shuffle your deck, and if you placed a <krillin> or <android 18> card in your drop, switch up to 1 of your mono-blue energy to active mode.",
-        "trigger": "self_activate_extra_from_hand"
       }
     ]
   },

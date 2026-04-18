@@ -32369,6 +32369,79 @@ def test_phase4_self_played_can_gain_control_of_opponent_battle() -> None:
     assert any(cp.name == "effect_auto_gain_control_opponent_battle_on_play" for cp in state.checkpoints)
 
 
+def test_phase4_exact_raditz_invitation_to_battle_reduces_hand_cost_and_gains_control() -> None:
+    card_text = (
+        "<Badge variant=\"red\">Barrier</Badge><Badge variant=\"red\">Blocker</Badge><br />"
+        "<Badge variant=\"purple\">Permanent</Badge> If your opponent has a ≪Saiyan≫ card in play in their Battle Area, reduce the energy cost of this card in your hand by 1.<br />"
+        "<Badge variant=\"blue\">Auto</Badge> When this card is played from your hand, choose up to 1 ≪Saiyan≫ card with 5000 power or less in your opponent's Battle Area and gain control of it."
+    )
+    rules = extract_effect_rules_from_card(
+        SimpleNamespace(
+            card_text=card_text,
+            skill_text=card_text,
+            skill_text_raw=card_text,
+            card_skill_unstyled=card_text,
+            name="Raditz, Invitation to Battle",
+            card_name="Raditz, Invitation to Battle",
+            id=174,
+            card_id=174,
+            card_type="BATTLE",
+        )
+    )
+    engine = RulesEngine(effect_rules={174: rules})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [CardInstance(instance_id=881740, card_id=910001, owner_id=1, color="Red")]
+    state.players[1].hand = [
+        CardInstance(
+            instance_id=881741,
+            card_id=174,
+            owner_id=1,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=2,
+            skill_text_raw=card_text,
+        )
+    ]
+    legal_before = [
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0
+    ]
+    assert legal_before == []
+
+    state.players[2].battle_area = [
+        CardInstance(
+            instance_id=881742,
+            card_id=910002,
+            owner_id=2,
+            card_type="BATTLE",
+            color="Red",
+            energy_cost=1,
+            power=5000,
+            traits=("Saiyan",),
+            has_activate_main=True,
+        )
+    ]
+    play = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0
+    )
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.card_id == 174 for card in state.players[1].battle_area)
+    assert any(card.instance_id == 881742 and card.owner_id == 2 for card in state.players[1].battle_area)
+    assert not state.players[2].battle_area
+    assert any(cp.name == "effect_auto_gain_control_opponent_battle_on_play" for cp in state.checkpoints)
+
+
 def test_phase4_activate_main_can_transfer_self_control_to_opponent() -> None:
     engine = RulesEngine(
         effect_rules={
@@ -37102,6 +37175,135 @@ def test_phase4_self_attacks_can_pay_life_gain_power_and_keyword() -> None:
     assert attacker.power == 30000
     assert "Double Strike" in attacker.temporary_keywords
     assert any(cp.name == "effect_auto_pay_life_on_attack_gain_power_and_keyword_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_exact_beerus_belligerent_god_restands_and_gains_battle_power_vs_battle() -> None:
+    card_text = (
+        "[Auto][Once per turn] Add 1 card from your life to your hand: "
+        "When this card attacks an opponent's Battle Card, switch this card to Active Mode, and it gets +15000 power for the battle."
+    )
+    card_id = 318
+    card = SimpleNamespace(card_skill_unstyled=card_text, card_type="BATTLE")
+    engine = RulesEngine(effect_rules={card_id: extract_effect_rules_from_card(card)})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    attacker = CardInstance(
+        instance_id=880318,
+        card_id=card_id,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        energy_cost=1,
+        power=5000,
+        resting=False,
+        skill_text_raw=card_text,
+    )
+    target = CardInstance(instance_id=880319, card_id=900318, owner_id=2, card_type="BATTLE", color="Red", energy_cost=2, power=10000, resting=True)
+    state.players[1].battle_area = [attacker]
+    state.players[2].battle_area = [target]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=attacker)
+    life_before = len(state.players[1].life)
+    hand_before = len(state.players[1].hand)
+    attack = next(
+        a
+        for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "battle"
+    )
+    state = engine.apply_action(state, attack)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    attacker_after = state.players[1].battle_area[0]
+    assert len(state.players[1].life) == life_before - 1
+    assert len(state.players[1].hand) == hand_before + 1
+    assert attacker_after.resting is False
+    assert attacker_after.power == 20000
+    assert attacker_after.battle_temporary_power_delta == 15000
+    assert any(cp.name == "effect_auto_pay_life_on_attack_gain_power_and_keyword_for_turn" for cp in state.checkpoints)
+
+
+def test_phase4_exact_whis_beerus_backup_play_grants_active_battle_attack_and_combo_draws() -> None:
+    card_text = (
+        "[Auto] When this card is played from your hand, choose up to 1 blue <Beerus> card in your Battle Area, and it can attack Battle Cards without [Barrier] in Active Mode for the turn.\n"
+        "[Auto][Limit 1] If this card is in your Combo Area: When a blue <Beerus> card in your Battle Area attacks and KOs an opponent's Battle Card, draw 1 card."
+    )
+    card_id = 319
+    engine = RulesEngine(effect_rules={card_id: extract_effect_rules_from_card(SimpleNamespace(card_skill_unstyled=card_text, card_type="BATTLE"))})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=2,
+        shuffle_decks=False,
+    )
+    state = _to_p1_main_where_attacks_are_legal(engine, state)
+    beerus = CardInstance(
+        instance_id=8803190,
+        card_id=990319,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        power=20000,
+        characters=("Beerus",),
+    )
+    active_target = CardInstance(
+        instance_id=8803191,
+        card_id=990320,
+        owner_id=2,
+        card_type="BATTLE",
+        color="Red",
+        power=5000,
+        resting=False,
+        has_barrier=False,
+    )
+    state.players[1].battle_area = [beerus]
+    state.players[1].hand = [CardInstance(instance_id=8803192, card_id=card_id, owner_id=1, card_type="BATTLE", color="Blue", energy_cost=1, skill_text_raw=card_text)]
+    state.players[1].energy = [CardInstance(instance_id=8803193, card_id=990321, owner_id=1, card_type="ENERGY", color="Blue")]
+    state.players[2].battle_area = [active_target]
+
+    before_play_attacks = [
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and a.attacker_index == 0 and a.target_zone == "battle"
+    ]
+    assert before_play_attacks == []
+
+    play = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, play)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(cp.name == "effect_auto_grant_attack_active_battle_without_barrier_for_turn_on_play" for cp in state.checkpoints)
+
+    after_play_attacks = [
+        a for a in engine.get_legal_actions(state, 1)
+        if a.action_type == ActionType.DECLARE_ATTACK and a.attacker_zone == "battle" and state.players[1].battle_area[a.attacker_index].instance_id == 8803190 and a.target_zone == "battle"
+    ]
+    assert len(after_play_attacks) == 1
+
+    whis_combo = CardInstance(
+        instance_id=8803194,
+        card_id=card_id,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        skill_text_raw=card_text,
+    )
+    state.players[1].combo_area = [whis_combo]
+    engine._register_card_effects(state, player_id=1, source_zone="combo", card=whis_combo)
+    hand_before = len(state.players[1].hand)
+
+    state = engine.apply_action(state, after_play_attacks[0])
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.END_OFFENSE_STEP))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 2) if a.action_type == ActionType.END_DEFENSE_STEP))
+    state = engine.apply_action(state, next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.RESOLVE_BATTLE))
+
+    assert len(state.players[1].hand) == hand_before + 1
+    assert any(cp.name == "effect_auto_draw_n" for cp in state.checkpoints)
 
 
 def test_phase4_owner_leader_attack_can_add_from_hand_to_life() -> None:
@@ -51383,3 +51585,122 @@ def test_phase4_exact_bt15_vegeta_leader_activate_battle_buffs_self_when_life_is
     assert state.players[1].leader_area.battle_temporary_power_delta == 5000
     assert state.players[1].leader_area.power == 15000
     assert any(cp.name == "effect_activate_gain_power_and_keyword_for_battle" for cp in state.checkpoints)
+
+
+def test_phase4_exact_bt16_son_gohan_interceptor_restands_energy_and_bounces_overcost_on_damage() -> None:
+    card_text = (
+        '<Badge variant="red">Barrier</Badge>\r <Badge variant="blue">Auto</Badge><Badge variant="red">Once per turn</Badge> '
+        "Switch this card to Rest Mode: When you take damage from an opponent's attack, switch up to 1 of your blue energy to Active Mode, "
+        "then choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and return it to its owner's hand."
+    )
+    card_id = 306
+    engine = RulesEngine(effect_rules={card_id: extract_effect_rules_from_card(SimpleNamespace(card_skill_unstyled=card_text, card_type="BATTLE"))})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state = engine.apply_action(state, Action(action_type=ActionType.END_TURN, player_id=1))
+    state = _to_main(engine, state)
+    source = CardInstance(
+        instance_id=991930,
+        card_id=card_id,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Blue",
+        power=15000,
+        resting=False,
+        skill_text_raw=card_text,
+    )
+    state.players[1].battle_area = [source]
+    energy = CardInstance(instance_id=991931, card_id=991931, owner_id=1, card_type="ENERGY", color="Blue", resting=True)
+    state.players[1].energy = [energy]
+    overcost = CardInstance(instance_id=991932, card_id=991932, owner_id=2, card_type="BATTLE", color="Red", energy_cost=3, power=15000)
+    legal_other = CardInstance(instance_id=991933, card_id=991933, owner_id=2, card_type="BATTLE", color="Red", energy_cost=1, power=5000)
+    state.players[2].battle_area = [overcost, legal_other]
+    state.players[2].energy = [CardInstance(instance_id=991934, card_id=991934, owner_id=2, card_type="ENERGY", color="Red", resting=False)]
+    engine._register_card_effects(state, player_id=1, source_zone="battle", card=source)
+    state.attack_context = AttackContext(
+        attacker_player_id=2,
+        attacker_zone="leader",
+        attacker_instance_id=state.players[2].leader_area.instance_id,
+        target_player_id=1,
+        target_zone="leader",
+        target_instance_id=state.players[1].leader_area.instance_id,
+    )
+    life_before = len(state.players[1].life)
+    engine._deal_damage_to_player(state, 1, 1)
+    engine._resolve_pending_effects(state)
+    assert len(state.players[1].life) == life_before - 1
+    assert source.resting is True
+    assert energy.resting is False
+    assert any(card.instance_id == overcost.instance_id for card in state.players[2].hand)
+    assert all(card.instance_id != legal_other.instance_id for card in state.players[2].hand)
+    assert any(cp.name == "effect_auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage" for cp in state.checkpoints)
+
+
+def test_phase4_exact_bt15_son_gohan_simian_revenge_plays_from_hand_after_matching_blocker_is_removed() -> None:
+    card_text = (
+        "[Blocker][Revenge]<br>"
+        "[Auto][Limit 1](Green): When one of your green non-≪Great Ape≫ &lt;Son Gohan: Youth&gt; cards with [Blocker] "
+        "is removed from your Battle Area by an opponent's skill, you may play this card from your hand."
+    )
+    card_id = 193
+    engine = RulesEngine(effect_rules={card_id: extract_effect_rules_from_card(SimpleNamespace(card_skill_unstyled=card_text, card_type="BATTLE"))})
+    state = engine.initialize_game(
+        p1_leader_card_id=1,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        first_player=1,
+        shuffle_decks=False,
+    )
+    source = CardInstance(
+        instance_id=991940,
+        card_id=card_id,
+        owner_id=1,
+        card_number="BT15-070",
+        card_type="BATTLE",
+        color="Green",
+        power=15000,
+        skill_text_raw=card_text,
+        has_auto=True,
+    )
+    source.card_name = "Son Gohan, Simian Revenge"
+    state.players[1].hand = [source]
+    engine._register_card_effects(state, player_id=1, source_zone="hand", card=source)
+    ally = CardInstance(
+        instance_id=991941,
+        card_id=991941,
+        owner_id=1,
+        card_type="BATTLE",
+        color="Green",
+        power=5000,
+        traits=("Saiyan",),
+        characters=("Son Gohan: Youth",),
+        keywords=("Blocker",),
+    )
+    state.players[1].battle_area = [ally]
+    engine._emit_effect_event(
+        state,
+        name="skill_activated",
+        actor_player_id=2,
+        payload={"source_instance_id": 555101, "source_card_id": 555102, "source_zone": "battle", "skill_kind": "activate_main"},
+    )
+    engine._send_board_card_to_owner_out_of_play(
+        state,
+        controller_player_id=1,
+        zone="battle",
+        instance_id=ally.instance_id,
+        destination="drop",
+    )
+    legal = engine.get_legal_actions(state, 1)
+    assert [row.action_type for row in legal] == [ActionType.DECLARE_SECRET_AUTO, ActionType.IGNORE_SECRET_AUTO]
+    state = engine.apply_action(state, legal[0])
+    assert any(card.instance_id == source.instance_id for card in state.players[1].battle_area)
+    assert not any(card.instance_id == source.instance_id for card in state.players[1].hand)
+    assert any(cp.name == "effect_auto_play_self_from_hand_on_owner_matching_battle_left" for cp in state.checkpoints)

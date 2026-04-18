@@ -1330,6 +1330,38 @@ def test_extract_attack_pay_life_gain_power_and_keyword_rule() -> None:
     assert rule.handler_params["grant_keyword"] == "Double Strike"
 
 
+def test_extract_beerus_belligerent_god_rule() -> None:
+    card = _card(
+        "[Auto][Once per turn] Add 1 card from your life to your hand: "
+        "When this card attacks an opponent's Battle Card, switch this card to Active Mode, and it gets +15000 power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_pay_life_on_attack_gain_power_and_keyword_for_turn")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["life_to_hand"] == 1
+    assert rule.handler_params["power_delta"] == 15000
+    assert rule.handler_params["switch_self_active"] is True
+    assert rule.handler_params["power_duration"] == "battle"
+    assert rule.handler_params["required_attack_target_zone"] == "battle"
+
+
+def test_extract_whis_beerus_backup_rules() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 1 blue <Beerus> card in your Battle Area, and it can attack Battle Cards without [Barrier] in Active Mode for the turn.\n"
+        "[Auto][Limit 1] If this card is in your Combo Area: When a blue <Beerus> card in your Battle Area attacks and KOs an opponent's Battle Card, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(r for r in rules if r.handler_id == "auto_grant_attack_active_battle_without_barrier_for_turn_on_play")
+    assert play_rule.trigger == "self_played"
+    assert play_rule.handler_params["max_targets"] == 1
+    assert play_rule.handler_params["allowed_colors"] == "blue"
+    assert play_rule.handler_params["required_characters"] == "Beerus"
+    combo_rule = next(r for r in rules if r.trigger == "owner_battle_ko_opponent_battle_battle_end" and r.handler_id == "auto_draw_n")
+    assert combo_rule.handler_params["amount"] == 1
+    assert combo_rule.handler_params["attacker_allowed_colors"] == "blue"
+    assert combo_rule.handler_params["attacker_required_characters"] == "Beerus"
+
+
 def test_extract_owner_leader_attack_add_from_hand_to_life_rule() -> None:
     card = _card(
         "[Auto] If your Leader Card is a yellow Turles Crusher Corps card: "
@@ -4653,6 +4685,20 @@ def test_extract_play_gain_control_opponent_battle_rule() -> None:
     assert rule.handler_params["max_cost"] == 3
 
 
+def test_extract_raditz_invitation_to_battle_from_badge_html() -> None:
+    card = _card(
+        "<Badge variant=\"red\">Barrier</Badge><Badge variant=\"red\">Blocker</Badge><br />"
+        "<Badge variant=\"purple\">Permanent</Badge> If your opponent has a ≪Saiyan≫ card in play in their Battle Area, reduce the energy cost of this card in your hand by 1.<br />"
+        "<Badge variant=\"blue\">Auto</Badge> When this card is played from your hand, choose up to 1 ≪Saiyan≫ card with 5000 power or less in your opponent's Battle Area and gain control of it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_battle_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_power"] == 5000
+    assert rule.handler_params["required_traits"] == "Saiyan"
+
+
 def test_extract_play_switch_owner_board_to_revealed_rule() -> None:
     card = _card("[Auto] When this card is played, choose up to 1 card in your Battle Area and switch it to Revealed Mode.")
     rules = extract_effect_rules_from_card(card)
@@ -6961,3 +7007,50 @@ def test_extract_bt15_vegeta_leader_from_badge_html() -> None:
     )
     assert buff_rule.handler_params["power_delta"] == 5000
     assert buff_rule.handler_params["requires_owner_life_less_or_equal_opponent"] is True
+
+
+def test_extract_bt16_son_gohan_interceptor_from_badge_html() -> None:
+    card = replace(
+        _card(
+            '<Badge variant="red">Barrier</Badge>\r <Badge variant="blue">Auto</Badge><Badge variant="red">Once per turn</Badge> '
+            "Switch this card to Rest Mode: When you take damage from an opponent's attack, switch up to 1 of your blue energy to Active Mode, "
+            "then choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and return it to its owner's hand."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    barrier_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert barrier_rule.source_text.lower() == "[barrier]"
+    auto_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_takes_damage_from_opponent_attack"
+        and rule.handler_id == "auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage"
+    )
+    assert auto_rule.handler_params["owner_energy_targets"] == 1
+    assert auto_rule.handler_params["owner_energy_allowed_colors"] == "blue"
+    assert auto_rule.handler_params["max_targets"] == 1
+    assert auto_rule.handler_params["requires_cost_greater_than_opponent_current_energy"] is True
+
+
+def test_extract_bt15_son_gohan_simian_revenge_from_badge_html() -> None:
+    card = replace(
+        _card(
+            "[Blocker][Revenge]<br>"
+            "[Auto][Limit 1](Green): When one of your green non-≪Great Ape≫ &lt;Son Gohan: Youth&gt; cards with [Blocker] "
+            "is removed from your Battle Area by an opponent's skill, you may play this card from your hand."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_card_left_battle_area"
+        and rule.handler_id == "auto_play_self_from_hand_on_owner_matching_battle_left"
+    )
+    assert play_rule.handler_params["event_allowed_colors"] == "green"
+    assert play_rule.handler_params["event_required_characters"] == "son gohan: youth"
+    assert play_rule.handler_params["event_required_keywords"] == "blocker"
+    assert play_rule.handler_params["event_excluded_traits"] == "Great Ape"
+    assert play_rule.handler_params["event_removed_by_opponent_skill"] is True

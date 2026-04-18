@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 367,
+  "effect_rule_count": 371,
   "rules": {
     "10": [
       {
@@ -147,6 +147,17 @@
       }
     ],
     "103": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
@@ -1370,6 +1381,24 @@
         "trigger": "self_koed"
       }
     ],
+    "174": [
+      {
+        "family_id": "self_played:auto_gain_control_opponent_battle_on_play",
+        "handler_id": "auto_gain_control_opponent_battle_on_play",
+        "handler_params": {
+          "max_power": 5000,
+          "max_targets": 1,
+          "required_traits": "Saiyan",
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, choose up to 1 \u226asaiyan\u226b card with 5000 power or less in your opponent's battle area and gain control of it.",
+        "trigger": "self_played"
+      }
+    ],
     "175": [
       {
         "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -1707,6 +1736,25 @@
         "trigger": "self_played"
       }
     ],
+    "193": [
+      {
+        "family_id": "owner_card_left_battle_area:auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "event_allowed_colors": "green",
+          "event_excluded_traits": "Great Ape",
+          "event_removed_by_opponent_skill": true,
+          "event_required_characters": "son gohan: youth",
+          "event_required_keywords": "blocker"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](green): when one of your green non-\u226agreat ape\u226b <son gohan: youth> cards with [blocker] is removed from your battle area by an opponent's skill, you may play this card from your hand.",
+        "trigger": "owner_card_left_battle_area"
+      }
+    ],
     "194": [
       {
         "family_id": "self_played:noop_auto",
@@ -1731,6 +1779,23 @@
         "provenance": "extractor",
         "source_text": "[blocker]",
         "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_card_left_battle_area:auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "event_allowed_colors": "green",
+          "event_excluded_traits": "Great Ape",
+          "event_removed_by_opponent_skill": true,
+          "event_required_characters": "vegeta",
+          "event_required_keywords": "blocker"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](green): when one of your green non-\u226agreat ape\u226b <vegeta> cards with [blocker] is removed from your battle area by an opponent's skill, you may play this card from your hand.",
+        "trigger": "owner_card_left_battle_area"
       },
       {
         "family_id": "self_activate_main:activate_play_self_from_hand",
@@ -2010,6 +2075,23 @@
       }
     ],
     "217": [
+      {
+        "family_id": "owner_card_left_battle_area:auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_id": "auto_play_self_from_hand_on_owner_matching_battle_left",
+        "handler_params": {
+          "event_allowed_colors": "green,red",
+          "event_excluded_traits": "Great Ape",
+          "event_removed_by_opponent_skill": true,
+          "event_required_characters": "raditz",
+          "event_required_keywords": "blocker"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1](red)/(green): when one of your red or green non-\u226agreat ape\u226b <raditz> cards with [blocker] is removed from your battle area by an opponent's skill, you may play this card from your hand.",
+        "trigger": "owner_card_left_battle_area"
+      },
       {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
         "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
@@ -3123,6 +3205,36 @@
         "trigger": "self_comboed_battle_end"
       }
     ],
+    "306": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_takes_damage_from_opponent_attack:auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage",
+        "handler_id": "auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage",
+        "handler_params": {
+          "max_targets": 1,
+          "owner_energy_allowed_colors": "blue",
+          "owner_energy_targets": 1,
+          "requires_cost_greater_than_opponent_current_energy": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] switch this card to rest mode: when you take damage from an opponent's attack, switch up to 1 of your blue energy to active mode, then choose up to 1 of your opponent's battle cards with an energy cost greater than their current energy and return it to its owner's hand.",
+        "trigger": "owner_takes_damage_from_opponent_attack"
+      }
+    ],
     "307": [
       {
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
@@ -3372,6 +3484,58 @@
         "provenance": "extractor",
         "source_text": "[auto][once per turn] if your leader card is a blue <whis> card: when this card attacks and kos an opponent's battle card, draw 1 card, then switch this card and up to 1 blue <beerus> card in your energy to active mode.",
         "trigger": "self_attacks"
+      }
+    ],
+    "318": [
+      {
+        "family_id": "self_attacks:auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+        "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
+        "handler_params": {
+          "life_to_hand": 1,
+          "power_delta": 15000,
+          "power_duration": "battle",
+          "required_attack_target_zone": "battle",
+          "switch_self_active": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] add 1 card from your life to your hand: when this card attacks an opponent's battle card, switch this card to active mode, and it gets +15000 power for the battle.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "319": [
+      {
+        "family_id": "self_played:auto_grant_attack_active_battle_without_barrier_for_turn_on_play",
+        "handler_id": "auto_grant_attack_active_battle_without_barrier_for_turn_on_play",
+        "handler_params": {
+          "allowed_colors": "blue",
+          "max_targets": 1,
+          "required_characters": "Beerus",
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played from your hand, choose up to 1 blue <beerus> card in your battle area, and it can attack battle cards without [barrier] in active mode for the turn.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_battle_ko_opponent_battle_battle_end:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "attacker_allowed_colors": "blue",
+          "attacker_required_characters": "Beerus"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if this card is in your combo area: when a blue <beerus> card in your battle area attacks and kos an opponent's battle card, draw 1 card.",
+        "trigger": "owner_battle_ko_opponent_battle_battle_end"
       }
     ],
     "32": [
@@ -3997,6 +4161,17 @@
     ],
     "354": [
       {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
         "handler_params": {
@@ -4044,6 +4219,17 @@
       }
     ],
     "357": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
       {
         "family_id": "self_played:auto_draw_n",
         "handler_id": "auto_draw_n",
@@ -4626,21 +4812,6 @@
         "trigger": "self_played"
       }
     ],
-    "388": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto][once per turn] when this card attacks and kos an opponent's battle card, draw 1 card, switch this card to active mode, and place 1 card from your opponent's life at the bottom of their deck.",
-        "trigger": "self_attacks"
-      }
-    ],
     "39": [
       {
         "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -4665,107 +4836,6 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1] if your leader card is a black <bardock: xeno> card or a \u226asaiyan\u226b card with {ss4} in its card name: look at up to 3 cards from the top of your deck, add up to 2 black cards with {ss4} in their card names among them to your hand, then place the rest at the bottom of your deck in any order. if you added 2 cards to your hand, choose 1 card in your hand and place it at the bottom of your deck.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "390": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
-        "handler_id": "auto_play_self_from_combo_on_battle_end",
-        "handler_params": {
-          "leader_required_characters": "Great Priest",
-          "required_leader_traits": "Great Priest",
-          "requires_comboed_from": "hand",
-          "requires_leader": "if your leader card is a <great priest> card and you have 1 or more multicolor energy",
-          "resting": false
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto]((yellow)), if your leader card is a <great priest> card and you have 1 or more multicolor energy: at the end of a battle in which this card was used in a combo from your hand, play this card from your drop area.",
-        "trigger": "self_comboed_battle_end"
-      },
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] switch this card to rest mode: draw 1 card.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "391": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
-        "handler_id": "auto_play_self_from_combo_on_battle_end",
-        "handler_params": {
-          "requires_comboed_from": "hand",
-          "resting": false
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto]((yellow)), if you have 1 or more multicolor energy: at the end of a battle in which this card was used in a combo from your hand, play this card from your drop area.",
-        "trigger": "self_comboed_battle_end"
-      }
-    ],
-    "392": [
-      {
-        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
-        "handler_id": "auto_play_self_from_combo_on_battle_end",
-        "handler_params": {
-          "requires_comboed_from": "hand",
-          "resting": false
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto]((red)), if you have 1 or more multicolor energy: at the end of a battle in which this card was used in a combo from your hand, play this card from your drop area.",
-        "trigger": "self_comboed_battle_end"
-      }
-    ],
-    "395": [
-      {
-        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
-        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, your opponent chooses 1 card in their hand and discards it.",
-        "trigger": "self_played"
       }
     ],
     "4": [
