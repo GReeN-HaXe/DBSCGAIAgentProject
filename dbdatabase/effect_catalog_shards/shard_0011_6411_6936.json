@@ -1,8 +1,302 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 334,
+  "effect_rule_count": 335,
   "rules": {
+    "6411": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is yellow and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is yellow and your life is at 4 or less, draw 1 card and this card gains +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      }
+    ],
+    "6417": [
+      {
+        "family_id": "self_played:auto_send_up_to_n_from_owner_deck_to_warp_on_play",
+        "handler_id": "auto_send_up_to_n_from_owner_deck_to_warp_on_play",
+        "handler_params": {
+          "max_cost": 5,
+          "max_targets": 1,
+          "required_traits": "World Tournament"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 \u226aworld tournament\u226b card with an energy cost of 5 or less from your deck, send it your warp, shuffle your deck, and at the start of your next turn, add that card sent to your warp by this skill to your hand from the warp.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_schedule_return_cards_warped_by_source_skill_on_play",
+        "handler_id": "auto_schedule_return_cards_warped_by_source_skill_on_play",
+        "handler_params": {
+          "affected_player_scope": "owner",
+          "require_next_turn": true,
+          "trigger_kind": "main_phase_start",
+          "trigger_player_scope": "owner"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 \u226aworld tournament\u226b card with an energy cost of 5 or less from your deck, send it your warp, shuffle your deck, and at the start of your next turn, add that card sent to your warp by this skill to your hand from the warp.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_up_to_n_from_owner_hand_to_warp",
+        "handler_id": "activate_send_up_to_n_from_owner_hand_to_warp",
+        "handler_params": {
+          "leader_required_traits": "World Tournament",
+          "max_cost": 3,
+          "max_targets": 1,
+          "required_leader_traits": "World Tournament",
+          "required_traits": "World Tournament",
+          "requires_leader": "if your leader card is a \u226aworld tournament\u226b card and you place this card in it's owner's drop area"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]\u2461, if your leader card is a \u226aworld tournament\u226b card and you place this card in it's owner's drop area: choose up to 1 \u226aworld tournament\u226b card with an energy cost of 3 or less from your hand, send it to your warp, and at the start of your next turn, play the card sent to your warp by this skill from your warp.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:activate_schedule_play_cards_warped_by_source_skill",
+        "handler_id": "activate_schedule_play_cards_warped_by_source_skill",
+        "handler_params": {
+          "affected_player_scope": "owner",
+          "leader_required_traits": "World Tournament",
+          "require_next_turn": true,
+          "required_leader_traits": "World Tournament",
+          "requires_leader": "if your leader card is a \u226aworld tournament\u226b card and you place this card in it's owner's drop area",
+          "trigger_kind": "main_phase_start",
+          "trigger_player_scope": "owner"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main]\u2461, if your leader card is a \u226aworld tournament\u226b card and you place this card in it's owner's drop area: choose up to 1 \u226aworld tournament\u226b card with an energy cost of 3 or less from your hand, send it to your warp, and at the start of your next turn, play the card sent to your warp by this skill from your warp.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "6421": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 <majin buu> card in your battle area, and if there's a <majin buu> card with an energy cost of 1 under it, choose up to 1 <majin buu> card with an energy cost of 1 among them and play it in your battle area, and if you played a card, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "6422": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust] (if this card is placed in an energy area from any area, it must be placed there in rest mode.)",
+        "trigger": "self_played"
+      }
+    ],
+    "6424": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust] (if this card is placed in an energy area from any area, it must be placed there in rest mode.)",
+        "trigger": "self_played"
+      }
+    ],
+    "6425": [
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[double strike] (this card inflicts 2 damage instead of 1 when attacking)",
+        "trigger": "self_attacks"
+      }
+    ],
+    "6427": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "min_owner_energy": 3,
+          "requires_no_owner_battle": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] (blue), if you have 3 or more energy: if you have no battle cards in play, play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "6428": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card from your hand, activate this skill. at the end of this turn, if there is a card that is both red and green in your energy, draw 2 cards, choose 1 card in your hand and place it in your drop area, then choose any number of your opponent's battle cards with a total energy cost of 3 or less and ko them.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card from your hand, activate this skill. at the end of this turn, if there is a card that is both red and green in your energy, draw 2 cards, choose 1 card in your hand and place it in your drop area, then choose any number of your opponent's battle cards with a total energy cost of 3 or less and ko them.",
+        "trigger": "self_played"
+      }
+    ],
+    "6429": [
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[critical] (when this card inflicts damage to your opponent's life, they place that many cards in their drop area instead of their hand.)",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_required_traits": "World Tournament",
+          "required_leader_traits": "World Tournament",
+          "requires_leader": "if your leader card is a \u226aworld tournament\u226b card"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a \u226aworld tournament\u226b card: place this card from your hand at the bottom of your deck, then draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "6434": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust] (if this card is placed in an energy area from any area, it must be placed there in rest mode.)",
+        "trigger": "self_played"
+      }
+    ],
+    "6436": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[blocker]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
+    "6439": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [once per turn] choose 1 green card from your battle area other than this card and place it in your drop area: draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "6442": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose up to 1 green <vegeta> card with an energy cost of 6 in a battle area, place it in its owner's drop area, and draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "6448": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](yellow), if there are a total of 2 or more\u226aworld tournament\u226b cards in play in all battle areas: play this card from your hand, and you can't play {son goku, savage great ape} for the duration of the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "6449": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4774,294 +5068,6 @@
         "provenance": "extractor",
         "source_text": "[auto][sparking 5] (this skill takes effect when you have 5 or more cards in your drop area.) when you combo with this card, if your leader card is blue, draw 1 card.",
         "trigger": "self_comboed"
-      }
-    ],
-    "6937": [
-      {
-        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
-        "handler_id": "auto_play_self_from_combo_on_battle_end",
-        "handler_params": {
-          "auto_cost_header": "(blue)\u2462",
-          "requires_comboed_from": "hand",
-          "rest_mode_only": true,
-          "resting": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto](blue)\u2462: at the end of a battle in which this card is used in a combo from your hand or energy, draw 1 card, choose up to 1 of your opponent's battle cards and place it at the bottom of its owner's deck, then play this card from your drop area in rest mode.",
-        "trigger": "self_comboed_battle_end"
-      }
-    ],
-    "6939": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 7,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_traits": "Krillin"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, look at up to 7 cards from the top of your deck. choose up to 1 <krillin> among them and add it to your hand.",
-        "trigger": "self_played"
-      }
-    ],
-    "6940": [
-      {
-        "family_id": "turn_end:auto_switch_up_to_n_owner_energy_active_on_turn_end",
-        "handler_id": "auto_switch_up_to_n_owner_energy_active_on_turn_end",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Trunks: Future",
-          "max_targets": 1,
-          "required_leader_traits": "Trunks: Future",
-          "requires_leader": "if your leader card is a blue <trunks: future> card and you add 1 card from your life to your hand"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][once per turn] if your leader card is a blue <trunks: future> card and you add 1 card from your life to your hand: at the end of the turn, switch up to 1 of your mono-blue energy to active mode.",
-        "trigger": "turn_end"
-      }
-    ],
-    "6942": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust] (if this card is placed in an energy area from any area, it must be placed there in rest mode.)",
-        "trigger": "self_played"
-      }
-    ],
-    "6943": [
-      {
-        "family_id": "self_played:auto_add_markers_to_matching_owner_unison_on_play",
-        "handler_id": "auto_add_markers_to_matching_owner_unison_on_play",
-        "handler_params": {
-          "allowed_colors": "red",
-          "amount": 1,
-          "max_cost": -1,
-          "max_targets": 1,
-          "requires_leader": "if your leader card is red"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is red: when this card is played, choose up to 1 of your red unison cards, add a marker to it, then your opponent chooses 1 card in their hand and sends it to their warp. at the end of your opponent's next turn, they add the card sent to their warp by this skill from their warp to their hand.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_send_up_to_n_opponent_hand_to_warp_on_play",
-        "handler_id": "auto_send_up_to_n_opponent_hand_to_warp_on_play",
-        "handler_params": {
-          "max_targets": 1,
-          "requires_leader": "if your leader card is red"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is red: when this card is played, choose up to 1 of your red unison cards, add a marker to it, then your opponent chooses 1 card in their hand and sends it to their warp. at the end of your opponent's next turn, they add the card sent to their warp by this skill from their warp to their hand.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play",
-        "handler_id": "auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play",
-        "handler_params": {
-          "requires_leader": "if your leader card is red"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is red: when this card is played, choose up to 1 of your red unison cards, add a marker to it, then your opponent chooses 1 card in their hand and sends it to their warp. at the end of your opponent's next turn, they add the card sent to their warp by this skill from their warp to their hand.",
-        "trigger": "self_played"
-      }
-    ],
-    "6944": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[barrier]",
-        "trigger": "self_played"
-      }
-    ],
-    "6945": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[barrier] (this card can't be chosen by the skills of your opponent's cards.)",
-        "trigger": "self_played"
-      }
-    ],
-    "6947": [
-      {
-        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
-        "handler_id": "auto_play_self_from_combo_on_battle_end",
-        "handler_params": {
-          "requires_leader": "red,green"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "manual_override",
-        "source_text": "",
-        "trigger": "self_comboed_battle_end"
-      }
-    ],
-    "6949": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": -1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card,  choose up to 1 of your opponent's battle cards with 30000 power or less and ko it",
-        "trigger": "self_played"
-      }
-    ],
-    "6950": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] \u2461, choose 1 card from your hand and place it in your drop area: play this card from your hand.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": -1,
-          "rest_mode_only": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card,  choose up to 1 of your opponent's battle cards in rest mode and ko it",
-        "trigger": "self_played"
-      }
-    ],
-    "6951": [
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": -1,
-          "min_owner_drop": 3
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] [sparking 3] (this skill takes effect when you have 3 or more cards in your drop area.) when you play this card, choose any number of your opponent's battle cards for which the total cost adds up to 2 or less and ko them.",
-        "trigger": "self_played"
-      }
-    ],
-    "6955": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is yellow and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is yellow and your life is at 4 or less: when this card is used in a combo,  draw 1 card",
-        "trigger": "self_comboed"
-      }
-    ],
-    "6956": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_required_traits": "Heroine",
-          "required_leader_traits": "Heroine",
-          "requires_leader": "if your leader card is a \u226aheroine\u226b card"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main]\u2461, if your leader card is a \u226aheroine\u226b card: play this card from your hand with 2 markers on it.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_traits": "Heroine,World Tournament"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[+1][activate: main] look at up to 5 cards from the top of your deck, add up to 1 \u226aworld tournament\u226b or \u226aheroine\u226b card among them to your hand, then shuffle your deck.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "6957": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
       }
     ]
   },

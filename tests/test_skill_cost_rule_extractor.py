@@ -1585,6 +1585,31 @@ def test_extract_counter_alternate_owner_battle_under_to_drop_cost_rule() -> Non
     }
 
 
+def test_extract_absorption_of_doom_counter_alternate_discard_other_black_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] If your Leader Card is a black <Fin> card: Negate the attack. "
+            "Additionally, if your opponent has a skill-less Battle Card or Unison Card in play, they can only attack two more times for the turn."
+            "[Permanent] If your opponent has 2 or more Battle Cards in play, you can activate this card's [Counter] skill from your hand "
+            "without paying its energy cost by choosing 1 other black card in your hand and discarding it."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "discard_hand",
+                "amount": 1,
+                "allowed_colors": "black",
+                "exclude_source_card": True,
+                "required_leader_colors": "black",
+                "required_leader_traits": "fin",
+                "requires_opponent_battle_cards_at_least": 2,
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_z_energy_under_self_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

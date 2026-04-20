@@ -4596,3 +4596,90 @@ When adding a new TODO:
 - Added runtime support for `auto_play_self_from_hand_on_owner_matching_battle_left` on top of the existing deferred secret-auto system, so the exact card declares from hand and plays itself only after the matching removal event occurs.
 - Extended owner-battle-left event matching with shared `event_required_keywords` and `event_excluded_traits` filters so exact trigger text like green non-`≪Great Ape≫` `<Son Gohan: Youth>` with `[Blocker]` can be modeled without a bespoke matcher.
 - Added focused extractor and exact phase4 coverage proving the secret auto opportunity appears from hand and the card plays itself after the matching `[Blocker]` Battle Card is removed by an opponent's skill.
+
+## BT15 Monstrous Encounter slice complete
+
+- Added shared extraction for `BT15-026 Monstrous Encounter`:
+  - `counter_attack -> counter_play_up_to_n_skillless_from_owner_hand_rest_and_redirect_attack`
+- Added runtime support for the extracted counter family:
+  - choose up to `N` matching skill-less cards from hand
+  - play the first legal match in Rest Mode
+  - retarget the live attack to the played Battle Card if one was played
+- Reused the existing shared descriptor matching for `≪Monster≫` and added the skill-less check only at runtime, which keeps the handler reusable for the same counter shape across future families.
+- Added focused extractor and exact phase4 coverage proving the counter plays a skill-less `≪Monster≫` with cost `2 or less` from hand in Rest Mode and redirects the attack to it.
+
+## BT15 Absorption of Doom slice complete
+
+- Added shared extraction for `BT15-138 Absorption of Doom`:
+  - `counter_attack -> counter_limit_opponent_attacks_if_opponent_has_skillless_battle_or_unison`
+- Added runtime support for the counter rider:
+  - if the opponent has any skill-less Battle Card or Unison Card in play, cap their remaining attacks for the turn at `2`
+- Added shared counter alternate-cost extraction for:
+  - `activate this card's [Counter] skill from your hand without paying its energy cost by choosing 1 other black card in your hand and discarding it`
+- Extended the skill-cost DSL so `discard_hand` can:
+  - filter matching hand cards
+  - exclude the source card when the text says `other`
+  - respect `requires_opponent_battle_cards_at_least`
+- Added focused extractor, skill-cost, and exact phase4 coverage proving the card uses the alternate discard cost correctly and applies the two-more-attacks limit only when the opponent has a skill-less Battle or Unison in play.
+
+## BT16 Hit, Assassin's Strike slice complete
+
+- Added shared extraction for `BT16-061 Hit, Assassin's Strike`:
+  - combo-area battle-end replay when one of your green Battle Cards attacks and KOs an opponent Battle Card
+  - resting-board auto that forces the opponent to discard `2` or else negates the attack and ends their attacks for the turn
+- Extended the shared combo replay runtime so `auto_play_self_from_combo_on_battle_end` can honor attacker-side descriptor filters like `green Battle Card` directly from the triggering battle-end event.
+- Added runtime support for `auto_if_self_rest_opponent_discards_n_or_negate_attack_and_end_attacks`:
+  - if the opponent has enough hand cards, they discard the required amount
+  - otherwise the current attack is negated, the battle moves to battle end, and the opponent's remaining attack declarations are capped at `0`
+- Added focused extractor and exact phase4 coverage proving the source plays itself from the Combo Area after the matching green KO battle and that the resting-board branch negates an attack when the opponent cannot discard `2`.
+
+## BT16 Realm of the Gods - Champa Destroys slice complete
+
+- Added shared extraction for `BT16-069 Realm of the Gods - Champa Destroys`:
+  - `Activate: Battle` from hand that first buffs one of your cards by `+10000` for the battle and then branches by turn
+- Added runtime support for `activate_buff_owner_cards_for_battle_then_turn_based_ko_or_discard_and_buff`:
+  - on your turn, KO up to `1` opponent Battle Card with an energy cost greater than their current energy
+  - on your opponent's turn, your opponent discards `1`, then one of your cards gains an additional `+5000` for the battle
+- Modeled the family as a single selected activate handler so the one-skill/two-branch effect resolves atomically instead of splitting into invalid partial rules.
+- Added focused extractor and exact phase4 coverage proving the extracted rule resolves both the owner-turn KO branch and the opponent-turn discard-plus-extra-buff branch.
+
+## BT15 Ultimate Minus Energy Power Ball slice complete
+
+- Added shared extraction for `BT15-139 Ultimate Minus Energy Power Ball`:
+  - `counter_attack -> counter_send_up_to_n_opponent_battle_to_warp` for non-attacking opponent Battle targets with `15000` power or less, ignoring `[Barrier]`
+  - `self_activate_extra_from_hand -> activate_buff_owner_cards_until_battle_or_turn` for the `Activate: Main/Battle` `+15000` owner leader-or-battle buff
+  - noop catalog coverage for the `≪Shadow Dragon≫ in all areas` line and the free-counter permanent with a black Unison in play
+- Added runtime support for `counter_send_up_to_n_opponent_battle_to_warp` so counter skills can warp arbitrary opponent Battle Cards instead of only the attacking card.
+- Added runtime support for `activate_buff_owner_cards_until_battle_or_turn` so Extra-card buffs from hand use battle duration during battle windows and turn duration during main-phase windows.
+- Added focused extractor and exact phase4 coverage proving the free counter warps a `15000`-or-less Battle Card while ignoring `[Barrier]` and that the extracted buff uses the correct turn-vs-battle duration behavior.
+
+## BT15 Yajirobe, Confronting Invasion slice complete
+
+- Added shared extraction for `BT15-080 Yajirobe, Confronting Invasion`:
+  - `counter_attack -> counter_play_self_rest_then_ko_attacking_battle_if_trait_and_opponent_draw_n`
+- Added runtime support for the extracted counter family:
+  - plays the source from Drop to Battle Area in Rest Mode after the counter is declared
+  - if the attacking Battle Card has `≪Great Ape≫` or `≪Demon Clan≫`, KOs it and the attacking player draws `1`
+- Added a narrow guard so this extracted family suppresses the generic text-based counter-play-self fallback for the same source card, avoiding double-play duplication during counter resolution.
+- Added focused extractor and exact phase4 coverage proving the exact card text plays the source in Rest Mode, KOs a matching attacking `≪Great Ape≫`, and makes the attacking player draw `1`.
+
+## BT16 Supreme Kai of Time, Opposing the Empire slice complete
+
+- Added shared extraction for `BT16-099 Supreme Kai of Time, Opposing the Empire`:
+  - `owner_battle_played_from_warp -> auto_draw_n_and_add_markers_on_owner_battle_played_from_warp`
+  - `self_activate_main -> activate_send_top_deck_to_owner_warp`
+- Reused the existing `owner_battle_played_from_warp` trigger family and added a new shared runtime handler that:
+  - draws the configured amount
+  - adds the configured marker delta to the source Unison
+- Extended the `Activate: Main` top-deck-to-warp extraction to accept exact wording that sends cards from the top of your deck to `your Warp`, not only `its owner's Warp`.
+- Reused the existing `activate_send_top_deck_to_owner_warp` runtime handler for the `+1` branch, including the shared Unison marker increase.
+- Added focused extractor and exact phase4 coverage proving the exact card text draws and gains a marker when one of your Battle Cards is played from Warp and that the `+1` branch sends the top `3` cards of your deck to Warp while adding a marker.
+
+## BT16 SS2 Trunks, Future on the Line slice complete
+
+- Added exact extraction for `BT16-081 SS2 Trunks, Future on the Line`:
+  - `self_played -> auto_switch_self_active_on_play` gated by `requires_played_via="ex_evolve"`
+  - `owner_opponent_battle_played -> auto_switch_up_to_n_opponent_board_rest` for opponent Battle-or-Unison plays under a yellow `<Trunks: Future>` leader
+- Broadened the shared `owner_opponent_battle_played` runtime matcher so it can resolve against live opponent Unison plays as well as Battle plays when the extracted family asks for board-card filters.
+- Tightened `auto_switch_self_active_on_play` so it respects exact source-instance matching and optional `requires_played_via` gating, preventing generic on-play self-stand handlers from overfiring.
+- Added focused extractor and exact phase4 coverage proving the EX-Evolve self-stand branch only fires on EX-Evolve play and the once-per-turn trigger rests either an opponent Battle Card or Unison when they are played.

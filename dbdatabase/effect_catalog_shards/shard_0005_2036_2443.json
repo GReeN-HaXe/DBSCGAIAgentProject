@@ -1,8 +1,293 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 402,
+  "effect_rule_count": 392,
   "rules": {
+    "2036": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played,  draw 1 card",
+        "trigger": "self_played"
+      }
+    ],
+    "2037": [
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_required_characters": "Broly",
+          "min_owner_energy": 3,
+          "required_leader_traits": "Broly",
+          "requires_leader": "if your leader is a <broly> card and you have 3 or more energy"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader is a <broly> card and you have 3 or more energy: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2038": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Broly,Paragus",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 green <broly> or <paragus> card to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "2039": [
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "allowed_colors": "green,red",
+          "max_cost": 6,
+          "max_targets": 1,
+          "required_characters": "Broly"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] discard 1 card from your hand: add up to 1 red/green multicolor <broly> card with an energy cost of 6 from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2040": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card, then activate up to 1 {broly's ring} from your hand.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "green",
+          "leader_required_characters": "Broly",
+          "required_leader_traits": "Broly",
+          "requires_leader": "if your leader is a green <broly> card and you have a <broly> card in play"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader is a green <broly> card and you have a <broly> card in play: play this card from your hand, and you can't play <paragus> cards for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2041": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Broly",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played,  look at up to 5 cards from the top of your deck, add up to 1 green <broly> card to your hand, then shuffle your deck",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "leader_allowed_colors": "green",
+          "leader_required_characters": "Broly",
+          "required_leader_traits": "Broly",
+          "requires_leader": "if your leader is a green <broly> card and you have a <broly> card in play"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader is a green <broly> card and you have a <broly> card in play: play this card from your hand, and you can't play <paragus> cards for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2042": [
+      {
+        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, add up to 1 \u226abio warrior\u226b card from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_self_from_hand",
+        "handler_id": "activate_play_self_from_hand",
+        "handler_params": {
+          "requires_leader": "if your leader is green"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main](green), if your leader is green: play this card from your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2045": [
+      {
+        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] when this card is placed in a battle area, add up to 1 \u226abio warrior\u226b card from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "2046": [
+      {
+        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
+        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, your opponent discards 1 card from their hand.",
+        "trigger": "self_played"
+      }
+    ],
+    "2047": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      }
+    ],
+    "2049": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, then add up to 1 card from your life to your hand.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_attacks:auto_add_up_to_n_from_owner_life_to_hand_on_attack",
+        "handler_id": "auto_add_up_to_n_from_owner_life_to_hand_on_attack",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, then add up to 1 card from your life to your hand.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "2056": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "leader_allowed_colors": "black",
+          "max_cost": 6,
+          "max_targets": 1,
+          "required_characters": "Vegito",
+          "required_leader_traits": "Black",
+          "requires_leader": "if your leader is a black card with both <son goku> and <vegeta> or a black <vegito> card, you place 1 card from your hand at the bottom of your deck, and you switch this card to rest mode"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate main] if your leader is a black card with both <son goku> and <vegeta> or a black <vegito> card, you place 1 card from your hand at the bottom of your deck, and you switch this card to rest mode: add up to 1 <vegito> card with an energy cost of 6 or less from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "2061": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      }
+    ],
     "2062": [
       {
         "family_id": "self_attacks:auto_draw_n",
@@ -6233,521 +6518,6 @@
         "provenance": "extractor",
         "source_text": "[auto][limit 1] if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have a \u226auniverse 7\u226b card in your combo area: when this card is added to z-energy, draw 1 card.",
         "trigger": "self_added_to_z_energy"
-      }
-    ],
-    "2444": [
-      {
-        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_params": {
-          "ignores_barrier": true,
-          "max_cost": -1,
-          "max_targets": 1,
-          "requires_leader": "if your leader is mono-yellow and you place 1 card from under this card in your drop",
-          "rest_mode_only": true,
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is mono-yellow and you place 1 card from under this card in your drop: when this card attacks, choose up to 1 of your opponent's rest mode battle cards, ignoring [barrier], ko it, and during your opponent's next charge phase, your opponent can only switch up to 4 of their cards to active mode.",
-        "trigger": "self_attacks"
-      },
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_owner_energy": 4,
-          "required_owner_combo_allowed_colors": "yellow",
-          "required_owner_combo_required_characters": "Caulifla,Kale"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](yellow)(yellow), if you have 4 or more energy and you choose 1 each of a yellow <kale> card in your battle area and a yellow <caulifla> card in your combo area: at the end of your damage step for that battle, draw 1 card, play this card from your hand, and place the chosen cards under this card.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2445": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_battle:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_owner_energy": 2,
-          "required_owner_combo_allowed_colors": "yellow",
-          "required_owner_combo_required_characters": "Caulifla,Kale",
-          "rest_mode_only": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](yellow), if you have 2 or more energy and you choose 1 yellow <kale> card in your battle area and 1 yellow <caulifla> card in your combo area: at the end of your damage step for that battle, draw 1 card, play this card from your hand, place the chosen cards under this card, then choose up to 1 of your opponent's rest mode battle cards and ko it.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2447": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader is yellow and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is yellow and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "2448": [
-      {
-        "family_id": "self_activate_battle:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Goku",
-          "required_leader_traits": "Son Goku",
-          "requires_leader": "if your leader is a yellow <son goku> card"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle] if your leader is a yellow <son goku> card: draw 1 card, choose up to 1 of your yellow <son goku> cards and it gets +15000 power for the battle.",
-        "trigger": "self_activate_battle"
-      },
-      {
-        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
-        "handler_id": "activate_gain_power_and_keyword_for_battle",
-        "handler_params": {
-          "allowed_colors": "yellow",
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Goku",
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": 15000,
-          "required_leader_traits": "Son Goku",
-          "required_traits": "Son Goku",
-          "requires_leader": "if your leader is a yellow <son goku> card",
-          "target_policy": "first",
-          "target_scope": "owner_cards"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle] if your leader is a yellow <son goku> card: draw 1 card, choose up to 1 of your yellow <son goku> cards and it gets +15000 power for the battle.",
-        "trigger": "self_activate_battle"
-      },
-      {
-        "family_id": "self_activate_battle:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Caulifla,Kefla",
-          "required_leader_traits": "Caulifla,Kefla",
-          "requires_leader": "if your leader is a yellow <caulifla> or <kefla> card",
-          "rest_mode_only": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle] if your leader is a yellow <caulifla> or <kefla> card: draw 1 card, choose up to 1 of your opponent's battle cards and switch it to rest mode, then choose up to 1 of your cards and it gets +5000 power for the battle.",
-        "trigger": "self_activate_battle"
-      },
-      {
-        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
-        "handler_id": "activate_gain_power_and_keyword_for_battle",
-        "handler_params": {
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Caulifla,Kefla",
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": 5000,
-          "required_card_type": "BATTLE",
-          "required_characters": "Opponent S And Switch It To Rest Mode,Then Choose Up To 1 Of Your",
-          "required_leader_traits": "Caulifla,Kefla",
-          "requires_leader": "if your leader is a yellow <caulifla> or <kefla> card",
-          "rest_mode_only": true,
-          "target_policy": "first",
-          "target_scope": "owner_cards"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle] if your leader is a yellow <caulifla> or <kefla> card: draw 1 card, choose up to 1 of your opponent's battle cards and switch it to rest mode, then choose up to 1 of your cards and it gets +5000 power for the battle.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2450": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "min_owner_energy": 5,
-          "requires_leader": "if your leader is yellow, you have 5 or more energy, and you have 10 or more cards in your z-energy"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main](yellow)(yellow)(yellow)(yellow), if your leader is yellow, you have 5 or more energy, and you have 10 or more cards in your z-energy: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2451": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
-        "handler_id": "auto_power_reduce_up_to_n_on_play",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": -15000,
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards or unisons and it gets -15000 power for the turn.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "red",
-          "leader_required_traits": "Saiyan",
-          "min_opponent_energy": 2,
-          "required_leader_traits": "Saiyan",
-          "requires_leader": "if your leader is a red non-\u226asaiyan\u226b card and your opponent has 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](red), if your leader is a red non-\u226asaiyan\u226b card and your opponent has 2 or more energy: draw 1 card and play this card from your hand.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "red",
-          "leader_required_traits": "Saiyan",
-          "min_opponent_energy": 2,
-          "required_leader_traits": "Saiyan",
-          "requires_leader": "if your leader is a red non-\u226asaiyan\u226b card and your opponent has 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](red), if your leader is a red non-\u226asaiyan\u226b card and your opponent has 2 or more energy: draw 1 card and play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2452": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "red",
-          "leader_required_characters": "Gohanks: Xeno,Son Gohan: Future",
-          "min_owner_energy": 2,
-          "required_leader_traits": "Son Gohan: Future,Gohanks: Xeno",
-          "requires_leader": "if your leader is a red <son gohan: future> or <gohanks: xeno> card and you have 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](red), if your leader is a red <son gohan: future> or <gohanks: xeno> card and you have 2 or more energy: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2455": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Raditz",
-          "min_owner_energy": 2,
-          "required_leader_traits": "Raditz",
-          "requires_leader": "if your leader is a blue <raditz> card and you have 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](blue), if your leader is a blue <raditz> card and you have 2 or more energy: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "2456": [
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Nappa",
-          "min_owner_energy": 2,
-          "post_play_token_amount": 1,
-          "post_play_token_combo_cost": 0,
-          "post_play_token_combo_power": 5000,
-          "post_play_token_name": "saibaiman token",
-          "post_play_token_power": 5000,
-          "post_play_token_resting": false,
-          "required_leader_traits": "Nappa",
-          "requires_leader": "if your leader is a blue <nappa> card and you have 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](blue), if your leader is a blue <nappa> card and you have 2 or more energy: play this card from your hand, then play 1 saibaiman token (5000 power, 0 combo cost, and 5000 combo power).",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Nappa",
-          "min_owner_energy": 2,
-          "required_leader_traits": "Nappa",
-          "requires_leader": "if your leader is a blue <nappa> card and you have 2 or more energy"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](blue), if your leader is a blue <nappa> card and you have 2 or more energy: play this card from your hand, then play 1 saibaiman token (5000 power, 0 combo cost, and 5000 combo power).",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "counter_attack:counter_play_token_in_battle",
-        "handler_id": "counter_play_token_in_battle",
-        "handler_params": {
-          "amount": 1,
-          "combo_cost": 0,
-          "combo_power": 5000,
-          "leader_allowed_colors": "blue",
-          "leader_required_characters": "Nappa",
-          "min_owner_energy": 2,
-          "power": 5000,
-          "required_leader_traits": "Nappa",
-          "requires_leader": "if your leader is a blue <nappa> card and you have 2 or more energy",
-          "resting": false,
-          "token_name": "saibaiman token"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1](blue), if your leader is a blue <nappa> card and you have 2 or more energy: play this card from your hand, then play 1 saibaiman token (5000 power, 0 combo cost, and 5000 combo power).",
-        "trigger": "counter_attack"
-      },
-      {
-        "family_id": "self_activate_battle:activate_play_token_in_battle",
-        "handler_id": "activate_play_token_in_battle",
-        "handler_params": {
-          "amount": 1,
-          "combo_allowed_colors": "blue",
-          "combo_cost": 0,
-          "combo_exact_combo_power": 5000,
-          "combo_max_cost": -1,
-          "combo_max_targets": 1,
-          "combo_negate_skills": true,
-          "combo_power": 0,
-          "combo_require_mono_color": true,
-          "combo_required_traits": "Mono",
-          "combo_source_zone": "drop",
-          "power": 0,
-          "requires_owner_turn": true,
-          "resting": false,
-          "token_name": "saibaiman token"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][once per turn](blue), if it's your turn: play 1 saibaiman token, then use up to 1 mono-blue card with 5000 combo power from your drop in a combo with its skills negated for the turn.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2458": [
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": 5
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 5 or less and ko it, then choose up to 1 of your opponent's unisons and remove 1 marker from it.",
-        "trigger": "self_played"
-      }
-    ],
-    "2459": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "green",
-          "required_leader_traits": "Green",
-          "requires_leader": "if your leader is a green card with both <trunks: future> and <mai: future>"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is a green card with both <trunks: future> and <mai: future>: when this card is played, draw 1 card, then play 1 earthling token (1000 power, 0 combo cost, and 0 combo power).",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "counter_attack:counter_play_token_in_battle",
-        "handler_id": "counter_play_token_in_battle",
-        "handler_params": {
-          "amount": 1,
-          "combo_cost": 0,
-          "combo_power": 0,
-          "leader_allowed_colors": "green",
-          "power": 1000,
-          "required_leader_traits": "Green",
-          "requires_leader": "if your leader is a green card with both <trunks: future> and <mai: future>",
-          "resting": false,
-          "token_name": "earthling token"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is a green card with both <trunks: future> and <mai: future>: when this card is played, draw 1 card, then play 1 earthling token (1000 power, 0 combo cost, and 0 combo power).",
-        "trigger": "counter_attack"
-      },
-      {
-        "family_id": "self_played:auto_play_token_in_battle_on_play",
-        "handler_id": "auto_play_token_in_battle_on_play",
-        "handler_params": {
-          "amount": 1,
-          "combo_cost": 0,
-          "combo_power": 0,
-          "leader_allowed_colors": "green",
-          "power": 1000,
-          "required_leader_traits": "Green",
-          "requires_leader": "if your leader is a green card with both <trunks: future> and <mai: future>",
-          "resting": false,
-          "token_name": "earthling token"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader is a green card with both <trunks: future> and <mai: future>: when this card is played, draw 1 card, then play 1 earthling token (1000 power, 0 combo cost, and 0 combo power).",
-        "trigger": "self_played"
-      }
-    ],
-    "2460": [
-      {
-        "family_id": "self_activate_battle:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_required_characters": "Zamasu",
-          "required_leader_traits": "Zamasu",
-          "requires_leader": "if your leader is a <zamasu> card and there are 3 or more colors among cards in your combo area"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][limit 1](green)(1), if your leader is a <zamasu> card and there are 3 or more colors among cards in your combo area: draw 1 card and play this card from your combo area.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "2461": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "requires_leader": "<Paragus: Br>",
-          "requires_played_from": "hand"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "manual_override",
-        "source_text": "",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_play_up_to_n_from_owner_deck_on_play",
-        "handler_id": "auto_play_up_to_n_from_owner_deck_on_play",
-        "handler_params": {
-          "max_targets": 1,
-          "required_name_contains": "ENERGY BARRAGE FRIEZA",
-          "requires_leader": "<Paragus: Br>",
-          "requires_played_from": "hand"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "manual_override",
-        "source_text": "",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_transfer_self_control_to_opponent_on_play",
-        "handler_id": "auto_transfer_self_control_to_opponent_on_play",
-        "handler_params": {
-          "requires_leader": "<Paragus: Br>",
-          "requires_played_from": "hand"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "manual_override",
-        "source_text": "",
-        "trigger": "self_played"
       }
     ]
   },

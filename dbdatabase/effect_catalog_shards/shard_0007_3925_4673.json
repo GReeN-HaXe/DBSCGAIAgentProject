@@ -1,8 +1,258 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 302,
+  "effect_rule_count": 303,
   "rules": {
+    "3925": [
+      {
+        "family_id": "turn_end:auto_switch_self_active_on_turn_end",
+        "handler_id": "auto_switch_self_active_on_turn_end",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of your turn, switch this card to active mode.",
+        "trigger": "turn_end"
+      }
+    ],
+    "3927": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, then add up to 1 card from your life to your hand.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_attacks:auto_add_up_to_n_from_owner_life_to_hand_on_attack",
+        "handler_id": "auto_add_up_to_n_from_owner_life_to_hand_on_attack",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, then add up to 1 card from your life to your hand.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_activate_main:activate_send_top_deck_to_owner_warp",
+        "handler_id": "activate_send_top_deck_to_owner_warp",
+        "handler_params": {
+          "send_count": 5,
+          "switch_self_active": false
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] send up to 5 cards from the top of your deck to your warp.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3928": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3931": [
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 2,
+          "required_runtime_labels": "dragon ball",
+          "shuffle_searched_zones": true,
+          "source_pool": "deck_or_life"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main][burst 2] (you must place the top 2 cards of your deck in your drop area to activate this skill.) switch this card to rest mode: choose up to 2 [dragon ball] cards from your deck or life and add them to your hand. then shuffle any areas you looked through.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3935": [
+      {
+        "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
+        "handler_id": "auto_play_self_from_combo_on_battle_end",
+        "handler_params": {
+          "requires_comboed_from": "hand",
+          "requires_leader": "if your leader card is blue",
+          "resting": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] at the end of the battle after you combo with this card from your hand, if your leader card is blue, play this card in rest mode.",
+        "trigger": "self_comboed_battle_end"
+      }
+    ],
+    "3936": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "3937": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [once per turn] place 1 \u226auniverse 7\u226b from your hand in the drop area: draw 2 cards.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3944": [
+      {
+        "family_id": "self_activate_main:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 2,
+          "required_runtime_labels": "dragon ball",
+          "shuffle_searched_zones": true,
+          "source_pool": "deck_or_life"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [burst 2] (you must place the top 2 cards of your deck in your drop area to activate this skill.) switch this card to rest mode: choose up to 2 [dragon ball] cards from your deck or life and add them to your hand, then shuffle any areas you looked through.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3951": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[+1][activate: main] you may choose 1 card in your hand and discard it. if you do, draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3953": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Shadow Dragon"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 \u226ashadow dragon\u226b card among them to your hand, then shuffle your deck.",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "3958": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "owner_card_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "event_max_cost": -1,
+          "event_required_card_type": "BATTLE",
+          "event_required_characters": "Skill-Less Is Used",
+          "event_requires_skill_less": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto][once per turn] when one of your skill-less battle cards is used in a combo, draw 1 card and add up to 1 card from your life to your hand.",
+        "trigger": "owner_card_comboed"
+      }
+    ],
+    "3961": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[0][activate: main] you and your opponent draw 1 card, then your opponent places the top card of their deck in their drop area.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "3962": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-2][activate: main] draw 2 cards.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "3968": [
       {
         "family_id": "self_played:noop_auto",
@@ -4468,229 +4718,6 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, look at up to 3 cards from the top of your deck, choose up to 1 \u226agoku's lineage\u226b from among them and add it to your hand, then shuffle your deck.",
-        "trigger": "self_played"
-      }
-    ],
-    "4676": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, draw 1 card, and your opponent may not play battle cards from their hand with the skills of cards with [super combo] for the duration of the game.",
-        "trigger": "self_played"
-      }
-    ],
-    "4679": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[barrier]",
-        "trigger": "self_played"
-      }
-    ],
-    "4680": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[over realm 3] (if you have at least 3 cards in your drop area, you can play this card by sending all cards in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [over realm] can only be activated once per turn)",
-        "trigger": "self_played"
-      }
-    ],
-    "4686": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[barrier]",
-        "trigger": "self_played"
-      }
-    ],
-    "4687": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, place up to 2 cards from the top of your deck in your drop area, then choose up to 2 of your energy and switch them to active mode and draw 1 card.",
-        "trigger": "self_played"
-      }
-    ],
-    "4688": [
-      {
-        "family_id": "self_activate_main:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main] [once per turn] choose 1 card from your hand and place it in your drop area: draw 1 card.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "4691": [
-      {
-        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
-        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "green",
-          "max_cost": -1,
-          "max_targets": 1,
-          "required_card_type": "UNISON"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, add up to 1 green unison card with 1000 power from your deck to your hand, then shuffle your deck; if you added a card to your hand, choose 1 card in your hand and discard it.",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_token_in_battle",
-        "handler_id": "activate_play_token_in_battle",
-        "handler_params": {
-          "add_from_life_to_hand_max_targets": 1,
-          "amount": 1,
-          "combo_cost": 0,
-          "combo_power": 5000,
-          "power": 15000,
-          "resting": false,
-          "token_name": "majin token"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][limit 1] (you can only activate this skill once per turn across all copies of this card.) [spirit boost 1] (you must remove a marker from your unison card to activate this skill.) play 1 majin token, then add up to 1 card from your life to your hand. (majin tokens have 15000 power, 0 combo cost, and 5000 combo power.)",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "4693": [
-      {
-        "family_id": "self_attacks:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[critical] (when this card inflicts damage to your opponent's life, they place that many cards in their drop area instead of their hand)",
-        "trigger": "self_attacks"
-      }
-    ],
-    "4695": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[barrier]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 2
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card with [swap], draw 2 cards.",
-        "trigger": "self_played"
-      }
-    ],
-    "4698": [
-      {
-        "family_id": "self_attacks:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[critical] (when this card inflicts damage to your opponent's life, they place that many cards in their drop area instead of their hand)",
-        "trigger": "self_attacks"
-      }
-    ],
-    "4707": [
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "ignores_barrier": true,
-          "max_cost": 2
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, choose up to 1 of your opponent's battle cards with an energy cost of 2 or less ignoring [barrier] and ko it.",
-        "trigger": "self_played"
-      }
-    ],
-    "4710": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is red and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you combo with this card, if your leader card is red and your life is at 4 or less, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "4715": [
-      {
-        "family_id": "self_played:auto_gain_control_opponent_battle_on_play",
-        "handler_id": "auto_gain_control_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": 3,
-          "max_targets": 1,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, choose up to 1 of the battle cards in your opponent's battle area with an energy cost of 3 or less and gain control of it.",
         "trigger": "self_played"
       }
     ]

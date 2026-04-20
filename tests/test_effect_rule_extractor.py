@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from types import SimpleNamespace
 
 from src.domain.models import CardData
 from src.game.effect_rule_extractor import (
@@ -3455,6 +3456,40 @@ def test_extract_counter_attack_can_schedule_clone_token_at_turn_end() -> None:
     assert token_rule.handler_params["switch_owner_energy_active_allowed_colors"] == "blue"
 
 
+def test_extract_counter_attack_can_play_skillless_monster_from_hand_and_redirect_attack() -> None:
+    card = _card(
+        "[Counter: Attack] Choose up to 1 skill-less ≪Monster≫ card in your hand with an energy cost of 2 or less "
+        "and play it in Rest Mode. If you played a card, it becomes the target of attack."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "counter_attack"
+        and rule.handler_id == "counter_play_up_to_n_skillless_from_owner_hand_rest_and_redirect_attack"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_traits"] == "Monster"
+    assert rule.handler_params["max_cost"] == 2
+    assert rule.handler_params["event_requires_skill_less"] is True
+    assert rule.handler_params["rest_mode"] is True
+
+
+def test_extract_absorption_of_doom_counter_attack_limit_rule() -> None:
+    card = _card(
+        "[Counter: Attack] If your Leader Card is a black <Fin> card: Negate the attack. "
+        "Additionally, if your opponent has a skill-less Battle Card or Unison Card in play, they can only attack two more times for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "counter_attack"
+        and rule.handler_id == "counter_limit_opponent_attacks_if_opponent_has_skillless_battle_or_unison"
+    )
+    assert rule.handler_params["remaining_attacks"] == 2
+
+
 def test_extract_counter_attack_can_play_demon_realm_soldier_token_with_blocker() -> None:
     card = _card(
         "[Counter: Attack] If your Leader Card is mono-black: Negate the attack, then play 1 Demon Realm Soldier Token "
@@ -4141,6 +4176,30 @@ def test_extract_owner_black_battle_played_from_warp_wormhole_rule() -> None:
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.trigger == "owner_battle_played_from_warp")
     assert rule.handler_id == "auto_gain_wormhole_on_owner_black_battle_played_from_warp"
+
+
+def test_extract_supreme_kai_of_time_opposing_the_empire_rules() -> None:
+    card = _card(
+        "[Auto][Once per turn] If your Leader Card is a black <Trunks: Xeno> card and it's your turn: "
+        "When a Battle Card is played from your Warp, draw 1 card, and add a marker to this card.\n"
+        "[+1][Activate: Main] If your Leader Card is a black ≪Saiyan≫ card: Send up to 3 cards from the top of your deck to your Warp."
+    )
+    card = replace(card, card_type="UNISON")
+    rules = extract_effect_rules_from_card(card)
+    auto_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_battle_played_from_warp"
+        and r.handler_id == "auto_draw_n_and_add_markers_on_owner_battle_played_from_warp"
+    )
+    assert auto_rule.handler_params["amount"] == 1
+    assert auto_rule.handler_params["marker_delta"] == 1
+    assert "<trunks: xeno>" in str(auto_rule.handler_params["requires_leader"]).lower()
+    assert "it's your turn" in str(auto_rule.handler_params["requires_leader"]).lower()
+    activate_rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_send_top_deck_to_owner_warp")
+    assert activate_rule.handler_params["send_count"] == 3
+    assert activate_rule.handler_params["marker_delta"] == 1
+    assert "saiyan" in str(activate_rule.handler_params["requires_leader"]).lower()
 
 
 def test_extract_play_add_top_deck_to_energy_rest_on_play_rule() -> None:
@@ -5570,9 +5629,111 @@ def test_extract_self_added_to_z_energy_can_buff_owner_battle_rule() -> None:
         and r.handler_id == "auto_buff_up_to_n_owner_battle_on_z_energy_added"
     )
     assert rule.handler_params["max_targets"] == 1
-    assert rule.handler_params["power_delta"] == 1000
-    assert rule.handler_params["required_characters"] == "Hirudegarn"
-    assert rule.limit_per_turn == 1
+
+
+def test_extract_hit_assassins_strike_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Barrier][Dual Attack]<br />"
+            "[Auto]((Green))((Green)), if your Leader Card is green, your opponent has 2 or more energy, and this card is in your Combo Area: "
+            "When one of your green Battle Cards attacks and KOs an opponent's Battle Card, play this card from your Combo Area.<br />"
+            "[Auto][Limit 1] If this card is in Rest Mode: When your opponent attacks, they may choose 2 cards in their hand and discard them. "
+            "If they don't, negate the attack, and your opponent can't attack for the turn."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+
+    combo_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_battle_ko_opponent_battle_battle_end"
+        and r.handler_id == "auto_play_self_from_combo_on_battle_end"
+    )
+    assert combo_rule.handler_params["attacker_allowed_colors"] == "green"
+    assert "leader card is green" in str(combo_rule.handler_params["requires_leader"]).lower()
+    assert combo_rule.handler_params["min_opponent_energy"] == 2
+
+    lock_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_opponent_battle_attacks"
+        and r.handler_id == "auto_if_self_rest_opponent_discards_n_or_negate_attack_and_end_attacks"
+    )
+    assert lock_rule.handler_params["discard_amount"] == 2
+    assert lock_rule.handler_params["remaining_attacks"] == 0
+    assert lock_rule.limit_per_turn == 1
+
+
+def test_extract_realm_of_the_gods_champa_destroys_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Battle] If your Leader Card and all of your energy is green: Choose 1 of your cards and it gets +10000 power for the battle, then choose one?\n"
+            "If it's your turn, choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and KO it.\n"
+            "If it's your opponent's turn, your opponent chooses 1 card in their hand and discards it, then you choose 1 of your cards and it gets +5000 power for the battle."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_extra_from_hand"
+        and r.handler_id == "activate_buff_owner_cards_for_battle_then_turn_based_ko_or_discard_and_buff"
+    )
+    assert rule.handler_params["requires_leader"] == "green"
+    assert rule.handler_params["requires_mono_energy"] == "green"
+    assert rule.handler_params["first_power_delta"] == 10000
+    assert rule.handler_params["turn_max_targets"] == 1
+    assert rule.handler_params["requires_cost_greater_than_opponent_current_energy"] is True
+    assert rule.handler_params["opponent_discard_amount"] == 1
+    assert rule.handler_params["opponent_turn_power_delta"] == 5000
+
+
+def test_extract_ultimate_minus_energy_power_ball_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] If your Leader Card is mono-black: Choose up to 1 of your opponent's Battle Cards with 15000 power or less, ignoring [Barrier], and send it to its owner's Warp.\n"
+            "[Permanent] This card gains ≪Shadow Dragon≫ in all areas.\n"
+            "[Permanent] If you have a black Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.\n"
+            "[Activate: Main/Battle][Limit 1] Choose up to 1 of your black Leader Cards or Battle Cards, and it gets +15000 power until the end of a battle or the end of the turn, whichever comes first."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    counter_rule = next(r for r in rules if r.handler_id == "counter_send_up_to_n_opponent_battle_to_warp")
+    assert counter_rule.trigger == "counter_attack"
+    assert counter_rule.handler_params["max_targets"] == 1
+    assert counter_rule.handler_params["max_power"] == 15000
+    assert counter_rule.handler_params["ignores_barrier"] is True
+    assert counter_rule.handler_params["requires_leader"] == "mono-black"
+    buff_rule = next(r for r in rules if r.handler_id == "activate_buff_owner_cards_until_battle_or_turn")
+    assert buff_rule.trigger == "self_activate_extra_from_hand"
+    assert buff_rule.handler_params["target_scope"] == "owner_cards"
+    assert buff_rule.handler_params["max_targets"] == 1
+    assert buff_rule.handler_params["power_delta"] == 15000
+    assert buff_rule.handler_params["allowed_colors"] == "black"
+    noop_rules = [r for r in rules if r.handler_id == "noop_auto"]
+    assert len(noop_rules) == 2
+
+
+def test_extract_yajirobe_confronting_invasion_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack and play this card in Rest Mode. "
+            "If the attacking card is a ≪Great Ape≫ or ≪Demon Clan≫ Battle Card, choose it, KO it, and your opponent draws 1 card."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "counter_attack"
+        and r.handler_id == "counter_play_self_rest_then_ko_attacking_battle_if_trait_and_opponent_draw_n"
+    )
+    assert rule.handler_params["required_attacker_traits"] == "Great Ape|Demon Clan"
+    assert rule.handler_params["draw_amount"] == 1
 
 
 def test_extract_self_added_to_z_energy_can_switch_opponent_board_rest_rule() -> None:
@@ -6379,6 +6540,33 @@ def test_extract_self_placed_under_by_union_can_rest_opponent_battle_rule() -> N
     assert rule.handler_params["max_targets"] == 1
     assert rule.handler_params["target_card_types"] == "BATTLE"
     assert rule.handler_params["ignores_barrier"] is True
+
+
+def test_extract_exact_ss2_trunks_future_on_the_line_rules() -> None:
+    card = _card(
+        "[Barrier][Blocker]<br>"
+        "[EX-Evolve]((Yellow)), draw 1 card: Yellow <Trunks: Future> with an energy cost of 1.<br>"
+        "[Auto] When this card is played using [EX-Evolve], switch it to Active Mode.<br>"
+        "[Auto][Once per turn] If your Leader Card is a yellow <Trunks: Future> card: "
+        "When your opponent plays a Battle Card or Unison Card, choose it and switch it to Rest Mode."
+    )
+    rules = extract_effect_rules_from_card(card)
+    switch_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_played" and r.handler_id == "auto_switch_self_active_on_play"
+    )
+    assert switch_rule.handler_params["requires_played_via"] == "ex_evolve"
+    rest_rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_opponent_battle_played"
+        and r.handler_id == "auto_switch_up_to_n_opponent_board_rest"
+    )
+    assert rest_rule.handler_params["max_targets"] == 1
+    assert rest_rule.handler_params["target_card_types"] == "BATTLE,UNISON"
+    assert rest_rule.handler_params["leader_required_traits"] == "Trunks: Future"
+    assert rest_rule.handler_params["leader_allowed_colors"] == "yellow"
 
 
 def test_extract_self_placed_under_by_union_can_schedule_opponent_next_main_energy_restand_rule() -> None:

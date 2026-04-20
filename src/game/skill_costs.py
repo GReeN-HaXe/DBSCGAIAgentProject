@@ -287,6 +287,10 @@ class SkillCostDsl:
         if requires_opponent_energy_at_least > 0:
             if opponent is None or len(opponent.energy) < requires_opponent_energy_at_least:
                 return False
+        requires_opponent_battle_cards_at_least = int(step.params.get("requires_opponent_battle_cards_at_least", 0) or 0)
+        if requires_opponent_battle_cards_at_least > 0:
+            if opponent is None or len(opponent.battle_area) < requires_opponent_battle_cards_at_least:
+                return False
         requires_sparking = int(step.params.get("requires_sparking", 0) or 0)
         if requires_sparking > 0 and len(player.drop) < requires_sparking:
             return False
@@ -418,7 +422,13 @@ class SkillCostDsl:
             if not SkillCostDsl._step_prereqs_met(player, step, opponent):
                 return False
             if step.kind == "discard_hand":
-                if len(player.hand) < step.amount:
+                candidates = [
+                    card
+                    for card in player.hand
+                    if (not bool(step.params.get("exclude_source_card", False)) or card.instance_id != source_card.instance_id)
+                    and SkillCostDsl._card_matches_filters(card, step)
+                ]
+                if len(candidates) < step.amount:
                     return False
                 continue
             if step.kind == "rest_energy":
@@ -625,8 +635,20 @@ class SkillCostDsl:
             if not SkillCostDsl._step_prereqs_met(player, step, opponent):
                 raise ValueError(f"Skill cost prerequisites not met for: {step.kind}")
             if step.kind == "discard_hand":
-                for _ in range(step.amount):
-                    player.drop.append(player.hand.pop(0))
+                discarded = 0
+                index = 0
+                while index < len(player.hand) and discarded < step.amount:
+                    card = player.hand[index]
+                    if bool(step.params.get("exclude_source_card", False)) and card.instance_id == source_card.instance_id:
+                        index += 1
+                        continue
+                    if not SkillCostDsl._card_matches_filters(card, step):
+                        index += 1
+                        continue
+                    player.drop.append(player.hand.pop(index))
+                    discarded += 1
+                if discarded < step.amount:
+                    raise ValueError("Not enough matching cards in hand to discard.")
                 continue
             if step.kind == "rest_energy":
                 rested = 0

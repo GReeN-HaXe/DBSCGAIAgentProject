@@ -1,8 +1,231 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 328,
+  "effect_rule_count": 325,
   "rules": {
+    "4676": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, draw 1 card, and your opponent may not play battle cards from their hand with the skills of cards with [super combo] for the duration of the game.",
+        "trigger": "self_played"
+      }
+    ],
+    "4679": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
+    "4680": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[over realm 3] (if you have at least 3 cards in your drop area, you can play this card by sending all cards in your drop area to your warp. at the end of that turn, send this card from the battle area to your warp. [over realm] can only be activated once per turn)",
+        "trigger": "self_played"
+      }
+    ],
+    "4686": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
+    "4687": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, place up to 2 cards from the top of your deck in your drop area, then choose up to 2 of your energy and switch them to active mode and draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "4688": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main] [once per turn] choose 1 card from your hand and place it in your drop area: draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4691": [
+      {
+        "family_id": "self_played:auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_id": "auto_add_up_to_n_from_owner_deck_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_card_type": "UNISON"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, add up to 1 green unison card with 1000 power from your deck to your hand, then shuffle your deck; if you added a card to your hand, choose 1 card in your hand and discard it.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_play_token_in_battle",
+        "handler_id": "activate_play_token_in_battle",
+        "handler_params": {
+          "add_from_life_to_hand_max_targets": 1,
+          "amount": 1,
+          "combo_cost": 0,
+          "combo_power": 5000,
+          "power": 15000,
+          "resting": false,
+          "token_name": "majin token"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][limit 1] (you can only activate this skill once per turn across all copies of this card.) [spirit boost 1] (you must remove a marker from your unison card to activate this skill.) play 1 majin token, then add up to 1 card from your life to your hand. (majin tokens have 15000 power, 0 combo cost, and 5000 combo power.)",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "4693": [
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[critical] (when this card inflicts damage to your opponent's life, they place that many cards in their drop area instead of their hand)",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4695": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card with [swap], draw 2 cards.",
+        "trigger": "self_played"
+      }
+    ],
+    "4698": [
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[critical] (when this card inflicts damage to your opponent's life, they place that many cards in their drop area instead of their hand)",
+        "trigger": "self_attacks"
+      }
+    ],
+    "4707": [
+      {
+        "family_id": "self_played:auto_ko_opponent_battle_on_play",
+        "handler_id": "auto_ko_opponent_battle_on_play",
+        "handler_params": {
+          "ignores_barrier": true,
+          "max_cost": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 of your opponent's battle cards with an energy cost of 2 or less ignoring [barrier] and ko it.",
+        "trigger": "self_played"
+      }
+    ],
+    "4710": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader card is red and your life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is red and your life is at 4 or less, draw 1 card.",
+        "trigger": "self_comboed"
+      }
+    ],
+    "4715": [
+      {
+        "family_id": "self_played:auto_gain_control_opponent_battle_on_play",
+        "handler_id": "auto_gain_control_opponent_battle_on_play",
+        "handler_params": {
+          "max_cost": 3,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, choose up to 1 of the battle cards in your opponent's battle area with an energy cost of 3 or less and gain control of it.",
+        "trigger": "self_played"
+      }
+    ],
     "4724": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -4669,287 +4892,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's leader cards or battle cards and it gets -5000 power for the duration of the battle.",
         "trigger": "self_attacks"
-      }
-    ],
-    "5335": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_activate_main:activate_play_self_from_hand",
-        "handler_id": "activate_play_self_from_hand",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[activate: main] if you have a red unison card with a specified cost of 2 in play and you have no battle cards in play: play this card from your hand.",
-        "trigger": "self_activate_main"
-      }
-    ],
-    "5336": [
-      {
-        "family_id": "self_attacks:auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
-        "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
-        "handler_params": {
-          "grant_keyword": "Double Strike",
-          "life_to_hand": 1,
-          "power_delta": 10000
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] add 1 card from your life to your hand: when this card attacks, it gets +10000 power and [double strike] for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "5337": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[blocker]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_in_hand_sent_to_drop_or_warp:auto_play_self_from_drop_on_hand_drop",
-        "handler_id": "auto_play_self_from_drop_on_hand_drop",
-        "handler_params": {
-          "required_destination_zone": "drop",
-          "required_drop_causes": "opponent_skill,revive"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is placed in your drop area from your hand by an opponent's skill or by your [revive] skill, you may play this card.",
-        "trigger": "self_in_hand_sent_to_drop_or_warp"
-      }
-    ],
-    "5340": [
-      {
-        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
-        "handler_id": "auto_power_reduce_up_to_n_on_play",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": -15000,
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn.",
-        "trigger": "self_played"
-      }
-    ],
-    "5343": [
-      {
-        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
-        "handler_id": "activate_gain_power_and_keyword_for_battle",
-        "handler_params": {
-          "grant_keyword": "Triple Strike",
-          "power_delta": 10000
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: battle][once per turn](blue)(blue): this card gets +10000 power and [triple strike] for the battle.",
-        "trigger": "self_activate_battle"
-      }
-    ],
-    "5344": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": 4,
-          "required_traits": "Earthling",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 \u226aearthling\u226b card with an energy cost of 4 or less among them to your hand, then shuffle your deck.",
-        "trigger": "self_played"
-      }
-    ],
-    "5346": [
-      {
-        "family_id": "self_played:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "green",
-          "leader_required_characters": "Son Goku",
-          "required_leader_traits": "Son Goku",
-          "requires_leader": "if your leader card is a green <son goku> card"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is a green <son goku> card: when this card is played,  draw 1 card",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_played:auto_self_gain_power_for_turn_on_play",
-        "handler_id": "auto_self_gain_power_for_turn_on_play",
-        "handler_params": {
-          "leader_allowed_colors": "green",
-          "leader_required_characters": "Son Goku",
-          "power_delta": 10000,
-          "required_leader_traits": "Son Goku",
-          "requires_leader": "if your leader card is a green <son goku> card"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is a green <son goku> card: when this card is played,  this card gets +10000 power for the turn",
-        "trigger": "self_played"
-      }
-    ],
-    "5348": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is green and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      },
-      {
-        "family_id": "self_played:auto_opponent_discards_n_from_hand_on_play",
-        "handler_id": "auto_opponent_discards_n_from_hand_on_play",
-        "handler_params": {
-          "amount": 1,
-          "requires_leader": "if your leader card is mono-green"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is mono-green: when this card is played, your opponent chooses 1 card in their hand and discards it.",
-        "trigger": "self_played"
-      }
-    ],
-    "5349": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "max_owner_life": 4,
-          "requires_leader": "if your leader card is green and your life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] if your leader card is green and your life is at 4 or less: when this card is used in a combo, draw 1 card.",
-        "trigger": "self_comboed"
-      }
-    ],
-    "5351": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_characters": "Son Goku,Trunks: Future,Vegeta",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue <son goku>, <vegeta>, or <trunks: future> card among them to your hand, then shuffle your deck.",
-        "trigger": "self_played"
-      }
-    ],
-    "5355": [
-      {
-        "family_id": "self_attacks:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[double strike] (this card inflicts 2 damage instead of 1 when attacking.)",
-        "trigger": "self_attacks"
-      }
-    ],
-    "5358": [
-      {
-        "family_id": "self_attacks:auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
-        "handler_id": "auto_pay_life_on_attack_gain_power_and_keyword_for_turn",
-        "handler_params": {
-          "grant_keyword": "Double Strike",
-          "life_to_hand": 1,
-          "power_delta": 10000
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] add 1 card from your life to your hand: when this card attacks, it gets +10000 power and [double strike] for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
-    "5360": [
-      {
-        "family_id": "self_played:auto_ko_opponent_battle_on_play",
-        "handler_id": "auto_ko_opponent_battle_on_play",
-        "handler_params": {
-          "max_cost": -1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played,  choose up to 1 of your opponent's battle cards and ko it",
-        "trigger": "self_played"
       }
     ]
   },

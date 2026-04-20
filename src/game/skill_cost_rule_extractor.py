@@ -233,6 +233,10 @@ _COUNTER_ALT_REDUCE_OWNER_BATTLE_POWER_RE = re.compile(
 _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
     r"\[counter:\s*(?:attack|play|counter|battle card attack)\].{0,220}?choose (\d+) (.+?) cards? in your hand and place (?:it|them) in your drop area\s*:"
 )
+_COUNTER_ALT_DISCARD_OTHER_HAND_RE = re.compile(
+    r"\[(?:permanent|permament)\].{0,320}?activate this card's \[counter\] skill from your hand without paying its energy cost by choosing (\d+) other (.+?) cards? in your hand and discarding (?:it|them)",
+    re.IGNORECASE,
+)
 
 
 def _normalize_text(raw: str | None) -> str:
@@ -482,6 +486,13 @@ def _extract_requires_opponent_energy_at_least(text: str) -> int | None:
     if match is None:
         return None
     return int(match.group(1))
+
+
+def _extract_requires_opponent_battle_cards_at_least(text: str) -> int | None:
+    match = re.search(r"if your opponent has (\d+) or more battle cards? in play", text, re.IGNORECASE)
+    if match is not None:
+        return int(match.group(1))
+    return None
 
 
 def _extract_required_name_tokens(descriptor: str) -> str:
@@ -1201,6 +1212,22 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         if required_leader_traits:
             params["required_leader_traits"] = required_leader_traits
         rules["counter_from_hand"] = [params]
+
+    m_counter_alt_discard_other_hand = _COUNTER_ALT_DISCARD_OTHER_HAND_RE.search(text)
+    if m_counter_alt_discard_other_hand:
+        descriptor = m_counter_alt_discard_other_hand.group(2).strip()
+        params = _extract_filtered_cost_step("discard_hand", descriptor, int(m_counter_alt_discard_other_hand.group(1)))
+        params["exclude_source_card"] = True
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
+        requires_opponent_battle_cards_at_least = _extract_requires_opponent_battle_cards_at_least(text)
+        if requires_opponent_battle_cards_at_least is not None:
+            params["requires_opponent_battle_cards_at_least"] = requires_opponent_battle_cards_at_least
+        rules["counter_alternate_from_hand"] = [params]
 
     return rules
 
