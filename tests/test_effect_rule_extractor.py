@@ -1330,6 +1330,38 @@ def test_extract_attack_pay_life_gain_power_and_keyword_rule() -> None:
     assert rule.handler_params["grant_keyword"] == "Double Strike"
 
 
+def test_extract_beerus_belligerent_god_rule() -> None:
+    card = _card(
+        "[Auto][Once per turn] Add 1 card from your life to your hand: "
+        "When this card attacks an opponent's Battle Card, switch this card to Active Mode, and it gets +15000 power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_pay_life_on_attack_gain_power_and_keyword_for_turn")
+    assert rule.trigger == "self_attacks"
+    assert rule.handler_params["life_to_hand"] == 1
+    assert rule.handler_params["power_delta"] == 15000
+    assert rule.handler_params["switch_self_active"] is True
+    assert rule.handler_params["power_duration"] == "battle"
+    assert rule.handler_params["required_attack_target_zone"] == "battle"
+
+
+def test_extract_whis_beerus_backup_rules() -> None:
+    card = _card(
+        "[Auto] When this card is played from your hand, choose up to 1 blue <Beerus> card in your Battle Area, and it can attack Battle Cards without [Barrier] in Active Mode for the turn.\n"
+        "[Auto][Limit 1] If this card is in your Combo Area: When a blue <Beerus> card in your Battle Area attacks and KOs an opponent's Battle Card, draw 1 card."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(r for r in rules if r.handler_id == "auto_grant_attack_active_battle_without_barrier_for_turn_on_play")
+    assert play_rule.trigger == "self_played"
+    assert play_rule.handler_params["max_targets"] == 1
+    assert play_rule.handler_params["allowed_colors"] == "blue"
+    assert play_rule.handler_params["required_characters"] == "Beerus"
+    combo_rule = next(r for r in rules if r.trigger == "owner_battle_ko_opponent_battle_battle_end" and r.handler_id == "auto_draw_n")
+    assert combo_rule.handler_params["amount"] == 1
+    assert combo_rule.handler_params["attacker_allowed_colors"] == "blue"
+    assert combo_rule.handler_params["attacker_required_characters"] == "Beerus"
+
+
 def test_extract_owner_leader_attack_add_from_hand_to_life_rule() -> None:
     card = _card(
         "[Auto] If your Leader Card is a yellow Turles Crusher Corps card: "
@@ -2020,6 +2052,46 @@ def test_extract_activate_main_can_play_self_from_hand_then_switch_opponent_batt
     assert rule.handler_params["required_owner_battle_required_name_contains"] == "SPIRIT BOMB"
 
 
+def test_extract_activate_main_can_play_self_from_z_energy_then_rest_and_lock_opponent_board() -> None:
+    card = _card(
+        "[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.<br>"
+        "[Permanent] If this card would leave the Battle Area, remove it from the game instead.<br>"
+        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have 3 or more Z-Energy: "
+        "Play this card from your Z-Energy, then choose up to 1 of your opponent's Battle Cards or Unisons, switch it to Rest Mode, and that card can't switch to Active Mode until the end of your opponent's turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    noop_rules = [r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto"]
+    play_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_play_self_from_hand"
+        and r.handler_params.get("required_source_zone") == "z_energy"
+    )
+    assert len(noop_rules) >= 2
+    assert play_rule.handler_params["post_play_rest_board_max_targets"] == 1
+    assert play_rule.handler_params["post_play_rest_prevent_active_until_opponent_turn"] is True
+    assert play_rule.handler_params["min_owner_z_energy"] == 3
+
+
+def test_extract_activate_main_can_play_self_from_z_energy_then_ko_rest_battle() -> None:
+    card = _card(
+        "[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.<br>"
+        "[Permanent] If this card would leave the Battle Area, remove it from the game instead.<br>"
+        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have 3 or more Z-Energy: "
+        "Play this card from your Z-Energy, then choose up to 1 of your opponent's Rest Mode Battle Cards and KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_main"
+        and r.handler_id == "activate_play_self_from_hand"
+        and r.handler_params.get("required_source_zone") == "z_energy"
+    )
+    assert play_rule.handler_params["post_play_ko_rest_battle_max_targets"] == 1
+
+
 def test_extract_attack_can_add_matching_to_z_energy_then_place_matching_under_spirit_bomb() -> None:
     card = _card(
         "[Auto] When this card attacks, draw 1 card, place this card from the Battle Area in its owner's Drop at the end of the battle, "
@@ -2385,6 +2457,24 @@ def test_extract_turn_end_can_place_self_from_under_leader_on_top_of_owner_leade
     assert rule.trigger == "turn_end"
     assert rule.handler_params["required_source_zone"] == "leader_under"
     assert "under_host_required_card_type" not in rule.handler_params
+
+
+def test_extract_turn_end_can_send_self_from_energy_to_drop_after_life_reveal_replacement() -> None:
+    card = _card(
+        "[Permanent] During your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, "
+        "you may place it in your energy in Rest Mode instead. If you do, draw 1 card.<br>"
+        "[Auto] At the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    noop_rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "turn_end"
+        and r.handler_id == "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life"
+    )
+    assert "would reveal this card from your life" in str(noop_rule.source_text or "").lower()
+    assert "next turn" in str(rule.source_text or "").lower()
 
 
 def test_extract_activate_main_can_draw_discard_place_from_drop_under_leader_and_switch_self_active() -> None:
@@ -4595,6 +4685,20 @@ def test_extract_play_gain_control_opponent_battle_rule() -> None:
     assert rule.handler_params["max_cost"] == 3
 
 
+def test_extract_raditz_invitation_to_battle_from_badge_html() -> None:
+    card = _card(
+        "<Badge variant=\"red\">Barrier</Badge><Badge variant=\"red\">Blocker</Badge><br />"
+        "<Badge variant=\"purple\">Permanent</Badge> If your opponent has a ≪Saiyan≫ card in play in their Battle Area, reduce the energy cost of this card in your hand by 1.<br />"
+        "<Badge variant=\"blue\">Auto</Badge> When this card is played from your hand, choose up to 1 ≪Saiyan≫ card with 5000 power or less in your opponent's Battle Area and gain control of it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_battle_on_play")
+    assert rule.trigger == "self_played"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_power"] == 5000
+    assert rule.handler_params["required_traits"] == "Saiyan"
+
+
 def test_extract_play_switch_owner_board_to_revealed_rule() -> None:
     card = _card("[Auto] When this card is played, choose up to 1 card in your Battle Area and switch it to Revealed Mode.")
     rules = extract_effect_rules_from_card(card)
@@ -6037,6 +6141,98 @@ def test_extract_exact_son_gohan_beyond_the_ultimate_rules() -> None:
     assert play_self_rule.handler_params["min_owner_energy"] == 3
 
 
+def test_extract_nigrisshi_from_the_shadows_rules() -> None:
+    card = _card(
+        "[Permanent] When this card is placed in a Drop Area from a Battle Area or Combo Area, it is placed at the bottom of its owner's deck instead.<br>"
+        "[Activate: Main/Battle] Choose 1 of your black Battle Cards with an energy cost of 3 and send it to its owner's Warp: "
+        "Play this card from your Drop Area."
+    )
+    rules = extract_effect_rules_from_card(card)
+    permanent_rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    assert "combo area" in permanent_rule.source_text.lower()
+    activate_rules = [r for r in rules if r.handler_id == "activate_play_self_from_hand"]
+    assert {r.trigger for r in activate_rules} == {"self_activate_main", "self_activate_battle"}
+    assert all(r.handler_params["required_source_zone"] == "drop" for r in activate_rules)
+
+
+def test_extract_ss_caulifla_spirited_striker_rules() -> None:
+    card = replace(
+        _card(
+            "[+1][Activate: Main] This card gets +5000 power for the turn, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and return it to its owner's hand.<br>"
+            "[-3][Activate: Main] If your Leader Card is a blue &lt;Kale&gt; card and you have 5 or more energy: You may place this card under your Leader Card. "
+            "If you do, play up to 1 &lt;Kefla&gt; card with 30000 power or less from your deck, then shuffle your deck."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    plus_rule = next(r for r in rules if r.handler_id == "activate_gain_power_and_keyword_for_turn")
+    assert plus_rule.trigger == "self_activate_main"
+    assert plus_rule.handler_params["power_delta"] == 5000
+    assert plus_rule.handler_params["post_return_max_targets"] == 1
+    assert plus_rule.handler_params["post_return_max_cost"] == 2
+    assert plus_rule.handler_params["marker_delta"] == 1
+    minus_rule = next(r for r in rules if r.handler_id == "activate_place_self_under_owner_leader")
+    assert minus_rule.trigger == "self_activate_main"
+    assert minus_rule.handler_params["marker_delta"] == -3
+    assert "blue" in str(minus_rule.handler_params.get("requires_leader", "")).lower()
+    assert "kale" in str(minus_rule.handler_params.get("requires_leader", "")).lower()
+    assert minus_rule.handler_params["min_owner_energy"] == 5
+    placed_under_rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_deck_on_placed_under")
+    assert placed_under_rule.trigger == "self_placed_under_owner_card"
+    assert placed_under_rule.handler_params["required_host_zone"] == "leader"
+    assert placed_under_rule.handler_params["requires_placed_from_zones"] == "unison"
+    assert placed_under_rule.handler_params["required_name_contains"] == "KEFLA"
+    assert placed_under_rule.handler_params["max_power"] == 30000
+
+
+def test_extract_ss3_nappa_golden_invader_rules() -> None:
+    card = replace(
+        _card(
+            "[+1][Activate: Main] Your opponent chooses 1 card in their hand and sends it to their Warp.<br>"
+            "[-2][Activate: Main] Choose up to 2 of your opponent's Battle Cards with energy costs greater than or equal to their current energy and KO them.<br>"
+            "[-3][Activate: Main](Green)(Green)②, if your Leader Card is a &lt;Nappa&gt; card or a green ≪Saiyan≫ card: Choose up to 1 Red/Green multicolor &lt;Raditz&gt; card with an original energy cost of 8 in your hand and play it."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    plus_rule = next(r for r in rules if r.handler_id == "activate_send_up_to_n_opponent_hand_to_warp")
+    assert plus_rule.trigger == "self_activate_main"
+    assert plus_rule.handler_params["max_targets"] == 1
+    assert plus_rule.handler_params["marker_delta"] == 1
+    minus_two_rule = next(
+        r
+        for r in rules
+        if r.handler_id == "activate_ko_up_to_n_opponent_battle"
+        and r.handler_params.get("requires_cost_at_least_opponent_current_energy") is True
+    )
+    assert minus_two_rule.trigger == "self_activate_main"
+    assert minus_two_rule.handler_params["max_targets"] == 2
+    assert minus_two_rule.handler_params["marker_delta"] == -2
+    minus_three_rule = next(r for r in rules if r.handler_id == "activate_play_up_to_n_from_owner_hand")
+    assert minus_three_rule.trigger == "self_activate_main"
+    assert minus_three_rule.handler_params["marker_delta"] == -3
+    assert minus_three_rule.handler_params["allowed_costs"] == "8"
+    assert minus_three_rule.handler_params["requires_multicolor"] is True
+    assert minus_three_rule.handler_params["required_card_type"] == "BATTLE"
+    assert minus_three_rule.handler_params["required_name_contains"] == "RADITZ"
+
+
+def test_extract_broly_omen_of_evolution_rules() -> None:
+    card = replace(
+        _card(
+            "[Activate: Battle] Place this card in its owner's Drop Area from your Combo Area: "
+            "Choose up to 1 Battle Card with a combo cost of 0 in your opponent's Combo Area and place it in its owner's Drop Area."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "activate_send_up_to_n_opponent_combo_to_drop")
+    assert rule.trigger == "self_activate_battle"
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["max_combo_cost"] == 0
+    assert rule.handler_params["target_policy"] == "first"
+
+
 def test_extract_exact_zamasu_final_tenacity_rules() -> None:
     card = _card(
         "[Indestructible]<br>"
@@ -6624,3 +6820,237 @@ def test_extract_exact_mai_link_of_hope_draws_and_activate_main_plays_earthling_
     assert token_rule.handler_params["token_name"] == "earthling token"
     assert token_rule.handler_params["power"] == 1000
     assert "rest_mode_only" not in token_rule.handler_params
+
+
+def test_extract_negative_energy_two_star_ball_can_send_self_to_drop_and_play_named_from_deck_or_hand() -> None:
+    card = _card(
+        "[Permanent] This card can't attack and isn't affected by your opponent's skills.<br>"
+        "[Activate: Main](Yellow), if your Leader Card is a ≪Shadow Dragon≫ card and you place this card in its owner's Drop Area: "
+        "Choose up to 1 <Haze Shenron> card with an energy cost of 2 or 3 in your deck or hand, play it, then shuffle your deck if you looked through it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    noop_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert "can't attack and isn't affected by your opponent's skills" in noop_rule.source_text.lower()
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop"
+    )
+    assert rule.handler_params["leader_required_traits"] == "Shadow Dragon"
+    assert rule.handler_params["required_characters"] == "Haze Shenron"
+    assert rule.handler_params["allowed_costs"] == "2,3"
+    assert rule.handler_params["min_cost"] == 2
+    assert rule.handler_params["max_cost"] == 3
+
+
+def test_extract_get_that_monster_choose_one_branches() -> None:
+    card = replace(
+        _card(
+            "[Activate: Battle][Limit 1] If your Leader Card is a red â‰ªShenronâ‰« card: Choose one-<br>"
+            "ãƒ»Add up to 1 [Dragon Ball] card from your deck to your hand, then shuffle your deck.<br>"
+            "ãƒ»Add up to 1 red â‰ªDesireâ‰« card with an energy cost of 1 or 2 from your deck to your hand, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    dragon_ball_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_battle"
+        and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand"
+        and rule.handler_params.get("required_runtime_labels") == "dragon ball"
+    )
+    assert dragon_ball_rule.handler_params["max_targets"] == 1
+    desire_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_battle"
+        and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand"
+        and rule.handler_params.get("required_traits") == "Desire"
+    )
+    assert desire_rule.handler_params["allowed_colors"] == "red"
+    assert desire_rule.handler_params["allowed_costs"] == "1,2"
+
+
+def test_extract_king_kais_training_places_self_under_host_then_adds_goku() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] Choose 1 {King Kai's Planet} in your Battle Area: "
+            "Place this card under the chosen card, add up to 1 {Son Goku, Confronting Invasion} from your deck to your hand, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_place_self_under_matching_owner_battle_then_add_up_to_n_from_owner_deck_to_hand"
+    )
+    assert rule.handler_params["required_owner_battle_required_name_contains"] == "KING KAI'S PLANET"
+    assert rule.handler_params["required_name_contains"] == "SON GOKU, CONFRONTING INVASION"
+
+
+def test_extract_scout_rests_active_opponent_else_gains_control() -> None:
+    card = _card(
+        "[Activate: Main] If your Leader Card is yellow or a â‰ªTurles Crusher Corpsâ‰« card and you choose 1 of your opponent's cards in Active Mode: "
+        "Your opponent may switch the chosen card to Rest Mode. If they don't, choose up to 1 of your opponent's Battle Cards and gain control of it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_rest_opponent_active_else_gain_control_opponent_battle"
+    )
+    assert rule.handler_params["leader_or_allowed_colors"] == "yellow"
+    assert rule.handler_params["leader_or_required_traits"] == "Turles Crusher Corps"
+
+
+def test_extract_chiaotzu_warps_self_then_opponent_chooses_non_saiyan_for_ko() -> None:
+    card = _card(
+        "[Activate: Main] Send this card to its owner's Warp: Your opponent chooses 1 of their Battle Cards; if it's a non-â‰ªSaiyanâ‰« card, KO it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_send_self_to_warp_then_opponent_choose_battle_ko_if_not_trait"
+    )
+    assert rule.handler_params["excluded_trait"] == "Saiyan"
+
+
+def test_extract_p338_raditz_attack_and_search_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto] When this card attacks, your opponent chooses 1 card in their hand and sends it to their Warp.<br>"
+            "[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, choose up to 1 red or green &lt;Raditz&gt;, &lt;Vegeta&gt;, or &lt;Nappa&gt; card among them and add it to your hand, shuffle your deck, and if you added a card to your hand, choose 1 card in your hand and discard it."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    attack_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_attacks"
+        and rule.handler_id == "auto_send_up_to_n_opponent_hand_to_warp_on_play"
+    )
+    assert attack_rule.handler_params["max_targets"] == 1
+    search_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play"
+    )
+    assert search_rule.handler_params["look_count"] == 5
+    assert set(str(search_rule.handler_params["allowed_colors"]).split(",")) == {"red", "green"}
+    assert set(str(search_rule.handler_params["required_characters"]).split(",")) == {"Raditz", "Vegeta", "Nappa"}
+    assert search_rule.handler_params["discard_after_add"] == 1
+
+
+def test_extract_erase_a_universe_damage_and_battle_buff_rules() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main]((Red))((Blue))((Green))((Yellow))(1), if your Leader Card is a &lt;Great Priest&gt; card: "
+            "Deal 1 damage to your opponent for every 2 colors on ≪God≫ cards in your Battle Area. (2 damage max.) "
+            "Additionally, if you have 12 or more multicolor ≪God≫ cards in play, you win the game.<br>"
+            "[Activate: Battle] Choose up to 1 ≪God≫ card and it gets +6000 power for the battle."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    damage_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_deal_damage_to_opponent_per_owner_matching_battle_colors_and_optionally_win"
+    )
+    assert damage_rule.handler_params["leader_required_characters"] == "Great Priest"
+    assert damage_rule.handler_params["damage_per"] == 1
+    assert damage_rule.handler_params["colors_per_damage"] == 2
+    assert damage_rule.handler_params["required_owner_battle_traits"] == "God"
+    assert damage_rule.handler_params["max_damage"] == 2
+    assert damage_rule.handler_params["win_if_owner_in_play_matching_count_at_least"] == 12
+    buff_rule = next(
+        rule for rule in rules
+        if rule.trigger == "self_activate_battle"
+        and rule.handler_id == "activate_gain_power_and_keyword_for_battle"
+    )
+    assert buff_rule.handler_params["power_delta"] == 6000
+    assert buff_rule.handler_params["target_scope"] == "owner_cards"
+    assert buff_rule.handler_params["required_traits"] == "God"
+
+
+def test_extract_bt15_vegeta_leader_from_badge_html() -> None:
+    card = replace(
+        _card(
+            '<Badge variant="blue">Auto</Badge><Badge variant="red">Once per turn</Badge> '
+            "If it's your opponent's turn: When one of your Battle Cards is removed from your Battle Area by an opponent's skill, "
+            "your opponent chooses 1 card in their hand and discards it.<br />"
+            '<Badge variant="orange">Activate: Battle</Badge><Badge variant="red">Once per turn</Badge> '
+            "If your life is less than or equal to your opponent's, this card gets +5000 power for the battle.<br />"
+            '<Badge variant="yellow">Awaken</Badge> '
+            "When your life is at 3 or less or your opponent's Leader Card's back is facing up: "
+            "You may draw 2 cards, choose up to 1 of your opponent's Unison Cards and remove a marker from it, then flip this card over."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    auto_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_card_left_battle_area"
+        and rule.handler_id == "auto_opponent_discards_n_from_hand_on_owner_matching_battle_left"
+    )
+    assert auto_rule.handler_params["amount"] == 1
+    assert auto_rule.handler_params["event_removed_by_opponent_skill"] is True
+    assert auto_rule.handler_params["requires_opponent_turn"] is True
+    buff_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_battle"
+        and rule.handler_id == "activate_gain_power_and_keyword_for_battle"
+    )
+    assert buff_rule.handler_params["power_delta"] == 5000
+    assert buff_rule.handler_params["requires_owner_life_less_or_equal_opponent"] is True
+
+
+def test_extract_bt16_son_gohan_interceptor_from_badge_html() -> None:
+    card = replace(
+        _card(
+            '<Badge variant="red">Barrier</Badge>\r <Badge variant="blue">Auto</Badge><Badge variant="red">Once per turn</Badge> '
+            "Switch this card to Rest Mode: When you take damage from an opponent's attack, switch up to 1 of your blue energy to Active Mode, "
+            "then choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and return it to its owner's hand."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    barrier_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert barrier_rule.source_text.lower() == "[barrier]"
+    auto_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_takes_damage_from_opponent_attack"
+        and rule.handler_id == "auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage"
+    )
+    assert auto_rule.handler_params["owner_energy_targets"] == 1
+    assert auto_rule.handler_params["owner_energy_allowed_colors"] == "blue"
+    assert auto_rule.handler_params["max_targets"] == 1
+    assert auto_rule.handler_params["requires_cost_greater_than_opponent_current_energy"] is True
+
+
+def test_extract_bt15_son_gohan_simian_revenge_from_badge_html() -> None:
+    card = replace(
+        _card(
+            "[Blocker][Revenge]<br>"
+            "[Auto][Limit 1](Green): When one of your green non-≪Great Ape≫ &lt;Son Gohan: Youth&gt; cards with [Blocker] "
+            "is removed from your Battle Area by an opponent's skill, you may play this card from your hand."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_card_left_battle_area"
+        and rule.handler_id == "auto_play_self_from_hand_on_owner_matching_battle_left"
+    )
+    assert play_rule.handler_params["event_allowed_colors"] == "green"
+    assert play_rule.handler_params["event_required_characters"] == "son gohan: youth"
+    assert play_rule.handler_params["event_required_keywords"] == "blocker"
+    assert play_rule.handler_params["event_excluded_traits"] == "Great Ape"
+    assert play_rule.handler_params["event_removed_by_opponent_skill"] is True

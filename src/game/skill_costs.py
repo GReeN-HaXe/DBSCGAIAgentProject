@@ -63,6 +63,7 @@ class SkillCostDsl:
         required_characters = SkillCostDsl._parse_param_set(step.params.get("required_characters"))
         required_card_types = SkillCostDsl._parse_param_set(step.params.get("required_card_types"))
         required_name_contains = str(step.params.get("required_name_contains", "")).strip().upper()
+        exact_energy_cost = int(step.params.get("exact_energy_cost", 0) or 0)
         min_energy_cost = int(step.params.get("min_energy_cost", 0) or 0)
         requires_multicolor = bool(step.params.get("requires_multicolor", False))
         if allowed_colors:
@@ -80,6 +81,8 @@ class SkillCostDsl:
             if characters.isdisjoint(required_characters):
                 return False
         if required_name_contains and required_name_contains not in str(getattr(card, "card_name", "") or "").upper():
+            return False
+        if exact_energy_cost > 0 and int(card.energy_cost or 0) != exact_energy_cost:
             return False
         if min_energy_cost > 0 and int(card.energy_cost or 0) < min_energy_cost:
             return False
@@ -544,6 +547,11 @@ class SkillCostDsl:
                 if len(available) < step.amount:
                     return False
                 continue
+            if step.kind == "send_owner_battle_to_warp":
+                available = SkillCostDsl._owner_battle_return_candidates(player, source_card, step)
+                if len(available) < step.amount:
+                    return False
+                continue
             if step.kind == "send_opponent_battle_to_removed":
                 if opponent is None:
                     return False
@@ -852,6 +860,26 @@ class SkillCostDsl:
                         metadata["removed_source_card_id"] = int(removed.card_id)
                         metadata["removed_source_zone"] = "battle"
                         metadata["removed_source_owner_player_id"] = int(player.player_id)
+                continue
+            if step.kind == "send_owner_battle_to_warp":
+                moved = 0
+                candidate_ids = {
+                    card.instance_id for card in SkillCostDsl._owner_battle_return_candidates(player, source_card, step)[: step.amount]
+                }
+                i = 0
+                while i < len(player.battle_area) and moved < step.amount:
+                    card = player.battle_area[i]
+                    if card.instance_id not in candidate_ids:
+                        i += 1
+                        continue
+                    moved_card = player.battle_area.pop(i)
+                    player.warp.append(moved_card)
+                    moved += 1
+                    if moved == 1:
+                        metadata["cost_target_instance_id"] = int(moved_card.instance_id)
+                        metadata["cost_target_card_id"] = int(moved_card.card_id)
+                        metadata["cost_target_zone"] = "battle"
+                metadata["alternate_cost_kind"] = "send_owner_battle_to_warp"
                 continue
             if step.kind == "send_opponent_battle_to_removed":
                 if opponent is None:

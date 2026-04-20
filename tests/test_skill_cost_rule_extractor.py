@@ -942,6 +942,36 @@ def test_extract_activate_main_unison_remove_owner_saibaiman_token_to_removed_co
     }
 
 
+def test_extract_activate_main_battle_send_owner_battle_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main/Battle] Choose 1 of your black Battle Cards with an energy cost of 3 and send it to its owner's Warp: "
+            "Play this card from your Drop Area."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main": [
+            {
+                "kind": "send_owner_battle_to_warp",
+                "amount": 1,
+                "allowed_colors": "black",
+                "required_card_types": "BATTLE",
+                "exact_energy_cost": 3,
+            }
+        ],
+        "activate_battle": [
+            {
+                "kind": "send_owner_battle_to_warp",
+                "amount": 1,
+                "allowed_colors": "black",
+                "required_card_types": "BATTLE",
+                "exact_energy_cost": 3,
+            }
+        ],
+    }
+
+
 def test_extract_counter_alternate_rest_hidden_battle_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

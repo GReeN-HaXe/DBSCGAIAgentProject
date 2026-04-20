@@ -4384,3 +4384,215 @@ When adding a new TODO:
 - locked with focused coverage proving:
   - the restricted opponent card regains its `Activate: Main` action after `Fearsome Conquest` leaves play
   - the granted `[Barrier]` is removed after `Loyalty to Cooler` leaves play
+
+## Mono-blue life reveal replacement slice complete
+
+- added shared `turn_end` extraction for:
+  - `At the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's Drop Area.`
+- added a narrow life-damage replacement path for the `BT10-036 / BT10-040` family so:
+  - during the opponent's turn
+  - if all of the owner's energy is mono-blue
+  - revealing the card from life now places it in Rest Mode energy instead of hand
+  - the owner then draws the listed card count
+- registered the delayed cleanup as a normal energy-zone public auto instead of a bespoke scheduler, and added energy-zone liveness so the registry can resolve it on the owner's next `turn_end`
+- locked with focused coverage proving:
+  - the life card goes to Rest Mode energy, not hand
+  - the draw still happens
+  - the card moves from energy to Drop at the end of the owner's next turn
+
+## Z-Energy Son Goku lock/KO slice complete
+
+- added shared extraction for the `BT23-111 / BT23-112` Z-Energy activate family:
+  - `Play this card from your Z-Energy, then choose up to 1 of your opponent's Battle Cards or Unisons, switch it to Rest Mode, and that card can't switch to Active Mode until the end of your opponent's turn.`
+  - `Play this card from your Z-Energy, then choose up to 1 of your opponent's Rest Mode Battle Cards and KO it.`
+- added noop accounting for the two shared permanents:
+  - `If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.`
+  - `If this card would leave the Battle Area, remove it from the game instead.`
+- widened activate-main legality and pending-play resolution so public activate skills can legally originate from `z_energy` and complete through the normal counter-window flow
+- added the post-play follow-up runtime for this family so the played card can:
+  - rest a chosen opponent Battle Card or Unison and prevent it from switching Active until the end of the opponent's turn
+  - or KO a chosen opponent Rest Mode Battle Card
+- added the permanent runtime hooks so:
+  - a resting copy blocks opponent Battle Cards from declaring attacks on Leaders
+  - a copy that would leave the Battle Area is removed from the game instead
+- locked with focused coverage proving both exact extracted cards now:
+  - play themselves from `z_energy`
+  - resolve the rest/lock or KO follow-up correctly
+  - enforce the two permanent clauses once in play
+
+## Shadow Dragon negative-energy ball slice complete
+
+- added shared extraction for the Shadow Dragon ball extras that:
+  - `place this card in its owner's Drop Area`
+  - then `choose up to 1 <named Shenron> card with an energy cost of ... in your deck or hand, play it, then shuffle your deck if you looked through it`
+- the shared extractor now covers the `BT10/BT11/BT12` Negative Energy ball family, including:
+  - exact costs
+  - `between X and Y`
+  - `X or Y`
+  - named `<...>` Shenron targets
+- added a shared activate runtime handler that resolves after the self-drop cost is paid and then plays the first legal matching card from deck or hand
+- added direct text-based attack prevention for cards whose skill text says:
+  - `This card can't attack`
+- locked with focused coverage proving:
+  - `Negative Energy Two-Star Ball` cannot declare attacks while in play
+  - its activate skill sends itself to Drop as cost
+  - it then plays `Haze Shenron` from deck through the extracted family handler
+
+## Nigrisshi self-replay slice complete
+
+- added shared extraction for the `DB2` self-replay family:
+  - `[Permanent] When this card is placed in a Drop Area from a Battle Area or Combo Area, it is placed at the bottom of its owner's deck instead.`
+  - `[Activate: Main/Battle] Choose 1 of your black Battle Cards with an energy cost of N and send it to its owner's Warp: Play this card from your Drop Area.`
+- widened the skill-cost DSL with `send_owner_battle_to_warp` and exact-cost filtering so the shared cost path can pay:
+  - choose 1 matching black Battle Card in your Battle Area
+  - send it to Warp
+- reused the existing `activate_play_self_from_hand` runtime with `required_source_zone = drop` instead of creating a bespoke drop-play handler
+- added a narrow text-based replacement hook so this family now bottoms itself instead of entering Drop when it would be placed there from:
+  - the Battle Area
+  - the Combo Area
+- locked with focused coverage proving:
+  - `Nigrisshi, from the Shadows` can warp an exact-cost black Battle Card and play itself from Drop
+  - the permanent replacement bottoms the card instead of sending it to Drop from both Battle and Combo
+
+## SS Caulifla activate-main slice complete
+
+- added shared extraction for `BT15-034 SS Caulifla, Spirited Striker`:
+  - `[+1][Activate: Main]` self gains `+5000` power for the turn, then returns up to 1 opponent Battle Card with energy cost 2 or less to hand
+  - `[-3][Activate: Main]` if the owner Leader is a blue `<Kale>` and the owner has 5 or more energy, place self under the Leader and then play up to 1 `<Kefla>` with power 30000 or less from deck
+- extended `activate_gain_power_and_keyword_for_turn` so the shared activate-main path can:
+  - adjust Unison markers
+  - apply the temporary self power buff
+  - resolve the post-buff opponent bounce branch
+- extended `activate_place_self_under_owner_leader` so the shared tuck path can spend markers before placing the source under the owner Leader
+- added `auto_play_up_to_n_from_owner_deck_on_placed_under` and wired it to `self_placed_under_owner_card` so under-Leader follow-ups can play matching Battle Cards from deck
+- hardened `unison -> self_placed_under_owner_card` source liveness so the original Unison source remains active for the placed-under follow-up after it moves under a Leader or Battle host
+- locked with focused coverage proving:
+  - the `+1` line buffs the source and bounces the legal opposing Battle Card
+  - the `-3` line places the source under the Leader and plays a matching `<Kefla>` from deck
+
+## SS3 Nappa unison activate slice complete
+
+- added shared extraction for `P-339 SS3 Nappa, Golden Invader`:
+  - `[+1][Activate: Main]` opponent chooses 1 card in hand and sends it to Warp
+  - `[-2][Activate: Main]` KOs up to 2 opponent Battle Cards with energy costs greater than or equal to their current energy
+  - `[-3][Activate: Main]` under green `<Nappa>` / `≪Saiyan≫` Leader gating, plays up to 1 red/green multicolor `<Raditz>` with original energy cost 8 from hand
+- extended the shared activate-main runtime so these paths can spend or gain Unison markers while resolving:
+  - opponent-hand-to-warp activate branch
+  - opponent-battle KO activate branch
+  - play-from-hand activate branch
+- widened opponent Battle target selection with `requires_cost_at_least_opponent_current_energy` for the `current energy` threshold wording
+- normalized the `<Raditz>` descriptor branch to use explicit name matching so `Red/Green multicolor <Raditz>` does not get misparsed into a broken trait filter
+- locked with focused coverage proving:
+  - the `+1` branch warps an opponent hand card and adds a marker
+  - the `-2` branch spends markers and KOs only legal Battle Cards
+  - the `-3` branch spends markers and plays the matching multicolor `Raditz` from hand
+
+## Broly combo-area activate slice complete
+
+- added shared extraction for `EX19-12 Broly, Omen of Evolution`:
+  - `[Activate: Battle] Place this card in its owner's Drop Area from your Combo Area: Choose up to 1 Battle Card with a combo cost of 0 in your opponent's Combo Area and place it in its owner's Drop Area.`
+- reused the existing `activate_send_up_to_n_opponent_combo_to_drop` runtime handler instead of introducing a new combo-area effect path
+- paired the extracted effect with the already-supported `activate_battle_combo -> send_self_from_combo_to_drop` cost rule so the exact card now resolves end to end from the Combo Area
+- locked with focused coverage proving:
+  - the extractor emits the shared activate-battle combo-drop handler
+  - the exact extracted card pays its combo-area self-drop cost
+  - the legal opponent combo-area target is placed into Drop while non-matching combo cards remain in the Combo Area
+
+## Five-item shortlist slice complete
+
+- added shared extraction for `P-343 Get That Monster!`:
+  - both `Choose one-` activate-battle search branches now map to the existing deck-to-hand activate path
+  - widened `activate_add_up_to_n_from_owner_deck_to_hand` so it also resolves `self_activate_battle`
+- added shared extraction and runtime for `BT15-089 King Kai's Training`:
+  - place self under `{King Kai's Planet}`
+  - then add up to 1 `{Son Goku, Confronting Invasion}` from deck to hand and shuffle
+- added shared extraction and runtime for `BT15-117 Scout`:
+  - leader gate is now modeled as yellow-or-`≪Turles Crusher Corps≫`
+  - the deterministic runtime resolves the opponent-preferred branch by switching the first legal active opponent Battle Card to Rest Mode
+- added shared extraction and runtime for `BT15-079 Chiaotzu, Confronting Invasion`:
+  - send self to Warp
+  - then opponent chooses a Battle Card and non-`≪Saiyan≫` targets are KO'd
+- added shared extraction and runtime for `P-338 Raditz`:
+  - `When this card attacks...` now reuses the existing opponent-hand-to-warp auto path on attack
+  - widened activate-main top-deck search extraction to support `choose up to ... among them and add it to your hand`
+- locked with focused coverage proving:
+  - each of the five shortlist items now extracts into a concrete supported family
+  - `King Kai's Training`, `Scout`, `Chiaotzu`, and `Raditz` resolve through runtime with exact card text
+
+## Erase a Universe head slice complete
+
+- added shared extraction for `BT16-017 Erase a Universe`:
+  - `[Activate: Main]` now maps to a shared damage-and-win handler that:
+    - counts colors on owner `≪God≫` Battle Cards
+    - deals capped damage to the opponent
+    - wins the game if the owner has 12 or more multicolor `≪God≫` cards in play
+  - `[Activate: Battle]` now maps to the shared battle-time power buff path for owner `≪God≫` cards
+- added runtime support for the activate-main branch in the shared engine handler
+- removed the duplicate text-derived leader requirement from this family so the explicit `Great Priest` leader filter controls resolution without a second brittle gate
+- locked with focused coverage proving:
+  - the extractor emits both the activate-main damage/win rule and the activate-battle buff rule
+  - the exact extracted card deals the capped 2 damage and wins the game when the 12 multicolor `≪God≫` condition is met
+
+## BT15 Vegeta leader slice complete
+
+- normalized DBS HTML badge markup in extractor text preprocessing so badge-based leader skills now parse as standard `[Auto]`, `[Activate: Battle]`, and `[Awaken]` branches
+- added shared extraction for `BT15-062 Vegeta`:
+  - opponent-turn `owner_card_left_battle_area` auto when one of your Battle Cards is removed by an opponent's skill
+  - self `[Activate: Battle]` power buff gated by `your life <= your opponent's life`
+- added runtime support for the new owner-battle-left discard family:
+  - `auto_opponent_discards_n_from_hand_on_owner_matching_battle_left`
+  - `card_left_battle_area` events now carry `removed_by_opponent_skill` so the trigger can distinguish ordinary battle leaves from opponent-skill removal
+- added a shared `requires_owner_life_less_or_equal_opponent` requirement so exact life-comparison activate skills resolve without a one-off handler
+- locked with focused coverage proving:
+  - the exact HTML leader text extracts into the expected auto and activate-battle rules
+  - the discard auto fires when an owner Battle Card is removed by an opponent's skill during the opponent's turn
+  - the activate-battle line gives the leader `+5000` for the battle when the life condition is met
+
+## BT16 Son Gohan, the Interceptor slice complete
+
+- added shared support for `BT16-026 Son Gohan, the Interceptor`
+- extended badge-html normalization so standalone keyword badges like `[Barrier]` also survive into branch extraction as bare keyword lines
+- added shared extraction for:
+  - `owner_takes_damage_from_opponent_attack -> auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage`
+  - keyword-only `[Barrier]` as a noop family
+- added a new public event trigger path:
+  - `player_took_damage`
+  - `owner_takes_damage_from_opponent_attack`
+- added runtime support for the exact auto branch:
+  - rests the source as cost
+  - switches up to `N` matching owner energy to Active Mode
+  - returns up to `N` opponent Battle Cards with cost greater than the opponent's current energy to hand
+- `card_left_battle_area` and damage-event plumbing now distinguish opponent-attack damage and opponent-skill removal as first-class trigger signals instead of relying on fragile text inference
+- locked with focused coverage proving:
+  - exact HTML card text extracts into `Barrier` noop plus the owner-damage auto
+  - taking damage from an opponent's attack rests the source, restands blue energy, and bounces the legal overcost opposing Battle Card
+## P-341 Raditz, Invitation to Battle slice complete
+
+- Added extraction for the exact badge-html `Barrier` / `Blocker` / on-play gain-control line on `P-341 Raditz, Invitation to Battle`.
+- Extended `auto_gain_control_opponent_battle_on_play` so it can filter by shared target descriptors like `required_traits`, `required_characters`, `allowed_colors`, and `max_power`, not just `max_cost`.
+- Tightened text-based hand cost reduction requirement parsing so leader trait checks only apply to explicit leader clauses, and added support for the opponent-battle-area condition used by this card's permanent reduction text.
+- Added focused extractor and exact phase4 coverage to prove the cost reduction only turns on with an opposing `≪Saiyan≫` Battle Card in play and that the 5000-power-or-less target is gained correctly on play.
+
+## BT16 Beerus, Belligerent God slice complete
+
+- Added shared extraction for `BT16-038 Beerus, Belligerent God` by mapping its life-payment attack auto onto the existing `auto_pay_life_on_attack_gain_power_and_keyword_for_turn` family.
+- Extended shared runtime requirement handling with `required_attack_target_zone` so attack-trigger autos can distinguish leader attacks from battle-card attacks without a one-off handler.
+- Extended the shared attack-time power handler so it can restand the source and apply battle-duration power using the existing battle temporary power path.
+- Added focused extractor and exact phase4 coverage proving the card pays 1 life, restands itself, and gains `+15000` for the battle only when it attacks an opponent Battle Card.
+
+## BT16 Whis, Beerus's Backup slice complete
+
+- Added shared extraction for `BT16-039 Whis, Beerus's Backup`:
+  - on play, grant a blue `<Beerus>` Battle Card the ability to attack active opponent Battle Cards without `[Barrier]` for the turn
+  - from the Combo Area, draw 1 when a blue `<Beerus>` Battle Card attacks and KOs an opponent Battle Card
+- Added runtime support for the temporary active-battle attack grant by teaching legal attack generation to surface active non-`[Barrier]` Battle Cards only while the turn-scoped flag is present.
+- Extended the shared `auto_draw_n` handler so battle-end KO triggers from combo-area secret autos can resolve on the existing draw path instead of requiring a dedicated handler.
+- Added focused extractor and exact phase4 coverage proving the granted active-battle attack becomes legal after Whis is played and that the combo-area trigger draws when the matching `Beerus` KO happens.
+
+## BT15 Son Gohan, Simian Revenge slice complete
+
+- Added shared extraction for `BT15-070 Son Gohan, Simian Revenge`:
+  - hidden-hand `owner_card_left_battle_area` auto that plays the source from hand when a matching owner Battle Card is removed by an opponent's skill
+- Added runtime support for `auto_play_self_from_hand_on_owner_matching_battle_left` on top of the existing deferred secret-auto system, so the exact card declares from hand and plays itself only after the matching removal event occurs.
+- Extended owner-battle-left event matching with shared `event_required_keywords` and `event_excluded_traits` filters so exact trigger text like green non-`≪Great Ape≫` `<Son Gohan: Youth>` with `[Blocker]` can be modeled without a bespoke matcher.
+- Added focused extractor and exact phase4 coverage proving the secret auto opportunity appears from hand and the card plays itself after the matching `[Blocker]` Battle Card is removed by an opponent's skill.
