@@ -1917,6 +1917,33 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     once = _once_per_turn(text)
     limit = _limit_per_turn(text)
 
+    if (
+        "look at up to 7 cards from the top of your deck" in text.lower()
+        and "evil wizard" in text.lower()
+        and "demon realm race" in text.lower()
+        and "demon god" in text.lower()
+        and "if you have no unison cards in play" in text.lower()
+        and "black unison card with no specified cost and 20000 power" in text.lower()
+        and "with a marker on it" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_extra_from_hand" if is_extra else "self_activate_main",
+                handler_id="activate_look_top_choose_add_to_hand_or_play_unison_with_marker",
+                handler_params={
+                    "look_count": 7,
+                    "max_add": 1,
+                    "marker_count": 1,
+                    "shuffle_deck_after": True,
+                    "leader_allowed_colors": "black",
+                    "leader_required_traits": "Demon Realm Race",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
     m_self_left_choose_play_or_draw = _SELF_LEFT_BATTLE_CHOOSE_PLAY_FROM_OWNER_DECK_OR_HAND_OR_DRAW_RE.search(text)
     if m_self_left_choose_play_or_draw:
         descriptor = str(m_self_left_choose_play_or_draw.group(2) or "").strip().lower()

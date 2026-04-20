@@ -1,8 +1,27 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 325,
+  "effect_rule_count": 324,
   "rules": {
+    "4673": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Goku'S Lineage",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you play this card, look at up to 3 cards from the top of your deck, choose up to 1 \u226agoku's lineage\u226b from among them and add it to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
     "4676": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4863,35 +4882,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when this card is played during your opponent's turn, choose up to 1 of your opponent's battle cards, ko it, then choose up to 1 card in your opponent's hand and discard it.",
         "trigger": "self_played"
-      }
-    ],
-    "5334": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
-        "handler_id": "auto_power_reduce_up_to_n_on_attack",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": -5000,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's leader cards or battle cards and it gets -5000 power for the duration of the battle.",
-        "trigger": "self_attacks"
       }
     ]
   },

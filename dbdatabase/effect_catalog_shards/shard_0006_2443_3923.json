@@ -3,6 +3,27 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 369,
   "rules": {
+    "2443": [
+      {
+        "family_id": "self_added_to_z_energy:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_characters": "Son Goku,Universe 7",
+          "leader_required_traits": "Universe 7",
+          "required_leader_traits": "Son Goku",
+          "required_owner_combo_required_traits": "Universe 7",
+          "requires_leader": "if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have a \u226auniverse 7\u226b card in your combo area"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto][limit 1] if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have a \u226auniverse 7\u226b card in your combo area: when this card is added to z-energy, draw 1 card.",
+        "trigger": "self_added_to_z_energy"
+      }
+    ],
     "2444": [
       {
         "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
@@ -5958,25 +5979,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, play 3 ghost tokens. (ghost tokens have 15000 power)",
         "trigger": "owner_other_battle_played"
-      }
-    ],
-    "3924": [
-      {
-        "family_id": "self_activate_main:activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch",
-        "handler_id": "activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch",
-        "handler_params": {
-          "amount": 1,
-          "life_to_hand_amount": 1,
-          "max_cost": 1,
-          "max_targets": 1,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": true,
-        "provenance": "extractor",
-        "source_text": "[activate: main][once per turn] choose 1 clone token in your opponent's battle area and remove it from the game: draw 1 card, choose 1 card in your life and add it to your hand, then choose up to 1 of your opponent's battle cards with an energy cost of 1 and return it to its owner's hand.",
-        "trigger": "self_activate_main"
       }
     ]
   },

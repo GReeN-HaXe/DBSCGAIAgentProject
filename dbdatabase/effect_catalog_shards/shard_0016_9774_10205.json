@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 77,
+  "card_rule_count": 78,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 121,
+  "effect_rule_count": 122,
   "rules": {
     "10025": [
       {
@@ -1672,6 +1672,24 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] when this card is played, look at up to 5 cards from the top of your deck, choose up to 2 \u226auniverse 2\u226b cards, add up to 1 card to your hand, send up to 1 card to your warp, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
+    "9774": [
+      {
+        "family_id": "self_played:auto_switch_up_to_n_owner_battle_to_hidden_on_play",
+        "handler_id": "auto_switch_up_to_n_owner_battle_to_hidden_on_play",
+        "handler_params": {
+          "allowed_colors": "white",
+          "max_cost": -1,
+          "max_targets": 1,
+          "required_traits": "Battle"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your white battle cards and switch it to hidden mode.",
         "trigger": "self_played"
       }
     ],

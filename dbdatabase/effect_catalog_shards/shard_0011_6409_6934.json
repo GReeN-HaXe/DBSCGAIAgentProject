@@ -3,6 +3,19 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 335,
   "rules": {
+    "6409": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[barrier]",
+        "trigger": "self_played"
+      }
+    ],
     "6411": [
       {
         "family_id": "self_comboed:auto_draw_n",
@@ -5051,23 +5064,6 @@
         "provenance": "extractor",
         "source_text": "[activate: main](blue)(blue)(blue)(blue), if your leader card is a blue \u226asaiyan\u226b card, your opponent has 3 or more energy, and you choose 1 of your blue skill-less battle cards with an energy cost of 2: play this card from your hand. if you played this card, place the chosen card in your energy.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "6936": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "min_owner_drop": 5,
-          "requires_leader": "if your leader card is blue"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][sparking 5] (this skill takes effect when you have 5 or more cards in your drop area.) when you combo with this card, if your leader card is blue, draw 1 card.",
-        "trigger": "self_comboed"
       }
     ]
   },

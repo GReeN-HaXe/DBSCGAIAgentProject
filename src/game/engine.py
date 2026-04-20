@@ -448,6 +448,7 @@ class RulesEngine:
             "activate_send_up_to_n_opponent_drop_battle_to_warp": self._handle_activate_send_up_to_n_opponent_drop_battle_to_warp,
             "activate_add_up_to_n_from_owner_warp_to_hand": self._handle_activate_add_up_to_n_from_owner_warp_to_hand,
             "activate_add_up_to_n_from_owner_deck_to_hand": self._handle_activate_add_up_to_n_from_owner_deck_to_hand,
+            "activate_look_top_choose_add_to_hand_or_play_unison_with_marker": self._handle_activate_look_top_choose_add_to_hand_or_play_unison_with_marker,
             "activate_add_self_from_owner_drop_to_hand": self._handle_activate_add_self_from_owner_drop_to_hand,
             "activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end": self._handle_activate_bottom_deck_up_to_n_opponent_battle_then_switch_self_active_at_turn_end,
             "activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end": self._handle_activate_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_energy_active_at_turn_end,
@@ -25876,6 +25877,101 @@ class RulesEngine:
             if looked_life and owner.life:
                 random.Random(0).shuffle(owner.life)
         self._checkpoint(state, "effect_activate_add_up_to_n_from_owner_deck_to_hand")
+
+    def _handle_activate_look_top_choose_add_to_hand_or_play_unison_with_marker(
+        self,
+        state: GameState,
+        event: EffectEvent,
+        reg: EffectRegistration,
+    ) -> None:
+        if event.name != "skill_activated":
+            return
+        if not self._effect_requirements_met(state, reg):
+            return
+        required_skill_kind = "activate_extra_from_hand" if reg.trigger == "self_activate_extra_from_hand" else "activate_main"
+        if str(event.payload.get("skill_kind") or "") != required_skill_kind:
+            return
+        owner = state.players.get(reg.owner_player_id)
+        if owner is None or not owner.deck:
+            return
+        look_count = self._resolve_effect_int_param(state, reg, "look_count", default=0)
+        if look_count <= 0:
+            return
+        max_add = self._resolve_effect_int_param(state, reg, "max_add", default=1)
+        marker_count = self._resolve_effect_int_param(state, reg, "marker_count", default=1)
+        looked = list(owner.deck[:look_count])
+
+        def _matches_hand_branch(card_or_id: CardInstance | int) -> bool:
+            deck_card_id = card_or_id.card_id if isinstance(card_or_id, CardInstance) else int(card_or_id)
+            runtime = self._resolve_card_runtime_data(deck_card_id)
+            runtime_colors = {
+                part.strip().lower()
+                for part in str(runtime.color or "").replace("/", ",").split(",")
+                if part.strip()
+            }
+            if "black" not in runtime_colors:
+                return False
+            runtime_traits = {part.strip().lower() for part in (runtime.traits or ()) if part.strip()}
+            return not runtime_traits.isdisjoint({"evil wizard", "demon realm race", "demon god"})
+
+        def _matches_unison_branch(card_or_id: CardInstance | int) -> bool:
+            deck_card_id = card_or_id.card_id if isinstance(card_or_id, CardInstance) else int(card_or_id)
+            runtime = self._resolve_card_runtime_data(deck_card_id)
+            if "UNISON" not in str(runtime.card_type or "").upper():
+                return False
+            runtime_colors = {
+                part.strip().lower()
+                for part in str(runtime.color or "").replace("/", ",").split(",")
+                if part.strip()
+            }
+            if "black" not in runtime_colors:
+                return False
+            if int(runtime.power or 0) != 20000:
+                return False
+            if str(runtime.energy_cost_raw or "").strip().upper() == "X":
+                return False
+            return runtime.energy_cost is None
+
+        chosen_index: int | None = None
+        chosen_mode = ""
+        if max_add > 0:
+            hand_matches = [i for i, deck_card in enumerate(looked) if _matches_hand_branch(deck_card)]
+            if hand_matches:
+                chosen_index = hand_matches[0]
+                chosen_mode = "hand"
+        if chosen_index is None and not owner.unison_area:
+            unison_matches = [i for i, deck_card in enumerate(looked) if _matches_unison_branch(deck_card)]
+            if unison_matches:
+                chosen_index = unison_matches[0]
+                chosen_mode = "unison"
+        if chosen_index is None:
+            return
+
+        removed = owner.deck.pop(chosen_index)
+        chosen_card_id = removed.card_id if isinstance(removed, CardInstance) else int(removed)
+        card = self._create_card_instance(next_instance_id=state.next_instance_id, card_id=chosen_card_id, owner_id=reg.owner_player_id)
+        state.next_instance_id += 1
+        if chosen_mode == "hand":
+            owner.hand.append(card)
+        else:
+            card.markers = max(marker_count, 0)
+            self._replace_owner_unison_if_needed(state, owner)
+            owner.unison_area.append(card)
+            self._register_card_effects(state, player_id=reg.owner_player_id, source_zone="unison", card=card)
+            self._emit_effect_event(
+                state,
+                name="card_played",
+                actor_player_id=reg.owner_player_id,
+                payload={
+                    "source_instance_id": card.instance_id,
+                    "source_card_id": card.card_id,
+                    "source_zone": "unison",
+                    "played_from": "deck",
+                },
+            )
+        if bool(reg.handler_params.get("shuffle_deck_after", False)) and owner.deck:
+            random.Random(0).shuffle(owner.deck)
+        self._checkpoint(state, "effect_activate_look_top_choose_add_to_hand_or_play_unison_with_marker")
 
     def _handle_activate_play_up_to_n_each_named_from_owner_deck_or_drop(self, state: GameState, event: EffectEvent, reg: EffectRegistration) -> None:
         if event.name != "skill_activated":

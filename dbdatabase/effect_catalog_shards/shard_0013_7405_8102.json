@@ -3,6 +3,21 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 388,
   "rules": {
+    "7405": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
     "7406": [
       {
         "family_id": "self_played:noop_auto",
@@ -6222,24 +6237,6 @@
         "provenance": "extractor",
         "source_text": "[-4][activate: main] draw 2 cards, discard 1 card from your hand, then choose up to 1 of your opponent's battle cards and it gets -20000 power for the turn.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "8105": [
-      {
-        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
-        "handler_id": "auto_power_reduce_up_to_n_on_play",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": -10000,
-          "target_policy": "first"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and it gets -10000 power for the turn.",
-        "trigger": "self_played"
       }
     ]
   },

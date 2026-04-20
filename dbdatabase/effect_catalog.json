@@ -1,7 +1,7 @@
 {
-  "card_rule_count": 3827,
+  "card_rule_count": 3828,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 5554,
+  "effect_rule_count": 5555,
   "rules": {
     "10": [
       {
@@ -32495,6 +32495,26 @@
         "provenance": "extractor",
         "source_text": "[activate: battle] if your leader card is a <zamasu> card and it's your opponent's turn:  draw 1 card, then choose 1 card in your opponent's hand, place it in their energy in rest mode, then if you placed an opponent's card in their energy, at the end of the turn your opponent chooses 1 of their energy and places it in its owner's drop area",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "383": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_look_top_choose_add_to_hand_or_play_unison_with_marker",
+        "handler_id": "activate_look_top_choose_add_to_hand_or_play_unison_with_marker",
+        "handler_params": {
+          "leader_allowed_colors": "black",
+          "leader_required_traits": "Demon Realm Race",
+          "look_count": 7,
+          "marker_count": 1,
+          "max_add": 1,
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a black \u226ademon realm race\u226b card: look at up to 7 cards from the top of your deck, then choose one? \u30fbadd up to 1 black \u226aevil wizard\u226b, black \u226ademon realm race\u226b, or black \u226ademon god\u226b card among them to your hand, then shuffle your deck. \u30fbif you have no unison cards in play, play up to 1 black unison card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck.",
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "3831": [

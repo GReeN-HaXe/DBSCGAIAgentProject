@@ -1,8 +1,37 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 322,
+  "effect_rule_count": 323,
   "rules": {
+    "5334": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
+        "handler_id": "auto_power_reduce_up_to_n_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -5000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's leader cards or battle cards and it gets -5000 power for the duration of the battle.",
+        "trigger": "self_attacks"
+      }
+    ],
     "5335": [
       {
         "family_id": "self_played:noop_auto",
@@ -5070,25 +5099,6 @@
         "provenance": "extractor",
         "source_text": "[auto] when you play this card, if your leader card is a \u226agod\u226b or \u226auniverse 6\u226b, choose up to 2 of your opponent's battle cards with 9000 power or less and ko them.",
         "trigger": "self_played"
-      }
-    ],
-    "5847": [
-      {
-        "family_id": "self_comboed:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 2,
-          "leader_required_characters": "And You Life Is At 4,Less,You May Place 1",
-          "leader_required_traits": "God,Universe 2",
-          "required_leader_traits": "God,Universe 2",
-          "requires_leader": "if your leader card is a \u226agod\u226b or \u226auniverse 2\u226b and you\uff52 life is at 4 or less"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you combo with this card, if your leader card is a \u226agod\u226b or \u226auniverse 2\u226b and you\uff52 life is at 4 or less, you may place 1 card from your hand in your drop area. if you do so, draw 2 cards, and this card gains +10000 combo power for the duration of the turn.",
-        "trigger": "self_comboed"
       }
     ]
   },

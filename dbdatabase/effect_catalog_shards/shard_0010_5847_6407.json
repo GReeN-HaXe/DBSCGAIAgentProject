@@ -3,6 +3,25 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 334,
   "rules": {
+    "5847": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "leader_required_characters": "And You Life Is At 4,Less,You May Place 1",
+          "leader_required_traits": "God,Universe 2",
+          "required_leader_traits": "God,Universe 2",
+          "requires_leader": "if your leader card is a \u226agod\u226b or \u226auniverse 2\u226b and you\uff52 life is at 4 or less"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when you combo with this card, if your leader card is a \u226agod\u226b or \u226auniverse 2\u226b and you\uff52 life is at 4 or less, you may place 1 card from your hand in your drop area. if you do so, draw 2 cards, and this card gains +10000 combo power for the duration of the turn.",
+        "trigger": "self_comboed"
+      }
+    ],
     "5849": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -4981,19 +5000,6 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[barrier] (this card can't be chosen by the skills of your opponent's cards)",
-        "trigger": "self_played"
-      }
-    ],
-    "6409": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[barrier]",
         "trigger": "self_played"
       }
     ]

@@ -3,6 +3,26 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 392,
   "rules": {
+    "2035": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "green",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_characters": "Son Gohan: Adolescence,Son Goten",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, switch this card to active mode, look at up to 5 cards from the top of your deck, add up to 1 green <son gohan: adolescence> or <son goten> card to your hand, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ],
     "2036": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -6479,27 +6499,6 @@
       }
     ],
     "2442": [
-      {
-        "family_id": "self_added_to_z_energy:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1,
-          "leader_allowed_colors": "yellow",
-          "leader_required_characters": "Son Goku,Universe 7",
-          "leader_required_traits": "Universe 7",
-          "required_leader_traits": "Son Goku",
-          "required_owner_combo_required_traits": "Universe 7",
-          "requires_leader": "if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have a \u226auniverse 7\u226b card in your combo area"
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto][limit 1] if your leader is a yellow \u226auniverse 7\u226b <son goku> card and you have a \u226auniverse 7\u226b card in your combo area: when this card is added to z-energy, draw 1 card.",
-        "trigger": "self_added_to_z_energy"
-      }
-    ],
-    "2443": [
       {
         "family_id": "self_added_to_z_energy:auto_draw_n",
         "handler_id": "auto_draw_n",

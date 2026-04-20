@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 340,
+  "effect_rule_count": 339,
   "rules": {
     "1000": [
       {
@@ -1875,35 +1875,6 @@
         "trigger": "self_activate_main"
       }
     ],
-    "1119": [
-      {
-        "family_id": "self_played:noop_auto",
-        "handler_id": "noop_auto",
-        "handler_params": {},
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[energy-exhaust]",
-        "trigger": "self_played"
-      },
-      {
-        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
-        "handler_id": "auto_power_reduce_up_to_n_on_attack",
-        "handler_params": {
-          "max_cost": -1,
-          "max_targets": 1,
-          "power_delta": -15000,
-          "target_policy": "first"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn.",
-        "trigger": "self_attacks"
-      }
-    ],
     "374": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -2089,6 +2060,26 @@
         "provenance": "extractor",
         "source_text": "[activate: battle][limit 1][burst 1] if your leader card is a black <trunks: xeno>-only card and you place this card at the bottom of your deck from your warp: choose up to 1 of your leader cards or unison cards and it gets +5000 power for the battle.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "383": [
+      {
+        "family_id": "self_activate_extra_from_hand:activate_look_top_choose_add_to_hand_or_play_unison_with_marker",
+        "handler_id": "activate_look_top_choose_add_to_hand_or_play_unison_with_marker",
+        "handler_params": {
+          "leader_allowed_colors": "black",
+          "leader_required_traits": "Demon Realm Race",
+          "look_count": 7,
+          "marker_count": 1,
+          "max_add": 1,
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: main] if your leader card is a black \u226ademon realm race\u226b card: look at up to 7 cards from the top of your deck, then choose one? \u30fbadd up to 1 black \u226aevil wizard\u226b, black \u226ademon realm race\u226b, or black \u226ademon god\u226b card among them to your hand, then shuffle your deck. \u30fbif you have no unison cards in play, play up to 1 black unison card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck.",
+        "trigger": "self_activate_extra_from_hand"
       }
     ],
     "384": [

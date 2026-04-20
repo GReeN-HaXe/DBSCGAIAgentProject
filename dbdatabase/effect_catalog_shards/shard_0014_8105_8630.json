@@ -3,6 +3,24 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 420,
   "rules": {
+    "8105": [
+      {
+        "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
+        "handler_id": "auto_power_reduce_up_to_n_on_play",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -10000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, choose up to 1 of your opponent's battle cards and it gets -10000 power for the turn.",
+        "trigger": "self_played"
+      }
+    ],
     "8106": [
       {
         "family_id": "self_played:noop_auto",
@@ -6800,26 +6818,6 @@
         "provenance": "extractor",
         "source_text": "[auto][spirit boost 1] when this card is played, choose up to 1 of your opponent's battle cards, and during this turn, negate its skills and it gets -30000 power.",
         "trigger": "self_played"
-      }
-    ],
-    "8826": [
-      {
-        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "blue",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_characters": "Or Up To 1 Unison A Specified Cost Of 2",
-          "required_traits": "Demon Realm"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 blue \u226ademon realm\u226b card or up to 1 blue unison with a specified cost of 2 to your hand, then shuffle your deck.",
-        "trigger": "owner_leader_attacks"
       }
     ]
   },

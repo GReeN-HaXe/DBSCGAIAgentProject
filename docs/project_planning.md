@@ -4683,3 +4683,11 @@ When adding a new TODO:
 - Broadened the shared `owner_opponent_battle_played` runtime matcher so it can resolve against live opponent Unison plays as well as Battle plays when the extracted family asks for board-card filters.
 - Tightened `auto_switch_self_active_on_play` so it respects exact source-instance matching and optional `requires_played_via` gating, preventing generic on-play self-stand handlers from overfiring.
 - Added focused extractor and exact phase4 coverage proving the EX-Evolve self-stand branch only fires on EX-Evolve play and the once-per-turn trigger rests either an opponent Battle Card or Unison when they are played.
+
+## BT16 Attack of the Dark Empire slice complete
+
+- Added exact extraction for `BT16-123 Attack of the Dark Empire` as a single shared `Activate: Main` choose-one family.
+- Added runtime support for the top-7 choose-one effect with deterministic resolution:
+  - prefer the matching black `≪Evil Wizard≫` / `≪Demon Realm Race≫` / `≪Demon God≫` add-to-hand branch when available
+  - otherwise, if you have no Unison in play, play a matching black no-specified-cost `20000` power Unison from the same looked cards with `1` marker
+- Added focused extractor and exact phase4 coverage for both the hand-add branch and the no-Unison Unison-play branch.

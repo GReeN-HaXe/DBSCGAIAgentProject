@@ -3,6 +3,35 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 386,
   "rules": {
+    "1119": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[energy-exhaust]",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:auto_power_reduce_up_to_n_on_attack",
+        "handler_id": "auto_power_reduce_up_to_n_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "power_delta": -15000,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's battle cards and it gets -15000 power for the turn.",
+        "trigger": "self_attacks"
+      }
+    ],
     "1121": [
       {
         "family_id": "self_played:auto_power_reduce_up_to_n_on_play",
@@ -6192,34 +6221,6 @@
         "provenance": "extractor",
         "source_text": "[activate: main][limit 1](yellow), if your leader is yellow and you have 4 or more energy: play this card from your hand.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "1646": [
-      {
-        "family_id": "self_attacks:auto_draw_n",
-        "handler_id": "auto_draw_n",
-        "handler_params": {
-          "amount": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, draw 1 card, and add up to 1 card from your life to your hand.",
-        "trigger": "self_attacks"
-      },
-      {
-        "family_id": "self_attacks:auto_add_up_to_n_from_owner_life_to_hand_on_attack",
-        "handler_id": "auto_add_up_to_n_from_owner_life_to_hand_on_attack",
-        "handler_params": {
-          "max_targets": 1
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card attacks, draw 1 card, and add up to 1 card from your life to your hand.",
-        "trigger": "self_attacks"
       }
     ]
   },

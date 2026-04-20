@@ -1,8 +1,36 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 358,
+  "effect_rule_count": 359,
   "rules": {
+    "1646": [
+      {
+        "family_id": "self_attacks:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, and add up to 1 card from your life to your hand.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "self_attacks:auto_add_up_to_n_from_owner_life_to_hand_on_attack",
+        "handler_id": "auto_add_up_to_n_from_owner_life_to_hand_on_attack",
+        "handler_params": {
+          "max_targets": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, draw 1 card, and add up to 1 card from your life to your hand.",
+        "trigger": "self_attacks"
+      }
+    ],
     "1647": [
       {
         "family_id": "self_played:auto_ko_opponent_battle_on_play",
@@ -5917,26 +5945,6 @@
         "once_per_turn": false,
         "provenance": "extractor",
         "source_text": "[auto] when this card is played,  draw 1 card",
-        "trigger": "self_played"
-      }
-    ],
-    "2035": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "allowed_colors": "green",
-          "look_count": 5,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_characters": "Son Gohan: Adolescence,Son Goten",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": 1,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when this card is played, switch this card to active mode, look at up to 5 cards from the top of your deck, add up to 1 green <son gohan: adolescence> or <son goten> card to your hand, then shuffle your deck.",
         "trigger": "self_played"
       }
     ]

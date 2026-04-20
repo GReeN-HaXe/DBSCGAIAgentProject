@@ -3,6 +3,25 @@
   "catalog_kind": "dbs_effect_catalog",
   "effect_rule_count": 303,
   "rules": {
+    "3924": [
+      {
+        "family_id": "self_activate_main:activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch",
+        "handler_id": "activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch",
+        "handler_params": {
+          "amount": 1,
+          "life_to_hand_amount": 1,
+          "max_cost": 1,
+          "max_targets": 1,
+          "target_policy": "first"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate: main][once per turn] choose 1 clone token in your opponent's battle area and remove it from the game: draw 1 card, choose 1 card in your life and add it to your hand, then choose up to 1 of your opponent's battle cards with an energy cost of 1 and return it to its owner's hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "3925": [
       {
         "family_id": "turn_end:auto_switch_self_active_on_turn_end",
@@ -4700,25 +4719,6 @@
         "provenance": "extractor",
         "source_text": "[activate: main][once per turn][spirit boost 1] blue unison card with a specified cost of 2 or more: play 1 ghost token with 15000 power.",
         "trigger": "self_activate_main"
-      }
-    ],
-    "4673": [
-      {
-        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
-        "handler_params": {
-          "look_count": 3,
-          "max_add": 1,
-          "max_cost": -1,
-          "required_traits": "Goku'S Lineage",
-          "shuffle_deck_after": true
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[auto] when you play this card, look at up to 3 cards from the top of your deck, choose up to 1 \u226agoku's lineage\u226b from among them and add it to your hand, then shuffle your deck.",
-        "trigger": "self_played"
       }
     ]
   },

@@ -6569,6 +6569,30 @@ def test_extract_exact_ss2_trunks_future_on_the_line_rules() -> None:
     assert rest_rule.handler_params["leader_allowed_colors"] == "yellow"
 
 
+def test_extract_exact_attack_of_the_dark_empire_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If your Leader Card is a black \u226aDemon Realm Race\u226b card: "
+            "Look at up to 7 cards from the top of your deck, then choose one?"
+            "\u30fbAdd up to 1 black \u226aEvil Wizard\u226b, black \u226aDemon Realm Race\u226b, or black \u226aDemon God\u226b card among them to your hand, then shuffle your deck."
+            "\u30fbIf you have no Unison Cards in play, play up to 1 black Unison Card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_extra_from_hand"
+        and r.handler_id == "activate_look_top_choose_add_to_hand_or_play_unison_with_marker"
+    )
+    assert rule.handler_params["look_count"] == 7
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["marker_count"] == 1
+    assert rule.handler_params["leader_allowed_colors"] == "black"
+    assert rule.handler_params["leader_required_traits"] == "Demon Realm Race"
+
+
 def test_extract_self_placed_under_by_union_can_schedule_opponent_next_main_energy_restand_rule() -> None:
     card = _card(
         "[Auto] When this card is placed under another card by [Union], activate this skill. "

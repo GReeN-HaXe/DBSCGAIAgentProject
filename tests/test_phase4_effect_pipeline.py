@@ -49605,6 +49605,284 @@ def test_phase4_exact_ss2_trunks_future_on_the_line_ex_evolve_and_opponent_play_
     assert any(cp.name == "effect_auto_switch_up_to_n_opponent_board_rest" for cp in state.checkpoints)
 
 
+def test_phase4_exact_attack_of_the_dark_empire_can_add_matching_card_to_hand() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                993830: SimpleNamespace(
+                    id=993830,
+                    card_number="BT16-123",
+                    card_name="Attack of the Dark Empire",
+                    card_type="EXTRA",
+                    card_color="Black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled=(
+                        "[Activate: Main] If your Leader Card is a black \u226aDemon Realm Race\u226b card: "
+                        "Look at up to 7 cards from the top of your deck, then choose one?"
+                        "\u30fbAdd up to 1 black \u226aEvil Wizard\u226b, black \u226aDemon Realm Race\u226b, or black \u226aDemon God\u226b card among them to your hand, then shuffle your deck."
+                        "\u30fbIf you have no Unison Cards in play, play up to 1 black Unison Card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck."
+                    ),
+                    has_activate_main=True,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=("Activate: Main",),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                ),
+                993831: SimpleNamespace(
+                    id=993831,
+                    card_number="L-DEMON",
+                    card_name="Demon Leader",
+                    card_type="LEADER",
+                    card_color="Black",
+                    card_energy_cost="0",
+                    energy_cost_int=0,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Demon Realm Race"]',
+                    card_character_json='[]',
+                ),
+                993832: SimpleNamespace(
+                    id=993832,
+                    card_number="EW-1",
+                    card_name="Evil Wizard Test",
+                    card_type="BATTLE",
+                    card_color="Black",
+                    card_energy_cost="3",
+                    energy_cost_int=3,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Evil Wizard"]',
+                    card_character_json='[]',
+                ),
+            }
+            return rows.get(
+                card_id,
+                SimpleNamespace(
+                    id=card_id,
+                    card_number=f"T-{card_id}",
+                    card_name=f"Card {card_id}",
+                    card_type="BATTLE",
+                    card_color="Black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=5000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                ),
+            )
+
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If your Leader Card is a black \u226aDemon Realm Race\u226b card: "
+            "Look at up to 7 cards from the top of your deck, then choose one?"
+            "\u30fbAdd up to 1 black \u226aEvil Wizard\u226b, black \u226aDemon Realm Race\u226b, or black \u226aDemon God\u226b card among them to your hand, then shuffle your deck."
+            "\u30fbIf you have no Unison Cards in play, play up to 1 black Unison Card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    engine = RulesEngine(card_repository=Repo(), effect_rules={993830: extract_effect_rules_from_card(card)})
+    state = engine.initialize_game(
+        p1_leader_card_id=993831,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [CardInstance(instance_id=993835, card_id=3001, owner_id=1, card_type="ENERGY", color="Black")]
+    state.players[1].hand = [CardInstance(instance_id=993833, card_id=993830, owner_id=1, card_type="EXTRA", color="Black", energy_cost=1)]
+    state.players[1].deck = [CardInstance(instance_id=993834, card_id=993832, owner_id=1, card_type="BATTLE", color="Black")]
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert any(card.card_id == 993832 for card in state.players[1].hand), [card.card_id for card in state.players[1].hand]
+    assert any(cp.name == "effect_activate_look_top_choose_add_to_hand_or_play_unison_with_marker" for cp in state.checkpoints)
+
+
+def test_phase4_exact_attack_of_the_dark_empire_can_play_matching_unison_with_marker() -> None:
+    class Repo:
+        def get_by_id(self, card_id, source_table: str = "cards"):
+            rows = {
+                993840: SimpleNamespace(
+                    id=993840,
+                    card_number="BT16-123",
+                    card_name="Attack of the Dark Empire",
+                    card_type="EXTRA",
+                    card_color="Black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=0,
+                    card_skill_unstyled=(
+                        "[Activate: Main] If your Leader Card is a black \u226aDemon Realm Race\u226b card: "
+                        "Look at up to 7 cards from the top of your deck, then choose one?"
+                        "\u30fbAdd up to 1 black \u226aEvil Wizard\u226b, black \u226aDemon Realm Race\u226b, or black \u226aDemon God\u226b card among them to your hand, then shuffle your deck."
+                        "\u30fbIf you have no Unison Cards in play, play up to 1 black Unison Card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck."
+                    ),
+                    has_activate_main=True,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=("Activate: Main",),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                ),
+                993841: SimpleNamespace(
+                    id=993841,
+                    card_number="L-DEMON",
+                    card_name="Demon Leader",
+                    card_type="LEADER",
+                    card_color="Black",
+                    card_energy_cost="0",
+                    energy_cost_int=0,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=15000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='["Demon Realm Race"]',
+                    card_character_json='[]',
+                ),
+                993842: SimpleNamespace(
+                    id=993842,
+                    card_number="U-1",
+                    card_name="Black No Cost Unison",
+                    card_type="UNISON",
+                    card_color="Black",
+                    card_energy_cost="-",
+                    energy_cost_int=None,
+                    combo_cost_int=None,
+                    combo_power_int=None,
+                    power_int=20000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                ),
+            }
+            return rows.get(
+                card_id,
+                SimpleNamespace(
+                    id=card_id,
+                    card_number=f"T-{card_id}",
+                    card_name=f"Card {card_id}",
+                    card_type="BATTLE",
+                    card_color="Black",
+                    card_energy_cost="1",
+                    energy_cost_int=1,
+                    combo_cost_int=0,
+                    combo_power_int=5000,
+                    power_int=5000,
+                    card_skill_unstyled="",
+                    has_activate_main=False,
+                    has_auto=False,
+                    has_draw=False,
+                    has_counter=False,
+                    has_counter_attack=False,
+                    has_counter_play=False,
+                    has_permanent=False,
+                    has_barrier=False,
+                    keywords=(),
+                    card_traits_json='[]',
+                    card_character_json='[]',
+                ),
+            )
+
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] If your Leader Card is a black \u226aDemon Realm Race\u226b card: "
+            "Look at up to 7 cards from the top of your deck, then choose one?"
+            "\u30fbAdd up to 1 black \u226aEvil Wizard\u226b, black \u226aDemon Realm Race\u226b, or black \u226aDemon God\u226b card among them to your hand, then shuffle your deck."
+            "\u30fbIf you have no Unison Cards in play, play up to 1 black Unison Card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    engine = RulesEngine(card_repository=Repo(), effect_rules={993840: extract_effect_rules_from_card(card)})
+    state = engine.initialize_game(
+        p1_leader_card_id=993841,
+        p1_deck_card_ids=_deck(1000),
+        p2_leader_card_id=2,
+        p2_deck_card_ids=_deck(2000),
+        shuffle_decks=False,
+    )
+    state = _to_main(engine, state)
+    state.players[1].energy = [CardInstance(instance_id=993845, card_id=3001, owner_id=1, card_type="ENERGY", color="Black")]
+    state.players[1].hand = [CardInstance(instance_id=993843, card_id=993840, owner_id=1, card_type="EXTRA", color="Black", energy_cost=1)]
+    state.players[1].deck = [CardInstance(instance_id=993844, card_id=993842, owner_id=1, card_type="UNISON", color="Black", power=20000)]
+    action = next(a for a in engine.get_legal_actions(state, 1) if a.action_type == ActionType.PLAY_CARD_FROM_HAND and a.hand_index == 0)
+    state = engine.apply_action(state, action)
+    state = engine.apply_action(state, Action(action_type=ActionType.PASS_COUNTER_WINDOW, player_id=2))
+    assert len(state.players[1].unison_area) == 1, [card.card_id for card in state.players[1].unison_area]
+    assert state.players[1].unison_area[0].card_id == 993842, [card.card_id for card in state.players[1].unison_area]
+    assert state.players[1].unison_area[0].markers == 1, state.players[1].unison_area[0].markers
+    assert any(cp.name == "effect_activate_look_top_choose_add_to_hand_or_play_unison_with_marker" for cp in state.checkpoints)
+
+
 def test_phase4_exact_android_21_full_power_counter_on_play_and_non_leader_tax() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
