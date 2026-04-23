@@ -233,8 +233,16 @@ _COUNTER_ALT_REDUCE_OWNER_BATTLE_POWER_RE = re.compile(
 _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
     r"\[counter:\s*(?:attack|play|counter|battle card attack)\].{0,220}?choose (\d+) (.+?) cards? in your hand and place (?:it|them) in your drop area\s*:"
 )
+_COUNTER_ATTACK_SPIRIT_BOOST_RE = re.compile(
+    r"\[counter(?::)?\s*attack\](?:.{0,120}?)?\[spirit boost\s+(\d+|x)\]",
+    re.IGNORECASE,
+)
 _COUNTER_ALT_DISCARD_OTHER_HAND_RE = re.compile(
     r"\[(?:permanent|permament)\].{0,320}?activate this card's \[counter\] skill from your hand without paying its energy cost by choosing (\d+) other (.+?) cards? in your hand and discarding (?:it|them)",
+    re.IGNORECASE,
+)
+_COUNTER_ALT_SPIRIT_BOOST_RE = re.compile(
+    r"\[(?:permanent|permament)\].{0,260}?activate this card's \[counter\] skill from your hand without paying its energy cost by paying the cost for \[spirit boost\s+(\d+)\] instead",
     re.IGNORECASE,
 )
 
@@ -246,6 +254,10 @@ def _normalize_text(raw: str | None) -> str:
     text = html.unescape(text).lower()
     text = text.replace("[br]", ". ").replace("—", " - ").replace("―", " - ")
     return _WS_RE.sub(" ", text.strip())
+
+
+def _spirit_boost_amount(raw: str) -> int:
+    return 1 if str(raw or "").strip().lower() == "x" else int(raw)
 
 
 def _extract_allowed_colors(descriptor: str) -> str:
@@ -854,7 +866,16 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             0,
             {
                 "kind": "remove_owner_unison_markers",
-                "amount": int(m_activate_main_spirit_boost.group(1)),
+                "amount": _spirit_boost_amount(m_activate_main_spirit_boost.group(1)),
+            },
+        )
+    m_counter_attack_spirit_boost = _COUNTER_ATTACK_SPIRIT_BOOST_RE.search(text)
+    if m_counter_attack_spirit_boost:
+        rules.setdefault("counter_from_hand", []).insert(
+            0,
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": _spirit_boost_amount(m_counter_attack_spirit_boost.group(1)),
             },
         )
     m_activate_main_drop_to_warp = _ACTIVATE_MAIN_DROP_TO_WARP_RE.search(text)
@@ -1193,6 +1214,20 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         )
         params["required_card_types"] = "BATTLE"
         params["power_delta"] = int(m_counter_alt_reduce_owner_battle_power.group(3))
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
+        rules["counter_alternate_from_hand"] = [params]
+
+    m_counter_alt_spirit_boost = _COUNTER_ALT_SPIRIT_BOOST_RE.search(text)
+    if m_counter_alt_spirit_boost:
+        params = {
+            "kind": "remove_owner_unison_markers",
+            "amount": int(m_counter_alt_spirit_boost.group(1)),
+        }
         required_leader_colors = _extract_required_leader_colors(text)
         if required_leader_colors:
             params["required_leader_colors"] = required_leader_colors

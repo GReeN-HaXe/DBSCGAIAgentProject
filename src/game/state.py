@@ -430,10 +430,33 @@ class AttackPowerTax:
 
 
 @dataclass(frozen=True)
+class BattleAttackBottomDeckHandTax:
+    owner_player_id: int
+    affected_player_id: int
+    min_cost_greater_than_current_energy: int = 1
+    hand_count: int = 2
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
+class BattleAttackDiscardHandTax:
+    owner_player_id: int
+    affected_player_id: int
+    hand_count: int = 2
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
 class CounterHandActivationRestriction:
     owner_player_id: int
     restricted_card_id: int = 0
     restricted_mode: str = ""
+    expires_on_turn_end_player_id: int = 1
+
+
+@dataclass(frozen=True)
+class NonKeywordSkillDamagePrevention:
+    protected_player_id: int
     expires_on_turn_end_player_id: int = 1
 
 
@@ -632,6 +655,8 @@ class GameState:
     scheduled_charge_phase_skip_player_ids: set[int] = field(default_factory=set)
     low_power_battle_play_hand_warp_penalties: list[LowPowerBattlePlayHandWarpPenalty] = field(default_factory=list)
     attack_power_taxes: list[AttackPowerTax] = field(default_factory=list)
+    battle_attack_bottom_deck_taxes: list[BattleAttackBottomDeckHandTax] = field(default_factory=list)
+    battle_attack_discard_hand_taxes: list[BattleAttackDiscardHandTax] = field(default_factory=list)
     non_leader_attack_rest_taxes: list[NonLeaderAttackRestTax] = field(default_factory=list)
     non_leader_attack_hand_z_taxes: list[NonLeaderAttackHandAndZTax] = field(default_factory=list)
     active_counter_hand_restrictions: list[CounterHandActivationRestriction] = field(default_factory=list)
@@ -642,6 +667,7 @@ class GameState:
     negate_opponent_strike_for_player_ids: set[int] = field(default_factory=set)
     battle_no_damage_player_ids: set[int] = field(default_factory=set)
     battle_ko_protected_instance_ids: set[int] = field(default_factory=set)
+    nonkeyword_skill_damage_preventions: list[NonKeywordSkillDamagePrevention] = field(default_factory=list)
     activate_skill_usage: set[tuple[int, str, int]] = field(default_factory=set)
     attack_restricted_instance_ids: set[int] = field(default_factory=set)
     attack_restricted_name_contains: set[str] = field(default_factory=set)

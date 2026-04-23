@@ -1610,6 +1610,63 @@ def test_extract_absorption_of_doom_counter_alternate_discard_other_black_hand_c
     }
 
 
+def test_extract_dyspo_thwarting_the_enemy_counter_alternate_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Limit 1] If your Leader Card is red: Negate the attack, then play this card in Rest Mode. "
+            "If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn."
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 2,
+                "required_leader_colors": "red",
+            }
+        ]
+    }
+
+
+def test_extract_skill_hunter_towa_counter_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Spirit Boost 1] Play this card.<br>"
+            "[Permanent] If it's your opponent's turn and they have a skill-less Battle Card or Unison Card in play, reduce the energy cost of this card in your hand by 1.<br>"
+            "[Auto] If your Leader Card is a black &lt;Fin&gt; card: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it under your Leader Card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_counter_spirit_boost_x_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Spirit Boost X] (Remove X markers from your Unison Card to activate this skill.) "
+            "If your Leader Card is a red ≪Universe 11≫ card: Negate the attack."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
+            }
+        ]
+    }
+
+
 def test_extract_activate_battle_z_energy_under_self_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

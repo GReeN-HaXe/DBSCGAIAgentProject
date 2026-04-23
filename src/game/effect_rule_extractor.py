@@ -245,6 +245,10 @@ _OWNER_BATTLE_ATTACKS_GAIN_POWER_THEN_ADD_UP_TO_N_FROM_OWNER_DECK_OR_LIFE_TO_HAN
     r"(?:if [^:]{1,220}:\s*)?when one of your battle cards attacks,\s*it gets \+(\d+) power for the duration of the turn,\s*then choose up to (\d+) (.+?) from your deck or life and add (?:it|them) to your hand",
     re.IGNORECASE,
 )
+_OWNER_LEADER_ATTACKS_ADD_UP_TO_N_FROM_OWNER_DECK_AND_OR_LIFE_TO_HAND_RE = re.compile(
+    r"(?:if [^:]{1,220}:\s*)?when this card attacks,\s*add up to (\d+) (.+?) cards? from your deck and/or life to your hand",
+    re.IGNORECASE,
+)
 _SELF_AEGIS_PLACE_TOP_N_FROM_OPPONENT_DECK_IF_NO_OTHER_OWNER_MATCHING_RE = re.compile(
     r"when this card activates \[aegis\],\s*if there are no (.+?) cards? in play in your battle area other than this card,\s*place (\d+) cards? from the top of your opponent'?s deck in their drop area",
     re.IGNORECASE,
@@ -635,6 +639,10 @@ _ACTIVATE_BATTLE_SWITCH_UP_TO_N_OWNER_BATTLE_ACTIVE_RE = re.compile(
 _ACTIVATE_MAIN_CHOOSE_ALL_OWNER_BATTLE_GAIN_KEYWORD_UNTIL_OPP_TURN_END_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,300}?choose all (.+?) cards? in your battle area\.\s*they gain \[([^\]]+)\].{0,160}?until the end of your opponent'?s next turn"
 )
+_ACTIVATE_MAIN_CHOOSE_ALL_OWNER_BATTLES_WITH_BOTH_TRAITS_GAIN_POWER_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?choose all of your battle cards? with both (.+?) and (.+?) and they get \+(\d+) power for the turn",
+    re.IGNORECASE,
+)
 _ACTIVATE_MAIN_GRANT_NEXT_EX_EVOLVE_FROM_DROP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,320}?the next time you activate \[ex-evolve\] on your (.+?) card during this turn,\s*it can also activate from (?:its|their) owner'?s drop"
 )
@@ -859,6 +867,10 @@ _COUNTER_ATTACK_DRAW_AND_SEND_UP_TO_ONE_EACH_FROM_ALL_BATTLES_TO_WARP_RE = re.co
 )
 _COUNTER_ATTACK_PLAY_UP_TO_N_SKILLLESS_FROM_HAND_REST_REDIRECT_RE = re.compile(
     r"\[counter(?::)?\s*attack\]\s*choose up to (\d+) skill-less (.+?) card in your hand with an energy cost of (\d+) or less and play it in rest mode\.\s*if you played a card,\s*it becomes the target of attack",
+    re.IGNORECASE,
+)
+_COUNTER_ATTACK_PLAY_UP_TO_N_FROM_OWNER_DROP_NEGATE_SKILLS_RE = re.compile(
+    r"\[counter(?::)?\s*attack\]\s*negate the attack\.\s*if your leader card is a (.+?) card,\s*play up to (\d+) (.+?) card with an energy cost of (\d+) from your drop area with its skills negated for the turn",
     re.IGNORECASE,
 )
 _COUNTER_ATTACK_LIMIT_OPPONENT_ATTACKS_IF_OPPONENT_HAS_SKILLLESS_BATTLE_OR_UNISON_RE = re.compile(
@@ -1270,6 +1282,16 @@ _ACTIVATE_MAIN_ADD_SELF_FROM_OWNER_DROP_TO_HAND_RE = re.compile(
 
 def _normalize_text(raw: str | None) -> str:
     text = str(raw or "")
+    text = (
+        text.replace("â‰ª", "≪")
+        .replace("â‰«", "≫")
+        .replace("â€”", "—")
+        .replace("â€“", "–")
+        .replace("â€˜", "'")
+        .replace("â€™", "'")
+        .replace("â€œ", '"')
+        .replace("â€�", '"')
+    )
     text = re.sub(r"<badge[^>]*>\s*([^<]+?)\s*</badge>", lambda m: f"[{m.group(1)}]", text, flags=re.IGNORECASE)
     text = re.sub(r"<br\s*/?>", ". ", text, flags=re.IGNORECASE)
     text = html.unescape(text).lower()
@@ -1324,6 +1346,16 @@ def _split_choose_one_branches(text: str) -> list[str]:
 
 def _split_effect_branches(raw: str | None) -> list[str]:
     text = str(raw or "")
+    text = (
+        text.replace("â‰ª", "≪")
+        .replace("â‰«", "≫")
+        .replace("â€”", "—")
+        .replace("â€“", "–")
+        .replace("â€˜", "'")
+        .replace("â€™", "'")
+        .replace("â€œ", '"')
+        .replace("â€�", '"')
+    )
     text = re.sub(r"<badge[^>]*>\s*([^<]+?)\s*</badge>", lambda m: f"[{m.group(1)}]", text, flags=re.IGNORECASE)
     text = html.unescape(text)
     if not text.strip():
@@ -1362,6 +1394,25 @@ def _normalize_extracted_keywords(raw: str | None) -> str:
     if matches:
         return ",".join(matches)
     return str(raw or "").strip().lower()
+
+
+def _clean_extracted_label(raw: str | None) -> str:
+    text = str(raw or "").strip()
+    text = re.sub(r"^[^0-9A-Za-z.]+", "", text)
+    text = re.sub(r"[^0-9A-Za-z.: '\-/]+$", "", text)
+    text = re.sub(r"\s+", " ", text).strip(" -/,'")
+    return text.title()
+
+
+def _extract_symbol_wrapped_values(raw: str | None) -> list[str]:
+    return [
+        cleaned
+        for cleaned in (
+            _clean_extracted_label(match)
+            for match in re.findall(r"(?:≪|â‰ª|\?)\s*([^≫â‰«?]+?)\s*(?:≫|â‰«|\?)", str(raw or ""), re.IGNORECASE)
+        )
+        if cleaned
+    ]
 
 
 def _extract_token_stats(
@@ -1452,13 +1503,13 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
     if m_leader_traits:
         raw_traits = m_leader_traits.group(1)
         if "<" in raw_traits:
-            traits = [part.strip().title() for part in re.findall(r"<([^>]+)>", raw_traits) if part.strip()]
+            traits = [_clean_extracted_label(part) for part in re.findall(r"<([^>]+)>", raw_traits) if _clean_extracted_label(part)]
         elif "{" in raw_traits:
-            traits = [part.strip().title() for part in re.findall(r"\{([^}]+)\}", raw_traits) if part.strip()]
-        elif "≪" in raw_traits and "≫" in raw_traits:
-            traits = [part.strip().title() for part in re.findall(r"≪([^≫]+)≫", raw_traits) if part.strip()]
+            traits = [_clean_extracted_label(part) for part in re.findall(r"\{([^}]+)\}", raw_traits) if _clean_extracted_label(part)]
+        elif any(token in raw_traits for token in ("≪", "≫", "â‰ª", "â‰«", "?")):
+            traits = _extract_symbol_wrapped_values(raw_traits)
         else:
-            traits = [part.strip().title() for part in re.split(r"\bor\b|/|,", raw_traits) if part.strip()]
+            traits = [_clean_extracted_label(part) for part in re.split(r"\bor\b|/|,", raw_traits) if _clean_extracted_label(part)]
         if traits:
             params["required_leader_traits"] = ",".join(traits)
     m_energy = re.search(r"\byou have (\d+) or more energy", text)
@@ -1683,17 +1734,12 @@ def _descriptor_filters(descriptor: str, text: str) -> dict[str, int | str | boo
     params: dict[str, int | str | bool] = {}
     if "[dragon ball]" in descriptor_lc:
         params["required_runtime_labels"] = "dragon ball"
-    raw_required_traits = sorted(
-        {
-            match.strip().title()
-            for match in re.findall(r"(?:≪|â‰ª)\s*([^≫]+?)\s*(?:≫|â‰«)", descriptor, re.IGNORECASE)
-            if match.strip()
-        }
-    )
-    raw_required_characters = sorted({match.strip().title() for match in re.findall(r"<([^>]+)>", descriptor) if match.strip()})
+    raw_required_traits = sorted(set(_extract_symbol_wrapped_values(descriptor)))
+    raw_required_characters = sorted({_clean_extracted_label(match) for match in re.findall(r"<([^>]+)>", descriptor) if _clean_extracted_label(match)})
     m_character_name_requirement = re.search(r"with <([^>]+)> in (?:its|their) character name", descriptor, re.IGNORECASE)
     if m_character_name_requirement:
-        raw_required_characters = sorted({*raw_required_characters, m_character_name_requirement.group(1).strip().title()})
+        cleaned_character = _clean_extracted_label(m_character_name_requirement.group(1))
+        raw_required_characters = sorted({*raw_required_characters, cleaned_character} if cleaned_character else set(raw_required_characters))
     m_cost = re.search(r"energy costs? of (\d+) or less", descriptor_lc)
     if m_cost is None:
         m_cost = re.search(r"energy cost of (\d+) or less", descriptor_lc)
@@ -1918,6 +1964,262 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
     limit = _limit_per_turn(text)
 
     if (
+        "if your leader card is a mono-red ≪universe 7≫ card:" in text.lower()
+        and "when this card is used in a combo from your hand" in text.lower()
+        and "your leader card get +1000 power for the battle" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="auto_buff_owner_leader_for_battle_on_combo",
+                handler_params={
+                    "power_delta": 1000,
+                    "requires_comboed_from": "hand",
+                    "leader_allowed_colors": "red",
+                    "leader_required_traits": "Universe 7",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] negate the attack and play this card." in text.lower()
+        and "during a battle in which one of your battle cards attacks an opponent's battle card" in text.lower()
+        and "when this card is used in a combo, it gets +5000 combo power for the battle" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="auto_self_gain_combo_power_on_combo",
+                handler_params={
+                    "combo_power_delta": 5000,
+                    "requires_owner_battle_attacking_opponent_battle": True,
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is a green <dr.uiro> card" in text.lower()
+        and "choose up to 1 <dr.kochin> or" in text.lower()
+        and "frenzied warrior" in text.lower()
+        and "energy cost of 2 or less in your hand and play it" in text.lower()
+        and "choose up to 1 <dr.uiro> card with an energy cost of 4 or less in your hand and play it" in text.lower()
+        and "place them under a {dr.uiro's lab} in your battle area" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_name_or_trait_from_owner_hand",
+                handler_params={
+                    "marker_delta": 1,
+                    "max_targets": 1,
+                    "max_cost": 2,
+                    "required_name_contains_any": "DR.KOCHIN",
+                    "required_traits_any": "Frenzied Warrior",
+                    "required_card_type": "BATTLE",
+                    "leader_allowed_colors": "green",
+                    "leader_required_characters": "Dr.Uiro",
+                    "requires_effect_choice_match": True,
+                },
+                source_text="[+1][Activate: Main] If your Leader Card is a green <Dr.Uiro> card, choose up to 1 <Dr.Kochin> or ≪Frenzied Warrior≫ card with an energy cost of 2 or less in your hand and play it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_from_owner_hand_then_place_up_to_n_opponent_battle_under_named_host",
+                handler_params={
+                    "marker_delta": -2,
+                    "max_targets": 1,
+                    "max_cost": 4,
+                    "required_name_contains": "DR.UIRO",
+                    "required_card_type": "BATTLE",
+                    "place_max_targets": 2,
+                    "place_max_cost": 5,
+                    "host_required_name_contains": "DR.UIRO'S LAB",
+                    "host_required_card_type": "BATTLE",
+                    "requires_effect_choice_match": True,
+                },
+                source_text="[-2][Activate: Main] Choose up to 1 <Dr.Uiro> card with an energy cost of 4 or less in your hand and play it. If you do, choose up to 2 of your opponent's Battle Cards with energy costs of 5 or less and place them under a {Dr.Uiro's Lab} in your Battle Area.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][spirit boost x]" in text.lower()
+        and "if your leader card is a red" in text.lower()
+        and "universe 11" in text.lower()
+        and "negate the attack, add up to 1 red <jiren> card with an [evolve] skill" in text.lower()
+        and "if you removed a marker from one of your red unison cards using this skill" in text.lower()
+        and "card with an energy cost of 1 in your drop area and play it in rest mode" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_add_up_to_n_from_owner_deck_to_hand_then_play_from_drop_if_spirit_boost",
+                handler_params={
+                    "max_add": 1,
+                    "add_allowed_colors": "red",
+                    "add_required_characters": "Jiren",
+                    "add_required_skill_text_contains": "[evolve]",
+                    "add_max_cost": 5,
+                    "shuffle_deck_after": True,
+                    "requires_spirit_boost_marker_removed": True,
+                    "play_max_targets": 1,
+                    "play_allowed_colors": "red",
+                    "play_required_traits": "Universe 11",
+                    "play_exact_cost": 1,
+                    "play_resting": True,
+                    "leader_allowed_colors": "red",
+                    "leader_required_traits": "Universe 11",
+                },
+                source_text="[Counter: Attack][Spirit Boost X] If your Leader Card is a red ≪Universe 11≫ card: Negate the attack, add up to 1 red <Jiren> card with an [Evolve] skill and an energy cost of 5 or less from your deck to your hand, then shuffle your deck. If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 red ≪Universe 11≫ card with an energy cost of 1 in your Drop Area and play it in Rest Mode with its skills negated for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is a ≪shenron≫ card" in text.lower()
+        and "when this card is played, add up to 1 [dragon ball] card from your deck or drop area to your hand" in text.lower()
+        and "place 7 [dragon ball] cards from your drop area under this card" in text.lower()
+        and "choose up to 1 {twin onslaught ss4 son goku} in your hand and play it on top of this card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_add_up_to_n_dragon_ball_from_owner_deck_or_drop_to_hand_on_play",
+                handler_params={
+                    "max_targets": 1,
+                    "required_runtime_labels": "dragon ball",
+                    "leader_required_traits": "Shenron",
+                    "shuffle_deck_after": True,
+                },
+                source_text="[Auto] If your Leader Card is a ≪Shenron≫ card: When this card is played, add up to 1 [Dragon Ball] card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_place_n_dragon_ball_from_owner_drop_under_self_then_play_named_from_owner_hand_on_top",
+                handler_params={
+                    "drop_under_count": 7,
+                    "required_runtime_labels": "dragon ball",
+                    "max_targets": 1,
+                    "required_name_contains": "TWIN ONSLAUGHT SS4 SON GOKU",
+                    "required_card_type": "BATTLE",
+                    "leader_allowed_colors": "green",
+                    "leader_required_traits": "Shenron",
+                },
+                source_text="[Activate: Main]((Green))((Green)), if your Leader Card is a green ≪Shenron≫ card and you place 7 [Dragon Ball] cards from your Drop Area under this card: Choose up to 1 {Twin Onslaught SS4 Son Goku} in your hand and play it on top of this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] negate the attack and play this card." in text.lower()
+        and "if it's your opponent's turn" in text.lower()
+        and "when this card is used in a combo" in text.lower()
+        and "choose up to 1 <trunks: future> card in your battle area and switch it to active mode" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="auto_switch_up_to_n_owner_battle_active_on_combo",
+                handler_params={
+                    "max_targets": 1,
+                    "required_characters": "Trunks: Future",
+                    "requires_opponent_turn": True,
+                },
+                source_text="[Auto] If it's your opponent's turn: When this card is used in a combo, choose up to 1 <Trunks: Future> card in your Battle Area and switch it to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is a red" in text.lower()
+        and "frieza's army" in text.lower()
+        and "you have 2 or more energy" in text.lower()
+        and "choose 1 card in your hand and discard it" in text.lower()
+        and "when this card is played from your hand" in text.lower()
+        and "activate up to 1 {frieza's spaceship} from your deck" in text.lower()
+        and "when this card is ko'd by your leader card's skill" in text.lower()
+        and "mono-red <frieza> card with an energy cost of 5 in your hand and play it" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_discard_n_from_owner_hand_activate_up_to_n_named_field_extra_from_owner_deck_on_play",
+                handler_params={
+                    "discard_count": 1,
+                    "max_targets": 1,
+                    "required_name_contains": "FRIEZA'S SPACESHIP",
+                    "required_card_type": "EXTRA",
+                    "requires_field_keyword": True,
+                    "played_from": "hand",
+                    "leader_allowed_colors": "red",
+                    "leader_required_traits": "Frieza's Army",
+                    "min_owner_energy": 2,
+                    "shuffle_deck_after": True,
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_play_up_to_n_from_owner_hand_on_self_ko",
+                handler_params={
+                    "max_targets": 1,
+                    "allowed_colors": "red",
+                    "required_characters": "Frieza",
+                    "max_cost": 5,
+                    "require_mono_color": True,
+                    "min_owner_matching_energy": 3,
+                    "required_energy_colors": "red",
+                    "required_ko_cause": "leader_skill",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
         "look at up to 7 cards from the top of your deck" in text.lower()
         and "evil wizard" in text.lower()
         and "demon realm race" in text.lower()
@@ -1938,6 +2240,201 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     "leader_allowed_colors": "black",
                     "leader_required_traits": "Demon Realm Race",
                 },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] negate the attack and play this card." in text.lower()
+        and "if your leader card is a ≪universe 6≫ card and it's your opponent's turn, reduce the energy cost of this card in your hand by 2." in text.lower()
+        and "if your leader card is a blue <kale> card: when this card is played, you may choose 1 card in your hand and discard it." in text.lower()
+        and "your opponent can't attack with battle cards with energy costs greater than their current energy for the turn unless they choose 2 cards in their hand and place them at the bottom of their deck each time." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader Card is a ≪Universe 6≫ card and it's your opponent's turn, reduce the energy cost of this card in your hand by 2.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_discard_n_from_owner_hand_then_limit_opponent_high_cost_battle_attacks",
+                handler_params={
+                    "discard_count": 1,
+                    "opponent_hand_bottom_deck_count": 2,
+                    "min_cost_greater_than_current_energy": 1,
+                    "leader_allowed_colors": "blue",
+                    "leader_required_characters": "Kale",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] play this card." in text.lower()
+        and "[permanent] during your opponent's turn, reduce the energy cost of this card in your hand by 1." in text.lower()
+        and "if your leader card is a black <trunks: xeno>-only card and you choose 1 card in your hand and send it to your warp: when this card is played," in text.lower()
+        and "your opponent can't attack with battle cards for the turn unless they choose 2 cards in their hand and discard them each time." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] During your opponent's turn, reduce the energy cost of this card in your hand by 1.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_send_n_from_owner_hand_to_warp_then_limit_opponent_battle_attacks",
+                handler_params={
+                    "warp_count": 1,
+                    "opponent_hand_discard_count": 2,
+                    "leader_allowed_colors": "black",
+                    "leader_required_characters": "Trunks: Xeno",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] switch up to 1 red <great priest> card in your leader area to active mode." in text.lower()
+        and "[permanent] if there are 4 or more colors among cards in your energy and battle area, you can activate this card's [counter] skill from your hand without paying its energy cost." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If there are 4 or more colors among cards in your energy and Battle Area, you can activate this card's [Counter] skill from your hand without paying its energy cost.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_switch_up_to_n_owner_leader_active",
+                handler_params={
+                    "max_targets": 1,
+                    "leader_allowed_colors": "red",
+                    "leader_required_characters": "Great Priest",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] negate the attack and play this card." in text.lower()
+        and "if a <son gohan: adolescence> card is in play in your battle area, this card gains [blocker] for the turn." in text.lower()
+        and "[permanent][bond 2] ≪heroine≫: this card gets +9000 power." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent][Bond 2] ≪Heroine≫: This card gets +9000 power.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_self_gain_power_for_turn_on_play",
+                handler_params={
+                    "grant_keyword": "Blocker",
+                    "required_owner_battle_required_characters": "Son Gohan: Adolescence",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][limit 1] if your leader card is red: negate the attack, then play this card in rest mode." in text.lower()
+        and "if you negated a leader card's attack with this skill, your opponent can't attack with their leader card for the turn." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self_attack_restriction",
+                handler_params={
+                    "requires_leader": "red",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][spirit boost 1] play this card." in text.lower()
+        and "if it's your opponent's turn and they have a skill-less battle card or unison card in play, reduce the energy cost of this card in your hand by 1." in text.lower()
+        and "when this card is played, choose up to 1 of your opponent's battle cards with an energy cost of 4 or less and place it under your leader card." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack][Spirit Boost 1] Play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If it's your opponent's turn and they have a skill-less Battle Card or Unison Card in play, reduce the energy cost of this card in your hand by 1.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_place_up_to_n_opponent_battle_under_owner_leader_on_play",
+                handler_params={
+                    "max_targets": 1,
+                    "max_cost": 4,
+                    "leader_allowed_colors": "black",
+                    "leader_required_characters": "Fin",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack] negate the attack, and you don't take damage from your opponent's non-keyword skills for the turn." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_prevent_nonkeyword_skill_damage_for_turn",
+                handler_params={},
                 source_text=text,
                 once_per_turn=once,
                 limit_per_turn=limit,
@@ -2842,6 +3339,29 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                     trigger="owner_battle_attacks",
                     handler_id="auto_owner_battle_gain_power_then_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_attack",
                     handler_params=params,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_owner_leader_attack_add_from_deck_or_life = _OWNER_LEADER_ATTACKS_ADD_UP_TO_N_FROM_OWNER_DECK_AND_OR_LIFE_TO_HAND_RE.search(branch)
+        if m_owner_leader_attack_add_from_deck_or_life and card_type == "LEADER":
+            descriptor = m_owner_leader_attack_add_from_deck_or_life.group(2).lower()
+            extra = _extract_common_conditions(branch)
+            params = {
+                "max_targets": int(m_owner_leader_attack_add_from_deck_or_life.group(1)),
+                "source_pool": "deck_or_life",
+                **_descriptor_filters(descriptor, branch),
+                **extra,
+            }
+            if "shuffle any areas you looked through" in branch.lower():
+                params["shuffle_searched_zones"] = True
+            rules.append(
+                EffectRule(
+                    trigger="owner_leader_attacks",
+                    handler_id="auto_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_owner_leader_attack",
+                    handler_params=params,
+                    source_text=branch,
                     once_per_turn=once,
                     limit_per_turn=limit,
                 )
@@ -5419,6 +5939,29 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
+        m_activate_main_all_both_traits_power = _ACTIVATE_MAIN_CHOOSE_ALL_OWNER_BATTLES_WITH_BOTH_TRAITS_GAIN_POWER_RE.search(branch)
+        if m_activate_main_all_both_traits_power:
+            extra = _extract_common_conditions(branch)
+            trait_one = _clean_extracted_label(m_activate_main_all_both_traits_power.group(1))
+            trait_two = _clean_extracted_label(m_activate_main_all_both_traits_power.group(2))
+            power_delta = int(m_activate_main_all_both_traits_power.group(3))
+            rules.append(
+                EffectRule(
+                    trigger="self_activate_extra_from_hand" if is_extra else "self_activate_main",
+                    handler_id="activate_buff_owner_battle_cards",
+                    handler_params={
+                        "target_policy": "all",
+                        "target_scope": "owner_battle",
+                        "max_targets": 99,
+                        "power_delta": power_delta,
+                        "required_all_traits": f"{trait_one},{trait_two}",
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
         m_activate_main_choose_owner_leader_or_battle_gain_power_and_keyword = (
             _ACTIVATE_MAIN_CHOOSE_OWNER_LEADER_OR_BATTLE_GAIN_POWER_AND_KEYWORD_FOR_TURN_RE.search(branch)
         )
@@ -7346,6 +7889,38 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                         "max_cost": max_cost,
                         "event_requires_skill_less": True,
                         "rest_mode": True,
+                        **extra,
+                    },
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+        m_counter_play_from_drop_negated = _COUNTER_ATTACK_PLAY_UP_TO_N_FROM_OWNER_DROP_NEGATE_SKILLS_RE.search(branch)
+        if m_counter_play_from_drop_negated:
+            leader_descriptor = str(m_counter_play_from_drop_negated.group(1) or "").strip().lower()
+            descriptor = str(m_counter_play_from_drop_negated.group(3) or "").strip().lower()
+            filters = _descriptor_filters(descriptor, branch)
+            extra = _extract_common_conditions(branch)
+            leader_filters = _descriptor_filters(leader_descriptor, branch)
+            if "required_traits" in leader_filters:
+                extra["required_leader_traits"] = str(leader_filters.get("required_traits", ""))
+            if "required_characters" in leader_filters:
+                extra["leader_required_characters"] = str(leader_filters.get("required_characters", ""))
+            if "allowed_colors" in leader_filters:
+                extra["required_leader_colors"] = str(leader_filters.get("allowed_colors", ""))
+            rules.append(
+                EffectRule(
+                    trigger="counter_attack",
+                    handler_id="counter_play_up_to_n_from_owner_drop_negate_skills_for_turn",
+                    handler_params={
+                        "max_targets": int(m_counter_play_from_drop_negated.group(2)),
+                        "max_cost": int(m_counter_play_from_drop_negated.group(4)),
+                        "allowed_colors": str(filters.get("allowed_colors", "")),
+                        "required_traits": str(filters.get("required_traits", "")),
+                        "required_characters": str(filters.get("required_characters", "")),
+                        "required_name_contains": str(filters.get("required_name_contains", "")),
+                        "negate_skills": True,
                         **extra,
                     },
                     once_per_turn=once,

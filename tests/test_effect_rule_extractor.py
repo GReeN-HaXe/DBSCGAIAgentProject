@@ -759,6 +759,46 @@ def test_extract_exact_clone_token_combo_power_line() -> None:
     assert "requires_comboed_from" not in rule.handler_params
 
 
+def test_extract_exact_son_gohan_universe_7_challenger_combo_buff() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a mono-red \u226aUniverse 7\u226b card: "
+        "When this card is used in a combo from your hand, you may have your Leader Card get +1000 power for the battle."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(r for r in rules if r.handler_id == "auto_buff_owner_leader_for_battle_on_combo")
+    assert rule.trigger == "self_comboed"
+    assert rule.handler_params["power_delta"] == 1000
+    assert rule.handler_params["requires_comboed_from"] == "hand"
+    assert rule.handler_params["leader_allowed_colors"] == "red"
+    assert rule.handler_params["leader_required_traits"] == "Universe 7"
+
+
+def test_extract_exact_dodoria_entering_the_fray_rules() -> None:
+    card = _card(
+        "[Auto] If your Leader Card is a red \u226aFrieza's Army\u226b card, you have 2 or more energy, "
+        "and you choose 1 card in your hand and discard it: When this card is played from your hand, "
+        "activate up to 1 {Frieza's Spaceship} from your deck, then shuffle your deck.\n"
+        "[Auto]((Red)), if you have 3 or more red energy: When this card is KO'd by your Leader Card's skill, "
+        "choose up to 1 mono-red <Frieza> card with an energy cost of 5 in your hand and play it."
+    )
+    rules = extract_effect_rules_from_card(card)
+    field_rule = next(
+        r
+        for r in rules
+        if r.handler_id == "auto_discard_n_from_owner_hand_activate_up_to_n_named_field_extra_from_owner_deck_on_play"
+    )
+    assert field_rule.trigger == "self_played"
+    assert field_rule.handler_params["discard_count"] == 1
+    assert field_rule.handler_params["required_name_contains"] == "FRIEZA'S SPACESHIP"
+    assert field_rule.handler_params["leader_required_traits"] == "Frieza's Army"
+    ko_rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_owner_hand_on_self_ko")
+    assert ko_rule.trigger == "self_koed"
+    assert ko_rule.handler_params["allowed_colors"] == "red"
+    assert ko_rule.handler_params["required_characters"] == "Frieza"
+    assert ko_rule.handler_params["max_cost"] == 5
+    assert ko_rule.handler_params["required_energy_colors"] == "red"
+
+
 def test_extract_exact_pincer_attack_android_18_combo_line() -> None:
     card = _card(
         "[Auto] If your Leader Card is a blue <Android 18> card and you choose 1 of your opponent's Clone Tokens and remove it from the game: "
@@ -5736,6 +5776,52 @@ def test_extract_yajirobe_confronting_invasion_rules() -> None:
     assert rule.handler_params["draw_amount"] == 1
 
 
+def test_extract_dyspo_thwarting_the_enemy_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Limit 1] If your Leader Card is red: Negate the attack, then play this card in Rest Mode. "
+            "If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn.<br>"
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "counter_attack"
+        and r.handler_id == "counter_negate_attack_play_self_attack_restriction"
+    )
+    assert rule.handler_params["requires_leader"] == "red"
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_skill_hunter_towa_rules() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Spirit Boost 1] Play this card.<br>"
+            "[Permanent] If it's your opponent's turn and they have a skill-less Battle Card or Unison Card in play, reduce the energy cost of this card in your hand by 1.<br>"
+            "[Auto] If your Leader Card is a black &lt;Fin&gt; card: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it under your Leader Card."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    counter_rule = next(r for r in rules if r.trigger == "counter_attack" and r.handler_id == "noop_auto")
+    assert counter_rule.source_text == "[Counter: Attack][Spirit Boost 1] Play this card."
+    permanent_rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "noop_auto")
+    assert "reduce the energy cost of this card in your hand by 1" in permanent_rule.source_text.lower()
+    auto_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_played"
+        and r.handler_id == "auto_place_up_to_n_opponent_battle_under_owner_leader_on_play"
+    )
+    assert auto_rule.handler_params["max_targets"] == 1
+    assert auto_rule.handler_params["max_cost"] == 4
+    assert auto_rule.handler_params["leader_allowed_colors"] == "black"
+    assert auto_rule.handler_params["leader_required_characters"] == "Fin"
+
+
 def test_extract_self_added_to_z_energy_can_switch_opponent_board_rest_rule() -> None:
     card = _card(
         "[Dual Attack]\n"
@@ -6773,6 +6859,52 @@ def test_extract_owner_battle_attack_gain_power_then_add_dragon_ball_from_deck_o
     assert rule.handler_params["shuffle_searched_zones"] is True
 
 
+def test_extract_bt16_zamasu_attack_add_dragon_ball_from_deck_and_or_life() -> None:
+    card = replace(
+        _card(
+            "<Badge variant=\"blue\">Auto</Badge> When this card attacks, add up to 2 <Badge variant=\"red\">Dragon Ball</Badge> cards from your deck and/or life to your hand; shuffle any areas you looked through using this skill.\r\n"
+            "<Badge variant=\"yellow\">Wish</Badge> When your life is at 3 or less or there are 7 <Badge variant=\"red\">Dragon Ball</Badge> cards in your Drop Area: Draw 1 card, then place all <Badge variant=\"red\">Dragon Ball</Badge> cards from your Drop Area at the bottom of your deck in any order and flip this card over."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "owner_leader_attacks"
+        and r.handler_id == "auto_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_owner_leader_attack"
+    )
+    assert rule.handler_params["max_targets"] == 2
+    assert rule.handler_params["source_pool"] == "deck_or_life"
+    assert rule.handler_params["required_runtime_labels"] == "dragon ball"
+    assert rule.handler_params["shuffle_searched_zones"] is True
+
+
+def test_extract_bt15_universe_6_combination_counter_and_activate_rules() -> None:
+    card = replace(
+        _card(
+            "<Badge variant=\"green\">Counter: Attack</Badge> Negate the attack. If your Leader Card is a ≪Universe 6≫ card, play up to 1 ≪Universe 6≫ card with an energy cost of 1 from your Drop Area with its skills negated for the turn.<br />"
+            "<Badge variant=\"orange\">Activate: Main</Badge><img src=\"/assets/img/dbs_masters/card_parts/blue_ball.png\" alt=\"\" class=\"colorCostBall\">, if your Leader Card is a ≪Universe 6≫ card: Choose all of your Battle Cards with both ≪Saiyan≫ and ≪Universe 6≫ and they get +5000 power for the turn."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    counter_rule = next(r for r in rules if r.trigger == "counter_attack" and r.handler_id == "counter_play_up_to_n_from_owner_drop_negate_skills_for_turn")
+    assert counter_rule.handler_params["max_targets"] == 1
+    assert counter_rule.handler_params["max_cost"] == 1
+    assert counter_rule.handler_params["required_traits"] == "Universe 6"
+    assert counter_rule.handler_params["required_leader_traits"] == "Universe 6"
+    activate_rule = next(
+        r
+        for r in rules
+        if r.trigger == "self_activate_extra_from_hand"
+        and r.handler_id == "activate_buff_owner_battle_cards"
+        and r.handler_params.get("required_all_traits") == "Saiyan,Universe 6"
+    )
+    assert activate_rule.handler_params["target_policy"] == "all"
+    assert activate_rule.handler_params["power_delta"] == 5000
+
+
 def test_extract_self_aegis_mill_if_no_other_matching_owner_battle() -> None:
     card = _card(
         "[Barrier]<br>"
@@ -7266,3 +7398,256 @@ def test_extract_bt15_son_gohan_simian_revenge_from_badge_html() -> None:
     assert play_rule.handler_params["event_required_keywords"] == "blocker"
     assert play_rule.handler_params["event_excluded_traits"] == "Great Ape"
     assert play_rule.handler_params["event_removed_by_opponent_skill"] is True
+
+
+def test_extract_bt15_kale_universe_6_combination_from_badge_html() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] Negate the attack and play this card. <br>"
+            "[Permanent] If your Leader Card is a \u226aUniverse 6\u226b card and it's your opponent's turn, reduce the energy cost of this card in your hand by 2.<br>"
+            "[Auto] If your Leader Card is a blue &lt;Kale&gt; card: When this card is played, you may choose 1 card in your hand and discard it. "
+            "If you do, your opponent can't attack with Battle Cards with energy costs greater than their current energy for the turn unless they choose 2 cards in their hand and place them at the bottom of their deck each time."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    permanent_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert "reduce the energy cost of this card in your hand by 2" in permanent_rule.source_text.lower()
+    auto_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_discard_n_from_owner_hand_then_limit_opponent_high_cost_battle_attacks"
+    )
+    assert auto_rule.handler_params["discard_count"] == 1
+    assert auto_rule.handler_params["opponent_hand_bottom_deck_count"] == 2
+    assert auto_rule.handler_params["leader_allowed_colors"] == "blue"
+    assert auto_rule.handler_params["leader_required_characters"] == "Kale"
+
+
+def test_extract_exact_whis_stalwart_assistance_rules() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] Negate the attack and play this card.\n"
+            "[Auto] During a battle in which one of your Battle Cards attacks an opponent's Battle Card: "
+            "When this card is used in a combo, it gets +5000 combo power for the battle."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    counter_rule = next(rule for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto")
+    assert "negate the attack and play this card" in counter_rule.source_text.lower()
+    combo_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_comboed" and rule.handler_id == "auto_self_gain_combo_power_on_combo"
+    )
+    assert combo_rule.handler_params["combo_power_delta"] == 5000
+    assert combo_rule.handler_params["requires_owner_battle_attacking_opponent_battle"] is True
+
+
+def test_extract_exact_dr_uiro_rebooting_for_revenge_rules() -> None:
+    card = replace(
+        _card(
+            "[+1][Activate: Main] If your Leader Card is a green <Dr.Uiro> card, "
+            "choose up to 1 <Dr.Kochin> or ≪Frenzied Warrior≫ card with an energy cost of 2 or less in your hand and play it.\n"
+            "[-2][Activate: Main] Choose up to 1 <Dr.Uiro> card with an energy cost of 4 or less in your hand and play it. "
+            "If you do, choose up to 2 of your opponent's Battle Cards with energy costs of 5 or less and place them under a {Dr.Uiro's Lab} in your Battle Area."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    plus_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_play_up_to_n_name_or_trait_from_owner_hand"
+    )
+    assert plus_rule.handler_params["marker_delta"] == 1
+    assert plus_rule.handler_params["max_cost"] == 2
+    assert plus_rule.handler_params["required_name_contains_any"] == "DR.KOCHIN"
+    assert plus_rule.handler_params["required_traits_any"] == "Frenzied Warrior"
+    assert plus_rule.handler_params["leader_allowed_colors"] == "green"
+    assert plus_rule.handler_params["leader_required_characters"] == "Dr.Uiro"
+    assert plus_rule.handler_params["requires_effect_choice_match"] is True
+    minus_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_play_up_to_n_from_owner_hand_then_place_up_to_n_opponent_battle_under_named_host"
+    )
+    assert minus_rule.handler_params["marker_delta"] == -2
+    assert minus_rule.handler_params["max_cost"] == 4
+    assert minus_rule.handler_params["required_name_contains"] == "DR.UIRO"
+    assert minus_rule.handler_params["place_max_targets"] == 2
+    assert minus_rule.handler_params["place_max_cost"] == 5
+    assert minus_rule.handler_params["host_required_name_contains"] == "DR.UIRO'S LAB"
+    assert minus_rule.handler_params["requires_effect_choice_match"] is True
+
+
+def test_extract_exact_son_goku_path_to_revival_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto] If your Leader Card is a ≪Shenron≫ card: When this card is played, "
+            "add up to 1 [Dragon Ball] card from your deck or Drop Area to your hand, "
+            "then shuffle your deck if you looked through it.\n"
+            "[Activate: Main]((Green))((Green)), if your Leader Card is a green ≪Shenron≫ card "
+            "and you place 7 [Dragon Ball] cards from your Drop Area under this card: "
+            "Choose up to 1 {Twin Onslaught SS4 Son Goku} in your hand and play it on top of this card."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    auto_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_add_up_to_n_dragon_ball_from_owner_deck_or_drop_to_hand_on_play"
+    )
+    assert auto_rule.handler_params["max_targets"] == 1
+    assert auto_rule.handler_params["required_runtime_labels"] == "dragon ball"
+    assert auto_rule.handler_params["leader_required_traits"] == "Shenron"
+    activate_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_place_n_dragon_ball_from_owner_drop_under_self_then_play_named_from_owner_hand_on_top"
+    )
+    assert activate_rule.handler_params["drop_under_count"] == 7
+    assert activate_rule.handler_params["required_name_contains"] == "TWIN ONSLAUGHT SS4 SON GOKU"
+    assert activate_rule.handler_params["leader_allowed_colors"] == "green"
+    assert activate_rule.handler_params["leader_required_traits"] == "Shenron"
+
+
+def test_extract_exact_vegeta_fatherly_encouragement_rules() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] Negate the attack and play this card.\n"
+            "[Auto] If it's your opponent's turn: When this card is used in a combo, "
+            "choose up to 1 <Trunks: Future> card in your Battle Area and switch it to Active Mode."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    counter_rule = next(rule for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto")
+    assert "negate the attack and play this card" in counter_rule.source_text.lower()
+    combo_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_comboed" and rule.handler_id == "auto_switch_up_to_n_owner_battle_active_on_combo"
+    )
+    assert combo_rule.handler_params["max_targets"] == 1
+    assert combo_rule.handler_params["required_characters"] == "Trunks: Future"
+    assert combo_rule.handler_params["requires_opponent_turn"] is True
+
+
+def test_extract_exact_bt14_source_of_power_rules() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack][Spirit Boost X] (Remove X markers from your Unison Card to activate this skill.) "
+            "If your Leader Card is a red ≪Universe 11≫ card: Negate the attack, add up to 1 red <Jiren> card "
+            "with an [Evolve] skill and an energy cost of 5 or less from your deck to your hand, then shuffle your deck. "
+            "If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 red ≪Universe 11≫ "
+            "card with an energy cost of 1 in your Drop Area and play it in Rest Mode with its skills negated for the turn."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "counter_attack"
+        and r.handler_id == "counter_add_up_to_n_from_owner_deck_to_hand_then_play_from_drop_if_spirit_boost"
+    )
+    assert rule.handler_params["max_add"] == 1
+    assert rule.handler_params["add_required_characters"] == "Jiren"
+    assert rule.handler_params["add_required_skill_text_contains"] == "[evolve]"
+    assert rule.handler_params["add_max_cost"] == 5
+    assert rule.handler_params["requires_spirit_boost_marker_removed"] is True
+    assert rule.handler_params["play_required_traits"] == "Universe 11"
+    assert rule.handler_params["play_exact_cost"] == 1
+    assert rule.handler_params["play_resting"] is True
+    assert rule.handler_params["leader_required_traits"] == "Universe 11"
+
+
+def test_extract_bt15_videl_call_of_justice_from_badge_html() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] Negate the attack and play this card. If a &lt;Son Gohan: Adolescence&gt; card is in play in your Battle Area, this card gains [Blocker] for the turn.<br>"
+            "[Permanent][Bond 2] \u226aHeroine\u226b: This card gets +9000 power."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    permanent_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert "[bond 2]" in permanent_rule.source_text.lower()
+    blocker_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_self_gain_power_for_turn_on_play"
+    )
+    assert blocker_rule.handler_params["grant_keyword"] == "Blocker"
+    assert blocker_rule.handler_params["required_owner_battle_required_characters"] == "Son Gohan: Adolescence"
+
+
+def test_extract_bt16_pan_challenging_a_demon_god_from_badge_html() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] Play this card.<br>"
+            "[Permanent] During your opponent's turn, reduce the energy cost of this card in your hand by 1.<br>"
+            "[Auto] If your Leader Card is a black &lt;Trunks: Xeno&gt;-only card and you choose 1 card in your hand and send it to your Warp: "
+            "When this card is played, your opponent can't attack with Battle Cards for the turn unless they choose 2 cards in their hand and discard them each time."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    permanent_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert "reduce the energy cost of this card in your hand by 1" in permanent_rule.source_text.lower()
+    auto_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_send_n_from_owner_hand_to_warp_then_limit_opponent_battle_attacks"
+    )
+    assert auto_rule.handler_params["warp_count"] == 1
+    assert auto_rule.handler_params["opponent_hand_discard_count"] == 2
+    assert auto_rule.handler_params["leader_allowed_colors"] == "black"
+    assert auto_rule.handler_params["leader_required_characters"] == "Trunks: Xeno"
+
+
+def test_extract_bt16_spectate_from_badge_html() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] Switch up to 1 red &lt;Great Priest&gt; card in your Leader Area to Active Mode.<br>"
+            "[Permanent] If there are 4 or more colors among cards in your energy and Battle Area, you can activate this card's [Counter] skill from your hand without paying its energy cost."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    permanent_rule = next(rule for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto")
+    assert "without paying its energy cost" in permanent_rule.source_text.lower()
+    counter_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "counter_attack"
+        and rule.handler_id == "counter_switch_up_to_n_owner_leader_active"
+    )
+    assert counter_rule.handler_params["max_targets"] == 1
+    assert counter_rule.handler_params["leader_allowed_colors"] == "red"
+    assert counter_rule.handler_params["leader_required_characters"] == "Great Priest"
+
+
+def test_extract_bt16_damage_negation_counter_rule() -> None:
+    card = replace(
+        _card("[Counter: Attack] Negate the attack, and you don't take damage from your opponent's non-keyword skills for the turn."),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        r
+        for r in rules
+        if r.trigger == "counter_attack"
+        and r.handler_id == "counter_prevent_nonkeyword_skill_damage_for_turn"
+    )
+    assert "don't take damage" in rule.source_text.lower()

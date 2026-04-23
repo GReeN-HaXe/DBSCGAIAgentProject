@@ -4691,3 +4691,140 @@ When adding a new TODO:
   - prefer the matching black `≪Evil Wizard≫` / `≪Demon Realm Race≫` / `≪Demon God≫` add-to-hand branch when available
   - otherwise, if you have no Unison in play, play a matching black no-specified-cost `20000` power Unison from the same looked cards with `1` marker
 - Added focused extractor and exact phase4 coverage for both the hand-add branch and the no-Unison Unison-play branch.
+
+## BT15 Kale, Universe 6 Combination slice complete
+
+- Added exact extraction for `BT15-043 Kale, Universe 6 Combination`:
+  - `[Permanent]` noop coverage for the opponent-turn hand cost reduction under a `≪Universe 6≫` leader
+  - `self_played -> auto_discard_n_from_owner_hand_then_limit_opponent_high_cost_battle_attacks`
+- Added runtime support for the played-card auto:
+  - discard `1` from hand on play
+  - for the rest of the turn, opponent Battle Cards with energy costs greater than their current energy can only attack if their owner bottoms `2` cards from hand each time
+- Added shared battle-attack hand-bottom-deck tax support and wired it into attack legality plus attack declaration resolution, so illegal high-cost Battle attacks disappear when the tax cannot be paid and auto-pay deterministically when it can.
+- Tightened opponent-turn requirement parsing so phrases like `it's your opponent's turn` work correctly during battle windows and other non-main contexts.
+- Added focused extractor and exact phase4 coverage proving the exact card text:
+  - resolves from `[Counter: Attack]` play with the permanent cost reduction active
+  - blocks over-cost Battle attacks when the attacker cannot bottom `2` cards
+  - allows those attacks and bottoms `2` cards when the attacker can pay the tax.
+
+## BT15 Videl, Call of Justice slice complete
+
+- Added exact extraction for `BT15-083 Videl, Call of Justice`:
+  - `[Permanent][Bond 2] ≪Heroine≫` noop coverage
+  - `self_played -> auto_self_gain_power_for_turn_on_play` with `grant_keyword=Blocker`
+- Reused the existing generic counter-play-self runtime so the `[Counter: Attack] Negate the attack and play this card.` branch remains on the shared path instead of adding a duplicate one-off counter handler.
+- Gated the temporary `[Blocker]` grant on the owner already controlling a `<Son Gohan: Adolescence>` Battle Card, using the existing owner-battle requirement matcher.
+- Added focused extractor and exact phase4 coverage proving the exact card text plays from hand as a counter and gains temporary `[Blocker]` when the required `<Son Gohan: Adolescence>` card is already in play.
+
+## BT16 Damage Negation slice complete
+
+- Added exact extraction for `BT16-070 Damage Negation`:
+  - `counter_attack -> counter_prevent_nonkeyword_skill_damage_for_turn`
+- Added runtime support for turn-scoped non-keyword skill damage prevention on the protected player, with cleanup at end of turn.
+- Wired the prevention check into the shared player-damage path so prevented non-keyword skill damage exits cleanly before life is moved.
+- Added focused extractor and exact phase4 coverage proving the counter resolves and prevents subsequent non-keyword skill damage for the rest of the turn.
+
+## BT16 Zamasu slice complete
+
+- Added exact extraction for `BT16-072 Zamasu`:
+  - `owner_leader_attacks -> auto_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_owner_leader_attack`
+- Added runtime support for leader-attack searches that add matching cards from deck and/or life to hand, including optional shuffle of any searched zones.
+- Reused the existing built-in Wish leader path for the draw, Dragon Ball recycle, and leader flip branch.
+- Added focused extractor and exact phase4 coverage proving the leader attack search and exact Wish recycle branch both resolve from the raw card text.
+
+## BT15 Universe 6 Combination slice complete
+
+- Added exact extraction for `BT15-059 Universe 6 Combination`:
+  - `counter_attack -> counter_play_up_to_n_from_owner_drop_negate_skills_for_turn`
+  - `self_activate_extra_from_hand -> activate_buff_owner_battle_cards` with `required_all_traits=Saiyan,Universe 6`
+- Fixed extractor normalization for mojibake trait wrappers so `≪...≫` requirements survive as canonical trait names instead of leaking placeholder punctuation into rule params.
+- Added runtime support for `required_all_traits` in `activate_buff_owner_battle_cards`, so all-trait targeting works for exact-card activate branches instead of widening to any partial match.
+- Added focused extractor and exact phase4 coverage proving:
+  - the counter branch plays a matching `≪Universe 6≫` card with cost `1` from Drop with its skills negated for the turn
+  - the activate branch buffs only owner Battle Cards that have both `≪Saiyan≫` and `≪Universe 6≫`.
+
+## BT16 Pan, Challenging a Demon God slice complete
+
+- Added exact extraction for `BT16-105 Pan, Challenging a Demon God`:
+  - `[Permanent]` noop coverage for the opponent-turn hand cost reduction
+  - `self_played -> auto_send_n_from_owner_hand_to_warp_then_limit_opponent_battle_attacks`
+- Added a shared battle-attack discard-from-hand tax primitive so an opponent can be forced to discard cards from hand each time they attack with Battle Cards for the turn.
+- Wired that tax into both attack legality and attack declaration resolution, matching the existing bottom-deck tax pattern but using Drop instead of deck bottom.
+- Added focused extractor and exact phase4 coverage proving the exact card text:
+  - plays itself from `[Counter: Attack]`
+  - warps `1` owner hand card on play under the black `<Trunks: Xeno>` leader gate
+  - forces the opponent to discard `2` from hand on their next Battle Card attack that turn.
+
+## BT16 Spectate slice complete
+
+- Added exact extraction for `BT16-016 Spectate`:
+  - `[Permanent]` noop coverage for the free-counter condition
+  - `counter_attack -> counter_switch_up_to_n_owner_leader_active`
+- Added a shared free-counter check for cards whose text allows `[Counter]` activation from hand without paying energy when there are `4` or more colors among cards in the owner energy and Battle Area.
+- Added a shared counter handler for switching the owner leader to Active Mode under exact leader filters.
+- Added focused extractor and exact phase4 coverage proving the exact card text:
+  - can be declared from hand for free once the `4`-color condition is met
+  - switches the red `<Great Priest>` leader back to Active Mode on counter resolution.
+
+## BT14 Dyspo, Thwarting the Enemy slice complete
+- added exact extraction for counter_attack -> counter_negate_attack_play_self_attack_restriction`r
+- added Counter alternate hand-cost extraction for Spirit Boost 2 as emove_owner_unison_markers`r
+- added exact runtime support so the counter plays self in Rest Mode and locks the attacking Leader from attacking again that turn
+
+
+## BT15 Skill Hunter Towa slice complete
+- added exact extraction for counter_attack -> noop_auto on the Spirit Boost counter-play line and self_played -> auto_place_up_to_n_opponent_battle_under_owner_leader_on_play`r
+- added counter_from_hand Spirit Boost marker-cost extraction from [Counter: Attack][Spirit Boost N] headers
+- added runtime support for placing up to 1 opponent Battle Card under the owner Leader on play, plus hand-cost reduction gating for opposing skill-less Battle/Unison cards
+
+## P-364 Son Gohan, Universe 7 Challenger slice complete
+- Added exact extraction for `P-364 Son Gohan, Universe 7 Challenger`:
+  - `self_comboed -> auto_buff_owner_leader_for_battle_on_combo`
+- Added runtime support for hand-combo autos that apply battle-scoped power to the owner Leader after leader color/trait gates pass.
+- Added focused extractor and phase4 coverage proving the exact card text buffs a mono-red `Universe 7` Leader by `+1000` for the battle, then clears the battle power modifier after battle resolution.
+
+## P-363 Dodoria, Entering the Fray slice complete
+- Added exact extraction for `P-363 Dodoria, Entering the Fray`:
+  - `self_played -> auto_discard_n_from_owner_hand_activate_up_to_n_named_field_extra_from_owner_deck_on_play`
+  - `self_koed -> auto_play_up_to_n_from_owner_hand_on_self_ko`
+- Added runtime support for the on-play hand-discard cost into named Field Extra activation from deck.
+- Added runtime support for self-KO autos that play a matching Battle Card from hand, including mono-color, color, character, cost, and matching-energy gates.
+- Added focused extractor and phase4 coverage for activating `{Frieza's Spaceship}` from deck and playing a mono-red cost-5 `<Frieza>` from hand after Dodoria is KO'd by a Leader-skill-tagged event.
+
+## P-368 Whis, Stalwart Assistance slice complete
+- Added exact extraction for `P-368 Whis, Stalwart Assistance`:
+  - `counter_attack -> noop_auto`
+  - `self_comboed -> auto_self_gain_combo_power_on_combo`
+- Added runtime gating for combo-power autos that only fire while the owner is attacking with a Battle Card into an opponent Battle Card.
+- Added focused extractor and phase4 coverage proving the exact card text adds `+5000` combo power in the Battle-card-vs-Battle-card case and does not fire when the same Battle Card attacks a Leader.
+
+## P-370 Dr.Uiro, Rebooting for Revenge slice complete
+- Added exact extraction for `P-370 Dr.Uiro, Rebooting for Revenge`:
+  - `self_activate_main -> activate_play_up_to_n_name_or_trait_from_owner_hand`
+  - `self_activate_main -> activate_play_up_to_n_from_owner_hand_then_place_up_to_n_opponent_battle_under_named_host`
+- Added runtime support for the `+1` branch that plays a cost-2-or-less `<Dr.Kochin>` or `Frenzied Warrior` Battle Card from hand under a green `<Dr.Uiro>` leader.
+- Added runtime support for the `-2` branch that plays a cost-4-or-less `<Dr.Uiro>` from hand, then places up to 2 opponent Battle Cards with cost 5 or less under `{Dr.Uiro's Lab}`.
+- Scoped selected public activate-effect propagation so exclusive UNISON branches resolve only the chosen branch without regressing composite activate effects that intentionally resolve multiple handlers.
+- Added focused extractor and phase4 coverage for both UNISON branches.
+
+## P-371 Son Goku, Path to Revival slice complete
+- Added exact extraction for `P-371 Son Goku, Path to Revival`:
+  - `self_played -> auto_add_up_to_n_dragon_ball_from_owner_deck_or_drop_to_hand_on_play`
+  - `self_activate_main -> activate_place_n_dragon_ball_from_owner_drop_under_self_then_play_named_from_owner_hand_on_top`
+- Added runtime support for the on-play `Dragon Ball` search from Drop first, then deck, with a shuffle checkpoint when the deck is searched.
+- Added runtime support for the costed activate branch that places 7 `Dragon Ball` cards from Drop under this card, then plays `{Twin Onslaught SS4 Son Goku}` from hand on top of it.
+- Added focused extractor and phase4 coverage for both the on-play search and the activate-main replacement branch.
+
+## P-372 Vegeta, Fatherly Encouragement slice complete
+- Added exact extraction for `P-372 Vegeta, Fatherly Encouragement`:
+  - `counter_attack -> noop_auto`
+  - `self_comboed -> auto_switch_up_to_n_owner_battle_active_on_combo`
+- Added runtime support for opponent-turn self-combo autos that switch matching owner Battle Cards in the Battle Area to Active Mode.
+- Added focused extractor and phase4 coverage proving the exact card text switches a resting `<Trunks: Future>` during the opponent turn and does not fire during the owner's turn.
+
+## BT14-030 Source of Power slice complete
+- Added exact extraction for `BT14-030 Source of Power`:
+  - `counter_attack -> counter_add_up_to_n_from_owner_deck_to_hand_then_play_from_drop_if_spirit_boost`
+- Added runtime support for the exact counter branch that searches a red `<Jiren>` with `[Evolve]` from deck, shuffles, then plays a red `Universe 11` cost-1 Battle Card from Drop in Rest Mode with skills negated when the Spirit Boost marker cost was paid.
+- Added `Spirit Boost X` skill-cost extraction as deterministic `remove_owner_unison_markers` amount `1` for current engine support.
+- Added focused extractor, skill-cost, and phase4 coverage proving the deck search, marker-cost gate, Drop play, Rest Mode placement, and skill negation.
