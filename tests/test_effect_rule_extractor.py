@@ -7570,6 +7570,34 @@ def test_extract_exact_bt14_source_of_power_rules() -> None:
     assert rule.handler_params["leader_required_traits"] == "Universe 11"
 
 
+def test_extract_exact_bt16_carefree_playtime_rules() -> None:
+    card = replace(
+        _card(
+            "[Counter: Counter] If one of your blue <Beerus> cards is attacking an opponent's Battle Card: "
+            "Negate the [Counter: Attack] and switch up to 1 of your blue energy to Active Mode."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    negate_rule = next(
+        r
+        for r in rules
+        if r.trigger == "counter_attack"
+        and r.handler_id == "counter_negate_counter_attack"
+    )
+    switch_rule = next(
+        r
+        for r in rules
+        if r.trigger == "counter_attack"
+        and r.handler_id == "counter_switch_up_to_n_owner_energy_active_if_owner_battle_attacking_opponent_battle"
+    )
+    assert "negate the [counter: attack]" in negate_rule.source_text.lower()
+    assert switch_rule.handler_params["max_targets"] == 1
+    assert switch_rule.handler_params["allowed_colors"] == "blue"
+    assert switch_rule.handler_params["attacker_allowed_colors"] == "blue"
+    assert switch_rule.handler_params["attacker_required_characters"] == "Beerus"
+
+
 def test_extract_bt15_videl_call_of_justice_from_badge_html() -> None:
     card = replace(
         _card(
@@ -7651,3 +7679,395 @@ def test_extract_bt16_damage_negation_counter_rule() -> None:
         and r.handler_id == "counter_prevent_nonkeyword_skill_damage_for_turn"
     )
     assert "don't take damage" in rule.source_text.lower()
+
+
+def test_extract_exact_p394_android_17_most_valuable_player_rules() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main][Sparking 5](R), if your Leader Card is a red â‰ªUniverse 7â‰« card and you send this card from your Drop Area to your Warp: "
+            "Your Leader Card gains [Invoker] until the end of your next turn."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_grant_owner_leader_keyword_until_owner_next_turn_end"
+    )
+    assert rule.handler_params["grant_keyword"] == "Invoker"
+    assert rule.handler_params["leader_allowed_colors"] == "red"
+    assert rule.handler_params["leader_required_traits"] == "Universe 7"
+    assert rule.handler_params["min_owner_drop"] == 5
+
+
+def test_extract_exact_bt15_mentors_rescue_rules() -> None:
+    card = replace(
+        _card(
+            "[Counter: Play] If your Leader Card is a <Cabba> card: If the Battle Card being played has 20000 power or more, "
+            "play up to 1 blue ≪Universe 7≫ <Vegeta> card with [Blocker] from your deck, negate its non-keyword skills for the game, then shuffle your deck."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "counter_play"
+        and rule.handler_id == "counter_play_from_owner_deck_if_pending_battle_power_at_least_negate_nonkeyword_skills_for_game"
+    )
+    assert rule.handler_params["min_pending_power"] == 20000
+    assert rule.handler_params["leader_required_characters"] == "Cabba"
+    assert rule.handler_params["allowed_colors"] == "blue"
+    assert rule.handler_params["required_traits"] == "Universe 7"
+    assert rule.handler_params["required_characters"] == "Vegeta"
+    assert rule.handler_params["required_keyword"] == "blocker"
+
+
+def test_extract_exact_bt16_ss_vegeta_the_pursuer_rules() -> None:
+    card = replace(
+        _card(
+            "[Critical]\n"
+            "[Auto] Choose 1 Red/Blue multicolor card in your energy: "
+            "At the end of a turn where this card was played from your hand, draw 1 card and switch the chosen card to Active Mode."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_schedule_turn_end_draw_n_and_switch_chosen_owner_energy_active_if_played_from_hand"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["allowed_colors"] == "red,blue"
+    assert rule.handler_params["requires_multicolor"] is True
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_exact_bt16_demon_god_gravy_umbral_might_rules() -> None:
+    card = replace(
+        _card(
+            "[Dark Over Realm 3](2)\n"
+            "[Auto] When this card is played from your hand, it gets +5000 power and [Double Strike] for the turn."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_self_gain_power_for_turn_on_play"
+        and rule.handler_params.get("grant_keyword") == "Double Strike"
+    )
+    assert rule.handler_params["power_delta"] == 5000
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_exact_ex20_cell_startling_assimilation_union_absorb_rule() -> None:
+    card = replace(
+        _card(
+            "[Unique]\n"
+            "[Union Absorb][Limit 1] If your Leader Card is a <Cell> card and you place 1 <Android 17> card from your hand or Drop Area under this card: "
+            "Play up to 1 multicolor <Cell> card with an energy cost of 4 from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it.\n"
+            "[Auto] If your Leader Card is a <Cell> card: When an opponent's Battle Card is KO'd by your Leader Card's skill, you may play this card from your hand in Rest Mode."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_union_absorb_activated"
+        and rule.handler_id == "noop_auto"
+        and "[union absorb][limit 1]" in rule.source_text.lower()
+    )
+    assert rule.limit_per_turn == 1
+
+
+def test_extract_exact_ex20_wretched_regeneration_rules() -> None:
+    card = replace(
+        _card(
+            "[Counter: Attack] If your Leader Card is a <Cell> card: Negate the attack. Additionally, you may discard 1 card from your hand. If you do, play up to 1 green <Cell> card with an energy cost of 1 from your Drop Area.\n"
+            "[Activate: Main](Green)(Green)(2), if your Leader Card is a <Cell> card: Play up to 1 <Cell: Xeno> card from under your Leader Card, or 1 green <Cell> card with an energy cost of 7 or 8 from under your Leader Card."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    counter_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "counter_attack"
+        and rule.handler_id == "counter_optional_discard_n_from_owner_hand_then_play_up_to_n_from_owner_drop"
+    )
+    assert counter_rule.handler_params["discard_count"] == 1
+    assert counter_rule.handler_params["allowed_colors"] == "green"
+    assert counter_rule.handler_params["required_characters"] == "Cell"
+    assert counter_rule.handler_params["max_cost"] == 1
+    activate_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_extra_from_hand"
+        and rule.handler_id == "activate_play_matching_from_owner_leader_under"
+    )
+    assert activate_rule.handler_params["leader_required_characters"] == "Cell"
+    assert activate_rule.handler_params["first_required_characters"] == "Cell: Xeno"
+    assert activate_rule.handler_params["second_allowed_colors"] == "green"
+    assert activate_rule.handler_params["second_required_characters"] == "Cell"
+    assert activate_rule.handler_params["second_exact_costs"] == "7,8"
+
+
+def test_extract_exact_bt15_fin_coercion_incarnate_rule() -> None:
+    card = replace(
+        _card(
+            "[Deflect]\n"
+            "[Auto] If your Leader Card is black: When this card is played from your hand, "
+            "your opponent chooses 1 of their Battle Cards, then you choose the rest of their Battle Cards "
+            "and send them to their owners' Warps."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_opponent_choose_one_then_warp_rest_opponent_battle_on_play"
+    )
+    assert rule.handler_params["leader_allowed_colors"] == "black"
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_exact_bt17_dr_myuu_general_rilldo_rule() -> None:
+    card = replace(
+        _card(
+            "[Auto] When this card attacks, play up to 1 red ≪Machine Mutant≫ card with an energy cost of 1 from your hand.\n"
+            "[Awaken] When your life is at 4 or less or you choose 3 cards from under a <Super Sigma> card in your Battle Area and place them under this card: "
+            "You may draw 1 card, switch up to 1 of your energy to Active Mode, add cards from your life to your hand until you have 6 life left, then flip this card over."
+        ),
+        card_type="LEADER",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_attacks"
+        and rule.handler_id == "auto_play_up_to_n_from_owner_hand_on_attack"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["allowed_colors"] == "red"
+    assert rule.handler_params["required_traits"] == "Machine Mutant"
+    assert rule.handler_params["exact_costs"] == "1"
+
+
+def test_extract_exact_bt17_galactic_explorers_rules() -> None:
+    card = replace(
+        _card(
+            "[Deflect]\n"
+            "[Activate: Main](Red)(Red)(Red), if you have 4 or more energy: Play this card from under a Unison Card.\n"
+            "[Activate: Main][Once per turn][Spirit Boost 3] Choose all of your opponent's Battle Cards and they get -30000 power for the turn, and this card gains [Triple Attack] for the turn.\n"
+            "[Activate: Main][Limit 1] Choose 1 of your red Unison Cards with 10000 power or more and place this card under it from your hand or Battle Area: Add a marker to the chosen card."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_play_self_from_under_owner_unison"
+    )
+    assert play_rule.handler_params["required_source_zone"] == "battle_under"
+    assert play_rule.handler_params["owner_energy_at_least"] == 4
+    boost_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_reduce_all_opponent_battles_power_and_gain_keyword_for_turn"
+    )
+    assert boost_rule.handler_params["power_delta"] == -30000
+    assert boost_rule.handler_params["grant_keyword"] == "Triple Attack"
+    tuck_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_add_marker_to_matching_owner_unison_and_place_self_under_it"
+    )
+    assert tuck_rule.handler_params["target_allowed_colors"] == "red"
+    assert tuck_rule.handler_params["target_min_power"] == 10000
+
+
+def test_extract_exact_ex19_skillbreaker_rules() -> None:
+    card = replace(
+        _card(
+            "[Deflect][Critical][Blocker]\n"
+            "[Auto] If your Leader Card is a yellow ≪Universe 11≫ card: When this card is played from your hand, choose one-\n"
+            "・If you don't have a Unison Card in play, choose up to 1 {Vegeta, Unison of Fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it.\n"
+            "・This card gets +10000 power and [Double Strike] for the turn.\n"
+            "[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your yellow card skills, switch this card to Active Mode, then choose all of your opponent's Battle Cards and negate their skills for the turn."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    choose_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_choose_unison_play_or_self_buff_on_play"
+    )
+    assert choose_rule.handler_params["requires_played_from"] == "hand"
+    assert choose_rule.handler_params["leader_allowed_colors"] == "yellow"
+    assert choose_rule.handler_params["leader_required_traits"] == "Universe 11"
+    assert choose_rule.handler_params["play_card_name_contains"] == "VEGETA, UNISON OF FURY"
+    assert choose_rule.handler_params["play_markers"] == 3
+    assert choose_rule.handler_params["buff_power_delta"] == 10000
+    assert choose_rule.handler_params["buff_keyword"] == "Double Strike"
+    rest_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_switched_to_rest"
+        and rule.handler_id == "auto_switch_self_active_then_negate_all_opponent_battle_skills_for_turn_on_owner_yellow_skill"
+    )
+    assert rest_rule.handler_params["requires_owner_turn"] is True
+    assert rest_rule.handler_params["required_actor_player_id"] == "owner"
+    assert rest_rule.handler_params["required_skill_color"] == "yellow"
+
+
+def test_extract_exact_bt17_bizu_combination_ready_rule() -> None:
+    card = replace(
+        _card(
+            "[Auto] If your Leader Card is a <Dr. Myuu> card: When this card is played from your hand, add up to 1 <Ribet> card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_traits"] == "Ribet"
+    assert rule.handler_params["leader_required_traits"] == "Dr. Myuu"
+    assert rule.handler_params["shuffle_deck_after"] is True
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_exact_bt17_ribet_combination_ready_rule() -> None:
+    card = replace(
+        _card(
+            "[Auto] If your Leader Card is a <Dr. Myuu> card: When this card is played from your hand, add up to 1 <Nezi> card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play"
+    )
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_traits"] == "Nezi"
+    assert rule.handler_params["leader_required_traits"] == "Dr. Myuu"
+    assert rule.handler_params["shuffle_deck_after"] is True
+    assert rule.handler_params["requires_played_from"] == "hand"
+
+
+def test_extract_exact_bt15_kale_rampaging_demon_rule() -> None:
+    card = replace(
+        _card(
+            "[Deflect][Double Strike]\n"
+            "[Auto] When this card is played without using skills, choose one-\n"
+            "・Choose all of your opponent's Battle Cards with energy costs of 3 or more, place them at the bottom of their owners' decks, and if your Leader Card is a blue <Kale> card, place up to 1 card from the top of your deck under your Leader Card.\n"
+            "・If you have 7 or more energy, choose all of your opponent's Battle Cards, ignoring [Barrier], place them at the bottom of their owners' decks, and this card gains [Barrier] and [Dual Attack] for the turn."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_choose_bottom_deck_opponent_battles_or_gain_keywords_on_play_without_skills"
+    )
+    assert rule.handler_params["first_branch_min_cost"] == 3
+    assert rule.handler_params["bonus_leader_allowed_colors"] == "blue"
+    assert rule.handler_params["bonus_leader_required_characters"] == "Kale"
+    assert rule.handler_params["second_branch_min_owner_energy"] == 7
+    assert rule.handler_params["second_branch_grant_keywords"] == "Barrier,Dual Attack"
+
+
+def test_extract_exact_bt17_clash_on_planet_m2_rule() -> None:
+    card = replace(
+        _card(
+            "[Activate: Main] Choose 1 of your red Battle Cards: Choose one-\n"
+            "- The chosen card can attack Battle Cards in Active Mode for the turn.\n"
+            "- Choose 1 of your opponent's Battle Cards, and it gets -X power for the turn, where X is the power of the card chosen for this skill's skill cost."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    attack_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_extra_from_hand"
+        and rule.handler_id == "activate_grant_cost_target_attack_active_mode"
+    )
+    assert attack_rule.handler_params["cost_target_scope"] == "owner_battle"
+    reduce_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_extra_from_hand"
+        and rule.handler_id == "activate_reduce_opponent_battle_by_cost_target_power"
+    )
+    assert reduce_rule.handler_params["max_targets"] == 1
+
+
+def test_extract_exact_bt17_meta_cooler_multiplying_threat_rule() -> None:
+    card = _card(
+        "[Auto] Add 1 card from your life to your hand: When this card attacks, look at up to 5 cards from the top of your deck, "
+        "play up to 1 {Infinite Multiplication Meta-Cooler} among them in Rest Mode, shuffle your deck, and this card gets +10000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_attacks"
+        and rule.handler_id == "auto_pay_life_look_top_play_up_to_n_named_rest_and_gain_power_on_attack"
+    )
+    assert rule.handler_params["life_to_hand"] == 1
+    assert rule.handler_params["look_count"] == 5
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["required_name_contains"] == "INFINITE MULTIPLICATION META-COOLER"
+    assert rule.handler_params["rest_mode"] is True
+    assert rule.handler_params["power_delta"] == 10000
+    assert rule.handler_params["shuffle_deck_after"] is True
+
+
+def test_extract_exact_bt15_ss_broly_brutality_beyond_measure_rule() -> None:
+    card = _card(
+        "[Deflect][Double Strike]\n"
+        "[Permanent] If your opponent has 3 or more energy and you have 5 or more red Extra Cards in your Drop Area, reduce the energy cost of this card in your hand by 3.\n"
+        "[Auto][Once per turn] Choose 1 card in your hand and discard it: When you activate the [Activate: Battle] skill on a red Extra Card with an original energy cost of 3 or more in your hand or Drop Area, switch this card to Active Mode. If the card you discarded with this skill is a copy of this card, draw 2 cards, then choose up to 1 of your opponent's Battle Cards or Unison Cards, ignoring [Barrier], and it gets -35000 power for the turn."
+    )
+    rules = extract_effect_rules_from_card(card)
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "owner_activate_battle"
+        and rule.handler_id == "auto_discard_on_owner_activate_battle_red_extra_switch_self_active_and_optional_copy_bonus_debuff"
+    )
+    assert rule.handler_params["discard_count"] == 1
+    assert rule.handler_params["required_skill_source_zones"] == "hand,drop"
+    assert rule.handler_params["required_skill_card_type"] == "EXTRA"
+    assert rule.handler_params["required_skill_allowed_colors"] == "red"
+    assert rule.handler_params["required_skill_min_cost"] == 3
+    assert rule.handler_params["bonus_draw"] == 2
+    assert rule.handler_params["bonus_power_delta"] == -35000
+    assert rule.handler_params["max_targets"] == 1
+    assert rule.handler_params["ignores_barrier"] is True

@@ -1,13 +1,14 @@
 {
   "candidates_scanned": 5766,
   "cards_with_diagnostics": 219,
-  "cards_with_rules": 3793,
-  "cards_without_rules": 1973,
+  "cards_with_rules": 3810,
+  "cards_without_rules": 1956,
   "coverage": {
     "by_handler": {
       "activate_activate_up_to_n_named_field_extra_from_owner_deck": 5,
       "activate_activate_up_to_n_named_field_extra_from_owner_drop": 1,
       "activate_activate_up_to_n_named_field_extra_from_owner_z_deck": 6,
+      "activate_add_marker_to_matching_owner_unison_and_place_self_under_it": 1,
       "activate_add_self_from_owner_drop_to_hand": 8,
       "activate_add_up_to_n_from_owner_deck_to_hand": 52,
       "activate_add_up_to_n_from_owner_warp_to_hand": 4,
@@ -29,7 +30,9 @@
       "activate_gain_power_and_keyword_for_battle": 115,
       "activate_gain_power_and_keyword_for_turn": 46,
       "activate_gain_power_by_hidden_cost_target_original_power_for_turn": 1,
+      "activate_grant_cost_target_attack_active_mode": 1,
       "activate_grant_next_ex_evolve_from_owner_drop": 1,
+      "activate_grant_owner_leader_keyword_until_owner_next_turn_end": 1,
       "activate_ko_up_to_n_opponent_battle": 42,
       "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1,
       "activate_look_top_choose_add_to_hand_or_play_unison_with_marker": 1,
@@ -50,9 +53,11 @@
       "activate_place_up_to_n_from_owner_hand_under_named_host_then_draw_n": 1,
       "activate_place_up_to_n_from_under_named_owner_battle_into_drop_then_opponent_discards_same_count": 1,
       "activate_place_up_to_n_opponent_battle_under_source_host_and_switch_host_active_on_turn_end": 1,
+      "activate_play_matching_from_owner_leader_under": 1,
       "activate_play_self_from_hand": 850,
       "activate_play_self_from_under_owner_leader": 3,
       "activate_play_self_from_under_owner_leader_then_ko_up_to_n_opponent_battle": 1,
+      "activate_play_self_from_under_owner_unison": 1,
       "activate_play_self_from_warp": 21,
       "activate_play_token_in_battle": 21,
       "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1,
@@ -64,7 +69,9 @@
       "activate_play_up_to_n_from_under_self_and_place_self_under_played_card": 3,
       "activate_play_up_to_n_name_or_trait_from_owner_hand": 1,
       "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn": 1,
+      "activate_reduce_all_opponent_battles_power_and_gain_keyword_for_turn": 1,
       "activate_reduce_next_matching_extra_skill_cost_from_hand": 2,
+      "activate_reduce_opponent_battle_by_cost_target_power": 1,
       "activate_remove_self_and_place_up_to_n_from_under_owner_leader_on_top_of_owner_leader": 1,
       "activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host": 2,
       "activate_rest_named_host_and_place_each_named_from_owner_hand_under_it": 1,
@@ -99,6 +106,7 @@
       "auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play": 1,
       "auto_add_top_deck_to_energy_rest_on_play": 5,
       "auto_add_up_to_n_dragon_ball_from_owner_deck_or_drop_to_hand_on_play": 1,
+      "auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play": 2,
       "auto_add_up_to_n_from_owner_deck_to_hand_on_combo": 3,
       "auto_add_up_to_n_from_owner_deck_to_hand_on_play": 48,
       "auto_add_up_to_n_from_owner_drop_to_hand_on_play": 7,
@@ -122,7 +130,9 @@
       "auto_buff_up_to_n_owner_battles_on_play": 1,
       "auto_buff_up_to_n_owner_cards_on_hidden_drop": 2,
       "auto_buff_up_to_n_owner_cards_on_switch": 4,
+      "auto_choose_bottom_deck_opponent_battles_or_gain_keywords_on_play_without_skills": 1,
       "auto_choose_play_up_to_n_from_owner_deck_or_hand_or_secondary_on_self_left_battle": 2,
+      "auto_choose_unison_play_or_self_buff_on_play": 1,
       "auto_combo_self_from_battle_on_owner_combo": 1,
       "auto_combo_self_from_drop_on_placed_into_drop": 5,
       "auto_combo_up_to_n_from_owner_zone_on_attack": 27,
@@ -130,6 +140,7 @@
       "auto_discard_n_from_owner_hand_activate_up_to_n_named_field_extra_from_owner_deck_on_play": 1,
       "auto_discard_n_from_owner_hand_then_limit_opponent_high_cost_battle_attacks": 1,
       "auto_discard_n_then_switch_up_to_n_owner_battle_active_on_attack": 2,
+      "auto_discard_on_owner_activate_battle_red_extra_switch_self_active_and_optional_copy_bonus_debuff": 1,
       "auto_draw_n": 1559,
       "auto_draw_n_add_matching_from_owner_battle_or_drop_to_z_energy_then_place_matching_from_owner_battle_or_drop_under_named_host_on_attack": 1,
       "auto_draw_n_and_add_markers_on_owner_battle_played_from_warp": 1,
@@ -148,6 +159,7 @@
       "auto_ko_up_to_n_opponent_battle_on_switch": 2,
       "auto_look_top_add_up_to_one_to_hand_on_play": 371,
       "auto_opponent_bottom_decks_n_from_hand_on_combo": 1,
+      "auto_opponent_choose_one_then_warp_rest_opponent_battle_on_play": 1,
       "auto_opponent_discards_n_and_schedule_play_and_add_marked_warped_cards_on_attack": 1,
       "auto_opponent_discards_n_from_hand_on_opponent_counter_activated": 2,
       "auto_opponent_discards_n_from_hand_on_owner_matching_battle_left": 1,
@@ -156,6 +168,7 @@
       "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo": 14,
       "auto_owner_battle_gain_power_then_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_attack": 2,
       "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1,
+      "auto_pay_life_look_top_play_up_to_n_named_rest_and_gain_power_on_attack": 1,
       "auto_pay_life_on_attack_gain_power_and_keyword_for_turn": 18,
       "auto_pay_z_energy_bottom_deck_opponent_hand_on_opponent_combo_and_negate_self_for_battle": 1,
       "auto_pay_z_energy_on_play_and_grant_next_matching_union_play_keyword": 1,
@@ -196,6 +209,7 @@
       "auto_play_up_to_n_from_owner_deck_on_play": 3,
       "auto_play_up_to_n_from_owner_drop_on_main_phase_start": 1,
       "auto_play_up_to_n_from_owner_drop_on_play": 33,
+      "auto_play_up_to_n_from_owner_hand_on_attack": 1,
       "auto_play_up_to_n_from_owner_hand_on_self_combo": 1,
       "auto_play_up_to_n_from_owner_hand_on_self_ko": 1,
       "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start": 1,
@@ -226,11 +240,12 @@
       "auto_schedule_return_cards_warped_by_source_skill_on_play": 2,
       "auto_schedule_return_cards_warped_by_source_skill_to_owner_hand_on_opponent_next_turn_end_on_play": 5,
       "auto_schedule_switch_up_to_n_owner_energy_active_on_opponent_next_main_phase_on_placed_under_by_union": 1,
+      "auto_schedule_turn_end_draw_n_and_switch_chosen_owner_energy_active_if_played_from_hand": 1,
       "auto_self_gain_combo_power_on_combo": 29,
       "auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp": 1,
       "auto_self_gain_power_and_keyword_for_turn_on_switch": 1,
       "auto_self_gain_power_for_turn_on_attack": 1,
-      "auto_self_gain_power_for_turn_on_play": 42,
+      "auto_self_gain_power_for_turn_on_play": 43,
       "auto_send_n_from_owner_hand_to_warp_then_limit_opponent_battle_attacks": 1,
       "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life": 2,
       "auto_send_self_to_owner_drop_on_attack_battle_end": 1,
@@ -244,6 +259,7 @@
       "auto_switch_self_active_on_owner_combo": 1,
       "auto_switch_self_active_on_play": 10,
       "auto_switch_self_active_on_turn_end": 48,
+      "auto_switch_self_active_then_negate_all_opponent_battle_skills_for_turn_on_owner_yellow_skill": 1,
       "auto_switch_self_to_hidden_on_play": 2,
       "auto_switch_up_to_n_any_player_board_to_revealed_on_play": 1,
       "auto_switch_up_to_n_opponent_battle_rest_on_play": 6,
@@ -263,6 +279,9 @@
       "counter_add_up_to_n_from_owner_deck_to_hand_then_play_from_drop_if_spirit_boost": 1,
       "counter_limit_opponent_attacks_if_opponent_has_skillless_battle_or_unison": 1,
       "counter_negate_attack_play_self_attack_restriction": 1,
+      "counter_negate_counter_attack": 1,
+      "counter_optional_discard_n_from_owner_hand_then_play_up_to_n_from_owner_drop": 1,
+      "counter_play_from_owner_deck_if_pending_battle_power_at_least_negate_nonkeyword_skills_for_game": 1,
       "counter_play_self_rest_then_ko_attacking_battle_if_trait_and_opponent_draw_n": 1,
       "counter_play_token_in_battle": 10,
       "counter_play_up_to_n_from_owner_drop_negate_skills_for_turn": 1,
@@ -272,12 +291,15 @@
       "counter_schedule_play_token_in_battle": 1,
       "counter_send_up_to_n_attacking_battle_to_warp": 1,
       "counter_send_up_to_n_opponent_battle_to_warp": 1,
+      "counter_switch_up_to_n_owner_energy_active_if_owner_battle_attacking_opponent_battle": 1,
       "counter_switch_up_to_n_owner_leader_active": 1,
-      "noop_auto": 881
+      "noop_auto": 883
     },
     "by_trigger": {
-      "counter_attack": 32,
+      "counter_attack": 35,
+      "counter_play": 1,
       "opponent_turn_end": 1,
+      "owner_activate_battle": 1,
       "owner_activate_extra_from_hand": 1,
       "owner_battle_attacks": 2,
       "owner_battle_ko_opponent_battle_battle_end": 4,
@@ -299,11 +321,11 @@
       "owner_union_absorb_activated": 1,
       "owner_union_activated": 1,
       "self_activate_battle": 393,
-      "self_activate_extra_from_hand": 95,
-      "self_activate_main": 1547,
+      "self_activate_extra_from_hand": 98,
+      "self_activate_main": 1551,
       "self_added_to_z_energy": 6,
       "self_aegis_activated": 5,
-      "self_attacks": 507,
+      "self_attacks": 509,
       "self_attacks_battle_end": 9,
       "self_attacks_or_self_blocker_activated": 1,
       "self_blocker_activated": 37,
@@ -318,9 +340,11 @@
       "self_placed_into_drop": 7,
       "self_placed_under_by_union": 2,
       "self_placed_under_owner_card": 9,
-      "self_played": 2304,
+      "self_played": 2311,
       "self_switched_hidden": 4,
       "self_switched_revealed": 4,
+      "self_switched_to_rest": 1,
+      "self_union_absorb_activated": 2,
       "turn_end": 79
     }
   },
@@ -1008,7 +1032,7 @@
       "missed_play_draw"
     ]
   },
-  "total_extracted_rules": 5512,
+  "total_extracted_rules": 5536,
   "unmatched_top_templates": [
     {
       "count": 1,
@@ -1037,11 +1061,6 @@
     },
     {
       "count": 1,
-      "example_card_id": 33,
-      "template": "[deflect][critical][blocker]. [auto] if your leader card is a yellow \u226auniverse <n>\u226b card: when this card is played from your hand, choose one-. \u30fbif you don't have a unison card in play, choose up to <n> {vegeta, unison o..."
-    },
-    {
-      "count": 1,
       "example_card_id": 41,
       "template": "[energy-exhaust][unique][barrier]. [permanent] if your leader card is a <bardock: xeno> card, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is a <bardock: xeno> card and you have a..."
     },
@@ -1059,11 +1078,6 @@
       "count": 1,
       "example_card_id": 59,
       "template": "[deflect][dual attack][blocker]. [ex-evolve](red)(red), if you have <n> or more energy: red <son gohan: adolescence> card with an energy cost of <n>.. [activate: main][once per turn] choose <n> of your leader card or uni..."
-    },
-    {
-      "count": 1,
-      "example_card_id": 71,
-      "template": "[deflect][double strike]. [permanent] if your opponent has <n> or more energy and you have <n> or more red extra card in your drop area, reduce the energy cost of this card in your hand by <n>.. [auto][once per turn] cho..."
     },
     {
       "count": 1,
@@ -1097,11 +1111,6 @@
     },
     {
       "count": 1,
-      "example_card_id": 121,
-      "template": "[deflect]. [auto] if your leader card is black: when this card is played from your hand, your opponent chooses <n> of their battle card, then you choose the rest of their battle card and send them to their owners' warps."
-    },
-    {
-      "count": 1,
       "example_card_id": 140,
       "template": "[double strike]. [counter: attack] negate the attack and play this card.. [permanent] during your opponent's turn, reduce the energy cost of this card in your hand by <n>."
     },
@@ -1109,6 +1118,21 @@
       "count": 1,
       "example_card_id": 141,
       "template": "[dual attack]. [counter: play] play this card, and if the battle card being played has an energy cost of <n> or less, return it to its owner's hand instead.. [permanent] during your opponent's turn, reduce the energy cos..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 150,
+      "template": "[double strike]. [ex-evolve](blue), if you have <n> or more energy: <hit> card with an energy cost of <n> or <n>.. [counter: attack] negate the attack and play this card.. [permanent] during your opponent's turn, reduce..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 177,
+      "template": "[dual attack]. [permanent] if an opponent's battle card would be ko'd by this card's attack, gain control of it instead; you may switch it to active mode.. [auto][spirit boost <n>] when this card is played from your hand..."
+    },
+    {
+      "count": 1,
+      "example_card_id": 191,
+      "template": "[unique][barrier]. [activate: main][limit <n>] (green), if there are a total of <n> {king kai's training} in your warp and/or under a {king kai's planet} in your battle area, and you send this card to its owner's warp: p..."
     }
   ]
 }

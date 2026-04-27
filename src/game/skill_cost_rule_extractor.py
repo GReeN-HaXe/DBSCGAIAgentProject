@@ -27,6 +27,10 @@ _COUNTER_HIDDEN_COST_RE = re.compile(
 _ACTIVATE_MAIN_HIDDEN_COST_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:"
 )
+_ACTIVATE_MAIN_BATTLE_REFERENCE_COST_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?choose 1 of your (.+?) battle cards?\s*:\s*choose one",
+    re.IGNORECASE,
+)
 _ACTIVATE_BATTLE_HIDDEN_COST_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,260}?choose 1 (?:(?:of your )?(.+?) battle cards?|(.+?) card in your battle area) and switch (?:it|them) to hidden mode:"
 )
@@ -89,6 +93,10 @@ _ACTIVATE_MAIN_HAND_TO_WARP_RE = re.compile(
 )
 _ACTIVATE_MAIN_SEND_SELF_FROM_HAND_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?send this card from your hand to (?:(?:your|the) warp|(?:its|their )?owner'?s warp)\s*:",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_SEND_SELF_FROM_DROP_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?send this card from your drop(?: area)? to (?:(?:your|the) warp|(?:its|their )?owner'?s warp)\s*:",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_HAND_TO_DROP_RE = re.compile(
@@ -592,6 +600,15 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             params["allowed_colors"] = allowed_colors
         rules["activate_main"] = [params]
 
+    m_activate_battle_reference = _ACTIVATE_MAIN_BATTLE_REFERENCE_COST_RE.search(text)
+    if m_activate_battle_reference:
+        descriptor = m_activate_battle_reference.group(1).strip()
+        params = {"kind": "choose_owner_battle_reference", "amount": 1}
+        allowed_colors = _extract_allowed_colors(descriptor)
+        if allowed_colors:
+            params["allowed_colors"] = allowed_colors
+        rules["activate_main_hand"] = [params]
+
     m_activate_battle_hidden = _ACTIVATE_BATTLE_HIDDEN_COST_RE.search(text)
     if m_activate_battle_hidden:
         descriptor = str(m_activate_battle_hidden.group(1) or m_activate_battle_hidden.group(2) or "").strip()
@@ -885,6 +902,8 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_owner_drop_to_warp", descriptor, amount))
     if _ACTIVATE_MAIN_SEND_SELF_TO_WARP_RE.search(text):
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_warp", "amount": 1})
+    if _ACTIVATE_MAIN_SEND_SELF_FROM_DROP_TO_WARP_RE.search(text):
+        rules.setdefault("activate_main_drop", []).append({"kind": "send_self_to_warp", "amount": 1})
     if m_activate_main_remove_self_in_drop_and_discard_hand:
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
         rules.setdefault("activate_main", []).append(

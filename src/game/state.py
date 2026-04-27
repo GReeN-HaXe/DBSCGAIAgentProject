@@ -283,6 +283,8 @@ class DelayedKeywordClear:
     target_instance_id: int
     trigger_player_id: int
     keyword: str
+    created_turn_number: int = 0
+    require_next_turn: bool = False
 
 
 @dataclass(frozen=True)
@@ -290,6 +292,14 @@ class DelayedActiveSwitch:
     owner_player_id: int
     target_instance_id: int
     trigger_player_id: int
+
+
+@dataclass(frozen=True)
+class DelayedDrawAndActiveSwitch:
+    owner_player_id: int
+    target_instance_id: int
+    trigger_player_id: int
+    amount: int = 1
 
 
 @dataclass(frozen=True)
@@ -631,6 +641,7 @@ class GameState:
     delayed_mode_switches: list[DelayedModeSwitch] = field(default_factory=list)
     delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
     delayed_active_switches: list[DelayedActiveSwitch] = field(default_factory=list)
+    delayed_draw_and_active_switches: list[DelayedDrawAndActiveSwitch] = field(default_factory=list)
     delayed_main_phase_energy_switches: list[DelayedMainPhaseEnergySwitch] = field(default_factory=list)
     delayed_warps: list[DelayedWarp] = field(default_factory=list)
     delayed_bottom_decks_if_in_play: list[DelayedBottomDeckIfInPlay] = field(default_factory=list)

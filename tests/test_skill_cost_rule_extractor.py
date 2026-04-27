@@ -94,6 +94,27 @@ def test_extract_activate_main_rest_self_skill_cost_rule() -> None:
     }
 
 
+def test_extract_activate_main_choose_owner_battle_reference_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Choose 1 of your red Battle Cards: "
+            "Choose one- "
+            "The chosen card can attack Battle Cards in Active Mode for the turn. "
+            "Choose 1 of your opponent's Battle Cards, and it gets -X power for the turn, where X is the power of the card chosen for this skill's skill cost."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_hand": [
+            {
+                "kind": "choose_owner_battle_reference",
+                "amount": 1,
+                "allowed_colors": "red",
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_hand_to_drop_and_send_self_to_warp_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(

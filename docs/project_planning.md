@@ -4828,3 +4828,124 @@ When adding a new TODO:
 - Added runtime support for the exact counter branch that searches a red `<Jiren>` with `[Evolve]` from deck, shuffles, then plays a red `Universe 11` cost-1 Battle Card from Drop in Rest Mode with skills negated when the Spirit Boost marker cost was paid.
 - Added `Spirit Boost X` skill-cost extraction as deterministic `remove_owner_unison_markers` amount `1` for current engine support.
 - Added focused extractor, skill-cost, and phase4 coverage proving the deck search, marker-cost gate, Drop play, Rest Mode placement, and skill negation.
+
+## BT16-043 Carefree Playtime slice complete
+- Added exact extraction for `BT16-043 Carefree Playtime`:
+  - `counter_attack -> counter_negate_counter_attack`
+  - `counter_attack -> counter_switch_up_to_n_owner_energy_active_if_owner_battle_attacking_opponent_battle`
+- Added runtime support for the exact counter branch that switches up to `1` blue owner energy to Active Mode when the owner has a blue `<Beerus>` card attacking an opponent Battle Card.
+- Reused the existing counter-chain resolution path for the `[Counter: Counter] Negate the [Counter: Attack]` portion, with the extractor now surfacing that branch explicitly in the catalog.
+- Added focused extractor and phase4 coverage proving the energy-switch branch fires in the required blue `<Beerus>` battle-attack context and does not fire for a non-`<Beerus>` attacker.
+
+## P-394 Android 17, Most Valuable Player slice complete
+- Added exact extraction for `P-394 Android 17, Most Valuable Player`:
+  - `self_activate_main -> activate_grant_owner_leader_keyword_until_owner_next_turn_end`
+- Added runtime support for granting the owner leader `Invoker` until the end of the owner's next turn.
+- Extended delayed keyword clearing to support next-turn expiry semantics, and broadened `send_self_to_warp` skill-cost payment to allow drop-origin activate-main costs.
+- Added focused extractor and phase4 coverage proving the drop activation, leader keyword grant, next-turn expiration, and red `Universe 7` leader gate.
+
+## BT15-060 Mentor's Rescue slice complete
+- Added exact extraction for `BT15-060 Mentor's Rescue`:
+  - `counter_play -> counter_play_from_owner_deck_if_pending_battle_power_at_least_negate_nonkeyword_skills_for_game`
+- Added first-class `counter_play` exact-event support so `Counter: Play` extractor slices can resolve through the effect pipeline.
+- Added runtime support for checking the pending battle card's power, playing a blue `Universe 7` `<Vegeta>` with `Blocker` from deck, preserving keyword skills, negating non-keyword skills for the game, and shuffling the deck.
+- Added focused extractor and phase4 coverage proving the positive 20000-power branch and the below-threshold negative branch.
+
+## BT16-015 SS Vegeta, the Pursuer slice complete
+- Added exact extraction for `BT16-015 SS Vegeta, the Pursuer`:
+  - `self_played -> auto_schedule_turn_end_draw_n_and_switch_chosen_owner_energy_active_if_played_from_hand`
+- Added delayed end-of-turn runtime support for locked-in energy choice effects that draw, then switch the chosen energy card to Active Mode.
+- Added runtime support for the exact `Red/Blue multicolor` energy selection gate when the card is played from hand.
+- Added focused extractor and phase4 coverage proving the delayed draw plus chosen-energy restand branch and the no-schedule branch when no legal multicolor energy exists.
+
+## BT16-119 Demon God Gravy, Umbral Might slice complete
+- Added exact extraction for `BT16-119 Demon God Gravy, Umbral Might`:
+  - `self_played -> auto_self_gain_power_for_turn_on_play`
+- Reused the existing on-play self-buff runtime path to grant `+5000 power` and `Double Strike` for the turn when the card is played from hand.
+- Added focused extractor and phase4 coverage proving the buff branch resolves on `Dark Over Realm` hand play.
+
+## EX20-06 Cell, Startling Assimilation slice complete
+- Added exact extractor coverage for the `Union Absorb` header on `EX20-06 Cell, Startling Assimilation`:
+  - `self_union_absorb_activated -> noop_auto`
+- Reused the native `Union Absorb` runtime path already implemented in the engine instead of duplicating the promotion logic in an effect handler.
+- Added focused extractor and phase4 coverage proving the exact extracted rule dispatches on `self_union_absorb_activated` while the existing Union Absorb runtime still promotes the multicolor `<Cell>` target correctly.
+
+## EX20-08 Wretched Regeneration slice complete
+- Added exact extraction for `EX20-08 Wretched Regeneration`:
+  - `counter_attack -> counter_optional_discard_n_from_owner_hand_then_play_up_to_n_from_owner_drop`
+  - `self_activate_extra_from_hand -> activate_play_matching_from_owner_leader_under`
+- Added runtime support for the exact counter branch that optionally discards `1` card from hand, then plays up to `1` green `<Cell>` with energy cost `1` from the owner's Drop Area after the attack is negated.
+- Added runtime support for the exact activate-extra branch that plays up to `1` `<Cell: Xeno>` card, or `1` green `<Cell>` with energy cost `7` or `8`, from under the owner's leader.
+- Added focused extractor and phase4 coverage proving both the discard-then-drop-play counter branch and the leader-under play branch resolve through the exact effect pipeline.
+
+## BT15-128 Fin, Coercion Incarnate slice complete
+- Added exact extraction for `BT15-128 Fin, Coercion Incarnate`:
+  - `self_played -> auto_opponent_choose_one_then_warp_rest_opponent_battle_on_play`
+- Added runtime support for the exact on-play branch that keeps a deterministic opponent-chosen Battle Card, then sends the rest of the opponent's Battle Cards to their owners' Warps when the card is played from hand under a black leader.
+- Added focused extractor and phase4 coverage proving the source hand-play gate and the warp-all-but-one battlefield cleanup behavior resolve through the exact effect pipeline.
+
+## BT17-002 Dr. Myuu & General Rilldo slice complete
+- Added exact extraction for `BT17-002 Dr. Myuu & General Rilldo`:
+  - `self_attacks -> auto_play_up_to_n_from_owner_hand_on_attack`
+- Added runtime support for the exact leader-attack branch that plays up to `1` red `Machine Mutant` card with energy cost `1` from the owner's hand after attack declaration resolves through counter timing.
+- Added focused extractor and phase4 coverage proving the leader attack trigger plays the matching hand card and respects the engine's post-counter attack timing.
+
+## BT17-009 SS Son Goku, Pan, & SS Trunks, Galactic Explorers slice complete
+- Added exact extraction for `BT17-009 SS Son Goku, Pan, & SS Trunks, Galactic Explorers`:
+  - `self_activate_main -> activate_play_self_from_under_owner_unison`
+  - `self_activate_main -> activate_reduce_all_opponent_battles_power_and_gain_keyword_for_turn`
+  - `self_activate_main -> activate_add_marker_to_matching_owner_unison_and_place_self_under_it`
+- Added runtime support for the exact activate-main branch that plays the card from under the owner's Unison through counter timing, including synthetic under-card instance ids and `battle_under` pending-play resolution.
+- Added runtime support for the exact Spirit Boost branch that gives all opponent Battle Cards `-30000 power` for the turn while granting this card `Triple Attack` for the turn.
+- Extended the existing place-under-Unison handler to support moving the card from hand as well as Battle Area onto a matching red Unison with `10000` or more power, then adding a marker.
+- Added focused extractor and phase4 coverage proving all three exact branches resolve through the effect pipeline.
+
+## EX19-18 God of Destruction Toppo, Skillbreaker slice complete
+- Added exact extraction for `EX19-18 God of Destruction Toppo, Skillbreaker`:
+  - `self_played -> auto_choose_unison_play_or_self_buff_on_play`
+  - `self_switched_to_rest -> auto_switch_self_active_then_negate_all_opponent_battle_skills_for_turn_on_owner_yellow_skill`
+- Added runtime support for the exact choose-one on-play branch that deterministically plays `Vegeta, Unison of Fury` with `3` markers from hand or deck when the owner has no Unison in play, otherwise resolves the self-buff branch for `+10000 power` and `Double Strike` for the turn.
+- Added runtime support for the exact once-per-turn rest trigger branch that switches the card back to Active Mode on the owner's turn after a yellow owner skill rests it, then negates all opponent Battle Card skills for the turn.
+- Added focused extractor and phase4 coverage proving both the no-Unison play branch, the self-buff fallback branch, and the rest-trigger negation branch resolve through the effect pipeline.
+
+## BT17-024 Bizu, Combination Ready slice complete
+- Added exact extraction for `BT17-024 Bizu, Combination Ready`:
+  - `self_played -> auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play`
+- Added runtime support for the exact on-play branch that adds up to `1` `<Ribet>` card from the owner's Drop Area first, then Deck if needed, to hand when the card is played from hand under a `<Dr. Myuu>` leader.
+- Added deck-search checkpoint support for the exact `then shuffle your deck if you looked through it` branch.
+- Added focused extractor and phase4 coverage proving both the Drop-to-hand branch and the Deck-to-hand fallback branch resolve through the effect pipeline.
+
+## BT17-025 Ribet, Combination Ready slice complete
+- Added exact extraction for `BT17-025 Ribet, Combination Ready`:
+  - `self_played -> auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play`
+- Reused the exact on-play deck-or-drop-to-hand runtime path, specializing the target filter to add up to `1` `<Nezi>` card when the card is played from hand under a `<Dr. Myuu>` leader.
+- Added focused extractor and phase4 coverage proving both the Drop-to-hand branch and the Deck-to-hand fallback branch resolve through the effect pipeline.
+
+## BT15-042 Kale, Rampaging Demon slice complete
+- Added exact extraction for `BT15-042 Kale, Rampaging Demon`:
+  - `self_played -> auto_choose_bottom_deck_opponent_battles_or_gain_keywords_on_play_without_skills`
+- Added runtime support for the exact choose-one branch when the card is played without using skills, resolving deterministically to the `7+ energy` branch when available and otherwise resolving the `3+ cost` bottom-deck branch.
+- Added the exact blue `<Kale>` leader bonus that places up to `1` card from the top of the owner's deck under their Leader on the first branch.
+- Added focused extractor and phase4 coverage proving both the `cost 3+ only` bottom-deck branch and the `7+ energy` all-bottom-deck plus `Barrier` and `Dual Attack` branch resolve through the effect pipeline.
+
+## BT17-029 Clash on Planet M-2 slice complete
+- Added exact extraction for `BT17-029 Clash on Planet M-2`:
+  - `self_activate_extra_from_hand -> activate_grant_cost_target_attack_active_mode`
+  - `self_activate_extra_from_hand -> activate_reduce_opponent_battle_by_cost_target_power`
+- Added exact `Activate: Main` skill-cost extraction for choosing `1` of the owner's red Battle Cards as a reference cost target.
+- Added runtime support for carrying extra-card skill-cost metadata through `activate_extra_from_hand` resolution so the selected branch can read the referenced Battle Card.
+- Added runtime support for the exact choose-one branches that either let the chosen Battle Card attack Battle Cards in Active Mode for the turn or give up to `1` opponent Battle Card `-X power` for the turn, where `X` is the referenced card's power.
+- Added focused extractor, skill-cost, and phase4 coverage proving both exact branches resolve through the effect pipeline.
+
+## BT17-072 Meta-Cooler, Multiplying Threat slice complete
+- Added exact extraction for `BT17-072 Meta-Cooler, Multiplying Threat`:
+  - `self_attacks -> auto_pay_life_look_top_play_up_to_n_named_rest_and_gain_power_on_attack`
+- Added exact runtime support for the attack-trigger branch that adds `1` card from life to hand, looks at up to `5` cards from the top of the deck, plays up to `1` `{Infinite Multiplication Meta-Cooler}` among them in Rest Mode, shuffles the deck, and gives the attacker `+10000 power` for the turn.
+- Added focused extractor and phase4 coverage proving the life-payment, top-deck play, rest-mode entry, and temporary self-buff all resolve through the effect pipeline.
+
+## BT15-019 SS Broly, Brutality Beyond Measure slice complete
+- Added exact extraction for `BT15-019 SS Broly, Brutality Beyond Measure`:
+  - `owner_activate_battle -> auto_discard_on_owner_activate_battle_red_extra_switch_self_active_and_optional_copy_bonus_debuff`
+- Added runtime support for the exact once-per-turn owner trigger that discards `1` card from hand when the owner activates an `[Activate: Battle]` skill on a red Extra Card with original energy cost `3+` in hand or Drop, then switches this card to Active Mode.
+- Added the discarded-copy bonus branch that draws `2` cards and gives up to `1` opponent Battle Card or Unison `-35000 power` for the turn while ignoring `[Barrier]`.
+- Added focused extractor and phase4 coverage proving both the discarded-copy bonus branch and the non-copy branch resolve through the effect pipeline.

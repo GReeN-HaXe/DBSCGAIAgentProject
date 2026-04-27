@@ -2098,6 +2098,477 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
         )
 
     if (
+        "[counter: counter]" in text.lower()
+        and "if one of your blue <beerus> cards is attacking an opponent's battle card" in text.lower()
+        and "negate the [counter: attack]" in text.lower()
+        and "switch up to 1 of your blue energy to active mode" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_counter_attack",
+                handler_params={},
+                source_text="[Counter: Counter] If one of your blue <Beerus> cards is attacking an opponent's Battle Card: Negate the [Counter: Attack].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_switch_up_to_n_owner_energy_active_if_owner_battle_attacking_opponent_battle",
+                handler_params={
+                    "max_targets": 1,
+                    "allowed_colors": "blue",
+                    "attacker_allowed_colors": "blue",
+                    "attacker_required_characters": "Beerus",
+                },
+                source_text="[Counter: Counter] If one of your blue <Beerus> cards is attacking an opponent's Battle Card: Negate the [Counter: Attack] and switch up to 1 of your blue energy to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[activate: main]" in text.lower()
+        and "[sparking 5]" in text.lower()
+        and "if your leader card is a red" in text.lower()
+        and "universe 7" in text.lower()
+        and "send this card from your drop area to your warp" in text.lower()
+        and "your leader card gains [invoker] until the end of your next turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_grant_owner_leader_keyword_until_owner_next_turn_end",
+                handler_params={
+                    "grant_keyword": "Invoker",
+                    "leader_allowed_colors": "red",
+                    "leader_required_traits": "Universe 7",
+                    "min_owner_drop": 5,
+                },
+                source_text="[Activate: Main][Sparking 5](R), if your Leader Card is a red ≪Universe 7≫ card and you send this card from your Drop Area to your Warp: Your Leader Card gains [Invoker] until the end of your next turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: play]" in text.lower()
+        and "if your leader card is a <cabba> card" in text.lower()
+        and "if the battle card being played has 20000 power or more" in text.lower()
+        and "play up to 1 blue" in text.lower()
+        and "universe 7" in text.lower()
+        and "<vegeta> card with [blocker] from your deck" in text.lower()
+        and "negate its non-keyword skills for the game" in text.lower()
+        and "shuffle your deck" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="counter_play_from_owner_deck_if_pending_battle_power_at_least_negate_nonkeyword_skills_for_game",
+                handler_params={
+                    "min_pending_power": 20000,
+                    "leader_required_characters": "Cabba",
+                    "allowed_colors": "blue",
+                    "required_traits": "Universe 7",
+                    "required_characters": "Vegeta",
+                    "required_keyword": "blocker",
+                    "shuffle_deck_after": True,
+                },
+                source_text="[Counter: Play] If your Leader Card is a <Cabba> card: If the Battle Card being played has 20000 power or more, play up to 1 blue ≪Universe 7≫ <Vegeta> card with [Blocker] from your deck, negate its non-keyword skills for the game, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[critical]" in text.lower()
+        and "[auto]" in text.lower()
+        and "choose 1 red/blue multicolor card in your energy" in text.lower()
+        and "at the end of a turn where this card was played from your hand" in text.lower()
+        and "draw 1 card and switch the chosen card to active mode" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_schedule_turn_end_draw_n_and_switch_chosen_owner_energy_active_if_played_from_hand",
+                handler_params={
+                    "amount": 1,
+                    "allowed_colors": "red,blue",
+                    "requires_multicolor": True,
+                    "requires_played_from": "hand",
+                },
+                source_text="[Auto] Choose 1 Red/Blue multicolor card in your energy: At the end of a turn where this card was played from your hand, draw 1 card and switch the chosen card to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[dark over realm 3](2)" in text.lower()
+        and "[auto]" in text.lower()
+        and "when this card is played from your hand" in text.lower()
+        and "it gets +5000 power" in text.lower()
+        and "[double strike] for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_self_gain_power_for_turn_on_play",
+                handler_params={
+                    "power_delta": 5000,
+                    "grant_keyword": "Double Strike",
+                    "requires_played_from": "hand",
+                },
+                source_text="[Auto] When this card is played from your hand, it gets +5000 power and [Double Strike] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[unique]" in text.lower()
+        and "[union absorb][limit 1]" in text.lower()
+        and "if your leader card is a <cell> card" in text.lower()
+        and "place 1 <android 17> card from your hand or drop area under this card" in text.lower()
+        and "play up to 1 multicolor <cell> card with an energy cost of 4 from your deck or drop area on top of this card" in text.lower()
+        and "shuffle your deck if you looked through it" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_union_absorb_activated",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Union Absorb][Limit 1] If your Leader Card is a <Cell> card and you place 1 <Android 17> card from your hand or Drop Area under this card: Play up to 1 multicolor <Cell> card with an energy cost of 4 from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack]" in text.lower()
+        and "if your leader card is a <cell> card" in text.lower()
+        and "negate the attack" in text.lower()
+        and "you may discard 1 card from your hand" in text.lower()
+        and "if you do, play up to 1 green <cell> card with an energy cost of 1 from your drop area" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_optional_discard_n_from_owner_hand_then_play_up_to_n_from_owner_drop",
+                handler_params={
+                    "discard_count": 1,
+                    "max_targets": 1,
+                    "allowed_colors": "green",
+                    "required_characters": "Cell",
+                    "max_cost": 1,
+                    "leader_required_characters": "Cell",
+                },
+                source_text="[Counter: Attack] If your Leader Card is a <Cell> card: Negate the attack. Additionally, you may discard 1 card from your hand. If you do, play up to 1 green <Cell> card with an energy cost of 1 from your Drop Area.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_extra_from_hand",
+                handler_id="activate_play_matching_from_owner_leader_under",
+                handler_params={
+                    "max_targets": 1,
+                    "leader_required_characters": "Cell",
+                    "first_required_characters": "Cell: Xeno",
+                    "second_allowed_colors": "green",
+                    "second_required_characters": "Cell",
+                    "second_exact_costs": "7,8",
+                },
+                source_text="[Activate: Main](Green)(Green)(2), if your Leader Card is a <Cell> card: Play up to 1 <Cell: Xeno> card from under your Leader Card, or 1 green <Cell> card with an energy cost of 7 or 8 from under your Leader Card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is black" in text.lower()
+        and "when this card is played from your hand" in text.lower()
+        and "your opponent chooses 1 of their battle cards" in text.lower()
+        and "you choose the rest of their battle cards and send them to their owners' warps" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_opponent_choose_one_then_warp_rest_opponent_battle_on_play",
+                handler_params={
+                    "leader_allowed_colors": "black",
+                    "requires_played_from": "hand",
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when this card attacks" in text.lower()
+        and "play up to 1 red" in text.lower()
+        and "machine mutant" in text.lower()
+        and "card with an energy cost of 1 from your hand" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_play_up_to_n_from_owner_hand_on_attack",
+                handler_params={
+                    "max_targets": 1,
+                    "allowed_colors": "red",
+                    "required_traits": "Machine Mutant",
+                    "exact_costs": "1",
+                },
+                source_text="[Auto] When this card attacks, play up to 1 red ≪Machine Mutant≫ card with an energy cost of 1 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "play this card from under a unison card" in text.lower()
+        and "choose all of your opponent's battle cards and they get -30000 power for the turn" in text.lower()
+        and "this card gains [triple attack] for the turn" in text.lower()
+        and "choose 1 of your red unison cards with 10000 power or more and place this card under it from your hand or battle area: add a marker to the chosen card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_self_from_under_owner_unison",
+                handler_params={
+                    "required_source_zone": "battle_under",
+                    "owner_energy_at_least": 4,
+                },
+                source_text="[Activate: Main](Red)(Red)(Red), if you have 4 or more energy: Play this card from under a Unison Card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_reduce_all_opponent_battles_power_and_gain_keyword_for_turn",
+                handler_params={
+                    "power_delta": -30000,
+                    "grant_keyword": "Triple Attack",
+                },
+                source_text="[Activate: Main][Once per turn][Spirit Boost 3] Choose all of your opponent's Battle Cards and they get -30000 power for the turn, and this card gains [Triple Attack] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_marker_to_matching_owner_unison_and_place_self_under_it",
+                handler_params={
+                    "target_allowed_colors": "red",
+                    "target_min_power": 10000,
+                },
+                source_text="[Activate: Main][Limit 1] Choose 1 of your red Unison Cards with 10000 power or more and place this card under it from your hand or Battle Area: Add a marker to the chosen card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is a yellow ≪universe 11≫ card: when this card is played from your hand, choose one" in text.lower()
+        and "if you don't have a unison card in play, choose up to 1 {vegeta, unison of fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it" in text.lower()
+        and "this card gets +10000 power and [double strike] for the turn" in text.lower()
+        and "when this card is switched to rest mode by one of your yellow card skills, switch this card to active mode, then choose all of your opponent's battle cards and negate their skills for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_choose_unison_play_or_self_buff_on_play",
+                handler_params={
+                    "requires_played_from": "hand",
+                    "leader_allowed_colors": "yellow",
+                    "leader_required_traits": "Universe 11",
+                    "play_card_name_contains": "VEGETA, UNISON OF FURY",
+                    "play_card_type": "UNISON",
+                    "play_markers": 3,
+                    "play_source_pool": "hand_or_deck",
+                    "shuffle_deck_after": True,
+                    "buff_power_delta": 10000,
+                    "buff_keyword": "Double Strike",
+                },
+                source_text="[Auto] If your Leader Card is a yellow ≪Universe 11≫ card: When this card is played from your hand, choose one-\n・If you don't have a Unison Card in play, choose up to 1 {Vegeta, Unison of Fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it.\n・This card gets +10000 power and [Double Strike] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_switched_to_rest",
+                handler_id="auto_switch_self_active_then_negate_all_opponent_battle_skills_for_turn_on_owner_yellow_skill",
+                handler_params={
+                    "requires_owner_turn": True,
+                    "required_actor_player_id": "owner",
+                    "required_skill_color": "yellow",
+                },
+                source_text="[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your yellow card skills, switch this card to Active Mode, then choose all of your opponent's Battle Cards and negate their skills for the turn.",
+                once_per_turn=True,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is a <dr. myuu> card" in text.lower()
+        and "when this card is played from your hand, add up to 1 <ribet> card from your deck or drop area to your hand, then shuffle your deck if you looked through it" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play",
+                handler_params={
+                    "max_targets": 1,
+                    "required_traits": "Ribet",
+                    "leader_required_traits": "Dr. Myuu",
+                    "shuffle_deck_after": True,
+                    "requires_played_from": "hand",
+                },
+                source_text="[Auto] If your Leader Card is a <Dr. Myuu> card: When this card is played from your hand, add up to 1 <Ribet> card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is a <dr. myuu> card" in text.lower()
+        and "when this card is played from your hand, add up to 1 <nezi> card from your deck or drop area to your hand, then shuffle your deck if you looked through it" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play",
+                handler_params={
+                    "max_targets": 1,
+                    "required_traits": "Nezi",
+                    "leader_required_traits": "Dr. Myuu",
+                    "shuffle_deck_after": True,
+                    "requires_played_from": "hand",
+                },
+                source_text="[Auto] If your Leader Card is a <Dr. Myuu> card: When this card is played from your hand, add up to 1 <Nezi> card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when this card is played without using skills, choose one" in text.lower()
+        and "choose all of your opponent's battle cards with energy costs of 3 or more, place them at the bottom of their owners' decks" in text.lower()
+        and "if your leader card is a blue <kale> card, place up to 1 card from the top of your deck under your leader card" in text.lower()
+        and "if you have 7 or more energy, choose all of your opponent's battle cards, ignoring [barrier], place them at the bottom of their owners' decks, and this card gains [barrier] and [dual attack] for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_choose_bottom_deck_opponent_battles_or_gain_keywords_on_play_without_skills",
+                handler_params={
+                    "first_branch_min_cost": 3,
+                    "bonus_leader_allowed_colors": "blue",
+                    "bonus_leader_required_characters": "Kale",
+                    "second_branch_min_owner_energy": 7,
+                    "second_branch_grant_keywords": "Barrier,Dual Attack",
+                },
+                source_text="[Auto] When this card is played without using skills, choose one-\n・Choose all of your opponent's Battle Cards with energy costs of 3 or more, place them at the bottom of their owners' decks, and if your Leader Card is a blue <Kale> card, place up to 1 card from the top of your deck under your Leader Card.\n・If you have 7 or more energy, choose all of your opponent's Battle Cards, ignoring [Barrier], place them at the bottom of their owners' decks, and this card gains [Barrier] and [Dual Attack] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "choose 1 of your red battle cards: choose one" in text.lower()
+        and "the chosen card can attack battle cards in active mode for the turn" in text.lower()
+        and "choose 1 of your opponent's battle cards, and it gets -x power for the turn, where x is the power of the card chosen for this skill's skill cost" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_extra_from_hand",
+                handler_id="activate_grant_cost_target_attack_active_mode",
+                handler_params={
+                    "cost_target_scope": "owner_battle",
+                },
+                source_text="[Activate: Main] Choose 1 of your red Battle Cards: The chosen card can attack Battle Cards in Active Mode for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_extra_from_hand",
+                handler_id="activate_reduce_opponent_battle_by_cost_target_power",
+                handler_params={
+                    "max_targets": 1,
+                },
+                source_text="[Activate: Main] Choose 1 of your red Battle Cards: Choose 1 of your opponent's Battle Cards, and it gets -X power for the turn, where X is the power of the card chosen for this skill's skill cost.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "add 1 card from your life to your hand: when this card attacks" in text.lower()
+        and "look at up to 5 cards from the top of your deck" in text.lower()
+        and "play up to 1 {infinite multiplication meta-cooler} among them in rest mode" in text.lower()
+        and "shuffle your deck" in text.lower()
+        and "this card gets +10000 power for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_pay_life_look_top_play_up_to_n_named_rest_and_gain_power_on_attack",
+                handler_params={
+                    "life_to_hand": 1,
+                    "look_count": 5,
+                    "max_targets": 1,
+                    "required_name_contains": "INFINITE MULTIPLICATION META-COOLER",
+                    "rest_mode": True,
+                    "power_delta": 10000,
+                    "shuffle_deck_after": True,
+                },
+                source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, look at up to 5 cards from the top of your deck, play up to 1 {Infinite Multiplication Meta-Cooler} among them in Rest Mode, shuffle your deck, and this card gets +10000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your opponent has 3 or more energy and you have 5 or more red extra cards in your drop area" in text.lower()
+        and "choose 1 card in your hand and discard it" in text.lower()
+        and "when you activate the [activate: battle] skill on a red extra card with an original energy cost of 3 or more in your hand or drop area" in text.lower()
+        and "switch this card to active mode" in text.lower()
+        and "if the card you discarded with this skill is a copy of this card, draw 2 cards" in text.lower()
+        and "choose up to 1 of your opponent's battle cards or unison cards, ignoring [barrier], and it gets -35000 power for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="owner_activate_battle",
+                handler_id="auto_discard_on_owner_activate_battle_red_extra_switch_self_active_and_optional_copy_bonus_debuff",
+                handler_params={
+                    "discard_count": 1,
+                    "required_skill_source_zones": "hand,drop",
+                    "required_skill_card_type": "EXTRA",
+                    "required_skill_allowed_colors": "red",
+                    "required_skill_min_cost": 3,
+                    "bonus_draw": 2,
+                    "bonus_power_delta": -35000,
+                    "max_targets": 1,
+                    "ignores_barrier": True,
+                },
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
         "if your leader card is a ≪shenron≫ card" in text.lower()
         and "when this card is played, add up to 1 [dragon ball] card from your deck or drop area to your hand" in text.lower()
         and "place 7 [dragon ball] cards from your drop area under this card" in text.lower()

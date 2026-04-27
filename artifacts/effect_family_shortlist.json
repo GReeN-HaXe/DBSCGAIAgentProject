@@ -8,7 +8,7 @@
   "shortlist": [
     {
       "rank": 1,
-      "template": "[counter: counter] if one of your blue <beerus> card is attacking an opponent's battle card: negate the [counter: attack] and switch up to <n> of your blue energy to active mode.",
+      "template": "[dark over realm <n>](<n>) [auto][limit <n>] when this card attacks, play up to <n> \u226aevil wizard\u226b card, \u226ademon realm race\u226b card, or \u226ademon god\u226b card - all black and with an energy cost of <n> or less - from your hand.",
       "sources": [
         "global_unmatched"
       ],
@@ -18,129 +18,15 @@
       "priority_card_count": 0,
       "implemented_card_count": 0,
       "priority_implemented_card_count": 0,
-      "example_card_id": 323,
-      "example_card_number": "BT16-043",
-      "example_card_name": "Carefree Playtime",
+      "example_card_id": 576,
+      "example_card_number": "BT17-112",
+      "example_card_name": "Demon God Dabura, Imperial Warrior",
       "handler_counts": {},
       "trigger_counts": {},
       "diagnostic_counts": {}
     },
     {
       "rank": 2,
-      "template": "[counter: play] if your leader card is a <cabba> card: if the battle card being played has <n> power or more, play up to <n> blue \u226auniverse <n>\u226b <vegeta> card with [blocker] from your deck, negate its non-keyword skills...",
-      "sources": [
-        "global_unmatched"
-      ],
-      "score": 100,
-      "recommended_action": "implement_new_family",
-      "card_count": 1,
-      "priority_card_count": 0,
-      "implemented_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "example_card_id": 165,
-      "example_card_number": "BT15-060",
-      "example_card_name": "Mentor's Rescue",
-      "handler_counts": {},
-      "trigger_counts": {},
-      "diagnostic_counts": {}
-    },
-    {
-      "rank": 3,
-      "template": "[critical] [auto] choose <n> red/blue multicolor card in your energy: at the end of a turn where this card was played from your hand, draw <n> card and switch the chosen card to active mode.",
-      "sources": [
-        "global_unmatched"
-      ],
-      "score": 100,
-      "recommended_action": "implement_new_family",
-      "card_count": 1,
-      "priority_card_count": 0,
-      "implemented_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "example_card_id": 251,
-      "example_card_number": "BT16-015",
-      "example_card_name": "SS Vegeta, the Pursuer",
-      "handler_counts": {},
-      "trigger_counts": {},
-      "diagnostic_counts": {}
-    },
-    {
-      "rank": 4,
-      "template": "[dark over realm <n>](<n>) [auto] when this card is played from your hand, it gets +<n> power and [double strike] for the turn.",
-      "sources": [
-        "global_unmatched"
-      ],
-      "score": 100,
-      "recommended_action": "implement_new_family",
-      "card_count": 1,
-      "priority_card_count": 0,
-      "implemented_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "example_card_id": 379,
-      "example_card_number": "BT16-119",
-      "example_card_name": "Demon God Gravy, Umbral Might",
-      "handler_counts": {},
-      "trigger_counts": {},
-      "diagnostic_counts": {}
-    },
-    {
-      "rank": 5,
-      "template": "[deflect]. [auto] if your leader card is black: when this card is played from your hand, your opponent chooses <n> of their battle card, then you choose the rest of their battle card and send them to their owners' warps.",
-      "sources": [
-        "global_unmatched"
-      ],
-      "score": 100,
-      "recommended_action": "implement_new_family",
-      "card_count": 1,
-      "priority_card_count": 0,
-      "implemented_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "example_card_id": 121,
-      "example_card_number": "BT15-128",
-      "example_card_name": "Fin, Coercion Incarnate",
-      "handler_counts": {},
-      "trigger_counts": {},
-      "diagnostic_counts": {}
-    },
-    {
-      "rank": 6,
-      "template": "[deflect][critical][blocker]. [auto] if your leader card is a yellow \u226auniverse <n>\u226b card: when this card is played from your hand, choose one-. \u30fbif you don't have a unison card in play, choose up to <n> {vegeta, unison o...",
-      "sources": [
-        "global_unmatched"
-      ],
-      "score": 100,
-      "recommended_action": "implement_new_family",
-      "card_count": 1,
-      "priority_card_count": 0,
-      "implemented_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "example_card_id": 33,
-      "example_card_number": "EX19-18",
-      "example_card_name": "God of Destruction Toppo, Skillbreaker",
-      "handler_counts": {},
-      "trigger_counts": {},
-      "diagnostic_counts": {}
-    },
-    {
-      "rank": 7,
-      "template": "[deflect][double strike] . [auto] when this card is played without using skills, choose one-. \u30fbchoose all of your opponent's battle card with energy costs of <n> or more, place them at the bottom of their owners' decks,...",
-      "sources": [
-        "global_unmatched"
-      ],
-      "score": 100,
-      "recommended_action": "implement_new_family",
-      "card_count": 1,
-      "priority_card_count": 0,
-      "implemented_card_count": 0,
-      "priority_implemented_card_count": 0,
-      "example_card_id": 147,
-      "example_card_number": "BT15-042",
-      "example_card_name": "Kale, Rampaging Demon",
-      "handler_counts": {},
-      "trigger_counts": {},
-      "diagnostic_counts": {}
-    },
-    {
-      "rank": 8,
       "template": "[deflect][double strike]. [permanent] if your opponent has <n> or more energy and you have <n> or more red extra card in your drop area, reduce the energy cost of this card in your hand by <n>.. [auto][once per turn] cho...",
       "sources": [
         "global_unmatched"
@@ -159,7 +45,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 9,
+      "rank": 3,
       "template": "[deflect][dual attack][blocker]. [ex-evolve](red)(red), if you have <n> or more energy: red <son gohan: adolescence> card with an energy cost of <n>.. [activate: main][once per turn] choose <n> of your leader card or uni...",
       "sources": [
         "global_unmatched"
@@ -178,7 +64,26 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 10,
+      "rank": 4,
+      "template": "[deflect][unique][barrier] [auto] if you have <n> or more energy: when this card is played, it gains [triple strike] for the turn. [activate: main][once per turn] add up to <n> <caulifla> or <kale> card from your drop ar...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 100,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 464,
+      "example_card_number": "P-395",
+      "example_card_name": "SS2 Kefla, Supreme Warrior of Universe 6",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 5,
       "template": "[deflect][unique][triple strike][barrier] [counter: attack] negate the attack and play this card in rest mode. [permanent] during your opponent's turn, reduce the energy cost of this card in your hand by <n> for each car...",
       "sources": [
         "global_unmatched"
@@ -197,7 +102,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 11,
+      "rank": 6,
       "template": "[double strike] [auto][limit <n>] when this card attacks and kos an opponent's battle card, switch this card and up to <n> of your blue energy to active mode. [auto][limit <n>] if your leader card is blue and this card i...",
       "sources": [
         "global_unmatched"
@@ -216,7 +121,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 12,
+      "rank": 7,
       "template": "[double strike]. [counter: attack] negate the attack and play this card.. [permanent] during your opponent's turn, reduce the energy cost of this card in your hand by <n>.",
       "sources": [
         "global_unmatched"
@@ -235,7 +140,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 13,
+      "rank": 8,
       "template": "[double strike]. [ex-evolve](blue), if you have <n> or more energy: <hit> card with an energy cost of <n> or <n>.. [counter: attack] negate the attack and play this card.. [permanent] during your opponent's turn, reduce...",
       "sources": [
         "global_unmatched"
@@ -254,7 +159,26 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 14,
+      "rank": 9,
+      "template": "[double strike][barrier][blocker] [ex-evolve](red): <general rilldo> with an energy cost of <n> or more. [activate: battle] if it's your opponent's turn and you place <n> card from under this card in its owner's drop are...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 100,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 551,
+      "example_card_number": "BT17-017",
+      "example_card_name": "Meta-Rilldo, Ascended General",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 10,
       "template": "[dual attack] [counter: counter] if your leader card is blue: play this card. [auto] when this card is played, choose up to <n> of your opponent's battle card and place them at the bottom of their owners' decks in any or...",
       "sources": [
         "global_unmatched"
@@ -273,7 +197,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 15,
+      "rank": 11,
       "template": "[dual attack]. [counter: play] play this card, and if the battle card being played has an energy cost of <n> or less, return it to its owner's hand instead.. [permanent] during your opponent's turn, reduce the energy cos...",
       "sources": [
         "global_unmatched"
@@ -292,7 +216,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 16,
+      "rank": 12,
       "template": "[dual attack]. [permanent] if an opponent's battle card would be ko'd by this card's attack, gain control of it instead; you may switch it to active mode.. [auto][spirit boost <n>] when this card is played from your hand...",
       "sources": [
         "global_unmatched"
@@ -313,7 +237,7 @@
       }
     },
     {
-      "rank": 17,
+      "rank": 13,
       "template": "[dual attack]. [permanent] if your opponent has <n> or more battle card in play, reduce the energy cost of this card in your hand by <n>.. [auto] at the end of your turn, if your opponent has a battle card with an energy...",
       "sources": [
         "global_unmatched"
@@ -332,7 +256,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 18,
+      "rank": 14,
       "template": "[energy-exhaust][barrier][blocker] [auto] if you have <n> or more multicolor energy: when this card in your hand is played or used in a combo, your opponent chooses <n> card in their hand and discards it. [auto][limit <n...",
       "sources": [
         "global_unmatched"
@@ -351,7 +275,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 19,
+      "rank": 15,
       "template": "[energy-exhaust][blocker] [auto] when this card is played from your hand or at the end of a battle in which this card was used in a combo from your hand, add up to <n> skill-less battle card with an energy cost of <n> fr...",
       "sources": [
         "global_unmatched"
@@ -370,7 +294,7 @@
       "diagnostic_counts": {}
     },
     {
-      "rank": 20,
+      "rank": 16,
       "template": "[energy-exhaust][blocker] [counter: attack] negate the attack and play this card. [permanent] if there are <n> or more colors in your energy, you can activate this card's [counter] skill from your hand by adding a card f...",
       "sources": [
         "global_unmatched"
@@ -384,6 +308,82 @@
       "example_card_id": 398,
       "example_card_number": "BT16-140",
       "example_card_name": "Whis, Angel of Universe 7",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 17,
+      "template": "[energy-exhaust][blocker] [union-fusion]((red))((blue))(<n>): <son goku: br> and <vegeta: br>. [permanent] this card can't be ko'd by skills. [auto] if your leader card is a blue <vegeta: br> or blue <gogeta: br> card: a...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 100,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 254,
+      "example_card_number": "BT16-142",
+      "example_card_name": "SS Gogeta, Holding Nothing Back",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 18,
+      "template": "[energy-exhaust][blocker]. [arrival red/green](green). [auto](red): when this card is played, your opponent may choose <n> card in their hand and discard them. if they don't, choose up to <n> card in your opponent's batt...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 100,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 232,
+      "example_card_number": "P-352",
+      "example_card_name": "King Vegeta, Great Ape's Rule",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 19,
+      "template": "[energy-exhaust][blocker]. [auto][limit <n>](yellow), if the front of your leader card is a blue {son goku & vegeta} and you have <n> or less energy: when this card in your hand is played or placed in your energy, place...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 100,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 233,
+      "example_card_number": "P-353",
+      "example_card_name": "SSB Vegito, Blue Omen",
+      "handler_counts": {},
+      "trigger_counts": {},
+      "diagnostic_counts": {}
+    },
+    {
+      "rank": 20,
+      "template": "[energy-exhaust][blocker]. [evolve](<n>): <android <n>>.. [permanent] if this card would be removed from your battle area by an opponent's skill, you may place <n> card from under this card in their owners' drop areas in...",
+      "sources": [
+        "global_unmatched"
+      ],
+      "score": 100,
+      "recommended_action": "implement_new_family",
+      "card_count": 1,
+      "priority_card_count": 0,
+      "implemented_card_count": 0,
+      "priority_implemented_card_count": 0,
+      "example_card_id": 534,
+      "example_card_number": "EX20-09",
+      "example_card_name": "Cell, Unending Torrent",
       "handler_counts": {},
       "trigger_counts": {},
       "diagnostic_counts": {}
