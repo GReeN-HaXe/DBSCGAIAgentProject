@@ -4949,3 +4949,116 @@ When adding a new TODO:
 - Added runtime support for the exact once-per-turn owner trigger that discards `1` card from hand when the owner activates an `[Activate: Battle]` skill on a red Extra Card with original energy cost `3+` in hand or Drop, then switches this card to Active Mode.
 - Added the discarded-copy bonus branch that draws `2` cards and gives up to `1` opponent Battle Card or Unison `-35000 power` for the turn while ignoring `[Barrier]`.
 - Added focused extractor and phase4 coverage proving both the discarded-copy bonus branch and the non-copy branch resolve through the effect pipeline.
+
+## Reactive hand-body batch complete
+- Added exact extraction coverage for `BT15-035 Champa, Right on Time`, `BT15-045 Hit, On Guard`, `BT16-024 SSG Son Goku, Miraculous Transformation`, and `BT16-140 Whis, Angel of Universe 7`.
+- Reused the native `counter_negate_attack_play_self` runtime path for the common `Counter: Attack` play-self bodies instead of landing four isolated handlers.
+- Fixed hand cost reduction evaluation so counter eligibility reads the actual reduction clause instead of unrelated card text such as `EX-Evolve` prerequisites.
+- Added dynamic hand-cost reduction support for `reduce the energy cost of this card in your hand by 1 for each card in your opponent's energy`.
+- Extended the resting-card leader-lock helper so `Miraculous Transformation` correctly prevents opposing Battle Cards from attacking Leader Cards while rested under a mono-blue leader.
+- Added focused extractor, skill-cost, and phase4 coverage proving the batch resolves through the exact effect pipeline, including Whis's alternate life-payment counter and combo energy restand.
+
+## Reactive interrupt batch complete
+- Added exact extraction coverage for `BT16-030 SS Vegeta, the Interceptor` and `BT15-036 Vados, Right on Time`.
+- Added exact runtime support for `counter_attack -> counter_play_self_from_counter_counter` so `SS Vegeta, the Interceptor` now resolves through the counter chain, plays itself from the counter window, and bottom-decks up to `2` opponent Battle Cards on play.
+- Added exact runtime support for `counter_play -> counter_play_self_then_return_pending_to_owner_hand_if_cost_at_most` so `Vados, Right on Time` now replaces eligible pending Battle Card plays with a return-to-hand outcome instead of trying to act after the card has already entered battle.
+- Fixed counter-chain timing so pending counter-triggered effects resolve before the original pending play or attack is finalized, which is required for replacement-style `Counter: Play` effects.
+- Narrowed the generic counter play-self fallback so it does not preempt newly registered exact counter handlers and cause `source_missing` resolution failures.
+- Added focused extractor and phase4 coverage proving both exact cards resolve through the effect pipeline under deterministic counter-window setups.
+
+## BT17-130 Further Evolution slice complete
+- Added exact extraction for `BT17-130 Further Evolution`:
+  - `self_activate_extra_from_hand -> activate_look_top_choose_further_evolution_branch`
+- Added exact runtime support for the two mutually exclusive top-`7` search branches, deterministically preferring the `skill-less black Battle Card` branch when available and otherwise falling back to the `black ≪Android≫ cost 7 or less` branch.
+- Added focused extractor and phase4 coverage proving both the `add up to 2 skill-less black Battle Cards` branch and the `add up to 1 black ≪Android≫ cost 7 or less` fallback branch resolve through the effect pipeline.
+
+## BT17-081 Son Goku slice complete
+- Added exact extraction for `BT17-081 Son Goku`:
+  - `self_attacks -> auto_pay_life_look_top_play_up_to_n_matching_unison_with_marker_on_attack`
+- Added exact runtime support for the front-side leader auto that adds `1` card from life to hand on attack, looks at up to `5` cards from the top of the deck, and plays up to `1` yellow Unison with specified cost `1` among them with a marker on it in Rest Mode before shuffling.
+- Added focused extractor and phase4 coverage proving the life-payment and yellow-unison-with-marker branch resolve through the effect pipeline.
+
+## BT17-112 Demon God Dabura, Imperial Warrior slice complete
+- Added exact extraction for `BT17-112 Demon God Dabura, Imperial Warrior`:
+  - `self_attacks -> auto_play_up_to_n_from_owner_hand_on_attack`
+- Reused the existing generic on-attack play-from-hand runtime path, specializing the target filters to `black` cards with `≪Evil Wizard≫`, `≪Demon Realm Race≫`, or `≪Demon God≫` traits and exact energy costs `0`, `1`, or `2`.
+- Added focused extractor and phase4 coverage proving the exact attack-trigger branch resolves through the effect pipeline.
+
+## P-395 SS2 Kefla, Supreme Warrior of Universe 6 slice complete
+- Added exact extraction for `P-395 SS2 Kefla, Supreme Warrior of Universe 6`:
+  - `self_played -> auto_self_gain_power_for_turn_on_play` with `grant_keyword=Triple Strike` gated on `7+` owner energy
+  - `self_activate_main -> activate_add_up_to_n_from_owner_drop_to_hand`
+- Added a reusable `activate_add_up_to_n_from_owner_drop_to_hand` runtime handler for targeted drop-to-hand retrieval on `Activate: Main` and `Activate: Battle` exact slices.
+- Added focused extractor and phase4 coverage proving both the on-play Triple Strike grant and the `Caulifla/Kale` drop-to-hand retrieve resolve through the effect pipeline.
+
+## BT15-008 SS Son Gohan, Opposing the Demon slice complete
+- Added exact extraction for `BT15-008 SS Son Gohan, Opposing the Demon`:
+  - `self_activate_main -> activate_reduce_all_opponent_battles_power_and_gain_keyword_for_turn`
+- Reused the existing all-opponent battle power reduction runtime with a `-15000` exact parameterization and no keyword grant.
+- Added focused extractor and phase4 coverage proving the rest-a-leader-or-unison payment and full-board `-15000` power reduction resolve through the effect pipeline.
+
+## BT17-107 The Z Fighters at the Cell Games slice complete
+- Added exact extraction for `BT17-107 The Z Fighters at the Cell Games`:
+  - `self_activate_extra_from_hand -> activate_look_top_choose_add_to_hand_or_play_unison_with_marker`
+- Generalized the existing choose-one search runtime so branch filters come from handler params instead of being hard-coded to the black `Attack of the Dark Empire` variant.
+- Added focused extractor and phase4 coverage proving both the yellow `Saiyan` add-to-hand branch and the yellow Unison-with-marker branch resolve through the effect pipeline.
+
+## BT17-108 The World Champion Strikes slice complete
+- Added exact extraction for `BT17-108 The World Champion Strikes`:
+  - `counter_attack -> noop_auto`
+- This card is a scrape-minimal counter header with no additional exact runtime work beyond the existing generic counter pipeline, so extractor support is sufficient for this slice.
+
+## BT17-109 Instant Kamehameha slice complete
+- Added exact extraction for `BT17-109 Instant Kamehameha`:
+  - `counter_activated -> counter_switch_up_to_n_owner_leader_active`
+  - `counter_activated -> counter_buff_and_negate_owner_leader_for_turn_if_attacking`
+- Reused the existing alternate `counter_alternate_from_hand` Spirit Boost cost extraction so the permanent `pay the cost for [Spirit Boost 3] instead` path resolves without a new cost family.
+- Added the missing drop-zone registration support for `counter_activated`, then added focused extractor, skill-cost, and phase4 coverage proving the attacking `<Son Goku>` leader switches active, gains `+5000`, has its skills negated for the turn, and spends `3` Unison markers through the counter path.
+
+## BT17-076 Piccolo, Fusing With Kami slice complete
+- Added exact extraction for `BT17-076 Piccolo, Fusing With Kami`:
+  - `self_activate_battle -> activate_ko_up_to_n_opponent_battle`
+- Reused the existing generic `Activate: Battle` KO runtime with exact params for `max_cost=4` and `ignores_barrier=True`.
+- Added focused extractor and phase4 coverage proving the battle-window activation can KO an opponent battle card with `Barrier`.
+
+## BT16-036 Beerus, Ruthless Pursuer slice complete
+- Added exact extraction for `BT16-036 Beerus, Ruthless Pursuer`:
+  - `self_attacks_battle_end -> auto_switch_self_and_up_to_n_owner_energy_active_on_attack_ko`
+  - `owner_battle_ko_opponent_battle_battle_end -> auto_draw_n`
+  - `owner_battle_ko_opponent_battle_battle_end -> auto_play_self_from_combo_on_battle_end`
+- Added a small exact runtime handler for the self-restand plus blue-energy-restand clause on battle end after the source attack KOs an opponent battle card.
+- Reused the existing battle-end combo-area self-play runtime for the second clause, gated by blue leader and blue attacking battle filters.
+
+## BT17-017 Meta-Rilldo, Ascended General slice complete
+- Added exact extraction for `BT17-017 Meta-Rilldo, Ascended General`:
+  - `self_activate_battle -> activate_move_under_self_to_drop_switch_self_active_and_self_power_for_turn`
+- Added a small exact runtime handler that consumes `1` card from under the source on opponent turn, sends it to drop, switches the source active, and applies `-5000` power for the turn.
+- Added focused extractor and phase4 coverage proving the under-card payment and self-restand/self-debuff branch resolve through the effect pipeline.
+
+## P-348 Turles, Brutal Persuasion slice complete
+- Added exact extraction for `P-348 Turles, Brutal Persuasion`:
+  - `self_played -> auto_play_face_up_opponent_life_battle_rest_negated_on_play`
+- Added an exact on-play runtime handler that pulls a face-up opponent life Battle Card into the opponent Battle Area in Rest Mode with its skills permanently negated.
+- Added an exact battle-resolution replacement for the permanent clause so attack KOs are replaced with control transfer instead of producing a KO event.
+
+## BT15-077 Yamcha, Confronting Invasion slice complete
+- Added exact extraction for `BT15-077 Yamcha, Confronting Invasion`:
+  - tracked the permanent hand-cost reduction text
+  - `turn_end -> auto_send_self_to_owner_drop_on_turn_end_if_opponent_has_battle_cost`
+- Added the exact turn-end runtime that self-drops the card when the opponent has a cost-1 Battle Card in play.
+
+## BT17-068 Cooler, Sibling Cruelty slice complete
+- Added exact extraction for `BT17-068 Cooler, Sibling Cruelty`:
+  - `self_played -> auto_restrict_self_copies_and_bottom_deck_green_unison_then_opponent_discard_on_play`
+- Added the exact on-play runtime that applies a same-turn self-copy play restriction, optionally bottom-decks a green low-cost Unison from drop, and forces one opponent discard if the payment was made.
+- Implemented `BT17-078 Cooler's Armored Squadron` via the generalized choose-one top-deck branch handler, extending it to support a first-branch `play from deck` path and an `[Empower]`-gated green Unison branch.
+- Implemented `BT17-080 A Hopeless Sight` by mapping the live counter clause to the existing optional-discard drop-play family and extending the named-from-drop activate-main handler to honor multi-target resolutions for `play up to 100` cases.
+- Implemented `BT17-063 Dore, Cooler's Armored Squadron` and `BT17-064 Neiz, Cooler's Armored Squadron` together by adding exact `Empower` family extraction, a marker-gated on-play deck-search reuse path, and a small counter-play-with-marker / attack-restriction-on-play runtime for the Neiz slice.
+
+## BT17-050 Android 19, Energy Absorber slice complete
+- Added exact extraction for `BT17-050 Android 19, Energy Absorber`:
+  - `counter_attack -> noop_auto`
+  - tracked the permanent energy-source counter activation clause
+- Added a new `DECLARE_COUNTER_FROM_ENERGY` action path so counter cards can be declared directly from the energy area when their live text allows it.
+- Implemented the exact declaration runtime for the `from your energy by paying its energy cost and discarding 1 card from your hand` clause, reusing the existing counter-chain resolution and play-self runtime once the card reaches drop.
+- Added focused extractor and phase4 coverage proving the card can negate an attack from energy, discard a hand card, leave energy, and enter play through the normal counter pipeline.

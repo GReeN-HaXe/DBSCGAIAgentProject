@@ -1075,6 +1075,27 @@ def test_extract_counter_alternate_life_to_hand_with_energy_color_requirement() 
     }
 
 
+def test_extract_exact_bt16_whis_angel_of_universe_7_counter_alternate_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack and play this card. "
+            "[Permanent] If there are 4 or more colors in your energy, you can activate this card's [Counter] skill "
+            "from your hand by adding a card from your life to your hand instead of paying its energy cost. "
+            "[Auto] When this card is used in a combo from your hand, switch up to 1 of your energy to Active Mode."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "add_life_to_hand",
+                "amount": 1,
+                "requires_energy_colors_at_least": 4,
+            }
+        ]
+    }
+
+
 def test_extract_counter_alternate_life_to_hand_with_multicolor_energy_requirement() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -1646,6 +1667,25 @@ def test_extract_dyspo_thwarting_the_enemy_counter_alternate_spirit_boost_cost_r
                 "kind": "remove_owner_unison_markers",
                 "amount": 2,
                 "required_leader_colors": "red",
+            }
+        ]
+    }
+
+
+def test_extract_instant_kamehameha_counter_alternate_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Counter] If your Leader Card has <Son Goku> in its character name and is attacking: "
+            "Switch 1 of your Leader Cards to Active Mode, and it gets +5000 power and has its skills negated for the turn.\n"
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 3] instead."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 3,
             }
         ]
     }

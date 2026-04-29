@@ -423,6 +423,12 @@ class ScheduledAttackRestriction:
 
 
 @dataclass(frozen=True)
+class ScheduledCannotSwitchActiveRestriction:
+    active_player_id: int
+    target_instance_id: int = -1
+
+
+@dataclass(frozen=True)
 class LowPowerBattlePlayHandWarpPenalty:
     owner_player_id: int
     affected_player_id: int
@@ -663,6 +669,7 @@ class GameState:
     scheduled_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     active_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     scheduled_attack_restrictions: list[ScheduledAttackRestriction] = field(default_factory=list)
+    scheduled_cannot_switch_active_restrictions: list[ScheduledCannotSwitchActiveRestriction] = field(default_factory=list)
     scheduled_charge_phase_skip_player_ids: set[int] = field(default_factory=set)
     low_power_battle_play_hand_warp_penalties: list[LowPowerBattlePlayHandWarpPenalty] = field(default_factory=list)
     attack_power_taxes: list[AttackPowerTax] = field(default_factory=list)

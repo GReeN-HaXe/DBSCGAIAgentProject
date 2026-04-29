@@ -1,0 +1,13 @@
+{
+  "900306": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "add_life_to_hand",
+        "required_leader_colors": "yellow",
+        "required_leader_traits": "fierce foe",
+        "requires_all_energy_rested": true
+      }
+    ]
+  }
+}
