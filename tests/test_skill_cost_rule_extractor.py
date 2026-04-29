@@ -94,6 +94,27 @@ def test_extract_activate_main_rest_self_skill_cost_rule() -> None:
     }
 
 
+def test_extract_activate_main_choose_owner_battle_reference_skill_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Activate: Main] Choose 1 of your red Battle Cards: "
+            "Choose one- "
+            "The chosen card can attack Battle Cards in Active Mode for the turn. "
+            "Choose 1 of your opponent's Battle Cards, and it gets -X power for the turn, where X is the power of the card chosen for this skill's skill cost."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "activate_main_hand": [
+            {
+                "kind": "choose_owner_battle_reference",
+                "amount": 1,
+                "allowed_colors": "red",
+            }
+        ]
+    }
+
+
 def test_extract_activate_main_hand_to_drop_and_send_self_to_warp_skill_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -1054,6 +1075,27 @@ def test_extract_counter_alternate_life_to_hand_with_energy_color_requirement() 
     }
 
 
+def test_extract_exact_bt16_whis_angel_of_universe_7_counter_alternate_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack and play this card. "
+            "[Permanent] If there are 4 or more colors in your energy, you can activate this card's [Counter] skill "
+            "from your hand by adding a card from your life to your hand instead of paying its energy cost. "
+            "[Auto] When this card is used in a combo from your hand, switch up to 1 of your energy to Active Mode."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "add_life_to_hand",
+                "amount": 1,
+                "requires_energy_colors_at_least": 4,
+            }
+        ]
+    }
+
+
 def test_extract_counter_alternate_life_to_hand_with_multicolor_energy_requirement() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
@@ -1580,6 +1622,107 @@ def test_extract_counter_alternate_owner_battle_under_to_drop_cost_rule() -> Non
                 "kind": "send_owner_battle_under_to_drop",
                 "amount": 1,
                 "required_host_name_contains": "THE NAMELESS PLANET",
+            }
+        ]
+    }
+
+
+def test_extract_absorption_of_doom_counter_alternate_discard_other_black_hand_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] If your Leader Card is a black <Fin> card: Negate the attack. "
+            "Additionally, if your opponent has a skill-less Battle Card or Unison Card in play, they can only attack two more times for the turn."
+            "[Permanent] If your opponent has 2 or more Battle Cards in play, you can activate this card's [Counter] skill from your hand "
+            "without paying its energy cost by choosing 1 other black card in your hand and discarding it."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "discard_hand",
+                "amount": 1,
+                "allowed_colors": "black",
+                "exclude_source_card": True,
+                "required_leader_colors": "black",
+                "required_leader_traits": "fin",
+                "requires_opponent_battle_cards_at_least": 2,
+            }
+        ]
+    }
+
+
+def test_extract_dyspo_thwarting_the_enemy_counter_alternate_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Limit 1] If your Leader Card is red: Negate the attack, then play this card in Rest Mode. "
+            "If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn."
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 2,
+                "required_leader_colors": "red",
+            }
+        ]
+    }
+
+
+def test_extract_instant_kamehameha_counter_alternate_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Counter] If your Leader Card has <Son Goku> in its character name and is attacking: "
+            "Switch 1 of your Leader Cards to Active Mode, and it gets +5000 power and has its skills negated for the turn.\n"
+            "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 3] instead."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_alternate_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 3,
+            }
+        ]
+    }
+
+
+def test_extract_skill_hunter_towa_counter_spirit_boost_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Spirit Boost 1] Play this card.<br>"
+            "[Permanent] If it's your opponent's turn and they have a skill-less Battle Card or Unison Card in play, reduce the energy cost of this card in your hand by 1.<br>"
+            "[Auto] If your Leader Card is a black &lt;Fin&gt; card: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it under your Leader Card."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
+            }
+        ]
+    }
+
+
+def test_extract_counter_spirit_boost_x_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack][Spirit Boost X] (Remove X markers from your Unison Card to activate this skill.) "
+            "If your Leader Card is a red ≪Universe 11≫ card: Negate the attack."
+        )
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    assert rules == {
+        "counter_from_hand": [
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": 1,
             }
         ]
     }

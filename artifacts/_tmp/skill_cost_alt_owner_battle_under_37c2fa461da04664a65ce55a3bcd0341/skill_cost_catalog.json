@@ -1,0 +1,11 @@
+{
+  "900305": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "send_owner_battle_under_to_drop",
+        "required_host_name_contains": "THE NAMELESS PLANET"
+      }
+    ]
+  }
+}

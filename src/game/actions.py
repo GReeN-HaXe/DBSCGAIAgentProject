@@ -30,6 +30,7 @@ class ActionType(str, Enum):
     END_OFFENSE_STEP = "end_offense_step"
     END_DEFENSE_STEP = "end_defense_step"
     DECLARE_COUNTER_FROM_HAND = "declare_counter_from_hand"
+    DECLARE_COUNTER_FROM_ENERGY = "declare_counter_from_energy"
     PASS_COUNTER_WINDOW = "pass_counter_window"
     DECLARE_ATTACK = "declare_attack"
     RESOLVE_BATTLE = "resolve_battle"

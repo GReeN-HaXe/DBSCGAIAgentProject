@@ -287,6 +287,10 @@ class SkillCostDsl:
         if requires_opponent_energy_at_least > 0:
             if opponent is None or len(opponent.energy) < requires_opponent_energy_at_least:
                 return False
+        requires_opponent_battle_cards_at_least = int(step.params.get("requires_opponent_battle_cards_at_least", 0) or 0)
+        if requires_opponent_battle_cards_at_least > 0:
+            if opponent is None or len(opponent.battle_area) < requires_opponent_battle_cards_at_least:
+                return False
         requires_sparking = int(step.params.get("requires_sparking", 0) or 0)
         if requires_sparking > 0 and len(player.drop) < requires_sparking:
             return False
@@ -418,7 +422,13 @@ class SkillCostDsl:
             if not SkillCostDsl._step_prereqs_met(player, step, opponent):
                 return False
             if step.kind == "discard_hand":
-                if len(player.hand) < step.amount:
+                candidates = [
+                    card
+                    for card in player.hand
+                    if (not bool(step.params.get("exclude_source_card", False)) or card.instance_id != source_card.instance_id)
+                    and SkillCostDsl._card_matches_filters(card, step)
+                ]
+                if len(candidates) < step.amount:
                     return False
                 continue
             if step.kind == "rest_energy":
@@ -562,7 +572,7 @@ class SkillCostDsl:
             if step.kind == "send_self_to_warp":
                 if step.amount != 1:
                     return False
-                if not SkillCostDsl._in_battle_or_unison(player, source_card):
+                if not (SkillCostDsl._in_battle_or_unison(player, source_card) or SkillCostDsl._in_drop(player, source_card)):
                     return False
                 continue
             if step.kind == "send_self_to_removed":
@@ -572,6 +582,11 @@ class SkillCostDsl:
                     return False
                 continue
             if step.kind == "switch_owner_battle_to_hidden":
+                available = SkillCostDsl._owner_battle_candidates(player, source_card, step)
+                if len(available) < step.amount:
+                    return False
+                continue
+            if step.kind == "choose_owner_battle_reference":
                 available = SkillCostDsl._owner_battle_candidates(player, source_card, step)
                 if len(available) < step.amount:
                     return False
@@ -625,8 +640,20 @@ class SkillCostDsl:
             if not SkillCostDsl._step_prereqs_met(player, step, opponent):
                 raise ValueError(f"Skill cost prerequisites not met for: {step.kind}")
             if step.kind == "discard_hand":
-                for _ in range(step.amount):
-                    player.drop.append(player.hand.pop(0))
+                discarded = 0
+                index = 0
+                while index < len(player.hand) and discarded < step.amount:
+                    card = player.hand[index]
+                    if bool(step.params.get("exclude_source_card", False)) and card.instance_id == source_card.instance_id:
+                        index += 1
+                        continue
+                    if not SkillCostDsl._card_matches_filters(card, step):
+                        index += 1
+                        continue
+                    player.drop.append(player.hand.pop(index))
+                    discarded += 1
+                if discarded < step.amount:
+                    raise ValueError("Not enough matching cards in hand to discard.")
                 continue
             if step.kind == "rest_energy":
                 rested = 0
@@ -904,8 +931,11 @@ class SkillCostDsl:
                         metadata["removed_source_owner_player_id"] = int(opponent.player_id)
                 continue
             if step.kind == "send_self_to_warp":
-                if not SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="warp"):
-                    raise ValueError("Source card not found in battle/unison area for send_self_to_warp.")
+                if not (
+                    SkillCostDsl._remove_source_from_battle_or_unison(player, source_card, destination="warp")
+                    or SkillCostDsl._remove_source_from_drop(player, source_card, destination="warp")
+                ):
+                    raise ValueError("Source card not found in battle/unison/drop for send_self_to_warp.")
                 continue
             if step.kind == "send_self_to_removed":
                 removed_zone = "drop"
@@ -924,6 +954,16 @@ class SkillCostDsl:
                     card.hidden_mode = True
                     moved += 1
                     if moved == 1:
+                        metadata["cost_target_instance_id"] = int(card.instance_id)
+                        metadata["cost_target_card_id"] = int(card.card_id)
+                        metadata["cost_target_zone"] = "battle"
+                continue
+            if step.kind == "choose_owner_battle_reference":
+                candidates = SkillCostDsl._owner_battle_candidates(player, source_card, step)
+                chosen = 0
+                for card in candidates[: step.amount]:
+                    chosen += 1
+                    if chosen == 1:
                         metadata["cost_target_instance_id"] = int(card.instance_id)
                         metadata["cost_target_card_id"] = int(card.card_id)
                         metadata["cost_target_zone"] = "battle"

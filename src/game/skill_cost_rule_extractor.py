@@ -27,6 +27,10 @@ _COUNTER_HIDDEN_COST_RE = re.compile(
 _ACTIVATE_MAIN_HIDDEN_COST_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?choose 1 of your (.+?) battle cards? and switch it to hidden mode:"
 )
+_ACTIVATE_MAIN_BATTLE_REFERENCE_COST_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,220}?choose 1 of your (.+?) battle cards?\s*:\s*choose one",
+    re.IGNORECASE,
+)
 _ACTIVATE_BATTLE_HIDDEN_COST_RE = re.compile(
     r"\[activate(?::)?\s*battle\].{0,260}?choose 1 (?:(?:of your )?(.+?) battle cards?|(.+?) card in your battle area) and switch (?:it|them) to hidden mode:"
 )
@@ -89,6 +93,10 @@ _ACTIVATE_MAIN_HAND_TO_WARP_RE = re.compile(
 )
 _ACTIVATE_MAIN_SEND_SELF_FROM_HAND_TO_WARP_RE = re.compile(
     r"\[activate(?::)?\s*main\].{0,260}?send this card from your hand to (?:(?:your|the) warp|(?:its|their )?owner'?s warp)\s*:",
+    re.IGNORECASE,
+)
+_ACTIVATE_MAIN_SEND_SELF_FROM_DROP_TO_WARP_RE = re.compile(
+    r"\[activate(?::)?\s*main\].{0,260}?send this card from your drop(?: area)? to (?:(?:your|the) warp|(?:its|their )?owner'?s warp)\s*:",
     re.IGNORECASE,
 )
 _ACTIVATE_MAIN_HAND_TO_DROP_RE = re.compile(
@@ -233,6 +241,18 @@ _COUNTER_ALT_REDUCE_OWNER_BATTLE_POWER_RE = re.compile(
 _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE = re.compile(
     r"\[counter:\s*(?:attack|play|counter|battle card attack)\].{0,220}?choose (\d+) (.+?) cards? in your hand and place (?:it|them) in your drop area\s*:"
 )
+_COUNTER_ATTACK_SPIRIT_BOOST_RE = re.compile(
+    r"\[counter(?::)?\s*attack\](?:.{0,120}?)?\[spirit boost\s+(\d+|x)\]",
+    re.IGNORECASE,
+)
+_COUNTER_ALT_DISCARD_OTHER_HAND_RE = re.compile(
+    r"\[(?:permanent|permament)\].{0,320}?activate this card's \[counter\] skill from your hand without paying its energy cost by choosing (\d+) other (.+?) cards? in your hand and discarding (?:it|them)",
+    re.IGNORECASE,
+)
+_COUNTER_ALT_SPIRIT_BOOST_RE = re.compile(
+    r"\[(?:permanent|permament)\].{0,260}?activate this card's \[counter\] skill from your hand without paying its energy cost by paying the cost for \[spirit boost\s+(\d+)\] instead",
+    re.IGNORECASE,
+)
 
 
 def _normalize_text(raw: str | None) -> str:
@@ -242,6 +262,10 @@ def _normalize_text(raw: str | None) -> str:
     text = html.unescape(text).lower()
     text = text.replace("[br]", ". ").replace("—", " - ").replace("―", " - ")
     return _WS_RE.sub(" ", text.strip())
+
+
+def _spirit_boost_amount(raw: str) -> int:
+    return 1 if str(raw or "").strip().lower() == "x" else int(raw)
 
 
 def _extract_allowed_colors(descriptor: str) -> str:
@@ -484,6 +508,13 @@ def _extract_requires_opponent_energy_at_least(text: str) -> int | None:
     return int(match.group(1))
 
 
+def _extract_requires_opponent_battle_cards_at_least(text: str) -> int | None:
+    match = re.search(r"if your opponent has (\d+) or more battle cards? in play", text, re.IGNORECASE)
+    if match is not None:
+        return int(match.group(1))
+    return None
+
+
 def _extract_required_name_tokens(descriptor: str) -> str:
     brace_values = _extract_wrapper_values(descriptor, open_char="{", close_char="}")
     if brace_values:
@@ -568,6 +599,15 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         if allowed_colors:
             params["allowed_colors"] = allowed_colors
         rules["activate_main"] = [params]
+
+    m_activate_battle_reference = _ACTIVATE_MAIN_BATTLE_REFERENCE_COST_RE.search(text)
+    if m_activate_battle_reference:
+        descriptor = m_activate_battle_reference.group(1).strip()
+        params = {"kind": "choose_owner_battle_reference", "amount": 1}
+        allowed_colors = _extract_allowed_colors(descriptor)
+        if allowed_colors:
+            params["allowed_colors"] = allowed_colors
+        rules["activate_main_hand"] = [params]
 
     m_activate_battle_hidden = _ACTIVATE_BATTLE_HIDDEN_COST_RE.search(text)
     if m_activate_battle_hidden:
@@ -843,7 +883,16 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             0,
             {
                 "kind": "remove_owner_unison_markers",
-                "amount": int(m_activate_main_spirit_boost.group(1)),
+                "amount": _spirit_boost_amount(m_activate_main_spirit_boost.group(1)),
+            },
+        )
+    m_counter_attack_spirit_boost = _COUNTER_ATTACK_SPIRIT_BOOST_RE.search(text)
+    if m_counter_attack_spirit_boost:
+        rules.setdefault("counter_from_hand", []).insert(
+            0,
+            {
+                "kind": "remove_owner_unison_markers",
+                "amount": _spirit_boost_amount(m_counter_attack_spirit_boost.group(1)),
             },
         )
     m_activate_main_drop_to_warp = _ACTIVATE_MAIN_DROP_TO_WARP_RE.search(text)
@@ -853,6 +902,8 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         rules.setdefault("activate_main", []).append(_extract_filtered_cost_step("send_owner_drop_to_warp", descriptor, amount))
     if _ACTIVATE_MAIN_SEND_SELF_TO_WARP_RE.search(text):
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_warp", "amount": 1})
+    if _ACTIVATE_MAIN_SEND_SELF_FROM_DROP_TO_WARP_RE.search(text):
+        rules.setdefault("activate_main_drop", []).append({"kind": "send_self_to_warp", "amount": 1})
     if m_activate_main_remove_self_in_drop_and_discard_hand:
         rules.setdefault("activate_main", []).append({"kind": "send_self_to_removed", "amount": 1})
         rules.setdefault("activate_main", []).append(
@@ -1190,6 +1241,20 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
             params["required_leader_traits"] = required_leader_traits
         rules["counter_alternate_from_hand"] = [params]
 
+    m_counter_alt_spirit_boost = _COUNTER_ALT_SPIRIT_BOOST_RE.search(text)
+    if m_counter_alt_spirit_boost:
+        params = {
+            "kind": "remove_owner_unison_markers",
+            "amount": int(m_counter_alt_spirit_boost.group(1)),
+        }
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
+        rules["counter_alternate_from_hand"] = [params]
+
     m_counter_direct_discard_hand = _COUNTER_DIRECT_DISCARD_HAND_TO_DROP_RE.search(text)
     if m_counter_direct_discard_hand:
         descriptor = m_counter_direct_discard_hand.group(2).strip()
@@ -1201,6 +1266,22 @@ def extract_skill_cost_rules_from_card(card: CardData) -> dict[str, list[dict[st
         if required_leader_traits:
             params["required_leader_traits"] = required_leader_traits
         rules["counter_from_hand"] = [params]
+
+    m_counter_alt_discard_other_hand = _COUNTER_ALT_DISCARD_OTHER_HAND_RE.search(text)
+    if m_counter_alt_discard_other_hand:
+        descriptor = m_counter_alt_discard_other_hand.group(2).strip()
+        params = _extract_filtered_cost_step("discard_hand", descriptor, int(m_counter_alt_discard_other_hand.group(1)))
+        params["exclude_source_card"] = True
+        required_leader_colors = _extract_required_leader_colors(text)
+        if required_leader_colors:
+            params["required_leader_colors"] = required_leader_colors
+        required_leader_traits = _extract_required_leader_traits(text)
+        if required_leader_traits:
+            params["required_leader_traits"] = required_leader_traits
+        requires_opponent_battle_cards_at_least = _extract_requires_opponent_battle_cards_at_least(text)
+        if requires_opponent_battle_cards_at_least is not None:
+            params["requires_opponent_battle_cards_at_least"] = requires_opponent_battle_cards_at_least
+        rules["counter_alternate_from_hand"] = [params]
 
     return rules
 

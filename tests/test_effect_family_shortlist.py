@@ -132,3 +132,72 @@ def test_build_effect_family_shortlist_merges_stats_for_truncated_unmatched_temp
     assert row["implemented_card_count"] == 2
     assert row["recommended_action"] == "extend_existing_family"
     assert row["handler_counts"] == {"z": 2}
+
+
+def test_build_effect_family_shortlist_does_not_merge_prefix_for_different_example() -> None:
+    audit = {
+        "families": [
+            {
+                "template": "shared prefix implemented family with one ending",
+                "card_count": 1,
+                "implemented_card_count": 1,
+                "priority_card_count": 0,
+                "priority_implemented_card_count": 0,
+                "example_card_id": 118,
+                "example_card_number": "BT15-125",
+                "example_card_name": "Skill Hunter Towa",
+                "handler_counts": {"noop_auto": 2},
+                "trigger_counts": {"self_played": 2},
+                "diagnostic_counts": {},
+            }
+        ],
+        "top_priority_families": [],
+        "extractor_report": {
+            "unmatched_top_templates": [
+                {
+                    "template": "shared prefix implemented family...",
+                    "count": 1,
+                    "example_card_id": 115,
+                }
+            ]
+        },
+    }
+    payload = build_effect_family_shortlist(audit, top_n=5)
+    row = payload["shortlist"][0]
+    assert row["example_card_id"] == 115
+    assert row["implemented_card_count"] == 0
+    assert row["recommended_action"] == "implement_new_family"
+
+
+def test_build_effect_family_shortlist_excludes_fully_implemented_non_priority_family() -> None:
+    audit = {
+        "families": [
+            {
+                "template": "implemented counter family",
+                "card_count": 1,
+                "implemented_card_count": 1,
+                "priority_card_count": 0,
+                "priority_implemented_card_count": 0,
+                "example_card_id": 203,
+                "example_card_number": "BT15-080",
+                "example_card_name": "Yajirobe, Confronting Invasion",
+                "handler_counts": {"counter_play_self_rest_then_ko_attacking_battle_if_trait_and_opponent_draw_n": 1},
+                "trigger_counts": {"counter_attack": 1},
+                "diagnostic_counts": {},
+            }
+        ],
+        "top_priority_families": [],
+        "extractor_report": {
+            "unmatched_top_templates": [
+                {
+                    "template": "real unmatched family",
+                    "count": 1,
+                    "example_card_id": 361,
+                }
+            ]
+        },
+    }
+    payload = build_effect_family_shortlist(audit, top_n=5)
+    templates = [row["template"] for row in payload["shortlist"]]
+    assert "implemented counter family" not in templates
+    assert templates == ["real unmatched family"]

@@ -35,7 +35,7 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
         if implemented > 0:
             candidate["recommended_action"] = "extend_existing_family"
 
-    def _candidate(template: str) -> dict[str, Any]:
+    def _candidate(template: str, *, example_card_id: object | None = None) -> dict[str, Any]:
         candidate = candidates.setdefault(
             template,
             {
@@ -56,9 +56,16 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
             },
         )
         family_row = family_index.get(template)
-        if family_row is None and template.endswith("..."):
+        if family_row is None and template.endswith("...") and example_card_id is not None:
             prefix = template[:-3].rstrip()
-            family_row = next((row for family_template, row in family_prefix_index if family_template.startswith(prefix)), None)
+            family_row = next(
+                (
+                    row
+                    for family_template, row in family_prefix_index
+                    if family_template.startswith(prefix) and row.get("example_card_id") == example_card_id
+                ),
+                None,
+            )
         if family_row is not None:
             _merge_family_stats(candidate, family_row)
         return candidate
@@ -111,7 +118,7 @@ def build_effect_family_shortlist(audit: dict[str, Any], *, top_n: int = 20) -> 
         count = int(row.get("count", 0))
         if count <= 0:
             continue
-        candidate = _candidate(template)
+        candidate = _candidate(template, example_card_id=row.get("example_card_id"))
         candidate["sources"] = sorted(set([*candidate["sources"], "global_unmatched"]))
         candidate["score"] = max(int(candidate["score"]), count * 100)
         candidate["card_count"] = max(int(candidate["card_count"]), count)
