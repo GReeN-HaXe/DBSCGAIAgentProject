@@ -303,6 +303,15 @@ class DelayedDrawAndActiveSwitch:
 
 
 @dataclass(frozen=True)
+class DelayedDrawAndDropToEnergy:
+    owner_player_id: int
+    trigger_player_id: int
+    amount: int = 1
+    allowed_colors: str = ""
+    requires_multicolor: bool = False
+
+
+@dataclass(frozen=True)
 class DelayedMainPhaseEnergySwitch:
     owner_player_id: int
     trigger_player_id: int
@@ -423,6 +432,14 @@ class ScheduledAttackRestriction:
 
 
 @dataclass(frozen=True)
+class DelayedBattleAttackNegate:
+    affected_player_id: int
+    created_turn_number: int
+    min_cost: int = -1
+    require_next_turn: bool = False
+
+
+@dataclass(frozen=True)
 class ScheduledCannotSwitchActiveRestriction:
     active_player_id: int
     target_instance_id: int = -1
@@ -450,6 +467,7 @@ class BattleAttackBottomDeckHandTax:
     owner_player_id: int
     affected_player_id: int
     min_cost_greater_than_current_energy: int = 1
+    max_cost: int = -1
     hand_count: int = 2
     expires_on_turn_end_player_id: int = 1
 
@@ -648,6 +666,7 @@ class GameState:
     delayed_keyword_clears: list[DelayedKeywordClear] = field(default_factory=list)
     delayed_active_switches: list[DelayedActiveSwitch] = field(default_factory=list)
     delayed_draw_and_active_switches: list[DelayedDrawAndActiveSwitch] = field(default_factory=list)
+    delayed_draw_and_drop_to_energy: list[DelayedDrawAndDropToEnergy] = field(default_factory=list)
     delayed_main_phase_energy_switches: list[DelayedMainPhaseEnergySwitch] = field(default_factory=list)
     delayed_warps: list[DelayedWarp] = field(default_factory=list)
     delayed_bottom_decks_if_in_play: list[DelayedBottomDeckIfInPlay] = field(default_factory=list)
@@ -669,6 +688,7 @@ class GameState:
     scheduled_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     active_activate_skill_restrictions: list[DelayedActivateSkillRestriction] = field(default_factory=list)
     scheduled_attack_restrictions: list[ScheduledAttackRestriction] = field(default_factory=list)
+    delayed_battle_attack_negates: list[DelayedBattleAttackNegate] = field(default_factory=list)
     scheduled_cannot_switch_active_restrictions: list[ScheduledCannotSwitchActiveRestriction] = field(default_factory=list)
     scheduled_charge_phase_skip_player_ids: set[int] = field(default_factory=set)
     low_power_battle_play_hand_warp_penalties: list[LowPowerBattlePlayHandWarpPenalty] = field(default_factory=list)

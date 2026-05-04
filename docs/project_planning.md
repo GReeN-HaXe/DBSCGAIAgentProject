@@ -5062,3 +5062,38 @@ When adding a new TODO:
 - Added a new `DECLARE_COUNTER_FROM_ENERGY` action path so counter cards can be declared directly from the energy area when their live text allows it.
 - Implemented the exact declaration runtime for the `from your energy by paying its energy cost and discarding 1 card from your hand` clause, reusing the existing counter-chain resolution and play-self runtime once the card reaches drop.
 - Added focused extractor and phase4 coverage proving the card can negate an attack from energy, discard a hand card, leave energy, and enter play through the normal counter pipeline.
+
+## Next 5 shortlist heads complete
+- Implemented `BT17-053 Android 14, Inorganic Horror` with exact extraction for the on-play battle-attack bottom-deck tax clause and reused the native counter play-self family for the counter header.
+- Implemented `BT16-131 Whis, Calling to Order` with a new exact search-and-optional-rest-play runtime covering both the played-from-hand and combo-battle-end branches.
+- Extended the named deck-play family with `max_look` support and implemented `BT17-141 Meta-Cooler, Enhanced Menace` as a top-7, play-up-to-3 named rest-mode branch.
+- Added a delayed draw-plus-drop-to-energy schedule and implemented `BT16-142 SS Gogeta, Holding Nothing Back` for the exact end-of-turn draw and red/blue multicolor drop-to-energy line.
+- Implemented `P-352 King Vegeta, Great Ape's Rule` with an exact on-play opponent-discard-or-drop branch and a turn-end Great Ape restand handler.
+
+## Following 5 shortlist heads complete
+- Implemented `BT17-056 Red Ribbon Army, Assemble!` with a reusable exact `Activate: Main` deck-play handler extended to honor `max_power` deck filters.
+- Implemented `BT17-057 Sacrificial Strike` with an exact `Activate: Battle` handler that buffs a blue `Red Ribbon Army` battle card, optionally sends a matching owner battle card to drop, and grants `Critical` to the battling owner card for the battle.
+- Implemented `BT17-055 Android 15, Inorganic Horror` by wiring the exact `Counter: Play` bounce clause to the existing pending-play return family and broadening energy-source counter declaration to support `pay its energy cost` variants that do not require a hand discard.
+- Implemented `EX20-09 Cell, Unending Torrent` by mapping the live `Activate: Battle` text to the existing under-card release and self-restand family with the exact `<Cell>` leader gate and zero power delta.
+- Implemented `P-354 Baby Janemba, Malefic Agent of Destruction` as extractor coverage for the passive `Offering` / `Energy-Exhaust` suppression clause.
+
+## New 5 shortlist heads complete
+- Implemented `P-381 Natt, on Alert` with exact extraction for the hand-played `Dr. Myuu` search branch into red `<General Rilldo>` cost-5-or-less deck-to-hand.
+- Implemented `P-379 King Cold, Hail to the King` with exact extractor coverage for the counter header and a new on-play opponent battle-attack discard tax family.
+- Implemented `P-377 Son Gohan, the Empowered` with exact `self_placed_into_drop` extraction for the `Trunks, the Empowered` deck search and explicit turn-end self-restand extraction for the `+1` line.
+- Implemented `P-353 SSB Vegito, Blue Omen` with a new `self_added_to_energy` trigger family, charge-phase energy entry event registration, the exact deck-to-energy plus opponent hand-to-energy branch, and exact activate-main play-on-top-of-self support.
+- Implemented `EX19-31 SS Broly, Reckless Pursuit` with exact on-play / self-switch skill-negation extraction and a new skill-less KO family shared across `Activate: Main` and `Activate: Battle`.
+
+## Next 5 real shortlist heads complete
+- Implemented `P-403 Mai, Future Possibilities` with exact Z-Energy-gated attack buff extraction and a delayed next-opponent-turn battle-attack negate family keyed by minimum attacker cost.
+- Implemented `P-404 Piccolo, Master's Teachings` with exact on-play deck-play extraction after a two-card discard cost and an owner-battle-attack trigger that rests the source and moves an opponent battle card into the owner combo area.
+- Implemented `P-387 Chiaotzu, Z Fighter` with exact `self_placed_into_drop` rest-mode extraction, a new activate-main total-cost rest family, and an opponent-attack keyword-skill negation handler.
+- Implemented `BT15-150 Turles, Dark Power Unleashed` with exact battle-end KO reward extraction and a self-left-battle-area punishment handler for opponent-skill removal.
+- Implemented `BT17-139 Piccolo, Fusing With Nail` with exact activate-battle rested-target KO/discard extraction and a battle-KO replacement runtime that spends an under-card instead of allowing the source to be KO'd.
+
+## BT18 / BT15 follow-up shortlist batch complete
+- Implemented `BT18-081 Cymbal, Demonic Subordinate` with exact attack-time `Demon Clan` battle buff extraction and a combo-time leader `Double Strike` grant for the battle.
+- Implemented `BT18-085 SS Son Goten & SS Trunks, Unfurled Potential` with exact Union-Fusion drop buff extraction, z-energy-to-drop removal extraction, and drop-origin combo plus end-of-battle warp coverage.
+- Implemented `BT18-070 Son Goku, Skills Improved` with exact owner battle KO follow-up extraction, including draw-plus-self-play from hand and the self attack KO restand plus opponent discard line.
+- Implemented `BT18-062_PR2 Son Goku, Krillin, & Yamcha, Turtle School Inheritors` with exact deck-play extraction for the 20000-power green `Turtle School` search that excludes `<Master Roshi>` and negates keyword skills for the turn.
+- Implemented `BT15-147 Vegeta & Cabba, Lessons Learned` with an exact on-play bottom-deck handler limited to opponent Rest Mode battle cards with energy cost 4 or less.
