@@ -1491,6 +1491,19 @@ def test_engine_loads_skill_cost_catalog_from_path() -> None:
     assert any(a.action_type == ActionType.DECLARE_COUNTER_FROM_HAND for a in legal)
 
 
+def test_extract_activate_main_send_self_from_drop_to_warp_cost_rule() -> None:
+    card = SimpleNamespace(
+        card_skill_unstyled=(
+            "[Counter: Attack] Negate the attack.\n"
+            "[Activate: Main](Blue), if your Leader is a <Paikuhan> card and you send this card from your Drop to your Warp: Choose up to 1 of your blue <Paikuhan> cards and it gets +5000 power and [Double Strike] for the turn."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_skill_cost_rules_from_card(card)
+    main_steps = rules["activate_main_drop"]
+    assert any(step["kind"] == "send_self_to_warp" for step in main_steps)
+
+
 def test_extract_auto_on_opponent_combo_z_energy_cost_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
