@@ -1,0 +1,46 @@
+{
+  "card_rule_count": 2,
+  "catalog_kind": "dbs_effect_catalog",
+  "effect_rule_count": 2,
+  "rules": {
+    "10204": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1,
+          "leader_required_traits": "Universe 2",
+          "required_leader_traits": "Universe 2",
+          "requires_leader": "if your leader is a \u226auniverse 2\u226b card"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] [limit 1] if your leader is a \u226auniverse 2\u226b card: when this card is played, draw 1 card, send up to 1 {rozie, witchy warrior} from your drop to your warp, add up to 1 black \u226amaiden squadron\u226b card from your drop or warp to your z-energy, then send up to 2 battle cards from your opponent's drop to their owner's warp.",
+        "trigger": "self_played"
+      }
+    ],
+    "10205": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "look_count": 5,
+          "max_add": 2,
+          "max_cost": -1,
+          "required_characters": "Add Up To 1",
+          "required_traits": "Universe 2",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] [limit 1] when this card is played, look at up to 5 cards from the top of your deck, choose up to 2 \u226auniverse 2\u226b cards, add up to 1 card to your hand, send up to 1 card to your warp, then shuffle your deck.",
+        "trigger": "self_played"
+      }
+    ]
+  },
+  "schema_version": 1
+}

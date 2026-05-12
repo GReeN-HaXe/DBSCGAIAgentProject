@@ -469,6 +469,8 @@ class BattleAttackBottomDeckHandTax:
     min_cost_greater_than_current_energy: int = 1
     max_cost: int = -1
     hand_count: int = 2
+    battle_count: int = 0
+    payment_max_battle_cost: int = -1
     expires_on_turn_end_player_id: int = 1
 
 
@@ -617,6 +619,18 @@ class DelayedPlayToken:
 
 
 @dataclass(frozen=True)
+class DelayedOpponentSkillDraw:
+    owner_player_id: int
+    affected_player_id: int
+    trigger_player_id: int
+    created_turn_number: int
+    amount: int = 1
+    require_next_turn: bool = True
+    trigger_on_counter: bool = True
+    required_skill_text_contains: str = ""
+
+
+@dataclass(frozen=True)
 class NonLeaderAttackRestTax:
     owner_player_id: int
     affected_player_id: int
@@ -674,6 +688,7 @@ class GameState:
     delayed_return_warped_cards_to_hand: list[DelayedReturnWarpedCardsToHand] = field(default_factory=list)
     delayed_play_warped_cards: list[DelayedPlayWarpedCard] = field(default_factory=list)
     delayed_play_tokens: list[DelayedPlayToken] = field(default_factory=list)
+    delayed_opponent_skill_draws: list[DelayedOpponentSkillDraw] = field(default_factory=list)
     ex_evolve_permissions: list[ExEvolvePermission] = field(default_factory=list)
     activate_extra_cost_reductions: list[ActivateExtraCostReduction] = field(default_factory=list)
     activate_arrival_cost_reductions: list[ActivateArrivalCostReduction] = field(default_factory=list)

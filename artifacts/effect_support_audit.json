@@ -1,9 +1,9 @@
 {
   "coverage": {
     "db": {
-      "cards_with_diagnostics": 219,
-      "cards_with_rules": 4010,
-      "cards_without_rules": 1991
+      "cards_with_diagnostics": 218,
+      "cards_with_rules": 4099,
+      "cards_without_rules": 1902
     },
     "priority": {
       "cards_with_diagnostics": 0,
@@ -14,27 +14,43 @@
   },
   "extractor_report": {
     "candidates_scanned": 6001,
-    "cards_with_diagnostics": 219,
-    "cards_with_rules": 4010,
-    "cards_without_rules": 1991,
+    "cards_with_diagnostics": 218,
+    "cards_with_rules": 4099,
+    "cards_without_rules": 1902,
     "coverage": {
       "by_handler": {
         "activate_activate_up_to_n_named_field_extra_from_owner_deck": 5,
         "activate_activate_up_to_n_named_field_extra_from_owner_drop": 1,
         "activate_activate_up_to_n_named_field_extra_from_owner_z_deck": 6,
+        "activate_add_blue_son_goten_and_trunks_cost3_from_owner_deck_or_drop_to_hand": 2,
+        "activate_add_life_and_place_skillless_from_owner_deck_into_drop": 1,
         "activate_add_marker_to_matching_owner_unison_and_place_self_under_it": 1,
         "activate_add_self_from_owner_drop_to_hand": 8,
         "activate_add_up_to_n_from_owner_deck_to_hand": 52,
         "activate_add_up_to_n_from_owner_drop_to_hand": 1,
         "activate_add_up_to_n_from_owner_warp_to_hand": 4,
+        "activate_apply_battle_attack_bottom_deck_battle_tax": 1,
+        "activate_bottom_deck_hand_add_android_14_and_15_from_owner_deck_to_hand": 1,
+        "activate_bottom_deck_hand_play_son_goku_br_or_vegeta_br_from_owner_deck_negated_remove_self": 1,
+        "activate_bottom_deck_n_from_owner_hand_then_play_up_to_n_from_owner_deck": 1,
+        "activate_bottom_deck_n_from_owner_hand_then_play_up_to_n_from_owner_hand": 1,
+        "activate_bottom_deck_n_matching_from_owner_drop_then_play_self_from_drop": 1,
+        "activate_bottom_deck_owner_battle_then_play_matching_from_owner_deck": 2,
         "activate_bottom_deck_up_to_n_opponent_battle": 24,
+        "activate_buff_masters_teachings_for_battle": 1,
         "activate_buff_owner_battle_cards": 72,
         "activate_buff_owner_battle_for_battle_then_optionally_send_owner_battle_to_drop_and_grant_battling_owner_card_keyword": 1,
         "activate_buff_owner_cards_for_battle_then_turn_based_ko_or_discard_and_buff": 1,
         "activate_buff_owner_cards_until_battle_or_turn": 1,
         "activate_buff_owner_leader_for_turn": 2,
-        "activate_combo_self_from_owner_drop": 6,
+        "activate_buff_up_to_n_owner_combo_cards_for_battle": 1,
+        "activate_choose_ko_total_power_or_buff_owner_card_for_battle": 1,
+        "activate_combo_self_from_owner_drop": 7,
+        "activate_combo_up_to_n_from_owner_hand": 1,
+        "activate_combo_up_to_n_from_owner_warp": 1,
         "activate_deal_damage_to_opponent_per_owner_matching_battle_colors_and_optionally_win": 1,
+        "activate_discard_n_look_top_place_up_to_n_matching_under_self_then_shuffle": 1,
+        "activate_discard_one_gain_keyword_then_if_copy_draw_and_rest_opponent_card": 1,
         "activate_draw_n_add_up_to_n_from_owner_life_to_hand_then_return_up_to_n_opponent_battle_to_hand_and_schedule_energy_switch": 2,
         "activate_draw_n_and_gain_keyword_for_turn": 2,
         "activate_draw_n_and_ko_up_to_n_opponent_battle_by_source_host_power": 1,
@@ -43,20 +59,27 @@
         "activate_draw_n_discard_n_and_place_up_to_n_from_owner_drop_under_owner_leader_then_switch_self_active_on_turn_end": 1,
         "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end": 3,
         "activate_drop_all_under_self_switch_self_active_and_gain_keyword_if_dropped_n": 1,
+        "activate_gain_control_opponent_great_ape_until_turn_end": 1,
         "activate_gain_keyword_from_under_self_until_opponent_turn_end": 1,
         "activate_gain_power_and_keyword_for_battle": 115,
         "activate_gain_power_and_keyword_for_turn": 49,
         "activate_gain_power_by_hidden_cost_target_original_power_for_turn": 1,
         "activate_grant_cost_target_attack_active_mode": 1,
+        "activate_grant_masters_teachings_until_next_opponent_turn": 1,
         "activate_grant_next_ex_evolve_from_owner_drop": 1,
         "activate_grant_owner_leader_keyword_until_owner_next_turn_end": 1,
+        "activate_grant_owner_z_leader_power_and_keyword_for_turn": 1,
+        "activate_ko_all_opponent_battles_up_to_chosen_owner_power": 2,
         "activate_ko_up_to_n_opponent_battle": 45,
         "activate_ko_up_to_n_opponent_battle_and_buff_owner_leader_for_turn": 1,
         "activate_ko_up_to_n_skillless_opponent_battle": 2,
-        "activate_look_top_choose_add_to_hand_or_play_unison_with_marker": 3,
+        "activate_look_bottom_play_matching_from_deck": 1,
+        "activate_look_top_choose_add_to_hand_or_play_unison_with_marker": 5,
         "activate_look_top_choose_further_evolution_branch": 1,
+        "activate_look_top_play_up_to_n_named_rest_and_bottom_rest": 1,
         "activate_look_top_send_up_to_n_to_owner_warp": 1,
         "activate_move_under_self_to_drop_switch_self_active_and_self_power_for_turn": 2,
+        "activate_negate_chosen_owner_battle_then_drop_and_place_green_extras_under_leader": 1,
         "activate_negate_opponent_leader_skills_and_restrict_up_to_n_opponent_rest_cards_switch_active_until_opponent_turn_end": 1,
         "activate_opponent_discards_n_from_hand": 13,
         "activate_optional_send_owner_hand_to_warp_draw_n": 1,
@@ -73,43 +96,61 @@
         "activate_place_self_under_owner_leader": 6,
         "activate_place_up_to_n_from_owner_hand_under_named_host_then_draw_n": 1,
         "activate_place_up_to_n_from_under_named_owner_battle_into_drop_then_opponent_discards_same_count": 1,
+        "activate_place_up_to_n_matching_from_owner_deck_into_drop_then_shuffle": 1,
         "activate_place_up_to_n_opponent_battle_under_source_host_and_switch_host_active_on_turn_end": 1,
         "activate_play_matching_from_owner_leader_under": 1,
         "activate_play_self_from_energy": 1,
         "activate_play_self_from_hand": 850,
         "activate_play_self_from_under_owner_leader": 3,
         "activate_play_self_from_under_owner_leader_then_ko_up_to_n_opponent_battle": 1,
-        "activate_play_self_from_under_owner_unison": 1,
-        "activate_play_self_from_warp": 21,
+        "activate_play_self_from_under_owner_unison": 2,
+        "activate_play_self_from_warp": 22,
+        "activate_play_skillless_monsters_cost1_and2_from_owner_deck_rest": 1,
         "activate_play_token_in_battle": 21,
         "activate_play_up_to_n_each_named_from_owner_deck_or_drop": 1,
         "activate_play_up_to_n_from_opponent_hand_to_opponent_battle": 2,
         "activate_play_up_to_n_from_owner_deck": 2,
         "activate_play_up_to_n_from_owner_deck_or_hand_after_self_to_drop": 7,
-        "activate_play_up_to_n_from_owner_hand": 4,
+        "activate_play_up_to_n_from_owner_hand": 6,
         "activate_play_up_to_n_from_owner_hand_then_place_up_to_n_opponent_battle_under_named_host": 1,
+        "activate_play_up_to_n_from_owner_warp": 1,
         "activate_play_up_to_n_from_owner_z_deck_or_z_energy": 1,
         "activate_play_up_to_n_from_under_self_and_place_self_under_played_card": 3,
+        "activate_play_up_to_n_matching_from_owner_deck_or_drop_on_top_of_self": 1,
+        "activate_play_up_to_n_matching_from_owner_deck_or_drop_to_opponent_battle_rest_negated": 1,
         "activate_play_up_to_n_matching_from_owner_hand_on_top_of_self": 1,
         "activate_play_up_to_n_name_or_trait_from_owner_hand": 1,
         "activate_play_up_to_n_named_from_owner_drop_and_gain_power_for_turn": 2,
+        "activate_play_up_to_n_non_great_ape_son_goku_childhood_from_owner_hand": 1,
+        "activate_play_yellow_bardock_from_hand": 1,
+        "activate_power_reduce_up_to_n_opponent_battle_for_turn": 1,
         "activate_reduce_all_opponent_battles_power_and_gain_keyword_for_turn": 2,
-        "activate_reduce_next_matching_extra_skill_cost_from_hand": 2,
+        "activate_reduce_battle_power_then_play_android_14_or_15_from_owner_hand": 1,
+        "activate_reduce_next_matching_extra_skill_cost_from_hand": 3,
         "activate_reduce_opponent_battle_by_cost_target_power": 1,
         "activate_remove_self_and_place_up_to_n_from_under_owner_leader_on_top_of_owner_leader": 1,
+        "activate_remove_self_and_schedule_draw_on_opponent_villainous_or_counter": 1,
+        "activate_remove_self_from_game_then_place_up_to_n_opponent_battle_on_top_of_owner_deck": 1,
         "activate_rest_any_number_owner_battles_and_place_top_deck_under_named_host": 2,
         "activate_rest_named_host_and_place_each_named_from_owner_hand_under_it": 1,
         "activate_rest_opponent_active_else_gain_control_opponent_battle": 1,
+        "activate_rest_self_add_life_and_buff_matching_owner_battle_for_turn": 1,
+        "activate_rest_self_and_power_reduce_up_to_n_opponent_battle_for_turn": 1,
         "activate_restrict_opponent_leader_attack_until_end_of_next_turn": 1,
         "activate_restrict_up_to_n_opponent_rest_cards_switch_active_until_end_of_next_turn": 1,
+        "activate_return_self_and_masters_teachings_combo_to_hand_then_draw_play_and_buff": 1,
         "activate_schedule_next_opponent_battle_attack_negate_by_cost": 1,
         "activate_schedule_play_cards_warped_by_source_skill": 5,
         "activate_schedule_play_token_in_battle": 1,
         "activate_schedule_return_cards_warped_by_source_skill_to_owner_hand": 2,
+        "activate_search_blue_son_goten_sh_add_or_play": 1,
+        "activate_send_self_to_drop_add_named_pair_then_ko_opponent_battle": 1,
+        "activate_send_self_to_drop_buff_named_card_for_battle": 1,
         "activate_send_self_to_warp_then_opponent_choose_battle_ko_if_not_trait": 1,
         "activate_send_top_deck_to_owner_warp": 8,
+        "activate_send_total_named_from_owner_drop_to_warp_then_play_matching_from_owner_deck_or_hand_on_top_of_self": 2,
         "activate_send_up_to_n_from_owner_hand_to_warp": 1,
-        "activate_send_up_to_n_opponent_battle_to_warp": 30,
+        "activate_send_up_to_n_opponent_battle_to_warp": 31,
         "activate_send_up_to_n_opponent_battle_to_warp_and_schedule_play_warped_cards_later": 2,
         "activate_send_up_to_n_opponent_combo_to_drop": 1,
         "activate_send_up_to_n_opponent_drop_battle_to_warp": 2,
@@ -119,6 +160,7 @@
         "activate_switch_owner_board_to_revealed_mode": 1,
         "activate_switch_self_active_and_gain_power_for_turn": 2,
         "activate_switch_self_active_and_power_reduce_up_to_n_opponent_battle_for_turn": 1,
+        "activate_switch_self_active_then_play_up_to_n_matching_from_owner_drop_or_warp_on_top_of_self": 1,
         "activate_switch_self_to_hidden_mode": 1,
         "activate_switch_up_to_n_owner_battle_active": 11,
         "activate_switch_up_to_n_owner_cards_active_and_gain_keyword_if_self_switched": 2,
@@ -126,6 +168,7 @@
         "activate_turn_split_namekian_battle_buff": 1,
         "activate_win_game_if_opponent_owned_cards_under_self_at_least_n": 1,
         "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed": 10,
+        "auto_activate_up_to_n_named_field_extra_from_owner_drop_on_play": 1,
         "auto_activate_up_to_n_named_field_extra_from_owner_z_deck_on_play": 2,
         "auto_add_markers_and_self_power_for_turn_on_owner_combo": 1,
         "auto_add_markers_on_owner_activate_extra_from_hand": 1,
@@ -136,6 +179,7 @@
         "auto_add_top_deck_to_energy_rest_and_bottom_deck_up_to_n_opponent_battle_on_play": 1,
         "auto_add_top_deck_to_energy_rest_on_play": 5,
         "auto_add_top_deck_to_owner_energy_then_opponent_places_up_to_n_hand_to_energy": 2,
+        "auto_add_top_n_from_owner_deck_to_life_on_owner_card_placed_into_drop": 1,
         "auto_add_up_to_n_dragon_ball_from_owner_deck_or_drop_to_hand_on_play": 1,
         "auto_add_up_to_n_from_owner_deck_or_drop_to_hand_on_play": 2,
         "auto_add_up_to_n_from_owner_deck_to_hand_on_combo": 3,
@@ -148,63 +192,87 @@
         "auto_add_up_to_n_from_owner_life_to_hand_on_play": 1,
         "auto_add_up_to_n_from_owner_life_to_hand_then_draw_n_on_owner_leader_attack": 3,
         "auto_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_owner_leader_attack": 2,
+        "auto_add_up_to_n_matching_from_owner_drop_to_energy_rest_on_play": 1,
         "auto_add_up_to_n_matching_from_top_deck_to_energy_rest_then_bottom_deck_owner_energy_on_play": 1,
         "auto_add_up_to_n_owner_energy_to_z_energy_then_place_self_in_owner_energy_on_play": 1,
         "auto_apply_non_leader_attack_hand_and_z_tax_on_play": 1,
-        "auto_bottom_deck_up_to_n_opponent_battle": 35,
+        "auto_bottom_deck_opponent_hand_or_battle_on_play": 1,
+        "auto_bottom_deck_up_to_n_opponent_battle": 37,
         "auto_bottom_deck_up_to_n_opponent_battle_then_switch_up_to_n_owner_leader_and_energy_active_and_gain_keyword_until_opponent_turn_on_play": 1,
         "auto_bottom_deck_up_to_n_opponent_rest_battle_on_play": 1,
         "auto_buff_other_owner_combo_card_on_combo": 4,
         "auto_buff_owner_battle_cards": 1,
+        "auto_buff_owner_battling_card_or_leader_for_turn_on_combo": 1,
         "auto_buff_owner_leader_for_battle_on_combo": 1,
         "auto_buff_owner_leader_for_turn": 1,
         "auto_buff_owner_leader_for_turn_on_field_extra_placed": 1,
         "auto_buff_owner_leader_for_turn_on_placed_under": 1,
         "auto_buff_owner_leader_on_switch_until_opponent_turn_end": 1,
+        "auto_buff_played_battle_and_draw_if_power_at_least": 1,
+        "auto_buff_self_and_grant_skill_removal_protection_until_next_opponent_turn": 1,
+        "auto_buff_self_for_battle_per_under_card": 1,
         "auto_buff_up_to_n_owner_battle_on_z_energy_added": 1,
         "auto_buff_up_to_n_owner_battles_for_battle_on_combo": 2,
+        "auto_buff_up_to_n_owner_battles_for_turn_on_self_placed_into_drop_by_skill": 1,
         "auto_buff_up_to_n_owner_battles_on_play": 1,
         "auto_buff_up_to_n_owner_cards_on_hidden_drop": 2,
         "auto_buff_up_to_n_owner_cards_on_switch": 4,
         "auto_choose_bottom_deck_opponent_battles_or_gain_keywords_on_play_without_skills": 1,
         "auto_choose_play_up_to_n_from_owner_deck_or_hand_or_secondary_on_self_left_battle": 2,
         "auto_choose_unison_play_or_self_buff_on_play": 1,
+        "auto_combo_matching_from_hand_on_attack_then_draw": 1,
         "auto_combo_self_from_battle_on_owner_combo": 1,
         "auto_combo_self_from_drop_on_placed_into_drop": 5,
-        "auto_combo_up_to_n_from_owner_zone_on_attack": 27,
+        "auto_combo_up_to_n_from_owner_zone_on_attack": 28,
         "auto_combo_up_to_n_named_from_under_named_host_on_attack_then_draw_n_and_gain_keyword_for_battle": 1,
+        "auto_discard_from_owner_hand_then_opponent_discards_on_owner_card_placed_into_drop": 1,
         "auto_discard_n_from_owner_hand_activate_up_to_n_named_field_extra_from_owner_deck_on_play": 1,
+        "auto_discard_n_from_owner_hand_then_apply_non_leader_attack_rest_tax_on_play": 1,
         "auto_discard_n_from_owner_hand_then_limit_opponent_battle_attacks_bottom_deck_each_time": 1,
         "auto_discard_n_from_owner_hand_then_limit_opponent_high_cost_battle_attacks": 1,
         "auto_discard_n_then_switch_up_to_n_owner_battle_active_on_attack": 2,
         "auto_discard_named_from_owner_hand_then_limit_opponent_battle_attacks_bottom_deck_each_time_on_play": 1,
         "auto_discard_on_owner_activate_battle_red_extra_switch_self_active_and_optional_copy_bonus_debuff": 1,
-        "auto_draw_n": 1561,
+        "auto_draw_n": 1564,
         "auto_draw_n_add_matching_from_owner_battle_or_drop_to_z_energy_then_place_matching_from_owner_battle_or_drop_under_named_host_on_attack": 1,
         "auto_draw_n_and_add_markers_on_owner_battle_played_from_warp": 1,
+        "auto_draw_n_and_switch_up_to_n_opponent_battle_rest_on_self_blocker_activated": 1,
+        "auto_draw_n_on_owner_bardocks_crew_played": 1,
+        "auto_draw_n_on_owner_battle_switched_to_rest_by_skill": 1,
         "auto_draw_n_optional_add_matching_from_owner_hand_to_z_energy_then_look_top_add_up_to_one_to_hand_on_play": 1,
+        "auto_draw_n_switch_self_active_and_switch_up_to_n_opponent_board_rest_on_aegis": 1,
         "auto_draw_n_switch_up_to_n_owner_leader_and_energy_active_and_grant_owner_leader_keyword_for_turn": 1,
+        "auto_draw_n_then_discard_n_from_owner_hand_on_play": 2,
         "auto_gain_control_opponent_battle_on_play": 2,
         "auto_gain_control_opponent_unison_on_play": 1,
         "auto_gain_wormhole_on_owner_black_battle_played_from_warp": 2,
         "auto_grant_attack_active_battle_without_barrier_for_turn_on_play": 1,
+        "auto_grant_keyword_to_owner_battle_on_self_combo": 1,
         "auto_grant_keyword_to_up_to_n_owner_battle_while_self_in_battle_on_field_extra_placed": 1,
         "auto_grant_owner_leader_keyword_for_battle_on_combo": 1,
         "auto_host_gain_keywords_until_opponent_turn_on_placed_under": 1,
         "auto_if_self_rest_opponent_discards_n_or_negate_attack_and_end_attacks": 1,
         "auto_ko_all_opponent_rest_battles_then_switch_all_opponent_battles_rest_on_self_left_battle_by_opponent_skill": 1,
+        "auto_ko_attacked_battle_and_opponent_discards_n_on_battle_end": 1,
         "auto_ko_opponent_battle_on_play": 231,
         "auto_ko_up_to_n_opponent_battle_on_attack": 62,
-        "auto_ko_up_to_n_opponent_battle_on_play": 10,
+        "auto_ko_up_to_n_opponent_battle_on_play": 11,
         "auto_ko_up_to_n_opponent_battle_on_switch": 2,
+        "auto_ko_up_to_n_opponent_rest_battle_on_self_added_to_z_energy": 1,
+        "auto_limit_opponent_battle_attacks_bottom_deck_hand_each_time_on_play": 1,
         "auto_limit_opponent_battle_attacks_discard_hand_each_time_on_play": 1,
-        "auto_look_top_add_up_to_one_to_hand_on_play": 371,
+        "auto_look_top_add_saiyan_or_unison_to_hand_on_attack": 1,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 375,
+        "auto_look_top_place_up_to_n_matching_under_matching_owner_battle_on_play": 1,
+        "auto_look_top_play_matching_from_owner_deck_negated_on_play": 1,
+        "auto_mark_self_played_turn_number": 1,
         "auto_negate_up_to_n_opponent_battle_keyword_skills_for_turn_on_opponent_attack": 1,
         "auto_negate_up_to_n_opponent_battle_skills_for_turn_on_play_or_self_switch": 2,
         "auto_negate_up_to_n_opponent_rest_battle_skills_for_turn_on_play": 1,
         "auto_opponent_bottom_decks_n_from_hand_on_combo": 1,
         "auto_opponent_choose_one_then_warp_rest_opponent_battle_on_play": 1,
         "auto_opponent_discards_n_and_schedule_play_and_add_marked_warped_cards_on_attack": 1,
+        "auto_opponent_discards_n_from_hand_on_attack": 1,
         "auto_opponent_discards_n_from_hand_on_opponent_counter_activated": 2,
         "auto_opponent_discards_n_from_hand_on_owner_matching_battle_left": 1,
         "auto_opponent_discards_n_from_hand_on_owner_opponent_battle_played": 1,
@@ -212,6 +280,7 @@
         "auto_opponent_discards_n_from_hand_on_play_or_combo": 2,
         "auto_opponent_discards_n_or_owner_sends_up_to_n_opponent_battle_to_drop_on_play": 1,
         "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo": 14,
+        "auto_optional_drop_villainous_and_self_gain_power_and_keyword_on_play": 1,
         "auto_owner_battle_gain_power_then_add_up_to_n_matching_from_owner_deck_or_life_to_hand_on_attack": 2,
         "auto_pay_life_bottom_deck_play_self_from_drop_or_warp_negate_attack": 1,
         "auto_pay_life_look_top_play_up_to_n_matching_unison_with_marker_on_attack": 1,
@@ -224,9 +293,11 @@
         "auto_place_all_opponent_battles_with_max_cost_under_self_on_play": 1,
         "auto_place_any_number_opponent_battle_into_drop_on_play": 2,
         "auto_place_battle_koed_by_owner_attacker_under_self_on_battle_end": 1,
+        "auto_place_green_extra_from_owner_hand_under_leader_then_draw_n_on_self_left_battle_area": 1,
         "auto_place_self_from_under_owner_leader_on_top_of_owner_leader_on_turn_end": 2,
         "auto_place_top_deck_under_self_and_switch_up_to_n_opponent_battle_rest_on_union_absorb": 1,
         "auto_place_top_n_from_opponent_deck_into_drop_on_aegis": 1,
+        "auto_place_up_to_n_attacking_battle_on_top_of_owner_deck_on_owner_battle_koed_by_opponent_attack": 1,
         "auto_place_up_to_n_from_owner_combo_under_owner_leader_on_owner_matching_battle_played": 1,
         "auto_place_up_to_n_from_owner_deck_into_drop_on_combo": 1,
         "auto_place_up_to_n_from_owner_deck_to_destination_zone": 1,
@@ -239,12 +310,17 @@
         "auto_place_up_to_n_opponent_battle_under_owner_leader_on_play": 1,
         "auto_place_up_to_n_opponent_battle_under_self_on_attack": 2,
         "auto_play_face_up_opponent_life_battle_rest_negated_on_play": 1,
-        "auto_play_self_from_combo_on_battle_end": 51,
+        "auto_play_matching_from_owner_deck_on_top_of_self_active_on_attack_ko": 1,
+        "auto_play_matching_from_owner_hand_and_draw_on_self_added_to_z_energy": 1,
+        "auto_play_self_from_combo_on_battle_end": 54,
         "auto_play_self_from_combo_on_battle_end_then_negate_up_to_n_opponent_unisons_for_turn": 1,
         "auto_play_self_from_combo_on_battle_end_then_return_up_to_n_opponent_battle_to_hand": 1,
         "auto_play_self_from_drop_on_hand_drop": 2,
+        "auto_play_self_from_drop_then_ko_up_to_n_opponent_rest_battle_on_self_placed_into_drop": 1,
         "auto_play_self_from_hand_on_owner_battle_ko": 1,
         "auto_play_self_from_hand_on_owner_matching_battle_left": 3,
+        "auto_play_self_from_hand_on_owner_matching_battle_played": 1,
+        "auto_play_self_from_hand_on_owner_opponent_card_switched_to_rest": 1,
         "auto_play_self_from_under_leader_or_owner_hand_on_owner_combo": 1,
         "auto_play_self_from_under_owner_leader_to_opponent_battle": 1,
         "auto_play_token_in_battle_on_attack": 7,
@@ -254,34 +330,43 @@
         "auto_play_token_in_battle_on_owner_matching_battle_played": 13,
         "auto_play_token_in_battle_on_owner_union_activated": 1,
         "auto_play_token_in_battle_on_play": 25,
+        "auto_play_up_to_n_from_owner_deck_and_self_gain_power_on_attack": 1,
         "auto_play_up_to_n_from_owner_deck_on_main_phase_start": 1,
         "auto_play_up_to_n_from_owner_deck_on_placed_under": 1,
         "auto_play_up_to_n_from_owner_deck_on_play": 4,
         "auto_play_up_to_n_from_owner_drop_on_main_phase_start": 1,
         "auto_play_up_to_n_from_owner_drop_on_play": 33,
         "auto_play_up_to_n_from_owner_hand_on_attack": 2,
-        "auto_play_up_to_n_from_owner_hand_on_self_combo": 1,
-        "auto_play_up_to_n_from_owner_hand_on_self_ko": 1,
+        "auto_play_up_to_n_from_owner_hand_on_self_combo": 2,
+        "auto_play_up_to_n_from_owner_hand_on_self_ko": 2,
         "auto_play_up_to_n_from_owner_hand_on_top_of_self_on_main_phase_start": 1,
         "auto_play_up_to_n_from_owner_hand_or_deck_with_markers_on_play": 1,
         "auto_play_up_to_n_from_owner_z_energy_combo_or_drop_on_play": 1,
         "auto_play_up_to_n_from_under_self_and_place_self_under_played_card": 2,
-        "auto_play_up_to_n_named_from_owner_deck_rest_on_play_or_combo": 3,
+        "auto_play_up_to_n_named_from_owner_deck_rest_on_play_or_combo": 4,
         "auto_play_up_to_n_named_from_owner_drop_on_self_ko": 5,
+        "auto_play_up_to_n_yellow_trunks_future_from_owner_deck_or_drop_on_play": 1,
+        "auto_play_yellow_bardocks_crew_from_hand_rest_on_play": 1,
         "auto_power_reduce_opponent_unison_on_self_ko": 1,
         "auto_power_reduce_up_to_n_on_attack": 26,
         "auto_power_reduce_up_to_n_on_combo": 5,
         "auto_power_reduce_up_to_n_on_placed_under": 1,
         "auto_power_reduce_up_to_n_on_play": 97,
+        "auto_redirect_attack_to_owner_leader_if_self_targeted_and_attacker_power_at_least": 1,
         "auto_reduce_next_matching_z_awaken_cost_in_z_deck_on_play": 1,
+        "auto_reduce_up_to_n_opponent_cards_power_by_owner_energy_color_count_on_play_or_added_to_energy": 2,
+        "auto_remove_all_non_leader_under_self_to_drop_reduce_all_opponent_battles_and_remove_self_at_turn_end": 1,
         "auto_remove_markers_from_up_to_n_opponent_unisons_on_owner_combo": 1,
+        "auto_remove_self_from_game_on_battle_end": 1,
         "auto_remove_self_from_owner_drop_if_placed_from_z_energy": 1,
         "auto_rest_named_host_and_place_up_to_n_named_from_owner_hand_under_it_then_ko_on_play_if_placed": 1,
+        "auto_rest_opponent_board_on_owner_opponent_card_played_if_self_resting_and_pay_z_energy": 1,
         "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_reduce_power": 1,
         "auto_rest_self_on_owner_opponent_skill_play_overcost_battle_switch_target_rest": 1,
         "auto_rest_self_redirect_attack_to_matching_owner_battle_on_opponent_attack": 1,
         "auto_rest_self_switch_up_to_n_owner_energy_active_then_return_up_to_n_opponent_battle_to_hand_on_owner_damage": 1,
         "auto_rest_self_then_move_up_to_n_opponent_battle_to_owner_combo_on_owner_attack": 1,
+        "auto_restrict_opponent_board_card_attack_until_end_of_next_turn_on_play": 1,
         "auto_restrict_self_copies_and_bottom_deck_green_unison_then_opponent_discard_on_play": 1,
         "auto_restrict_up_to_n_opponent_battle_attack_until_opponent_turn_end_on_play": 1,
         "auto_restrict_up_to_n_opponent_battle_skills_while_self_in_battle_on_field_extra_placed": 1,
@@ -289,6 +374,7 @@
         "auto_return_cards_warped_by_source_skill_to_owner_hand_on_owner_matching_battle_left": 1,
         "auto_return_up_to_n_opponent_battle_to_hand_on_play": 21,
         "auto_return_up_to_n_opponent_combo_to_hand_on_combo": 2,
+        "auto_return_up_to_n_opponent_unison_to_hand_on_play": 1,
         "auto_schedule_place_self_under_owner_leader_on_turn_end_on_play": 1,
         "auto_schedule_play_cards_warped_by_source_skill_on_play": 5,
         "auto_schedule_play_token_in_battle_on_play": 4,
@@ -297,34 +383,41 @@
         "auto_schedule_switch_up_to_n_owner_energy_active_on_opponent_next_main_phase_on_placed_under_by_union": 1,
         "auto_schedule_turn_end_draw_n_and_add_up_to_n_from_owner_drop_to_energy_if_played": 1,
         "auto_schedule_turn_end_draw_n_and_switch_chosen_owner_energy_active_if_played_from_hand": 1,
-        "auto_self_gain_combo_power_on_combo": 29,
+        "auto_search_play_matching_great_ape_from_owner_deck_on_owner_battle_koed_by_opponent_attack": 1,
+        "auto_self_gain_combo_power_on_combo": 30,
         "auto_self_gain_combo_power_on_combo_per_owner_drop_and_warp": 1,
         "auto_self_gain_power_and_keyword_for_turn_on_switch": 1,
         "auto_self_gain_power_for_turn_on_attack": 2,
-        "auto_self_gain_power_for_turn_on_play": 44,
+        "auto_self_gain_power_for_turn_on_play": 45,
         "auto_send_n_from_owner_hand_to_warp_then_limit_opponent_battle_attacks": 1,
         "auto_send_self_from_owner_energy_to_drop_on_turn_end_if_replaced_from_life": 2,
+        "auto_send_self_to_drop_and_negate_attack_on_opponent_battle_attack": 1,
         "auto_send_self_to_owner_drop_on_attack_battle_end": 1,
         "auto_send_self_to_owner_drop_on_turn_end_if_opponent_has_battle_cost": 1,
+        "auto_send_self_to_owner_drop_on_turn_start": 1,
         "auto_send_self_to_owner_warp_on_battle_end": 1,
         "auto_send_up_to_n_from_owner_deck_to_warp_on_play": 4,
         "auto_send_up_to_n_opponent_battle_to_warp_on_play": 35,
         "auto_send_up_to_n_opponent_drop_to_warp_else_draw_n_on_owner_combo": 1,
+        "auto_send_up_to_n_opponent_hand_and_battle_to_warp_on_play": 1,
         "auto_send_up_to_n_opponent_hand_battle_to_warp_on_play": 2,
-        "auto_send_up_to_n_opponent_hand_to_warp_on_play": 11,
+        "auto_send_up_to_n_opponent_hand_to_warp_on_play": 12,
         "auto_switch_all_owner_battles_active_by_trait_on_turn_end": 1,
         "auto_switch_self_active_and_gain_keyword_for_turn_on_main_phase_start": 1,
+        "auto_switch_self_active_and_gain_keyword_on_opponent_attack": 1,
         "auto_switch_self_active_on_attack_or_blocker": 1,
         "auto_switch_self_active_on_owner_combo": 1,
         "auto_switch_self_active_on_play": 10,
-        "auto_switch_self_active_on_turn_end": 49,
+        "auto_switch_self_active_on_turn_end": 50,
+        "auto_switch_self_active_then_buff_up_to_n_owner_battles_for_turn_on_attack": 1,
         "auto_switch_self_active_then_negate_all_opponent_battle_skills_for_turn_on_owner_yellow_skill": 1,
         "auto_switch_self_active_then_opponent_discards_n_on_attack_ko": 1,
         "auto_switch_self_active_then_opponent_discards_n_on_self_attack_ko": 1,
-        "auto_switch_self_and_up_to_n_owner_energy_active_on_attack_ko": 1,
+        "auto_switch_self_and_up_to_n_owner_energy_active_on_attack_ko": 2,
         "auto_switch_self_to_hidden_on_play": 2,
         "auto_switch_up_to_n_any_player_board_to_revealed_on_play": 1,
-        "auto_switch_up_to_n_opponent_battle_rest_on_play": 7,
+        "auto_switch_up_to_n_opponent_battle_rest_on_play": 8,
+        "auto_switch_up_to_n_opponent_battle_rest_on_self_combo": 1,
         "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_opponent_turn_end": 1,
         "auto_switch_up_to_n_opponent_battle_to_hidden_then_reveal_on_turn_end": 1,
         "auto_switch_up_to_n_opponent_board_rest": 4,
@@ -332,6 +425,7 @@
         "auto_switch_up_to_n_opponent_unison_rest_on_play": 1,
         "auto_switch_up_to_n_owner_battle_active_on_combo": 1,
         "auto_switch_up_to_n_owner_battle_to_hidden_on_play": 4,
+        "auto_switch_up_to_n_owner_battles_active_by_trait_on_turn_end": 1,
         "auto_switch_up_to_n_owner_board_to_revealed_on_placed_under": 1,
         "auto_switch_up_to_n_owner_board_to_revealed_on_play": 2,
         "auto_switch_up_to_n_owner_energy_active_on_combo": 2,
@@ -340,95 +434,116 @@
         "auto_switch_up_to_n_owner_energy_active_on_turn_end": 26,
         "auto_switch_up_to_n_owner_opponent_battle_rest_on_owner_opponent_counter_activated": 1,
         "auto_top_deck_add_if_color_on_play": 15,
+        "auto_turles_power_ball_turn_end": 1,
+        "auto_use_under_chosen_owner_battle_combo_switch_it_active_and_restrict_attack": 3,
         "counter_add_up_to_n_from_owner_deck_to_hand_then_play_from_drop_if_spirit_boost": 1,
         "counter_buff_and_negate_owner_leader_for_turn_if_attacking": 1,
         "counter_limit_opponent_attacks_if_opponent_has_skillless_battle_or_unison": 1,
+        "counter_negate_attack_add_self_from_drop_to_z_energy": 1,
+        "counter_negate_attack_add_up_to_n_from_owner_drop_to_hand": 1,
         "counter_negate_attack_and_play_self_with_markers": 1,
-        "counter_negate_attack_play_self": 4,
+        "counter_negate_attack_play_self": 8,
         "counter_negate_attack_play_self_attack_restriction": 1,
+        "counter_negate_attack_play_self_if_owner_villainous_at_most": 1,
+        "counter_negate_attack_play_self_then_reduce_battle_power": 1,
         "counter_negate_counter_attack": 1,
         "counter_optional_discard_n_from_owner_hand_then_play_up_to_n_from_owner_drop": 2,
+        "counter_optional_discard_then_limit_opponent_attacks": 1,
+        "counter_place_owner_battle_in_drop_then_draw_if_attacker_matches_trait": 1,
+        "counter_place_pending_play_at_bottom_of_owner_deck_if_cost_at_most": 1,
+        "counter_place_pending_play_in_warp_and_send_up_to_n_opponent_drop_battle_to_warp": 1,
+        "counter_place_under_from_owner_battle_to_drop_then_limit_opponent_attacks": 1,
         "counter_play_from_owner_deck_if_pending_battle_power_at_least_negate_nonkeyword_skills_for_game": 1,
         "counter_play_self_from_counter_counter": 1,
         "counter_play_self_rest_then_ko_attacking_battle_if_trait_and_opponent_draw_n": 1,
         "counter_play_self_then_return_pending_to_owner_hand_if_cost_at_most": 2,
         "counter_play_token_in_battle": 10,
-        "counter_play_up_to_n_from_owner_drop_negate_skills_for_turn": 1,
+        "counter_play_up_to_n_from_owner_drop_negate_skills_for_turn": 2,
         "counter_play_up_to_n_skillless_from_owner_hand_rest_and_redirect_attack": 1,
         "counter_prevent_nonkeyword_skill_damage_for_turn": 1,
+        "counter_reduce_all_opponent_battles_power_for_turn": 1,
+        "counter_reduce_owner_lord_slug_power_then_negate_and_rest_opponent_battle": 1,
         "counter_schedule_play_cards_warped_by_source_skill": 1,
         "counter_schedule_play_token_in_battle": 1,
         "counter_send_up_to_n_attacking_battle_to_warp": 1,
         "counter_send_up_to_n_opponent_battle_to_warp": 1,
         "counter_switch_up_to_n_owner_energy_active_if_owner_battle_attacking_opponent_battle": 1,
         "counter_switch_up_to_n_owner_leader_active": 2,
-        "noop_auto": 1062
+        "noop_auto": 1109
       },
       "by_trigger": {
         "counter_activated": 2,
-        "counter_attack": 48,
-        "counter_play": 3,
+        "counter_attack": 62,
+        "counter_play": 6,
         "opponent_turn_end": 1,
         "owner_activate_battle": 1,
         "owner_activate_extra_from_hand": 1,
         "owner_battle_attacks": 3,
         "owner_battle_ko_opponent_battle_battle_end": 8,
+        "owner_battle_koed_by_opponent_attack_battle_end": 2,
         "owner_battle_played_from_warp": 3,
+        "owner_battle_switched_to_rest": 1,
         "owner_card_comboed": 19,
         "owner_card_left_battle_area": 7,
+        "owner_card_placed_into_drop": 2,
         "owner_field_extra_placed": 2,
         "owner_leader_attacks": 47,
         "owner_main_phase_start": 4,
-        "owner_opponent_battle_attacks": 3,
-        "owner_opponent_battle_played": 4,
-        "owner_opponent_card_attacks": 1,
+        "owner_opponent_battle_attacks": 4,
+        "owner_opponent_battle_played": 5,
+        "owner_opponent_card_attacks": 4,
         "owner_opponent_card_comboed": 1,
+        "owner_opponent_card_played": 1,
+        "owner_opponent_card_switched_to_rest": 1,
         "owner_opponent_counter_activated": 3,
         "owner_opponent_main_phase_start": 7,
         "owner_opponent_skill_plays_overcost_battle": 2,
-        "owner_other_battle_played": 14,
+        "owner_other_battle_attacks": 1,
+        "owner_other_battle_played": 17,
         "owner_other_battle_played_by_dark_over_realm": 1,
+        "owner_swap_activated": 1,
         "owner_takes_damage_from_opponent_attack": 1,
         "owner_union_absorb_activated": 1,
         "owner_union_activated": 1,
-        "self_activate_battle": 400,
+        "self_activate_battle": 414,
         "self_activate_extra_from_hand": 105,
-        "self_activate_main": 1567,
-        "self_added_to_energy": 1,
-        "self_added_to_z_energy": 6,
-        "self_aegis_activated": 5,
-        "self_attacks": 541,
-        "self_attacks_battle_end": 17,
+        "self_activate_main": 1610,
+        "self_added_to_energy": 2,
+        "self_added_to_z_energy": 8,
+        "self_aegis_activated": 6,
+        "self_attacks": 549,
+        "self_attacks_battle_end": 20,
         "self_attacks_or_self_blocker_activated": 1,
-        "self_blocker_activated": 80,
-        "self_comboed": 267,
-        "self_comboed_battle_end": 55,
+        "self_blocker_activated": 81,
+        "self_comboed": 273,
+        "self_comboed_battle_end": 59,
         "self_field_extra_placed": 4,
         "self_hidden_battle_to_drop": 2,
-        "self_in_hand_sent_to_drop_or_warp": 3,
-        "self_koed": 8,
-        "self_left_battle_area": 3,
+        "self_in_hand_sent_to_drop_or_warp": 4,
+        "self_koed": 10,
+        "self_left_battle_area": 4,
         "self_placed_in_leader_area": 10,
-        "self_placed_into_drop": 11,
+        "self_placed_into_drop": 13,
         "self_placed_under_by_union": 2,
         "self_placed_under_owner_card": 9,
-        "self_played": 2433,
+        "self_played": 2504,
         "self_switched_hidden": 4,
         "self_switched_revealed": 4,
         "self_switched_to_active": 1,
         "self_switched_to_rest": 1,
         "self_union_absorb_activated": 2,
-        "turn_end": 82
+        "turn_end": 86,
+        "turn_start": 1
       }
     },
     "diagnostic_counts": {
       "missed_attack_draw": 1,
       "missed_combo_draw": 3,
-      "missed_play_draw": 142,
+      "missed_play_draw": 141,
       "missed_play_ko": 68,
       "missed_play_power_reduce": 23
     },
-    "total_extracted_rules": 5812,
+    "total_extracted_rules": 6011,
     "unmatched_top_templates": [
       {
         "count": 1,
@@ -457,38 +572,13 @@
       },
       {
         "count": 1,
-        "example_card_id": 41,
-        "template": "[energy-exhaust][unique][barrier]. [permanent] if your leader card is a <bardock: xeno> card, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is a <bardock: xeno> card and you have a..."
-      },
-      {
-        "count": 1,
         "example_card_id": 47,
         "template": "[super combo][energy-exhaust]. [auto] if your leader card is green, yellow, or a \u226aheroine\u226b card: when this card is used in a combo from your hand, choose one-. \u30fbchoose up to <n> of your opponent's leader card or unison c..."
       },
       {
         "count": 1,
-        "example_card_id": 83,
-        "template": "[permanent] if your leader card is a mono-red \u226asaiyan\u226b card, reduce the energy cost of this card in your hand by <n>.. [activate: battle][limit <n>] choose one-. \u30fbif it's your turn, choose any number of your opponent's b..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 92,
-        "template": "[permanent] if you have a [field] extra card in your battle area, this card gains [blocker].. [auto] if you don't have a [field] extra card in your battle area: when this card is played from your hand, activate up to <n>..."
-      },
-      {
-        "count": 1,
         "example_card_id": 99,
         "template": "[permanent] if you have a [field] extra card in your battle area, this card gains [blocker].. [auto] if your leader card is a yellow \u226aturles crusher corps\u226b card: when this card is played from your hand, flip up to <n> ca..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 108,
-        "template": "[permanent] this card gains \u226adesire\u226b in all areas.. [activate: main] play up to <n> skill-less \u226amonster\u226b card with energy costs of <n> and <n> respectively from your deck in rest mode, then shuffle your deck."
-      },
-      {
-        "count": 1,
-        "example_card_id": 111,
-        "template": "[field]. [auto] if your leader card is a green or yellow \u226asaiyan\u226b card: at the end of a turn in which this card was placed in a battle area, you may choose <n> \u226agreat ape\u226b card with an energy cost of <n> in your hand and..."
       },
       {
         "count": 1,
@@ -512,16 +602,6 @@
       },
       {
         "count": 1,
-        "example_card_id": 213,
-        "template": "[field]. [permanent] if your leader card is a green \u226asaiyan\u226b card, you can activate this card from your hand without paying its energy cost.. [auto][once per turn]\u2460: when one of your non-\u226agreat ape\u226b \u226asaiyan\u226b card is ko'd..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 220,
-        "template": "[energy-exhaust][double strike][blocker]. [arrival blue/yellow](blue)(blue)(yellow). [auto] when this card is played, choose up to <n> of your opponent's battle card, ignoring [barrier], and place it at the bottom of its..."
-      },
-      {
-        "count": 1,
         "example_card_id": 235,
         "template": "[ultimate]. [counter: attack] for each card color among card in battle areas and energy areas, choose up to <n> of your opponent's battle card, ignoring [barrier], and send it to its owner's warp; for each card sent to a..."
       },
@@ -542,43 +622,13 @@
       },
       {
         "count": 1,
-        "example_card_id": 345,
-        "template": "[permanent] during your turn, this card gets +<n> power and can attack battle card without [barrier] in active mode. [permanent] if this card is in rest mode and your opponent has no battle card in play, your opponent's..."
-      },
-      {
-        "count": 1,
         "example_card_id": 380,
         "template": "[swap <n>][spirit boost <n>] if your leader card is a black <dabura: xeno> card and you choose <n> card in your hand and place it at the bottom of your deck: black <gravy> card with an energy cost of <n>. [auto] add <n>..."
       },
       {
         "count": 1,
-        "example_card_id": 394,
-        "template": "[energy-exhaust][triple attack] [evolve]((green))(<n>): <frost>. [permanent] this card can attack battle card without [barrier] in active mode. [auto][once per turn] if this card's attack hasn't been negated: at the end..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 429,
-        "template": "[permanent] this card gains \u226adesire\u226b in all areas. [activate: main] choose <n> <son goku> card in your battle area and place it at the bottom of your deck: play up to <n> <goku black> card with an energy cost of <n> or l..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 430,
-        "template": "[permanent] this card gains \u226adesire\u226b in all areas. [activate: main] play up to <n> <zamasu> card with an energy cost of <n> or less and [indestructible] from your warp."
-      },
-      {
-        "count": 1,
         "example_card_id": 433,
         "template": "[super combo] [swap <n>][spirit boost <n>] if your leader card is a black <dabura: xeno> card: black <dabura: xeno> card with an energy cost of <n>."
-      },
-      {
-        "count": 1,
-        "example_card_id": 436,
-        "template": "[energy-exhaust][unique][double strike][indestructible][blocker] [ex-evolve]((blue))((yellow))(<n>): blue <zamasu> with an energy cost of <n>. [aegis blue/yellow][once per turn] [permanent] if your leader card is a <zama..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 448,
-        "template": "[permanent] during your turn, this card can't be ko'd by your opponent's skills. [auto] if your opponent has <n> or more energy: when this card attacks, you may choose <n> blue \u226agod\u226b card with a combo cost of <n> in your..."
       },
       {
         "count": 1,
@@ -589,21 +639,6 @@
         "count": 1,
         "example_card_id": 457,
         "template": "[swap <n>][spirit boost <n>] if your leader card is a black <dabura: xeno> card and you choose <n> card in your hand and place it at the bottom of your deck: black <dabura: xeno> card with an energy cost of <n>. [auto] w..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 470,
-        "template": "[permanent] if your leader card is a green <majin buu> card, this card is green while in your deck and drop area. [activate: main](<n>), if your leader card is a green or black \u226amajin\u226b card and you have <n> or more energ..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 562,
-        "template": "[field] [permanent] this card is also treated as {planet m-<n>} in all areas. [auto] if your leader card is a <dr. myuu> card: when this card is placed in your battle area, draw <n> card, then discard <n> card from your..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 569,
-        "template": "[field] [permanent] this card is also treated as {big gete star} in all areas. [activate: main][burst <n>](<n>), switch this card to rest mode: look at up to <n> card from the top of your deck, play up to <n> {infinite m..."
       },
       {
         "count": 1,
@@ -642,11 +677,6 @@
       },
       {
         "count": 1,
-        "example_card_id": 693,
-        "template": "[energy-exhaust][double strike][dual attack] [ex-evolve](<n>): <cell> with an energy cost of <n> or <n>. [auto][once per turn] when this card attacks, choose <n> card in your opponent's hand and discard it. [auto] when t..."
-      },
-      {
-        "count": 1,
         "example_card_id": 694,
         "template": "[ultimate] [activate: battle] if your leader card is green or a \u226afrieza clan\u226b card and your opponent has <n> or more energy: your opponent discards <n> card from their hand. choose up to <n> of your opponent's battle car..."
       },
@@ -654,11 +684,6 @@
         "count": 1,
         "example_card_id": 698,
         "template": "[swap <n>] red <frieza> with an energy cost of <n>. [counter: attack] negate the attack and play this card in rest mode."
-      },
-      {
-        "count": 1,
-        "example_card_id": 702,
-        "template": "[permanent] if your leader card is blue, reduce the energy cost of this card in your hand by <n>. [permanent] this card can't be ko'd by your opponent's skills during your turn. [auto] when this card attacks and kos an o..."
       },
       {
         "count": 1,
@@ -674,21 +699,6 @@
         "count": 1,
         "example_card_id": 1029,
         "template": "[z-awaken] when your life is at <n> or less and there are <n> or more <king piccolo> card in your drop: green <king piccolo> or green <piccolo jr.>. (pay the skill cost and z-energy, then play this card from your z-deck..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 1054,
-        "template": "[field]. [activate: main][once per turn] place <n> card from your hand at the bottom of your deck: play up to <n> green \u226aturtle school\u226b card with an energy cost of <n> from your deck, then shuffle your deck.. [activate:..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 1055,
-        "template": "[counter: attack] negate the attack. play up to <n> red or green \u226ademon clan\u226b card with an energy cost of <n> or less from your drop with its skills negated for the turn.. [permanent] if your leader is a <king piccolo> c..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 1063,
-        "template": "[auto][once per turn] when you play a battle card, choose it, and it gets +<n> power for the turn. if this raises that card's power to <n> or more, draw <n> card.. [awaken] when your life is at <n> or less or you have <n..."
       },
       {
         "count": 1,
@@ -712,23 +722,128 @@
       },
       {
         "count": 1,
-        "example_card_id": 1082,
-        "template": "[permanent] if your leader is a <pan> card, reduce the energy cost of this card in your hand by <n>.. [auto] if this card's power is <n> or more: when this card attacks, look at up to <n> card from the top of your deck,..."
-      },
-      {
-        "count": 1,
-        "example_card_id": 1083,
-        "template": "[auto][limit <n>] if your leader is a red <son goku: gt> <vegeta: gt> card and your life is at <n> or less: when this card is used in a combo from your hand, choose <n> of your card and it gets +<n> power for the turn."
-      },
-      {
-        "count": 1,
         "example_card_id": 1097,
         "template": "[unique][critical][blocker]. [counter: attack][limit <n>] negate the attack and play this card.. [permanent] if your leader is a red <syn shenron> z-leader, you can activate this card's [counter] skill from your hand wit..."
       },
       {
         "count": 1,
-        "example_card_id": 1100,
-        "template": "[counter: attack] negate the attack. additionally, if your leader is a \u226ashadow dragon\u226b card, choose all of your opponent's battle card and they get -<n> power for the turn."
+        "example_card_id": 1114,
+        "template": "[unique][barrier]. [permanent] while this card is in rest mode, your opponent's battle card can't attack your leader.. [auto] discard <n> card from your hand: when this card is ko'd, play this card from your drop in rest..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1125,
+        "template": "[ultimate][deflect]. [over realm <n>] your leader is a mono-red \u226asaiyan\u226b card.. [auto] if you have <n> or more mono-red energy: when this card is played, your opponent reveals their hand, you choose up to <n> battle card..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1148,
+        "template": "[unique][blocker]. [permanent] if this card is in rest mode, your opponent can't attack your leader with battle card.. [auto][limit <n>](<n>), if your leader is a \u226abardock's crew\u226b card with its back facing up: at the end..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1166,
+        "template": "[unique]. [permanent] this card gets +<n> power for each card in your z-energy.. [auto][once per turn] if it's your turn: when you activate [over realm] or [dark over realm] or play a black battle card from your warp, dr..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1201,
+        "template": "[unique][double strike][blocker]. [auto](yellow), if your leader is a \u226agreat ape\u226b <son gohan: youth> card and you have <n> or more energy: when a yellow [field] extra is placed in your battle area, add up to <n> card fro..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1325,
+        "template": "[triple strike]. [evolve][yellow_ball][yellow_ball][three]yellow non-\u226agreat ape\u226b <son goku: childhood> . [auto] if your leader is yellow and has <son goku> in its character name, and you have <n> or more energy : when th..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1327,
+        "template": "[unique] . [auto] [once per turn] if your leader is a green <vegeta> card: when you play a green battle card with [blocker] or activate a green [field] with an energy cost of <n>, draw <n> card. . [activate main] [once p..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1414,
+        "template": "[z-awaken](green), when your life is at <n> or less: green <gogeta: br>.. [permanent] during your turn, this card gets +<n> power.. [auto][once per turn] when you play a green battle card with [ex-evolve] from your z-ene..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1467,
+        "template": "[permanent] while a card with <pan> in its character name is under this card, this card gains [blocker].. [auto] when this card activates [blocker], add up to <n> card with <pan> in its character name from under this car..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1480,
+        "template": "[deflect][barrier]. [auto] if your leader is mono-blue: when this card is played, if your opponent has <n> or more card in their hand, they place card from their hand at the bottom of their deck in any order until they h..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1498,
+        "template": "[unique]. [villainous] (when you play another \u226avillainous\u226b battle card or activate a \u226avillainous\u226b extra's skill, your opponent discards a card from their hand. negate this skill for the turn.). [auto][limit <n>](<n>), if..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1501,
+        "template": "[villainous] (when you play another \u226avillainous\u226b battle card or activate a \u226avillainous\u226b extra's skill, your opponent discards a card from their hand. negate this skill for the turn.). [auto][limit <n>](<n>), if it's your..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1516,
+        "template": "[unique][dual attack]. [villainous] (when you play another \u226avillainous\u226b battle card or activate a \u226avillainous\u226b extra's skill, your opponent discards a card from their hand. negate this skill for the turn.). [auto][limit..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1526,
+        "template": "[villainous] (when you play another \u226avillainous\u226b battle card or activate a \u226avillainous\u226b extra's skill, your opponent discards a card from their hand. negate this skill for the turn.). [auto] when this card attacks, choos..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1593,
+        "template": "[auto](blue): at the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your drop.. [auto][limit <n>] when this card is played, you may place <n> blue \u226aboujack briga..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1594,
+        "template": "[double strike]. [auto](blue), if you have <n> or more energy: at the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your drop.. [auto][limit <n>] when your oppo..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1595,
+        "template": "[deflect][double strike]. [permanent] for each green unison card in your drop, reduce the z-energy cost of this card in your z-deck by <n>. (up to <n>). [auto][once per turn] if it's your turn: when your green unison is..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1596,
+        "template": "[empower green <n>]. [auto][limit <n>] if this card has <n> or more markers on it: when this card is played, add <n> green card from your drop to your z-energy, and this card gains [dual attack] for the turn.. [+<n>][act..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1598,
+        "template": "[unique][barrier][blocker]. [permanent] for each green unison in your drop, reduce the energy cost of this card in your hand by <n>.. [auto][once per turn] if your leader is a \u226afrieza clan\u226b card: at the end of your turn..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1601,
+        "template": "[auto][limit <n>] if your leader is a black <supreme kai of time>: when a card is placed from your life in your drop by one of your leader skills, add the top card of your deck to your life.. [activate: main][limit <n>][..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1604,
+        "template": "[over realm <n>][dual attack]. [auto] if your leader is a black <supreme kai of time>: when this card attacks, use one card with <n> combo power from your warp in a combo with its skills negated for the turn."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1609,
+        "template": "[deflect][barrier]. [overlord][limit <n>] if your leader is a <evil saiyan> or <cumber> card?both black: . [z-stack <n>] black <cumber> battle card with energy cost of <n>. (when putting this card into play/on top of you..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1612,
+        "template": "[barrier][field]. [permanent] mono-black \u226asaiyan\u226b card with a combo cost of <n> and <n> combo power in your hand and battle area have their combo costs reduced by <n>.. [permanent] when using your <fu>'s [overlord] to ch..."
+      },
+      {
+        "count": 1,
+        "example_card_id": 1613,
+        "template": "[barrier][blocker]. [union-potara] choose up to <n> of your opponent's battle card, send it to its owner's warp, and draw <n> card: <son goku> and <vegeta>.. [permanent] this card is played from your hand in your opponen..."
       }
     ]
   },
@@ -1901,7 +2016,7 @@
       "example_card_name": "Son Goku, Limbering Up",
       "example_card_number": "BT19-079",
       "handler_counts": {
-        "auto_look_top_add_up_to_one_to_hand_on_play": 2
+        "auto_look_top_add_up_to_one_to_hand_on_play": 4
       },
       "implemented_card_count": 2,
       "implemented_rate": 1.0,
@@ -1911,7 +2026,7 @@
       "priority_implemented_rate": 0.0,
       "template": "[auto] when this card is played from your hand, look at up to <n> card from the top of your deck, add up to <n> <son goku: br> or <vegeta: br> card among them - both green and with an energy cost of <n> or less - to your...",
       "trigger_counts": {
-        "self_played": 2
+        "self_played": 4
       }
     },
     {
@@ -2805,8 +2920,10 @@
       "example_card_name": "Shugesh, Feelings Bequeathed",
       "example_card_number": "BT18-103",
       "handler_counts": {
+        "activate_look_top_choose_add_to_hand_or_play_unison_with_marker": 1,
         "auto_draw_n": 1,
-        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1,
+        "noop_auto": 1
       },
       "implemented_card_count": 2,
       "implemented_rate": 1.0,
@@ -2816,7 +2933,8 @@
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader is a \u226abardock's crew\u226b card and there are <n> or more \u226abardock's crew\u226b card with different card names in your energy, z-energy, battle area, and/or drop, this card gets +<n> power.. [auto] when...",
       "trigger_counts": {
-        "self_played": 2
+        "self_activate_main": 1,
+        "self_played": 3
       }
     },
     {
@@ -6633,15 +6751,20 @@
       "example_card_id": 1486,
       "example_card_name": "A Wild Fighter Is Born",
       "example_card_number": "BT19-066",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_add_blue_son_goten_and_trunks_cost3_from_owner_deck_or_drop_to_hand": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main/battle][limit <n>] if your leader's character name includes <son goten>, <trunks>, or <gotenks>: add up to <n> card with <son goten> in its character name and <n> card with <trunks> in its character name...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -8923,15 +9046,20 @@
       "example_card_id": 1592,
       "example_card_name": "Pan, Heartfelt Support",
       "example_card_number": "P-460",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_self_from_under_owner_unison": 1,
+        "activate_rest_self_add_life_and_buff_matching_owner_battle_for_turn": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main] if you have a <son goku: gt> card in play: play this card from under a unison.. [activate: main][once per turn] if you have <n> or more energy and you switch this card to rest mode: add up to <n> card fr...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 2
+      }
     },
     {
       "card_count": 1,
@@ -9920,15 +10048,19 @@
       "example_card_id": 1409,
       "example_card_name": "S.S. Deadly Bomber",
       "example_card_number": "BT19-031",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_reduce_battle_power_then_play_android_14_or_15_from_owner_hand": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main] if your leader is a red <android <n>> card: choose up to <n> of your opponent's battle card, ignoring [barrier], it gets -<n> power for the turn, then play up to <n> <android <n>> or <android <n>> card -...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -10311,15 +10443,19 @@
       "example_card_id": 1406,
       "example_card_name": "Forgotten Capsules",
       "example_card_number": "BT19-032",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_hand_add_android_14_and_15_from_owner_deck_to_hand": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main] place <n> other card from your hand at the bottom of your deck: add up to <n> <android <n>> and <n> <android <n>> card - both red and with an energy cost of <n> - from your deck to your hand, then shuffl...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -11782,15 +11918,19 @@
       "example_card_id": 1393,
       "example_card_name": "Spirit Bomb Unleashed",
       "example_card_number": "BT19-030",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_grant_owner_z_leader_power_and_keyword_for_turn": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main][limit <n>] if a red <son goku> <vegeta> <trunks: future> leader is under your z-leader: choose up to <n> of your red <son goku> z-leaders and it gets +<n> power and [critical] for the turn.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -13678,15 +13818,21 @@
       "example_card_id": 1465,
       "example_card_name": "Son Gohan & Piccolo, Master-Student Bond",
       "example_card_number": "BT19-124",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_buff_masters_teachings_for_battle": 1,
+        "activate_grant_masters_teachings_until_next_opponent_turn": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main][once per turn] choose up to <n> of your battle card with <son gohan> in its character name, and it gains \u226amaster's teachings\u226b until the end of your opponent's next turn.. [activate: battle][once per turn...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -13750,15 +13896,19 @@
       "example_card_id": 1433,
       "example_card_name": "Broly",
       "example_card_number": "BT19-068",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_discard_n_look_top_place_up_to_n_matching_under_self_then_shuffle": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[activate: main][once per turn] discard <n> card from your hand: look at up to <n> card from the top of your deck, choose up to <n> green extras among them, place them under this card, and shuffle your deck.. [awaken] wh...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -16160,15 +16310,19 @@
       "example_card_id": 1111,
       "example_card_name": "Son Goten, Growing Up Fast",
       "example_card_number": "BT18-112",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_self_from_combo_on_battle_end": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto] at the end of a battle where this card was used in a combo from your hand, play this card from your drop in rest mode.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_comboed_battle_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -19329,15 +19483,21 @@
       "example_card_id": 1428,
       "example_card_name": "Lemo, Dependable Friend",
       "example_card_number": "BT19-074",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_reduce_next_matching_extra_skill_cost_from_hand": 1,
+        "auto_place_green_extra_from_owner_hand_under_leader_then_draw_n_on_self_left_battle_area": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto] if your leader is a green <broly: br> card and you place <n> green extra from your hand under your leader: when this card is removed from your battle area by an opponent's skill, draw <n> card.. [activate: main][l...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_left_battle_area": 1
+      }
     },
     {
       "card_count": 1,
@@ -19428,15 +19588,21 @@
       "example_card_id": 1419,
       "example_card_name": "Bulma, a Humble Wish",
       "example_card_number": "BT19-072",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_hand_play_son_goku_br_or_vegeta_br_from_owner_deck_negated_remove_self": 1,
+        "auto_use_under_chosen_owner_battle_combo_switch_it_active_and_restrict_attack": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto] if your leader is a green <veku: br> or green <gogeta: br> card: when you attack with a <son goku: br> or <vegeta: br> card - both with [ex-evolve] - you may use <n> card from under that card in a combo with its s...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_other_battle_attacks": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -19511,15 +19677,21 @@
       "example_card_id": 1365,
       "example_card_name": "Whis, From on High",
       "example_card_number": "EX21-23",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_remove_self_from_game_then_place_up_to_n_opponent_battle_on_top_of_owner_deck": 1,
+        "auto_add_up_to_n_matching_from_owner_drop_to_energy_rest_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto] if your leader is a mono-blue <beerus> card and all of your energy is mono-blue: when this card is played, add up to <n> mono-blue card from your drop to your energy in rest mode.. [activate: main] remove this car...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -32310,15 +32482,23 @@
       "example_card_id": 1147,
       "example_card_name": "Gine, for the Sake of Family",
       "example_card_number": "BT18-094",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_yellow_bardock_from_hand": 1,
+        "auto_draw_n_on_owner_battle_switched_to_rest_by_skill": 1,
+        "auto_play_yellow_bardocks_crew_from_hand_rest_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto] when this card is played, play up to <n> mono-yellow \u226abardock's crew\u226b card with an energy cost of <n> from your hand, then switch it to rest mode.. [+<n>][auto] if it's your turn: when a battle card is switched to...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_battle_switched_to_rest": 1,
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -32401,15 +32581,22 @@
       "example_card_id": 1371,
       "example_card_name": "SS Son Goku, Awakened by Rage",
       "example_card_number": "EX21-26",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_add_top_n_from_owner_deck_to_life_on_owner_card_placed_into_drop": 1,
+        "auto_buff_self_and_grant_skill_removal_protection_until_next_opponent_turn": 1,
+        "auto_discard_from_owner_hand_then_opponent_discards_on_owner_card_placed_into_drop": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto] when this card is played, until the end of your opponent's next turn, this card gets +<n> power and can't be removed from your battle area by skills.. [auto][limit <n>] if your leader is a green <son goku> card an...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_card_placed_into_drop": 2,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -38813,15 +39000,19 @@
       "example_card_id": 1550,
       "example_card_name": "Fin, Dark Lifeform",
       "example_card_number": "P-451",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_matching_from_owner_hand_and_draw_on_self_added_to_z_energy": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto](black), if your leader is a black <fin> card, you have <n> or more energy, and your opponent has a skill-less battle card or unison in play: when you add this card to your z-energy, you may play <n> <fin> card wit...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_added_to_z_energy": 1
+      }
     },
     {
       "card_count": 1,
@@ -38889,15 +39080,21 @@
       "example_card_id": 1506,
       "example_card_name": "Son Gohan, Power Unshackled",
       "example_card_number": "BT19-049",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_apply_battle_attack_bottom_deck_battle_tax": 1,
+        "auto_play_self_from_combo_on_battle_end": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto](blue), if your leader has <sh> in its character name: at the end of a battle where this card was used in a combo from your hand, play this card from your drop.. [activate: main][limit <n>](blue), place this card i...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_comboed_battle_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -38906,15 +39103,19 @@
       "example_card_id": 1187,
       "example_card_name": "Grand Kai, Intentional Draw",
       "example_card_number": "P-409",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_place_up_to_n_attacking_battle_on_top_of_owner_deck_on_owner_battle_koed_by_opponent_attack": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto](blue), if your leader is mono-blue and you discard this card from your hand: when one of your battle card is ko'd by an opponent's attack, choose up to <n> of the attacking battle card and place it on top of its o...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_battle_koed_by_opponent_attack_battle_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -39703,15 +39904,21 @@
       "example_card_id": 1478,
       "example_card_name": "Trunks, Tenacious Tag-Team",
       "example_card_number": "BT19-058",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_search_blue_son_goten_sh_add_or_play": 1,
+        "auto_return_up_to_n_opponent_unison_to_hand_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>] if your leader is a blue <gotenks: sh> card: when this card is played, choose up to <n> of your opponent's unisons with a specified cost of <n> and return it to its owner's hand.. [activate: main][limit...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -39781,15 +39988,21 @@
       "example_card_id": 1431,
       "example_card_name": "Cheelai, Dependable Friend",
       "example_card_number": "BT19-073",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_place_up_to_n_matching_from_owner_deck_into_drop_then_shuffle": 1,
+        "auto_look_top_place_up_to_n_matching_under_matching_owner_battle_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>] if your leader is a green <broly: br> card: when this card is played, look at up to <n> card from the top of your deck, place up to <n> green extra from among them under <n> of your green <broly: br> ca...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -39883,15 +40096,19 @@
       "example_card_id": 1083,
       "example_card_name": "SS4 Son Goku, Digging Deep",
       "example_card_number": "BT18-011",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_buff_owner_battling_card_or_leader_for_turn_on_combo": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>] if your leader is a red <son goku: gt> <vegeta: gt> card and your life is at <n> or less: when this card is used in a combo from your hand, choose <n> of your card and it gets +<n> power for the turn.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_comboed": 1
+      }
     },
     {
       "card_count": 1,
@@ -40440,15 +40657,21 @@
       "example_card_id": 1477,
       "example_card_name": "Son Goten, Fast Improving",
       "example_card_number": "BT19-052",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_draw_n": 1,
+        "auto_send_self_to_drop_and_negate_attack_on_opponent_battle_attack": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>] when this card is discarded from your hand by a [union] skill, draw <n> card.. [auto] place this card in its owner's drop: when your opponent attacks with a battle card, negate the attack.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_battle_attacks": 1,
+        "self_in_hand_sent_to_drop_or_warp": 1
+      }
     },
     {
       "card_count": 1,
@@ -40728,15 +40951,21 @@
       "example_card_id": 1542,
       "example_card_name": "Bardock, Fatherly Feelings",
       "example_card_number": "P-437",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_look_top_play_matching_from_owner_deck_negated_on_play": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>] when this card is played, look at up to <n> card from the top of your deck, play up to <n> red \u226abardock's crew\u226b card with an energy cost of <n> among them with its [auto] skills negated for the turn, an...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -41003,15 +41232,23 @@
       "example_card_id": 1537,
       "example_card_name": "Son Gohan, Dependable Young Fighter",
       "example_card_number": "BT19-148",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_ko_up_to_n_opponent_rest_battle_on_self_added_to_z_energy": 1,
+        "auto_play_self_from_hand_on_owner_opponent_card_switched_to_rest": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>](<n>), if your leader is yellow or a \u226amaster's teachings\u226b card and your life is at <n> or less: when an opponent's card is switched to rest mode by one of your skills, play this card from your hand.. [au...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_card_switched_to_rest": 1,
+        "self_added_to_z_energy": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -41037,15 +41274,21 @@
       "example_card_id": 1510,
       "example_card_name": "Vegeta, Interplanetary Training",
       "example_card_number": "BT19-056",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_bottom_deck_opponent_hand_or_battle_on_play": 1,
+        "auto_play_self_from_combo_on_battle_end": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>](blue), if your leader is a blue <son gohan: sh> card and it's your turn: at the end of a battle where this card was used in a combo from your hand, play it from your drop.. [auto] when this card is play...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_comboed_battle_end": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -41163,15 +41406,19 @@
       "example_card_id": 1336,
       "example_card_name": "Pilaf, Mechanized Partnership",
       "example_card_number": "EX21-02",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_up_to_n_named_from_owner_deck_rest_on_play_or_combo": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][limit <n>](red)(red), if your leader is a red <pilaf> card and there are <n> or more <pilaf>, <shu>, and <mai> card in your drop: when this card is used in a combo from your hand, play up to <n> {pilaf machine, th...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_comboed": 1
+      }
     },
     {
       "card_count": 1,
@@ -41528,15 +41775,19 @@
       "example_card_id": 1394,
       "example_card_name": "Krillin, at the Ready",
       "example_card_number": "BT19-018",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][once per turn] if it's your opponent's turn: when your opponent plays a battle card with <n> power or more, look at up to <n> card from the top of your deck, add up to <n> red \u226asaiyan\u226b card with an energy cost of...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_battle_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -41587,15 +41838,19 @@
       "example_card_id": 1144,
       "example_card_name": "Bardock's Crew",
       "example_card_number": "BT18-089",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_draw_n_on_owner_bardocks_crew_played": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][once per turn] if it's your turn: when you play a \u226abardock's crew\u226b card, draw <n> card.. [awaken] when your life is at <n> or less or there are <n> or more \u226abardock's crew\u226b card with different card names in your e...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_other_battle_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -42141,15 +42396,22 @@
       "example_card_id": 1335,
       "example_card_name": "Hit, Ready To Brawl",
       "example_card_number": "EX21-01",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_add_life_and_place_skillless_from_owner_deck_into_drop": 1,
+        "activate_play_up_to_n_from_owner_hand": 1,
+        "auto_redirect_attack_to_owner_leader_if_self_targeted_and_attacker_power_at_least": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][once per turn] when this card is attacked by a card with <n> power or more, switch the target of attack to your leader.. [+<n>][activate: main] add up to <n> card from your life to your hand, place up to <n> skill...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_card_attacks": 1,
+        "self_activate_main": 2
+      }
     },
     {
       "card_count": 1,
@@ -42487,15 +42749,19 @@
       "example_card_id": 1063,
       "example_card_name": "Pan",
       "example_card_number": "SD17-01",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_buff_played_battle_and_draw_if_power_at_least": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[auto][once per turn] when you play a battle card, choose it, and it gets +<n> power for the turn. if this raises that card's power to <n> or more, draw <n> card.. [awaken] when your life is at <n> or less or you have <n...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_other_battle_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -45236,6 +45502,7 @@
       "example_card_number": "BT19-123",
       "handler_counts": {
         "auto_look_top_add_up_to_one_to_hand_on_play": 1,
+        "auto_play_up_to_n_from_owner_hand_on_self_combo": 1,
         "noop_auto": 1
       },
       "implemented_card_count": 1,
@@ -45246,6 +45513,7 @@
       "priority_implemented_rate": 0.0,
       "template": "[barrier]. [auto] when this card is played, look at up to <n> card from the top of your deck, add up to <n> \u226aslug's army\u226b card among them to your hand, and place the rest at the bottom of your deck in any order.. [auto](...",
       "trigger_counts": {
+        "self_comboed": 1,
         "self_played": 2
       }
     },
@@ -53797,6 +54065,8 @@
       "example_card_name": "Angila, Lord Slug's Henchman",
       "example_card_number": "BT19-117",
       "handler_counts": {
+        "activate_combo_up_to_n_from_owner_hand": 1,
+        "auto_grant_keyword_to_owner_battle_on_self_combo": 1,
         "noop_auto": 1
       },
       "implemented_card_count": 1,
@@ -53807,6 +54077,8 @@
       "priority_implemented_rate": 0.0,
       "template": "[blocker]. [permanent][bond <n>] while this card is in active mode, it gains [barrier].. [auto] if your leader is a <lord slug> card: when this card is used in a combo, choose up to <n> of your yellow \u226aslug's army\u226b card,...",
       "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_comboed": 1,
         "self_played": 1
       }
     },
@@ -53819,6 +54091,7 @@
       "example_card_number": "BT19-116",
       "handler_counts": {
         "activate_play_self_from_hand": 1,
+        "auto_draw_n_and_switch_up_to_n_opponent_battle_rest_on_self_blocker_activated": 1,
         "noop_auto": 1
       },
       "implemented_card_count": 1,
@@ -53830,6 +54103,7 @@
       "template": "[blocker]. [permanent][bond <n>] while this card is in active mode, it gains [barrier].. [auto][once per turn] when you activate this card's [blocker], draw <n> card, and choose up to <n> of your opponent's battle card a...",
       "trigger_counts": {
         "self_activate_main": 1,
+        "self_blocker_activated": 1,
         "self_played": 1
       }
     },
@@ -55598,15 +55872,21 @@
       "example_card_id": 1435,
       "example_card_name": "Training With Ba",
       "example_card_number": "BT19-095",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_negate_attack_add_self_from_drop_to_z_energy": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] if your leader is a green <broly: br> card: when this card is activated from your hand or from under a card, negate the attack and add this card from your drop to your z-energy.. [permanent] if your lea...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -55615,15 +55895,21 @@
       "example_card_id": 1438,
       "example_card_name": "Wishing to End the Battle",
       "example_card_number": "BT19-099",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_place_under_from_owner_battle_to_drop_then_limit_opponent_attacks": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] if your leader is a green <broly: br> z-leader: negate the attack. additionally, you may place <n> extras from under one of your green <broly: br> card in their owners' drops. if you do, your opponent c...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -55649,15 +55935,21 @@
       "example_card_id": 1411,
       "example_card_name": "Android Assault",
       "example_card_number": "BT19-033",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_negate_attack_add_up_to_n_from_owner_drop_to_hand": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] if your leader is an <android <n>> card: negate the attack and add up to <n> red \u226aandroid\u226b card with an energy cost of <n> from your drop to your hand.. [permanent] if your leader is an <android <n>> z-...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -55768,15 +56060,21 @@
       "example_card_id": 1547,
       "example_card_name": "Android 17, Defending Friends",
       "example_card_number": "P-442",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_limit_opponent_battle_attacks_bottom_deck_hand_each_time_on_play": 1,
+        "counter_negate_attack_play_self": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] negate the attack and play this card in rest mode.. [auto][limit <n>] if your leader is blue and - your leader is a z-leader, you have <n> or more z-energy, or you have a z-battle card in play: when thi...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -56508,15 +56806,22 @@
       "example_card_id": 1149,
       "example_card_name": "Tora, Feelings Bequeathed",
       "example_card_number": "BT18-099",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_discard_n_from_owner_hand_then_apply_non_leader_attack_rest_tax_on_play": 1,
+        "counter_negate_attack_play_self": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] negate the attack and play this card.. [permanent] if your leader is a \u226abardock's crew\u226b card and there are <n> or more \u226abardock's crew\u226b card with different card names in your energy, z-energy, battle ar...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -56593,15 +56898,21 @@
       "example_card_id": 1520,
       "example_card_name": "Golden Frieza, Villainous Threat",
       "example_card_number": "BT19-126",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_negate_attack_play_self_if_owner_villainous_at_most": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] negate the attack, and if there are <n> or fewer \u226avillainous\u226b card in your battle area, play this card.. [villainous] (when you play another \u226avillainous\u226b battle card or activate a \u226avillainous\u226b extra's s...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -57549,15 +57860,19 @@
       "example_card_id": 1163,
       "example_card_name": "A Saiyan's Willpower",
       "example_card_number": "BT18-120",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_place_owner_battle_in_drop_then_draw_if_attacker_matches_trait": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] negate the attack. additionally, if the attacking card is a \u226afrieza clan\u226b card, place <n> of your battle card in its owner's drop. if you do, draw <n> card.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1
+      }
     },
     {
       "card_count": 1,
@@ -57566,15 +57881,19 @@
       "example_card_id": 1100,
       "example_card_name": "Minus Energy Power Ball",
       "example_card_number": "BT18-028",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_reduce_all_opponent_battles_power_for_turn": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] negate the attack. additionally, if your leader is a \u226ashadow dragon\u226b card, choose all of your opponent's battle card and they get -<n> power for the turn.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1
+      }
     },
     {
       "card_count": 1,
@@ -57685,15 +58004,21 @@
       "example_card_id": 1055,
       "example_card_name": "A Demon Is Born",
       "example_card_number": "BT18-088",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_play_up_to_n_from_owner_drop_negate_skills_for_turn": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack] negate the attack. play up to <n> red or green \u226ademon clan\u226b card with an energy cost of <n> or less from your drop with its skills negated for the turn.. [permanent] if your leader is a <king piccolo> c...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -58592,15 +58917,21 @@
       "example_card_id": 1473,
       "example_card_name": "Gohan Whistles",
       "example_card_number": "BT19-133",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_reduce_owner_lord_slug_power_then_negate_and_rest_opponent_battle": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack][limit <n>] if your leader is a <lord slug> card and you choose <n> of your <lord slug> card and have it get -<n> power for the turn: negate the attack, and choose up to <n> of your opponent's battle car...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -58626,15 +58957,21 @@
       "example_card_id": 1421,
       "example_card_name": "Whis's Capriciousness",
       "example_card_number": "BT19-092",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_optional_discard_then_limit_opponent_attacks": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack][limit <n>] if your leader is a green <veku: br> or green <gogeta: br> card: negate the attack. additionally, you may discard <n> green card from your hand. if you do, your opponent can only attack <n> m...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -58745,15 +59082,21 @@
       "example_card_id": 1551,
       "example_card_name": "Meta-Cooler, Infinite Terror",
       "example_card_number": "P-446",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_negate_attack_play_self": 1,
+        "noop_auto": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack][limit <n>] if your leader is mono-yellow: negate the attack and play this card.. [permanent] if you have a z-leader or z-battle card in play, you can activate this card's [counter] skill from your hand...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -59100,15 +59443,21 @@
       "example_card_id": 1341,
       "example_card_name": "Android 18, With Reckless Abandon",
       "example_card_number": "EX21-03",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_negate_attack_play_self_then_reduce_battle_power": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: attack][limit <n>] negate the attack, play this card, then choose up to <n> of your opponent's battle card and it gets -<n> power for the turn.. [permanent][sparking <n>] if your leader is a mono-red \u226auniverse...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -59943,15 +60292,21 @@
       "example_card_id": 1182,
       "example_card_name": "Begrudging Allies",
       "example_card_number": "BT18-140",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_place_pending_play_in_warp_and_send_up_to_n_opponent_drop_battle_to_warp": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: play] if the battle card being played has an energy cost of <n> or less, send it to its owner's warp instead. additionally, if your leader is black, send up to <n> battle card from your opponent's drop to their...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_play": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -60011,15 +60366,20 @@
       "example_card_id": 1513,
       "example_card_name": "Decisive Strike",
       "example_card_number": "BT19-065",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_place_pending_play_at_bottom_of_owner_deck_if_cost_at_most": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[counter: play] if you have a blue z-battle card in play: if the battle card being played has an energy cost of <n> or less, place it at the bottom of its owner's deck instead.. [permanent] if all of your energy is mono-...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_play": 2
+      }
     },
     {
       "card_count": 1,
@@ -63514,15 +63874,21 @@
       "example_card_id": 1407,
       "example_card_name": "Android 17, Finally Freed",
       "example_card_number": "BT19-026",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "counter_negate_attack_play_self": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[critical]. [counter: attack][limit <n>] if your leader is an <android <n>> card: negate the attack and play this card in rest mode.. [permanent] if your leader is a red <android <n>> z-leader and your life is at <n> or...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "counter_attack": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -64032,15 +64398,22 @@
       "example_card_id": 1355,
       "example_card_name": "Hatchhyack, Saiyan Exterminator",
       "example_card_number": "EX21-13",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_n_matching_from_owner_drop_then_play_self_from_drop": 1,
+        "activate_switch_self_active_then_play_up_to_n_matching_from_owner_drop_or_warp_on_top_of_self": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[critical]. [permanent] if this card would be removed from a battle area, send it to its owner's warp instead.. [activate: main][limit <n>](<n>), if your leader is a black \u226amachine mutant\u226b card, {the dark planet} is in y...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 2,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -67925,15 +68298,21 @@
       "example_card_id": 1451,
       "example_card_name": "Son Gohan & Piccolo, Training's Beginnings",
       "example_card_number": "BT19-108",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_return_self_and_masters_teachings_combo_to_hand_then_draw_play_and_buff": 1,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect]. [auto] when this card is ko'd, look at up to <n> card from the top of your deck, add up to <n> \u226amaster's teachings\u226b card among them to your hand, then shuffle your deck.. [activate: battle][limit <n>](yellow),...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_koed": 1
+      }
     },
     {
       "card_count": 1,
@@ -68786,15 +69165,21 @@
       "example_card_id": 1350,
       "example_card_name": "Towa, Unpredictable Offense",
       "example_card_number": "EX21-33",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_n_from_owner_hand_then_play_up_to_n_from_owner_hand": 1,
+        "auto_draw_n": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect]. [auto][once per turn] if your leader is a black <dabura: xeno> card: when you activate [swap], draw <n> card.. [activate: main][limit <n>] if your leader is a black \u226ademon realm race\u226b card and you place <n> ca...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_swap_activated": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -68910,7 +69295,9 @@
       "example_card_name": "SS Son Goku, All-Out Evolution",
       "example_card_number": "BT19-078",
       "handler_counts": {
-        "auto_draw_n": 1
+        "auto_draw_n": 1,
+        "auto_draw_n_then_discard_n_from_owner_hand_on_play": 1,
+        "noop_auto": 1
       },
       "implemented_card_count": 1,
       "implemented_rate": 1.0,
@@ -68920,7 +69307,7 @@
       "priority_implemented_rate": 0.0,
       "template": "[deflect]. [ex-evolve][limit <n>](green), draw <n> card: green <son goku: br> with energy cost of <n> or less.. [permanent] this card's [ex-evolve] can also be activated from your z-energy.. [auto] if your leader is a gr...",
       "trigger_counts": {
-        "self_played": 1
+        "self_played": 3
       }
     },
     {
@@ -69677,15 +70064,20 @@
       "example_card_id": 1292,
       "example_card_name": "Intensive Training Son Goku",
       "example_card_number": "BT10-066",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_send_total_named_from_owner_drop_to_warp_then_play_matching_from_owner_deck_or_hand_on_top_of_self": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][barrier]. [activate: main/battle] if your leader card is a green <son goku> card and you send a total of <n> green <son gohan: youth> , <vegeta>, <bulma>, <krillin>, and/or <piccolo> card from your drop area to...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -69732,15 +70124,21 @@
       "example_card_id": 1146,
       "example_card_name": "SSB Son Goku, Evolved Defender",
       "example_card_number": "BT18-093",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_rest_opponent_board_on_owner_opponent_card_played_if_self_resting_and_pay_z_energy": 1,
+        "auto_restrict_opponent_board_card_attack_until_end_of_next_turn_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][barrier]. [auto] when this card is played, choose up to <n> of your opponent's leader, unison, or battle card in rest mode, and it can't attack until the end of your opponent's next turn.. [auto] if this card i...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_card_played": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -69800,15 +70198,19 @@
       "example_card_id": 1131,
       "example_card_name": "Gotenks, Fusion Confusion",
       "example_card_number": "SD19-05",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_send_self_to_drop_add_named_pair_then_ko_opponent_battle": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][barrier]. [union-fusion][limit <n>] green <son goten> and green <trunks: youth>.. [activate: main] if your leader is green and has <gotenks> in its character name, and you place this card in its owner's drop: a...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -70416,15 +70818,23 @@
       "example_card_id": 1342,
       "example_card_name": "SS Son Gohan, Come What May",
       "example_card_number": "EX21-29",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_up_to_n_yellow_trunks_future_from_owner_deck_or_drop_on_play": 1,
+        "auto_use_under_chosen_owner_battle_combo_switch_it_active_and_restrict_attack": 2,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][blocker]. [permanent] your yellow <trunks: future> card with energy costs of <n> gain [barrier].. [auto][limit <n>] when this card is played, you may place <n> card from your hand at the bottom of your deck. if...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_card_attacks": 1,
+        "self_attacks": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -70667,15 +71077,19 @@
       "example_card_id": 1422,
       "example_card_name": "SS Vegeta, All-Out Evolution",
       "example_card_number": "BT19-082",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][critical]. [ex-evolve][limit <n>](green), draw <n> card: green <vegeta: br> with energy cost of <n> or less.. [permanent] this card's [ex-evolve] can also be activated from your z-energy.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -72587,15 +73001,20 @@
       "example_card_id": 1104,
       "example_card_name": "Son Gohan, Facing New Foes",
       "example_card_number": "BT18-092",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_switch_up_to_n_opponent_battle_rest_on_play": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][dual attack]. [permanent] reduce the [ex-evolve] skill cost of yellow <son gohan: sh> card in your hand or drop by <n>.. [auto] if your leader is a yellow <piccolo: sh> card: when this card is played, choose up...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -73255,15 +73674,19 @@
       "example_card_id": 1479,
       "example_card_name": "Gotenks, Reckless Rush",
       "example_card_number": "BT19-060",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_bottom_deck_up_to_n_opponent_battle": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][triple strike]. [union-fusion](blue)(blue)(blue), draw <n> card: <son goten: sh> and <trunks: sh>.. [permanent] this card can't be switched to active mode during your charge phase.. [auto] when this card is pla...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -73357,15 +73780,25 @@
       "example_card_id": 1191,
       "example_card_name": "SS4 Gogeta, Triumphant Together",
       "example_card_number": "BT18-019",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_send_self_to_owner_drop_on_turn_start": 1,
+        "auto_switch_self_active_on_turn_end": 1,
+        "auto_switch_self_and_up_to_n_owner_energy_active_on_attack_ko": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][triple strike][blocker]. [union-fusion](red)(red)(red)(red), draw <n> card: red <son goku: gt> and red <vegeta: gt>.. [permanent] this card isn't affected by non-<gogeta: gt> skills, and when this card is in a...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks_battle_end": 1,
+        "self_played": 1,
+        "turn_end": 1,
+        "turn_start": 1
+      }
     },
     {
       "card_count": 1,
@@ -73492,15 +73925,21 @@
       "example_card_id": 1456,
       "example_card_name": "Lord Slug, Craving for Youth",
       "example_card_number": "BT19-115",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_up_to_n_from_owner_deck_and_self_gain_power_on_attack": 1,
+        "auto_self_gain_combo_power_on_combo": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][unique]. [auto] when this card attacks, play up to <n> yellow \u226aslug's army\u226b card with an energy cost of <n> from your deck, shuffle your deck, and this card gets +<n> power for the turn.. [auto] if your leader...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks": 1,
+        "self_comboed": 1
+      }
     },
     {
       "card_count": 1,
@@ -73885,15 +74324,23 @@
       "example_card_id": 1112,
       "example_card_name": "Pan, Inherited Bloodline",
       "example_card_number": "BT18-113",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_combo_up_to_n_from_owner_zone_on_attack": 1,
+        "auto_play_self_from_drop_then_ko_up_to_n_opponent_rest_battle_on_self_placed_into_drop": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[deflect][unique][dual attack]. [permanent] when this card would leave your battle area, remove it from the game instead.. [auto](yellow), if your leader is yellow and your opponent has <n> or more energy: when you place...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks": 1,
+        "self_placed_into_drop": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -77725,15 +78172,21 @@
       "example_card_id": 1165,
       "example_card_name": "Demon God Shroom & Demon God Salsa, Imminent Annihilation",
       "example_card_number": "BT18-123",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_combo_up_to_n_from_owner_warp": 1,
+        "activate_look_bottom_play_matching_from_deck": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[double strike]. [z-awaken] (black), if your life is at <n> or less: black <shroom> <salsa> leader. (pay the skill cost and z-energy, then play this card from your z-deck on top of the specified leader's back side.). [ac...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -77868,15 +78321,23 @@
       "example_card_id": 1315,
       "example_card_name": "SS Son Goku, United Onslaught",
       "example_card_number": "BT19-003",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_buff_self_for_battle_per_under_card": 1,
+        "auto_remove_all_non_leader_under_self_to_drop_reduce_all_opponent_battles_and_remove_self_at_turn_end": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[double strike]. [z-awaken](red), place up to <n> of your z-energy under your leader: red <son goku> <vegeta> <trunks: future>.. [auto] when this card attacks, for each non-leader card under this card, this card gets +<n...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks": 1,
+        "self_played": 1,
+        "turn_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -78486,15 +78947,22 @@
       "example_card_id": 1175,
       "example_card_name": "Demon God Shroom & Demon God Salsa, Unending Nightmare",
       "example_card_number": "BT18-133",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_self_from_warp": 1,
+        "auto_send_up_to_n_opponent_hand_and_battle_to_warp_on_play": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[double strike][servant]. [permanent] when this card is placed in your drop from your battle area or combo area, place it at the bottom of its owner's deck instead.. [auto] when this card is played, your opponent chooses...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -80986,15 +81454,23 @@
       "example_card_id": 1167,
       "example_card_name": "Demon God Putine & Demon God Gravy, Treacherous Intel",
       "example_card_number": "BT18-125",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_buff_up_to_n_owner_combo_cards_for_battle": 1,
+        "activate_send_up_to_n_opponent_battle_to_warp": 1,
+        "auto_send_up_to_n_opponent_hand_to_warp_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[empower black <n>]. [auto] if there are <n> or more markers on this card: when this card is played, your opponent sends <n> card from their hand to their warp.. [+<n>][activate: battle] up to <n> black battle card in yo...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -86680,15 +87156,19 @@
       "example_card_id": 1531,
       "example_card_name": "Beerus, Villainous Threat",
       "example_card_number": "BT19-143",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[energy-exhaust][deflect][offering]. [villainous] (when you play another \u226avillainous\u226b battle card or activate a \u226avillainous\u226b extra's skill, your opponent discards a card from their hand. negate this skill for the turn.)",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -87124,15 +87604,21 @@
       "example_card_id": 220,
       "example_card_name": "SS2 Kefla, Lightning Speed",
       "example_card_number": "BT15-148",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_discard_one_gain_keyword_then_if_copy_draw_and_rest_opponent_card": 1,
+        "auto_bottom_deck_up_to_n_opponent_battle": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[energy-exhaust][double strike][blocker]. [arrival blue/yellow](blue)(blue)(yellow). [auto] when this card is played, choose up to <n> of your opponent's battle card, ignoring [barrier], and place it at the bottom of its...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -87164,15 +87650,23 @@
       "example_card_id": 693,
       "example_card_name": "Cell, Abominable Power",
       "example_card_number": "BT17-145",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_combo_self_from_owner_drop": 1,
+        "auto_opponent_discards_n_from_hand_on_attack": 1,
+        "auto_remove_self_from_game_on_battle_end": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[energy-exhaust][double strike][dual attack] [ex-evolve](<n>): <cell> with an energy cost of <n> or <n>. [auto][once per turn] when this card attacks, choose <n> card in your opponent's hand and discard it. [auto] when t...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_attacks": 1,
+        "self_comboed_battle_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -87805,15 +88299,21 @@
       "example_card_id": 394,
       "example_card_name": "Frost, by Any Means Necessary",
       "example_card_number": "BT16-136",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_ko_attacked_battle_and_opponent_discards_n_on_battle_end": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[energy-exhaust][triple attack] [evolve]((green))(<n>): <frost>. [permanent] this card can attack battle card without [barrier] in active mode. [auto][once per turn] if this card's attack hasn't been negated: at the end...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks_battle_end": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -87961,15 +88461,22 @@
       "example_card_id": 41,
       "example_card_name": "SS4 Bardock, Prismatic Aegis",
       "example_card_number": "EX19-26",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_power_reduce_up_to_n_opponent_battle_for_turn": 1,
+        "auto_reduce_up_to_n_opponent_cards_power_by_owner_energy_color_count_on_play_or_added_to_energy": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[energy-exhaust][unique][barrier]. [permanent] if your leader card is a <bardock: xeno> card, reduce the energy cost of this card in your hand by <n>.. [auto] if your leader card is a <bardock: xeno> card and you have a...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_added_to_energy": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -88071,15 +88578,21 @@
       "example_card_id": 436,
       "example_card_name": "Fused Zamasu, Exterminating Force",
       "example_card_number": "BT16-129",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_draw_n_switch_self_active_and_switch_up_to_n_opponent_board_rest_on_aegis": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[energy-exhaust][unique][double strike][indestructible][blocker] [ex-evolve]((blue))((yellow))(<n>): blue <zamasu> with an energy cost of <n>. [aegis blue/yellow][once per turn] [permanent] if your leader card is a <zama...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_aegis_activated": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -89257,15 +89770,21 @@
       "example_card_id": 1242,
       "example_card_name": "King Piccolo, Newly Youthful Conqueror",
       "example_card_number": "BT18-078",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_self_from_hand_on_owner_matching_battle_played": 1,
+        "auto_switch_self_active_then_buff_up_to_n_owner_battles_for_turn_on_attack": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[evolve][one] \uff1cking piccolo\uff1e . [auto][limit <n>][green_ball], if your leader is a green \uff1cking piccolo\uff1ecard and you have <n> or more energy : when you play a \u226ademon clan\u226b card using a skill, play this card from your hand....",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_other_battle_played": 1,
+        "self_attacks": 1
+      }
     },
     {
       "card_count": 1,
@@ -90409,7 +90928,9 @@
       "example_card_name": "SSG Vegeta, Crimson Impact",
       "example_card_number": "BT19-081",
       "handler_counts": {
-        "auto_ko_opponent_battle_on_play": 1
+        "auto_ko_opponent_battle_on_play": 1,
+        "auto_ko_up_to_n_opponent_battle_on_play": 1,
+        "noop_auto": 1
       },
       "implemented_card_count": 1,
       "implemented_rate": 1.0,
@@ -90419,7 +90940,7 @@
       "priority_implemented_rate": 0.0,
       "template": "[ex-evolve][limit <n>](green), draw <n> card: green <vegeta: br> with energy cost of <n> or less.. [permanent] this card's [ex-evolve] can also be activated from your z-energy.. [auto] when this card is played, choose up...",
       "trigger_counts": {
-        "self_played": 1
+        "self_played": 3
       }
     },
     {
@@ -91119,15 +91640,20 @@
       "example_card_id": 569,
       "example_card_name": "Big Gete Star, Nightmarish Regeneration",
       "example_card_number": "BT17-079",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_look_top_play_up_to_n_named_rest_and_bottom_rest": 1,
+        "activate_play_up_to_n_matching_from_owner_deck_or_drop_on_top_of_self": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[field] [permanent] this card is also treated as {big gete star} in all areas. [activate: main][burst <n>](<n>), switch this card to rest mode: look at up to <n> card from the top of your deck, play up to <n> {infinite m...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 2
+      }
     },
     {
       "card_count": 1,
@@ -91136,15 +91662,21 @@
       "example_card_id": 562,
       "example_card_name": "Mechanized Planet",
       "example_card_number": "BT17-028",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_rest_self_and_power_reduce_up_to_n_opponent_battle_for_turn": 1,
+        "auto_draw_n_then_discard_n_from_owner_hand_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[field] [permanent] this card is also treated as {planet m-<n>} in all areas. [auto] if your leader card is a <dr. myuu> card: when this card is placed in your battle area, draw <n> card, then discard <n> card from your...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -91225,15 +91757,20 @@
       "example_card_id": 1054,
       "example_card_name": "Master Roshi's Training",
       "example_card_number": "BT18-087",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_n_from_owner_hand_then_play_up_to_n_from_owner_deck": 1,
+        "activate_play_up_to_n_matching_from_owner_deck_or_drop_to_opponent_battle_rest_negated": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[field]. [activate: main][once per turn] place <n> card from your hand at the bottom of your deck: play up to <n> green \u226aturtle school\u226b card with an energy cost of <n> from your deck, then shuffle your deck.. [activate:...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 2
+      }
     },
     {
       "card_count": 1,
@@ -91314,15 +91851,25 @@
       "example_card_id": 111,
       "example_card_name": "Turles's Power Ball",
       "example_card_number": "BT15-118",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_gain_control_opponent_great_ape_until_turn_end": 1,
+        "activate_send_self_to_drop_buff_named_card_for_battle": 1,
+        "auto_mark_self_played_turn_number": 1,
+        "auto_turles_power_ball_turn_end": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[field]. [auto] if your leader card is a green or yellow \u226asaiyan\u226b card: at the end of a turn in which this card was placed in a battle area, you may choose <n> \u226agreat ape\u226b card with an energy cost of <n> in your hand and...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1,
+        "self_played": 1,
+        "turn_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -91682,15 +92229,23 @@
       "example_card_id": 213,
       "example_card_name": "Vegeta's Power Ball",
       "example_card_number": "BT15-090",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_search_play_matching_great_ape_from_owner_deck_on_owner_battle_koed_by_opponent_attack": 1,
+        "auto_switch_up_to_n_owner_battles_active_by_trait_on_turn_end": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[field]. [permanent] if your leader card is a green \u226asaiyan\u226b card, you can activate this card from your hand without paying its energy cost.. [auto][once per turn]\u2460: when one of your non-\u226agreat ape\u226b \u226asaiyan\u226b card is ko'd...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_battle_koed_by_opponent_attack_battle_end": 1,
+        "self_played": 1,
+        "turn_end": 1
+      }
     },
     {
       "card_count": 1,
@@ -92714,22 +93269,27 @@
     },
     {
       "card_count": 1,
-      "diagnostic_card_count": 1,
-      "diagnostic_counts": {
-        "missed_play_draw": 1
-      },
+      "diagnostic_card_count": 0,
+      "diagnostic_counts": {},
       "example_card_id": 1554,
       "example_card_name": "Son Goku, Evolution Awaits",
       "example_card_number": "P-450",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_draw_n": 1,
+        "auto_self_gain_power_for_turn_on_play": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[over realm <n>]. [auto] when this card is played by [over realm], draw <n> card, and this card gets +<n> power for the turn.. [activate: main] if your leader is a <son goku: xeno>-only card, your opponent has <n> or mor...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -94090,15 +94650,21 @@
       "example_card_id": 448,
       "example_card_name": "Beerus, Coming to Blows",
       "example_card_number": "P-367",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_combo_matching_from_hand_on_attack_then_draw": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] during your turn, this card can't be ko'd by your opponent's skills. [auto] if your opponent has <n> or more energy: when this card attacks, you may choose <n> blue \u226agod\u226b card with a combo cost of <n> in your...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -94162,15 +94728,21 @@
       "example_card_id": 345,
       "example_card_name": "Frost, to Battle Universe 7",
       "example_card_number": "BT16-065",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_up_to_n_from_owner_hand_on_self_ko": 1,
+        "noop_auto": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] during your turn, this card gets +<n> power and can attack battle card without [barrier] in active mode. [permanent] if this card is in rest mode and your opponent has no battle card in play, your opponent's...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_koed": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -95678,15 +96250,21 @@
       "example_card_id": 1275,
       "example_card_name": "Android 8, \"Failed\" Fighter",
       "example_card_number": "P-421",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_buff_up_to_n_owner_battles_for_turn_on_self_placed_into_drop_by_skill": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if you have a <commander red> card in play, reduce the energy cost of this card in your hand by <n>. [auto][limit <n>] if it's your turn : when this card is placed in your drop by a skill, choose up to <n> of...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_placed_into_drop": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -95817,15 +96395,20 @@
       "example_card_id": 92,
       "example_card_name": "Krillin, Battle at the Tree",
       "example_card_number": "BT15-099",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_activate_up_to_n_named_field_extra_from_owner_drop_on_play": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if you have a [field] extra card in your battle area, this card gains [blocker].. [auto] if you don't have a [field] extra card in your battle area: when this card is played from your hand, activate up to <n>...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -96151,15 +96734,21 @@
       "example_card_id": 1324,
       "example_card_name": "Gamma 2, Executing Justice",
       "example_card_number": "P-435",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_remove_self_and_schedule_draw_on_opponent_villainous_or_counter": 1,
+        "auto_optional_drop_villainous_and_self_gain_power_and_keyword_on_play": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if you have a \u226avillainous\u226b card in play, treat this card as if it has no specified cost in all areas.. [auto][limit <n>] when this card is played, you may choose <n> \u226avillainous\u226b card and place it in its owne...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -96415,15 +97004,21 @@
       "example_card_id": 470,
       "example_card_name": "Majin Buu, Tricky Nemesis",
       "example_card_number": "P-398",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_up_to_n_from_owner_hand": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader card is a green <majin buu> card, this card is green while in your deck and drop area. [activate: main](<n>), if your leader card is a green or black \u226amajin\u226b card and you have <n> or more energ...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -96453,15 +97048,21 @@
       "example_card_id": 83,
       "example_card_name": "Gigantic Meteor",
       "example_card_number": "BT15-030",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_choose_ko_total_power_or_buff_owner_card_for_battle": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader card is a mono-red \u226asaiyan\u226b card, reduce the energy cost of this card in your hand by <n>.. [activate: battle][limit <n>] choose one-. \u30fbif it's your turn, choose any number of your opponent's b...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -96711,15 +97312,21 @@
       "example_card_id": 702,
       "example_card_name": "Beerus, Annihilation's Essence",
       "example_card_number": "P-384",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_play_matching_from_owner_deck_on_top_of_self_active_on_attack_ko": 1,
+        "noop_auto": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader card is blue, reduce the energy cost of this card in your hand by <n>. [permanent] this card can't be ko'd by your opponent's skills during your turn. [auto] when this card attacks and kos an o...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks_battle_end": 1,
+        "self_played": 2
+      }
     },
     {
       "card_count": 1,
@@ -96947,15 +97554,21 @@
       "example_card_id": 1082,
       "example_card_name": "Pan, United Emotion",
       "example_card_number": "BT18-009",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "auto_look_top_add_saiyan_or_unison_to_hand_on_attack": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader is a <pan> card, reduce the energy cost of this card in your hand by <n>.. [auto] if this card's power is <n> or more: when this card attacks, look at up to <n> card from the top of your deck,...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_attacks": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -97137,15 +97750,20 @@
       "example_card_id": 1432,
       "example_card_name": "Out of Control Power",
       "example_card_number": "BT19-096",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_ko_all_opponent_battles_up_to_chosen_owner_power": 2
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader is a green <broly: br> card and this card is under a <broly: br> card, you can activate this card's [activate] skill under the same conditions as if it were in your hand.. [activate: main/battl...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_battle": 1,
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -97154,15 +97772,19 @@
       "example_card_id": 1440,
       "example_card_name": "Cunning Murder",
       "example_card_number": "BT19-097",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_negate_chosen_owner_battle_then_drop_and_place_green_extras_under_leader": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader is a green <broly: br> card and this card is under a <broly: br> card, you can activate this card's [activate] skill under the same conditions as if it were in your hand.. [activate: main][limi...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1
+      }
     },
     {
       "card_count": 1,
@@ -97560,15 +98182,23 @@
       "example_card_id": 1126,
       "example_card_name": "Bulma, Stalwart Adventurer",
       "example_card_number": "SD20-03",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_up_to_n_non_great_ape_son_goku_childhood_from_owner_hand": 1,
+        "auto_switch_self_active_and_gain_keyword_on_opponent_attack": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader is a yellow <son goku: childhood> card, yellow non-\u226agreat ape\u226b <son goku: childhood> card in your battle area get +<n> power.. [+<n>][activate: main] if your leader is a yellow z-leader or a ye...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "owner_opponent_card_attacks": 1,
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -97658,7 +98288,9 @@
       "example_card_name": "Fasha, Feelings Bequeathed",
       "example_card_number": "BT18-101",
       "handler_counts": {
-        "auto_look_top_add_up_to_one_to_hand_on_play": 1
+        "activate_look_top_choose_add_to_hand_or_play_unison_with_marker": 1,
+        "auto_look_top_add_up_to_one_to_hand_on_play": 1,
+        "noop_auto": 1
       },
       "implemented_card_count": 1,
       "implemented_rate": 1.0,
@@ -97668,7 +98300,8 @@
       "priority_implemented_rate": 0.0,
       "template": "[permanent] if your leader is a \u226abardock's crew\u226b card and there are <n> or more \u226abardock's crew\u226b card with different card names in your energy, z-energy, battle area, and/or drop, this card gets +<n> power.. [activate: m...",
       "trigger_counts": {
-        "self_activate_main": 1
+        "self_activate_main": 2,
+        "self_played": 1
       }
     },
     {
@@ -100727,15 +101360,21 @@
       "example_card_id": 429,
       "example_card_name": "Body Steal",
       "example_card_number": "BT16-094",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_owner_battle_then_play_matching_from_owner_deck": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] this card gains \u226adesire\u226b in all areas. [activate: main] choose <n> <son goku> card in your battle area and place it at the bottom of your deck: play up to <n> <goku black> card with an energy cost of <n> or l...",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -100744,15 +101383,21 @@
       "example_card_id": 430,
       "example_card_name": "United in Will",
       "example_card_number": "BT16-095",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_play_up_to_n_from_owner_warp": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] this card gains \u226adesire\u226b in all areas. [activate: main] play up to <n> <zamasu> card with an energy cost of <n> or less and [indestructible] from your warp.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 1,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -101054,15 +101699,22 @@
       "example_card_id": 108,
       "example_card_name": "Nature's Revival",
       "example_card_number": "BT15-115",
-      "handler_counts": {},
-      "implemented_card_count": 0,
-      "implemented_rate": 0.0,
+      "handler_counts": {
+        "activate_bottom_deck_owner_battle_then_play_matching_from_owner_deck": 1,
+        "activate_play_skillless_monsters_cost1_and2_from_owner_deck_rest": 1,
+        "noop_auto": 1
+      },
+      "implemented_card_count": 1,
+      "implemented_rate": 1.0,
       "priority_card_count": 0,
       "priority_diagnostic_card_count": 0,
       "priority_implemented_card_count": 0,
       "priority_implemented_rate": 0.0,
       "template": "[permanent] this card gains \u226adesire\u226b in all areas.. [activate: main] play up to <n> skill-less \u226amonster\u226b card with energy costs of <n> and <n> respectively from your deck in rest mode, then shuffle your deck.",
-      "trigger_counts": {}
+      "trigger_counts": {
+        "self_activate_main": 2,
+        "self_played": 1
+      }
     },
     {
       "card_count": 1,
@@ -115080,7 +115732,8 @@
       "example_card_name": "Medamatcha, Lord Slug's Henchman",
       "example_card_number": "BT19-119",
       "handler_counts": {
-        "auto_play_token_in_battle_on_attack": 1
+        "auto_play_token_in_battle_on_attack": 1,
+        "auto_switch_up_to_n_opponent_battle_rest_on_self_combo": 1
       },
       "implemented_card_count": 1,
       "implemented_rate": 1.0,
@@ -115090,7 +115743,8 @@
       "priority_implemented_rate": 0.0,
       "template": "[unique][dual attack]. [permanent][bond <n>] this card gets +<n> power.. [auto][once per turn] when this card attacks, play <n> meda token. (meda tokens have <n> power, <n> combo cost, and <n> combo power.). [auto] if yo...",
       "trigger_counts": {
-        "self_attacks": 1
+        "self_attacks": 1,
+        "self_comboed": 1
       }
     },
     {
@@ -117063,9 +117717,9 @@
   "priority_unimplemented_cards": [],
   "schema_version": "effect_support_audit.v1",
   "summary": {
-    "cards_with_diagnostics": 219,
-    "cards_with_rules": 4010,
-    "cards_without_rules": 1991,
+    "cards_with_diagnostics": 218,
+    "cards_with_rules": 4099,
+    "cards_without_rules": 1902,
     "family_count": 5775,
     "priority_card_count": 0,
     "priority_cards_with_diagnostics": 0,
