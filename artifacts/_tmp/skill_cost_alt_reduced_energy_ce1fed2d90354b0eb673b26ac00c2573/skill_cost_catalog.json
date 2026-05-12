@@ -1,0 +1,12 @@
+{
+  "900315": {
+    "counter_alternate_from_hand": [
+      {
+        "amount": 1,
+        "kind": "rest_energy",
+        "required_leader_traits": "king piccolo",
+        "requires_z_energy_at_least": 3
+      }
+    ]
+  }
+}

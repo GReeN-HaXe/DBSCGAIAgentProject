@@ -4768,7 +4768,8 @@ When adding a new TODO:
 
 ## BT14 Dyspo, Thwarting the Enemy slice complete
 - added exact extraction for counter_attack -> counter_negate_attack_play_self_attack_restriction`r
-- added Counter alternate hand-cost extraction for Spirit Boost 2 as emove_owner_unison_markers`r
+- added Counter alternate hand-cost extraction for Spirit Boost 2 as 
+emove_owner_unison_markers`r
 - added exact runtime support so the counter plays self in Rest Mode and locks the attacking Leader from attacking again that turn
 
 
@@ -5097,3 +5098,385 @@ When adding a new TODO:
 - Implemented `BT18-070 Son Goku, Skills Improved` with exact owner battle KO follow-up extraction, including draw-plus-self-play from hand and the self attack KO restand plus opponent discard line.
 - Implemented `BT18-062_PR2 Son Goku, Krillin, & Yamcha, Turtle School Inheritors` with exact deck-play extraction for the 20000-power green `Turtle School` search that excludes `<Master Roshi>` and negates keyword skills for the turn.
 - Implemented `BT15-147 Vegeta & Cabba, Lessons Learned` with an exact on-play bottom-deck handler limited to opponent Rest Mode battle cards with energy cost 4 or less.
+
+## BT18 / SD17 / BT15 shortlist batch complete
+- Implemented `BT18-011 SS4 Son Goku, Digging Deep` with exact combo-from-hand extraction and a new runtime that buffs the battling owner card or leader for the turn.
+- Implemented `SD17-01 Pan` with exact extractor coverage for the front-side battle-play buff-plus-draw trigger, reusing the existing played-battle threshold runtime.
+- Implemented `BT18-028 Minus Energy Power Ball` with an exact `Counter: Attack` mass debuff family for `Shadow Dragon` leaders.
+- Implemented `BT18-088 A Demon Is Born` with exact counter extraction into the shared drop-play-negate family and a hand-counter cost override for the `paying (1) instead` clause.
+- Implemented `BT15-148 SS2 Kefla, Lightning Speed` with exact on-play bottom-deck extraction and a new activate-main discard/copy-bonus runtime for `Dual Attack`, draw 2, and opponent rest.
+
+## BT17 / BT16 / EX19 shortlist batch complete
+- BT17-145: on-attack discard, drop-combo +5000 combo power, and combo-area removal to removed-from-game at battle end implemented.
+- BT16-136: active-mode no-Barrier attack legality and battle-end KO plus discard line implemented.
+- EX19-26: play-or-charge power reduction by owner energy color count and Activate: Battle -5000 line implemented.
+- BT16-129: Aegis draw/self-stand/rest-opponent line implemented.
+- BT17-079: top-3 Meta-Cooler play line and Meta-Cooler Core deck/drop top-stack line implemented.
+
+## BT18 / BT17 field-and-z-energy shortlist batch complete
+- BT18-112: exact combo-from-hand battle-end self-play to battle in Rest Mode implemented.
+- BT18-092: exact yellow Piccolo: SH-gated on-play Rest Mode switch implemented, with EX-Evolve reduction tracked for extraction coverage.
+- BT18-113: exact Z-Energy-to-drop self-replay plus rested battle KO line implemented, alongside the mono-yellow 5000-combo drop-on-attack follow-up.
+- BT17-028: exact field-entry draw-2 discard-1 line and self-rest battle-window -1000 reduction line implemented.
+- BT18-087: exact hand-bottom-deck Turtle School deck-play line and deck/drop-to-opponent-battle rest/skill-negation line implemented.
+
+## BT18 / SD19 / BT15 Bardock-and-Great-Ape shortlist batch complete
+- BT18-094: exact on-play mono-yellow Bardock's Crew hand-play/rest line, turn-based draw on owner skill-induced battle rest, and `-3` yellow Bardock hand-play implemented.
+- BT18-089: exact Bardock's Crew play-trigger draw line, attack-time yellow Bardock's Crew 5000-combo drop combo line, and activate-main rest-own-board then KO rested opponent battle line implemented.
+- BT18-093: exact on-play next-turn attack restriction for a rested opponent leader/unison/battle card and self-resting opponent-card-play reactive rest line with Z-Energy payment implemented.
+- SD19-05: exact activate-main self-drop, green Son Goten plus Trunks: Youth recovery, and cost-3-or-less opponent battle KO line implemented.
+- BT15-118: exact same-turn end-step Great Ape hand-play to opponent battle with skills negated for the game plus draw-2 line, temporary Great Ape control line, and Turles battle-window +6000 buff line implemented.
+- BT18-099: exact counter-play body extraction plus on-play discard-to-non-Leader attack rest-tax runtime implemented.
+- BT18-120: exact Frieza Clan conditional counter branch implemented, including owner battle self-sacrifice and draw.
+- BT18-123: exact bottom-deck Servant play branch and warp-to-combo activate-battle line implemented for the Z-Leader slice.
+- P-367: exact attack-time blue God combo-from-hand plus draw line implemented, with the KO-protection permanent tracked for extraction coverage.
+- BT18-101: exact Bardock's Crew hand-discard top-5 search branch implemented via the shared add-to-hand or Unison chooser family.
+
+## BT16 / BT15 utility batch complete
+- Deliberate reorder: took a lower-friction reuse batch instead of the current stale shortlist top rows, because `P-409`, `BT18-140`, `BT18-019`, `BT18-123`, and `BT18-125` each want broader new runtime families.
+- Implemented `BT16-065 Frost, to Battle Universe 7` with exact permanent extraction coverage and a self-KO hand-play line for green `≪Universe 6≫` energy-cost-3 cards.
+- Implemented `BT16-054 Piccolo, to Battle Universe 6` with exact permanent extraction coverage plus a self-KO draw-1 then hand-play line for green `≪Universe 7≫` energy-cost-3 cards.
+- Implemented `BT16-053 SS Vegeta, to Battle Universe 6` with the same self-KO draw-1 then hand-play family and exact permanent extraction for the `Double Strike` clause.
+- Implemented `BT15-099 Krillin, Battle at the Tree` with an exact on-play drop-area field activation line for `{Turles's Power Ball}`.
+- Implemented `BT15-106 Turles, Great Ape Manipulator` with an exact on-play deck-or-drop field activation line for `{Turles's Power Ball}`.
+- Extended generic draw handling so `auto_draw_n` can resolve on `self_koed` / `card_koed` events.
+- Added reusable on-play field-extra activation handlers for:
+  - drop-origin named field activation
+  - deck-or-drop named field activation
+
+## BT18 stale-top-row cleanup batch complete
+- Implemented `P-409 Grand Kai, Intentional Draw` with an exact owner-battle-KOed-by-opponent-attack trigger that discards from hand, pays the blue auto cost, and places the attacking Battle Card on top of its owner's deck.
+- Implemented `BT18-140 Begrudging Allies` with an exact `Counter: Play` family that forces low-cost pending plays to Warp and also warps an opponent Battle Card from Drop when the Leader gate is met.
+- Implemented `BT18-019 SS4 Gogeta, Triumphant Together` with exact turn-start self-drop and turn-end / attack-KO self-restand lines, while keeping the complex permanent text tracked for extraction coverage.
+- Implemented `BT18-133 Demon God Shroom & Demon God Salsa, Unending Nightmare` with exact on-play hand-plus-battle Warp handling and an `Activate: Battle` warp-to-play line that now works through the shared self-from-warp runtime.
+- Implemented `BT18-125 Demon God Putine & Demon God Gravy, Treacherous Intel` with exact 4-marker hand-warp pressure, combo-area combo-power buffing, and all-opponent-battles-to-Warp resolution.
+- Added reusable runtime support for:
+  - `owner_battle_koed_by_opponent_attack_battle_end`
+  - combo-area battle-window combo-power buffing
+  - mixed opponent hand-and-battle Warp on play
+  - turn-start self-drop
+  - turn-end self-reactivation
+- Validation after this batch:
+  - `tests/test_effect_rule_extractor.py`: `574 passed`
+  - `tests/test_phase4_effect_pipeline.py -k "p409 or begrudging_allies or triumphant_together or unending_nightmare or treacherous_intel"`: `5 passed`
+  - `tests/test_skill_cost_rule_extractor.py tests/test_effect_catalog_io.py tests/test_effect_catalog_drift.py`: `112 passed`
+- Full `tests/test_phase4_effect_pipeline.py` still has the pre-existing unrelated failure in `test_phase4_exact_son_gohan_beyond_the_ultimate_play_activate_and_hand_play_lines`.
+
+## Next 5 shortlist heads batch complete
+- Implemented `BT18-078 King Piccolo, Newly Youthful Conqueror`:
+  - `owner_other_battle_played -> auto_play_self_from_hand_on_owner_matching_battle_played`
+  - `self_attacks -> auto_switch_self_active_then_buff_up_to_n_owner_battles_for_turn_on_attack`
+- Implemented `BT15-090 Vegeta's Power Ball`:
+  - tracked the free field activation permanent for extraction coverage
+  - `owner_battle_koed_by_opponent_attack_battle_end -> auto_search_play_matching_great_ape_from_owner_deck_on_owner_battle_koed_by_opponent_attack`
+  - `turn_end -> auto_switch_up_to_n_owner_battles_active_by_trait_on_turn_end`
+- Implemented `P-421 Android 8, "Failed" Fighter`:
+  - tracked the `Commander Red` hand cost reduction permanent
+  - `self_placed_into_drop -> auto_buff_up_to_n_owner_battles_for_turn_on_self_placed_into_drop_by_skill`
+- Implemented `P-398 Majin Buu, Tricky Nemesis`:
+  - tracked the deck/drop color override permanent
+  - `self_activate_main -> activate_play_up_to_n_from_owner_hand`
+- Implemented `SD20-03 Bulma, Stalwart Adventurer`:
+  - tracked the yellow `Son Goku: Childhood` aura permanent
+  - `self_activate_main -> activate_play_up_to_n_non_great_ape_son_goku_childhood_from_owner_hand`
+  - `owner_opponent_card_attacks -> auto_switch_self_active_and_gain_keyword_on_opponent_attack`
+- Added reusable runtime support for:
+  - owner-matching-battle-played self-play from hand
+  - Great Ape search-and-play from deck after owner battle KO by opponent attack
+  - owner-battle restand by trait with max target count
+  - self-drop-by-skill battle buffing
+  - non-`Great Ape` `Son Goku: Childhood` hand play from unison
+
+## Next 5 shortlist heads batch complete
+- Deliberate reorder for throughput:
+  - I skipped stale `BT18-089 Bardock's Crew` again and took the next 5 real unresolved heads instead.
+- Implemented `EX21-02 Pilaf, Mechanized Partnership`:
+  - `self_comboed -> auto_play_up_to_n_named_from_owner_deck_rest_on_play_or_combo`
+  - reused the named deck-play family with exact hand-combo gating and active-mode play
+- Implemented `EX21-01 Hit, Ready To Brawl`:
+  - `owner_opponent_card_attacks -> auto_redirect_attack_to_owner_leader_if_self_targeted_and_attacker_power_at_least`
+  - `self_activate_main -> activate_add_life_and_place_skillless_from_owner_deck_into_drop`
+  - `self_activate_main -> activate_play_up_to_n_from_owner_hand`
+- Implemented `EX21-03 Android 18, With Reckless Abandon`:
+  - `counter_attack -> counter_negate_attack_play_self_then_reduce_battle_power`
+  - tracked the hand/drop cost reduction permanent via extractor coverage
+- Implemented `P-384 Beerus, Annihilation's Essence`:
+  - tracked both permanents via extractor coverage
+  - `self_attacks_battle_end -> auto_play_matching_from_owner_deck_on_top_of_self_active_on_attack_ko`
+- Implemented `BT16-094 Body Steal`:
+  - tracked the global `Desire` permanent via extractor coverage
+  - `self_activate_main -> activate_bottom_deck_owner_battle_then_play_matching_from_owner_deck`
+- Added reusable runtime support for:
+  - redirecting an attack from a targeted source back to the owner leader
+  - placing a skill-less exact-cost deck card into drop while drawing from life
+  - exact counter play-self plus power reduction
+  - top-of-self active replacement on attack KO from deck
+  - bottom-decking a matching owner battle as activation payment before deck play
+
+## Next 5 shortlist heads batch complete
+- Deliberate reorder for throughput:
+  - I skipped `EX21-29 SS Son Gohan, Come What May`, `BT19-003 SS Son Goku, United Onslaught`, and `P-435 Gamma 2, Executing Justice` for this batch because they want broader new runtime families.
+- Implemented `BT10-066 Intensive Training Son Goku`:
+  - `self_activate_main -> activate_send_total_named_from_owner_drop_to_warp_then_play_matching_from_owner_deck_or_hand_on_top_of_self`
+  - `self_activate_battle -> activate_send_total_named_from_owner_drop_to_warp_then_play_matching_from_owner_deck_or_hand_on_top_of_self`
+- Implemented `BT15-030 Gigantic Meteor`:
+  - tracked the hand cost reduction permanent
+  - `self_activate_battle -> activate_choose_ko_total_power_or_buff_owner_card_for_battle`
+- Implemented `BT18-009 Pan, United Emotion`:
+  - tracked the hand cost reduction permanent
+  - `self_attacks -> auto_look_top_add_saiyan_or_unison_to_hand_on_attack`
+- Implemented `BT16-095 United in Will`:
+  - tracked the global `Desire` permanent
+  - `self_activate_main -> activate_play_up_to_n_from_owner_warp`
+- Implemented `BT15-115 Nature's Revival`:
+  - tracked the global `Desire` permanent
+  - `self_activate_main -> activate_play_skillless_monsters_cost1_and2_from_owner_deck_rest`
+- Added reusable runtime support for:
+  - exact drop-to-warp material payment followed by deck-or-hand top-of-self promotion
+  - exact choose-one battle resolution for KO-total-power vs battle buff lines
+  - exact on-attack top-deck add-to-hand branch for Saiyan-or-Unison searches
+  - exact deck play for paired skill-less `Monster` costs `1` and `2`
+
+## Next 5 shortlist heads batch complete
+- Deliberate reorder for throughput:
+  - I skipped stale completed shortlist rows again and took the next 5 real unresolved heads.
+- Implemented `BT19-030 Spirit Bomb Unleashed`:
+  - `self_activate_main -> activate_grant_owner_z_leader_power_and_keyword_for_turn`
+- Implemented `EX21-23 Whis, From on High`:
+  - `self_played -> auto_add_up_to_n_matching_from_owner_drop_to_energy_rest_on_play`
+  - `self_activate_main -> activate_remove_self_from_game_then_place_up_to_n_opponent_battle_on_top_of_owner_deck`
+- Implemented `EX21-29 SS Son Gohan, Come What May`:
+  - tracked the yellow `Trunks: Future` barrier aura permanent
+  - `self_played -> auto_play_up_to_n_yellow_trunks_future_from_owner_deck_or_drop_on_play`
+  - `self_attacks -> auto_use_under_chosen_owner_battle_combo_switch_it_active_and_restrict_attack`
+- Implemented `BT19-003 SS Son Goku, United Onslaught`:
+  - `self_attacks -> auto_buff_self_for_battle_per_under_card`
+  - `turn_end -> auto_remove_all_non_leader_under_self_to_drop_reduce_all_opponent_battles_and_remove_self_at_turn_end`
+- Implemented `EX21-13 Hatchhyack, Saiyan Exterminator`:
+  - tracked the battle-area-to-warp replacement permanent
+  - `self_activate_main -> activate_bottom_deck_n_matching_from_owner_drop_then_play_self_from_drop`
+  - `self_activate_main -> activate_switch_self_active_then_play_up_to_n_matching_from_owner_drop_or_warp_on_top_of_self`
+- Added reusable runtime support for:
+  - Z-Leader power-plus-keyword grant for the turn
+  - playing mono-color drop cards into energy in Rest Mode on play
+  - self-removal plus opponent battle top-decking
+  - yellow `Trunks: Future` deck-or-drop play on play
+  - turn-end under-card release plus global board debuff plus self-removal
+  - drop-bottom-deck material payment followed by self-play from drop
+  - drop-or-warp top-of-self promotion after switching self active
+
+
+## Next 5 shortlist heads batch complete
+- Implemented `BT19-031 S.S. Deadly Bomber`:
+  - `self_activate_main -> activate_reduce_battle_power_then_play_android_14_or_15_from_owner_hand`
+- Implemented `BT19-032 Forgotten Capsules`:
+  - `self_activate_main -> activate_bottom_deck_hand_add_android_14_and_15_from_owner_deck_to_hand`
+- Implemented `BT19-074 Lemo, Dependable Friend`:
+  - `self_left_battle_area -> auto_place_green_extra_from_owner_hand_under_leader_then_draw_n_on_self_left_battle_area`
+  - `self_activate_main -> activate_reduce_next_matching_extra_skill_cost_from_hand`
+- Implemented `BT19-072 Bulma, a Humble Wish`:
+  - `owner_other_battle_attacks -> auto_use_under_chosen_owner_battle_combo_switch_it_active_and_restrict_attack`
+  - `self_activate_main -> activate_bottom_deck_hand_play_son_goku_br_or_vegeta_br_from_owner_deck_negated_remove_self`
+- Implemented `EX21-26 SS Son Goku, Awakened by Rage`:
+  - `self_played -> auto_buff_self_and_grant_skill_removal_protection_until_next_opponent_turn`
+  - `owner_card_placed_into_drop -> auto_discard_from_owner_hand_then_opponent_discards_on_owner_card_placed_into_drop`
+  - `owner_card_placed_into_drop -> auto_add_top_n_from_owner_deck_to_life_on_owner_card_placed_into_drop`
+- Added reusable runtime support for:
+  - owner battle attack triggers sourced from cards other than the source
+  - owner card-to-drop trigger matching
+  - temporary skill-removal protection via delayed sentinel clearing
+  - red Android 14/15 hand-play follow-up after battle power reduction
+  - paired Android 14 + Android 15 deck search to hand
+
+## Next 5 shortlist heads batch complete
+- Implemented `BT19-018 Krillin, at the Ready`:
+  - `owner_opponent_battle_played -> auto_look_top_add_up_to_one_to_hand_on_play`
+- Implemented `BT19-033 Android Assault`:
+  - `counter_attack -> counter_negate_attack_add_up_to_n_from_owner_drop_to_hand`
+  - tracked the alternate life-to-hand Counter activation for the `Android 13` Z-Leader clause
+- Implemented `BT19-092 Whis's Capriciousness`:
+  - `counter_attack -> counter_optional_discard_then_limit_opponent_attacks`
+  - tracked the free Counter activation for green `Gogeta: Br` with `Son Goku: Br` and `Vegeta: Br` in Z-Energy
+- Implemented `BT19-026 Android 17, Finally Freed`:
+  - `counter_attack -> counter_negate_attack_play_self`
+  - tracked the free Counter activation for red `Android 13` Z-Leader at `3` life or less
+- Implemented `BT19-082 SS Vegeta, All-Out Evolution`:
+  - tracked the Z-Energy `EX-Evolve` permanent via extractor coverage
+- Implemented `BT19-068 Broly`:
+  - `self_activate_main -> activate_discard_n_look_top_place_up_to_n_matching_under_self_then_shuffle`
+- Implemented `BT19-073 Cheelai, Dependable Friend`:
+  - `self_played -> auto_look_top_place_up_to_n_matching_under_matching_owner_battle_on_play`
+  - `self_activate_main -> activate_place_up_to_n_matching_from_owner_deck_into_drop_then_shuffle`
+- Implemented `BT19-078 SS Son Goku, All-Out Evolution`:
+  - `self_played -> auto_draw_n_then_discard_n_from_owner_hand_on_play`
+  - tracked the Z-Energy `EX-Evolve` permanent via extractor coverage
+- Implemented `BT19-079 Son Goku, Limbering Up`:
+  - `self_played -> auto_look_top_add_up_to_one_to_hand_on_play`
+- Implemented `BT19-081 SSG Vegeta, Crimson Impact`:
+  - `self_played -> auto_ko_up_to_n_opponent_battle_on_play`
+  - tracked the Z-Energy `EX-Evolve` permanent via extractor coverage
+- Added reusable runtime support for:
+  - opponent-play power-threshold matching on `owner_opponent_battle_played`
+  - top-deck search/add resolution on `owner_opponent_battle_played`
+  - Counter negate + drop recovery to hand
+  - Counter optional discard + exact remaining-attack cap
+  - exact free-Counter conditions for `Gogeta: Br` Z-Energy and `Android 13` Z-Leader cases
+  - top-deck placement under leader or matching owner battle after exact filters
+  - exact deck-to-drop placement with shuffle for targeted search lines
+
+## Next 5 shortlist heads batch complete
+- Implemented `BT19-124 Son Gohan & Piccolo, Master-Student Bond`:
+  - `self_activate_main -> activate_grant_masters_teachings_until_next_opponent_turn`
+  - `self_activate_battle -> activate_buff_masters_teachings_for_battle`
+- Implemented `BT19-116 Angila, Restricting Options`:
+  - `self_blocker_activated -> auto_draw_n_and_switch_up_to_n_opponent_battle_rest_on_self_blocker_activated`
+- Implemented `BT19-117 Angila, Lord Slug's Henchman`:
+  - `self_comboed -> auto_grant_keyword_to_owner_battle_on_self_combo`
+  - `self_activate_battle -> activate_combo_up_to_n_from_owner_hand`
+- Implemented `BT19-123 Gyoshu, Scientist of Lord Slug`:
+  - `self_comboed -> auto_play_up_to_n_from_owner_hand_on_self_combo`
+- Implemented `BT19-119 Medamatcha, Lord Slug's Henchman`:
+  - `self_comboed -> auto_switch_up_to_n_opponent_battle_rest_on_self_combo`
+- Added reusable runtime support for:
+  - blocker-triggered draw plus opponent battle rest
+  - combo-time battle keyword grant to filtered owner battles
+  - battle-time hand combo injection with exact combo-cost filtering
+  - `Master's Teachings` delayed keyword grant until the end of the opponent's next turn
+  - battle-time `Master's Teachings` power buff resolution via delayed temporary keyword matching
+
+## Next 5 shortlist heads batch complete
+- Implemented `BT19-072 Bulma, a Humble Wish`:
+  - normalized the exact extractor gates for the green `Veku: Br` / `Gogeta: Br` variant text
+  - `owner_other_battle_attacks -> auto_use_under_chosen_owner_battle_combo_switch_it_active_and_restrict_attack`
+  - `self_activate_main -> activate_bottom_deck_hand_play_son_goku_br_or_vegeta_br_from_owner_deck_negated_remove_self`
+- Implemented `BT18-089 Bardock's Crew`:
+  - `owner_other_battle_played -> auto_draw_n_on_owner_bardocks_crew_played`
+- Implemented `BT19-095 Training With Ba`:
+  - `counter_attack -> counter_negate_attack_add_self_from_drop_to_z_energy`
+  - tracked the under-card Counter activation permission via extractor coverage
+- Implemented `BT19-099 Wishing to End the Battle`:
+  - `counter_attack -> counter_place_under_from_owner_battle_to_drop_then_limit_opponent_attacks`
+  - tracked the under-card Counter activation permission via extractor coverage
+- Implemented `BT19-133 Gohan Whistles`:
+  - `counter_attack -> counter_reduce_owner_lord_slug_power_then_negate_and_rest_opponent_battle`
+  - tracked the low-life free Counter activation permanent via extractor coverage
+- Added reusable runtime support for:
+  - moving the counter source from Drop to Z-Energy on resolution
+  - exact remaining-attack cap after placing under-cards from a host battle into Drop
+  - low-life free Counter activation for the `Lord Slug` family
+  - exact owner `Lord Slug` battle debuff plus opponent battle rest on Counter resolution
+
+## Next 5 shortlist heads batch complete
+- Deliberate reorder:
+  - took `BT18-078 King Piccolo, Newly Youthful Conqueror` and `BT18-123 Demon God Shroom & Demon God Salsa, Imminent Annihilation` as live-text normalization clears
+  - deferred `BT19-052 Son Goten, Fast Improving` because it wants a cleaner union-discard event family instead of another narrow approximation
+- Implemented `BT19-108 Son Gohan & Piccolo, Training's Beginnings`:
+  - `self_koed -> auto_look_top_add_up_to_one_to_hand_on_play`
+  - `self_activate_battle -> activate_return_self_and_masters_teachings_combo_to_hand_then_draw_play_and_buff`
+- Implemented `EX21-33 Towa, Unpredictable Offense`:
+  - `owner_swap_activated -> auto_draw_n`
+  - `self_activate_main -> activate_bottom_deck_n_from_owner_hand_then_play_up_to_n_from_owner_hand`
+- Implemented `BT19-115 Lord Slug, Craving for Youth`:
+  - `self_attacks -> auto_play_up_to_n_from_owner_deck_and_self_gain_power_on_attack`
+  - `self_comboed -> auto_self_gain_combo_power_on_combo`
+- Cleared live extractor normalization for `BT18-078 King Piccolo, Newly Youthful Conqueror`
+- Cleared live extractor normalization for `BT18-123 Demon God Shroom & Demon God Salsa, Imminent Annihilation`
+- Added reusable runtime support for:
+  - `owner_swap_activated` trigger matching
+  - top-deck add-to-hand resolution from `self_koed`
+  - bottom-deck hand payment followed by filtered hand play
+  - exact `Master's Teachings` combo-area return, drop payment, play, and buff resolution
+  - on-attack deck play plus self-buff resolution
+
+## Next 5 shortlist heads batch complete
+- Deliberate reorder:
+  - took `BT19-066`, `BT19-058`, `BT19-056`, `BT19-065`, and `BT19-060`
+  - deferred `BT19-049 Son Gohan, Power Unshackled` and `BT19-052 Son Goten, Fast Improving` because they still want broader reusable runtime families
+- Implemented `BT19-066 A Wild Fighter Is Born`:
+  - `self_activate_main -> activate_add_blue_son_goten_and_trunks_cost3_from_owner_deck_or_drop_to_hand`
+  - `self_activate_battle -> activate_add_blue_son_goten_and_trunks_cost3_from_owner_deck_or_drop_to_hand`
+- Implemented `BT19-058 Trunks, Tenacious Tag-Team`:
+  - `self_played -> auto_return_up_to_n_opponent_unison_to_hand_on_play`
+  - `self_activate_main -> activate_search_blue_son_goten_sh_add_or_play`
+- Implemented `BT19-056 Vegeta, Interplanetary Training`:
+  - `self_comboed_battle_end -> auto_play_self_from_combo_on_battle_end`
+  - `self_played -> auto_bottom_deck_opponent_hand_or_battle_on_play`
+- Implemented `BT19-065 Decisive Strike`:
+  - `counter_play -> counter_place_pending_play_at_bottom_of_owner_deck_if_cost_at_most`
+  - tracked the mono-blue free Counter activation permanent via extractor coverage
+- Implemented `BT19-060 Gotenks, Reckless Rush`:
+  - `self_played -> auto_bottom_deck_up_to_n_opponent_battle`
+- Added reusable runtime support for:
+  - pending play replacement to the bottom of the owner deck
+  - on-play opponent Unison return to hand with specified-cost matching
+  - exact deck-or-drop named pair retrieval to hand
+  - exact deck search that add-or-play resolves for the `Son Goten: SH` branch
+  - exact choose-one opponent hand-or-battle bottom-deck resolution on play
+
+## Next 5 shortlist heads batch in progress
+- Implemented `BT19-049 Son Gohan, Power Unshackled`:
+  - `self_comboed_battle_end -> auto_play_self_from_combo_on_battle_end`
+  - `self_activate_main -> activate_apply_battle_attack_bottom_deck_battle_tax`
+- Implemented `BT19-052 Son Goten, Fast Improving`:
+  - `self_in_hand_sent_to_drop_or_warp -> auto_draw_n`
+  - `owner_opponent_battle_attacks -> auto_send_self_to_drop_and_negate_attack_on_opponent_battle_attack`
+- Implemented `P-435 Gamma 2, Executing Justice`:
+  - `self_played -> auto_optional_drop_villainous_and_self_gain_power_and_keyword_on_play`
+  - `self_activate_main -> activate_remove_self_and_schedule_draw_on_opponent_villainous_or_counter`
+- Implemented `BT19-096 Out of Control Power`:
+  - `self_activate_main -> activate_ko_all_opponent_battles_up_to_chosen_owner_power`
+  - `self_activate_battle -> activate_ko_all_opponent_battles_up_to_chosen_owner_power`
+- Implemented `BT19-097 Cunning Murder`:
+  - `self_activate_main -> activate_negate_chosen_owner_battle_then_drop_and_place_green_extras_under_leader`
+- Added reusable runtime support for:
+  - battle-attack bottom-deck tax rows with battle-area payment and cost cap
+  - union discard cause propagation for `union_absorb` and `union_potara`
+  - draw-on-hand-drop filtering for union discard causes
+  - delayed draw watchers for opponent `[Villainous]` and `[Counter]` skill activations
+  - exact self-to-drop attack-negate from hand
+  - exact villainous-drop self-buff on play
+  - exact owner-power-threshold mass KO
+  - exact `Paragus: Br` negate/drop into green Extra placement under leader
+
+## Next 10 shortlist heads batch completed
+- Implemented `P-460 Pan, Heartfelt Support`:
+  - `self_activate_main -> activate_play_self_from_under_owner_unison`
+  - `self_activate_main -> activate_rest_self_add_life_and_buff_matching_owner_battle_for_turn`
+- Implemented `P-451 Fin, Dark Lifeform`:
+  - `self_added_to_z_energy -> auto_play_matching_from_owner_hand_and_draw_on_self_added_to_z_energy`
+- Implemented `P-437 Bardock, Fatherly Feelings`:
+  - `self_played -> auto_look_top_play_matching_from_owner_deck_negated_on_play`
+  - tracked the delayed hand-activate buff line via extractor coverage
+- Implemented `BT19-148 Son Gohan, Dependable Young Fighter`:
+  - `owner_opponent_card_switched_to_rest -> auto_play_self_from_hand_on_owner_opponent_card_switched_to_rest`
+  - `self_added_to_z_energy -> auto_ko_up_to_n_opponent_rest_battle_on_self_added_to_z_energy`
+  - tracked the enter-rest reminder line via extractor coverage
+- Implemented `P-442 Android 17, Defending Friends`:
+  - `counter_attack -> counter_negate_attack_play_self`
+  - `self_played -> auto_limit_opponent_battle_attacks_bottom_deck_hand_each_time_on_play`
+- Implemented `BT19-126 Golden Frieza, Villainous Threat`:
+  - `counter_attack -> counter_negate_attack_play_self_if_owner_villainous_at_most`
+  - tracked `Villainous` / cost-reduction text via extractor coverage
+- Implemented `P-446 Meta-Cooler, Infinite Terror`:
+  - `counter_attack -> counter_negate_attack_play_self`
+  - tracked the free-counter and `Bond 2` permanents via extractor coverage
+- Implemented `BT19-143 Beerus, Villainous Threat`:
+  - tracked `Villainous` coverage via extractor normalization
+- Implemented `P-450 Son Goku, Evolution Awaits`:
+  - `self_played -> auto_draw_n`
+  - `self_played -> auto_self_gain_power_for_turn_on_play`
+  - tracked the named `Xeno-Evolve` hand reduction line via extractor coverage
+- Implemented `BT16-065 Frost, to Battle Universe 7`:
+  - `self_koed -> auto_play_up_to_n_from_owner_hand_on_self_ko`
+  - normalized the live permanent text variants for extraction
+- Added reusable runtime support for:
+  - conditional Z-Energy add follow-up plays gated on opponent skill-less battle/unison presence
+  - on-play battle-attack bottom-deck hand tax gated by Z-Leader / Z-Battle / minimum Z-Energy state
+  - generic counter negate-and-play-self resolution and villainous-count-gated variant
+  - exact self-rest / life-to-hand / target-buff activate-main handling
+- Validation for this batch:
+  - focused extractor tests: `10 passed`
+  - focused phase4 tests: `7 passed`
+  - full extractor suite: `644 passed`
+  - full phase4 suite: baseline only `915 passed, 1 failed`
+  - known unrelated baseline remains: `tests/test_phase4_effect_pipeline.py:49477`
