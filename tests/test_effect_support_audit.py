@@ -111,6 +111,23 @@ def test_build_effect_support_audit_prioritizes_unimplemented_family(tmp_path: P
     assert payload["priority_unimplemented_cards"][0]["card_id"] == 3
 
 
+def test_build_effect_support_audit_tracks_unresolved_example_and_enriches_unmatched_metadata(tmp_path: Path) -> None:
+    db_path = tmp_path / "cards.db"
+    _make_db(db_path)
+    repo = SQLiteCardRepository(db_path)
+
+    payload = build_effect_support_audit(repo, [1, 2, 3], priority_card_ids=[3], top_families=5)
+
+    unresolved_family = next(row for row in payload["families"] if row["example_card_id"] == 3)
+    assert unresolved_family["unresolved_example_card_id"] == 3
+    assert unresolved_family["unresolved_example_card_number"] == "TEST-003"
+    assert unresolved_family["unresolved_example_card_name"] == "Battle Three"
+
+    unmatched = next(row for row in payload["extractor_report"]["unmatched_top_templates"] if row["example_card_id"] == 3)
+    assert unmatched["example_card_number"] == "TEST-003"
+    assert unmatched["example_card_name"] == "Battle Three"
+
+
 def test_build_effect_support_audit_separates_skillless_skips_from_priority_unimplemented(tmp_path: Path) -> None:
     db_path = tmp_path / "cards.db"
     _make_db(db_path)

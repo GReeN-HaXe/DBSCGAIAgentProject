@@ -1958,6 +1958,7 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
         return []
 
     card_type = str(getattr(card, "card_type", "") or "").upper()
+    card_number = str(getattr(card, "card_number", "") or "").upper()
     is_extra = card_type in {"EXTRA", "Z-EXTRA"}
     rules: list[EffectRule] = []
     once = _once_per_turn(text)
@@ -16510,6 +16511,6888 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 limit_per_turn=limit,
             )
         )
+
+    if (
+        "at the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your drop" in text.lower()
+        and "place 1 blue" in text.lower()
+        and "boujack brigade" in text.lower()
+        and "place one of your energy in your drop" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_comboed_battle_end",
+                handler_id="auto_play_self_from_combo_on_battle_end",
+                handler_params={},
+                source_text="[Auto](Blue): At the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your Drop.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_place_boujack_brigade_from_hand_to_energy_then_drop_energy_and_bottom_deck_opponent_hand_on_play",
+                handler_params={},
+                source_text="[Auto][Limit 1] When this card is played, you may place 1 blue ≪Boujack Brigade≫ from your hand in your energy in Rest Mode. If you do, place one of your energy in your Drop, and your opponent places 1 card from their hand at the bottom of their deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when a card is placed from your life in your drop by one of your leader skills" in text.lower()
+        and "add the top card of your deck to your life" in text.lower()
+        and "bond 3" in text.lower()
+        and "send it to its owner's warp" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="auto_add_top_n_from_owner_deck_to_life_on_owner_card_placed_into_drop",
+                handler_params={"amount": 1, "event_required_source_zones": "life", "leader_allowed_colors": "black", "leader_required_characters": "Supreme Kai of Time"},
+                source_text="[Auto][Limit 1] If your Leader is a black <Supreme Kai of Time>: When a card is placed from your life in your Drop by one of your Leader skills, add the top card of your deck to your life.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_send_up_to_n_opponent_battle_to_warp",
+                handler_params={"max_targets": 1, "required_owner_battle_count": 3, "required_owner_battle_under_host_required_characters": "Xeno"},
+                source_text="[Activate: Main][Limit 1][Bond 3] Card with <Xeno> in its character name: Choose 1 of your opponent's Battle Cards and send it to its owner's Warp.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "mono-black" in text.lower()
+        and "combo costs reduced by 1" in text.lower()
+        and "when using your <fu>'s [overlord]" in text.lower()
+        and "cards in your opponent's battle area" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] Mono-black ≪Saiyan≫ cards with a combo cost of 1 and 5000 combo power in your hand and Battle Area have their combo costs reduced by 1.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] When using your <Fu>'s [Overlord] to choose a [Servant] card, you can also choose cards in your opponent's Battle Area.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your opponent has 11 or more cards in their hand" in text.lower()
+        and "until they have 10 cards in their hand" in text.lower()
+        and "2 or more character names" in text.lower()
+        and "[triple strike] for the battle" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_bottom_deck_opponent_hand_to_size_on_play",
+                handler_params={"hand_limit": 10, "leader_required_colors": "blue"},
+                source_text="[Auto] If your Leader is mono-blue: When this card is played, if your opponent has 11 or more cards in their hand, they place cards from their hand at the bottom of their deck in any order until they have 10 cards in their hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_gain_power_and_keyword_for_battle",
+                handler_params={"power_delta": 10000, "grant_keyword": "Triple Strike", "target_scope": "owner_battle", "allowed_colors": "blue", "min_character_count": 2},
+                source_text="[Activate: Battle][Limit 1] If your Leader's character name includes <SH>, you have 3 or more energy, and you remove this card from the game: Choose up to 1 of your blue Battle Cards with 2 or more character names and it gets +10000 power and [Triple Strike] for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[z-stack 1]" in text.lower()
+        and "play up to 1 black <cumber> card with an energy cost of 2 from under this card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_matching_from_under_self",
+                handler_params={"max_targets": 1, "max_cost": 2, "required_characters": "Cumber"},
+                source_text="[Activate: Main](Black): Play up to 1 black <Cumber> card with an energy cost of 2 from under this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when your green unison is placed in your drop" in text.lower()
+        and "ignoring [barrier], ko it" in text.lower()
+        and "this card gets +5000 power for the turn" in text.lower()
+        and "play 1 green unison with a specified cost of 3 or less from your hand with a marker on it" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="auto_green_unison_drop_ko_and_self_gain_power_for_turn",
+                handler_params={"max_targets": 1, "power_delta": 5000, "ignores_barrier": True},
+                source_text="[Auto][Once per turn] If it's your turn: When your green Unison is placed in your Drop, choose 1 of your opponent's Battle Cards, ignoring [Barrier], KO it, and this card gets +5000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_unison_from_hand_with_markers",
+                handler_params={"allowed_colors": "green", "max_cost": 3, "markers": 1, "leader_required_traits": "Frieza Clan"},
+                source_text="[Activate: Main][Once per turn](Green)(Green), if your leader is a green ≪Frieza Clan≫ card and you have 4 or more energy: Play 1 green Unison with a specified cost of 3 or less from your hand with a marker on it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when your opponent attacks, use 1 mono-blue" in text.lower()
+        and "boujack brigade" in text.lower()
+        and "card in your energy in a combo" in text.lower()
+        and "add the top card of your deck to your energy" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_comboed_battle_end",
+                handler_id="auto_play_self_from_combo_on_battle_end",
+                handler_params={},
+                source_text="[Auto](Blue), if you have 3 or more energy: At the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your Drop.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_battle_attacks",
+                handler_id="auto_combo_mono_blue_boujack_brigade_from_energy_then_add_top_deck_to_energy_on_opponent_attack",
+                handler_params={},
+                source_text="[Auto][Limit 1] When your opponent attacks, use 1 mono-blue ≪Boujack Brigade≫ card in your energy in a combo. If you do, add the top card of your deck to your energy.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if this card has 3 or more markers on it" in text.lower()
+        and "add 1 green card from your drop to your z-energy" in text.lower()
+        and "gains [dual attack] for the turn" in text.lower()
+        and "[+1][activate: main][burst 1]" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_add_green_drop_to_z_energy_and_self_gain_keyword_on_play",
+                handler_params={"min_source_markers": 3, "grant_keyword": "Dual Attack"},
+                source_text="[Auto][Limit 1] If this card has 3 or more markers on it: When this card is played, add 1 green card from your Drop to your Z-Energy, and this card gains [Dual Attack] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_gain_power_and_keyword_for_turn",
+                handler_params={"marker_delta": 1, "power_delta": 10000},
+                source_text="[+1][Activate: Main][Burst 1] This card gets +10000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[over realm 6]" in text.lower()
+        and "when this card attacks, use one card with 5000 combo power from your warp in a combo with its skills negated for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_combo_up_to_n_from_owner_zone_on_attack",
+                handler_params={"max_targets": 1, "source_zone": "warp", "exact_combo_power": 5000, "negate_skills": True, "leader_allowed_colors": "black", "leader_required_characters": "Supreme Kai of Time"},
+                source_text="[Auto] If your Leader is a black <Supreme Kai of Time>: When this card attacks, use one card with 5000 combo power from your Warp in a combo with its skills negated for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "while a card with <pan> in its character name is under this card" in text.lower()
+        and "when this card activates [blocker], add up to 1 card with <pan> in its character name from under this card to its owner's hand" in text.lower()
+        and "place it under this card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] While a card with <Pan> in its character name is under this card, this card gains [Blocker].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_blocker_activated",
+                handler_id="auto_return_up_to_n_matching_under_self_to_hand_on_self_blocker_activated",
+                handler_params={"max_targets": 1, "required_characters": "Pan"},
+                source_text="[Auto] When this card activates [Blocker], add up to 1 card with <Pan> in its character name from under this card to its owner's hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_place_up_to_n_matching_owner_battle_under_self",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_characters": "Pan", "leader_required_characters": "Piccolo: SH"},
+                source_text="[Activate: Main][Once per turn] If your Leader is a <Piccolo: SH> card: Choose up to 1 of your yellow Battle Cards with <Pan> in its character name and place it under this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "send this card to its owner's warp" in text.lower()
+        and "ultimate duo" in text.lower()
+        and "keyword skills negated for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_send_self_to_owner_warp_then_play_up_to_n_from_owner_deck_negated",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_name_contains": "ULTIMATE DUO", "required_card_type": "BATTLE"},
+                source_text="[Activate: Main] If your Leader is a <Son Goku> or <Vegeta> card-both yellow-and you send this card to its owner's Warp: Play up to 1 {SS Son Goku & SS Vegeta, Ultimate Duo} from your deck with its keyword skills negated for the turn, and shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when this card is played or attacks" in text.lower()
+        and "gains [servant] until the end of your opponent's next turn" in text.lower()
+        and "energy cost of 4 or less" in text.lower()
+    ):
+        for trigger in ("self_played", "self_attacks"):
+            rules.append(
+                EffectRule(
+                    trigger=trigger,
+                    handler_id="auto_grant_servant_to_up_to_n_opponent_battle_until_next_turn",
+                    handler_params={"max_targets": 1, "max_cost": 4, "until_opponent_next_turn": True},
+                    source_text="[Auto] When this card is played or attacks, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less, and it gains [Servant] until the end of your opponent's next turn.",
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+
+    if (
+        "[counter: attack]" in text.lower()
+        and "gains [servant] until the end of your next turn" in text.lower()
+        and "choose up to 1 of your opponent's battle cards" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_and_grant_servant_until_next_turn",
+                handler_params={"max_targets": 1},
+                source_text="[Counter: Attack] If your Leader is a <Cumber> card: Negate the attack, choose up to 1 of your opponent's Battle Cards, and it gains [Servant] until the end of your next turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: play]" in text.lower()
+        and "play it in your battle area instead" in text.lower()
+        and "gains [servant] for the game" in text.lower()
+        and "energy cost of 4 or less" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="counter_take_pending_play_to_owner_battle_with_servant_for_game",
+                handler_params={"max_pending_cost": 4},
+                source_text="[Counter: Play] If your Leader is a black <Cumber> card and you discard 1 card from your hand: If the Battle Card being played has an energy cost of 4 or less, play it in your Battle Area instead and it gains [Servant] for the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[z-stack 2]" in text.lower()
+        and "discard 1 or more yellow ≪majin≫ cards from your hand" in text.lower()
+        and "draw 1 card and this card gains [dual attack] for the turn" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_discard_matching_from_owner_hand_gain_total_combo_power_and_threshold_draw_keyword",
+                handler_params={"discard_allowed_colors": "yellow", "discard_required_traits": "Majin", "min_total_power": 20000, "grant_keyword": "Dual Attack"},
+                source_text="[Activate: Main][Limit 1] If there are 2 cards under this card and you discard 1 or more yellow ≪Majin≫ cards from your hand: This card gains power equal to the total combo power of the cards discarded by this skill for the turn. Additionally, if this card has 20000 power or more, draw 1 card and this card gains [Dual Attack] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[field]" in text.lower()
+        and "switch this card to rest mode" in text.lower()
+        and "place up to 1 yellow battle card among them under this card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_rest_self_look_top_place_yellow_battle_under_self_and_bottom_rest",
+                handler_params={"look_count": 3},
+                source_text="[Activate: Main] If your Leader is a yellow <Son Goku> or <Vegeta> card and you switch this card to Rest Mode: Look at up to 3 cards from the top of your deck, place up to 1 yellow Battle Card among them under this card, and place the rest at the bottom of your deck in any order.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_use_all_under_self_in_combo_then_send_self_to_drop",
+                handler_params={"min_under": 7},
+                source_text="[Activate: Battle] If it's your turn, your <Son Goku> card is in a battle, and there are 7 or more cards under this card: Use all Battle Cards from under this card in a combo with their skills negated for the turn, and place this card in its owner's Drop.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "look at up to 5 cards from the top of your deck" in text.lower()
+        and "{fu, all according to plan}" in text.lower()
+        and "cost 6 or less" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_look_top_add_up_to_one_to_hand_on_play",
+                handler_params={"look_count": 5, "max_add": 1, "allowed_colors": "black", "required_characters": "Fu|Saiyan", "max_cost": 6},
+                source_text="[Auto][Limit 1] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 <Fu> or ≪Saiyan≫ card-both black and with an energy cost of 6 or less-or 1 {Fu, All According to Plan} from among them to your hand, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when this card is played, choose and discard 1 card from your hand" in text.lower()
+        and "flip up to 1 of your blue <goku black>-only leader cards" in text.lower()
+        and "place this card under it from your battle area" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played, choose and discard 1 card from your hand: Flip up to 1 of your blue <Goku Black>-only Leader Cards to its back side. You can't play Battle Cards that don't include <Zamasu> or <Goku Black> in their character names for the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_marker_to_matching_owner_unison_and_place_self_under_it",
+                handler_params={"marker_delta": 1, "host_required_characters": "Zamasu", "leader_required_characters": "Goku Black", "min_owner_unison": 1},
+                source_text="[Activate: Main][Limit 1] If your Leader is a <Goku Black>-only card and you choose 1 {Zamasu, Teamwork Undying} in your Unison Area: Add 1 marker to your chosen card, then place this card under it from your Battle Area.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][limit 1]" in text.lower()
+        and "play this card in your opponent's battle area" in text.lower()
+        and "if your leader is a black <cumber> card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack][Limit 1] Negate the attack and play this card in your opponent's Battle Area.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a black <Cumber> card, you can activate this card's [Counter] skill from your hand without paying its energy cost.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when this card attacks, look at up to 7 cards from the top of your deck" in text.lower()
+        and "place up to 2 green extras among them under one of your <broly: br> cards" in text.lower()
+        and "this card gets +10000 power for the battle" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a green <Broly: Br> card: When this card attacks, look at up to 7 cards from the top of your deck, place up to 2 green Extras among them under one of your <Broly: Br> cards, then shuffle your deck, and this card gets +10000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_from_owner_hand",
+                handler_params={"max_targets": 1, "allowed_colors": "green", "required_characters": "Broly: Br", "max_cost": 8, "leader_required_characters": "Broly: Br", "min_owner_energy": 4},
+                source_text="[Activate: Main][Once per turn] If you have 4 or more energy: Play up to 1 green <Broly: Br> card with an energy cost of 8 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_buff_owner_battle_cards",
+                handler_params={"max_targets": 1, "power_delta": 5000, "target_scope": "owner_cards"},
+                source_text="[Activate: Battle][Once per turn] Place 1 green Extra from under one of your <Broly: Br> cards in its owner's Drop: Choose up to 1 of your cards, and it gets +5000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][limit 1]" in text.lower()
+        and "if your leader is a blue <android 18> card: negate the attack and play this card." in text.lower()
+        and "placing 2 blue non-leaders from under your leader in their owners' drops" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={"leader_allowed_colors": "blue", "leader_required_characters": "Android 18"},
+                source_text="[Counter: Attack][Limit 1] If your Leader is a blue <Android 18> card: Negate the attack and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 2 blue non-Leaders from under your Leader in their owners' Drops.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][limit 1] negate the attack." in text.lower()
+        and "if the attacker was a ≪saiyan≫" in text.lower()
+        and "switch it to active mode" in text.lower()
+        and "if your leader is a green <super 17> z-leader" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_and_switch_matching_owner_battle_active_if_attacker_trait",
+                handler_params={
+                    "max_targets": 1,
+                    "attacker_required_traits": "Saiyan",
+                    "required_characters": "Super 17",
+                },
+                source_text="[Counter: Attack][Limit 1] Negate the attack. Additionally, if the attacker was a ≪Saiyan≫ card, choose up to 1 of your <Super 17> cards and switch it to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a green <Super 17> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost by discarding another card from your hand instead.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "while this card is under a yellow ≪majin≫ card with an energy cost of 2 or more in a battle area" in text.lower()
+        and "place this card under the chosen card." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] While this card is under a yellow ≪Majin≫ card with an energy cost of 2 or more in a Battle Area, the card above this card can't be KO'd once per turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_place_self_under_matching_owner_battle_after_host_under_to_drop",
+                handler_params={
+                    "requires_owner_turn": True,
+                    "required_owner_battle_allowed_colors": "yellow",
+                    "required_owner_battle_required_traits": "Majin",
+                    "required_owner_battle_min_cost": 2,
+                },
+                source_text="[Activate: Main](Yellow), choose 1 other yellow ≪Majin≫ card in your Battle Area and place 1 card from under that card in its owner's Drop: Place this card under the chosen card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[z-awaken]" in text.lower()
+        and "while this card is in a battle, you can't activate extra skills or use cards in combos." in text.lower()
+        and "at the end of your opponent's turn, switch this card to active mode and remove it from the game." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="turn_end",
+                handler_id="noop_auto",
+                handler_params={"requires_opponent_turn": True},
+                source_text="[Permanent] While this card is in a battle, you can't activate Extra skills or use cards in combos.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="turn_end",
+                handler_id="auto_switch_self_active_and_remove_self_from_game_on_turn_end",
+                handler_params={"requires_opponent_turn": True},
+                source_text="[Auto] At the end of your opponent's turn, switch this card to Active Mode and remove it from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+    if (
+        "during your turn, this card gets +10000 power and can attack battle cards without [barrier] in active mode." in text.lower()
+        and "if your opponent has no battle cards in play, this card gains [critical]." in text.lower()
+        and "when this card is ko'd, draw 1 card, then choose up to 1 green ≪universe 7≫ card with an energy cost of 3 in your hand and play it." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] During your turn, this card gets +10000 power and can attack Battle Cards without [Barrier] in Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your opponent has no Battle Cards in play, this card gains [Critical].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green ≪Universe 7≫ card with an energy cost of 3 in your hand and play it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_play_up_to_n_from_owner_hand_on_self_ko",
+                handler_params={"max_targets": 1, "allowed_colors": "green", "required_traits": "Universe 7", "max_cost": 3},
+                source_text="[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green ≪Universe 7≫ card with an energy cost of 3 in your hand and play it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "during your turn, this card gets +10000 power and can attack battle cards without [barrier] in active mode." in text.lower()
+        and "if your opponent has no battle cards in play, this card gains [double strike]." in text.lower()
+        and "when this card is ko'd, draw 1 card, then choose up to 1 green ≪universe 7≫ card with an energy cost of 3 in your hand and play it." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] During your turn, this card gets +10000 power and can attack Battle Cards without [Barrier] in Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your opponent has no Battle Cards in play, this card gains [Double Strike].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green ≪Universe 7≫ card with an energy cost of 3 in your hand and play it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_play_up_to_n_from_owner_hand_on_self_ko",
+                handler_params={"max_targets": 1, "allowed_colors": "green", "required_traits": "Universe 7", "max_cost": 3},
+                source_text="[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green ≪Universe 7≫ card with an energy cost of 3 in your hand and play it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader card is yellow and a ≪turles crusher corps≫ card" in text.lower()
+        and "activate up to 1 {turles's power ball} from your deck or drop area" in text.lower()
+        and "[blocker]" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If you have a [Field] Extra Card in your Battle Area, this card gains [Blocker].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_activate_up_to_n_named_field_extra_from_owner_deck_or_drop_on_play",
+                handler_params={
+                    "max_targets": 1,
+                    "required_name_contains": "TURLES'S POWER BALL",
+                    "required_card_type": "EXTRA",
+                    "requires_field_keyword": True,
+                    "played_from": "hand",
+                    "leader_allowed_colors": "yellow",
+                    "leader_required_traits": "Turles Crusher Corps",
+                    "shuffle_deck_after": True,
+                },
+                source_text="[Auto] If your Leader Card is yellow and a ≪Turles Crusher Corps≫ card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[super combo]" in text.lower()
+        and "if this card would leave your combo area, remove it from the game instead." in text.lower()
+        and "the next time you would activate a mono-red extra card with an original energy cost of 3 or less this turn, reduce its activation cost by (red)." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={"requires_comboed_from": "hand"},
+                source_text="[Permanent] If this card would leave your Combo Area, remove it from the game instead.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo",
+                handler_params={
+                    "requires_comboed_from": "hand",
+                    "requires_opponent_turn": True,
+                    "leader_allowed_colors": "red",
+                    "leader_required_characters": "Frieza: Br",
+                    "amount": 1,
+                    "required_card_type": "EXTRA",
+                    "max_energy_cost": 3,
+                    "require_mono_color": True,
+                    "allowed_colors": "red",
+                },
+                source_text="[Auto][Limit 1] If your Leader Card is a red <Frieza: Br> card, your life is at 3 or less, and it's your opponent's turn: When this card is used in a combo from your hand, the next time you would activate a mono-red Extra Card with an original energy cost of 3 or less this turn, reduce its activation cost by (Red).",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[super combo][energy-exhaust]" in text.lower()
+        and "when this card is used in a combo from your hand, switch up to 1 of your blue/green multicolor energy to active mode." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="auto_switch_up_to_n_owner_energy_active_on_combo",
+                handler_params={
+                    "max_targets": 1,
+                    "requires_comboed_from": "hand",
+                    "requires_opponent_turn": True,
+                    "leader_allowed_colors": "blue,green",
+                    "allowed_colors": "blue,green",
+                    "requires_multicolor": True,
+                },
+                source_text="[Auto] If your Leader Card is blue or green and it's your opponent's turn: When this card is used in a combo from your hand, switch up to 1 of your Blue/Green multicolor energy to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[super combo][energy-exhaust]" in text.lower()
+        and "at the end of a battle in which this card was used in a combo from your hand" in text.lower()
+        and "place it at the bottom of its owner's deck." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_comboed_battle_end",
+                handler_id="auto_bottom_deck_up_to_n_opponent_rest_battle_on_battle_end",
+                handler_params={"max_targets": 1, "leader_allowed_colors": "blue,yellow", "rest_mode_only": True},
+                source_text="[Auto] If your Leader Card is blue or yellow: At the end of a battle in which this card was used in a combo from your hand, choose up to 1 of your opponent's Battle Cards in Rest Mode and place it at the bottom of its owner's deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "choose up to 1 <anilaza> or <koichiarator> card" in text.lower()
+        and "place up to 2 red ≪universe 3≫ cards with energy costs of 3 or less from your drop under the chosen card." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_place_up_to_n_matching_from_owner_drop_under_matching_owner_battle",
+                handler_params={
+                    "max_targets": 2,
+                    "allowed_colors": "red",
+                    "required_traits": "Universe 3",
+                    "max_cost": 3,
+                    "required_owner_battle_allowed_colors": "red",
+                    "required_owner_battle_required_characters": "Anilaza,Koichiarator",
+                    "required_owner_battle_required_card_type": "BATTLE",
+                },
+                source_text="[Activate: Main] If your Leader is a red ≪Universe 3≫ card: Choose up to 1 <Anilaza> or <Koichiarator> card—both red and in your Battle Area—and place up to 2 red ≪Universe 3≫ cards with energy costs of 3 or less from your Drop under the chosen card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "when you use [arrival] to play a red/blue multicolor battle card, draw 1 card." in text.lower()
+        and "play up to 1 red ≪universe 7≫ card with an energy cost of 3 or less from under this card, and remove this card from the game." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1, "event_requires_played_via": "arrival", "event_allowed_colors": "red,blue", "event_requires_multicolor": True},
+                source_text="[Auto][Limit 1] When you use [Arrival] to play a Red/Blue multicolor Battle Card, draw 1 card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_matching_from_under_self_and_remove_self_from_game",
+                handler_params={"max_targets": 1, "allowed_colors": "red", "required_traits": "Universe 7", "max_cost": 3},
+                source_text="[Activate: Main][Limit 1](Blue), if your Leader is a red <Warriors of Universe 7> card and you have 3 or more energy: Play up to 1 red ≪Universe 7≫ card with an energy cost of 3 or less from under this card, and remove this card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[barrier][blocker]" in text.lower()
+        and "when this card is played, it can't be ko'd in battle for the turn." in text.lower()
+        and "play up to 1 red ≪universe 7≫ card with an energy cost of 3 or less from under this card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played, it can't be KO'd in battle for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_rest_self_then_play_up_to_n_matching_from_under_self",
+                handler_params={"max_targets": 1, "allowed_colors": "red", "required_traits": "Universe 7", "max_cost": 3},
+                source_text="[Activate: Main][Limit 1](Red)(1), if your Leader is a red <Warriors of Universe 7> card and you switch this card to Rest Mode: Play up to 1 red ≪Universe 7≫ card with an energy cost of 3 or less from under this card, and at the end of your opponent's next turn, remove this card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_switch_self_active_and_gain_power_for_turn",
+                handler_params={"power_delta": 0},
+                source_text="[Activate: Battle][Limit 1] If it's your opponent's turn: Switch this card to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][limit 1] negate the attack" in text.lower()
+        and "battle cards with an energy cost of 4 or less and ko it." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_and_ko_up_to_n_opponent_battle",
+                handler_params={"max_targets": 1, "max_cost": 4},
+                source_text="[Counter: Attack][Limit 1] Negate the attack and choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "[counter: attack][limit 1] negate the attack, play this card, and this card gains [blocker] for the turn." in text.lower()
+        and "when this card is placed from your hand or drop under an <anilaza> or <koichiarator> card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self_and_gain_keyword_for_turn",
+                handler_params={"grant_keywords": "Blocker"},
+                source_text="[Counter: Attack][Limit 1] Negate the attack, play this card, and this card gains [Blocker] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_placed_under_owner_card",
+                handler_id="auto_power_reduce_up_to_n_on_placed_under",
+                handler_params={"max_targets": 1, "power_delta": -10000},
+                source_text="[Auto][Limit 1] When this card is placed from your hand or Drop under an <Anilaza> or <Koichiarator> card—both red and in your Battle Area—choose up to 1 of your opponent's Battle Cards, and it gets -10000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "if your leader is a green <son goku: gt> card and this card is in your warp, you can't play non-green battle cards." in text.lower()
+        and "play up to 1 <android 17> card and 1 <hell fighter 17> card" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a green <Son Goku: GT> card and this card is in your Warp, you can't play non-green Battle Cards.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_named_from_owner_drop_negated",
+                handler_params={"required_name_contains_list": "Android 17,Hell Fighter 17", "max_cost": 1},
+                source_text="[Activate: Main][Limit 1] If your Leader is a green <Super 17> card, you have 4 or more energy, and you place this card from your hand in your Drop: Play up to 1 <Android 17> card and 1 <Hell Fighter 17> card—both with energy costs of 1—from your Drop with their skills negated for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "have a <fu> z-battle card in play" in text.lower()
+        and "gains [servant] until the end of your opponent's next turn." in text.lower()
+        and "choose up to 1 of your opponent's battle cards with [servant], switch it to active mode, and gain control of it." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] While your Leader is a <Evil Saiyan> or <Cumber> card—both black—and you have a <Fu> Z-Battle Card in play, reduce the specified cost of this card in your hand by (Black).",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_grant_servant_to_matching_owner_battle_until_opponent_next_turn",
+                handler_params={"allowed_colors": "black", "required_characters": "Evil Saiyan,Cumber", "max_cost": 6},
+                source_text="[+2][Activate: Main][Limit 1] Choose up to 1 of your <Evil Saiyan> or <Cumber> cards―both black and with energy costs of 6 or less―and it gains [Servant] until the end of your opponent's next turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_switch_opponent_servant_active_and_gain_control",
+                handler_params={},
+                source_text="[-7][Activate: Main](Black): Choose up to 1 of your opponent's Battle Cards with [Servant], switch it to Active Mode, and gain control of it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "you can use your mono-red rest mode ≪saiyan≫ cards in combos." in text.lower()
+        and "when you use a card in a combo, look at up to 3 cards from the top of your deck" in text.lower()
+        and "your <gogeta: gt> cards can attack your opponent's battle cards in active mode" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="owner_card_comboed",
+                handler_id="auto_look_top_add_up_to_one_to_hand_on_play",
+                handler_params={"look_count": 3, "max_add": 1, "allowed_colors": "red", "required_traits": "Saiyan", "move_unpicked_to_bottom": True, "event_allowed_colors": "red"},
+                source_text="[Auto][Once per turn] When you use a card in a combo, look at up to 3 cards from the top of your deck, add up to 1 red ≪Saiyan≫ card or 1 red Unison with a specified cost of 2 among them to your hand, and place the remaining cards at the bottom of your deck in any order.",
+                once_per_turn=True,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_leader_attacks",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto] When this card attacks, draw 1 card, then play up to 1 red ≪Saiyan≫ card with an energy cost of 1 from your hand in Rest Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_leader_attacks",
+                handler_id="auto_play_up_to_n_from_owner_hand_on_attack",
+                handler_params={"max_targets": 1, "allowed_colors": "red", "required_traits": "Saiyan", "max_cost": 1, "resting": True},
+                source_text="[Auto] When this card attacks, draw 1 card, then play up to 1 red ≪Saiyan≫ card with an energy cost of 1 from your hand in Rest Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] You can use your mono-red Rest Mode ≪Saiyan≫ cards in combos.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "your deck can only include up to 6 [dragon ball] cards" in text.lower()
+        and "switch this card to rest mode: add up to 2 [dragon ball] cards from your deck and/or life to your hand" in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_up_to_n_dragon_ball_from_owner_deck_and_or_life_to_hand",
+                handler_params={"max_targets": 2, "required_runtime_labels": "dragon ball"},
+                source_text="[Activate: Main] Switch this card to Rest Mode: Add up to 2 [Dragon Ball] cards from your deck and/or life to your hand, then shuffle any areas you looked through with this skill.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_leader_attacks",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto] When this card attacks, draw 1 card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if (
+        "your opponent's skill-less cards can't attack this card." in text.lower()
+        and "when a skill-less battle card or unison card is played in your opponent's battle area or unison area, draw 1 card." in text.lower()
+        and "choose up to 1 of your opponent's battle cards and place it under your leader card." in text.lower()
+    ):
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] Your opponent's skill-less cards can't attack this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_gain_power_and_keyword_for_turn",
+                handler_params={"power_delta": 5000},
+                source_text="[+1][Activate: Main] This card gets +5000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_place_up_to_n_opponent_battle_under_owner_leader",
+                handler_params={"max_targets": 1},
+                source_text="[-1][Activate: Main] If your Leader Card is a black <Fin> card: Choose up to 1 of your opponent's Battle Cards and place it under your Leader Card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT20-031":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader's back side is a red <Warriors of Universe 7> card and you have 3 or fewer energy: When this card is played, for the turn, when your opponent would use a non-[Awaken] skill to switch one of their energy to Active Mode, they can't switch it to Active Mode unless they place 1 of their energy in its owner's Drop.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX22-03":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a <Goku Black>, this card gains [Indestructible] and [Blocker].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="auto_schedule_switch_self_active_on_turn_end_when_owner_energy_sent_to_drop_by_leader",
+                handler_params={},
+                source_text="[Auto] When one of your energy is placed in your Drop by your Leader's skill, switch this card to Active Mode at the end of the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-456":
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Play] Draw 1 card, and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_battle_played",
+                handler_id="auto_negate_up_to_n_played_opponent_battle_skills_for_turn_and_switch_self_active",
+                handler_params={},
+                source_text="[Auto] If your Leader is yellow: When your opponent plays a Battle Card, you may choose that card and negate its skills for the turn. If you do, switch this card to Active Mode and negate this skill for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "SD22-04":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played, it can't be removed from your Battle Area by skills until the end of your opponent's next turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_self_from_under_owner_card",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1](Yellow), if your Leader is a yellow <Vegeta> Z-Leader and you have a yellow <Son Goku> in play: Play this card from under your Leader or Battle Card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_switch_up_to_total_cost_n_opponent_battles_rest",
+                handler_params={"max_targets": 1, "max_total_cost": 99},
+                source_text="[Activate: Battle][Once per turn] Choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX22-04":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If it's your opponent's turn and this card is under a blue <Zamasu> Battle Card, the card on top of this card gets +15000 power.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_combo_up_to_n_from_owner_zone_on_attack",
+                handler_params={"max_targets": 1, "source_zone": "drop", "allowed_colors": "blue", "required_traits": "God", "exact_combo_power": 5000, "negate_skills": True},
+                source_text="[Auto] When this card attacks, use up to 1 mono-blue ≪God≫ with 5000 combo power from your Drop in a combo and negate its skills for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_self_from_under_owner_card",
+                handler_params={},
+                source_text="[Activate: Main](Blue), if your Leader is a <Goku Black>: Play this card from under a <Zamasu> Z-Battle Card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-380":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack and play this card in Rest Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-374":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_opponent_may_send_hand_to_warp_else_restrict_rest_opponent_card_attack",
+                handler_params={"max_cost": 4},
+                source_text="[Auto] When this card is played, your opponent may choose 1 card in their hand and send it to their Warp. If they don't, choose up to 1 of your opponent's Leader Cards in Rest Mode, or up to 1 of your opponent's Battle Cards with an energy cost of 4 or less in Rest Mode, and it can't attack until the end of their next turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT16-113":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Super Combo][Swap 4][Spirit Boost 1] If your Leader Card is a black <Dabura: Xeno> card: Black <Dabura: Xeno> card with an energy cost of 4.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-002":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_from_owner_deck",
+                handler_params={"max_targets": 1, "allowed_colors": "red", "required_characters": "Ginger|Sansyo|Nikky", "max_cost": 1},
+                source_text="[Activate: Main] Switch this card to Rest Mode: Play up to 1 red <Ginger>, <Sansyo>, or <Nikky> with an energy cost of 1 from your deck, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="leader_wished",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Wish] When there are 7 [Dragon Ball] cards in your Drop: Add up to 1 {Garlic Jr.'s Ambition} from your deck to your hand, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] Choose one— Play up to 1 red <Ginger>, <Sansyo>, or <Nikky> with an energy cost of 4 from your deck with its skills negated for the turn, then shuffle your deck. Activate the [Activate: Main] skill of up to 1 red or black ≪Desire≫ from your hand with an energy cost less than or equal to your current energy.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] (Red), if your life is at 2 or less and you remove 7 [Dragon Ball] cards in your Drop from the game: You don't take damage for the turn, then flip this card over at the end of the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-485":
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="auto_draw_n_on_self_placed_into_drop_from_energy_by_leader",
+                handler_params={"amount": 1, "leader_allowed_colors": "blue", "leader_required_characters": "Zamasu"},
+                source_text="[Auto] If your Leader is a blue <Zamasu> card: When this card is placed from your energy in a Drop by your Leader's skill, draw 1 card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a blue <Zamasu> card: Add this card from your hand to your energy, and for the turn, you can't add cards to your energy, can only play mono-blue <Zamasu> or mono-blue <Goku Black> cards, and at the end of the turn, place this card from your energy in its owner's Drop.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-118":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is yellow and this card is played from your hand: Choose up to 1 {Whis, Time Regression} in your Z-Deck and reduce its energy cost by (Yellow)(Yellow) for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] Choose 2 of your energy in Rest Mode and place this card in its owner's Drop: Choose up to 1 yellow <Vegeta> card with an energy cost of 2 and switch it to Active Mode. The chosen cards don't switch to Active Mode during your next Charge Phase.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-106":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a yellow <Frieza> card and you choose up to 1 yellow <Frieza> card with an energy cost of 1 from your Drop and add it to your hand: When this card is played, play up to 1 yellow <Frieza> card with [Swap] and an energy cost of 3 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] Add 1 card from your life to your hand and switch this card to Rest Mode: When your yellow <Frieza> card with an energy cost of 3 is played, at the end of the turn, play 1 yellow Frieza's Army Token with 10000 power, and that card gains [Blocker] until the end of your opponent's next turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "SD22-07":
+        rules.append(
+            EffectRule(
+                trigger="self_added_to_z_energy",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Yellow), if your Leader is a yellow <Vegeta> card: When you add one of your yellow cards to your Z-Energy, play this card from your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card attacks, this card gets +5000 power and [Double Strike] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If this card is switched to Rest Mode by your yellow <Vegeta> Leader's skill, this card can't be KO'd by your Leader's skills until the end of the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-121":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If this card is played by [Swap], this card gains [Dual Attack] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_battle_played",
+                handler_id="auto_negate_up_to_n_played_opponent_battle_skills_for_turn_and_switch_self_active",
+                handler_params={"leader_allowed_colors": "yellow"},
+                source_text="[Auto][Once per turn] If your Leader is yellow: When your opponent plays a Battle Card, choose up to 1 of those cards and negate its skills for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX22-13":
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Play][Limit 1] If your Leader is a blue <Goku Black> card and it's your opponent's turn: Choose up to 1 of your <Zamasu> cards and switch it to Active Mode, then add this card from your Drop to your Z-Energy.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a blue <Goku Black> card and you have 5 or more energy: Play up to 1 {Infinite Force Fused Zamasu} from your hand on top of 1 of your mono-blue <Zamasu> or <Goku Black> cards with an energy cost of 5 or more.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] Place this card from your Z-Energy in its owner's Drop: Use up to 1 mono-blue <Goku Black> card with 5000 combo power from your Drop in a combo, then negate its skills for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-101":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] Look at up to 5 cards from the top of your deck, add up to 1 yellow {The Return of the Army of Terror} or up to 1 yellow <Frieza> card among them to your hand, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_swap_activated",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1, "leader_allowed_colors": "yellow", "leader_required_characters": "Frieza"},
+                source_text="[Auto][Once per turn] When you activate [Swap] on one of your yellow <Frieza> cards, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Once per turn] When your yellow <Frieza> card with [Swap] and an energy cost of 3 or more attacks, look at up to 3 cards from the top of your deck and use up to 1 yellow Frieza's Army card among them in a combo with its skills negated for the turn. Place the remaining cards at the bottom of your deck in any order.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-122":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If this card is played by [Swap], choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode, ignoring [Barrier], this card can't be removed from your Battle Area by skills until the end of your opponent's next turn, and if you have 3 or more energy, this card gains [Double Strike] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT16-120":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Swap 3][Spirit Boost 1] If your Leader Card is a black <Dark Broly> card and you add 1 card from your life to your hand: Black <Gravy> card with an energy cost of 3.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_self_gain_power_for_turn_on_attack",
+                handler_params={"power_delta": 11000},
+                source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, it gets +11000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-132":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_up_to_n_from_owner_deck_to_hand",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_characters": "Frieza", "max_cost": 5, "required_skill_text_contains": "[swap]", "shuffle_searched_zones": True},
+                source_text="[Activate: Main] Add up to 1 yellow <Frieza> with [Swap] and an energy cost of 5 or less from your deck to your hand, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_buff_owner_battle_cards",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_characters": "Frieza", "target_scope": "owner_cards", "power_delta": 5000, "leader_required_characters": "Frieza,The Emperor Who Swore Revenge", "leader_allowed_colors": "yellow", "max_owner_life": 4},
+                source_text="[Activate: Battle][Limit 1] If your Leader is a {Frieza, The Emperor Who Swore Revenge} or a yellow <Frieza> Z-Leader and your life is at 4 or less: Choose up to 1 of your yellow <Frieza> cards, and that card gets +5000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-018":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_up_to_n_from_owner_deck_or_drop_to_hand",
+                handler_params={"max_targets": 1, "required_name_contains": "POWER POLE", "required_card_type": "EXTRA", "shuffle_deck_after": True, "leader_allowed_colors": "red", "leader_required_characters": "Son Goku"},
+                source_text="[Activate: Main][Limit 1] If your Leader is a red <Son Goku> and you discard this card from your hand: Add up to 1 {Power Pole} from your deck or Drop to your hand, then shuffle your deck if you looked through it.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-003":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_self_gain_power_for_turn_on_play",
+                handler_params={"grant_keyword": "Barrier"},
+                source_text="[Auto] When this card is played, this card gains [Barrier] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_battle_played",
+                handler_id="auto_power_reduce_up_to_n_played_opponent_battle_for_turn",
+                handler_params={"power_delta": -10000, "required_name_under_either_leader": "SON GOHAN, AWAKENED HIDDEN POWER"},
+                source_text="[Auto][Once per turn] If there is a {Son Gohan, Awakened Hidden Power} under your Leader or your opponent's Leader: When your opponent plays a Battle Card, choose up to 1 of your opponent's Battle Cards, and that card gets -10000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_bottom_deck_n_from_owner_hand_then_add_up_to_n_from_owner_drop_to_hand",
+                handler_params={"hand_count": 1, "max_targets": 1, "required_name_contains": "POWER POLE", "required_card_type": "EXTRA"},
+                source_text="[Activate: Main][Once per turn] If you place 1 card from your hand at the bottom of your deck: Add up to 1 {Power Pole} from your Drop to your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-128":
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="auto_play_self_from_hand_on_owner_life_placed_into_drop",
+                handler_params={"leader_allowed_colors": "yellow", "leader_required_characters": "Frieza"},
+                source_text="[Auto][Limit 1](Yellow), if your Leader is a yellow <Frieza>: When your life is placed in your Drop, play this card from your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_buff_owner_battle_cards",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_characters": "Frieza", "target_scope": "owner_cards", "power_delta": 5000},
+                source_text="[Activate: Main][Once per turn] Choose up to 1 of your yellow <Frieza> cards, and that card gets +5000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX22-01":
+        rules.append(
+            EffectRule(
+                trigger="owner_battle_attacks",
+                handler_id="auto_draw_n_on_owner_matching_battle_attacks",
+                handler_params={"amount": 1, "attacker_required_characters": "Zamasu|Goku Black"},
+                source_text="[Auto][Once per turn] When one of your <Zamasu> or <Goku Black> Battle Cards attacks, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] If you have 2 or more energy: Add 1 card from your life to your energy, you can't place cards in your energy for the turn; at the end of the turn, place 1 of your energy in your Drop.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-028":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={"resting": True},
+                source_text="[Counter: Attack][Limit 1] Negate the attack and play this card in Rest Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If you have a red <Garlic Jr.> with an energy cost of 5 or more and [Indestructible] in play, you may activate this card's [Counter] skill from your hand without paying its energy cost.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-127":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack][Limit 1] Negate the attack and play this card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a yellow <Frieza> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_buff_owner_battle_cards",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_characters": "Frieza", "required_skill_text_contains": "[swap]", "target_scope": "owner_cards", "power_delta": 5000},
+                source_text="[Activate: Battle][Once per turn] Choose up to 1 of your yellow <Frieza> cards with [Swap], and that card gets +5000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-125":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_add_swap_from_owner_z_energy_to_hand_then_place_hand_to_z_energy_on_play",
+                handler_params={"leader_allowed_colors": "yellow", "leader_required_characters": "Frieza", "allowed_colors": "yellow", "required_characters": "Frieza", "required_skill_text_contains": "[swap]"},
+                source_text="[Auto] If your Leader is a yellow <Frieza>: When this card is played, you may add 1 yellow <Frieza> with [Swap] from your Z-Energy to your hand. If you do, add 1 card from your hand to your Z-Energy.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-007":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If this card has [Indestructible], it gets +10000 power.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_play_up_to_n_from_under_self_and_place_self_under_played_card",
+                handler_params={"max_targets": 1, "allowed_colors": "red", "required_characters": "Garlic Jr.", "max_cost": 3},
+                source_text="[Activate: Main][Limit 1](Red), if your Leader is a red <Garlic Jr.> and you have 3 or more energy: Play up to 1 red <Garlic Jr.> with an energy cost of 3 from under this card on top of this card in Active Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-104":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a {SSB Vegeta, God-Level Power}: When this card is played, skip all phases until the Charge Phase in your next turn, then start your Main Phase.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-038":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_self_gain_power_for_turn_on_play",
+                handler_params={"grant_keyword": "Barrier"},
+                source_text="[Auto] When this card is played, this card gains [Barrier] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_card_added_to_z_energy",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a blue <Uub> and it's your turn: When one of your opponent's cards is added to their Z-Energy, choose up to 1 of your opponent's Battle Cards from their Battle Area or Drop and add it to its owner's Z-Energy.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Once per turn] If your opponent has 3 or more Z-Energy and you have an <Uub> in a battle: Place up to 2 cards from the top of your deck into your Drop, then use up to 1 of your mono-blue cards with a combo power of 5000 from your Drop in a combo with its skills negated for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT20-125":
+        rules.append(
+            EffectRule(
+                trigger="self_union_potara_activated",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Union-Potara] Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and draw 1 card: <Son Goku> and <Vegeta>.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] This card is played from your hand in your opponent's Battle Area, and when choosing cards to use with this card's [Union] skill from your hand, you can choose Battle Cards you own in your opponent's Battle Area.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your life is at 4 or more and your opponent's Leader is a black <Cumber> card: When this card is played, for the turn, if your opponent's <Evil Saiyan> or <Cumber> card-both black and with an energy cost of 8-is attacking and in a battle, you can't activate [Counter] skills.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-063":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_place_self_under_opponent_battle_negate_non_keywords_gain_control_and_grant_servant",
+                handler_params={"max_cost": 4, "excluded_name_contains": "SON GOKU: GT"},
+                source_text="[Activate: Main](Blue), if your opponent has 2 or more energy and you have a {Universal Tuffleization Plan} in your Battle Area: Choose 1 of your opponent's Battle Cards with an energy cost of 4 or less that does not have a character name that includes <Son Goku: GT>, place this card under that card, negate that card's non-keyword skills, you gain control of it, and that card gains [Servant].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-065":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_draw_if_opponent_z_energy_at_least",
+                handler_params={"min_opponent_z_energy": 4, "amount": 1},
+                source_text="[Counter: Attack][Limit 1] Negate the attack. Additionally, if your opponent has 4 or more Z-Energy, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a blue <Uub> and your life is at 4 or less, you can activate this card's [Counter] skill from your hand without paying its energy cost by discarding 1 blue <Mr. Buu> from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT20-108":
+        rules.append(
+            EffectRule(
+                trigger="self_comboed_battle_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Yellow), if your Leader is a <Majin Buu> or <Evil Wizard Babidi> card-both yellow-it's your opponent's turn, and you choose 1 of your yellow ≪Majin≫ cards with an energy cost of 2 in Rest Mode: At the end of a battle where this card was used in a combo, play this card from your Drop in Active Mode on top of the chosen card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_discard_matching_from_owner_hand_gain_total_combo_power_and_threshold_draw_keyword",
+                handler_params={"discard_allowed_colors": "yellow", "discard_required_traits": "Majin", "min_total_power": 25000, "grant_keyword": "Dual Attack", "min_source_stacked_cards": 3},
+                source_text="[Activate: Main][Limit 1] If there are 3 ≪Majin≫ cards under this card and you discard 1 or more ≪Majin≫ cards from your hand: This card gains power equal to the total combo power of the cards discarded by this skill for the turn. Additionally, if this card has 25000 power or more, draw 1 card, and this card gains [Dual Attack] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-004":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If you have 3 or more energy and this card would leave your Battle Area, discard 1 card from your hand, play up to 1 {Son Goku, Full Power and Full Blast} from under this card, and remove this card from the game instead.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If there is a {Power Pole} under one of your <Son Goku> Battle Cards, reduce the energy cost of this card in your Z-Deck by 1.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "EX22-06":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Union-Potara] If your Leader is a <Zamasu> or <Goku Black>: Blue <Zamasu> Z-Battle Card with an energy cost of 3 and <Goku Black>.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_placed_under_by_union",
+                handler_id="auto_schedule_switch_up_to_n_owner_energy_active_on_turn_end_on_placed_under_by_union",
+                handler_params={"max_targets": 1},
+                source_text="[Auto] When a blue <Zamasu> with an energy cost of 7 is placed on top of this card, switch up to 1 of your energy to Active Mode at the end of the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="auto_schedule_switch_self_active_on_turn_end_when_owner_energy_sent_to_drop_by_leader",
+                handler_params={},
+                source_text="[Auto] When one of your energy is placed in your Drop by your Leader's skill, switch this card to Active Mode at the end of the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-131":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] During a turn where one of your mono-yellow Leaders flips from its back side to its front, reduce the energy cost of this card by (Yellow).",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main](Yellow), choose up to 1 of your yellow <Son Goku> or <Vegeta> cards with an energy cost of 2, send it to your Warp, play that card from your Warp at the start of your next Main Phase, and that card gets +5000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="activate_buff_owner_battle_cards",
+                handler_params={"max_targets": 1, "allowed_colors": "yellow", "required_characters": "Son Goku,Vegeta", "power_delta": 10000, "target_scope": "owner_cards"},
+                source_text="[Activate: Battle][Limit 1] Choose up to 1 of your yellow <Son Goku> or <Vegeta> cards, and that card gets +10000 power for the battle.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-049":
+        rules.append(
+            EffectRule(
+                trigger="self_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is placed in a Drop from Z-Energy, remove this card in the Drop from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Limit 1] If it's your opponent's turn and you have a blue <Baby> in a battle: Use this card under a {Universal Tuffleization Plan} in a Battle Area in a combo. At the end of the battle, remove this card in the Drop from the game.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-048":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={"resting": True},
+                source_text="[Counter: Attack][Limit 1] Negate the attack and play this card in Rest Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] During your opponent's turn, if you have a blue <Baby> in play, reduce the energy cost of this card in all areas by 2.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If this card is under a {Universal Tuffleization Plan} in your Battle Area, you can activate this card's [Counter] skill under the same conditions as if it were in your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-373":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When this card in your hand is played or used in a combo, choose up to 1 other card in your Combo Area, and your opponent's Battle Cards with exactly the same colors as the chosen card can't attack Leader Cards for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When this card in your hand is played or used in a combo, choose up to 1 other card in your Combo Area, and your opponent's Battle Cards with exactly the same colors as the chosen card can't attack Leader Cards for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX19-32":
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader Card is green, yellow, or a ≪Heroine≫ card: When this card is used in a combo from your hand, choose one-・Choose up to 1 of your opponent's Leader Cards or Unison Cards and switch it to Rest Mode.・If it's your turn, choose up to 1 of your opponent's skill-less Battle Cards and KO it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-095":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is mono-green <Cell>: Choose 1 keyword skill on 1 of your opponent's Battle Cards with an energy cost of 4 or less in their Battle Area or Drop. Then, choose up to 1 green <Cell> card with an energy cost of 3 or less, and that card gains the chosen keyword skill with this skill's cost for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-096":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent][Field] You can only have up to 2 cards under this card. If there is a <Son Gohan: Childhood> under this card, this card gains [Barrier].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] If all of your energy is mono-green, your Leader is in Active Mode, and you place 1 card from under this card in its owner's Drop: You may play 1 card from under this card. If you do, add up to 2 cards to your life.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-097":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack. If your life is at 4 or less, you may discard 1 card from your hand. If you do, your opponent can't attack for the turn unless they add 1 card from their hand to their Z-Energy.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a mono-green <Son Gohan: Childhood>, you can activate this card's [Counter] skill from your hand by discarding 1 green card from your hand instead of paying its energy cost. If you do, draw 1 card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-089":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack and play this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your opponent has 2 or more Earthling Tokens in play, you can activate this card's [Counter] skill from your hand without paying its energy cost by removing 2 of your opponent's Earthling Tokens from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_ko_up_to_n_opponent_battle_on_self_ko",
+                handler_params={"max_targets": 1, "max_cost": 5},
+                source_text="[Auto] When this card is KO'd, choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less and KO it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-086":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your opponent's Leader is mono-green <Cell>: When this card is played, choose 1 card in your hand and discard it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-087":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_opponent_draw_n_on_play",
+                handler_params={"amount": 1},
+                source_text="[Auto] If your opponent's Leader is mono-green <Cell>: When this card is played, your opponent draws 1 card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-074":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] The skills of your opponent's cards can't negate this card's skills. [Permanent] If your Leader is a mono-green <Cell> and this card would leave your Battle Area from a skill or KO, place this card under your leader instead. [Auto] When your opponent plays a card or at the end of your opponent's turn, you may KO this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-075":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your opponent has 2 or more Earthling Tokens in play, you can play this card from your Z-Deck by placing 2 of your opponent's Earthling Tokens in Rest Mode instead of paying its Z-Energy cost. [Auto] When this card attacks, use up to 1 of your opponent's Earthlings with an energy cost of 1 or an Earthling Token in your Combo Area in a combo, then this card gets +5000 power for the turn. [Activate: Main][Once per turn] Remove a total of 2 of your opponent's Earthling Tokens and/or Earthlings from the game: This card gets +10000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-099":
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] Earthling Tokens can't be used in combos by players other than their owner. Earthling Tokens aren't affected by this card's skills. [Auto][Once per turn] If it's your opponent's turn: When your opponent plays a mono-green <Cell> card from their hand, play 2 Earthling Tokens in your Battle Area. Your opponent can't activate [Counter] Extra Cards for the game.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-123":
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Once per turn] When this card attacks, look at up to 3 cards from the top of your deck, use up to 1 yellow Frieza's Army card among them in a combo with its skills negated for the turn, then place the remaining cards at the bottom of your deck in the same order.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-135":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main](Black), if your Leader is a black <Trunks: Xeno>-only card, you place 1 card from your hand at the bottom of your deck, and you remove this card in your Warp from the game: Add up to 2 of your life to your hand, and if you have no Unisons in play, play 1 {Supreme Kai of Time, Opposing the Empire} from your hand or Warp with 2 markers on it; you can't play Unisons for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-139":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_add_up_to_n_dark_dragon_ball_to_hand_and_drop_on_play",
+                handler_params={"add_to_hand_max": 1, "drop_max": 1},
+                source_text="[Auto] If your Leader is a <Mechikabura>-only card: When this card is played, look at your deck, add up to 1 ≪Dark Dragon Ball≫ to your hand and place up to 1 in your Drop, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1](Black)(Black)(Black), if your Leader is a <Mechikabura>-only card, your opponent has 3 or more energy, and you send this card from your Drop to your Warp: Send up to 1 of your opponent's Battle Cards from their Drop to their Warp, play up to 1 black <Mechikabura> with an energy cost of 8 and a power of 30000 from your hand or Drop, and that card gains [Barrier] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-500":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader's back side is {Saiyan Bond Vegeta} and your opponent has 2 or more energy: During this turn, you can activate your Leader's [Awaken] even if your life is at 6 or less.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a red ≪Universe 7≫ <Vegeta> and this card is in a battle: When this card's power reaches 20000 or more by one of your Leader's skills, play up to 1 {SS Cabba, Spirit Resonance} from your hand with 2 markers on it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-501":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a blue <Janemba>, and you discard this card from your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue ≪Evil Incarnate≫ or ≪Demon≫ with an energy cost of 4 or less to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is an ≪Evil Incarnate≫ with [Sparking] or [Burst], your opponent has 3 or more energy, and you send this card from your Drop to your Warp: Your opponent adds 1 card from the top of their deck to their energy in Rest Mode. If they do, your opponent places 1 of their energy in their Drop at the end of the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-137":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your opponent has 2 or more energy and you send 1 card from your life to your Warp: When this card is played from your hand, play up to 1 black Unison with a specified cost of 3 and a marker on it, shuffle your deck, then send up to 2 cards from the top of your deck to your Warp.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Once per turn] If you remove 1 of your skill-less Battle Cards from the game: Use up to 1 mono-black card with 5000 combo power from your Warp in a combo with its skills negated for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-497":
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card attacks, choose up to a total of 2 of your opponent's Battle Cards or Unisons in Rest Mode, ignoring [Barrier], and those cards won't switch to Active Mode during your opponent's next Charge Phase.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_left_battle_area",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, play up to 1 of your yellow <Vegeta> cards with an energy cost of 2 from your deck or Drop, then shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-146":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a green <Cell> and you have a green ≪Android≫ in your energy other than this card, negate this card's [Energy-Exhaust] in all areas.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a green ≪Android≫ and you have a <Cell> in play, reduce the combo cost of this card in your hand by 1.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT17-126":
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_battle_played",
+                handler_id="auto_restrict_played_opponent_battle_attack_for_turn_if_cost_greater_than_current_energy",
+                handler_params={"max_owner_energy": 3},
+                source_text="[Auto][Once per turn] If you have 3 or less energy: When your opponent plays a Battle Card with an energy cost greater than their current energy, it can't attack for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT17-124":
+        rules.append(
+            EffectRule(
+                trigger="owner_opponent_battle_played",
+                handler_id="auto_restrict_played_opponent_battle_attack_for_turn_if_cost_greater_than_current_energy",
+                handler_params={"max_owner_energy": 3},
+                source_text="[Auto][Once per turn] If you have 3 or less energy: When your opponent plays a Battle Card with an energy cost greater than their current energy, it can't attack for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT20-011":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] While a red <Koichiarator> card is under this card, this card can attack Battle Cards in Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a red ≪Universe 3≫ card and your opponent has 4 or more life: When this card attacks an opponent's Battle Card, deal 1 damage to your opponent.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-054":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_up_to_n_from_owner_deck_to_hand",
+                handler_params={"max_targets": 1, "allowed_colors": "green", "required_characters": "Son Gohan: Adolescence|Son Goten"},
+                source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck and add up to 1 green <Son Gohan: Adolescence> or <Son Goten> card to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Once per turn] When you play a <Son Gohan: Adolescence> or <Son Goten> card―both green and with an energy cost of 6 or more―from your hand, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] Play up to 1 {Son Gohan, Close Call} or {Son Goten, Close Call} from your hand or Drop in Rest Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Once per turn] If you discard 1 card from your hand: During that turn, the next time you activate [Activate: Battle] on a <Son Gohan: Adolescence> or <Son Goten> card―both green and with an energy cost of 6―from your hand, reduce that skill's skill cost by (Green).",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-513":
+        rules.append(
+            EffectRule(
+                trigger="owner_card_added_to_hand",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto](1): When this card is added from your Drop to your hand by one of your Leader's skills, play up to 1 copy of this card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1](1), if your Leader is {Powerthirst Black Masked Saiyan} and you choose 1 mono-black <Black Masked Saiyan> from your Drop: This card gains all of the skills of the card chosen with this skill for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+    if card_number == "BT21-076":
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Play][Limit 1] Play this card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] Add this card to your Z-Energy: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 7 or less, add it to its owner's Z-Energy, then choose up to 1 of your opponent's Unisons and remove 2 markers from it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-508":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader's back side is {Sharpened Power Son Goku} and your opponent has 2 or more energy: When this card is played, during this turn, you can activate your Leader's [Awaken] even if your life is at 6 or less.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](1), if your Leader is a <Son Goku> or <Frieza> with [Warrior of Universe 7] and you have 3 or more energy: When this card is discarded from your hand by one of your Leader's skills, play this card from your Drop, and this card gains [Blocker] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-134":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If you have a green <Broly> card in your energy or Battle Area, negate this card's [Energy-Exhaust] skill in all areas.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] Discard 1 card from your hand: When this card is played, choose up to 1 of your Leaders, and it gets +5000 power until the end of your opponent's turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-078":
+        rules.append(
+            EffectRule(
+                trigger="self_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto](Green), if your Leader is a green <Broly> card: When this card from your Battle Area in Rest Mode is placed in your Drop, play up to 1 Red/Green multicolor <Broly> card with an energy cost of 6 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] If you have a <Paragus> card in play and you switch this card to Rest Mode: Choose up to 1 <Broly> Battle Card and negate its skills for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-079":
+        rules.append(
+            EffectRule(
+                trigger="self_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a green <Broly> card and you have 3 or more energy: When this card is placed in its owner's Drop from a Battle Area, play up to 1 {SS Broly, Glacial Awakening} from your deck, hand, or Drop, and if you looked at your deck, shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-512":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] This card can attack your opponent's Battle Cards in Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks_battle_end",
+                handler_id="auto_switch_self_active_then_opponent_discards_n_on_self_attack_ko",
+                handler_params={"discard_count": 0, "min_opponent_energy": 2},
+                source_text="[Auto] If your opponent has 2 or more energy: When an opponent's Battle Card is KO'd by this card's attack, switch this card to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT17-134":
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader Card is red or yellow: When this card is used in a combo from your hand, reveal the top card of your deck and add it to your hand. If the revealed card is red, this card gets +5000 combo power for the battle, and if it's yellow, choose up to 1 of your opponent's cards in Rest Mode and it gets -5000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT17-147":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] If your Leader Card is green or a ≪Frieza Clan≫ card and your opponent has 3 or more energy: Your opponent discards 2 cards from their hand. Choose up to 1 of your opponent's Battle Cards with an energy cost less than or equal to the number of Unison Cards and ≪Frieza Clan≫ cards in all Leader Areas, Energy Areas, Battle Areas, Unison Areas, Drop Areas, and Warps, KO it, then remove this card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "SD23-01":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_add_up_to_n_from_owner_deck_to_hand",
+                handler_params={"max_targets": 1, "allowed_colors": "black", "required_traits": "Saiyan", "max_cost": 6},
+                source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, add up to 1 black ≪Saiyan≫ card with an energy cost of 6 or less to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_union_activated",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto][Once per turn] If you have a {Final Kamehameha} in your Battle Area: When you activate a [union] skill, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto][Once per turn] When this card attacks, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_buff_owner_battle_cards",
+                handler_params={"max_targets": 1, "allowed_colors": "black", "required_characters": "Vegito", "power_delta": 5000, "target_scope": "owner_cards"},
+                source_text="[Activate: Main][Once per turn]Choose up to 1 of your black <Vegito> cards and it gets +5000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "SD23-04":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] [limit 1] If your Battle Card with an energy cost of 6 or more is attacking, you place 1 card from your Z-Energy in your Drop, and you remove this card from the game: Choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp, then choose up to 1 card that's attacking and it gets +10000 power for the battle. Additionally, if you have 4 or more energy, at the end of the battle, play up to 1 each of <Son Goku> and <Vegeta> cards both black and with an energy cost of 1-from your Drop in Rest Mode with their skills negated for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-007":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle](Red), your red <Son Gohan: SH> card is attacking and you remove this card from the game: Choose up to 1 of your opponent's Battle Cards with 35000 power or less, ignoring [Barrier], and KO it, then choose one― ・Choose up to 1 of your red <Son Gohan: SH> Z-Leaders, it gets +20000 power for the battle, then remove it from the game at the end of the turn. ・Choose up to 1 of your red <Son Gohan: SH> cards with an original power of 30000 or more, and it gets +15000 power and [Double Strike] for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "SD23-06":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a black card with both <Son Goku> and <Vegeta> or a black <Vegito> card: When this card is played, play up to 1 {Son Goku, Help Has Arrived} from your deck or Drop with its skills negated for the game, and shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_self_gain_power_for_turn_on_attack",
+                handler_params={"power_delta": 6000},
+                source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, this card gets +6000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "SD23-05":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a black card with both <Son Goku> and <Vegeta> or a black <Vegito> card: When this card is played, play up to 1 {Vegeta, Help Has Arrived} from your deck or Drop with its skills negated for the game, and shuffle your deck if you looked through it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="auto_self_gain_power_for_turn_on_attack",
+                handler_params={"power_delta": 6000},
+                source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, this card gets +6000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-518":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is placed in a Battle Area, choose all of your opponent's Battle Cards, and those cards get -25000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Limit 1] If you have 4 or more energy, your red <Cell Max: SH> card with an energy cost of 8 is attacking, and you remove this card from the game: The attacking card gets +15000 power and [Double Strike] for the battle.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-006":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a red <Son Gohan: SH> card and you have 2 or more energy: When this card is placed in a Battle Area, play up to 1 {SS Son Gohan, All-Out Explosion} from your deck, play up to 1 red <Pan: SH> card with an energy cost of 1 from your deck to your opponent's Battle Area, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] Place 1 card from your hand at the bottom of your deck and remove this card from the game: When your {Piccolo, Bestowed Power} is played, add up to 1 {Piccolo, Power Beyond Awakening} from your deck to your hand, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "SD23-02":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If you have a black <Mai: Future> Z-Battle Card in play, this card gets +5000 power.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Black], if your opponent has 2 or more energy: Play this card from under a {Mai, Together With Trunks}, then play up to 1 each of <Son Goku> and <Vegeta> cards -- both black and with an energy cost of 1 -- from your Drop in Rest Mode with their skills negated for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "SD23-07":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="activate_switch_self_active_and_gain_power_for_turn",
+                handler_params={"power_delta": 0},
+                source_text="[Activate: Main] [Once per turn][Black], if you have a {Final Kamehameha} in your Battle Area: Switch this card to Active Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] [Once per turn] If your black <Vegito> card is in a battle: Use up to 1 card from under this card in a combo with its skills negated for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-057":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Green): When this card is played, choose up to 1 of your {SS Son Gohan & SS Son Goten, Emotions Delivered} cards and switch it to Active Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto](Green), if your {SS Son Gohan & SS Son Goten, Emotions Delivered} is in a battle and you switch this card to Rest Mode: When an [Activate: Battle] skill activates on your {Family Kamehameha, Emotions Delivered}, your card that's in a battle gets +10000 power and [Triple Strike] for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-026":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a red ≪Red Ribbon Army≫ card: Play this card in Rest Mode from your hand, choose up to 1 Battle Card, and it gets -5000 power for the turn. Additionally, if the chosen card is a <Magenta: SH> card, it gets -10000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-081":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, add up to 1 <Son Goku: Childhood> or ≪Earthling≫ card―both yellow and with an energy cost of 4 or less―to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Once per turn] When you play a yellow originally skill-less Battle Card, choose up to 1 of your opponent's Battle Cards or Unisons and negate its skills for the turn. Additionally, if it's your turn, draw 1 card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-024":
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Red), if your Leader is a red <Dr. Hedo: SH> card and you have a red Z-Extra in your Battle Area: When this card is used in a combo from your hand, play up to 1 <Gamma 1: SH> or <Gamma 2: SH> card―both red, with a power of 15000 or less, and with an energy cost less than or equal to your energy―from your deck, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-028":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self_then_reduce_battle_power",
+                handler_params={"max_targets": 1, "power_delta": -10000},
+                source_text="[Counter: Attack][Limit 1] Play this card, then choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Permanent] If your Leader is a red <Cell Max> card and you have a red Z-Extra in your Battle Area, you may activate this card's [Counter] skill from your hand without paying its energy cost.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-084":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a yellow <Korin> and your opponent has 3 or more energy: When this card is played, play up to 1 yellow non-≪Great Ape≫ <Son Goku: Childhood> card with an energy cost of 5 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-062":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When this card is played, reduce the energy cost of {Son Goku, Krillin, & Yamcha, Turtle School Inheritors} in your Z-Deck by (Green)(Green) for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-023":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When your red <Gamma 1: SH> card is switched to Active Mode by a <Dr. Hedo: SH> card skill, switch this card to Active Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-061":
+        rules.append(
+            EffectRule(
+                trigger="owner_battle_ko_opponent_battle_battle_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Green), choose 1 of your <Krillin> or <Yamcha> cards―both green, ≪Turtle School≫, and with an energy cost of 1― and place it in your Drop: When one of your cards attacks and KOs an opponent's Battle Card, draw 1 card and play this card from your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT20-106":
+        rules.append(
+            EffectRule(
+                trigger="self_comboed_battle_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Yellow), if your Leader is a <Majin Buu> or <Evil Wizard Babidi> card—both yellow—it's your opponent's turn, and you choose 1 of your yellow ≪Majin≫ cards with an energy cost of 6 in Rest Mode: At the end of a battle where this card was used in a combo, play this card from your Drop in Active Mode on top of the chosen card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If you have 5 or more energy and there are 5 ≪Majin≫ cards under this card: When this card attacks, it gets +10000 power for the turn, and at the end of the battle, place this card in its owner's Drop, and play up to 1 yellow ≪Majin≫ card with 30000 power from your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-431":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is yellow and has <Son Goku> in its character name, and you have 4 or more energy : When this card is played, switch all other cards in your Battle Area to Rest Mode, then choose all of your opponent's Battle Cards, Unisons, and [field] Extras-all in Rest Mode and place them in their owners' Drops.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT20-147":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main/Battle] If your Leader is a ≪Saiyan≫ or ≪Earthling≫ card—both mono-yellow—and your opponent has 3 or more energy: Choose up to 1 of your opponent's cards, ignoring [Barrier], switch it to Rest Mode, play up to 1 yellow <Son Goku> card from your deck, hand, or Drop, shuffle your deck if you looked through it, and for the turn, the played card gets +10000 power, [Triple Strike], and [Dual Attack], and can't be removed from your Battle Area by skills.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main/Battle] If your Leader is a ≪Saiyan≫ or ≪Earthling≫ card—both mono-yellow—and your opponent has 3 or more energy: Choose up to 1 of your opponent's cards, ignoring [Barrier], switch it to Rest Mode, play up to 1 yellow <Son Goku> card from your deck, hand, or Drop, shuffle your deck if you looked through it, and for the turn, the played card gets +10000 power, [Triple Strike], and [Dual Attack], and can't be removed from your Battle Area by skills.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT15-152":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] For each card color among cards in Battle Areas and Energy Areas, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and send it to its owner's Warp; for each card sent to a Warp using this skill, up to 1 of your Leader Cards gets +5000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] If your opponent has 4 or more energy: Play up to 4 black multicolor Battle Cards with different character names and energy costs of 2 from your deck, then shuffle your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT15-155":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] If you have 3 or more energy: Play this card. Your opponent can't attack with Battle Cards for the turn. You can't activate the [Counter] skill on copies of this card for the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main]①, remove this card from the game: Choose up to 1 of your opponent's Battle Cards and gain control of it.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-148":
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto](Green), if your Leader is a green ≪Saiyan≫, ≪Earthling≫, or ≪Namekian≫: When this card is used in a combo, choose up to 1 of your Leader cards and switch it to Active Mode, that card gains [Triple Strike] for the battle, place this card from your Drop in your Z-Deck face up at the end of that battle, then remove this card in your Z-Deck from the game at the end of your opponent's turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT18-147":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If you have 4 or more mono-red energy: When this card is played, your opponent reveals their hand, you choose up to 1 Battle Card with 35000 power or less from it and your opponent discards it, then choose up to 1 of your mono-red Leaders and until the start of your next turn, it gets +10000 power and this card gains [Quadruple Strike].",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT21-147":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] If your Leader is red: Choose one― ・Play up to 1 of your mono-red Battle Cards from your Drop. ・Choose up to 1 of your mono-red Battle Cards, and that card gets +10000 power and [Triple Attack] for the turn. ・Choose all of your opponent's Leaders, Battle Cards, and Unisons, ignoring [Barrier], and those cards get -15000 power for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT14-154":
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Play] Play this card, then choose up to 1 of your opponent's Battle Cards in Rest Mode, ignoring [Barrier], and place it under this card. The played Battle Card has its skills negated for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-131":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a black <Fu> card: Look at up to 5 cards from the top of your deck, place up to 1 black <Cumber> in your Z-Deck face up, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle](Black), send this card from your Drop to your Warp: Choose up to 1 of your black <Fu> cards, and it gets +15000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-118":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1]: Choose up to 1 of your black <Fu> Battle Cards with [Z-Stack], then place up to 1 black <Cumber> card from your Z-Deck under the chosen card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Limit 1] Discard 1 card from your hand and remove this card from the game: Play up to 1 black <Cumber> card with an energy cost of 6 from your Z-Deck face up in Rest Mode with its skills negated for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-086":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is placed in a Battle Area, choose all of your Battle Cards with <Son Goku> in their character names, and those cards get +5000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] Remove this card from the game: Choose up to 1 of your opponent's skill-less Battle Cards and KO it at the end of the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] Remove this card from the game: Choose up to 1 of your cards with <Son Goku> in its character name, and it gets +10000 power and [Critical] for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-101":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] Declare 1 number: When this card is played from your deck or hand, reveal the top card of your opponent's deck, then flip the revealed card over and place it at the top of their deck. Additionally, if the revealed card's energy cost is the same as the declared number, add up to 1 yellow <Suke San> card from your deck to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_comboed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a yellow <Fortuneteller Baba> card and your opponent's life is at 7 or more: When this card is used in a combo from your Battle Area, your opponent adds 1 card from their life to their hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-053":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main/Battle](Blue), if your Leader is {Janemba, Silent Demon} and you have a blue Z-Extra in your Battle Area: Play up to 1 blue <Janemba> card with an original energy cost of 6 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main/Battle](Blue), if your Leader is {Janemba, Silent Demon} and you have a blue Z-Extra in your Battle Area: Play up to 1 blue <Janemba> card with an original energy cost of 6 from your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-111":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] Negate the attack.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When one of this card's skills activates, add up to 1 skill-less Battle Card from your deck to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle] Choose up to 1 of your non-≪Great Ape≫ <Son Goku: Childhood> cards, and it gets +15000 power for the battle.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-102":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] Declare 1 number: When this card is played from your hand, reveal the top card of your opponent's deck, then flip the revealed card over and place it at the top of their deck. Additionally, if the revealed card's energy cost is the same as the declared number, add up to 1 yellow <Bandages> card from your deck to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-117":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a black <Fu> card: Look at up to 5 cards from the top of your deck, place up to 1 black <Fu> or <Cumber> card in your Z-Deck face up, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-083":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played, choose up to 1 of your yellow non-≪Great Ape≫ <Son Goku: Childhood> Battle Cards, and it gains [Dual Attack] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="turn_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] At the end of your turn, remove this card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-104":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] Declare 1 number: When this card is played from your hand, reveal the top card of your opponent's deck, then flip the revealed card over and place it at the top of their deck. Additionally, if the revealed card's energy cost is the same as the declared number, reduce the specified cost of a {Devilmite Beam} in your Z-Deck by (Yellow) for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-035":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Limit 1](Blue)(Yellow), if you have 5 or more energy, your blue <Gogeta> Z-Leader is attacking, and you remove this card from the game: Your attacking cards get +30000 power and [Triple Strike] for the battle.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-085":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If you place 2 cards from your hand at the bottom of your deck and KO 1 of your yellow <Bora> cards: When this card is played, add up to a total of 3 [Dragon Ball] cards from your deck or Drop to your hand, and if you looked at your deck, shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-031":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] Add up to 1 card from your life to your hand, look at up to 5 cards from the top of your deck, add up to 1 blue or yellow ≪Saiyan≫ card to your hand, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card attacks, draw 1 card, then add up to 1 card from your life to your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn](Blue): Draw 1 card, then choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and add it to its owner's hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-087":
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] Remove this card from the game: When one of your Battle Cards is KO'd or removed from your Battle Area by an opponent's skill, choose up to 1 of your opponent's Battle Cards without <Son Goku> in its character name and KO it.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-130":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="auto_send_up_to_n_opponent_hand_to_warp_on_play",
+                handler_params={"max_targets": 1},
+                source_text="[Auto] When this card is played, your opponent sends 1 card from their hand to their Warp.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a black <Fu> card: Play this card from under a <Fu> Z-Battle Card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT1-111":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your opponent has 4 or more energy: When this card is played, switch all of your mono-blue energy to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-139":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] If your life is at 3 or less and you remove 2 cards in your Z-Deck from the game: Add the top card of your deck to your life.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle](1), if your Leader is black and your life is at 4 or less: Play this card in Rest Mode from your hand or from your Z-Deck face up.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-136":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played, this card gains [Barrier] until the end of your opponent's turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_aegis_activated",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If you send this card to your Warp: When this card's [Aegis] skill activates, choose up to 1 each of blue or yellow <Son Goku> and <Vegeta> cards with 5000 power from your Warp, then add 1 to your hand and place 1 at the bottom of your deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "EX23-29":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a yellow <Gotenks: Adolescence> card and you discard 1 card from your hand: When this card is played, look at up to 7 cards from the top of your deck, play up to 1 <Son Goten: GT> or <Trunks: GT> card―both yellow and with an energy cost of 3 or less―, shuffle your deck, then at the end of the turn, add up to 1 Battle Card played by this skill to your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a yellow <Gotenks: Adolescence> card, you have 3 or more energy, and you remove this card from the game: During that turn, the next time you activate the [Union] skill on a yellow <Gotenks: Adolescence> card with an energy cost of 7 or less from your hand, reduce the skill cost by (Yellow)(Yellow).",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-045":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When this card is played, it gets +5000 power and [Critical] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-044":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When this card is played, play up to 1 blue {Janemba} with an energy cost of 2 from your deck, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX23-08":
+        rules.append(
+            EffectRule(
+                trigger="owner_other_battle_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] When your red <Jiren> card with [Evolve] is played, draw 1 card, then choose up to 1 of your {Toppo, Force of Obliteration} and add 2 markers to it.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Once per turn] Use up to 1 Battle Card from under your red <Jiren> card in a combo with its skills negated for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-522":
+        rules.append(
+            EffectRule(
+                trigger="self_added_to_z_energy",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Blue)(Blue), if your Leader is a blue <Paikuhan> card and you have 3 or more energy: When this card in your Z-Energy is placed in your Drop, play up to 1 blue <Paikuhan> card with an energy cost of 8 from your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1](Blue), if your Leader is a blue <Paikuhan> card and you add this card in your energy to your Z-Energy: Add the top card of your deck to your energy.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX23-35":
+        rules.append(
+            EffectRule(
+                trigger="self_sent_to_warp",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Burst 1](Yellow): When this card in a Drop is sent to a Warp by a ≪Shadow Dragon≫ Battle Card's skill, play up to 1 yellow <Oceanus Shenron> card with an energy cost of 4 from your Drop.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "EX23-26":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="counter_negate_attack_play_self",
+                handler_params={},
+                source_text="[Counter: Attack][Limit 1] Negate the attack and play this card.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played from your hand, choose up to 1 of your mono-green <Super 17> Battle Cards and it gains the following skill for the turn: [Auto][Once per turn] When this card activates [Blocker], switch this card to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-039":
+        rules.append(
+            EffectRule(
+                trigger="self_sent_to_warp",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Blue): When this card in your Drop is sent to your Warp by your {Soul Punisher, the Cleansing Light} or a blue <Gogeta> card skill, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck, then play this card from your Warp.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX23-31":
+        rules.append(
+            EffectRule(
+                trigger="self_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Yellow), if your Leader is yellow and you have 3 or more energy: When this card is revealed from the top of your deck and placed in your Drop, draw 1 card, and you may play this card from your Drop.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1](Yellow)(Yellow), if you have 4 or more energy and you place this card from your hand on top of your deck: When a {Son Goku, Return of the Dragon Fist} is revealed from the top of your deck and placed in your Drop, play that card from your Drop, and during that card's first attack during that turn, your opponent can't activate Extra skills in any area.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX23-28":
+        rules.append(
+            EffectRule(
+                trigger="turn_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] At the end of your turn, draw 1 card, then switch all yellow ≪Shadow Dragon≫ cards in your Battle Area to Active Mode.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main/Battle] Remove this card from the game: You may discard 6 yellow cards from your hand. If you do, choose all of your opponent's Rest Mode Battle Cards, ignoring [Barrier], then negate their skills and KO them.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main/Battle] Remove this card from the game: You may discard 6 yellow cards from your hand. If you do, choose all of your opponent's Rest Mode Battle Cards, ignoring [Barrier], then negate their skills and KO them.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "EX23-49":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] If there is a total of 4 non-black colors present among black multicolor cards in your energy, you send 1 {SS4: The Vermilion Saiyans} from your hand to your Warp, and you place this card in your Drop: Activate an [Activate: Main] skill on the card sent to your Warp by this skill, then add that card to your hand at the end of the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your leader is a <Bardock: Xeno> card and you switch this card to Rest Mode: Choose up to 1 of your Battle Cards with {SS4} in its card name and it gains [Dual Attack] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT22-137":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is played, this card can't be removed from your Battle Area by your opponent's skills until the end of your opponent's turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_energy_switched_to_active",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Once per turn] When your energy is switched to Active Mode by a skill, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "EX23-43":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a black ≪Demon Realm Race≫ card and you send 1 card from your hand to your Warp: When this card is played by an [Over Realm] skill, draw 1 card and add up to 1 black Battle Card with an energy cost between 3 and 7 from your Warp to your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_sent_to_warp",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a <Salsa> card: When this card in your deck is sent to your Warp by one of your skills, draw 1 card, send 1 card from your hand to your Warp, then send the top card of your deck to your Warp.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT21-149":
+        rules.append(
+            EffectRule(
+                trigger="counter_play",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Play] Play this card, for every card in your opponent's Z-Deck, place up to 1 Battle Card from your Drop or Warp under this card, and this card can't be removed from your Battle Area by your opponent's skills for the turn. Additionally, if the Battle Card to be played has an energy cost of 7 or less, send it to your Warp instead.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_card_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] Place 1 card from under this card into your Drop: When this card or your opponent attacks, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT14-152":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main] If your Leader Card is red and you remove this card from the game: Deal 1 damage to your opponent.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT23-076":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>, your opponent has 4 or more energy, you switch 3 of your Earthling Tokens to Rest Mode, and you remove this card from the game: During that turn, the next time your green <Trunks: Future> card with an energy cost of 8 attacks, your opponent can't activate [Counter].",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT23-071":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Once per turn] Discard 1 ≪Saiyan≫ or ≪Earthling≫ card from your hand: Play up to 1 green <Mai: Future> card with an energy cost of 1 from your deck, then shuffle your deck.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card attacks, play up to 1 green <Mai: Future> card with an energy cost of 1 from your deck or Drop, then shuffle your deck if you looked through it. Additionally, if you and your opponent have a total of 10 or more Battle Cards, this card gets +10000 power for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-552":
+        rules.append(
+            EffectRule(
+                trigger="owner_card_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a <Nappa> card: When this card or one of your Saibaiman Tokens attacks, choose up to 1 of your opponent's Battle Cards, return it to its owner's hand, and remove the attacking card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="auto_draw_n",
+                handler_params={"amount": 1},
+                source_text="[Auto] When this card is KO'd by a <Vegeta> card's skill, draw 1 card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-550":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] If your Leader is a <Son Goku: Xeno>-only card and you discard 1 card from your hand: When this card is placed in a Battle Area, add up to 2 cards from your life to your hand, then add up to 1 non-[Super Combo] <Son Goku: Xeno> card from your Drop or Warp to your hand.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="owner_card_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Once per turn] When a card from your Warp is placed in your Drop by your <Son Goku: Xeno>-only Leader's skill, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Burst 2] Remove this card from the game: Choose up to 1 of your <Son Goku: Xeno> cards and it gets +5000 power and [Critical] for the turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-546":
+        rules.append(
+            EffectRule(
+                trigger="self_left_battle_area",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When your red <Son Goku> card with an energy cost of 8 is removed from a Battle Area by an opponent's skill, play up to 1 {Golden Frieza & Android 17, Determined Tag Team} from your Drop with 1 marker on it, then remove this card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="turn_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] At the end of your turn, choose up to 1 of your mono-red ≪Universe 7≫ cards and switch it to Active Mode, then that card gains [Blocker] until the end of your opponent's turn.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1] If your Leader is {Son Goku, Supreme Warrior} and you have 4 or more energy: Reduce the skill cost of [Activate: Main] on {Son Goku, Ultra Mastery} in your hand by (Red) for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT23-039":
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If you have a {Piercing Special Beam Cannon} in your Battle Area and you switch this card to Rest Mode: When your blue <Piccolo> card's attack is negated by an opponent's skill, choose up to 1 of your blue <Piccolo> cards with an energy cost of 6 or less and switch it to Active Mode, then your opponent can't activate [Blocker] for the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_koed",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is KO'd by one of your skills, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT23-073":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] If your Leader is a green <Vegito> card or a green card with both <Trunks: Future> and <Mai: Future>: When this card is played, play up to 1 {Son Goku, Fusion in the Future} from your deck or Drop in Rest Mode, then shuffle your deck if you looked through it.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1] Remove this card from the game: When your <Trunks: Future> card with an energy cost of 8 attacks, your opponent discards 1 card from their hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-549":
+        rules.append(
+            EffectRule(
+                trigger="owner_battle_attacks",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto][Limit 1][Spirit Boost 1] When your yellow <Super 17> Battle Card attacks, the attacking card gets +6000 power, then switch that card to Active Mode at the end of the turn.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1](Yellow), remove this card from the game: Play up to 1 yellow <Android 17> card with an original energy cost of 1 from your hand or Drop, then play up to 1 {Android 20 & Dr. Myuu, Hellish Accomplices} from your hand with 1 marker on it.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "BT23-096":
+        rules.append(
+            EffectRule(
+                trigger="counter_attack",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Counter: Attack] Choose up to 1 of your Rest Mode <Vegito> cards and switch it to Active Mode, that card gets +6000 power for the battle, then switch the target of attack to the chosen card.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT23-092":
+        rules.append(
+            EffectRule(
+                trigger="self_placed_into_drop",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] When this card is placed in a Drop from Z-Energy or a Battle Area, remove this card in the Drop from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Limit 1](Green), if there are 3 or more colors among cards in your Combo Area: Play this card from your Combo Area.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_battle",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Battle][Limit 1] If your Leader is a green card with both <Zamasu> and <Goku Black> and you have a <Zamasu> card in your Combo Area: Use this card in a combo from your Drop.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-547":
+        rules.append(
+            EffectRule(
+                trigger="turn_end",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Auto] At the end of your turn, you may place all of your ≪Red Ribbon Army≫ cards in your Drop. If you don't place any cards, remove this card from the game.",
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text="[Activate: Main][Limit 1](Blue), place 1 card from your hand on top of your deck: Play up to 1 blue <Commander Red> card with an energy cost of 2 from your hand.",
+                once_per_turn=True,
+                limit_per_turn=1,
+            )
+        )
+
+    if card_number == "P-543":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT23-077":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "P-544":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT23-139":
+        rules.append(
+            EffectRule(
+                trigger="self_activate_main",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT22-140":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT17-104":
+        rules.append(
+            EffectRule(
+                trigger="self_played",
+                handler_id="noop_auto",
+                handler_params={},
+                source_text=text,
+                once_per_turn=once,
+                limit_per_turn=limit,
+            )
+        )
+
+    if card_number == "BT23-016":
+        rules.append(
+            EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1] If your red <Son Gohan: Future> or <Trunks: Future> card is in a battle: Use this card from under a {Destroyed West City} in your Battle Area in a combo.", once_per_turn=True, limit_per_turn=1)
+        )
+        rules.append(
+            EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1](1), if your Leader is a red <Son Gohan: Future> or <Gohanks: Xeno> card and this card is in a Combo Area: Choose up to 1 of your red <Son Gohan: Future> or <Trunks: Future> cards and it gains [Double Strike] for the battle.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-018":
+        rules.append(
+            EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1] If your red <Son Gohan: Future> or <Trunks: Future> card is in a battle: Use this card from under a {Destroyed West City} in your Battle Area in a combo, then choose up to 1 of your opponent's Battle Cards or Unisons and it gets -5000 power for the turn.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-034":
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader is a red card with both <Son Gohan: Future> and <Trunks: Future>: Look at up to 5 cards from the top of your deck, add up to 1 red <Son Gohan: Future> or <Trunks: Future> card to your hand, shuffle your deck, then place up to 1 <Trunks: Future> from your hand under a {Destroyed West City} in your Battle Area.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-036":
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Look at up to 5 cards from the top of your deck, add up to 1 red ≪Android≫ card to your hand, shuffle your deck, then place up to 1 red <Android 17> or <Android 18> card from your hand under a {Destroyed West City} in your Battle Area.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-007":
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1] If you have 4 or more energy, you place 2 of your Z-Energy in your Drop, and you place this card from under a {Destroyed West City} in your Battle Area on top of that card: Choose up to 1 of your {Android 17 & Android 18, Domination Achieved} and it gets +5000 power for the turn.", once_per_turn=True, limit_per_turn=1)
+        )
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1] Place a {Destroyed West City} from under this card on top of this card, then choose 1 of your red <Android 17> cards and 1 of your red <Android 18> cards: Play up to 1 {Android 17 & Android 18, Domination Achieved} from your hand or Drop, then place all of the chosen cards under that card.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-005":
+        rules.append(
+            EffectRule(trigger="turn_start", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the start of your turn, play up to 1 red <Trunks: Future> card with an energy cost of 8 from your hand, remove only this card on top of a card in the Battle Area from the game, and you can't play any cards other than red <Trunks: Future> cards for the turn.", once_per_turn=once, limit_per_turn=limit)
+        )
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place 1 of your red <Trunks: Future> cards with an energy cost of 8 under this card: Place this card from under a {Destroyed West City} in your Battle Area on top of that card.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-042":
+        rules.append(
+            EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a blue <Raditz> or <Nappa> card and it's your turn: When your mono-blue <Raditz>, <Vegeta>, or <Nappa> card is played, your opponent reveals the cards in their hand. Additionally, if your opponent has a Battle Card with 15000 power or less in their hand, play up to 1 <Raditz>, <Vegeta>, or <Nappa> card—all blue, with 16000 power, and a different character name than the played card—from your hand.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-041":
+        rules.append(
+            EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a mono-blue <Son Goku> card and you remove this card from the game: When your blue <Piccolo> card attacks, the attacking card gains [Critical] for the battle, then reduce the energy cost of the next {Piercing Special Beam Cannon} you place in your Battle Area this turn by (Blue). Additionally, you may choose 1 of your blue <Son Goku> Battle Cards and KO it. If you do, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck, then the attacking card gets +15000 power for the battle.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-105":
+        rules.append(
+            EffectRule(trigger="owner_battle_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When one of your yellow <Kale> cards attacks, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode, and the attacking card gets +10000 power for the turn.", once_per_turn=True, limit_per_turn=1)
+        )
+        rules.append(
+            EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, if you have a yellow <Kale> card in play, add 1 card from your life to your hand.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-069":
+        rules.append(
+            EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack][Limit 1] If you have a blue <Son Goku> card in play: Negate the attack, then choose up to 1 of your opponent's Battle Cards and it can't attack for the turn.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-033":
+        rules.append(
+            EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack][Limit 1] If your Leader is red: Negate the attack. Additionally, if your life is at 4 or less and you have a Z-Extra in your Battle Area, when your opponent attacks with a non-Leader card during that turn, they must place any number of their Z-Energy cards in their Drop so that the total value of those cards' power becomes greater than or equal to X, where X is the power of the attacking card.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-004":
+        rules.append(
+            EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, look at up to 7 cards from the top of your deck, then place up to 1 red <Android 17> or <Android 18> card among them under a {Destroyed West City} in your Battle Area, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit)
+        )
+        rules.append(
+            EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If you have 3 or more energy: When this card is KO'd by one of your ≪Android≫ card's skills, play up to 1 <Android 17> or <Android 18> card—both with an energy cost less than or equal to your current energy and no keyword skills—from under a {Destroyed West City} in your Battle Area.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-102":
+        rules.append(
+            EffectRule(trigger="owner_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If this card is in a battle: When one of your yellow <Caulifla> cards is used in a combo, this card gains [Double Strike] for the battle.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-067":
+        rules.append(
+            EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card attacks, choose up to 1 Battle Card in your opponent's Battle Area and up to 1 Battle Card in your opponent's Drop, add them to your opponent's Z-Energy, then your opponent adds 1 card from their hand to their Z-Energy.", once_per_turn=True, limit_per_turn=1)
+        )
+
+    if card_number == "BT23-055":
+        rules.append(
+            EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card from your hand.", once_per_turn=once, limit_per_turn=limit)
+        )
+        rules.append(
+            EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If you have 3 or more energy and you declare 1 number: When this card is played, until the end of your opponent's turn, your opponent can't play a Battle Card with an original power the same as your declared number unless they place 1 card from their hand at the bottom of their deck.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-070":
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 of your opponent's Battle Cards with <Son Gohan> in its character name and place this card under it from your Drop after this card is activated.", once_per_turn=once, limit_per_turn=limit)
+        )
+        rules.append(
+            EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](2): Place this card in your Drop from under a Battle Card with <Son Gohan> in its character name.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-063":
+        rules.append(
+            EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] When this card is played, it gains [Dual Attack] for the turn.", once_per_turn=True, limit_per_turn=1)
+        )
+        rules.append(
+            EffectRule(trigger="self_koed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is KO'd by a <Vegeta> card skill, draw 1 card.", once_per_turn=once, limit_per_turn=limit)
+        )
+
+    if card_number == "BT23-132":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-056":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 green or yellow <Frieza> card to your hand, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn][Spirit Boost 1] Use up to 1 Green/Yellow multicolor card with a combo cost of 1 from your hand in a combo with its skills negated for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-007":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-005":
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, switch one of your red <Beerus> Leaders to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Battle] Use up to 1 of your Red/Yellow multicolor ≪God≫ cards from your hand in a combo.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[-6][Auto] When your opponent attacks, negate the attack, and your opponent can only attack 2 more times for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-567":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If it's your opponent's turn: When this card is used in a combo, choose up to 1 of your <Kefla> cards and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader is a mono-yellow ≪Universe 6≫ card and you discard this card from your hand: Use up to 1 of your mono-yellow <Caulifla> cards with 5000 combo power in a combo from your Drop with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT23-104":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a yellow ≪Universe 7≫ card: When this card is placed in a Battle Area, your Leader gets +5000 power until the end of your opponent's turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader is {Son Goku, Autonomous Awakening}, you add 2 of your life to your Z-Energy, and you remove this card from the game: When your yellow ≪Universe 7≫ <Son Goku> card with an energy cost of 6 or more is played, it gets +10000 power for the turn, then choose up to 1 of your opponent's Battle Cards and negate its skills for the turn, then add the top 2 cards of your deck to your life at the end of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-556":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT23-122":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack][Limit 1] If your Leader is a yellow <Kefla> card: Play this card in Rest Mode, then choose up to 1 of your cards and it gets +5000 power for the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-557":
+        rules.append(EffectRule(trigger="counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Counter: Counter][Limit 1] If your Leader is a blue card with both <Son Goku> and <Piccolo>: Draw 1 card, play this card, and this card gets +5000 power until the end of your opponent's turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="activate_switch_self_active_and_gain_power_for_turn", handler_params={"power_delta": 0}, source_text="[Activate: Battle][Limit 1](Blue): Switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-013":
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1](Red), if your Leader is a red <Vegeta> or <Bulma> card and you have 3 or more energy: When one of your red ≪Earthling≫ cards is removed from the Battle Area by a skill, draw 1 card, play this card from your hand, then place up to 1 red ≪Saiyan≫ card from your Z-Energy under {Concentrated Saiyan Power} in your Battle Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] Use up to 1 mono-red card with 5000 combo power from your Drop in a combo with its skills negated for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-004":
+        rules.append(EffectRule(trigger="owner_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a player attacks, you may use 1 Battle Card from under this card in a combo with its skills negated for the turn. If you do, negate this skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-1][Activate: Main] Switch this card to Active Mode, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and it gets -25000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] Choose all of your opponent's Battle Cards and Unisons and they get -25000 power for the turn. Choose up to 1 of your cards and it gets +5000 power until the end of your opponent's turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-568":
+        rules.append(EffectRule(trigger="owner_overlord_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your yellow <Garlic Jr.> activates an [Overlord] skill, choose up to 1 of your opponent's Rest Mode Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] If you have 3 or more energy and you place 1 card from your hand at the bottom of your deck: Choose up to 1 of your {Garlic Jr., Overlord of the Dead Zone} and it gets +5000 power and [Double Strike] until the end of your opponent's turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-006":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] When this card attacks, if you have 3 or more red cards in your energy, use up to 1 Red/Yellow multicolor card from your Drop in a combo with its skills negated for the turn. If you have 3 or more yellow cards in your energy, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-002":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Add 1 red or yellow ≪God≫ card from your hand to your Z-Energy: Look at up to 5 cards from the top of your deck, add up to 1 red ≪God≫ card to your hand, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When you use one of your Red/Yellow multicolor ≪God≫ cards in a combo, add up to 1 card from your life to your hand, and during this turn, the next time you activate [Arrival Red/Yellow] on a <Beerus> card with an energy cost of 5 in your hand, reduce the skill cost by (Red).", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT23-099":
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When your yellow ≪Universe 7≫ card is used in a combo, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Place 1 of your Z-Energy in your Drop and switch 1 yellow <Son Goku> card to Rest Mode: Draw 1 card, then choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT17-102":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played from your hand, play up to 1 <Pirina> card with an energy cost of 1 from your deck in Rest Mode, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+
+    if card_number == "BT14-067":
+        rules.append(EffectRule(trigger="owner_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1](Green), if you have a green skill-less Battle Card in play: When your opponent attacks, play this card from your hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is green or a ≪Heroine≫ card: When this card is played from your hand, your opponent may choose 2 cards in their hand and discard them. If they don't, choose up to 1 of your opponent's Battle Cards with an energy cost of 7 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+
+    if card_number == "BT24-028":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[0][Activate: Main] If your Leader is a ≪Phantom Demon≫ card: Play up to 1 blue <Hirudegarn> card with an energy cost of 3 from your Drop in Rest Mode with its skills negated for the turn, then place the played card in your Drop at the end of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-3][Activate: Main] If your Leader is a ≪Phantom Demon≫ card: Play up to 1 blue or green <Hirudegarn> card with an energy cost of 6 or more from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-078":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-124":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-053":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Play up to 1 blue ≪Hero≫ card with an energy cost of 1 from your Drop.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1](Blue), if your Leader is a ≪Hero≫ card and you send this card from your Drop to your Warp: Use up to 1 blue ≪Hero≫ card with an energy cost of 1 from your Drop in a combo.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-030":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-123":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-060":
+        rules.append(EffectRule(trigger="owner_battle_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-027":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, you can use Rest Mode ≪Hero≫ cards in combos until the end of your opponent's turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[0][Activate: Main] Choose 1 of your <Hirudegarn> cards and KO it, then choose 1 of your blue ≪Hero≫ cards with an energy cost of 1 and return it to its owner's hand: Switch up to 1 of your energy to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-032":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] When this card is played, this card gains [Double Strike] and [Barrier] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-035":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack][Limit 1] If your Leader is a ≪Hero≫ card: Negate the attack and play this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If it's your opponent's turn, you choose 1 of your blue ≪Hero≫ cards with an energy cost of 1, and place it at the bottom of its owner's deck: When this card is played, switch up to 1 of your energy to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-114":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-084":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play a yellow ≪Great Ape≫ <Son Gohan: Youth> card with an energy cost of 4, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-051":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 of your blue <Hirudegarn> Battle Cards and it gets +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1](Blue), if your Leader is a ≪Phantom Demon≫ card and your blue <Hirudegarn> Battle Card is in a battle: Use this card in a combo from your Drop, and play this card from your Drop at the end of the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-113":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Place 1 card from under this card into its owner's Drop: Draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[+1][Auto] When this card or one of your black cards with a [Union] skill attacks or activates the [Blocker] skill, place up to 2 black cards from your Warp under this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-3][Activate: Main] Play up to 1 black Battle Card with an energy cost of 6 and a [Union] skill from your Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-067":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader is green and your life is at 4 or less: When this card is used in a combo, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-577":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, draw 1 card, and this card gains [Critical] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1](Blue), if your Leader is a ≪Hero≫ or ≪Phantom Demon≫ card and you place 1 of your <Hirudegarn> cards without [Unique] at the bottom of its owner's deck: Play this card from your hand.", once_per_turn=True, limit_per_turn=1))
+
+    if card_number == "BT24-111":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-052":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-110":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-079":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, add up to 1 ≪Saiyan≫ or ≪Earthling≫ card—both yellow and with an energy cost of 4 or less—to your hand, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Discard 1 yellow card from your hand: When this card attacks, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn](Yellow): Play up to 1 {Son Goku, Father's Care} from your Drop in Rest Mode with a marker on it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Spirit Boost 1] If you have {Power Ball, Mimicking the Moon} in your Battle Area: Reduce the [Z-Awaken] skill cost on {Son Gohan, Power of a Rampaging Great Ape} in your Z-Deck by (Yellow) for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-041":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1] If your Leader is a ≪Phantom Demon≫ card and you choose 1 of your <Hirudegarn> cards without [Unique] and KO it: Play this card from your Drop.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-103":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-104":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-083":
+        rules.append(EffectRule(trigger="owner_other_card_switched_to_rest", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card is switched to Rest Mode by one of your skills, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+2][Activate: Main][Limit 1] If your Leader is a ≪Turles Crusher Corps≫ card: Look at up to 5 cards from the top of your deck, place any number at the top of your deck in any order, and place the rest at the bottom of your deck in any order.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[0][Activate: Main] This card gets +10000 power until the end of your opponent's turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-109":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-087":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack][Limit 1] Play this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, your opponent can't attack with cards for the turn unless they place 1 of their Rest Mode cards in its owner's Drop.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_other_card_switched_to_rest", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your skills, draw 1 card and switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-135":
+        rules.append(EffectRule(trigger="owner_opponent_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent plays a Battle Card, you may choose it and switch it to Rest Mode. If you do, negate this skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-133":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, your opponent can't attack until the end of their turn unless they switch 1 of their Active Mode cards to Rest Mode each time.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-132":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-099":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT24-061":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1] If your Leader is a green <Son Goku> card and you place 1 of your Z-Energy in its owner's Drop: Choose up to 1 of your {SS Son Goku, Ground-Shaking Fury} and switch it to Active Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your opponent is attacking, you choose 1 of your {SS Son Goku, Ground-Shaking Fury}, and you remove this card from the game: Switch the attack target to the chosen card and it gets +10000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-139":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_switch_self_active_and_gain_power_for_turn", handler_params={"power_delta": 0}, source_text="[Activate: Main][Burst 3] If you send 3 cards from your hand to your Warp: Switch this card to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-571":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Place 1 of your Red/Yellow multicolor ≪God≫ cards under this card: Switch this card to Active Mode, and this card gains [Double Strike] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[0][Auto] When your opponent attacks, use up to 1 red ≪God≫ from under this card in a combo with its skills negated for the turn, then switch the attack target to your Leader.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-028":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: This card gains [Critical] for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-047":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place 1 card from your hand in your Drop Area: Your opponent chooses 1 card from their hand and places it in their Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-083":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place 1 of your ≪Frieza's Army≫ Battle Cards in the Drop Area: Choose up to 1 of your energy and switch it to Active Mode. Then, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn]  Place 1 of your ≪Frieza's Army≫ Battle Cards in the Drop Area: Choose up to 2 of your energy and switch them to Active Mode. Then, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-084":
+        rules.append(EffectRule(trigger="turn_end", handler_id="auto_switch_up_to_n_owner_battles_active_by_trait_on_turn_end", handler_params={"max_targets": 1}, source_text="[Auto] At the end of your turn, choose up to 1 of your Battle Cards and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="auto_switch_up_to_n_owner_battles_active_by_trait_on_turn_end", handler_params={"max_targets": 2}, source_text="[Auto] At the end of your turn, choose up to 2 of your Battle Cards and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-098":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, place 3 cards from the top of your deck in your Drop Area. If all of the cards placed in your Drop Area are black, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose up to 3 black cards in your Warp and place them in your Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT3-031":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, place the top card of your deck under this card. Then, if there are 2 or more cards under this card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] [Once per turn] When this card attacks, place the top card of your deck under this card. Then, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_switch_self_active_and_gain_power_for_turn", handler_params={"power_delta": 5000}, source_text="[Activate: Main] Choose 5 cards under this card and place them in the Drop Area: Switch this card to Active Mode. It gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-030":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, it gains +1000 for each 1 energy you have, for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] [Once per turn] When this card attacks, draw 1 card. Then, this card gains +1000 power for each 1 energy you have for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-100":
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you place this card in the Leader Area, choose 1 {Big Gete Star} from your deck and place it in the Battle Area in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] If 3 or more of your &lt;Meta-Cooler&gt; are in play, choose 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, place up to 3 cards from the top of your deck in the Drop Area. Choose up to 1 &lt;Meta-Cooler&gt; or &lt;Meta-Cooler Core&gt; from your Drop Area and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-003":
+        rules.append(EffectRule(trigger="owner_opponent_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent's Battle Card's power is decreased, if {SS3 Goku, One Hit Wonder} isn't in play in your Battle Area, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] (Red), send this card from your Drop Area to your Warp: Choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-002":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] [Once per turn] Place 1 card from your hand in the Drop Area: This card gains +5000 power for the duration of the battle.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] [Once per turn] Place 1 card from your hand in the Drop Area: This card gains +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-071":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: Choose up to 1 of your opponent's Rest Mode Battle Cards with an energy cost of 3 or less and KO it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: Choose up to 1 of your opponent's Rest Mode Battle Cards and KO it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-085":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn]  Flip over 1 face-down card in your life: If the flipped card is ≪Ginyu Force≫ but not &lt;Ginyu&gt;, play that card. If not, add it to your hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Add 1 card from your life to your hand: This card gains [Double Strike] for the duration of the turn. If there are 2 or more of your ≪Ginyu Force≫ in play, this card gains an additional +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-068":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place 1 card from your hand under this card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO that card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Activate: Main] [Once per turn] Place 1 card from your hand under this card: Draw 2 cards.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place 2 cards from under this card in the Drop Area: Choose up to 1 opponent Battle Card and KO that card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-035":
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] During your turn, when you combo with a card that has an energy cost of 2 or more, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-069":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, if &lt;Son Goku&gt; is in your Drop Area, this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] [Once per turn] Remove all of your cards in the Drop Area from the game: This card gains +5000 power and [Triple Strike] (This card inflicts 3 damage instead of 1 when attacking). Then, at the end of the turn, you lose the game.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-003":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, it gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, and this card gains +5000 power for the duration of this turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_activates_blocker", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When your opponent activates [Blocker], you may place 1 red card from your hand into the Drop Area. If you do so, negate that [Blocker].", once_per_turn=True, limit_per_turn=1))
+
+    if card_number == "P-046":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 of your opponent's Battle Cards with an energy cost of 3 or less and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD10-01":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card from your life and add it to your hand: Switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When this card attacks, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-010":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-009":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-181":
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When you combo with a red or green card, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] If your life is at 3 or less and you choose 1 card under this card and place it in your Drop Area: Choose one—<br>・ Choose up to 1 Battle Card in your Drop Area, combo with it, then this card gains [Double Strike] for the duration of the turn.<br>・ Choose 1 of your opponent's Battle Cards, ignoring [Barrier], and KO it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-055":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, choose up to 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT15-106":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a [Field] Extra Card in your Battle Area, this card gains [Blocker].", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_activate_up_to_n_named_field_extra_from_owner_deck_or_drop_on_play", handler_params={"max_activations": 1, "required_name_contains": "TURLES'S POWER BALL"}, source_text="[Auto] If your Leader Card is a yellow ≪Turles Crusher Corps≫ card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-097":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-118":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your Leader Card is a ≪Shenron≫ card: Choose 1 Battle Card in your Drop Area with 15000 or less power and an energy cost of 3 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-134":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Villainous≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Your opponent has a skill-less Battle Card in play: Choose any number of your opponent's Battle Cards with energy costs of 4 or less for which the total cost adds up to 4 or less and send them to their owners' Warps.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX19-08":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When choosing cards in your life using the [Activate: Main] skill on your blue <Goku Black>-only card, you may choose this card in your Battle Area instead.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] Choose 1 card in your hand and discard it: When this card is played, flip over up to 1 of your blue <Goku Black>-only Leader Cards, and you can't play non-<Zamasu> or non-<Goku Black> Battle Cards for the game.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_add_marker_to_matching_owner_unison_and_place_self_under_it", handler_params={}, source_text="[Activate: Main][Limit 1] If your Leader Card is a <Goku Black>-only card and you choose 1 {Zamasu, Teamwork Undying} in your Unison Area: Add a marker to the chosen card, then place this card under it from your Battle Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT9-051":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can activate this card's [Activate: Battle] from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is green: Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], KO it, then choose 1 card in your opponent's hand and place it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="activate_gain_power_and_keyword_for_battle", handler_params={"power_delta": 5000}, source_text="[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +5000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-067":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can activate this card's [Activate: Battle] from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is yellow: Choose up to 1 of your opponent's Battle Cards in Rest Mode, ignoring [Barrier], negate its skills for the duration of the turn, then KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="activate_gain_power_and_keyword_for_battle", handler_params={"power_delta": 5000}, source_text="[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +5000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT18-001":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can use your mono-red Rest Mode ≪Saiyan≫ cards in combos.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When you use a card in a combo, look at up to 3 cards from the top of your deck, add up to 1 red ≪Saiyan≫ card or 1 red Unison with a specified cost of 2 among them to your hand, and place the remaining cards at the bottom of your deck in any order.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your <Gogeta: GT> cards can attack your opponent's Battle Cards in Active Mode, and when your <Gogeta: GT> cards attack your opponent's Battle Cards, your opponent skips their Defense Step.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_union_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When you activate [Union-Fusion], this card gains <Gogeta: GT> for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, then play up to 1 red ≪Saiyan≫ card with an energy cost of 1 from your hand in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-064":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-109":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT20-109":
+        rules.append(EffectRule(trigger="self_in_hand_sent_to_drop_or_warp", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1](Yellow), if your Leader is a <Majin Buu> or <Evil Wizard Babidi> card—both yellow—and you have 2 or more energy: When you use one of your yellow <Majin Buu> or yellow <Evil Wizard Babidi> card skills to discard this card from your hand, play this card from your Drop.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_discard_matching_from_owner_hand_gain_total_combo_power_and_threshold_draw_keyword", handler_params={}, source_text="[Activate: Main][Limit 1] Discard 1 or more ≪Majin≫ cards from your hand: Choose up to 1 of your opponent's Battle Cards in Rest Mode, KO it, and this card gains power equal to the total combo power of the cards discarded by this skill for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT22-051":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] For every card in your Z-Energy, reduce the energy cost of this card in your hand by 3.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If it's your turn: When this card attacks or is used in a combo, choose up to 1 of your opponent's Battle Cards and add it to its owner's hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If it's your turn: When this card attacks or is used in a combo, choose up to 1 of your opponent's Battle Cards and add it to its owner's hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader is a blue <Whis> card and you have 3 or more energy: When this card attacks and KOs an opponent's Battle Card, switch this card to Active Mode, and this card gets +10000 power, [Double Strike], and [Dual Attack] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT22-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 1 or more each of red <Gamma 1: SH> and <Gamma 2: SH> cards in play, reduce this card's energy cost in your Z-Deck by (Red), and reduce its Z-Energy cost by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 3 or more energy, your red <Gamma 1: SH> and <Gamma 2: SH> cards get +5000 power during your turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_switched_to_active", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] When your red <Gamma 1: SH> card is switched to Active Mode by a <Dr. Hedo: SH> card skill, switch this card to Active Mode, and this card gains [Double Strike] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT23-019":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1] If your red <Son Gohan: Future> or <Trunks: Future> card is in a battle: Use this card from under a {Destroyed West City} in your Battle Area in a combo.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Limit 1](1), if your Leader is a red <Son Gohan: Future> or <Gohanks: Xeno> card, you have 3 or more energy, and this card is in a Combo Area: Choose up to 1 of your red <Son Gohan: Future> or <Trunks: Future> cards and it gains [Barrier] until the end of your opponent's turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-052":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-116":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-102":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-056":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack or combo with this card, if your Leader Card is green, place up to 3 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack or combo with this card, if your Leader Card is green, place up to 3 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-074":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack or combo with this card, if your Leader Card is yellow, place up to 3 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack or combo with this card, if your Leader Card is yellow, place up to 3 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-040":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack with this card or combo with it, if your Leader Card is blue, place up to 3 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack with this card or combo with it, if your Leader Card is blue, place up to 3 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-101":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-026":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_return_up_to_n_opponent_battle_to_hand_on_play", handler_params={"max_targets": 1}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-035":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_add_up_to_n_from_owner_deck_to_hand_on_play", handler_params={"max_targets": 1, "required_name_contains": "CITY PATROL GREAT SAIYAMAN", "shuffle_deck_after": True}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-061":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-096":
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-029":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Choose up to 1 of your Leader Cards or Battle Cards and it gets +100000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is red, you can activate this card's [Counter] skill from your hand by choosing 2 of your non-token Battle Cards and reducing their power by -10000 for the turn instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-026":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-074":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a green ≪Earthling≫ card, green skill-less Battle Cards in your Combo Area get +5000 combo power while this card is in a battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, you may add up to 1 green skill-less Battle Card from your Drop Area to your hand. If you do, place up to 1 skill-less green Battle Card in your Drop Area at the bottom of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-023":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-059":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-152":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your opponent has a [Field] card in their Battle Area, reduce the energy cost of this card in your hand by 2.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose 1 [Field] card in a Battle Area with an energy cost of 1 or less and place it in its owner's Drop Area. If you do, this card gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-079":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-018":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-084":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a green ≪Frieza's Army≫ or ≪Frieza Clan≫ card, reduce the energy cost of this card in your hand by 1 for each green Extra Card in your Battle Area and Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your opponent has 3 or more energy: When this card is removed from your Battle Area by a skill or KO'd, you may choose 2 cards in your hand and discard them. If you do, choose up to 1 mono-green <Broly: Br> card with an energy cost of 6 or 7 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your opponent has 3 or more energy: When this card is removed from your Battle Area by a skill or KO'd, you may choose 2 cards in your hand and discard them. If you do, choose up to 1 mono-green <Broly: Br> card with an energy cost of 6 or 7 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "XD3-07":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 2 Cell Jr. tokens in your Battle Area and remove them from the game: For each Cell Jr. token you remove from the game with this skill, choose up to 1 of your opponent's cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Yellow), if your Leader Card is a <Cell> card: Add this card to your hand from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-016":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose this card and 1 each of {Shu, Trusted Lackey} and {Mai, Trusted Lackey} from your Battle Area and place them in your Drop Area: Choose up to 1 {Combiner Mecha Pilaf Machine} from your deck or Drop Area and play it. Then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 [Dragon Ball] card from your deck, place it in your Drop Area, then shuffle your deck: Choose 1 {Shu, Trusted Lackey} and 1 {Mai, Trusted Lackey} in your Battle Area, and they get +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-007":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-032":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-017":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-107":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-015":
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-013":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-021":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-036":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-031":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT11-030":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-083":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack][Limit 1] If your Leader Card is green: Negate the attack, then play this card in Rest Mode. If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-106":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-113":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-119":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-003":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-118":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-085":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card, if one of your yellow Battle Cards is being attacked, this card gains +10000 combo power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-080":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You may not play this card from any area unless your Leader Card is <Son Goku: GT>.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 ≪Goku's Lineage≫ with an energy cost of 5 or less other than {Deadly Golden Great Ape Son Goku} from your deck and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-051":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-084":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-107":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-060":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] When your life is at 4 or less: Choose 1 green or black ≪Desire≫ card from your Drop Area and add it to your hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your life is at 5 or more, choose up to 2 [Dragon Ball] cards from your deck and place them in your Drop Area, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-029":
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-033":
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-070":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-085":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-040":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-022":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-099":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-072":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-093":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-110":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-111":
+        rules.append(EffectRule(trigger="self_attack_negated_or_failed_damage_to_opponent_leader", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-110":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If the total number of cards in Rest Mode between you and your opponent is 6 or more, reduce the energy cost of this card in your hand by 3.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can only activate skills on cards that are green or yellow and no other color for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card from your hand and place it in your Drop Area: Choose 1 of your opponent's cards in Rest Mode and that card can't be switched to Active Mode until the end of your opponent's next turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT11-028":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your Battle Cards can't be switched to Rest Mode by your opponent's card skills, and you can only use blue or green card skills to place cards under this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be removed from a Battle Area by your opponent's card skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main]②: Choose 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it under this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-091":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Only 1 {Frieza, Back from Hell} can be played in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 of your opponent's Battle Cards in Rest Mode ignoring [Barrier]. It can't switch to Active Mode until the start of your next turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Sparking 7] (This skill takes effect when you have 7 or more cards in your Drop Area.) Your opponent has 7 or more cards in Rest Mode: If your Leader Card is a yellow ≪Shenron≫ card and this card is in Rest Mode, deal 1 damage to your opponent.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT21-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Once per turn, if this card would be KO'd by an opponent's skill, you may place 1 card from under a {Universal Tuffleization Plan} in your Battle Area into your Drop instead.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader is a blue <Baby>: When this card attacks, choose up to 1 of your opponent's Battle Cards that does not include <Son Goku: GT> in its character name and place that card under a {Universal Tuffleization Plan} in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, and this card gains +5000 power for the duration of this turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_activates_blocker", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When your opponent activates [Blocker], you may place 1 red card from your hand into the Drop Area. If you do so, negate that [Blocker].", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-145":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "DB2-129":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-099":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-069":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-069":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-161":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-055":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT6-089":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-021":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-063":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand and if your Leader Card is a green <Frieza's Army> card, choose 2 cards from your life and add them to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_removed_from_battle_by_skill_or_ko", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from a Battle Area by a skill or KO'd, and if your Leader Card is a green <Frieza's Army> card, choose 1 or 2 cards from your life and add them to your hand, then choose up to 1 green <Broly: Br> card with an energy cost of 4 from your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-044":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Auto] When you play this card from your hand, choose up to 1 blue <Majin> card from your Drop Area and add it to your hand.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text='[Activate: Main] (1), your Leader Card is a <Majin> card: Choose 1 blue <Majin Buu> card with an energy cost of 3 from your Energy Area and play it. If you played a card, add this card to your energy in Rest Mode.', once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-065":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Auto] When you play this card from your hand, look at up to 5 cards from the top of your deck and choose up to 1 <Broly: Br> card among them and add it to your hand, then shuffle your deck.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_removed_from_battle_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by a skill and if your Leader Card is a green <Frieza's Army> card, choose up to 1 of your green energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-090":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text='[Counter: Attack][Spirit Boost X] (Remove X markers from your Unison Card to activate this skill.) Negate the attack; if you removed a marker from your green Unison Card using this skill, play 1 Majin Token in Rest Mode.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If one of your green Unison Cards is attacked, you may activate this card's [Counter] skill from your hand without paying its energy cost by choosing 1 card in your hand and discarding it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-082":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD2-02":
+        rules.append(EffectRule(trigger="owner_other_card_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX07-05":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Permanent] All <Janemba> cards in your Battle Area gain [Barrier].', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is placed in a Battle Area, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-075":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Permanent] This card gains <Desire> in all areas.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a green <Frieza's Army> card: Choose all of your opponent's Battle Cards ignoring [Barrier] and place them at the bottom of their owners' decks in any order, and if there are no Battle Cards in play in your Battle Area, choose up to 1 <Broly: Br> card with an energy cost of 4 from your deck and play it, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-119":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Permanent] This card gains <Desire> in all areas.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text='[Activate: Main] Your Leader Card is a <Shenron> card: Choose 1 Battle Card in your Drop Area with an energy cost less than or equal to your current energy and play it.', once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-081":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Unless {Display of Power Son Gohan} is in play in your Battle Area, you can't place this card in your Combo Area from any area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of a battle in which you combo with this card from your hand during your opponent's turn, if your Leader Card is a yellow <Saiyan> card, play this card in Rest Mode, and you can't play {Son Goku, Guardian Angel} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] 3, choose 1 {Display of Power Son Gohan} from your Battle Area and place it in its owner's Drop Area: Choose up to 1 {Finishing Blow Son Gohan} from your hand and play it, then place this card under the card you played with this skill.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-012":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Permanent] This card can attack Battle Cards that are in Active Mode.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can't play {Veku, Contents Under Pressure} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: If your Leader Card is a red <Saiyan> card, choose up to 1 red <Son Goku: Br> card and 1 red <Vegeta: Br> card from your Drop Area and add them to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-107":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, place the top 2 cards of your deck in the Drop Area. Then, if there is a green or yellow card in your Battle Area or Drop Area, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place up to 2 cards from the top of your deck in the Drop Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-108":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, place the top 2 cards of your deck in the Drop Area. Then, if there's a red or blue card in your Battle Area or Drop Area, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place up to 2 cards from the top of your deck in the Drop Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, draw 1 card. Then, you may choose 5 cards in your Drop Area and send them to your Warp. If you do so, this card gains +5000 power and [Double Strike] (This card inflicts 2 damage instead of 1 when attacking) for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-580":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a green &lt;Videl&gt; card and you return 1 of your {Videl} to its owner's hand: When your green skill-less Battle Card with an energy cost of 1 is played, play this card from your hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_add_up_to_n_from_owner_deck_to_hand", handler_params={"max_targets": 1, "allowed_colors": "green", "required_characters": "Videl", "max_cost": 3}, source_text="[Activate: Main/Battle] Place this card in your Drop: Add up to 1 green &lt;Videl&gt; card with an energy cost of 3 or less from your deck to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="activate_add_up_to_n_from_owner_deck_to_hand", handler_params={"max_targets": 1, "allowed_colors": "green", "required_characters": "Videl", "max_cost": 3}, source_text="[Activate: Main/Battle] Place this card in your Drop: Add up to 1 green &lt;Videl&gt; card with an energy cost of 3 or less from your deck to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-031":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your opponent cannot activate [Counter] against this card's attack and cannot activate [Blocker] during this card's attack.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-056":
+        rules.append(EffectRule(trigger="owner_card_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent's &lt;Son Goku&gt; or Battle Card with an energy cost of 6 or less is placed in the Drop Area from any area by one of your skills, this card gains [Critical] (When this card inflicts damage to your opponent's life, they place that many cards in their Drop Area instead of their hand) for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-582":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_switch_self_active_and_gain_power_for_turn", handler_params={"power_delta": 0}, source_text="[Activate: Main][Limit 1] Choose 1 of your &lt;Rasin&gt; cards and 1 of your &lt;Lakasei&gt; cards—both yellow and with an energy cost of 1—other than this card and place them under this card: Switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-586":
+        rules.append(EffectRule(trigger="owner_card_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a black &lt;Broly&gt; card, it's your turn, and you discard 1 card from your hand: When your life leaves your Life Area by one of your skills, play this card from your Drop, then send this card from your Battle Area to your Warp at the end of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1](1), if your Leader is a black &lt;Broly&gt; card and you discard this card from your hand: Play up to 1 green &lt;Broly&gt; card with an energy cost of 1 from your deck, shuffle your deck, then add up to 2 cards from your life to your hand.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-002":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card. If this card attacks a Battle Card, it gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-057":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, both players choose 1 card from their hand and place it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card. Then, both players choose 1 card from their hand and 1 card from their Battle Area, and place those cards in their Drop Areas.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-020":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card cannot be KO-ed in battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-041":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, your opponent may choose 2 cards from their hand and place them in the Drop Area. If they don't, choose all of your opponent's Battle Cards and energy. Place them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-538":
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Limit 1] If it's your turn: When you combo, draw 1 card, and this card can't be KO'd until the end of your opponent's turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1](Green), if you have 4 or more energy and you add this card to Z-Energy: Play up to 1 green &lt;Gogeta: Br&gt; card with an energy cost of 8 from your Z-Energy, and that card gains [Dual Attack] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-054":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your Leader Card gains [Double Strike] (This card inflicts 2 damage instead of 1 when attacking) for the duration of the turn. Then, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-056":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-018":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This Card can attack Battle Cards that are in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-023":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card cannot attack Battle Card with 15000 or more power.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-033":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 1 blue &lt;Son Goku&gt; among them and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-034":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 &lt;Whis&gt; with an energy cost of 4 or lower from your deck and add it to your hand.  Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-045":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you Combo with this card, if your Leader Card is blue and your life is 4 or less, draw 1 card and add +10000 to this card's Combo for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-047":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-049":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if you do not have any Battle Cards other than this card in play, choose up to 1 of your opponent's Battle Cards. Place that card  on top of the opponent's deck, and all cards that were under it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-017":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] ②: Look at up to 7 cards from the top of your deck, choose one &lt;Frost&gt; with [Evolve] among them and Evolve this card into it. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-006":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play a red ≪Alien≫, it gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-036":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose all cards in your hand and your opponent's hand, and all Battle Cards in your opponent's Drop Area, and shuffle them into their owners' decks.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-008":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 3 cards from the top of your deck. Choose up to 1 ≪Alien≫ with power 15000 or less among them and play it. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EB1-57":
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto](Red)①, if your Leader Card is a red or green ≪Saiyan≫ card: When this card KOs one of your opponent's Battle Cards, play 1 Red/Green multicolor &lt;Vegeta&gt; card with an energy cost of 6 from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-011":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, inflict 2 damage to your opponent.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-013":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, switch this card to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-047":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When you play a green Battle Card from your Drop Area, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green)(Green)②, place this card in its owner's Drop Area: Choose up to 1 Battle Card with an energy cost of 4 or less from your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-002":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 ≪Machine Mutant≫ Battle Card from your hand with 5000 or less power and play it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 ≪Machine Mutant≫ Battle Card from your hand with 10000 or less power and play it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-001":
+        rules.append(EffectRule(trigger="owner_battle_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When your Battle Card attacks a Leader Card, if the attacking card has 15000 or more power, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place 1 card from your hand in the Drop Area: Choose this card or 1 of your Battle Cards. It gains [Double Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-063":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, when you Combo with this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-027":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks your opponent's Leader, if you have less cards in hand than your opponent, your opponent chooses 1 card in their hand and places it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-143":
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, send up to 1 Battle Card from your opponent's Drop Area to their Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] If your Leader Card is a black ≪Demon Realm Race≫ card and it's your turn: Up to 1 black ≪Evil Wizard≫, ≪Demon Realm Race≫, or ≪Demon God≫ card in your Combo Area gets +5000 combo power for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-048":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you Combo with this card, choose 1 card in your opponent's Combo Area and return it to their hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-044":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_add_top_deck_to_energy_rest_on_play", handler_params={}, source_text="[Auto] When you play this card, add 1 card to your energy from the top of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-128":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] Choose 1 or 2 cards in your life and add them to your hand: When this card attacks, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-001":
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When you combo, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your opponent's cards and it gets -5000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card in your life is flipped face up by one of your red card skills, you may flip this card over. If you do, draw 1 card and you can't flip your Leader Card to its front for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card in your life is flipped face up by one of your red card skills, you may flip this card over. If you do, draw 1 card and you can't flip your Leader Card to its back for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-132":
+        rules.append(EffectRule(trigger="leader_wished", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your Leader Card activates [Awaken] or [Wish], this card gets +15000 power and [Dual Attack] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-106":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose any number of you and your opponent's Battle Cards and Unison Cards, ignoring [Barrier], and negate the skills of those cards until the end of your opponent's next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose up to 2 of your skill-less Battle Cards with energy costs of 4 or less and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-036":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto]  When a card evolves into this card, choose up to 1 opponent Battle Card with [Blocker] and return it to their hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-060":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks during the turn you played it with [Over Realm], your opponent may not combo with Battle Cards in their Battle Area or activate [Blocker] for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-001":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, place up to 1 card from the top of your deck in the Drop Area. If that card is red, this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, and if there are 10 or more total &lt;Son Goku&gt; or &lt;Vegeta&gt; in your Drop Area, this card gains +5000 power and [Double Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-068":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card cannot attack Battle Cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-035":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+2][Activate: Main] If your Leader Card is mono-blue: Place the top card of your deck in your energy; you can't place cards in your Energy Area for the turn, then, at the end of the turn, place the card you placed in your energy with this skill in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-5][Activate: Main] Choose all cards in all Battle Areas, ignoring [Barrier], and shuffle them into their owners' decks.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-133":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is yellow: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] If all of your energy is yellow: When you activate this card, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and negate its skills for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-066":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 2 cards in your life and add them to your hand: Choose up to 1 of your Battle Cards and it gains [Double Strike] for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_switch_self_active_and_gain_power_for_turn", handler_params={"power_delta": 0}, source_text="[Activate: Main][Once per turn] Choose 1 card in your life and add it to your hand: Switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-071":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, your opponent chooses 1 card from their hand and places it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-026":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, it gets +5000 power for the duration of the turn, then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. Then shuffle any areas you looked through.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="leader_wished", handler_id="noop_auto", handler_params={}, source_text="[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 ≪Desire≫ card in your Drop Area, add it to your hand, and flip this card over.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose one— Draw 1 card. Choose 1 blue or black ≪Desire≫ card in your hand with an energy cost less than or equal to your current energy and activate its [Activate: Main] skill. Remove 7 [Dragon Ball] cards in your Drop Area from the game. If you do, choose up to 3 of your energy and switch them to Active Mode, and this card gets +15000 power and [Critical] for the duration of the turn, then flip this card over at the end of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-095":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose all of your ≪Ginyu Force≫ Battle Cards. Those cards gain +10000 power and [Double Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-127":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if there is a ≪Universe 6≫ Battle Card in your Drop Area, you may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 1 blue or yellow non-&lt;Cabba&gt; ≪Universe 6≫ card with an energy cost of 1 in your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-077":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may place 1 card from your hand in the Drop Area. If you do so, choose and activate 1 {Broly's Ring} from your deck. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "XD3-04":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is an ≪Android≫ card: When you play this card, choose up to 1 Battle Card with an energy cost of 4 or less that has {Android} in its name from your deck, place it in your Drop Area, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-068":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then you may choose 2 of your Battle Cards and switch them to Rest Mode. If you switched 2 Battle Cards to Rest Mode, your opponent can only attack with Battle Cards one more time for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-131":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a black &lt;Supreme Kai of Time&gt; card: When this card is played using [Over Realm], send up to 2 cards from the top of your deck to your Warp, then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-093":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in Rest Mode, your opponent cannot attack your other Battle Cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-093":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is yellow, all of your Battle Cards and your opponent's Battle Cards with original energy costs of 5 or less have their skills negated, and all of your Battle Cards with energy costs of 1 get +5000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[0][Activate: Main] Play up to 2 yellow skill-less Battle Cards with energy costs of 1 from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] If your Leader Card is yellow: Your opponent can only attack with Battle Cards once during their next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-029":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When a card in a Battle Area is returned to its owner's hand by a skill, draw 1 card, then choose 1 card in your hand and place it at the top or bottom of your deck.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 blue Battle Card in your hand with an energy cost of 1 and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-066":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card cannot be attacked by a Leader Card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-415":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] [Once per turn] If your Leader is a green &lt;Vegeta&gt; card: When you play a green Battle Card with [blocker] or activate a green [field] with an energy cost of 1, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate Main] [Once per turn] [Green], if your Leader is green and you have a [Field] Extra in your Battle Area: Add up to 1 green Great Ape card with an energy cost of 4 or less and [Blocker] from your Drop to your hand.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-036":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, you may place it in your energy in Rest Mode instead. If you do, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-129":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 of your Battle Cards and place it in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards, KO it, then your opponent chooses 1 card in their hand and places it in their Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT6-060":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] Choose 1 card from your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and KO it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-131":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is black and your life is at 4 or less: When this card is used in a combo, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-086":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Heroine≫ card: Look at up to 7 cards from the top of your deck and choose one－\n・Add up to 2 green skill-less Battle Cards among them to your hand, then shuffle your deck.\n・If you don't have a Unison Card in play, play up to 1 green Unison Card with 6000 power among them with a marker on it, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-001":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Burst 2] (You must place the top 2 cards of your deck in your Drop Area to activate this skill.) Choose 1 card in your life and add it to your hand: If your opponent has 5 or more life, deal 1 damage to your opponent.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_battle_activates_alliance", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When one of your Battle Cards activates [Alliance], choose up to 1 of your opponent's Battle Cards with 30000 power or less and KO it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Sparking 5] Choose 3 cards in your hand and place them in your Drop Area: Choose all of your red and green Battle Cards, then both the chosen cards and this card get +10000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT6-079":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Burst 2] (You must place the top 2 cards of your deck in your Drop Area to activate this skill.) When this card attacks, you may choose 1 yellow card from your hand and place it in your Drop Area. If you do, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 yellow ≪Saiyan≫ card in your Drop Area with an energy cost of 3 or more, add it to your hand, and negate this skill for the duration of the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-021":
+        rules.append(EffectRule(trigger="owner_main_phase_start", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the beginning of your Main Phase, look at up to 3 cards from the top of your deck. Choose up to 1 {Miraculous Comeback Ultimate Gohan} among them and add it to your hand. Then, place the remaining cards at the bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-078":
+        rules.append(EffectRule(trigger="self_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in the Drop Area from the Battle Area, if your Leader Card is &lt;Broly&gt;, you may place 1 card from your hand in the Drop Area. If you do, play this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-076":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck and add 1 green &lt;Broly&gt; among them to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX11-02":
+        rules.append(EffectRule(trigger="owner_leader_power_reduced_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your Leader Card's power is decreased by a skill, it gets +10000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 card in your life and add it to your hand, then choose 1 of your Leader Cards and it gets -5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] Choose 1 of your Leader Cards and it gets -5000 power for the turn: Look at your opponent's hand, choose up to 1 multicolor Battle Card or Battle Card with 10000 power or less in it, and place it in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-085":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then choose up to 1 of your opponent's Tokens and remove it from the game.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card's skills can't be negated in any area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-086":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, place all Rest Mode Battle Cards except for this card in the Drop Area. Then, choose all Active Mode Battle Cards except for this card and switch them to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-007":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Each &lt;Son Gohan: Adolescence&gt; in your hand gains \"[Evolve] (Red)(Red)①: &lt;Son Gohan: Adolescence&gt;\" (Play this card on top of the specified card).", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-139":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, draw 1 card; if you don't have a Unison Card in play, play 1 black Unison Card with no specified cost and 15000 power from your Drop Area with a marker on it; you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main]①, if your Leader Card is a black ≪Saiyan≫ card and you send 1 &lt;Son Gohan: Xeno&gt; card and 1 &lt;Trunks: Xeno&gt; card from your Drop Area to your Warp: Play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-023":
+        rules.append(EffectRule(trigger="owner_takes_damage_from_opponent_non_keyword_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is red: When you take damage from an opponent's non-keyword skill, you may play this card from your hand. If you do, add the top card of your deck to your life; you can't activate the [Auto] skill on copies of this card for the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-282":
+        rules.append(EffectRule(trigger="owner_battle_removed_by_opponent_skill_or_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When one of your yellow skill-less Battle Cards with an energy cost of 2 is removed from your Battle Area by an opponent's skill or KO'd, you may play this card from your hand. If you do, you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If this card's attack deals damage to an opponent or removes a marker from an opponent's Unison Card, play up to 1 skill-less Battle Card with 15000 power from your Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT3-042":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Switch this card to Rest Mode: Choose 1 of your Battle Cards and return it to your hand. Then, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and return it to their owner's hand. (Cards stacked under the card are placed in the Drop Area)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-111":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-050":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks a Leader Card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Burst 7] (You must place the top 7 cards of your deck in your Drop Area to activate this skill.) When your opponent attacks with a card, negate that attack, then negate this skill for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] When your life is at 1: Choose all of your opponent's Battle Cards with [Blocker] and KO them.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-042":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Draw 1 card, then choose up to 1 of your Leader Cards and it gets +5000 power until the end of your opponent's next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT18-115":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] While this card is in Rest Mode, your opponent's Battle Cards can't attack your Leader.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] Discard 1 card from your hand: When this card is KO'd, play this card from your Drop in Rest Mode with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-12":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, if your Leader Card is a &lt;Goku Black&gt; or &lt;Zamasu&gt; card, draw 1 card, and you can't play {Goku Black, Countdown to Destruction} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-135":
+        rules.append(EffectRule(trigger="self_sent_from_drop_to_warp_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a black ≪Saiyan≫ card: When this card is sent from your Drop Area to your Warp by a skill, place this card at the bottom of your deck from your Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a black ≪Saiyan≫ card, you send this card from your Drop Area to your Warp, and you choose 1 of your black Unison Cards and place it in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and send it to its owner's Warp, and you can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-094":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[0][Activate: Main] Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-1][Activate: Main] Choose 1 of your opponent's Battle Cards with an energy cost of 5 or less in Rest Mode and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-065":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a ≪Heroine≫ card: When this card is played, play up to 1 green skill-less Battle Card with an energy cost of 1 from your deck, shuffle your deck, then choose up to 2 of your skill-less Battle Cards and they get +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1] If your Leader Card is a ≪Heroine≫ card, you have 2 or more green energy, and you choose 1 of your green Unison Cards with 6000 power and a marker on it and you place this card under it from your hand or Battle Area: Add a marker to the chosen Unison Card, then draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "DB3-133":
+        rules.append(EffectRule(trigger="owner_opponent_life_added_to_hand_or_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent adds a card from their life to their hand or Drop Area, add a marker to this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-6][Activate: Main] If your Leader Card is red: Choose up to 2 mono-red Battle Cards with different card names, energy costs of 3 or less, and 19000 power or less in your deck or hand, play them, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-048":
+        rules.append(EffectRule(trigger="counter_battle_card_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Battle Card Attack] Play this card. Then, choose 1 keyword skill of the attacking card and negate it for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, reveal 1 card from the bottom of your deck. If that card is a &lt;Trunks: Future&gt; with an energy cost of 3 or less, play that card and negate its [Activate] skill for the duration of the game. If it is any other card, place it at the bottom of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-058":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] Play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card during your opponent's turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less, KO it, then your opponent chooses 1 card in their hand and sends it to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-072":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, you may choose 1 ≪Goku's Lineage≫ from your hand and place it in your Drop Area. If you do so, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, then choose up to 1 ≪Goku's Lineage≫ in your Battle Area. This card and the chosen card gain +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-100":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand, choose up to 1 of your opponent's Battle Cards in Rest Mode, and it can't be switched to Active Mode until the end of your opponent's next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-024":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is red and your life is at 4 or less: When this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_unison_spirit_boost_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader Card is red and you choose 1 of your red Unison Cards: When you remove a marker from one of your Unison Cards using a [Spirit Boost] skill, you may place this card from your hand under the chosen card. If you do, add a marker to the chosen card, then draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-076":
+        rules.append(EffectRule(trigger="owner_battle_removed_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] Activate this skill when one of your ≪Goku's Lineage≫ with an energy cost of 5 or more is removed from the Battle Area by an opponent's skill. If you have no cards in your Battle Area, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-088":
+        rules.append(EffectRule(trigger="self_activate_main_or_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] Choose one－\n・Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less, KO it, then draw 1 card.\n・Choose 1 of your opponent's Unison Cards and remove a marker from it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-058":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_ko_up_to_n_opponent_battle_on_play", handler_params={"max_targets": 1}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards. KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-073":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose 1 card in your life and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-019":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-058":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_ko_up_to_n_opponent_battle_on_play", handler_params={"max_targets": 1}, source_text="[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When you play this card, choose up to 1 of your opponent's Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-039":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="auto_play_self_from_combo_on_battle_end", handler_params={}, source_text="[Auto] At the end of the battle after you combo with this card from your hand, if your Leader Card is blue, play this card in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-090":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a green &lt;Gotenks&gt; card: Negate the attack. You may choose 1 card in your hand and discard it. If you do, add up to 1 green &lt;Son Goten&gt; card with 15000 power and up to 1 green &lt;Trunks: Youth&gt; card with 15000 power from your Drop Area to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-101":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Draw 1 card, then choose up to 1 of your Battle Cards, and it can attack Battle Cards in Active Mode for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-121":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is a ≪Universe 11≫ card: When you play this card or it is placed in your Drop Area from your Battle Area by a skill, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_placed_into_drop", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is a ≪Universe 11≫ card: When you play this card or it is placed in your Drop Area from your Battle Area by a skill, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-099":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: This card gains +5000 power for the duration of the turn, then place 3 cards from the top of your deck in the Drop Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 3 cards in your Warp and place them in your Drop Area: This card gains +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-043":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card at the bottom of your deck: Choose 1 blue &lt;Son Goku&gt; or &lt;Vegeta&gt; with an energy cost of 3 or less from your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-026":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 5 cards from the top of your deck, choose up to 1 blue or yellow &lt;Goku Black&gt; or &lt;Zamasu&gt; card among them and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, this card gets -5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your opponent has 8 or more energy: Choose up to 4 cards from your opponent's life and place them at the bottom of their deck in any order.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] (1): Choose 1 of your opponent's Battle Cards and return it to its owner's hand.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-024":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, place up to 1 card from the top of your deck under your {Majin Buu's Sealed Ball}.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-037":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Play this card and negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When activating this card's Counter, if you have 3 or less life, you may place 2 ≪Saiyan≫ from your hand in the Drop Area.  If you do so, reduce the energy cost of this card by 3 for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-075":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card with [Swap], choose up to a total of 3 of your opponent's Battle Cards or energy ignoring [Barrier], and switch them to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-014":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Auto] When you play this card, if your Leader Card is a ≪Shenron≫ card and {Oolong's Wish} is in your Drop Area, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-134":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a black ≪Saiyan≫ card, you have 3 or more energy, and there are 15 or more cards in your Drop Area, this card gets +11000 power and [Critical] during your turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-022":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 2 red Battle Cards among them with 25000 or less power other than &lt;Evil Wizard Babidi&gt; and play them. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-098":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand, look at up to 3 cards from the top of your deck. Choose up to 1 ≪Ginyu Force≫ other than &lt;Ginyu&gt; among them and play it. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-089":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 2 cards in your opponent's hand and place them in their Drop Area, then choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-108":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Yellow), choose 1 mono-yellow ≪Shadow Dragon≫ card with an energy cost of 4 or less in your Battle Area and place it in its owner's Drop Area: Draw 1 card, then play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your Leader Card is a yellow ≪Shadow Dragon≫ card and you send 1 mono-yellow ≪Shadow Dragon≫ card with an energy cost between 2 and 4 that isn't a &lt;Syn Shenron&gt; card from your Drop Area to its owner's Warp: Add up to 1 card from your life to your hand and this card gains the skills of the card you sent to the Warp with this skill until the end of your opponent's next turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT15-059":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. If your Leader Card is a ≪Universe 6≫ card, play up to 1 ≪Universe 6≫ card with an energy cost of 1 from your Drop Area with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Blue), if your Leader Card is a ≪Universe 6≫ card: Choose all of your Battle Cards with both ≪Saiyan≫ and ≪Universe 6≫ and they get +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-533":
+        rules.append(EffectRule(trigger="leader_wished", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader's back side is {SS4 Son Goku, Senses Regained}, you have 3 or more energy, and you place 1 of your red Battle Cards with 25000 power or more in your Drop: When your Leader's [Awaken] skill activates, play this card from your hand, and this card gains [Triple Strike] and [Dual Attack] for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1](Red)/(Yellow), if your Leader's back side is {SS4 Son Goku, Senses Regained}, you have 3 or more energy, and you have a Red/Yellow multicolor card in your energy: Play this card from your hand.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-052":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If you have 2 or more energy and you choose 1 of your mono-blue &lt;Janemba&gt; cards with an energy cost of 3 and place this card under it: Play up to 1 blue &lt;Janemba: Xeno&gt; card with an energy cost of 4 from your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT17-138":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is red or blue: When this card is used in a combo from your hand, if a red card is in your energy, choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -5000 power for the turn. Additionally, if a blue card is in your energy, choose up to 1 of your opponent's Leader Cards or Unison Cards and it gets -5000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-132":
+        rules.append(EffectRule(trigger="owner_opponent_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent plays a Battle Card with an energy cost greater than their current energy using a skill, this card gets +10000 power until the end of your next turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-038":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Critical] (When this card inflicts damage to your opponent's life, they place that many cards in their Drop Area instead of their hand)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-008":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Sparking 2] (This skill takes effect when you have 2 or more cards in your Drop Area.) When you play this card, look at up to 5 cards from the top of your deck, choose up to 1 &lt;Gogeta: Br&gt; card or red &lt;Son Goku: Br&gt; card among them and add it to your hand, shuffle your deck, then if you added a card to your hand, choose 1 card from your hand and place it in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and it gets -5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, return this card to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-068":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is green and your life is at 4 or less: When this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your Combo Area and it gets +6000 combo power for the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-012":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 1 ≪Universe 6≫ with 15000 or less power among them and play it. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-046":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-099":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: This card gains +5000 power for the duration of the turn, then place 3 cards from the top of your deck in the Drop Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 3 cards in your Warp and place them in your Drop Area: This card gains +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-045":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose up to 1 &lt;Trunks: Future&gt; with an energy cost of 4 or less from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-029":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can attack Battle Cards that are in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When this card attacks a Battle Card, switch this card to Active Mode and this card gains +10000 power for the duration of the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card cannot be KO-ed by your opponent's skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, until the beginning of your next turn, this card gains +5000 power.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-027":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When using this card's [Evolve] skill from your hand, you can choose Battle Cards from your energy and play this card in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a blue ≪Saiyan≫ card: When a card in your energy evolves into this card, draw 1 card, then at the end of the turn, switch this card to Active Mode and place the top card of your deck in your energy in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-176":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a ≪Shenron≫ card: Choose one-\n･ If your Leader Card has 10000 power and you have 5 or less life, your Leader Card gets +5000 power for the duration of the turn. \n･ Choose your Leader Card or 1 of your Battle Cards and it gets +5000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-042":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks or is attacked, choose up to 1 blue battle card in your Drop Area and combo with it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacked", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks or is attacked, choose up to 1 blue battle card in your Drop Area and combo with it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-046":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose one-\n・Look at up to 7 cards from the top of your deck, choose up to 1 &lt;Janemba&gt; card among them, add it to your hand, then shuffle your deck.\n・Look at up to 1 card from the bottom of your deck, choose up to 1 &lt;Janemba&gt; card among them, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-100":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card using [Over Realm], it gains +10000 power for the duration of the turn, and can attack Battle Cards in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-028":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card with the skill of {Majin Buu's Sealed Ball}, inflict 1 damage to the opponent's life.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-051":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in your Drop Area: Choose up to 1 of your energy and switch it to Active Mode, then choose up to 1 &lt;Piccolo&gt; or &lt;Piccolo Jr.&gt; with an energy cost of 4 or less from your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-086":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green), if your Leader Card is green and you discard this card from your hand: Choose up to 1 card in your opponent's Battle Area with an energy cost of 1 and the [Field] skill and place it in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-055":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, you and your opponent draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_rejuvenate_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] If you have 3 or more green energy: When you activate a [Rejuvenate] skill, draw 2 cards, then flip this card over.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, you and your opponent draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your opponent has 10 or more cards in their hand: Play up to 1 mono-green ≪Slug's Army≫ card with an energy cost of 2 or less from your Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-090":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If you have a green Unison Card in play: If the Battle Card being played has an energy cost of 4 or less, it's placed in its owner's Drop Area instead of being played, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is mono-green, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-067":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Switch all of your blue energy to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-088":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, draw cards until you have 4 cards in your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-019":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack][Limit 1] If your Leader Card is red: Negate the attack, then play this card in Rest Mode. If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-103":
+        rules.append(EffectRule(trigger="owner_card_revealed_from_top_deck_to_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is yellow: When this card is revealed from the top of your deck and placed in your Drop Area, you may play this card from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, draw 1 card, then choose 1 card from your hand and place it on the top of your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Spirit Boost 1] (You must remove a marker from your Unison Card to activate this skill.) If your Leader Card is a yellow &lt;Son Goku: GT&gt; card: Reveal the top card of your deck and place it in your Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT17-128":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, play up to 1 Demon Realm Soldier Token, and this card gets +10000 power for the turn. (Demon Realm Soldier Tokens have 5000 power, 0 combo cost, and 5000 combo power.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-026":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 of your opponent's Battle Cards with 12000 or less power in the Battle Area and KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-201":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Red), place this card in its owner's Drop Area: Choose up to 1 red or blue <Frieza> card with an energy cost of 3 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Blue), if your opponent has 3 or more energy and you choose 1 red or blue <Frieza> card with an energy cost of 3 in your Battle Area and this card in your Drop Area and send them both to their owners' Warps: Choose up to 1 red <Frieza> card with an energy cost of 5 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-074":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card in your life and add it to your hand: Choose up to 1 blue or yellow ≪Universe 6≫ card with an energy cost of 1 in your hand and play it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_leader_flipped_front", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent's Leader Card flips back to its front, choose up to 1 blue or yellow ≪Universe 6≫ card in your Drop Area with an energy cost of 3 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 blue or yellow ≪Universe 6≫ card in your hand with an energy cost of 2 or less and play it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-079":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, when you combo with this card from your hand, choose up to 1 of your opponent's cards with [Blocker] and an energy cost of 3 or less, and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-061":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, reveal the top card of your deck; if it's a green ≪Ginyu Force≫ card with an energy cost of 2, you may play it. Then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, reveal the top card of your deck; if it's a green ≪Ginyu Force≫ card with an energy cost of 2, you may play it. Then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] (Green): Choose 1 green ≪Ginyu Force≫ card in your Battle Area and it gets +10000 power for the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-053":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose 1 of your other Battle Cards. It gains +1000 power for each of your energy for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-073":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card and your opponent combos during the duration of that turn, choose all of your opponent's Battle Cards in the Battle Area and Combo Area with energy costs of 3 or less and place them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-025":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 <Son Gohan: Adolescence> under this card: For the duration of the turn, this card can attack Battle Cards in Active Mode and gains all the skills of the chosen card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-023":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in Rest Mode, the opponent cannot attack <Evil Wizard Babidi>.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-213":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, draw 1 card, then shuffle up to 4 Battle Cards from your opponent's Drop Area into their deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-070":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Reduce the energy costs of <Android 17> and <Android 18> in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your life is 4 or less, all of your <Android 17> and <Android 18> gain +5000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-096":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains +6000 power during your opponent's turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-061":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a yellow ≪Shenron≫ card: Choose up to 2 yellow ≪Namekian≫ cards with energy costs of 2 or less in your Drop Area and play them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your red cards can attack your opponent's Battle Cards in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 2 of your opponent's Battle Cards, and they get -15000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] Look at your opponent's hand, choose up to 1 Battle Card with 25000 power or less from it and discard it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-088":
+        rules.append(EffectRule(trigger="self_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is yellow and all of your energy is mono-yellow: When this face-up card in your life is placed in your Drop Area, if you don't have a Unison Card in play, you may play this card from your Drop Area with a marker on it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] You may place 1 face-up card in your life under this card. If you do, choose 1 mono-yellow Battle Card in your hand, place it in your life face up, then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-075":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-013":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can attack Battle Cards that are in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of the battle after this card attacks, place 10 cards from the top of your deck in your Drop Area. Then, choose up to 1 <Vegito> with 25000 power from your Drop Area and evolve into it by placing it on top of this card in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-026":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If <Gotenks> is under this card, and if there are no cards in your opponent's Combo Area, this card cannot be KO-ed.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-133":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your Leader Cards, it gets +10000 power for the duration of the battle, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-108":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Place 1<Meta-Cooler> from your Battle Area in the Drop Area: This card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card or when it attacks, if {Big Gete Star} is under this card, choose up to 2 <Meta-Cooler> from your Drop Area and play them.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card or when it attacks, if {Big Gete Star} is under this card, choose up to 2 <Meta-Cooler> from your Drop Area and play them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-003":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Sparking 3] When you play this card from your hand, look at up to 7 cards from the top of your deck, choose up to 1 red <Vegeta: Br> card among them and play it in Rest Mode, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] This card gets +10000 power and can attack Battle Cards in Active Mode for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, return this card to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-042":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Battle Card in battle is green: When you combo with this card, it gets +5000 combo power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-049":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, your opponent chooses 1 card from their hand and sends it to their Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, then choose up to 1 red or green <Raditz>, <Vegeta>, or <Nappa> card among them, add it to your hand, shuffle your deck, and if you added a card to your hand, choose 1 card from your hand and place it in your Drop Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose up to 1 red or green ≪Saiyan≫ card in your Battle Area and it gets +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-112":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack with this card, you may add 1 card from your life to your hand. If you do, this card gets +10000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent plays a Battle Card with 15000 power or less using a non-keyword skill, your opponent chooses 2 cards from their hand and places them in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-093":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 Battle Card which includes {Android} in its card name other than <Android 20> from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-071":
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of the battle after this card attacks, place this card in your Drop Area and choose up to 1 Battle Card whose character name includes <Son Gohan> in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-103":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if <King Cold> is in play in your Battle Area, choose up to 2 ≪Frieza Clan≫ other than <Frieza> from your hand and play them. Their skills are negated for the duration of the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-056":
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent's card attacks, if your Leader Card is <Zamasu> or <Goku Black>, you may place 1 card from your hand in the Drop Area. If you do so, negate that attack, and negate this skill for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-054":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, if your leader is <Goku Black>, choose up to 3 of your opponent's energy and place them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-003":
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When this card attacks, switch this card to Active Mode, and it gains +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-063":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 of your opponent's Battle Cards and return it to their hand. (Cards stacked under the card are placed in the Drop Area)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-049":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 ≪Boujack Brigade≫ card with an energy cost of 3 or less or up to 1 blue Unison Card with a specified cost of 4 among them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn]①: This card gets +11000 power and [Critical] until the start of your next Main Phase.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-042":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if you have 5 or more energy, choose up to 1opponent Battle Card and KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-046":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto](Blue)③: At the end of a battle in which this card is used in a combo from your hand or energy, draw 1 card, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck, then play this card from your Drop Area in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_battle_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If this card is in Rest Mode: When your opponent attacks with a Battle Card, switch up to 1 of your blue energy to Active Mode, then switch up to 1 of your opponent's energy to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT3-070":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, your opponent chooses 1 of their Battle Cards and KO-s it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-055":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If <Zamasu> is in play in your Battle Area, this card cannot be KO-ed by your opponent's card's skills and does not leave the Battle Area due to skills.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX13-08":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[0][Activate: Main] You and your opponent draw 1 card, then your opponent places the top card of their deck in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] This card gains [Critical] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main/Battle] If your opponent has 15 or less cards in their deck: This card gets +15000 power and [Triple Strike] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main/Battle] If your opponent has 15 or less cards in their deck: This card gets +15000 power and [Triple Strike] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-138":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-3][Activate: Main](Blue)(X), if your Leader Card is blue: Choose one-\n・ Draw X cards.\n・ Choose up to X of your opponent's Battle Cards and place them at the bottom of their owners' decks in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX12-02":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose this card or 1 of your Battle Cards and switch it to Rest Mode: Add a marker to this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-1][Activate: Main] Your opponent can't attack with Battle Cards with energy costs greater than their current energy until the end of their next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-3][Activate: Main] Choose up to 1 of your opponent's energy, switch it to Rest Mode, then this card gets +5000 power, [Double Strike], and [Dual Attack] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-024":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Dr. Myuu>, choose up to 1 <Ribet> from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-087":
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent attacks, you may choose 1 yellow skill-less Battle Card in your hand or Drop Area and combo with it. If you do, negate this skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards or Unison Cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-4][Activate: Main] Play up to 2 skill-less Battle Cards with 15000 power from your deck or Drop Area, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-124":
+        rules.append(EffectRule(trigger="owner_opponent_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader Card is black: When your opponent plays a Battle Card using a non-keyword skill, they choose 1 card from their hand and discard it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[+2][Auto] When you activate an [Over Realm] skill, add up to 1 card from your life to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-5][Activate: Main](Black)(Black)(Black)(Black): Send 1 card from your opponent's life to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Auto] When a card evolves into this card, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-018":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Switch this card to Rest Mode: Look at 1 card from the top of your deck, choose up to 1 <Dabura>, <Pui Pui>, or <Yakon> and add it to your hand, then place the rest on the bottom of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-119":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you activate this card, look at up to 5 cards from the top of your deck, add up to 1 yellow ≪Demon Clan≫ card among them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a yellow ≪Demon Clan≫ card: At the end of your turn, choose up to 1 yellow ≪Demon Clan≫ card with an energy cost of 2 or less in your hand, and play it with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-057":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is <Zamasu> or <Goku Black>, reduce the energy cost of this card in your hand or Battle Area by 1.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-112":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] All of your Chilled's Army tokens can combo even in Rest Mode. They gain combo cost 0 and 5000 combo power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Switch 1 of your Chilled Army tokens to rest: This card gains [Triple Strike] (This card inflicts 3 damage instead of 1 when attacking) for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-111":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If there are 3 or more ≪Cooler's Armored Squadron≫ in your Drop Area, all <Cooler> in your hand gain [Evolve] (Yellow)(Yellow)(Yellow): <Cooler>.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-010":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card, then choose up to 1 of your red Leader Cards or red Battle Cards. It gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-077":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be removed from your Battle Area by your opponent's skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When this card is in Rest Mode, your opponent can't use non-Leader Card skills to add cards from their deck to their hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle]③: This card gets +10000 power and [Triple Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-386":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your turn, this card gets +10000 power and can attack your opponent's Battle Cards without [Barrier] in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] While your opponent has no Battle Cards in play, this card gains [Dual Attack].", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto](Green): When this card is KO'd, draw 1 card, then play up to 1 green ≪Universe 7≫ card with an energy cost of 3 from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-073":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is green: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 green card in your hand from the game.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you activate this card, you can't activate {For the Greater Good} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-105":
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, switch all ≪Great Ape≫ in your Battle Area to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in your Battle Area, choose up to 1 ≪Saiyan≫ with an energy cost of 4 or less from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-111":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is an <Android 17> card: At the end of a battle in which this card was used in a combo, play this card from your Drop Area in Rest Mode; you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn](Yellow), if your Leader Card is a yellow <Android 17> card and you choose 1 of your yellow ≪Android≫ Battle Cards other than this card and switch it to Rest Mode: Choose up to 1 mono-yellow <Android 17> card with an original energy cost of 3 in your hand and play it; you can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT2-092":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, and this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-141":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card attacks, your opponent may send 1 Battle Card from their Drop Area to their Warp. If they don't, this card gets +15000 power until the end of your opponent's next turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-118":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a <Whis> card: Negate the attack. You may choose 1 card in your hand and discard it. If you do, play up to 1 yellow skill-less Battle Card with an energy cost of 2 and 15000 power from your Drop Area in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-146":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪World Tournament≫ card: You may choose 1 ≪World Tournament≫ card in your hand and place it in your Drop Area. If you do, choose up to 2 red ≪World Tournament≫ cards with different names and energy costs of 3 or less from your deck, play them, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-028":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, choose up to 1 blue ≪Evil Incarnate≫ or ≪Demon≫ card with an energy cost of 2 or less in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn](Blue), place 1 card from your life in your Drop Area: Play up to 1 blue ≪Evil Incarnate≫ card with an energy cost of 2 from your energy.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT3-007":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of the battle after you combo with this card, choose up to 1 <Son Goku: GT> with 5000 or less power from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-129":
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in your Leader Area, choose up to 1 {Big Gete Star} in your deck and activate it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-023":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Dr. Myuu>, choose up to 1 <Bizu> from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-025":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Dr. Myuu>, choose up to 1 <Nezi> from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-053":
+        rules.append(EffectRule(trigger="owner_other_battle_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When one of your Battle Cards attacks, it gets +5000 power for the duration of the battle, then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. Then shuffle any areas you looked through.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose one—\n・Draw 1 card.\n・Choose 1 green or black ≪Desire≫ card from your hand with an energy cost less than or equal to your current energy and activate its [Activate: Main] skill.\n・Remove 7 [Dragon Ball] cards in your Drop Area from the game. If you do, choose up to 1 card each from your opponent's hand and Battle Cards and place them in their owners' Drop Areas, and this card gets +15000 power for the duration of the turn, then flip this card over at the end of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT11-063":
+        rules.append(EffectRule(trigger="owner_union_activated", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When you activate a [Union] skill, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+2][Activate: Main] Choose all of your mono-green Battle Cards, and they gain [Revenge] until the start of your next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-7][Activate: Main] If your Leader Card is mono-green: Look at your opponent's life, place 1 card among them in their Drop Area, then your opponent shuffles their life, chooses 3 cards in their hand, and discards them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-098":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is yellow: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 or less and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 yellow card in your hand from the game.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you activate this card, you can't activate {Restrain} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-026":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Play this card and negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you or your opponent's Leader Card has 15000 or more power, reduce the energy cost of this card in your hand by 2.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card KO-s your opponent's Battle Card, switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-102":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card using [Over Realm], choose up to 1 skill-less Battle Card with an energy cost of 2 or less from your deck and play it, then shuffle your deck. Then, it gains [Critical] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT15-092":
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in your Leader Area, play up to 1 {Tree of Might, Divine Roots} from your deck with 2 markers on it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn][Spirit Boost 1](Yellow): Choose one—\n・If you have 2 or more face-up cards in your life, this card gets +10000 power for the battle.\n・You may choose 1 {Fruit of the Tree of Might} in your hand and discard it. If you do, activate its [Activate: Battle] skill without paying its skill cost.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-259":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards or Unison Cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-136":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card and your Leader Card is a green ≪Frieza's Army≫ card, if there are 3 or more Battle Cards in play in your Battle Area, draw cards until you have 6 cards in your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Green), place this card in its owner's Drop Area: Choose up to 1 <Broly: Br> card with an energy cost of 7 from your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-035":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, your opponent can't attack for the turn unless they choose 1 card in their hand and place it at the bottom of their deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-073":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, your opponent chooses 1 card from their hand and places it in the Drop Area. If that card is a Battle Card with an energy cost of 4 or more, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-058":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, if you have more life than your opponent, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] ⑥: Choose all of your opponent's Battle Cards in the Battle Area and KO them.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-018":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 [Dragon Ball] card from your deck and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-075":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Sparking 7] (This skill takes effect when you have 7 or more cards in your Drop Area.) When this card attacks, if your Leader Card is black, you may choose 2 cards in your life and send it to its owner's Warp. If you do, choose up to 1 card in your opponent's life and send it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-089":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your opponent may add all of their life to their hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-079":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your Battle Cards. It gains +10000 power and [Revenge] (When this card is attacked, KO the attacking card after the battle) for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-024":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose any number of opponent Battle Cards of which the total power adds up to 30000 or less and KO those cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-080":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] [Once per turn] When a ≪Boujack Brigade≫ card is played in your Battle Area, draw 1 card, and this card gets +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with 1 of your cards during your turn, if your Combo Area has 2 or more ≪Boujack Brigade≫ cards that you comboed with from a Battle Area, choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it, and if you KO'd a card, negate this skill for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-051":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, look at up to 2 cards from the top of your deck. Choose up to 1 ≪Maiden Squadron≫ among them and add it to your hand. Then, place the remaining cards at the bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] If <Kakunsa> and <Rozie> are in play in your Battle Area, choose 1 of your opponent's Battle Cards and KO it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-045":
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you place this card in your Leader Area, choose up to 1 {Dr.Uiro's Lab} from your deck and activate it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, look at up to 7 cards from the top of your deck, choose up to 1 ≪Frenzied Warrior≫ card among them, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 keyword skill on 1 of your opponent's Battle Cards and negate it for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If a {Dr.Uiro's Lab} in your Battle Area has 17 or more cards under it: You win the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-010":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand and your Leader Card is a <Raditz> card, you may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 1 {Power Ball} from your deck, activate it, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-168":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-033":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your opponent can't combo for the duration of this card's battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, return all of your opponent's Battle Cards to their owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX13-21":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a <Cheelai: Br/Lemo: Br> card and you choose 1 card in your hand and discard it: Choose one?\n・ If you have no cards in your Battle Area, play up to 1 green <Broly: Br> card with an energy cost of 4 from your deck and up to 1 green <Cheelai: Br> or <Lemo: Br> card from your deck, then shuffle your deck.\n・ Play up to 1 green <Cheelai: Br> or <Lemo: Br> card from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-088":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a green <King Cold: Br> card: When this card is placed in a Battle Area, add up to 1 card from your life to your hand, then 1 of your Leader Cards gets +10000 power and [Double Strike] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card in your Battle Area is placed in its owner's Drop Area by one of your skills, choose up to 1 of your opponent's Unison Cards and remove a marker from it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-024":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, your opponent places 5 cards from the top of their deck in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-077":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card cannot be switched to Active Mode. Only 1 {Evil Psyche, Zamasu} can be played in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-086":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is a green <King Cold: Br> card: When this card is placed in a Battle Area, draw 1 card, then choose up to 1 mono-green ≪Frieza Clan≫ or ≪Frieza's Army≫ card with an energy cost of 2 or less in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When a green Extra Card with the [Field] skill in your Battle Area other than this card is placed in its owner's Drop Area by one of your skills, choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-082":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 opponent Battle Card with an energy cost of 2 or less and KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-282":
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When one of your yellow skill-less Battle Cards with an energy cost of 2 is removed from your Battle Area by an opponent's skill or KO'd, you may play this card from your hand. If you do, you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_deals_damage", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If this card's attack deals damage to an opponent or removes a marker from an opponent's Unison Card, play up to 1 skill-less Battle Card with 15000 power from your Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT13-089":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Play up to 1 ≪Chilled's Army≫ card with an energy cost of 2 or less from your deck in Rest Mode, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-032":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When you combo with this card, if your Leader Card is blue, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-020":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your turn, this card gets +5000 power and can attack Battle Cards in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent activates a [Counter] skill, deal 1 damage to them.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-008":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose 1 card in your hand and place it in your Drop Area. If you do so, choose up to 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-294":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, if your life is at 5 or more and your opponent's Leader Card is a red <King Vegeta: Br> card, place 1 card from your life in your Drop Area, then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-043":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: Choose this card and all of your non-black Battle Cards. They gain +5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-135":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] Choose up to 1 of your red Leader Cards and it gets +5000 power until the start of your next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-4][Activate: Main](Red)(Red)(Red)(Red)(X), if your Leader Card is red: Deal X damage to your opponent.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-062":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose 1 of your Battle Cards and return it to your hand. Then, choose up to 1 of your opponent's Battle Cards, and place it at the bottom of their deck. (Cards stacked under the card are placed in the Drop Area)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-234":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a blue ?Saiyan? card and you have a blue ?Saiyan? card in play in Rest Mode, your Leader Card doesn't take damage from attacks.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-1][Activate: Main] Choose up to 2 of your opponent's Battle Cards, return them to their owners' hands, then choose up to 1 mono-blue ?Saiyan? card with an original energy cost of 2 or less in your hand and play it with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-084":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is an ?Android?, your opponent must choose cards in their hand until there are only 3 remaining, and place the chosen cards in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-008":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card and 1 other card from your hand in the Drop Area: Choose up to 1 <Gotenks> with 25000 or less power from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-076":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose any number of your opponent's Battle Cards with energy costs of 2 or less for which the total cost adds up to 3 or less and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-044":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, when you combo with this card, if your Leader Card is blue, choose up to 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-075":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If there are 2 or more <Son Goku> in your Drop Area, reduce the energy cost of this card in your hand and Battle Area by 2.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-060":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, negate all other Battle Card skills, then choose all cards in both players' hands as well as all other Battle Cards and return them to their decks. Shuffle both decks afterwards. Then, both players draw 5 cards. (Cards stacked under other cards are placed in the Drop Area)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-080":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, choose up to 1 opponent Battle Card with an energy cost of 1 or less and KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-005":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text='[Counter: Play] Play this card.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Permanent] If a multicolored card is in your energy, reduce the energy cost of this card in your hand by 1.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn. Then, if it's your opponent's turn, choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-113":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-004":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] Activate this skill when you play {Son Gohan & Son Goten, Familial Bonds} in your Battle Area. If {Son Goku, Heavenly Salvation} isn't in play in your Battle Area, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_switched_to_rest", handler_id="noop_auto", handler_params={}, source_text='[Auto][Once per turn] When this card is switched to Rest Mode by [Alliance], if you only have <Son Goku>, <Son Gohan: Adolescence>, <Son Goten> and/or <Trunks: Youth> cards in play in your Battle Area, choose this card and up to 1 of your Battle Cards and switch them to Active Mode.', once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-101":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_switch_up_to_n_owner_battle_active_on_combo", handler_params={"max_targets": 1}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-124":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](2): If this card is in Rest Mode, choose your opponent's Leader Card, switch it to Rest Mode, and it can't be switched to Active Mode until the end of your opponent's next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-032":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_return_up_to_n_opponent_battle_to_hand_on_play", handler_params={"max_targets": 1, "max_cost": 2, "ignores_barrier": True}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-016":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-096":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is a <Boujack Brigade> card, choose up to 1 of your opponent's Battle Cards in Rest Mode and it can't switch to Active Mode until the end of your opponent's next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] 1, place this card in its owner's Drop Area: If your Leader Card is a <Boujack Brigade> card, choose up to 1 <Boujack> card with an energy cost of 3 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-006":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-101":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text='[Counter: Attack] Negate the attack and play this card.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text='[Auto] If your Leader Card is a yellow <Son Goku: GT> card: When this card is played, reveal the top card of your deck and place it in your Drop Area.', once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-035":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Activate: Main][Once per turn] Choose 1 blue card in your hand and place it in your Drop Area: Draw 1 card and this card gets +5000 power until the end of your opponent's next turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT14-021":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] All of your red non-<Kunshi> <Universe 11> cards with energy costs of 1 in your Battle Area gain [Barrier].", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text='[Auto] When this card is played, draw 1 card.', once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-109":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-109":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text='[Auto] When you play a Battle Card using [Over Realm], place the top card of your deck under this card.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 3 cards under this card and send them to your Warp: If your Leader Card is black, Battle Cards you play using [Over Realm] aren't sent to Warps at the end of this turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-114":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck, choose up to 1 skill-less Battle Card among them and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_other_battle_left_play_or_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your <Son Goku: Childhood> card is KO'd by an opponent's skill or leaves a Battle Area, choose up to 1 of your opponent's Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-037":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can only be played from Energy Areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can't play {Vegito, World's Strongest Candy} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 {Vegito, Powers Combined} in your Energy Area and play it. If you played a card, add this card to your energy in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-098":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-003":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text='[Auto] When you play this card, draw 1 card.', once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_energy_switched_active_by_non_awaken", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent switches energy to Active Mode using a non-[Awaken] skill during their turn, choose up to 1 of your opponent's energy and place it in its owner's Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT6-108":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-021":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 red <Pilaf> or <Mai> card in your hand with an energy cost of 2 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-017":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If it's your turn: When this card is used in a combo with a red <Yamcha> card, it gets +5000 combo power for the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-275":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a blue <Trunks: Future> card: When this card is played, you may add 1 card from your life to your hand. If you do, choose 1 card in your hand and place it face up in your life.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[+1][Auto] When your opponent attacks, choose up to 1 mono-blue <Trunks: Future> card with an energy cost of 2 or less in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] Choose up to 1 of your opponent's Battle Cards, negate its skills for the turn, and place it under this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-007":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] Add 1 card from your life to your hand: When this card attacks a card that isn't a Leader Card, switch this card to Active Mode and it gets +10000 power for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-274":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader Card is a red ≪Earthling≫-only card: When you combo, choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -5000 power for the battle.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red ≪Earthling≫-only card with 10000 power or less: When this card is used in a combo, flip up to 1 card in your life face up; at the end of the turn, flip all face-up cards in your life face down. You can't activate the [Auto] skills on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-010":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If you have a red Unison Card in play: Your opponent can't attack with Battle Cards with 25000 power or more for the turn, then play this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-148":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is black and you send 3 black cards from your Drop Area to your Warp: If the Battle Card being played has an energy cost of 4 or less, it is placed in its owner's Drop Area instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 12 or more black cards in your Warp, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-008":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: Choose up to 2 of your opponent's Battle Cards, they get -15000 power for the turn, then play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a red Unison Card with 2 or more markers in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-044":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: You may discard this card from your hand. If you do, the Battle Card being played is returned to its owner's hand instead. If you don't, play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a blue Unison Card with 2 or more markers in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-083":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, at the end of a battle after you combo with this card, choose up to 1 yellow <Caulifla> card in your Battle Area and play this card on top of it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards or energy and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-053":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 3 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-009":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is red, this card gets +10000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] During a battle where this card is attacking, when your opponent activates a [Counter] skill, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card KOs an opponent's Battle Card, switch this card to Active Mode and it gets +10000 power and [Triple Strike] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-050":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When choosing a card to use with this card's [Evolve] skill from your hand, you can choose a Battle Card in your energy, then play this card in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a blue <Zamasu> or <Goku Black> card and your opponent has 5 or more energy: When a card evolves into this card, place up to 2 of your opponent's energy in their owners' Drop Areas.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-081":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Ginyu Force≫ card and you discard this card from your hand: Look at up to 3 cards from the top of your deck and place them on the top and/or bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck and place them on the top and/or bottom of your deck in any order.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-020":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Pilaf> card and you have 3 or more mono-red energy: When this card is played from your hand, play up to 1 red <Mai> card and up to 1 red <Shu> card with energy costs of 2 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-022":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Pilaf> card and you have 3 or more mono-red energy: When this card is played from your hand, play up to 1 red <Pilaf> card and up to 1 red <Mai> card with energy costs of 2 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-078":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a ≪Ginyu Force≫ card: When this card is played, choose up to 1 green ≪Ginyu Force≫ card with an energy cost of 2 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-292":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a black <Mechikabura> card with the [Wish] skill, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a black <Mechikabura>-only card and you choose 1 ≪Dark Dragon Ball≫ card, 1 black ≪Demon Realm Race≫ card, or 1 black ≪Demon God≫ card in your hand and discard it: Draw 2 cards, then your opponent sends 1 Battle Card from their Drop Area to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-089":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 3 cards from the top of your deck. Choose up to 1 ≪Frieza's Army≫ among them with an energy cost of 2 or less and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-001":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 2 cards from the top of your deck, add up to 1 red card among them to your hand, then place any remaining cards in your Drop Area and this card gets +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-054":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a blue <Zamasu> or <Goku Black> card: When this card is played from your hand, place the top card of your deck in your energy, then at the end of the turn, if the card you placed in your energy with this skill is in your energy, place it in its owner's Drop Area. If the card you placed in your energy with this skill isn't in your energy, place 1 card from your energy in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX14-05":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, add up to 1 ≪Dark Dragon Ball≫ card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn]②, if your Leader Card is black, you have 3 or more energy, and you choose 1 non-black ≪Dark Dragon Ball≫ card in your hand and place it in your Drop Area: Play up to 1 <Dark Broly> card or non-black Battle Card with <Xeno> in its character name and an energy cost of 4 or less from your deck or hand, then shuffle your deck if you looked through it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-073":
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green): Choose up to 1 green <Frieza> card with an energy cost of 4 in your hand or Drop Area and play it on top of this card in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-113":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is mono-yellow and you have a yellow Unison Card in play: If the Battle Card being played has an energy cost of 2 or less, it has its skills negated for the turn before being played, then play this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-046":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 4 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-097":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is yellow, your opponent can't activate Extra Cards unless they switch 1 of their energy to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-112":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Place 3 cards under this card in their owners' Drop Areas: Switch this card and up to 1 of your <Super 17> Leader Cards to Active Mode, then choose up to 1 of your opponent's Battle Cards in Rest Mode and place it under this card; this card gets +1000 power for the turn for each energy cost in the Battle Cards placed under it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-045":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a blue <Trunks: Future> card: When this card is played or attacks, your opponent chooses 2 cards in their hand and places them at the bottom of their deck in any order.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a blue <Trunks: Future> card: When this card is played or attacks, your opponent chooses 2 cards in their hand and places them at the bottom of their deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-127":
+        rules.append(EffectRule(trigger="owner_opponent_life_added_to_hand_or_drop_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is red: When your opponent's life is added to their hand or placed in their Drop Area by a skill, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent activates a [Counter] skill, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-086":
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your opponent has 3 or more energy: When this card is removed from a Battle Area by a skill or KO'd, add up to 1 green Extra Card with an energy cost of 1 or less from your Drop Area to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 card in your opponent's hand and discard it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-145":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] If your Leader Card is blue or yellow: Switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-130":
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played using [Over Realm], play up to 1<Vegeta: Xeno> card with an energy cost of 3 from your deck in Rest Mode, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-127":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can only place up to 6 energy in your Energy Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your hand and place it at the bottom of your deck: When this card attacks, choose 1 card in your life and place it in your energy in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card and this card gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, choose up to 3 of your mono-blue energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-024":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Pilaf> card and you have 3 or more mono-red energy: When this card is played from your hand, play up to 1 red <Pilaf> card and up to 1 red <Shu> card with energy costs of 2 from your deck, then shuffle your deck", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-079":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 3 cards from the top of your deck, add up to 1 ≪Ginyu Force≫ card among them to your hand, then place the remaining cards on the top and/or bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT15-068":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Limit 1] (Green), if there are a total of 4 {King Kai's Training} in your Warp and/or under a {King Kai's Planet} in your Battle Area, and you send this card to its owner's Warp: Play up to 1 {Son Goku, Maximum Gains} from your deck, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "EX19-01":
+        rules.append(EffectRule(trigger="owner_life_card_flipped_face_up", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader Card is a red ≪Earthling≫-only card with 10000 power or less: When a card in your life is flipped face up by one of your red card skills, you may play this card from your hand. If you do, choose up to 1 of your red Unison Cards with 1000 power and 2 markers or less, add a marker to it, and you can't play multicolor Battle Cards for the game.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red ≪Earthling≫-only card with 10000 power or less: When a face-up red Battle Card in your life is played, it gets +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-053":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your cards. It gains +5000 power for the duration of the turn. Then, choose up to 2 of your energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-085":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +10000 power for the duration of the battle; then, if it's your turn, choose up to 1 of your opponent's Battle Cards and place it under a <Majin Buu> card in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-043":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is <Hirudegarn>, it gains +10000 power for the duration of the battle, then choose up to 1 card in your opponent's hand and place it on top of their deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-055":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, activate up to 1 {Super Blutz Wave Generator} from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-117":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is black, you may choose up to 2 cards in your life and add them to your hand. If you chose to add 1 or more cards to your hand, choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less and send it to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-139":
+        rules.append(EffectRule(trigger="owner_opponent_card_switched_to_rest", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is yellow: When an opponent's card is switched to Rest Mode by one of your card skills, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent plays a Battle Card using a skill or activates a [Counter] skill, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent plays a Battle Card using a skill or activates a [Counter] skill, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT11-050":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is mono-blue: Negate the attack, then choose up to 1 of your blue Unison Cards in your Unison Area or Drop Area, return it to its owner's hand, then play this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-117":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then choose up to 2 of your opponent's Tokens and switch them to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card's skills can't be negated in any area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-115":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Your Leader Card is black: Negate the attack, then choose up to 1 black Battle Card from your Drop Area or Warp with an energy cost of 1 and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-037":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is a blue <Baby> card: Play this card, then if the Battle Card being played has an energy cost of 1, it's returned to its owner's hand instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Servant] (This card gets +10000 power and can't be switched to Active Mode during your Charge Phase.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-050":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, draw 2 cards, then switch this card to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-025":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is mono-red: When this card is played, choose up to 1 of your red Unison Cards and add 3 markers to it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-066":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is mono-green: When this card is played, choose up to 1 of your opponent's Unison Cards and remove 3 markers from it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-043":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_counter", handler_id="counter_play_self_from_counter_counter", handler_params={}, source_text="[Counter: Counter] Play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your Leader Card is a blue <Baby> card: You may look at the bottom card of your deck; if it's a mono-blue Battle Card with a [Counter] skill and an energy cost less than or equal to your current energy other than a copy of this card, you may play it, otherwise return it to the bottom of your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-132":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can choose Battle Cards in your Warp when choosing cards to use with this card's [Union] skill from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, add up to 1 Battle Card with an energy cost of 4 or less from your Warp to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-131":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-147":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Blue), if your Leader Card is blue or green and you discard this card from your hand: Choose up to 2 of your opponent's Battle Cards with energy costs of 3 or less and place them at the bottom of their owners' decks in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-022":
+        rules.append(EffectRule(trigger="self_in_hand_sent_to_drop_or_warp", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your hand and discard it: When this card is placed in your Drop Area from your hand by a skill, add up to 1 red <Broly: Br> card with an energy cost of 4 or less from your Drop Area to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX13-19":
+        rules.append(EffectRule(trigger="owner_opponent_counter_play_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent activates a [Counter: Play] skill, they choose 2 cards in their hand and discard them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-018":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a red <Ba: Br> card in play, this card gets +11000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX24-21":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate Main] If you have {Barrier Around Check-In Station} in your Battle Area: Play up to 1 blue ≪Evil Incarnate≫ or ≪Demon≫ card with an energy cost of 2 or less from your hand. Additionally, you may send 1 {Dimension Magic} from your Drop to its owner's Warp. If you do, switch up to 1 of your blue energy to Active Mode at the end of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacked", handler_id="noop_auto", handler_params={}, source_text="[0][Auto] Choose 1 of your <Janemba> cards: When this card is attacked, switch the target of attack to the chosen card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT25-072":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Battle] Add up to 1 {Vegeta, Warrior Spirit} or {Trunks, Warrior Spirit} from your Combo Area to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Battle] Use up to 2 red and/or green cards with 5000 combo power from your Drop in a combo with their skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-064":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 mono-green Extra Card with an energy cost of 2 or less and the [Field] skill in your hand and activate it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-1][Activate: Main] Your opponent chooses 1 of their Battle Cards with an energy cost of 5 or less and KOs it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[-3][Activate: Battle] This card gets [Triple Strike] and +5000 power for each Extra Card in your Battle Area with the [Field] skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-089":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a green <Vegeta> card: Choose up to 1 of your cards, it gets +10000 power for the battle, then choose 1 of your Unison Cards and you may remove a marker from it. If you do, choose up to 1 of your opponent's Unison Cards and remove a marker from it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-131":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is blue: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Auto] If all of your energy is blue: When you activate this card, choose one- If it's your turn, draw 1 card. If it's your opponent's turn, choose up to 1 of your blue energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-085":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is green, you discard this card from your hand, and choose 1 of your Unison Cards and remove a marker from it: Add up to 1 green ≪Dark Dragon Ball≫ card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-098":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] Add 1 card from your life to your hand: When this card is played, look at up to 7 cards from the top of your deck, play up to 1 yellow skill-less Battle Card with an energy cost of 1 among them, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-073":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is green and you choose 1 of your Unison Cards and remove a marker from it: When this card is played, choose up to 1 of your opponent's Unison Cards and remove a marker from it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-114":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, place up to 1 ≪Shadow Dragon≫ card from your Drop Area at the bottom of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-137":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 card in your opponent's hand and send it to their Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] Choose 1 of your black Battle Cards with 30000 power and place it in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT11-108":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and it can't be switched to Active Mode during your opponent's next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_overlord_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto](Yellow), if your Leader Card is a yellow ≪Demon Clan≫ card: When you activate an [Overlord] skill, play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-107":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, look at up to 5 cards from the top of your deck, play up to 1 yellow ≪Demon Clan≫ card with an energy cost of 2 or less among them other than copies of this card in Rest Mode, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_overlord_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto](Yellow), if your Leader Card is a yellow ≪Demon Clan≫ card: When you activate an [Overlord] skill, play this card from your hand, and you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-063":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, and if your Leader Card is yellow, choose up to 1 of your yellow Battle Cards with an energy cost of 2 or less, and it gains [Blocker] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-099":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is mono-yellow: Play this card, then if the card being played has an energy cost of 4 or less, it's played with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your opponent's turn, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-051":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your opponent has 2 or more energy: When this card attacks, your opponent may choose 1 of their Battle Cards and send it to its owner's Warp. If they didn't, draw 1 card, then switch up to 1 of your blue energy to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-126":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], send it to its owner's Warp, then this card gains [Triple Attack] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your hand and send it to your Warp: When your opponent attacks, negate the attack, then negate this skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-113":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, place up to 3 ≪Shadow Dragon≫ cards from your Drop Area at the bottom of your deck in any order, then this card gains [Dual Attack] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto](Yellow): When this card is used in a combo, play 1 {Seven-Star Ball, Negative Energy Overflow} from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-072":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Overlord][Once per turn] (Place 1 of your Battle Cards with the [Servant] skill at the bottom of your deck: Draw 1 card.)", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, choose up to 1 green Battle Card with an energy cost of 3 or less and the [Servant] skill in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-140":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card's skills can't be negated in any area; you can't play this card from any area unless your Leader Card is a <Dark Broly> card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 of your black Battle Cards with 30000 power and place it in its owner's Drop Area: Add up to 1 black Battle Card with 30000 power from your Drop Area to your hand.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT22-098":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader is a yellow card with both <Son Goku: Childhood> and <Korin> and you have 3 or more energy: When you play a yellow {Upa} from your hand, you may also play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Switch this card to Rest Mode: Play up to 1 yellow {Bora} from your Drop.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-519":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader is a yellow <Gotenks: Adolescence> and you choose cards to use with this card's [Union] skill from a hand, you may choose the specified Battle Card in your Drop. If you do, place the chosen cards at the bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in Rest Mode, only your opponent's Leader can attack Unisons.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT21-041":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, look at up to 7 cards from the top of your deck, place up to 1 mono-blue <Vegeta: GT> with an energy cost of 1 or 1 mono-blue ≪Brainwashed≫ under one of your {Universal Tuffleization Plan} cards, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Blue), place 1 <Vegeta: GT>-only card from your Drop or from under a {Universal Tuffleization Plan} in your Battle Area under this card: Play up to 1 blue <Baby> with an energy cost of 4 from under this card on top of this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT20-061":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your turn, while there are 2 or more green <Son Goku: GT> cards in your Warp, this card gets +6000 power.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EB1-47":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is mono-yellow and you have 3 or more energy: Choose up to 1 yellow <Frieza> card with {Mecha} in its card name and an energy cost of 4 in your hand and play it. You can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-079":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green), if your Leader Card is a green <Gotenks> card and you discard this card from your hand: Play or add to your hand up to 1 green <Son Goten> card with an energy cost of 3 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_in_hand_sent_to_drop_or_warp", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is discarded from your hand by a [Union] skill, look at up to 7 cards from the top of your deck, add up to 1 green Unison Card with a specified cost of 2 among them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-115":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn](Yellow), play up to 1 yellow <Hell Fighter 17> card with an energy cost of 1 from your deck or Drop Area, then shuffle your deck if you looked through it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-032":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, this card gets +10000 power and [Critical] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-013":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red ≪Earthling≫-only card with 10000 power or less: When this card is used in a combo, flip up to 1 card in your life face up; at the end of the turn, flip all face-up cards in your life face down. You can't activate the [Auto] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a red ≪Earthling≫-only card with 5000 power: Combo with this card from your Drop Area; at the end of the battle, send this card from your Drop Area to your Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-145":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Dark Broly> card: When this card is played, place up to 2 black Battle Cards with 30000 power from your deck in your Drop Area, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EB1-46":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card and all of your energy are mono-yellow and you send 2 mono-yellow Extra Cards with energy costs of 1 or more other than this card from your Drop Area to your Warp: The Battle Card being played is played in Rest Mode with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-146":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] Play this card, and if the Battle Card being played has an energy cost of 2 or less, it's sent to its owner's Warp instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Dark Broly> card: When this card is played, place up to 2 black Battle Cards with 30000 power from your deck in your Drop Area, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-078":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green), if your Leader Card is a green <Gotenks> card and you discard this card from your hand: Play or add to your hand up to 1 green <Trunks: Youth> card with an energy cost of 3 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-060":
+        rules.append(EffectRule(trigger="owner_opponent_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto][Bond 2] If your Leader Card is a ≪Slug's Army≫ card: When your opponent uses a card in a combo, you may place that card in its owner's Drop Area. If you do, you and your opponent draw 1 card, then negate this skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, if your opponent has 7 or more cards in their hand, play up to 1 green ≪Slug's Army≫ card with an energy cost of 1 from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, if your opponent has 7 or more cards in their hand, play up to 1 green ≪Slug's Army≫ card with an energy cost of 1 from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-041":
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your opponent activates a [Counter] skill during a battle with this card, choose all of your opponent's Battle Cards, ignoring [Barrier], return them to their owners' hands, then switch up to 2 of your mono-blue energy to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT11-105":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Overlord][Once per turn] (Place 1 of your Battle Cards with the [Servant] skill at the bottom of your deck: Draw 1 card.)", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a yellow ≪Demon Clan≫ card: When this card is played, activate this skill. During your opponent's next turn, your Leader Cards and Unison Cards don't take damage from attacks of cards that have [Double Strike] or [Triple Strike] skills.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-281":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be played from any area unless your opponent has 3 or more energy.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your opponent's Unison Cards and remove a marker from it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-132":
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played using [Over Realm], your opponent can only attack with Battle Cards once during their next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, you can't play copies of this card during your next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-143":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your opponent's turn, if you have a black Unison Card in play, this card gets +10000 power and [Blocker].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-136":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card's skills can't be negated in any area; you can't play this card from any area unless your Leader Card is a <Dark Broly> card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] Choose this card and 1 <Towa> card in your Battle Area and switch them to Rest Mode: Choose 1 of your <Dark Broly> Battle Cards and it gains [Critical] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] Choose this card and 1 <Towa> card in your Battle Area and switch them to Rest Mode: Choose 1 of your <Dark Broly> Battle Cards and it gains [Critical] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-058":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 card each from your opponent's Battle Area (Battle Cards only), energy, life, and hand, then place them at the bottom of their deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-285":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 <Eis Shenron> card from your deck, hand, or Drop Area, play it, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-466":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] For each green Unison in your Drop, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader is a ≪Frieza Clan≫ card: At the end of your turn or when this card activates its [Blocker] skill, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_blocker_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader is a ≪Frieza Clan≫ card: At the end of your turn or when this card activates its [Blocker] skill, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_blocker_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card activates its [Blocker] skill, use one mono-green card with 5000 combo power from your Drop in a combo with its skills negated for the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-135":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a <Dark Broly> card and you send 6 black Battle Cards other than this card from your Drop Area to your Warp: Play this card from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, you can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX05-01":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Blue): Choose up to 1 ≪Agent of Destruction≫ card with an energy cost of 4 that is both blue and yellow from your deck, play it in Rest Mode, shuffle your deck, then place this card at the bottom of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-02":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main]①, place this card in your Drop Area from your hand: If your Leader Card is a <Vegito> card, choose up to 1 <Son Goku> card and 1 <Vegeta> card in your deck or Drop Area with energy costs of 2 or less, negate their skills, play them in Rest Mode, shuffle your deck if you looked through it, and you can't play non-<Vegito> Battle Cards for the duration of the turn. At the end of the turn, place all Battle Cards played into the Battle Area by this skill in their owners' Drop Areas.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX02-07":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is red or blue, place up to 2 cards from the top of your deck in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX01-01":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 1 blue <Vegeta> among them with an energy cost of 3 or less and play it in Rest Mode. Then, place the remaining cards on the bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-23":
+        rules.append(EffectRule(trigger="owner_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent's cards attack, if your Leader Card is ≪Frieza Clan≫, you may choose 1 ≪Frieza Clan≫ other than <Frieza> in your hand and place it in your Drop Area. If you do so, negate that attack, and negate this skill for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-09":
+        rules.append(EffectRule(trigger="owner_energy_switched_to_active", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When your energy is switched from Rest Mode to Active Mode by a skill, if it's your opponent's turn, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "EX03-04":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if you have <Evil Wizard Babidi> in your Battle Area or Leader Area, for the duration of the turn this card gains +10000 power and [Dual Attack].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD1-02":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose all of your opponent's Battle Cards with [Blocker] and return them to their hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD1-04":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-067":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, choose up to 1 of your opponent's Battle Cards and KO it. Then, your opponent chooses 1 card in their hand and places it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD2-05":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 Battle Card from your hand with power of 15000 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-057":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Sparking 5] When you play this card, you may choose 1 card from your life and add it to your hand. If you do, choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-052":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, if your Leader Card is green, choose up to 1 card from your opponent's hand or up to 1 of their Battle Cards and place it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-077":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is yellow, your opponent's [Counter] skills and non-keyword [Auto]/[Activate] skills cannot be activated unless they place 1 card from their life in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-11":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Zamasu> or <Goku Black> and you have 5 or more energy, you may inflict 2 damage to your life. If you do so, choose up to 4 of your energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-144":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your turn, if you have a black Unison Card in play, this card gets +10000 power and [Double Strike].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX01-02":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is blue, reduce the energy cost of this card in your hand and Battle Area by 1.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-063":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Activate: Main] [Once per turn] Choose 1 {Master Roshi, Martial Meister} in your Battle Area and switch it to Rest Mode: Draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-078":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card at the bottom of its owner's deck: Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and place 2 cards from the top of your opponent's deck in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-006":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 card in your life and add it to your hand: This card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD8-06":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] (Green), choose 1 card from your hand and place it in your Drop Area: Choose up to 1 <Cheelai: Br> card with an energy cost of 2 or less from your deck and play it, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "SD7-05":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Burst 3] (You must place the top 3 cards of your deck in your Drop Area to activate this skill.) For the duration of the turn, this card gets +5000 power and can attack Battle Cards in Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "SD10-02":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your life and add it to your hand: When this card attacks, it gets +10000 power and [Double Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD11-02":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is red: When you combo with this card, choose up to 1 red Extra Card from your deck, place it in your Drop Area, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD6-02":
+        rules.append(EffectRule(trigger="self_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in your Drop Area from your hand as a result of [Union-Fusion], if your Leader Card is a <Gogeta> card, choose up to 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD6-03":
+        rules.append(EffectRule(trigger="self_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in your Drop Area from your hand as a result of [Union-Fusion], if your Leader Card is a <Gogeta> card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 [Field] card in your opponent's Battle Area and place it in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD9-02":
+        rules.append(EffectRule(trigger="owner_other_battle_area_card_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto] When {King Vegeta's Dynasty} in your Battle Area is placed in its owner's Drop Area, activate this skill. If {Raditz, Earth Invader} isn't in play in your Battle Area, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-105":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and send it to their Warp, then choose up to 1 Battle Card from your Warp with an energy cost of 4 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-030":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, your opponent chooses any number of cards from their hand, Battle Area, or Energy Area for which the total cost adds up to 6 or more and places them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-053":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose one-\n・This card gets +3000 power for the duration of the turn for each ≪Namekian≫ card under this card.\n・If there are 3 or more ≪Namekian≫ cards under this card, this card gains [Barrier] until the end of your opponent's next turn, then choose up to 1 of your opponent's energy and switch it to Rest Mode. That card can't be switched to Active Mode until the end of your opponent's next turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB2-020":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is ≪World Tournament≫, you may choose 1 {Test of Strength Uub} from your hand and play it. If you do so, both that card and this card gain +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-069":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 card each from your opponent's Life and Energy Areas, then place them at the bottom of their owner's deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-092":
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent activates a [Counter] skill during a battle with this card, you may switch this card to Active Mode. If you do, negate this card's skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, play up to 1 yellow {Son Goku} with an energy cost of 2 from your deck or Drop Area, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-114":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_switch_up_to_n_owner_battle_active_on_combo", handler_params={"max_targets": 1}, source_text="[Auto][Burst 1] If your Leader Card is a ≪Shadow Dragon≫ card and it's your opponent's turn: When this card is used in a combo from your hand, choose up to 1 ≪Shadow Dragon≫ card in your Battle Area and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-131":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played using [Over Realm], choose up to 2 cards in your opponent's hand and send them to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-271":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red <King Vegeta> card: When this card is placed in your Battle Area, choose up to 1 red or green ≪Saiyan≫ card with an energy cost of 2 or less in your hand, play it with its skills negated for the turn, then draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] If your Leader Card is a red <King Vegeta> card: Use a Red/Green multicolor Battle Card from your Drop Area in a combo with its skills negated for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB3-043":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD11-03":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, it gets +10000 power and you can't play non- ≪Universe 7≫ Battle Cards for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent plays a Battle Card, you may return this card to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD9-01":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card from your life and add it to your hand: Look at up to 5 cards from the top of your deck, choose up to 1 red or green ≪Saiyan≫ card or {King Vegeta's Dynasty} among them and add it to your hand, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "EX06-21":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a green <Vegito> card, it gets +15000 power for the duration of the battle, and if it is your turn, also choose one?\n・Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it.\n・Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less, ignoring [Barrier], and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-138":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a ≪Shadow Dragon≫ card: When this card is played, choose up to 1 ≪Shadow Dragon≫ Extra Card in your Drop Area and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_discarded", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a ≪Shadow Dragon≫ card: When this card is discarded by a ≪Shadow Dragon≫ card's skill, you may look at the top card of your deck; if it's a black ≪Shadow Dragon≫ card you may add it to your hand, otherwise, place it at the bottom of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-013":
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is KO'd, draw 1 card, then choose up to 1 of your opponent's Battle Cards and it gets -15000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-006":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose all ≪Ginyu Force≫ cards in your Battle Area, and they get +10000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Play this card in your opponent's Battle Area from its owner's Drop Area with its skills negated, then choose up to 1 of your opponent's Battle Cards with 20000 power or less other than {Body Change Ginyu}, gain control of it, and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-059":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 [Dragon Ball] card from your deck and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 other ≪Namekian≫ card in your Battle Area: Place this card under the chosen Battle Card, and that card gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-047":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 {Trusting Relationship Kami} from your deck, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-061":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose 1 card in your life and add it to your hand. If you do so, choose up to 1 of your opponent's Battle Cards, switch it to Rest Mode, and this card gains +10000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-036":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose up to 2 cards from your life and add them to your hand. If you chose to add 1 or more cards to your hand, this card gets +15000 power and [Critical] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-058":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto][Burst 2] At the end of a battle in which you combo with this card from your hand, if your Leader Card is a ≪Namekian≫ card, play this card in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 other ≪Namekian≫ card in your Battle Area: Place this card under the chosen Battle Card, and that card gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-011":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, and play this card. ([Counter] is activated from your hand by paying the card's energy cost)", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If {Heroic Duo Son Gohan} is in play in your Battle Area, this card gains +9000 power.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-276":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then play this card in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_leader_attacked", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is blue and you place this card in Rest Mode at the bottom of its owner's deck: When your opponent attacks a Leader Card, choose up to 1 of your Leader Cards and it gets +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-048":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Blue)(Blue), place this card in its owner's Drop Area: Play up to 1 skill-less ≪Evil Incarnate≫ card with an energy cost of 3 or less from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-039":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 each of your and your opponent's Battle Cards and KO them. If you KO-ed {Destined Conclusion Hero} as your Battle Card, for the duration of the turn this card gains +10000 power and [Triple Strike].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-058":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If <Ribrianne> and <Rozie> are in play in your Battle Area, this card gains [Dual Attack].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-026":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If a ≪Bardock's Crew≫ card is in your Drop Area, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 ≪Bardock's Crew≫ card in your Battle Area and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-065":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a ≪Universe 9≫ card: When you play this card, choose up to 2 blue ≪Universe 9≫ cards with different names and energy costs of 4 or less from your deck, play them with their skills negated for the duration of the turn, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-033":
+        rules.append(EffectRule(trigger="owner_battle_ko_opponent_battle_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card KOs an opponent's Battle Card, switch this card and up to 1 of your mono-blue energy to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT7-086":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-093":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB1-066":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] If <Prum> is in play in your Battle Area, choose 1 of your opponent's Battle Cards with an energy cost of 5 or less and KO it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-144":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main]②, if your Leader Card is a black ≪Demon Realm Race≫ card and you place this card from your hand and 1 card from your life in your Drop Area: Send 1 Battle Card from your opponent's Drop Area to their Warp, play up to 2 black Battle Cards with ≪Evil Wizard≫ and/or ≪Demon Realm Race≫ with energy costs of 2 and different character names that aren't <Mechikabura> cards from your deck, then shuffle your deck. You can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-097":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Whis> card and it's your opponent's turn: When this card is used in a combo, combo with up to 1 yellow skill-less Battle Card with an energy cost of 2 and 15000 power from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-014":
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red ≪Earthling≫-only card: At the end of a turn where this card was played from your hand, play up to 2 red skill-less Battle Cards with energy costs of 1 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-009":
+        rules.append(EffectRule(trigger="self_switched_to_rest_by_owner_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is switched from Active Mode to Rest Mode with {Secret Treaty Hercule}'s skill, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-020":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card, choose all ≪Universe 6≫ in your Battle Area. They gain +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand, if your Leader Card is red, choose up to 1 of your other ≪Saiyan≫ Battle Cards in play which are ≪Universe 7≫ or ≪Universe 6≫ and switch it to Active Mode. Both that card and this card gain +10000 power and [Triple Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-019":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 <Frost> with 20000 or less power from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-007":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 <Majin Buu> with 25000 or less power from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-015":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 card in your Battle Area and place up to 5 cards from the top of your deck under the chosen card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-062":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less, switch it to Rest Mode, and this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-014":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Leader Cards, and it gets -5000 power for the duration of the turn, and you can't play {Strategic Mind Kikono} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 ≪Universe 9≫  in your hand with an energy cost less than or equal to your total energy and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-080":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is ≪Universe 11≫, look at up to 10 cards from the top of your deck, choose up to 2 ≪Universe 11≫ with energy costs of 3 or less from among them, and play them in Rest Mode. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-098":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto](Yellow), if your Leader Card is a <Whis> card and it's your turn: When this card is used in a combo, choose up to 2 of your yellow skill-less Battle Cards with 15000 power, switch them to Active Mode, and they get +5000 power for the turn; you can't activate the [Auto] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD15-02":
+        rules.append(EffectRule(trigger="self_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] (You can only activate this skill once per turn across all copies of this card.) When this card is placed in your Drop Area from your Unison Area, choose up to 1 of your mono-red Leader Cards and it gets +5000 power for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -10000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_leader_attacked", handler_id="noop_auto", handler_params={}, source_text="[-6][Auto] If your opponent's life is at 3 or more: When your mono-red ≪Saiyan≫ Leader Card is attacked, deal 1 damage to your opponent.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-014":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is red: When this card is played, choose up to 1 of your red Unison Cards, add 2 markers to it, then choose up to 3 cards in your opponent's hand and send them to their Warp. At the end of your opponent's next turn, they add all cards sent to their Warp by this skill from their Warp to their hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-019":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"count": 1}, source_text="[Auto] When this card attacks a Leader Card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-016":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is red: When this card is played, choose up to 1 of your red Unison Cards, add a marker to it, then your opponent chooses 1 card in their hand and sends it to their Warp. At the end of your opponent's next turn, they add the card sent to their Warp by this skill from their Warp to their hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-023":
+        rules.append(EffectRule(trigger="owner_life_card_flipped_face_up", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader Card is a red <King Piccolo> card: When a card is placed in your life face up from any area other than your life, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red <King Piccolo> card and you flip 1 face-up card in your life face down: When this card is placed in your Drop Area from your Battle Area by an opponent's skill, play this card from your Drop Area with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-129":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a black ≪Saiyan≫ card, you have 3 or more energy, and there are 15 or more cards in your Drop Area, this card gets +11000 power and [Double Strike] during your turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-138":
+        rules.append(EffectRule(trigger="owner_energy_left_energy_area_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is blue: When your energy or your opponent's energy leaves an Energy Area due to a skill, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_energy_left_energy_area_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is blue: When your energy or your opponent's energy leaves an Energy Area due to a skill, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, switch up to 1 of your energy to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, switch up to 1 of your energy to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT15-072":
+        rules.append(EffectRule(trigger="owner_other_battle_koed_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When one of your green Battle Cards is KO'd by an opponent's skill, you may play this card from your hand. If you do, this card gets +10000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-011":
+        rules.append(EffectRule(trigger="owner_other_battle_removed_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When one of your red ≪Earthling≫ cards other than a <Bulma> card is removed from a Battle Area by an opponent's skill, you may play this card from your hand. If you do, play up to 1 red ≪Earthling≫-only Battle Card with an energy cost of 4 or less from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT21-042":
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a blue <Uub>: When one of your blue <Uub> cards with an energy cost of 6 or more is removed from your Battle Area by a skill, play this card from your hand.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_blocker_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card activates [Blocker], switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "EX16-08":
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto]①, if your Leader Card is a black ≪Demon Realm Race≫ card: When this card is removed from your Battle Area by an opponent's skill or KO'd, play up to 1 <Lord Slug: Xeno> card with an energy cost of 9 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto]①, if your Leader Card is a black ≪Demon Realm Race≫ card: When this card is removed from your Battle Area by an opponent's skill or KO'd, play up to 1 <Lord Slug: Xeno> card with an energy cost of 9 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT15-074":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If a green [Field] Extra Card is in your Battle Area, you can play this card from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT18-098":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in Rest Mode, your opponent can't attack your Leader with Battle Cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1](1), if your Leader is a ≪Bardock's Crew≫ card with its back facing up: At the end of a battle where this card was used in a combo from your hand, play this card from your Drop.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_switched_to_rest_by_owner_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your skills, switch it to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT10-067":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is green and you have a green Unison Card with a specified cost of 2 in play, you can play this card from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX15-01":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Red)(Red)(Red): If your Leader Card is a red <Gogeta: Br> card and you have 4 or more energy: Choose up to 1 mono-red <Gogeta: Br> card with an energy cost of 8 or less from your deck or hand, play it on top of this card, then shuffle your deck if you looked through it. You can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-010":
+        rules.append(EffectRule(trigger="owner_life_card_flipped_face_up", handler_id="noop_auto", handler_params={}, source_text="[Auto](Red), if your Leader Card is a red ≪Earthling≫-only card: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-006":
+        rules.append(EffectRule(trigger="owner_life_card_flipped_face_up", handler_id="noop_auto", handler_params={}, source_text="[Auto](Red), if your Leader Card is a red ≪Earthling≫-only card and you have 2 or more red energy: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-080":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card would be removed from your Battle Area by an opponent's skill, you may choose 1 card in your hand and discard it instead.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT18-025":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack][Limit 1] Negate the attack and play this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader is a red <Syn Shenron> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-009":
+        rules.append(EffectRule(trigger="owner_life_card_flipped_face_up", handler_id="noop_auto", handler_params={}, source_text="[Auto](Red), if your Leader Card is a red ≪Earthling≫-only card and you have 2 or more red energy: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-081":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card would be removed from a Battle Area, it's sent to its owner's Warp instead.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT24-010":
+        rules.append(EffectRule(trigger="owner_card_markers_became_zero_from_battle", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader is a red <Vegeta> or <Bulma> card: When your {SSG Son Goku, Crimson Guardian Deity}'s markers become 0 from a battle, play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader is a red <Vegeta> or <Bulma> card and you have 4 or more energy: When your {Son Goku, Dawn of Divinity} is removed from your Battle Area by your opponent's skill or KO'd, play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_other_battle_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader is a red <Vegeta> or <Bulma> card and you have 4 or more energy: When your {Son Goku, Dawn of Divinity} is removed from your Battle Area by your opponent's skill or KO'd, play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-416":
+        rules.append(EffectRule(trigger="owner_other_extra_played", handler_id="noop_auto", handler_params={}, source_text="[Auto](Yellow), if your Leader is a ≪Great Ape≫ <Son Gohan: Youth> card and you have 2 or more energy: When a yellow [Field] Extra is placed in your Battle Area, add up to 1 card from your life to your hand, then play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, play up to 1 yellow <Son Gohan: Youth> card with an energy cost of 1 from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT20-032":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] While your Leader is a ≪Universe 7≫ card and you have 3 or more energy, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_arrival_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Limit 1] If your Leader is a red <Warriors of Universe 7> card and you place this card from your Combo Area in its owner's Drop: When you use [Arrival] to play a Red/Blue multicolor Battle Card, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card attacks, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-072":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-067":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-017":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-033":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-065":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-031":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-027":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-040":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-037":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-027":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-079":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-039":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-006":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-094":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-009":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-011":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-054":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-100":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-097":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text=text, once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-125":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks a Leader Card, draw 1 card and this card gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, this card gets +5000 power for the duration of the turn, then choose up to 1 skill-less Battle Card in your Drop Area with an energy cost of 2 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards with [Double Strike], [Critical], or [Blocker].", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards with [Double Strike], [Critical], or [Blocker].", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT15-051":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Place all the cards under this card in their owners' Drop Areas: If you placed 1 or more cards in a Drop Area using this skill, this card gets +5000 power and [Double Strike] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT4-120":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is <Demigra> it gains +10000 power for the duration of the battle, and if it's your turn, your opponent then chooses 1 card from their hand and sends it to their Warp, then if that card is a Battle Card, combo with it in your Combo Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-121":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 Battle Card in your Warp with an energy cost of 4 or less and play it. If you use this skill to play a Battle Card with [Over Realm], choose up to 3 of your energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-005":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Add 1 card from your life to your hand: When this card attacks, it gets +11000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_deals_damage", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red ≪Saiyan≫ card and you have 2 or more energy: When this card deals damage by attacking, switch this card to Active Mode, look at up to 7 cards from the top of your deck, play up to 1 ≪Bardock's Crew≫ card with an energy cost of 1 among them, then shuffle your deck. The card you played with this skill and this card can't attack for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-119":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a ≪Shadow Dragon≫ card: Negate the attack, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-064":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Battle Card Attack] Negate the attack, and place this card on the attacking card. At the end of the opponent's next turn, place this card (and only this card) in the Drop Area. (As long as this card is stacked on top of another card, that card is not treated as a Battle Card and its skill cannot be activated.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-035":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is a ≪Frieza Clan≫ card: If the Battle Card being played has an energy cost of 3 or less, it is returned to its owner's hand instead of being played, then your opponent places 2 cards from the top of their deck in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-016":
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, choose up to 1 red ≪Frieza's Army≫ card with an energy cost of 2 from your hand and play it. If you played a card with this skill, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-086":
+        rules.append(EffectRule(trigger="self_placed_in_leader_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you place this card in your Leader Area, activate up to 1 {Cutting-Edge Recovery Device} from your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] Place 1 card from your life in your Drop Area: Draw 1 card, and this card gets +5000 power and [Double Strike] for the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT7-021":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is red: Choose up to 1 red ≪Saiyan≫ card in your Drop Area with an energy cost of 3 or less and 15000 power or less and play it. If you played a card, choose up to 2 [Dragon Ball] cards from your deck and add them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-065":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When you play a ≪World Tournament≫ Battle Card, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 2 of your Battle Cards with ≪World Tournament≫, they each gain +5000 power for the duration of the turn, then negate this skill for the duration of the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-125":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When this card has 2 or fewer markers on it, it can't attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Place up to 2 black Battle Cards with 30000 power from your Warp in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-4][Activate: Main] Place up to 8 black Battle Cards with 30000 power from your Warp in your Drop Area, then if your Leader Card is a <Dark Broly> card, it gets +15000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "XD1-01":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a blue or yellow ≪Universe 6≫ card is played in your Battle Area, that card gets +5000 power for the duration of the turn, then choose up to 1 card in your life and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent's Leader Card attacks, if all of your opponent's energy is in Rest Mode, choose up to 2 of your opponent's energy. Cards chosen with this card's skill can't be switched to Active Mode during your opponent's next Charge Phase.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_switched_to_rest", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When one of your card skills switches an opponent's Battle Card or energy to Rest Mode, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT3-022":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Dr. Myuu>, choose up to 1 <Natt> from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-020":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Union Absorb] Choose 1 each of <Nezi>, <Natt>, <Bizu>, and <Ribet> from your Drop Area and place them under this card: Choose up to 1 <General Rilldo> with 25000 power from your deck and place it on top of this card. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-123":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Union-Potara](Red)(Red)(Red)(Red)(Red): <Son Goku> and <Vegeta> (Place this card in Active Mode on top of the 2 specified cards stacked together.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-405":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose up to 1 Battle Card in play, ignoring [Barrier]. This card's power becomes the chosen card's power at the time you chose it with this skill, and at the start of your opponent's turn, this card's power becomes 4000.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "DB3-022":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is red: Choose 1 of your cards and it gets +5000 power for the turn; if it's your opponent's turn, choose up to 1 of your opponent's cards, ignoring [Barrier], and it gets -5000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-033":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 of your Battle Cards: For the turn, the chosen card gets +15000 power, can attack Battle Cards in Active Mode, can't have its attacks negated, and can't attack your opponent's Leader Card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-108":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 black Battle Card with an energy cost of 4 or less in your Warp and play it. If the Battle Card played with this skill has [Over Realm] or [Dark Over Realm], choose up to 2 of your energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-019":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Frieza Clan≫ card: Choose 1 of your opponent's Battle Cards and it gets -15000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-107":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose up to 1 {Four-Star Ball} from your deck or Drop Area and add it to your hand, then shuffle your deck if you looked through it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] (2): If your Leader Card is black, choose up to 1 skill-less Battle Card with an energy cost of 3 or less from your deck or Drop Area and play it, then shuffle your deck if you looked through it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-019":
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is KO'd, choose up to 1 <Spike> card from your Drop Area and play it in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-014":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be KO'd and can attack Battle Cards that are in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, if there are no Battle Cards in play in your opponent's Battle Area, choose up to 2 cards in your opponent's life and place them in their Drop Area, and you can't play {SSB Gogeta, Fusion Onslaught} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Battle Card, switch this card to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-102":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, play 1 Chilled's Army token. (Chilled's Army token has 10000 power)", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card and play 1 Chilled's Army token. (Chilled's Army token has 10000 power)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-132":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your hand and discard it: When this card is played, choose one-\n・ Play up to 1 skill-less Battle Card with an energy cost of 2 or less from your Drop Area.\n・ Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less, negate its skills for the turn, and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-050":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When this card is under a card, the <Majin Buu> on top of this card gains [Barrier].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-101":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 ≪Boujack Brigade≫ card with an energy cost of 2 or less from your deck and play it in Rest Mode, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-04":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Red)(Red)①: Choose up to 1 red <Hit> card in your Drop Area or Warp with an energy cost of 6, evolve this card into it, and you can't play red <Hit> cards with an energy cost of 6 for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-015":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a Battle Card or Extra Card to switch energy to Active Mode, they can't switch energy to Active Mode unless they choose 5 cards from their Drop Area and send them to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-065":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Look at up to 10 cards from the top of your deck. Choose up to 1 <Goku Black> or <Zamasu> among them. If you have 4 or more energy, choose 2 instead. Add the choose up to 2 instead. Add the chosen cards to your hand and shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-081":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your hand is not affected by your  Leader Card Broly's skill.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-094":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_start", handler_id="noop_auto", handler_params={}, source_text="[Auto] Place this card in its owner's Drop Area: At the start of your turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-096":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is green: Choose all of your opponent's Battle Cards and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-036":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card and your Leader Card is blue, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose oneー\n・Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order.\n・Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-037":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 Battle Card other than <Grand Supreme Kai> with a card name that includes {Supreme Kai} from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-119":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is black: Negate the attack, then choose up to 1 skill-less Battle Card from your Drop Area or Warp and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-038":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose one-\n・This card gains [Triple Strike] for the duration of the turn.\n・This card gains [Triple Attack] for the duration of the turn.\n・This card gets +30000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-127":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 3 Clone Tokens in your opponent's Battle Area and remove them from the game: Play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle](Blue)(Blue)②: Choose any number of Battle Cards in your Energy Area, combo them with this card in battle, and this card gains [Triple Strike] for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-064":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-059":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, KO it, and if it was in Rest Mode, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-074":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, your opponent chooses 1 card from their hand and places it in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-021":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of a battle where this card was used in a combo from your life, play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your Leader Card is a red <King Piccolo> card: Choose up to 1 of your red Unison Cards with [Rejuvenate] in its skill text, and you may place 1 red ≪Demon Clan≫ card from your Drop Area under it. If you do, draw 1 card, then add 1 marker to the chosen Unison Card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-106":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a yellow ≪Frieza's Army≫ card, you have 2 or more energy, you place 1 face-up card from your life in your Drop Area, and send this card from your Drop Area to your Warp: You may choose 1 mono-yellow ≪Frieza's Army≫ card or mono-yellow Unison Card in your hand and place it in your life face up. If you do, draw 1 card. You can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-115":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 <Demigra> with an energy cost of 4 or less from your deck and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX08-07":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 <Broly: Br> card with an original energy cost of 4 from your deck, negate its [Auto] skill for the duration of the turn, play it, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-117":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 of your Battle Cards with the [Servant] skill, negate its skills for the turn, then switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-064":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Blocker]", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-057":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in your Drop Area: Choose up to 1 green {Super Saiyan Son Goku} or {Spirited Search SS Trunks} with an energy cost of 2 from your deck and play it. Then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-105":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Auto] If your Leader Card is a yellow ≪Frieza's Army≫ card and you place 1 face-up card from your life in your Drop Area: When this card is played, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_switched_to_rest", handler_id="noop_auto", handler_params={}, source_text="[Auto] When one of your opponent's cards is switched to Rest Mode by one of your skills, this card gains [Blocker] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-066":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is <Trunks: Future>, look at up to 10 cards from the top of your deck. Choose up to 1 <Son Goku> or <Vegeta> or <Trunks: Future> among them, add it to your hand, and shuffle your deck. Then, if you have 4 or more energy, choose 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-029":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a red <Gogeta: Br> card: Choose one-\n・ Play or add to your hand up to 1 skill-less <Son Goku: Br> card with an energy cost of 1 and up to 1 skill-less <Vegeta: Br> card with an energy cost of 1 from your deck, then shuffle your deck.\n・ Play or add to your hand up to 1 skill-less <Son Goku: Br> card with an energy cost of 1 and up to 1 skill-less <Vegeta: Br> card with an energy cost of 1 from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-047":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less, ignoring [Barrier], and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-076":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is green or a ≪Phantom Demon≫ card: Negate the attack, then you may choose 1 card in your hand and discard it. If you do, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-023":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle](Red)(Red), choose 1 red <Broly: Br> card in your Battle Area and return it to its owner's hand: Play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle](Red)(Red), choose 1 red <Broly: Br> card in your Battle Area and return it to its owner's hand: Play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-074":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto} When a card evolves into this card, your opponent chooses two cards from their hand, and places them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-068":
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, choose one-\n・ Choose up to 1 <Hirudegarn> card with an energy cost of 3 from your deck or hand, play it, then shuffle your deck if you looked through it.\n・ Draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-102":
+        rules.append(EffectRule(trigger="owner_life_placed_into_drop", handler_id="noop_auto", handler_params={}, source_text="[Auto](Yellow), if your Leader Card is a yellow ≪Frieza's Army≫ card and all of your energy is mono-yellow: When this face-up card in your life is placed in your Drop Area, play this card from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If it's your turn: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less in Rest Mode and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-035":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-040":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be KO'd in battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Burst 3] If your Leader Card is a <Paikuhan> card: If you placed at least 1 blue <Son Goku> card and 1 blue <Vegeta> card in your Drop Area with this skill, play this card from your hand. If you didn't play this card, discard it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-017":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be played from any area with non-[Evolve] skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can attack your opponent's Battle Cards in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed_opponent_battle_or_removed_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If your Leader Card is a red ≪Saiyan≫ card: When this card KOs one of your opponent's Battle Cards with an original energy cost of 2 or more or is removed from your Battle Area by an opponent's skill, deal 1 damage to your opponent.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT1-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose all of your opponent's Battle Cards in the Battle Area with 15000 or less power and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-047":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can't play {Infernal Chain Janemba} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Sparking 10] (This skill takes effect when you have 10 or more cards in your Drop Area.) Place this card at the bottom of its owner's deck: If your Leader Card is ≪Evil Incarnate≫ card, choose up to 1 <Janemba> card from your Warp with an energy cost of 4 and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-585":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is played, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, use up to 1 mono-black card with 5000 combo power from your Warp in a combo with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-013":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Activate: Main] Switch this card to Rest Mode: Draw 1 card, then choose up to 1 of your Battle Cards and it gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-003":
+        rules.append(EffectRule(trigger="owner_union_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When you activate a [Union] skill, add a marker to this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[0][Activate: Main] Draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-5][Activate: Main] This card gets +15000 power, [Double Strike], and [Dual Attack] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-072":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if there is a <Cheelai: Br> card in play in your Battle Area, your opponent chooses 1 card from their hand and places it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-020":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, it gets +9000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is KO'd, choose up to 1 <Son Gohan> card from your Drop Area and play it in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-057":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card, choose up to 1 of the keyword skills on 1 of your opponent's Battle Cards and negate it for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-056":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is mono-blue: Switch up to 1 of your mono-blue energy to Active Mode, then choose up to 1 of your opponent's Battle Cards with 15000 power or less, ignoring [Barrier], and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a blue Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-093":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 5 cards from the top of your deck, add up to 1 ≪Shadow Dragon≫ card among them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, choose up to 1 yellow ≪Shadow Dragon≫ card in your Battle Area and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, choose all yellow ≪Shadow Dragon≫ cards in your Battle Area and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Yellow)(Yellow)(Yellow)(Yellow)(Yellow)(Yellow): Play up to 7 ≪Shadow Dragon≫ cards with different card names from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-112":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is mono-yellow: Play this card, and the card being played is played in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Yellow), discard this card from your hand: Play up to 1 ≪Shadow Dragon≫ card with an energy cost of 1 from your deck with its skills negated for the turn, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-026":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Play 1 Saibaiman Token. (Saibaiman Tokens have 5000 power, 0 combo cost, and 5000 combo power.)", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-1][Activate: Main] Remove 1 of your Saibaiman Tokens from the game: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and place it at the bottom of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-124":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, your opponent reveals their hand. Choose up to 4 Battle Cards from it and combo with them in your Combo Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-070":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Raditz> card, it gets +15000 power for the duration of the battle, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-025":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is red: Negate the attack, then choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-087":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card's skills can't be negated in any area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-048":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is green and the Battle Card your opponent is playing has an energy cost of 4 or less, it is placed in its owner's Drop Area instead of being played.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-013":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] If your Leader Card is a mono-red ≪Universe 7≫ card, and you only have this card and 1 red skill-less Battle Card in your Combo Area: When this card is used in a combo, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] Up to 1 red or ≪Universe 7≫ Battle Card in your Combo Area gets +5000 combo power for the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-104":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is black and your life is at 4 or less: If the Battle Card being played has an energy cost of 3 or less, it is sent to its owner's Warp instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have only black cards in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-123":
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When you activate an [Over Realm] skill, add a marker to this card.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Place up to 2 black Battle Cards from your Warp in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-3][Activate: Main] Add up to 2 black Battle Cards with powers between 20000 and 30000 from your Warp to your hand, then this card gets +15000 power and [Dual Attack] for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-135":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you or your opponent have 3 or more cards in their Warp, reduce the energy cost of this card in your hand by 2.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is black: When this card is played using its [Counter: Attack] skill, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp. At the end of the turn, play any cards sent to a Warp by this skill to their owners' Battle Areas with their skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-092":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] [Once per turn] Place 1 card from your hand in the Drop Area: Look at up to 2 cards from the top of your deck. Choose up to 2 ≪Frieza's Army≫ among them and place them in your Combo Area. Place any other cards in the Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-025":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a red <King Piccolo> card: Place 1 red ≪Demon Clan≫ card with an energy cost of 3 or less from your deck in your life face up, combo with 1 red face-up ≪Demon Clan≫ card in your life, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-031":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 2 skill-less Battle Cards with 10000 power in your Drop Area and/or Warp and play them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-022":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Machine Mutant≫, choose 1 of your Battle Cards with 15000 or less power and switch it to Active Mode. It gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-049":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, if your Leader Card is ≪Universe 9≫, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and return it to its owner's hand. (Cards stacked under the card are placed in the Drop Area.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-114":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack or combo with this card, if your Leader Card is black, choose up to 2 cards in your Warp and place them in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you attack or combo with this card, if your Leader Card is black, choose up to 2 cards in your Warp and place them in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-120":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is mono-yellow: If the card being played has an energy cost of 4 or less, it's played in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-115":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't attack and isn't affected by your opponent's skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Shadow Dragon≫ card and you place this card in its owner's Drop Area: Choose up to 1 <Eis Shenron> card with an energy cost of 2 from your deck or hand, play it, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-124":
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 of your Cell Jr. tokens and remove it from the game: When one of your <Cell> cards is removed from your Battle Area by an opponent's skill, choose up to 1 <Cell> card with an energy cost of 9 or less from your deck or Drop Area, add it to your hand, then choose up to 1 card in your opponent's hand and place it in their Drop Area, and shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-050":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Your opponent reveals the top card of their deck; if it's a Battle Card, this card gets +5000 power and [Dual Attack] for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "DB2-049":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Look at up to 3 cards from the top of your opponent's deck, put them back in any order, then play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn](Blue)①: Your opponent reveals the top card of their deck; if it's a Battle Card, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-022":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If {A King's Return to Youth} is in your Drop Area, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Sparking 10] (This skill takes effect when you have 10 or more cards in your Drop Area.) Choose 1 {King Piccolo, Terror Unleashed} or {A King's Return to Youth} from your Drop Area and send it to your Warp: If your Leader Card is a red ≪Shenron≫ card, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "P-103":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card, choose up to 1 <Son Goku: Br> card, <Vegeta: Br> card, or <Gogeta: Br> card from your Drop Area and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-050":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-025":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards ignoring [Barrier], and return it to its owner's hand, then choose up to 2 of your energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-068":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks a Leader Card, you may choose 1 card in your life and place it in your Drop Area. If you do so, place up to 3 cards from the top of your deck in your Drop Area, then your opponent chooses 1 card in their hand and places it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, then you may choose 1 of your non-token, non-black Battle Cards and place it in your Drop Area. If you do so, your opponent chooses 1 card in their hand and places it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards and KO it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-135":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Red)(Red)(Yellow)(Yellow)(Yellow): Your opponent may choose 3 cards from their life and place them in their Drop Area. If they do, place this card from your hand in your Drop Area. Otherwise, play this card from your hand, choose up to 1 of your opponent's Leader Cards and it gets -30000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-001":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks a Leader Card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card, and if you have 4 or less cards in your hand, draw 1 card and this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-123":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is mono-yellow: Choose the attacking card, ignoring [Barrier], negate its skills for the turn, and it can't be switched to Active Mode until the start of your next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a yellow Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-033":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, and if your Leader Card is a ≪Bardock's Crew≫ card, you may choose 1 blue card in your hand and place it in your Drop Area. If you do, add this card to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-022":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is red and your life is at 4 or less: If the Battle Card being played has 15000 power or less, it is placed in its owner's Drop Area instead of being played, and if it's your opponent's turn, choose up to 1 of your Leader Cards and it gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a multicolor card in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-088":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is yellow and your life is at 4 or less: The Battle Card being played is played in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a multicolor card in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-003":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Auto] When you play this card, draw 2 cards, and you may not activate [EX-Evolve] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card's power is 40000 or more, your opponent may not activate [Counter] during battles where this card is attacking.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-083":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Auto] When you play this card with [Swap], draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-039":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green), if your Leader Card is a green <Cell> card: Play this card from your Drop Area, then choose 1 of your green <Android 18> Battle Cards and place it under this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by a skill, choose up to 1 <Android 18> card with an energy cost of 3 in your Drop Area and play it with its skills negated for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-093":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then you may choose 1 of your Battle Cards, negate its skills, and place it in its owner's Drop Area. If you do, draw 1 card, then choose any number of your opponent's non-token Battle Cards with a total energy cost less than or equal to the energy cost of the card you placed in a Drop Area with this skill, and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-111":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your life reaches 1, if your Leader Card is red and this card is in your Battle Area, this card gains [Triple Strike], [Dual Attack], and can't be KO'd by your opponent's skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 card in your life and add it to your hand: Your opponent reveals their hand, you choose up to 1 card from it and place it in their Drop Area, and this card gets +25000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-034":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 2 of your opponent's Battle Cards and place them at the bottom of their owners' decks.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] At the end of your turn, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-074":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is green and you choose 1 of your Unison Cards and remove a marker from it: Play this card, then if the Battle Card being played has an energy cost of 5 or less, it's placed in its owner's Drop Area instead of being played.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-121":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is <Mira>, it gains +15000 power for the duration of the battle, and if it's your turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and send it to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-027":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 ≪Universe 11≫ card with an energy cost of 1 from your deck, play it with its skills negated for the turn, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-045":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, you may choose 2 non-black Battle Cards from your opponent's Drop Area and place them at the bottom of your opponent's deck in any order. If you do, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-087":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your opponent played a Unison Card, they may remove a marker from it. If they don't, choose up to 1 of their Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-045":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] [Once per turn] If it is your turn, look at up to 2 cards from the top of your deck. If there are any Battle Cards, you may choose to combo with them. Then, place the remaining cards in your Drop Area.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Place all cards from your hand in the Drop Area (you can't activate this ability with no cards in hand): This card gains +50000 power for the duration of the turn. If you placed 5 or more cards in the Drop Area with this skill, this card gains [Triple Strike] for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-053":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 blue Battle Card in your hand with an energy cost of 5 or less and play it. Then, choose 1 of your opponent's Battle Cards and return it to their owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-097":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is green: Your opponent can't attack with Battle Cards with energy costs of 5 or more until the start of your next Main Phase.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-163":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card is also treated as red, green, and yellow, and if it's your turn and your opponent's Leader Card's back is facing up, this card gets +5000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you attack with this card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-091":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Battle Card Attack] Play this card from your hand and change the target of the attack to this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 opponent Battle Card and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-036":
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of the battle after this card attacks, place this card at the bottom of your deck. Then choose any number of your opponent's Battle Cards for which the total cost adds up to 5 or less and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-034":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your opponent can't activate [Counter] against this card's attacks.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 5 Battle Cards in your Energy Area and combo with them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-122":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] ①, switch this card to rest and place 1 card from the top of your deck in the Drop Area: Choose up to 1 <Meta-Cooler> with an energy cost of 2 or less from your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-054":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is an ≪Evil Incarnate≫ card: When one of your ≪Evil Incarnate≫ or ≪Demon≫ cards is played, place the top card of your deck under this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If there are 4 or more cards under this card and you place this card in its owner's Drop Area: Play up to 1 blue skill-less ≪Evil Incarnate≫ card with an energy cost of 3 or less from your deck or Drop Area, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-261":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Over Realm 6][Dual Attack]", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-089":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When this card attacks, you may place 1 card from your hand in the Drop Area. If you do so, choose up to 1 <Android 18> in your Battle Area and switch it to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT5-109":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main]②, place this card in your Drop Area: If your opponent placed a card in their energy using a skill during this game, choose 1 of your opponent's energy and place it in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-088":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, choose all of your opponent's cards with [Blocker] and switch them to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-123":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, it gains +5000 power for the duration of the turn. Then, if this card's power is 60000 or more, it deals 1 damage to your opponent's life.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="activate_switch_self_active_and_gain_power_for_turn", handler_params={"power_delta": 0}, source_text="[Activate: Main] Place 2 red cards from your hand in the Drop Area: Switch this card to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-120":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, place up to 2 cards from the top of your deck in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your opponent's Leader Card is green or yellow, choose up to 4 of your energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-099":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is a ≪Boujack Brigade≫ card, look at up to 5 cards from the top of your deck, choose up to 1 ≪Boujack Brigade≫ card among them and add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area, then choose 5 ≪Boujack Brigade≫ cards with energy costs of 2 or less in your Drop Area: Shuffle the chosen cards into your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-021":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Activate: Main] Place this card in your Drop Area: Draw 2 cards. Then, choose up to 1 of your opponent's Battle Cards, and it loses -10000 power for the duration of the turn. (If a Battle Card's power falls to 0 or less, it is KO-ed)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-197":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 <Majin Buu> card in your Leader Area or Battle Area and it gets +15000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main]②, if all of your energy is black, send this card from your Drop Area to your Warp, then choose 1 card in your hand and place it in your Drop Area: Choose up to 1 black <Majin Buu> card with an energy cost of 2 or less in your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-068":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is <Piccolo>, it gains +10000 power for the duration of the battle, then choose up to 1 card in your opponent's hand and place it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-121":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 of your opponent's Battle Cards in Rest Mode and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-020":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a red ≪Machine Mutant≫, choose up to 1 of your opponent's Battle Cards, and it loses -15000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-025":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is red: Choose up to 1 of your opponent's Battle Cards with 20000 power or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-184":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose up to 1 blue or yellow ≪Universe 6≫ card with an energy cost of 2 or less from your hand and play it.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your life is at 4 or less and you choose 1 card under this card and place it in its owner's Drop Area: Choose one—・ Draw 1 card, then choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.・ At the beginning of your opponent's next Main Phase, choose up to 3 multicolor cards in your Drop Area and add them to your hand.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB3-017":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, and if your Leader Card is a red ≪Frieza's Army≫ card, choose your opponent's Leader Card and all of their Battle Cards, and they get -5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-050":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Your Leader Card is blue: Negate the attack, then choose up to 2 of your blue energy and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-072":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is green: Your opponent may place the Battle Card they're playing in its owner's Drop Area instead of playing it. If they didn't, your opponent chooses 2 cards in their hand and places them in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-101":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is yellow: If the Battle Card being played has an energy cost of 3 or less, it's played with its skills negated for the turn; choose up to 1 of your opponent's Battle Cards or Unison Cards and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-026":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a red ≪Earthling≫-only card: Choose up to 1 of your opponent's Battle Cards with 10000 power or less, KO it, then combo with up to 1 red <Launch> card in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-050":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Sparking 10] (This skill takes effect when you have 10 or more cards in your Drop Area.) If your Leader Card is a ≪Majin≫ card: If you have 5 or more energy, choose up to 1 blue <Majin Buu> card with an energy cost of 4 or less or 1 red <Majin Buu> card from your Energy Area and play it. If you played a card, choose up to 1 Battle Card in your Drop Area and place it under the card you played with this skill.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-050":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is blue: Choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less, place it at the bottom of its owner's deck, then choose up to 1 of your blue Unison Cards in your Unison Area or Drop Area and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB2-044":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="auto_switch_up_to_n_owner_battle_active_on_combo", handler_params={"max_targets": 1, "required_name_contains": "TIEN SHINHAN, TRADING MOVES"}, source_text="[Auto] When you combo with this card during your turn, choose up to 1 {Tien Shinhan, Trading Moves} in your Battle Area and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-087":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is black: Negate the attack, and you may choose 1 card from your hand and place it in your Drop Area. If you placed a card in your Drop Area, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and it can't attack, be placed in your opponent's Combo Area, or activate skills until the end of your next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-081":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, if your Leader Card is an ≪Android≫, you may place 1 card from your hand in the Drop Area. If you do so, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-128":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card has ≪Universe≫ in its special trait: If the Battle Card being played has an energy cost of 4 or less, it's played in Rest Mode with its skills negated for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-027":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 black <Broly> card with an energy cost of 1 in your Battle Area and place it in its owner's Drop Area: Play up to 1 <Dark Broly> card from your deck or Drop Area, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-077":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 2 of your ≪Android≫ cards with energy costs of 3 or less and switch them to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-068":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a black ≪Shenron≫ card, choose 1 of your and your opponent's Battle Cards with equal energy costs ignoring [Barrier]: Choose all other Battle Cards you control, all other Battle Cards your opponent controls ignoring [Barrier], and your and your opponent's hands, then shuffle them into their owners' decks, then you and your opponent draw 5 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-052":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 ≪Android≫ card in your Battle Area and it gets +10000 power and [Critical] for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-021":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Baby> card, it gets +10000 power for the duration of the battle, then choose one-･ Choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn. ･ Choose up to 1 of your Battle Cards and it gets +10000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-160":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Jackie Chun> card, it gets +15000 power for the duration of the Battle, then you may choose 1 of your Battle Cards in Rest Mode and place it in its owner's Drop Area. If you do, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-079":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose one- ・ Choose 1 of your opponent's cards and switch it to Rest Mode. ・ Choose 1 of your opponent's Battle Cards in Rest Mode with an energy cost of 4 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-048":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your mono-blue Battle Cards and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-048":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 blue card in your hand from the game.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you activate this card, you can't activate {All Too Easy...} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX13-34":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. You may send 4 cards from your Drop Area to your Warp. If you do, return this card from your Drop Area to your hand, and you can't activate copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 of your opponent's Battle Cards with an energy cost greater than their current energy and send it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-103":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] Choose up to 1 of your Battle Cards, and it gets +10000 power and [Revenge] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-143":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If you have a Unison Card in play: If the Battle Card being played has an energy cost of 2 or less, it's sent to its owner's Warp instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-064":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is green: Choose up to 1 <Dr. Uiro> card in your Drop Area with an energy cost of 4 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-069":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a ≪Universe 11≫ card: Choose 1 of your Leader Cards and it gets +10000 power and [Critical] for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-096":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your opponent chooses 2 cards from their hand and places them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-059":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a blue <Baby> card: Negate the attack, then choose up to 1 of your mono-blue Battle Cards with a [Counter] skill and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-027":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, choose up to 1 of your red ≪Saiyan≫ Leader Cards. It gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-122":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, you may place 2 cards from your hand in the Drop Area. If you do so, add this card to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-088":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Play this card and negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Yellow)(Yellow)(Yellow), place this card in your Drop Area: Choose up to 1 yellow skill-less ≪Saiyan≫ Battle Card with an energy cost of 3 or less from your deck or Drop Area and play it. Then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-023":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is red: If the Battle Card your opponent is playing has 20000 power or less, it is placed in its owner's Drop Area instead of being played.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-049":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Once per turn] Choose 1 <South Supreme Kai> under this card: Gain all of the chosen card's skills for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-102":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in a Battle Area, choose up to 1 ≪Ghost Warrior≫ card in your deck, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a black ≪Machine Mutant≫ card: At the end of your turn, place 2 cards from the top of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-076":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a green ≪Shenron≫ card, choose 1 of your Battle Cards and place it in its owner's Drop Area: Choose up to 1 green <Son Goku：GT> card with an energy cost of 2 or less in your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-149":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 <Dark Broly> card in your Battle Area and it gains [Dual Attack] for the turn; you can't activate copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-109":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 ≪Frieza's Army≫ card of energy cost 2 or less from your deck, and play it in Rest Mode. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-058":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Flip up to 1 card in your opponent's life face up.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] You may choose 1 card in your hand and discard it. If you do, your opponent chooses 1 card in their hand and discards it; choose up to 1 of your cards and it gains [Critical] for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-5][Activate: Main] Your opponent chooses 3 cards in their hand and discards them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-104":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is yellow: Negate the attack, then, if your opponent has 4 or more cards in Rest Mode, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-200":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card is also treated as blue, green, and yellow; if it's your turn and your opponent's Leader Card's back is facing up, this card gets +5000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-117":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Dragon Ball][Activate: Battle] Choose up to 1 of your Battle Cards or Leader Cards, it gets +5000 power for the duration of the battle, and if it's a skill-less Battle Card it gets an additional +5000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-060":
+        rules.append(EffectRule(trigger="self_deals_damage", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card deals damage, you may place 1 card from your hand in the Drop Area. If you do so, this card gains [Critical] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-031":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn]　When the number of cards under this card reaches 5 or higher, place this card in the Drop Area, then choose up to 1 {Majin Buu Revived} from your deck and play it. Then, shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB2-068":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Field][Activate: Main] Switch this card to Rest Mode: If your Leader Card is <Announcer>, choose up to 2 of your Battle Cards with ≪World Tournament≫, and they each gain +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-102":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your Leader Card is a yellow ≪Shenron≫  card: Choose 1 <Frieza>  card in your Drop Area with an energy cost of 4 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-027":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your red cards. It gains +6000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-029":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Machine Mutant≫, choose 1 of your opponent's Battle Cards with 15000 or less power and switch it to Active Mode. It gains +5000 power for the duration of the turn. Then, gain control of it. (Move the chosen card to your Battle Area)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-086":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your opponent chooses 1 of their Battle Cards and sends it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-072":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, if your Leader is ≪Universe 2≫, you may place 1 card from your hand in your Drop Area. If you do so, your opponent chooses 1 of their Battle Cards and KO-s it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-097":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Place 1 card from your hand in the Drop Area: Choose 1 of your opponent's attacking Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-155":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Battle Card Attack] Negate the attack, and if there is a green ≪God≫ card in play in your Battle Area, place this card on top of the attacking card. At the end of your next turn, place this card (and only this card) in its owner's Drop Area. (While this card is on top of another card, the card underneath it is not treated as a Battle Card and can't activate any of its skills.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-020":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] When the Battle Card is played, choose up to 2 of your opponent's Battle Cards and they get -5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-030":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in the Battle Area, if your Leader Card is <Dr. Myuu>, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Switch this card to Rest Mode: If it's your turn, choose up to 1 of your opponent's Leader Cards or Battle Cards. It loses -5000 power for the duration of the battle. (If a Battle Card's power falls to 0 or less, it is KO-ed)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-037":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a ≪Universe 7≫ card, negate the [Energy-Exhaust] of your Red/Blue multicolor cards in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Universe 7≫ card and you switch this card to Rest Mode: Look at up to 3 cards from the top of your deck, then place them on the top or bottom of your deck in any order.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-116":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 2 Battle Cards from your Drop Area with energy costs of 4 or less and 15000 power or more, and 2 Battle Cards from your opponent's Drop Area with energy costs of 4 or less and 15000 power or more: If your Leader Card is a ≪Shenron≫ card, play the chosen cards from your opponent's Drop Area in their Battle Area, then play the chosen cards from your Drop Area in your Battle Area in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-101":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Hatchhyack> card, it gets +10000 power for the duration of the battle, then choose all of your opponent's Battle Cards with an energy cost of 1 and place them in their owners' Drop Areas.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-079":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 green Battle Card with an energy cost of 5 or less in your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-071":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 2 ≪Maiden Squadron≫ with energy costs of 4 or less in your Drop Area and play them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-015":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If a <Recoome> card is in play in your Battle Area: Choose up to 1 of your opponent's Battle Cards with 15000 power or less ignoring [Barrier] and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-236":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a <Zamasu> card: Negate the attack. You may place the top card of your deck in your energy in Rest Mode. If you do, you can't activate copies of this card for the turn, and you can only play <Zamasu> cards, <Goku Black> cards, or mono-blue Unison Cards with specified costs of 2 or less for the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-060":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is mono-blue: Negate the attack, then you may choose 1 mono-blue card in your hand and discard it. If you do, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-084":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-057":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 3 green Battle Cards in your Drop Area and combo with them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-120":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 3 or more energy in Rest Mode, you can activate this card from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] If your Leader Card is a ≪Shadow Dragon≫ card: Choose up to 1 ≪Shadow Dragon≫ card in your Leader Area or Battle Area and it gets +5000 power for the turn. If you paid the energy cost to activate this skill, choose up to 1 card in your opponent's Battle Area and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] If your Leader Card is a ≪Shadow Dragon≫ card: Choose up to 1 ≪Shadow Dragon≫ card in your Leader Area or Battle Area and it gets +5000 power for the turn. If you paid the energy cost to activate this skill, choose up to 1 card in your opponent's Battle Area and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-088":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Shenron≫ card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less, ignoring [Barrier], and shuffle it into its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-07":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Dr. Myuu> card, it gets +15000 power for the duration of the battle, then choose up to 1 ≪Machine Mutant≫ card from your hand with an energy cost of 2 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-024":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] If your Leader Card is red: You may choose 1 of your mono-red Battle Cards, negate its non-keyword skills for the turn, and give it -25000 power for the turn. If you do, choose up to 1 of your opponent's Battle Cards and it gets -25000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] If your Leader Card is red: You may choose 1 of your mono-red Battle Cards, negate its non-keyword skills for the turn, and give it -25000 power for the turn. If you do, choose up to 1 of your opponent's Battle Cards and it gets -25000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT2-030":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 each of <Son Goku> and <Vegeta> from your hand and place them in the Drop Area: Choose your deck or your Drop Area. Choose up to 1 <Vegito> with an Energy cost of 6 or less from your chosen area and play it. If you chose your deck, shuffle it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-066":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Switch this card to Rest Mode: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less. KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-078":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your Leader Card is a green ≪Android≫  card: Look at up to 10 cards from the top of your deck, choose up to a total of 2 <Android 17>, <Hell Fighter 17>, or <Super 17> cards among them and add them to your hand. Then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-019":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-142":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Shuffle 2 Battle Cards from your opponent's Drop Area into their deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-110":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your opponent has 3 or more Battle Cards in play with energy costs of 2 or more, the Battle Card your opponent is playing is placed in its owner's Drop Area instead, then choose all Battle Cards with energy costs of 2 or less, ignoring [Barrier], and send them to their owners' Warps.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-020":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] When the Battle Card is played, choose up to 1 of those Battle Cards and it gets -15000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-051":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your Leader Card is a blue ≪Shenron≫ card: Choose 1 of your Leader Cards and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB3-031":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 {Toolo, the Seer} in your Drop Area and place it at the bottom of your deck: Choose all of your blue ≪Saiyan≫ Leader Cards and blue ≪Saiyan≫ Battle Cards, and they get +5000 power and [Critical] for the duration of the turn. At the end of the turn, choose all of the ≪Saiyan≫ cards in your Battle Area and place them in their owners' Drop Areas.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-018":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose one-\n・ Choose up to 1 ≪Universe 7≫ card from your Drop Area and add it to your hand.\n・ Choose up to 1 ≪Universe 7≫ card with an energy cost of 4 or less from your deck, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-077":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Sparking 7] (This skill takes effect when you have 7 or more cards in your Drop Area.) If your Leader Card is a green ≪Frieza's Army≫ card: Choose 1 of your energy and place it in your Drop Area, then choose up to 1 <Broly: Br> card with an energy cost of 6 or less from your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-052":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-030":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is mono-red: Choose up to 1 attacking Battle Card or Leader Card, ignoring [Barrier], and it gets -15000 power for the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a red Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-030":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If the Battle Card your opponent is playing has 20000 power or less, your opponent may place that Battle Card in their Drop Area instead of playing it. If they don't, they choose 1 of their Battle Cards and place it in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-029":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If you have a red Unison Card in play: If the Battle Card being played has 15000 power or less, it's placed in its owner's Drop Area instead of being played, then choose up to 1 of your Leader Cards and it gets +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is mono-red, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-097":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is yellow: Draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-089":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is green and you have a green Unison Card in play, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your opponent played a Battle Card this turn, choose all of your opponent's Battle Cards and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX16-09":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a black ≪Demon Realm Race≫ card: Look at up to 7 cards from the top of your deck, add up to 1<Dark Broly> card, non-black Battle Card with <Xeno> in its character name, or black Unison Card with 16000 power among them to your hand, then shuffle your deck. You can't activate the [Activate: Main] skill on copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-102":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose 2 cards from your hand and place them in your Drop Area: If your Leader Card is a ≪Boujack Brigade≫ card, choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD16-01":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Burst 3] Add up to 1 card from your life to your hand; if a black card is placed in your Drop Area by this skill, this card gains [Critical] for the turn. If a non-black card is placed in your Drop Area by this skill, this card gets +5000 power for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_spirit_boost_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] Add 1 card from your life to your hand: When you remove a marker from one of your black Unison Cards using a [Spirit Boost] skill, switch this card to Active Mode and negate its keyword skills for the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn][Burst 3] If a black card is placed in your Drop Area by this skill, this card gains [Critical] for the turn. If a non-black card is placed in your Drop Area by this skill, this card gets +5000 power for the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT12-151":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a black ≪Saiyan≫ card: Negate the attack, then if you don't have a Unison Card in play, play 1 black Unison Card with no specified cost and 15000 power from your Drop Area or Warp with a marker on it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-102":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is yellow: Negate the attack, then you may choose 1 card in your hand and discard it. If you do, choose up to 1 of your opponent's Battle Cards or Unison Cards and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-159":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then you may choose 1 card in your hand and place it in your Drop Area. If you do, choose 1 of your Leader Cards and it gains the following effect for the turn:\n・ When this card is attacked by a Battle Card, it gets +5000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-054":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, if your Leader Card is <Majin Buu>, you may place 1 card from your hand in the Drop Area. If you do so, choose 1 of your <Majin Buu> and 1 of your opponent's Battle Cards with an energy cost of 3 or less. Place the chosen opponent Battle Card under the chosen <Majin Buu>.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-096":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, if your Leader Card is ≪Universe 11≫, choose up to 1 of your opponent's Battle Cards and switch it to Rest mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-044":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] Choose up to 1 <Hirudegarn> in your Battle Area, send it to your Warp, and at the start of your next Main Phase, play that card from your Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-096":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 <Zamasu> card in your Battle Area without [Indestructible] and place it in its owner's Drop Area: Choose up to 1 <Zamasu> card in your hand with [Indestructible] and an energy cost of 4 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-025":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Your Leader Card is a red ≪Shenron≫ card: Choose up to 1 {King Piccolo, Terror Unleashed} and {A King's Return to Youth} from your deck and add them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-130":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose 1 of your opponent's Battle Cards and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-28":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Meta-Cooler> card, it gets +15000 power for the duration of the battle, then you may choose 1 {Big Gete Star} in your Battle Area and switch it to Active Mode. If you do, choose up to 1 of your yellow energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-149":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a black ≪Saiyan≫-only card and you place 1 black <Bardock: Xeno>, <King Vegeta: Xeno>, <Vegeta: Xeno> or <Broly> card from your Drop Area at the top of your deck: At the end of the turn, play up to 1 <Dark Broly> card or up to 1 black Battle Card with an energy cost of 4 or less and <Masked> in its character name from your deck, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-059":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If Your Leader Card is green: Choose one-\n・ Choose 1 Battle Card with an energy cost greater than or equal to your opponent's energy and KO it. \n・ Choose 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-091":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, choose up to 1 red <Son Goku: Br> card, red <Vegeta: Br> card, or blue <Veku: Br> card, add it to your hand, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](2) ： Choose 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 of your energy and place it in its owner's Drop Area: Draw 2 cards.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT14-070":
+        rules.append(EffectRule(trigger="owner_takes_damage", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is green: When you take damage from an opponent's non-keyword skill, you may play this card from your hand. If you do, add the top card of your deck to your life; you can't activate the [Auto] skill on copies of this card for the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-108":
+        rules.append(EffectRule(trigger="counter_counter", handler_id="noop_auto", handler_params={}, source_text="[Counter: Counter] Place 1 yellow card from your hand in the Drop Area: Negate the [Counter].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-057":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If you have a blue Unison Card in play: Draw 1 card; if the Battle Card being played has an energy cost of 4 or less, it's placed at the bottom of its owner's deck instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is mono-blue, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-126":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] When the Battle Card is played, you may choose it and switch it to Rest Mode, then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-019":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 red or yellow ≪Saiyan≫ or ≪Earthling≫ card with an energy cost of 2 or less in your Drop Area and play it. If you played a card, place the top 2 cards of your deck in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-085":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your Leader Cards, it gets +5000 power for the duration of the battle, then choose up to 1 [Dragon Ball] card from your deck or Drop Area, add it to your hand, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB1-019":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a red ≪Saiyan≫ card: Choose 1 of your Leader Cards or Battle Cards, and for the duration of the turn, that card gets +5000 power, then if your life is at 3 or less and it's your opponent's turn, choose up to 1 of your red energy, switch it to Active Mode, and draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-103":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a yellow <Son Gohan: Childhood> card, it gets +10000 power for the duration of the battle, and if your opponent has 5 or more cards in Rest Mode, it gets an additional +10000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-028":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Look at up to 7 cards from the top of your deck, and choose 1 <Son Goku: GT>, <Trunks: GT>, <Pan>, or <Giru> with 15000 or less power and play it. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-072":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, when you combo with this card, if your Leader Card is an ≪Android≫, your opponent chooses 1 of their Battle Cards and KO-s it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX13-12":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then if your Leader Card is a blue <Android 21> card and you have a Blue/Green multicolor card in your energy, choose up to 1 <Android 16> card with an energy cost of 2 or less in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-104":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, you may place 1 yellow card in your hand in the Drop Area. If you do so, your opponent's can only attack one more time with Battle Cards for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-070":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a ≪Namekian≫, when you activate this card's [Counter], you may choose 1 card from your life and add it to your hand. If you do so, you may activate this card's [Counter] without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-075":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Your Leader Card is green: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-002":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, you may choose up to 1 red ≪Namekian≫ or ≪Demon Clan≫ card in your hand and place it in your life face up. If you do, add 1 card from your life to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 3 red ≪Namekian≫ or ≪Demon Clan≫ cards in your hand and place them in your life face up, then add that many cards from your life to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn] If you have red ≪Namekian≫ or ≪Demon Clan≫ cards flipped face up in your life: Place the top card of your deck in your life face up, then combo with 1 face-up red ≪Namekian≫ or ≪Demon Clan≫ card in your life.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "DB2-094":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose 1 of your green Leader Cards or Battle Cards and it gets +10000 power for the battle; then, if it's your turn, choose up to 2 of your opponent's Battle Cards with energy costs of 3 or less and KO them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-130":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is red: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="skill_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] If all of your energy is red: When you activate this card, choose up to 1 of your opponent's Leader Cards or Battle Cards and it gets -10000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-106":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is yellow, negate the attack.Afterwards, the opponent's Battle Cards are unable to attack for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-114":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then you may choose 1 card in your hand and discard it. If you do, choose up to 1 black skill-less Battle Card with an energy cost of 3 or less in your hand and play it in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-047":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is blue: If the Battle Card your opponent is playing has an energy cost of 4 or less, it is returned to its owner's hand instead of being played.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-065":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is green and your life is at 4 or less: If the Battle Card being played has an energy cost of 3 or less, it is placed in its owner's Drop Area instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a multicolor card in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX11-07":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is red and you choose 1 card in your life and place it in your Drop Area: If the Battle Card being played has 20000 power or less, it is placed in its owner's Drop Area instead of being played.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a red Unison Card with a specified cost of 2 in play, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX16-03":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card is also treated as black in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your opponent's life is at 3 or more and there is a card under this card: When this card is played, switch it to Active Mode, then your opponent may choose up to 1 Battle Card each from their hand, Battle Area, and/or Drop Area and send them to their Warp. If they sent 2 or fewer cards to their Warp, choose up to 1 card in your opponent's life and place it in their Drop Area. You can't play copies of this card for the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-122":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is yellow and you have a yellow Unison Card in play, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your opponent has 4 or more cards in Rest Mode: Choose 1 of your opponent's Battle Cards in Rest Mode and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-078":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your Battle Cards can't be KO-ed by your own skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your Battle Cards can't be placed in the Drop Area by your own skills.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose 1 card from your life and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-132":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is green: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="skill_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] If all of your energy is green: When you activate this card, choose 1 card in your opponent's hand and place it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-162":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 of your opponent's Battle Cards and send it to its owner's Warp, then choose 1 of your Battle Cards and send it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-150":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your opponent has 5 or more energy: Your opponent can't play Battle Cards using Leader Card skills until the end of their next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-024":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Battle Card Attack] If your Leader Card is a red ≪Earthling≫-only card: Negate the attack, then if you have a red ≪Earthling≫ card in play, place this card on top of the attacking card. At the end of your next turn, place this card-and only this card-in its owner's Drop Area. (While this card is on top of another card, the card underneath it is not treated as a Battle Card and can't activate any of its skills.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT10-121":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If you have a yellow Unison Card in play: If the Battle Card being played has an energy cost of 4 or less, it has its skills negated for the turn and is played in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is mono-yellow, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards from your hand and discarding them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-086":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 2 of your opponent's Battle Cards, and switch them to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-049":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a blue ≪Shenron≫ card: Choose 1 blue ≪Saiyan≫ card in your Drop Area with 15000 or less power and an energy cost of 2 or less and play it. If you do, place the top card of your deck under the card you played with this skill.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-107":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Desire≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Shenron≫ card: Choose 1 Battle Card from your deck with an energy cost of 2 or less and power of 15000 or less, play it, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-137":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Reduce the energy cost of this card in your hand by 1 for each Battle Card in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] At the end of this turn, choose all Battle Cards ignoring [Barrier] and place them in their owners' Drop Areas.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-076":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 2 of your opponent's Battle Cards or up to 2 cards in your opponent's hand. Your opponent places all of the chosen cards in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-163":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 4 Battle Cards with energy costs between 3 and 7 in your Drop Area, and shuffle them into your deck: Choose all of your opponent's Battle Cards with 20000 power or less and send them to their owners' Warps.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-052":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is <Majin Buu>, choose 1 of your <Majin Buu> and 1 of your opponent's Battle Cards. Place the chosen opponent Battle Card under the chosen <Majin Buu>.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-082":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is green: Negate the attack, then play this card. If you played a card, choose 1 card in your hand and discard it; your opponent can't attack for the turn unless they choose 2 cards in their hand and discard them each time.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Union Absorb][Once per turn] Choose 1 card under your ≪Majin≫ Leader Card and place it under this card: Play up to 1 mono-green <Majin Buu> card with an energy cost of 4 and 15000 power from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT7-024":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is red: Negate the attack, then choose up to 1 of your Battle Cards and it gets +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 red card in your hand from the game.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="skill_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you activate this card, you can't activate {The Final Guardian} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-118":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, and you can't activate copies of this card for the turn; if you have 4 or more yellow ≪Demon Clan≫ cards in play, your opponent can only attack once more for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 4 or more yellow ≪Demon Clan≫ cards in play, you can activate this card from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB2-032":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack, then choose up to 1 of your Battle Cards and it gets +5000 power until the end of your next turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-025":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Negate the attack. Then, you may switch up to 1 of your Battle Cards to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT5-101":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] Your Leader Card is yellow: Negate the attack, then choose up to 1 of your opponent's Battle Cards in Rest Mode ignoring [Barrier]. It can't switch to Active Mode until the start of your next turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-075":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If your Leader Card is green: If the Battle Card being played has an energy cost of 2 or less, it's placed in its owner's Drop Area instead of being played, then choose 1 card in your opponent's hand and discard it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-069":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)[Activate: Main] [Once per turn] (Green)，choose 1 card in your hand and place it in your Drop Area: Look at up to 5 cards from the top of your deck, choose up to 1 ≪Namekian≫ with an energy cost of 2 or less from among them and put it into play, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT3-106":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 2 ≪Great Ape≫ cards with energy costs of 4 or less from your hand and play them. Then, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-091":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of the battle after you combo with this card, if your Leader Card is a yellow ≪Saiyan≫, place this card at the bottom of your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-090":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, at the end of the battle after you combo with this card, if your Leader Card is yellow, play this card in Rest Mode. Then, choose up to 1 card from your life and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD1-01":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your blue energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your turn, if you have 5 or more energy, this card gains +5000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card attacks, draw 1 card.  Choose up to 2 of your blue energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-030":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+0][Activate: Main] Play up to 1 blue skill-less Battle Card from your Drop Area with an energy cost less than or equal to your current energy.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[-2][Activate: Main] Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-077":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 2 cards from the top of your deck, choose up to 1 blue or yellow ≪Saiyan≫ card among them, add it to your hand, then place the remaining cards in your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-063":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card and your Leader Card is green, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose oneー\n・Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order.\n・Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-087":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you combo with this card and your Leader Card is yellow, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose oneー\n・Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order.\n・Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-080":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand, your opponent chooses 1 card from their hand and sends it to their Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Send this card to its owner's Warp: At the start of your next Main Phase, if your Leader Card is a yellow ≪Universe 6≫ card, play the card that was sent to the Warp by this skill in its owner's Battle Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-090":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 {Namekian Partner Pirina} from your deck, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-091":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 {Namekian Partner Saonel} from your deck, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-053":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up 7 cards from the top of your deck, choose up to 1 ≪Earthling≫ or ≪Namekian≫ card among them, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-105":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose 1 card in your life and add it to your hand. If you do, your opponent chooses cards in their hand and places them in their Drop Area until they have 12 cards in hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-101":
+        rules.append(EffectRule(trigger="counter_counter", handler_id="noop_auto", handler_params={}, source_text="[Counter: Counter] Choose 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order: Play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can only be played from any area using [Counter: Counter] skills, and only 1 {Vegeta, Making an Entrance} can be played in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-044":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 {Mass Replication} from your deck, activate it, then shuffle your deck.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT7-056":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When a card evolves into this card and your Leader Card is a <Son Gohan: Adolescence> card, draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card and your Leader Card is a <Son Gohan: Adolescence> card, draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-092":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Battle Cards chosen with this card's skill can't be switched to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 2 ≪Saiyan≫, ≪Earthling≫, and/or ≪God≫ cards in your opponent's Battle Area and switch them to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT7-084":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your opponent has 6 or more cards in Rest Mode, you can play this card from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-009":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 <Baby> card in your hand with an energy cost of 2 or less and play it. If you played a card, choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-007":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Revenge] (When this card is attacked, KO the attacking Battle Card at the end of battle.)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-154":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card would be removed from a Battle Area, remove it from the game instead.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If you have 4 or more energy: When this card is played using [Dark Over Realm], play up to 2 Battle Cards with different card names, energy costs of 6 or less, and the [Over Realm] skill from your Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your Battle Area with the [Over Realm] skill and place it in its owner's Drop Area: When one of your opponent's cards attacks, negate the attack.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT18-124":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gets +2000 power for each card in your Z-Energy.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] If it's your turn: When you activate [Over Realm] or [Dark Over Realm] or play a black Battle Card from your Warp, draw 1 card, and choose up to 1 of your opponent's Battle Cards with an energy cost of 6 or less and send it to its owner's Warp.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-130":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 ≪Frenzied Warrior≫ card in your Drop Area, add it to your hand, then choose up to 1 of your opponent's Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green)(Green), choose 1 <Dr.Kochin> card in your Battle Area and KO it: Play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-013":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can't play {Veku, the Fragile} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: If your Leader Card is a red ≪Saiyan≫ card, choose up to 1 red <Son Goku: Br> card and 1 red<Vegeta: Br> card from your Drop Area and add them to your hand, then choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-082":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 card in your hand and place it in your Drop Area: Choose one-\n･ Choose 1 of your opponent's Battle Cards ignoring [Barrier] and switch it to Rest Mode.\n･ Choose 1 of your opponent's Battle Cards in Rest Mode ignoring [Barrier] and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-068":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area, then choose 1 <Son Gohan: Adolescence>, <Son Goten>, <Vegeta>, <Trunks: Youth> and <Videl> card from your Drop Area and return them to your deck: Choose up to 1 Red/Yellow multicolor <Son Goku> card in your deck or hand with an energy cost of 3, play it, shuffle your deck, and the Battle Card you played gains [Double Strike] and [Dual Attack] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-001":
+        rules.append(EffectRule(trigger="owner_other_battle_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] [Once per turn] When you play a Battle Card, choose that card, and it gains +5000 power for the duration of the turn. Then, if its power is 20000 or more, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-025":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 or 2 cards in your life and add them to your hand: When you play this card, it gets +5000 power for the duration of the turn, and at the start of your opponent's next Main Phase, choose up to 1 of your energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-075":
+        rules.append(EffectRule(trigger="owner_opponent_card_switched_to_rest", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] Place this card in your Drop Area from your hand: When an opponent's card is switched to Rest Mode by your skill, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] (Yellow), send this card from your Drop Area to your Warp: Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-008":
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is KO'd, choose up to 1 ≪Brainwashed≫ card other than <Son Goten: GT> in your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "XD1-03":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 blue or yellow ≪Universe 6≫ card in your Battle Area other than this card, and it gets +10000 power and [Double Strike] for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-005":
+        rules.append(EffectRule(trigger="owner_life_card_flipped_face_up", handler_id="noop_auto", handler_params={}, source_text="[Auto](Red)(Red), if your Leader Card is a red ≪Earthling≫-only card: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_counter_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When your opponent activates a [Counter] skill, deal 1 damage to them.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT8-014":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Only 1 {Beerus, Biding His Time} can be played in your Battle Area, and if you have a Red/Yellow multicolor card in your energy, reduce the energy cost of this card in your hand by 2.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, this card gets +15000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "TB1-048":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If <Bergamo>, <Lavender>, and <Basil> are in play in your Battle Area, negate the skills of all of your opponent's Battle Cards with energy costs of 4 or less in their Battle Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT6-043":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card would be removed from your Battle Area by an opponent's skill, you may choose 2 cards from your hand and place them in your Drop Area instead.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Blue)①, your Leader Card is a ≪Majin≫ card: If you have 3 or more energy, choose 1 <Majin Buu> card with an energy cost of 4 from your Energy Area and play it. If you played a card, add this card to your energy in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-071":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Only 1 {Vegeta, Explosion of Fury} can be played in your Battle Area, and this card can't be played from any area unless there is a <Bulma> card in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-080":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be played by your card skills from any area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If you have 4 or more energy, place this card in its owner's Drop Area: Choose 1 Blue/Yellow multicolor Battle Card with an energy cost of 4 or less in your Drop Area and play it in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-010":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains ≪Saiyan≫ in all areas.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a red <Bulma> card and you choose 1 red or yellow ≪Saiyan≫ or ≪Earthling≫ card in your Drop Area and place it at the bottom of your deck: When you play this card, choose up to 1 red or yellow ≪Saiyan≫ card with an energy cost of 3 or less in your Drop Area and add it to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT12-082":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] While in a Battle Area, this card can't be placed in Drop Areas by your skills; reduce the combo cost of all ≪Turles Crusher Corps≫ cards in your opponent's hand and Battle Area by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_main_phase_start", handler_id="noop_auto", handler_params={}, source_text="[Auto] If all of your opponent's energy is mono-green: If this card is in your Battle Area at the start of your Main Phase, choose 1 card in your life and flip it face up. If you do, your opponent adds up to 1 {Fruit of the Tree of Might} from their deck to their hand, then shuffles their deck if they looked through it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Turles Crusher Corps≫ card: Place this card in your opponent's Battle Area in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-017":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, choose up to 1 red <Paragus: Br> card with an energy cost of 1 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-017":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Only 1 {Baby, Vengeful Blow} can be played in your Battle Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a <Baby> card with an original power of 30000 in your Battle Area is removed from your Battle Area by an opponent's skill or is KO'd, you may play this card from your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-031":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a Battle Card or Extra Card to switch energy to Active Mode, they can't switch energy to Active Mode unless they choose 5 cards from their Drop Area and send them to their Warp.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a Battle Card or Extra Card to switch energy to Active Mode, they can't switch energy to Active Mode unless they choose 5 cards from their Drop Area and send them to their Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-057":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Only 1 {Dr.Kochin, the Nefarious Scientist} can be played in your Battle Area, and reduce the energy cost of all ≪Frenzied Warrior≫ cards in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, look at up to 7 cards from the top of your deck, choose up to 1 ≪Frenzied Warrior≫ card among them, add it to your hand, shuffle your deck, then choose up to 1 ≪Frenzied Warrior≫ card in your hand with an energy cost of 2 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-008":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose 1 card from your hand or 1 {Big Gete Star} in your Battle Area and place it under this card: Choose up to 1 <Meta-Cooler Core> card from your deck or hand other than {Meta-Cooler Core, Titanic Glare}, play it on top of this card in Active Mode, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-082":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If all of your energy is black, you have no cards in your hand, and you place this card in its owner's Drop Area: Choose one-\n・ Choose up to 1 black <Majin Buu> card with an energy cost of 3 or 4 in your Drop Area and play it.\n・ If you have 3 or more energy, choose up to 1 black <Majin Buu> card with an energy cost between 3 and 6 in your Drop Area and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-057":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is an <Android 13> card and you choose this card in your hand and 1 <Android 15> card in your hand and place them in your Drop Area: Choose up to 2 cards in your life, add them to your hand, draw 1 card, then your opponent chooses 1 card in their hand and places it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-015":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] Choose 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, choose up to 1 ｛Full-Power Frost｝ from your deck or hand, play it, then shuffle your deck if you looked through it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-031":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 Extra Card in your hand and place it in your Drop Area: When you combo with this card, it gets +6000 combo power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-032":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 multicolor card in your energy and return it to its owner's hand: When you combo with this card, choose 1 card in your hand and place it in your energy in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-058":
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is green: At the end of a battle in which you combo with this card from your hand, play this card in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 or 2 cards in your life and add them to your hand: When you play this card during your opponent's turn, choose up to 1 of your green energy and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-026":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand, choose up to 1 of your blue or green Battle Cards and return it to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-007":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is yellow: When this card is played from your hand, switch up to 1 of your opponent's Battle Cards to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-053":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't be KO'd while there are 3 or more cards in your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If there are 2 or more cards in your hand, and your Leader Card is a green <Beerus> card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 6 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-003":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, draw 1 card, then choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-059":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 green <Android 17> card with an energy cost of 1 or 2 in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT8-050":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a green <Dr. Uiro> card: When you play this card, choose up to 1 of your opponent's Battle Cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-081":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is black and you have no cards in your hand, reduce the energy cost of this card in your hand by 3.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1 black <Majin Buu> card with an energy cost between 3 and 6 in your Drop Area and place it on top of this card in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-010":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a yellow ≪Frieza Clan≫ card: When you play this card, choose up to 1 of your yellow Battle Cards with an energy cost of 1 or 2 and switch it to Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-009":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 yellow <Frieza Clan> card with an energy cost of 1 or 2 in your hand and play it in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT19-041":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played, if your Leader is a mono-blue <Boujack Brigade> card and your energy includes a blue card, look at up to 5 cards from the top of your deck, add up to 1 blue card with <Boujack Brigade> in its special traits and an energy cost of 1 among them to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-129":
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played using [Over Realm], draw 1 card, then choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and send it to its owner's Warp.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT13-127":
+        rules.append(EffectRule(trigger="owner_over_realm_activated", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a black <Supreme Kai of Time> card: When this card is played using [Over Realm], send up to 2 cards from the top of your deck to your Warp, then draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT20-029":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_add_up_to_n_from_owner_life_to_hand_on_play", handler_params={"amount": 1}, source_text="[Auto] When this card is played, add up to 1 card from your life to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] While there are no cards under this card, this card gets -5000 power.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_main_phase_start", handler_id="noop_auto", handler_params={}, source_text="[Auto](Blue), if your Leader is a blue <Android 21> card: At the start of your opponent's Main Phase, play up to 1 blue ≪Android≫ Z-Battle Card with an energy cost of 4 or less from under this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-047":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a ≪Universe 11≫ card, you have a ≪Universe 11≫ card in play, and you choose 1 card in your hand and place it in your Drop Area: Play this card from your Drop Area, and you can't play {Cocotte, Technique Unleashed} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-032":
+        rules.append(EffectRule(trigger="owner_opponent_card_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is blue and you place this card in its owner's Drop Area: When one of your opponent's cards attacks, negate the attack.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If you have red energy: When this card is removed from your Battle Area by an opponent's skill, draw 2 cards.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-066":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is yellow: When you play this card, choose up to 1 of your opponent's Battle Cards and negate its skills for the duration of the turn. If the chosen card is in Rest Mode, it can't be switched to Active Mode during your opponent's next Charge Phase.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] If you have green energy: When this card is removed from your Battle Area by an opponent's skill, choose 1 card in your opponent's hand and place it in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT14-104":
+        rules.append(EffectRule(trigger="owner_takes_damage", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is yellow: When you take damage from an opponent's non-keyword skill, you may play this card from your hand. If you do, add 1 card from the top of your deck to your life; you can't activate the [Auto] skill on copies of this card for the game.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-025":
+        rules.append(EffectRule(trigger="owner_card_removed_from_battle_by_opponent_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is removed from your Battle Area by an opponent's skill, choose up to 1 ≪Frieza Clan≫ card in your hand with an energy cost of 3 or less and play it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn]③: This card gets +6000 power for each card in your energy and [Triple Strike] for the duration of the battle.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT9-062":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle][Once per turn]①: This card gets +5000 power for the duration of the turn, then choose up to 1 <Kale> or <Cabba> card with an energy cost of 2 or less in your hand and play it with its skills negated for the duration of the turn.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "BT9-033":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 {Tournament of Power Arena} from your deck, add it to your hand, then shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT4-039":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose up to 2 cards from your life and add them to your hand. If you chose to add 1 or more cards to your hand, choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less and place it on top of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-027":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] If the Battle Card being played has an energy cost of 3 or less, it is returned to its owner's hand instead of being played, then play this card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-071":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] Play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If all of your energy is black, reduce the energy cost of this card in your hand and Drop Area by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your opponent's turn: When you play this card, choose up to 1 of your opponent's Battle Cards and it can't attack or activate skills for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-080":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can't play {Majin Buu, Steadfast Absorption} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If you have no cards in your hand: Choose up to 1 black <Majin Buu> card in your Drop Area with an energy cost between 3 and 6 and play it on top of this card in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-063":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] All ≪Universe 11≫ cards with energy costs of 2 or less in your Battle Area gain [Barrier].", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-045":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have a <Cell> card in play, increase this card's energy cost by 2.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green), if there are no cards in your Battle Area: Play this card from your Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-056":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is an ≪Android≫ card, your opponent has a Battle Card in play with an energy cost greater than their current energy, and you have no cards in play in your Battle Area, you can play this card from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, negate its skills for the duration of the turn, and it can't be switched to Active Mode during your opponent's next Charge Phase.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-139":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can't attack if it has 3 or fewer markers on it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_opponent_card_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] Choose 1 card in your hand and discard it: When your opponent combos, place up to 1 card from their Combo Area in its owner's Drop Area, then negate this skill for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+2][Activate: Main] Choose 1 card in your hand and discard it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] Choose up to 1 of your ≪Hero≫ or ≪Phantom Demon≫ cards and KO it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-072":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gets +5000 power for each card placed under it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, choose 2 cards in your hand and place them under this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="owner_main_phase_start", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the start of your Main Phase, if there are 4 or more cards under this card, place this card in its owner's Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-044":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Union Absorb](Green)(Yellow), choose 1 <Android 14> card and 1 <Android 15> card in your Drop Area and place them under this card: If your Leader Card is an ≪Android≫ card, choose up to 1 <Android 13> card in your hand with an energy cost of 7 or less and play it on top of this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is an ≪Android≫ card: At the end of a battle in which you combo with this card from your hand, play this card in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-043":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card's attack and skill cannot be negated.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Beerus>, after your current turn ends, take another turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-052":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Choose up to 1card from your hand, and add it to your energy.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT1-073":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 2 cards from your opponent's hand at random and place them in the Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-093":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, choose up to 1 ≪Great Ape≫ with an energy cost of 5 or less from your deck and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-253":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[Counter: Attack] If your Leader Card is a blue <Baby> card: Negate the attack, then switch up to 2 of your mono-blue energy to Active Mode and draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "DB3-134":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[+1][Activate: Main] You may choose 1 card in your hand and discard it. If you do, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and it gets -10000 power for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="noop_auto", handler_params={}, source_text="[-4][Auto] If your Leader Card is red: When your opponent activates a [Counter] skill, deal 1 damage to them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT11-057":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you activate this card, draw 1 card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Once per turn] If your Leader Card is a blue <Vegeta: GT>-only card on its front side: Place the top card of your deck under your Leader Card, and if there are 4 or more cards under it, place all of those cards in their owners' Drop Areas, add up to 2 cards from your life to your hand, then place up to 2 cards from your life in your Drop Area.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB1-033":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card loses -5000 power for each <Tien Shinhan> in your Battle Area or Combo Area.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is ≪Universe 7≫ , you may place 1 card from your hand in the Drop Area. If you do so, choose up to 3 {Multi-Form Tien Shinhan} from your deck and play them. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT9-017":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] You can activate this card's [Activate: Battle] from your hand without paying its energy cost.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is red: Choose up to 2 of your opponent's Battle Cards, ignoring [Barrier], and they get -25000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +5000 power for the duration of the battle.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX01-05":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Return this card to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 7 cards from the top of your deck. Choose up to 1 <Trunks: Youth> among them with 15000 or less power and add it to your hand. Then, shuffle your deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX01-06":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Return this card to its owner's hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, you may reveal 1 <Son Goten> from your hand. If you do so, choose up to 1 opponent Battle Card with an energy cost of 3 or less and KO that card.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX07-10":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a yellow ≪Universe 6≫ card and your opponent has 3 or more energy: When you play this card, choose up to 1 blue <Kale> card with an energy cost of 4 in your Drop Area, negate its skills for the duration of the turn, and play it in Rest Mode; at the end of the turn, place the Battle Card played with this skill at the bottom of its owner's deck.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-09":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks, look at up to 7 cards from the top of your deck, choose up to 1<Trunks: Future> among them and add it to your hand, shuffle your deck, and this card gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-24":
+        rules.append(EffectRule(trigger="self_left_battle_area", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is placed in a Drop Area from a Battle Area, you may choose 1 card in your life and add it to your hand. If you do, choose up to 1 <Frieza> card from your hand with an energy cost of 2 or less other than {Frieza, Malicious Streak} and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-03":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you may choose 1 card in your hand and place it in your Drop Area. If you do, for the duration of the turn, if your Leader Card is a red {Champa} or red {Vados}, you can activate its [Awaken] skill even if you have 5 or more life.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-22":
+        rules.append(EffectRule(trigger="owner_opponent_card_switched_to_rest", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto][Once per turn] When an opponent's card is switched from Active Mode to Rest Mode by one of your skills, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "EX06-01":
+        rules.append(EffectRule(trigger="self_power_increased_by_skill", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card's power is increased by a skill during your turn, draw 1 card.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "EX05-02":
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack and play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your opponent's turn, if there is a card that is both blue and yellow in your energy, reduce the energy cost of this card in your hand by 2.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, your opponent places the top card of their deck in their Drop Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX12-03":
+        rules.append(EffectRule(trigger="counter_play", handler_id="noop_auto", handler_params={}, source_text="[Counter: Play] The Battle Card being played is played in Rest Mode, then play this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="counter_attack", handler_id="counter_negate_attack_play_self", handler_params={}, source_text="[Counter: Attack] Negate the attack, play this card, then choose up to 1 of your opponent's Battle Cards and negate its skills for the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your opponent's turn, if you have a yellow Unison Card with a specified cost of 2 in play, reduce the energy cost of this card in your hand by 2.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "BT3-047":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When a card evolves into this card, switch this card to Active Mode, and it gains +30000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-13":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your blue {Fused Zamasu} Leader Card can activate its [Awaken] skill even if you have 3 or more life.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Blue)(Blue), place this card in its owner's Drop Area: If your Leader Card is a <Zamasu> card and you have 15 or less cards in your deck, choose up to 1 {Infinite Force Fused Zamasu} in your hand and play it.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "P-048":
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card attacks during the turn you played it with [Over Realm], your opponent chooses 1 card from their hand and sends it to their Warp. If that card was a Battle Card, combo with it in your Combo Area.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-22":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If there are 3 or more ≪Frieza Clan≫ in your Drop Area, reduce the energy cost of this card in your hand by 1.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto][Once per turn] When this card attacks, if your Leader Card is ≪Frieza Clan≫, place the top 3 cards of your deck in your Drop Area, then if a ≪Frieza Clan≫ is in your Drop Area, switch this card to Active Mode.", once_per_turn=True, limit_per_turn=1))
+    if card_number == "TB1-035":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can only attack this card.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When <Lavender> and <Basil> are in play in your Battle Area, all ≪Trio De Dangers≫ in your Battle Area gain [Barrier].", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacked", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is attacked, it gains +5000 power for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD12-04":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is a blue ≪Saiyan≫ card, this card gains [Critical].", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When this card is KO'd, draw 1 card, then add up to 1 blue Unison Card with a specified cost of 2 from your Drop Area to your hand.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_koed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is KO'd, draw 1 card, then add up to 1 blue Unison Card with a specified cost of 2 from your Drop Area to your hand.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-03":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is red, this card can attack Battle Cards that are in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_attacks_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] During your turn, when this card KO-s an opponent's Battle Card, inflict 1 damage to your opponent.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-20":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your Leader Card is ≪Goku's Lineage≫ and your life is at 2 or less, this card gains [Swap 8](Yellow)(Yellow)(Yellow)(Yellow)(Yellow): ≪Goku's Lineage≫ with an energy cost of 8. (Play the specified card from your hand, then return this card to your hand)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD8-07":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If your opponent has 4 or more cards in Rest Mode, reduce the energy cost of this card in your hand by 3.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, you can't play {Son Goku, Time to Fight} for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card in its owner's Drop Area: Choose 1 green or yellow ≪Saiyan≫ card with an energy cost of 3 or less and 10000 power or less from your Drop Area and play it in Rest Mode, and you can only play Battle Cards that are green or yellow and no other color for the duration of the turn.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "SD3-04":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card can attack Battle Cards that are in Active Mode.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] When you've sent 7 or more cards to your Warp, reduce the energy cost of this card in your hand and Warp by 1.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX03-10":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, if your Leader Card is <Zamasu> or <Goku Black>, play 2 Shadow tokens. (Shadow tokens have 10000 power, 0 combo cost, and 5000 combo power)", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-26":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 1}, source_text="[Auto] When you play this card, draw 1 card, then choose up to 1 {Big Gete Star} in your Drop Area and activate it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card, draw 1 card, then choose up to 1 {Big Gete Star} in your Drop Area and activate it.", once_per_turn=once, limit_per_turn=limit))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] (Yellow)(Yellow), place this card in its owner's Drop Area: Choose one-\n・For the duration of the turn, your yellow {Meta-Cooler} Leader Card can activate its [Awaken] skill even if you have 5 or more life.\n・You may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 2 {Infinite Multiplication Meta-Cooler} in your Drop Area and play them.", once_per_turn=once, limit_per_turn=limit))
+    if card_number == "EX06-14":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] If your Leader Card is a <Goku Black> or <Zamasu> card, it gets +10000 power for the duration of the battle, then if there is a total of 7 or more energy between you and your opponent, place this card from your Drop Area in your energy in Rest Mode.", once_per_turn=once, limit_per_turn=limit))
+
+    if card_number == "EX06-10":
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Battle] Place this card at the bottom of its owner's deck: If your Leader Card is blue and it's your opponent's turn, choose up to 1 of your blue energy and switch it to Active Mode."))
+    if card_number == "BT6-007":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] [Sparking 3] Switch this card to Rest Mode: Look at up to 7 cards from the top of your deck, choose up to 1 red <Son Goku: Br> card among them and play it, then shuffle your deck."))
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, once_per_turn=True, limit_per_turn=1, source_text="[Activate: Main] [Once per turn] Choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and it gets -10000 power for the duration of the turn."))
+        rules.append(EffectRule(trigger="turn_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of your turn, return this card to its owner's hand."))
+    if card_number == "EX07-03":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] If your Leader Card is a <Beerus> card and you send this card from your Drop Area to your Warp: Choose up to 1 card in your life, add it to your hand, then choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn."))
+    if card_number == "EX07-02":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main] Place this card from your hand in your Drop Area: Choose up to 1 <Veku: Br> or <Gogeta: Br> card in your Drop Area and add it to your hand."))
+    if card_number == "EX10-02":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main](Green), if your Leader Card is green and you send this card from your Drop Area to your Warp: Choose 1 green Extra Card in your Drop Area and add it to your hand."))
+    if card_number == "EX07-11":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main][Burst 2] (2), if your Leader Card is a <Demigra> or <Towa> card and you place this card from your hand in your Drop Area: Choose 1 or 2 cards in your life and add them to your hand, then choose up to 1 <Gravy> and 1 <Putine> from your Deck and/or Warp and play them. Then shuffle your deck if you looked through it."))
+    if card_number == "EX13-25":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is a <Boujack Brigade> card: When this card is used in a combo from your Battle Area, it gets +5000 combo power for the battle."))
+        rules.append(EffectRule(trigger="self_comboed_battle_end", handler_id="noop_auto", handler_params={}, source_text="[Auto] At the end of a battle where this card is used in a combo from your Battle Area, return this card to its owner's hand."))
+    if card_number == "EX10-01":
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] If your Leader Card is blue and there is a multicolor card in your energy: When you combo with this card, it gets +5000 combo power for the duration of the turn."))
+    if card_number == "EX06-15":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play or combo with this card, if there is a multicolor card in your energy, choose up to 1 of your opponent's Battle Cards with [Barrier] and an energy cost of 3 or less, ignoring [Barrier], and KO it."))
+        rules.append(EffectRule(trigger="self_comboed", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play or combo with this card, if there is a multicolor card in your energy, choose up to 1 of your opponent's Battle Cards with [Barrier] and an energy cost of 3 or less, ignoring [Barrier], and KO it."))
+    if card_number == "XD1-04":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card from your hand and your Leader Card is a <Universe 6> card, look at up to 10 cards from the top of your deck and choose up to 1 blue or yellow <Cabba> or <Caulifla> card among them with an energy cost of 2 or less and play it, then shuffle your deck."))
+    if card_number == "XD1-05":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto][Bond 2] <Universe 6>: (This skill takes effect when you have 2 or more of the specified Battle Cards in play.) When you play this card, reduce the combo cost of blue and yellow <Universe 6> cards in your hand by 1 for the duration of the turn."))
+    if card_number == "EX09-02":
+        rules.append(EffectRule(trigger="self_activate_main", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] Place this card in its owner's Drop Area: Choose up to 1 red or yellow <Son Goku> card with an energy cost of 2 in your hand or Drop Area and play it."))
+        rules.append(EffectRule(trigger="self_activate_battle", handler_id="noop_auto", handler_params={}, source_text="[Activate: Main/Battle] Place this card in its owner's Drop Area: Choose up to 1 red or yellow <Son Goku> card with an energy cost of 2 in your hand or Drop Area and play it."))
+    if card_number == "EX06-33":
+        rules.append(EffectRule(trigger="union_absorb", handler_id="noop_auto", handler_params={}, source_text="[Union Absorb] Choose 1 <Towa> card in your Warp and place it under this card: If your Leader Card is a <Towa> or <Android> card, choose up to 1 <Mira> card in your deck with an energy cost of 7, play it in Active Mode on top of this card, then shuffle your deck."))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] If you have 10 or more black cards in your Warp, reduce the energy cost of this card in your hand by 1."))
+    if card_number == "BT10-140":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When this card is played using [Over Realm], choose any number of your opponent's Battle Cards that add up to a total energy cost to 6 or less and send them to their owners' Warps."))
+    if card_number == "EX06-30":
+        rules.append(EffectRule(trigger="self_played", handler_id="auto_draw_n", handler_params={"amount": 2}, source_text="[Auto] When you play this card with [Over Realm], draw 2 cards, then choose 1 card in your hand and place it in your Drop Area."))
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card with [Over Realm], draw 2 cards, then choose 1 card in your hand and place it in your Drop Area."))
+    if card_number == "EX06-34":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Auto] When you play this card with [Over Realm], choose up to 1 Battle Card in your hand with {Masked} in its name and an energy cost of 5 or less other than {Masked Saiyan, Beguiled Warrior} and play it."))
+    if card_number == "TB2-017":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains +5000 power for each card placed under it."))
+        rules.append(EffectRule(trigger="owner_opponent_attacks", handler_id="noop_auto", handler_params={}, source_text="[Auto] When your opponent attacks with one of their cards, place 1 card from the top of your deck under this card, then if there are 5 or more cards placed under this card, place this card in your Drop Area."))
+    if card_number == "EX14-03":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] This card gains <Recoome>, <Jeice>, <Burter>, and <Guldo> in all areas."))
+        rules.append(EffectRule(trigger="self_deals_damage", handler_id="noop_auto", handler_params={}, once_per_turn=True, limit_per_turn=1, source_text="[Auto][Once per turn] If your Leader Card is a green <Ginyu Force> card and you have 2 or more energy: When this card's attack deals damage to an opponent or removes a marker from an opponent's Unison Card, play up to 1 green <Ginyu Force> card with an energy cost of 2 from your deck other than copies of this card, then shuffle your deck."))
+    if card_number == "TB3-004":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] During your opponent's turn, this card gets -5000 power."))
+    if card_number == "EX06-35":
+        rules.append(EffectRule(trigger="self_played", handler_id="noop_auto", handler_params={}, source_text="[Permanent] Your opponent can't activate skills unless they choose 1 card in their hand and send it to their Warp."))
 
     if limit is not None:
         rules = [replace(rule, limit_per_turn=limit, limit_scope="card_number") for rule in rules]

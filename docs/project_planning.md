@@ -5480,3 +5480,56 @@ emove_owner_unison_markers`r
   - full extractor suite: `644 passed`
   - full phase4 suite: baseline only `915 passed, 1 failed`
   - known unrelated baseline remains: `tests/test_phase4_effect_pipeline.py:49477`
+- Implemented `P-463 Gokua, Cunning Slayer`:
+  - `self_comboed_battle_end -> auto_play_self_from_combo_on_battle_end`
+  - `self_played -> auto_place_boujack_brigade_from_hand_to_energy_then_drop_energy_and_bottom_deck_opponent_hand_on_play`
+- Implemented `P-470 Pan, Search for Another World`:
+  - `owner_card_placed_into_drop -> auto_add_top_n_from_owner_deck_to_life_on_owner_card_placed_into_drop`
+  - `self_activate_main -> activate_send_up_to_n_opponent_battle_to_warp`
+- Implemented `BT20-135 Prison Planet`:
+  - tracked both permanent lines via extractor coverage
+- Implemented `BT19-037 Son Goku, Stronger Together`:
+  - `self_played -> auto_bottom_deck_opponent_hand_to_size_on_play`
+  - `self_activate_battle -> activate_gain_power_and_keyword_for_battle`
+- Implemented `BT20-116 Fu, Assembling the Strong`:
+  - `self_activate_main -> activate_play_up_to_n_matching_from_under_self`
+- Implemented `P-464 Golden Frieza, Return of the Destroyer`:
+  - `owner_card_placed_into_drop -> auto_green_unison_drop_ko_and_self_gain_power_for_turn`
+  - `self_activate_main -> activate_play_unison_from_hand_with_markers`
+- Implemented `P-462 Boujack, Space Pirate Captain`:
+  - `self_comboed_battle_end -> auto_play_self_from_combo_on_battle_end`
+  - `owner_opponent_battle_attacks -> auto_combo_mono_blue_boujack_brigade_from_energy_then_add_top_deck_to_energy_on_opponent_attack`
+- Implemented `P-465 Cooler, Cruel Commander`:
+  - `self_played -> auto_add_green_drop_to_z_energy_and_self_gain_keyword_on_play`
+  - `self_activate_main -> activate_gain_power_and_keyword_for_turn`
+- Implemented `P-472 Trunks, Challenging the Dark Empire`:
+  - `self_attacks -> auto_combo_up_to_n_from_owner_zone_on_attack`
+- Implemented `BT19-127 Son Gohan & Piccolo, Moment's Respite` as the deliberate throughput swap for `BT20-125`:
+  - tracked the `Blocker` permanent via extractor coverage
+  - `self_blocker_activated -> auto_return_up_to_n_matching_under_self_to_hand_on_self_blocker_activated`
+  - `self_activate_main -> activate_place_up_to_n_matching_owner_battle_under_self`
+- Implemented the next exact shortlist batch:
+  - `BT20-044 Android 17, Emergency Defense`
+  - `BT20-083 Ki Energy Absorb`
+  - `BT20-092 Majin Buu, Heart of Good`
+  - `BT18-003 SS4 Gogeta, the Ultimate Fusion`
+  - `BT16-054 Piccolo, to Battle Universe 6`
+  - `BT16-053 SS Vegeta, to Battle Universe 6`
+  - `BT15-106 Turles, Great Ape Manipulator`
+  - `EX19-05 King Cold, Blessing of the Clan`
+  - `BT17-136 Android 17 & Android 18, Team-Up Attack`
+  - `BT17-133 SS2 Kefla, Super Fusion`
+- Added reusable runtime support for:
+  - bottom-decking opponent hand to a fixed size on play
+  - moving a matching owner battle under self
+  - playing matching battles from under self
+  - exact hand-to-energy / energy-to-combo Boujack Brigade flows
+  - green Unison drop reactive KO + self-buff
+  - Unison hand play with markers
+- Validation for this batch:
+  - focused extractor tests: `10 passed`
+  - focused phase4 tests: `9 passed`
+  - full extractor suite: `654 passed`
+  - full phase4 suite: baseline only `923 passed, 1 failed`
+  - catalog/drift validation after sequential rebuild: `10 passed`
+  - known unrelated baseline remains: `tests/test_phase4_effect_pipeline.py:49477`

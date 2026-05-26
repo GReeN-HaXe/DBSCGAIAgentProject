@@ -1656,21 +1656,23 @@
       "combined_count": 4,
       "deck_count": 0,
       "family_ids": [
-        "self_played:auto_draw_n"
+        "self_played:auto_draw_n",
+        "self_played:noop_auto"
       ],
       "handlers": {
-        "auto_draw_n": 1
+        "auto_draw_n": 2,
+        "noop_auto": 1
       },
       "intentionally_skipped": false,
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 3
       },
-      "rule_count": 1,
+      "rule_count": 3,
       "skip_reason": "",
       "trace_count": 4,
       "triggers": {
-        "self_played": 1
+        "self_played": 3
       }
     },
     {
@@ -3553,21 +3555,25 @@
       "combined_count": 3,
       "deck_count": 3,
       "family_ids": [
-        "self_activate_main:auto_draw_n"
+        "owner_card_attacks:noop_auto",
+        "self_activate_main:auto_draw_n",
+        "self_activate_main:noop_auto"
       ],
       "handlers": {
-        "auto_draw_n": 1
+        "auto_draw_n": 1,
+        "noop_auto": 3
       },
       "intentionally_skipped": false,
       "mapped": true,
       "provenances": {
-        "extractor": 1
+        "extractor": 4
       },
-      "rule_count": 1,
+      "rule_count": 4,
       "skip_reason": "",
       "trace_count": 0,
       "triggers": {
-        "self_activate_main": 1
+        "owner_card_attacks": 1,
+        "self_activate_main": 3
       }
     },
     {
@@ -6833,7 +6839,7 @@
     "intentionally_skipped_priority_card_count": 3,
     "mapped_priority_card_count": 263,
     "priority_card_count": 266,
-    "priority_family_count": 149,
+    "priority_family_count": 151,
     "raw_unmapped_priority_card_count": 3,
     "total_deck_mentions": 616,
     "total_trace_mentions": 1636,
@@ -6988,7 +6994,7 @@
       "deck_count": 57,
       "family_id": "self_played:auto_draw_n",
       "handlers": {
-        "auto_draw_n": 26
+        "auto_draw_n": 27
       },
       "priority_card_count": 26,
       "priority_card_ids": [
@@ -7020,22 +7026,23 @@
         9638
       ],
       "provenances": {
-        "extractor": 26
+        "extractor": 27
       },
       "trace_count": 98,
       "triggers": {
-        "self_played": 26
+        "self_played": 27
       }
     },
     {
-      "combined_count": 123,
+      "combined_count": 127,
       "deck_count": 64,
       "family_id": "self_played:noop_auto",
       "handlers": {
-        "noop_auto": 25
+        "noop_auto": 26
       },
-      "priority_card_count": 24,
+      "priority_card_count": 25,
       "priority_card_ids": [
+        8,
         10,
         17,
         24,
@@ -7062,11 +7069,11 @@
         9732
       ],
       "provenances": {
-        "extractor": 25
+        "extractor": 26
       },
-      "trace_count": 59,
+      "trace_count": 63,
       "triggers": {
-        "self_played": 25
+        "self_played": 26
       }
     },
     {
@@ -8446,6 +8453,25 @@
     {
       "combined_count": 3,
       "deck_count": 3,
+      "family_id": "owner_card_attacks:noop_auto",
+      "handlers": {
+        "noop_auto": 1
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        2541
+      ],
+      "provenances": {
+        "extractor": 1
+      },
+      "trace_count": 0,
+      "triggers": {
+        "owner_card_attacks": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
       "family_id": "self_activate_battle:activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end",
       "handlers": {
         "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end": 1
@@ -8555,6 +8581,25 @@
       "trace_count": 0,
       "triggers": {
         "self_activate_main": 1
+      }
+    },
+    {
+      "combined_count": 3,
+      "deck_count": 3,
+      "family_id": "self_activate_main:noop_auto",
+      "handlers": {
+        "noop_auto": 2
+      },
+      "priority_card_count": 1,
+      "priority_card_ids": [
+        2541
+      ],
+      "provenances": {
+        "extractor": 2
+      },
+      "trace_count": 0,
+      "triggers": {
+        "self_activate_main": 2
       }
     },
     {

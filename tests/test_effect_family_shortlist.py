@@ -201,3 +201,89 @@ def test_build_effect_family_shortlist_excludes_fully_implemented_non_priority_f
     templates = [row["template"] for row in payload["shortlist"]]
     assert "implemented counter family" not in templates
     assert templates == ["real unmatched family"]
+
+
+def test_build_effect_family_shortlist_prefers_unresolved_example_card() -> None:
+    audit = {
+        "families": [
+            {
+                "template": "shared family",
+                "card_count": 3,
+                "implemented_card_count": 2,
+                "priority_card_count": 0,
+                "priority_implemented_card_count": 0,
+                "example_card_id": 10,
+                "example_card_number": "DONE-001",
+                "example_card_name": "Already Done",
+                "unresolved_example_card_id": 11,
+                "unresolved_example_card_number": "MISS-001",
+                "unresolved_example_card_name": "Still Missing",
+                "handler_counts": {"noop_auto": 2},
+                "trigger_counts": {"self_played": 2},
+                "diagnostic_counts": {},
+            }
+        ],
+        "top_priority_families": [],
+        "extractor_report": {
+            "unmatched_top_templates": [
+                {
+                    "template": "shared family",
+                    "count": 1,
+                    "example_card_id": 11,
+                    "example_card_number": "MISS-001",
+                    "example_card_name": "Still Missing",
+                }
+            ]
+        },
+    }
+    payload = build_effect_family_shortlist(audit, top_n=5)
+    row = payload["shortlist"][0]
+    assert row["implemented_card_count"] == 2
+    assert row["example_card_id"] == 11
+    assert row["example_card_number"] == "MISS-001"
+    assert row["example_card_name"] == "Still Missing"
+
+
+def test_build_effect_family_shortlist_ranks_new_single_card_above_partial_family() -> None:
+    audit = {
+        "families": [
+            {
+                "template": "partial family",
+                "card_count": 3,
+                "implemented_card_count": 2,
+                "priority_card_count": 0,
+                "priority_implemented_card_count": 0,
+                "example_card_id": 20,
+                "example_card_number": "DONE-020",
+                "example_card_name": "Done Representative",
+                "unresolved_example_card_id": 21,
+                "unresolved_example_card_number": "MISS-021",
+                "unresolved_example_card_name": "Partial Missing",
+                "handler_counts": {"noop_auto": 2},
+                "trigger_counts": {"self_played": 2},
+                "diagnostic_counts": {},
+            }
+        ],
+        "top_priority_families": [],
+        "extractor_report": {
+            "unmatched_top_templates": [
+                {
+                    "template": "partial family",
+                    "count": 1,
+                    "example_card_id": 21,
+                    "example_card_number": "MISS-021",
+                    "example_card_name": "Partial Missing",
+                },
+                {
+                    "template": "new single card family",
+                    "count": 1,
+                    "example_card_id": 31,
+                    "example_card_number": "NEW-031",
+                    "example_card_name": "Brand New",
+                },
+            ]
+        },
+    }
+    payload = build_effect_family_shortlist(audit, top_n=5)
+    templates = [row["template"] for row in payload["shortlist"][:2]]
+    assert templates == ["new single card family", "partial family"]

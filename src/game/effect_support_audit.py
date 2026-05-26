@@ -64,6 +64,9 @@ def build_effect_support_audit(
                 "example_card_id": int(card.id),
                 "example_card_number": str(card.card_number),
                 "example_card_name": str(card.card_name),
+                "unresolved_example_card_id": None,
+                "unresolved_example_card_number": "",
+                "unresolved_example_card_name": "",
                 "handler_counts": Counter(),
                 "trigger_counts": Counter(),
                 "diagnostic_counts": Counter(),
@@ -77,6 +80,10 @@ def build_effect_support_audit(
             for rule in card_rules:
                 family["handler_counts"][rule.handler_id] += 1
                 family["trigger_counts"][rule.trigger] += 1
+        elif family["unresolved_example_card_id"] is None:
+            family["unresolved_example_card_id"] = int(card.id)
+            family["unresolved_example_card_number"] = str(card.card_number)
+            family["unresolved_example_card_name"] = str(card.card_name)
 
         notes = diagnostics.get(int(card.id), [])
         if notes:
@@ -114,6 +121,13 @@ def build_effect_support_audit(
             "example_card_id": int(payload["example_card_id"]),
             "example_card_number": str(payload["example_card_number"]),
             "example_card_name": str(payload["example_card_name"]),
+            "unresolved_example_card_id": (
+                int(payload["unresolved_example_card_id"])
+                if payload["unresolved_example_card_id"] is not None
+                else None
+            ),
+            "unresolved_example_card_number": str(payload["unresolved_example_card_number"]),
+            "unresolved_example_card_name": str(payload["unresolved_example_card_name"]),
             "handler_counts": dict(sorted(payload["handler_counts"].items())),
             "trigger_counts": dict(sorted(payload["trigger_counts"].items())),
             "diagnostic_counts": dict(sorted(payload["diagnostic_counts"].items())),
@@ -133,6 +147,13 @@ def build_effect_support_audit(
     priority_unimplemented_cards: list[dict[str, object]] = []
     intentionally_skipped_priority_cards: list[dict[str, object]] = []
     priority_diagnostic_cards: list[dict[str, object]] = []
+    card_meta_by_id = {
+        int(card.id): {
+            "card_number": str(card.card_number),
+            "card_name": str(card.card_name),
+        }
+        for card in cards
+    }
     if priority_set:
         for card in cards:
             if int(card.id) not in priority_set:
@@ -171,6 +192,16 @@ def build_effect_support_audit(
                         "diagnostics": list(notes),
                     }
                 )
+
+    extractor_report = dict(extractor_report)
+    extractor_report["unmatched_top_templates"] = [
+        {
+            **row,
+            "example_card_number": card_meta_by_id.get(int(row.get("example_card_id", -1)), {}).get("card_number", ""),
+            "example_card_name": card_meta_by_id.get(int(row.get("example_card_id", -1)), {}).get("card_name", ""),
+        }
+        for row in extractor_report.get("unmatched_top_templates", [])
+    ]
 
     return {
         "schema_version": EFFECT_SUPPORT_AUDIT_SCHEMA_VERSION,

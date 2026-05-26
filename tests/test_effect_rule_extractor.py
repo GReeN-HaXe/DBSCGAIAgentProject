@@ -204,7 +204,7 @@ def test_extract_vegeta_the_cruel_can_ko_and_send_opponent_hand_to_warp_on_play_
 
 def test_extract_android_21_the_ringleader_can_schedule_clone_token_on_opponent_next_turn_end() -> None:
     card = _card(
-        "[Auto] If your Leader Card is an ≪Android≫ card: When you play this card, draw 1 card, "
+        "[Auto] If your Leader Card is an â‰ªAndroidâ‰« card: When you play this card, draw 1 card, "
         "then at the end of your opponent's next turn, play 1 Clone Token with 10000 power in your opponent's Battle Area."
     )
     rules = extract_effect_rules_from_card(card)
@@ -613,7 +613,7 @@ def test_extract_exact_bt20_android_21_front_activate_searches_and_buffs_self() 
         _card(
             "[Permanent] You can't activate Extras, and during your turn, you can't use skills to play Battle Cards.<br>"
             "[Auto] If you have an <Android 21> Z-Battle Card in play: At the end of your turn, switch up to 1 of your blue energy to Active Mode.<br>"
-            "[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue ≪Android≫ card among them to your hand, shuffle your deck, and this card gets +5000 power for the turn.<br>"
+            "[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue â‰ªAndroidâ‰« card among them to your hand, shuffle your deck, and this card gets +5000 power for the turn.<br>"
             "[Awaken] When your life is at 4 or less: Draw 1 card, and switch up to 1 of your energy to Active Mode."
         ),
         card_type="LEADER",
@@ -865,7 +865,7 @@ def test_extract_critical_reminder_text_noop() -> None:
 def test_extract_on_play_look_top_add_universe_then_shuffle() -> None:
     card = _card(
         "[Auto] When you play this card, look at up to 5 cards from the top of your deck. "
-        "Choose up to 1 ≪Universe 7≫ among them and add it to your hand. Then, shuffle your deck."
+        "Choose up to 1 â‰ªUniverse 7â‰« among them and add it to your hand. Then, shuffle your deck."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
@@ -955,8 +955,8 @@ def test_extract_field_extra_placed_add_matching_from_owner_deck_to_hand() -> No
     card = _card(
         "[Field] (Place and activate this card in your Battle Area. It remains in your Battle Area until you activate another [Field]. "
         "When you do, place this card in its owner's Drop Area.)<br>"
-        "[Auto] When this card is placed in a Battle Area, choose up to 1 green ≪Great Ape≫ card from your deck, add it to your hand, then shuffle your deck.<br>"
-        "[Activate: Main] Switch this card to Rest Mode: Choose up to 1 red or green ≪Saiyan≫ card in your Battle Area, and it gets +5000 power for the duration of the turn."
+        "[Auto] When this card is placed in a Battle Area, choose up to 1 green â‰ªGreat Apeâ‰« card from your deck, add it to your hand, then shuffle your deck.<br>"
+        "[Activate: Main] Switch this card to Rest Mode: Choose up to 1 red or green â‰ªSaiyanâ‰« card in your Battle Area, and it gets +5000 power for the duration of the turn."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -997,7 +997,7 @@ def test_extract_field_extra_placed_grants_barrier_to_matching_owner_battle_whil
         _card(
             "[Field] If your Leader is a blue <Cooler> card :\n"
             "[Permanent] The [Field] skill on this card in your hand can also be activated at [Activate: Battle] timings.\n"
-            "[Auto] When this card is placed in a Battle Area, choose up to 1 of your blue <Cooler> or ≪Cooler's Armored Squadron≫ Battle Cards and it gains [Barrier] while this card is in a Battle Area."
+            "[Auto] When this card is placed in a Battle Area, choose up to 1 of your blue <Cooler> or â‰ªCooler's Armored Squadronâ‰« Battle Cards and it gains [Barrier] while this card is in a Battle Area."
         ),
         card_type="EXTRA",
     )
@@ -1021,7 +1021,7 @@ def test_extract_activate_main_add_dragon_ball_from_deck_or_life_to_hand() -> No
         "[Permanent] This card can't attack.<br>"
         "[Activate: Main] Switch this card to Rest Mode: Choose up to 2 [Dragon Ball] cards from your deck or life and add them to your hand. "
         "Then shuffle any areas you looked through.<br>"
-        "[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 ≪Desire≫ card in your Drop Area, add it to your hand, and flip this card over."
+        "[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 â‰ªDesireâ‰« card in your Drop Area, add it to your hand, and flip this card over."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.trigger == "self_activate_main" and r.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand")
@@ -1087,7 +1087,7 @@ def test_extract_self_played_can_play_cell_jr_tokens_from_when_you_play_this_car
 
 def test_extract_self_played_can_draw_two_and_play_two_cell_jr_tokens() -> None:
     card = _card(
-        "[Auto] When you play this card, if your Leader Card is an ≪Android≫ , draw 2 cards and play 2 Cell Jr. tokens. "
+        "[Auto] When you play this card, if your Leader Card is an â‰ªAndroidâ‰« , draw 2 cards and play 2 Cell Jr. tokens. "
         "(Cell Jr. tokens have 10000 power, 0 combo cost, and 5000 combo power)"
     )
     rules = extract_effect_rules_from_card(card)
@@ -1286,7 +1286,7 @@ def test_extract_play_or_combo_draw_emits_both_triggers_once() -> None:
 
 def test_extract_choose_one_branches_parses_branch_effects() -> None:
     card = _card(
-        "[Auto] When this card attacks, choose one— ・Draw 1 card. ・Choose up to 1 of your opponent's Battle Cards and KO it."
+        "[Auto] When this card attacks, choose oneâ€” ãƒ»Draw 1 card. ãƒ»Choose up to 1 of your opponent's Battle Cards and KO it."
     )
     rules = extract_effect_rules_from_card(card)
     assert any(r.trigger == "self_attacks" and r.handler_id == "auto_draw_n" for r in rules)
@@ -1518,7 +1518,7 @@ def test_extract_ss2_trunks_pursuit_hand_to_drop_or_warp_and_play_from_warp_rule
 def test_extract_tiny_golden_warrior_next_ex_evolve_from_drop_rule() -> None:
     card = replace(
         _card(
-            "[Permanent] This card gains ≪Earthling≫ in all areas. "
+            "[Permanent] This card gains â‰ªEarthlingâ‰« in all areas. "
             "[Activate: Main][Limit 1] If your Leader is a red <Krillin> card : "
             "The next time you activate [EX-Evolve] on your red <Son Goten> or <Trunks : Youth> card during this turn, "
             "it can also activate from its owner's Drop."
@@ -1541,8 +1541,8 @@ def test_extract_jaguars_island_challenge_stage_rules() -> None:
         _card(
             "[Barrier] "
             "[Permanent] This card can't attack. "
-            "[Auto] When you activate a red ≪Earthling≫ Extra from your hand, add 1 marker to this card. "
-            "[UNISON -3][Activate: Main/Battle] If your Leader is a red <Krillin> card and you place 4 red ≪Earthling≫ Extras from your Drop at the bottom of their owner's deck : "
+            "[Auto] When you activate a red â‰ªEarthlingâ‰« Extra from your hand, add 1 marker to this card. "
+            "[UNISON -3][Activate: Main/Battle] If your Leader is a red <Krillin> card and you place 4 red â‰ªEarthlingâ‰« Extras from your Drop at the bottom of their owner's deck : "
             "The next time you activate an [Activate] skill on a red Extra from your hand during this turn, reduce the skill cost by {1}."
         ),
         card_type="Z-UNISON",
@@ -1623,7 +1623,7 @@ def test_extract_self_played_can_grant_keyword_to_next_matching_union_play() -> 
 
 def test_extract_self_played_can_place_from_drop_under_self() -> None:
     card = _card(
-        "[Auto] When this card is played, place up to 1 ≪Saiyan≫ card from your Drop under this card, "
+        "[Auto] When this card is played, place up to 1 â‰ªSaiyanâ‰« card from your Drop under this card, "
         "and this card gains [Barrier] for the turn."
     )
     rules = extract_effect_rules_from_card(card)
@@ -1667,7 +1667,7 @@ def test_extract_self_played_can_place_from_deck_or_drop_under_self() -> None:
 
 def test_extract_owner_union_absorb_activated_can_place_top_deck_under_self_and_rest_opponent_battle() -> None:
     card = _card(
-        "[Auto][Once per turn] When one of your ≪Namekian≫ cards activates [Union Absorb], "
+        "[Auto][Once per turn] When one of your â‰ªNamekianâ‰« cards activates [Union Absorb], "
         "place the top card of your deck under this card, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."
     )
     rules = extract_effect_rules_from_card(card)
@@ -1867,9 +1867,9 @@ def test_extract_referee_introducing_the_fighters_first_branch_rule() -> None:
     card = replace(
         _card(
             "[Activate: Main] If your Leader Card is a green <Beerus> or green <Champa> card and you place this card in its owner's Drop Area: "
-            "Choose one?\n"
-            "・Activate up to 1 {The Nameless Planet} from your deck, then shuffle your deck.\n"
-            "・If your opponent has no Battle Cards in play, your opponent reveals their hand, and you choose up to 1 Battle Card with an energy cost of 3 or less from it and play it in your opponent's Battle Area."
+            "Choose one-\n"
+            "ãƒ»Activate up to 1 {The Nameless Planet} from your deck, then shuffle your deck.\n"
+            "ãƒ»If your opponent has no Battle Cards in play, your opponent reveals their hand, and you choose up to 1 Battle Card with an energy cost of 3 or less from it and play it in your opponent's Battle Area."
         ),
         card_type="BATTLE",
     )
@@ -1890,9 +1890,9 @@ def test_extract_referee_introducing_the_fighters_second_branch_rule() -> None:
     card = replace(
         _card(
             "[Activate: Main] If your Leader Card is a green <Beerus> or green <Champa> card and you place this card in its owner's Drop Area: "
-            "Choose one?\n"
-            "・Activate up to 1 {The Nameless Planet} from your deck, then shuffle your deck.\n"
-            "・If your opponent has no Battle Cards in play, your opponent reveals their hand, and you choose up to 1 Battle Card with an energy cost of 3 or less from it and play it in your opponent's Battle Area."
+            "Choose one-\n"
+            "ãƒ»Activate up to 1 {The Nameless Planet} from your deck, then shuffle your deck.\n"
+            "ãƒ»If your opponent has no Battle Cards in play, your opponent reveals their hand, and you choose up to 1 Battle Card with an energy cost of 3 or less from it and play it in your opponent's Battle Area."
         ),
         card_type="BATTLE",
     )
@@ -1943,9 +1943,9 @@ def test_extract_planetary_manipulation_second_branch_rule() -> None:
         _card(
             "[Counter: Attack] Negate the attack.\n"
             "[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 1 card from under a {The Nameless Planet} in your Battle Area in its owner's Drop Area instead.\n"
-            "[Activate: Main](G)(G)(G): Choose one??\n"
-            "・Place up to 3 cards from under a {The Nameless Planet} in your Battle Area in their owners' Drop Areas; your opponent discards cards equal to the number of cards you placed in Drop Areas this way.\n"
-            "・Look at your opponent's hand and play up to 1 Battle Card from it in your opponent's Battle Area in Rest Mode."
+            "[Activate: Main](G)(G)(G): Choose one--\n"
+            "ãƒ»Place up to 3 cards from under a {The Nameless Planet} in your Battle Area in their owners' Drop Areas; your opponent discards cards equal to the number of cards you placed in Drop Areas this way.\n"
+            "ãƒ»Look at your opponent's hand and play up to 1 Battle Card from it in your opponent's Battle Area in Rest Mode."
         ),
         card_type="EXTRA",
     )
@@ -1983,7 +1983,7 @@ def test_extract_nameless_planet_attack_redirect_rule() -> None:
     card = replace(
         _card(
             "[Auto] If your Leader Card is a green <Beerus> or green <Champa> card and you switch this card to Rest Mode: "
-            "When your opponent attacks, choose up to 1 of your green Battle Cards in Rest Mode with the same ≪Universe≫ special trait as your Leader Card "
+            "When your opponent attacks, choose up to 1 of your green Battle Cards in Rest Mode with the same â‰ªUniverseâ‰« special trait as your Leader Card "
             "and switch the target of attack to that card."
         ),
         card_type="EXTRA",
@@ -2097,7 +2097,7 @@ def test_extract_activate_main_can_play_self_from_z_energy_then_rest_and_lock_op
     card = _card(
         "[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.<br>"
         "[Permanent] If this card would leave the Battle Area, remove it from the game instead.<br>"
-        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have 3 or more Z-Energy: "
+        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow â‰ªUniverse 7â‰« <Son Goku> card and you have 3 or more Z-Energy: "
         "Play this card from your Z-Energy, then choose up to 1 of your opponent's Battle Cards or Unisons, switch it to Rest Mode, and that card can't switch to Active Mode until the end of your opponent's turn."
     )
     rules = extract_effect_rules_from_card(card)
@@ -2119,7 +2119,7 @@ def test_extract_activate_main_can_play_self_from_z_energy_then_ko_rest_battle()
     card = _card(
         "[Permanent] If this card is in Rest Mode, your opponent's Battle Cards can't attack Leaders.<br>"
         "[Permanent] If this card would leave the Battle Area, remove it from the game instead.<br>"
-        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have 3 or more Z-Energy: "
+        "[Activate: Main][Limit 1](Yellow), if your Leader is a yellow â‰ªUniverse 7â‰« <Son Goku> card and you have 3 or more Z-Energy: "
         "Play this card from your Z-Energy, then choose up to 1 of your opponent's Rest Mode Battle Cards and KO it."
     )
     rules = extract_effect_rules_from_card(card)
@@ -2186,7 +2186,7 @@ def test_extract_attack_can_add_matching_to_z_energy_then_place_matching_under_s
 def test_extract_hyperbolic_leader_attack_search_with_awaken_clause() -> None:
     card = replace(_card(
         "[Auto] When this card attacks, look at up to 5 cards from the top of your deck, "
-        "add up to 1 green ≪Saiyan≫ to your hand, then shuffle your deck. "
+        "add up to 1 green â‰ªSaiyanâ‰« to your hand, then shuffle your deck. "
         "[Awaken] When your life is at 4 or less or if you have a {SS Son Goku, Showing the Results of Training} in play: "
         "Draw 1 card, switch up to 1 of your energy to Active Mode, then add cards from your life to your hand until you have 6 life left."
     ), card_type="LEADER")
@@ -2202,7 +2202,7 @@ def test_extract_hyperbolic_leader_attack_search_with_awaken_clause() -> None:
 def test_extract_hyperbolic_krillin_play_search_with_cost_cap() -> None:
     card = _card(
         "[Auto] When this card is played, look at up to 5 cards from the top of your deck, "
-        "add up to 1 green ≪Saiyan≫ with an energy cost of 4 or less to your hand, then shuffle your deck."
+        "add up to 1 green â‰ªSaiyanâ‰« with an energy cost of 4 or less to your hand, then shuffle your deck."
     )
     rules = extract_effect_rules_from_card(card)
     search = next(r for r in rules if r.trigger == "self_played" and r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
@@ -2521,7 +2521,7 @@ def test_extract_turn_end_can_send_self_from_energy_to_drop_after_life_reveal_re
 def test_extract_activate_main_can_draw_discard_place_from_drop_under_leader_and_switch_self_active() -> None:
     card = _card(
         "[UNISON +2][Activate: Main] Draw 1 card and discard 1 card from your hand. "
-        "Additionally, if your Leader is a <Krillin> or <Android 18> card-both mono-blue-place up to 1 <Krillin> or ≪Android≫ card-both blue-from your Drop under your Leader, "
+        "Additionally, if your Leader is a <Krillin> or <Android 18> card-both mono-blue-place up to 1 <Krillin> or â‰ªAndroidâ‰« card-both blue-from your Drop under your Leader, "
         "and at the end of the turn, switch this card to Active Mode."
     )
     rules = extract_effect_rules_from_card(card)
@@ -2545,7 +2545,7 @@ def test_extract_activate_main_can_draw_discard_place_from_drop_under_leader_and
 def test_extract_android_18_gearing_up_for_battle_rules() -> None:
     card = _card(
         "[Auto] When this card is played, look at up to 5 cards from the top of your deck, "
-        "add up to 1 <Krillin> or ≪Android≫ card-both blue and with an energy cost of 5 or less-from among them to your hand, and shuffle your deck. "
+        "add up to 1 <Krillin> or â‰ªAndroidâ‰« card-both blue and with an energy cost of 5 or less-from among them to your hand, and shuffle your deck. "
         "[Activate: Main][Limit 1][Burst 1] If your Leader is a blue <Android 18> card: Place this card under your Leader."
     )
     rules = extract_effect_rules_from_card(card)
@@ -2583,7 +2583,7 @@ def test_extract_krillin_accel_dance_turn_end_under_leader_rule() -> None:
 
 def test_extract_super_17_power_distilled_first_activate_rule() -> None:
     card = _card(
-        "[Activate: Main][Limit 1] If your Leader is a green ≪Machine Mutant≫ card and you switch this card to Rest Mode: "
+        "[Activate: Main][Limit 1] If your Leader is a green â‰ªMachine Mutantâ‰« card and you switch this card to Rest Mode: "
         "Draw 1 card, place up to 1 <Android 18> or <Cell> card-both green and with an energy cost of 1-from your deck or Drop under your Leader, then shuffle your deck if you looked through it. "
         "[Activate: Main][Limit 1] If this card is under a green <Super 17> card: "
         "Choose up to 1 of your opponent's Battle Cards and place it under a <Super 17> card on top of this card, then switch a <Super 17> card on top of this card to Active Mode at the end of the turn."
@@ -2606,7 +2606,7 @@ def test_extract_super_17_power_distilled_first_activate_rule() -> None:
 
 def test_extract_super_17_power_distilled_second_activate_rule() -> None:
     card = _card(
-        "[Activate: Main][Limit 1] If your Leader is a green â‰ªMachine Mutantâ‰« card and you switch this card to Rest Mode: "
+        "[Activate: Main][Limit 1] If your Leader is a green Ã¢â€°ÂªMachine MutantÃ¢â€°Â« card and you switch this card to Rest Mode: "
         "Draw 1 card, place up to 1 <Android 18> or <Cell> card-both green and with an energy cost of 1-from your deck or Drop under your Leader, then shuffle your deck if you looked through it. "
         "[Activate: Main][Limit 1] If this card is under a green <Super 17> card: "
         "Choose up to 1 of your opponent's Battle Cards and place it under a <Super 17> card on top of this card, then switch a <Super 17> card on top of this card to Active Mode at the end of the turn."
@@ -2668,7 +2668,7 @@ def test_extract_piccolo_battle_under_draw_and_bounce_rule() -> None:
     card = _card(
         "[Energy-Exhaust][Revive Blue/Green] "
         "[Permanent] If your Leader's back side is {Piccolo, Brotherhood Bonds}, negate this card's [Energy-Exhaust] skill in all areas. "
-        "[Activate: Main][Limit 1] Choose 1 of your ≪Namekian≫ Battle Cards with a [Revive] skill and place this card under it: "
+        "[Activate: Main][Limit 1] Choose 1 of your â‰ªNamekianâ‰« Battle Cards with a [Revive] skill and place this card under it: "
         "Draw 1 card, then choose up to 1 of your opponent's Battle Cards and return it to its owner's hand."
     )
     rules = extract_effect_rules_from_card(card)
@@ -2704,7 +2704,7 @@ def test_extract_kefla_battle_under_bottom_deck_rule() -> None:
 
 def test_extract_frieza_battle_under_play_from_deck_or_hand_on_top_rule() -> None:
     card = _card(
-        "[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas. "
+        "[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas. "
         "[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle. "
         "[Activate: Main] Choose 1 <Frieza> card with an energy cost of 4 in your Battle Area and place this card under it: "
         "Play up to 1 green <Frieza: Xeno> card in your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it."
@@ -2728,7 +2728,7 @@ def test_extract_frieza_battle_under_play_from_deck_or_hand_on_top_rule() -> Non
 
 def test_extract_majin_buu_battle_under_choose_from_deck_or_hand_on_top_rule() -> None:
     card = _card(
-        "[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas. "
+        "[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas. "
         "[Activate: Battle] Choose 1 of your cards and that card gets +5000 power for the battle. "
         "[Activate: Main] Choose 1 mono-green <Majin Buu> card with an energy cost of 3 in your Battle Area and place this card under it: "
         "Choose up to 1 green <Majin Buu: Xeno> card with an energy cost of 5 or less in your deck or hand, "
@@ -2755,7 +2755,7 @@ def test_extract_majin_buu_battle_under_choose_from_deck_or_hand_on_top_rule() -
 
 def test_extract_turles_battle_under_discrete_cost_on_top_rule() -> None:
     card = _card(
-        "[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas. "
+        "[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas. "
         "[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle. "
         "[Activate: Main] If your opponent has 2 or more energy and you choose 1 of your mono-green <Turles> cards with an energy cost of 3 or 4 and place this card under it: "
         "Choose up to 1 green <Turles: Xeno> card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it."
@@ -2782,7 +2782,7 @@ def test_extract_turles_battle_under_discrete_cost_on_top_rule() -> None:
 
 def test_extract_janemba_battle_under_on_top_rule() -> None:
     card = _card(
-        "[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas. "
+        "[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas. "
         "[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle. "
         "[Activate: Main] If you have 2 or more energy and you choose 1 of your mono-blue <Janemba> cards with an energy cost of 3 and place this card under it: "
         "Play up to 1 blue <Janemba: Xeno> card with an energy cost of 4 from your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it."
@@ -2806,7 +2806,7 @@ def test_extract_janemba_battle_under_on_top_rule() -> None:
 
 def test_extract_lord_slug_battle_under_discrete_cost_on_top_rule() -> None:
     card = _card(
-        "[Permanent] This card gains ≪Dark Dragon Ball≫ in all areas. "
+        "[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas. "
         "[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle. "
         "[Activate: Main] If your opponent has 3 or more energy and you choose 1 of your mono-green <Lord Slug> cards with an energy cost of 3 or 4 and place this card under it: "
         "Choose up to 1 green <Lord Slug: Xeno> card with an energy cost of 4 in your deck or hand, play it on top of the chosen card in Active Mode, then shuffle your deck if you looked through it."
@@ -2830,7 +2830,7 @@ def test_extract_lord_slug_battle_under_discrete_cost_on_top_rule() -> None:
 
 def test_extract_cell_battle_under_choose_from_deck_or_hand_plain_play_rule() -> None:
     card = _card(
-        "[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas. "
+        "[Permanent] This card gains Ã¢â€°ÂªDark Dragon BallÃ¢â€°Â« in all areas. "
         "[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle. "
         "[Activate: Main] Choose 1 of your <Cell> cards with an energy cost of 7 or 9 and place this card under it: "
         "Choose up to 1 green <Cell: Xeno> card with an energy cost of 9 in your deck or hand, play it, then shuffle your deck if you looked through it."
@@ -2856,7 +2856,7 @@ def test_extract_cell_battle_under_choose_from_deck_or_hand_plain_play_rule() ->
 def test_extract_play_self_from_hand_and_place_matching_owner_battle_under_self_rule() -> None:
     card = _card(
         "[Auto][Limit 1] Place 1 card from under this card in its owner's Drop: When this card attacks, choose up to 1 of your opponent's Battle Cards and it gets -30000 power for the turn. "
-        "[Activate: Main](Red), choose 1 red ≪Saiyan≫ card in your Battle Area: Play this card from your hand and place the chosen card under it."
+        "[Activate: Main](Red), choose 1 red â‰ªSaiyanâ‰« card in your Battle Area: Play this card from your hand and place the chosen card under it."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -3145,7 +3145,7 @@ def test_extract_self_comboed_from_battle_can_draw_and_add_self_to_z_energy() ->
 
 def test_extract_opponent_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
     card = _card(
-        "[Auto] If your Leader is a red <Warriors of Universe 7> card: At the start of your opponent's Main Phase, play up to 1 red ≪Universe 7≫ card with an energy cost of 2 or less from under this card, and place this card under the played card."
+        "[Auto] If your Leader is a red <Warriors of Universe 7> card: At the start of your opponent's Main Phase, play up to 1 red â‰ªUniverse 7â‰« card with an energy cost of 2 or less from under this card, and place this card under the played card."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card")
@@ -3159,7 +3159,7 @@ def test_extract_opponent_main_phase_can_play_from_under_self_and_place_self_und
 
 def test_extract_owner_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
     card = _card(
-        "[Auto] At the start of your Main Phase, play up to 1 red <Piccolo Jr.> or ≪Demon Clan≫ card with an energy cost of 3 from under this card, and place this card under the played card."
+        "[Auto] At the start of your Main Phase, play up to 1 red <Piccolo Jr.> or â‰ªDemon Clanâ‰« card with an energy cost of 3 from under this card, and place this card under the played card."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card")
@@ -3174,7 +3174,7 @@ def test_extract_owner_main_phase_can_play_from_under_self_and_place_self_under_
 def test_extract_costed_opponent_main_phase_can_play_from_under_self_and_place_self_under_played() -> None:
     card = _card(
         "[Auto](Red), if your Leader is a red <Warriors of Universe 7> card and your opponent has 2 or more energy: "
-        "At the start of your opponent's Main Phase, play up to 1 red ≪Universe 7≫ card with an energy cost of 3 or less from under this card, and place this card under the played card."
+        "At the start of your opponent's Main Phase, play up to 1 red â‰ªUniverse 7â‰« card with an energy cost of 3 or less from under this card, and place this card under the played card."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card")
@@ -3419,7 +3419,7 @@ def test_extract_hit_can_send_opponent_battle_to_warp_and_play_it_later() -> Non
 
 def test_extract_universe_6_card_can_schedule_self_play_from_warp_next_turn() -> None:
     card = _card(
-        "[Activate: Main] Send this card to the Warp: At the beginning of your next turn, if your Leader Card is ≪Universe 6≫, play this card from the Warp in its owner's Battle Area."
+        "[Activate: Main] Send this card to the Warp: At the beginning of your next turn, if your Leader Card is â‰ªUniverse 6â‰«, play this card from the Warp in its owner's Battle Area."
     )
     rules = extract_effect_rules_from_card(card)
     schedule_rule = next(rule for rule in rules if rule.handler_id == "activate_schedule_play_cards_warped_by_source_skill")
@@ -3433,8 +3433,8 @@ def test_extract_universe_6_card_can_schedule_self_play_from_warp_next_turn() ->
 def test_extract_ultimate_dragon_quake_can_warp_then_replay_or_drop_at_end_of_current_turn() -> None:
     card = replace(
         _card(
-            "[Permanent] This card gains ≪Shadow Dragon≫ in all areas. "
-            "[Activate: Main/Battle][Limit 1] If your Leader Card is a ≪Shadow Dragon≫ card: "
+            "[Permanent] This card gains â‰ªShadow Dragonâ‰« in all areas. "
+            "[Activate: Main/Battle][Limit 1] If your Leader Card is a â‰ªShadow Dragonâ‰« card: "
             "Choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and send it to its owner's Warp. "
             "At the end of the turn, play any cards sent to a Warp by this skill to their owners' Battle Areas with their skills negated for the turn. "
             "If your opponent has 15 or fewer cards in their deck, place them in their owners' Drop Areas instead."
@@ -3461,7 +3461,7 @@ def test_extract_ultimate_dragon_quake_can_warp_then_replay_or_drop_at_end_of_cu
 
 def test_extract_counter_attack_can_warp_attacking_battle_and_replay_it_at_turn_end() -> None:
     card = _card(
-        "[Counter: Attack] If your Leader Card is ≪Universe 6≫: Negate the attack, choose up to 1 attacking Battle Card and send it to the Warp. "
+        "[Counter: Attack] If your Leader Card is â‰ªUniverse 6â‰«: Negate the attack, choose up to 1 attacking Battle Card and send it to the Warp. "
         "At the end of the turn, your opponent plays the card sent to the Warp with this skill in its owner's Battle Area from the Warp in Rest Mode."
     )
     rules = extract_effect_rules_from_card(card)
@@ -3479,7 +3479,7 @@ def test_extract_counter_attack_can_warp_attacking_battle_and_replay_it_at_turn_
 
 def test_extract_counter_attack_can_schedule_clone_token_at_turn_end() -> None:
     card = _card(
-        "[Counter: Attack] If your Leader is a blue ≪Android≫ card: Negate the attack and switch up to 1 of your blue energy to Active Mode. "
+        "[Counter: Attack] If your Leader is a blue â‰ªAndroidâ‰« card: Negate the attack and switch up to 1 of your blue energy to Active Mode. "
         "Additionally, at the end of the turn, play 1 Clone Token with 10000 power in your opponent's Battle Area."
     )
     rules = extract_effect_rules_from_card(card)
@@ -3498,7 +3498,7 @@ def test_extract_counter_attack_can_schedule_clone_token_at_turn_end() -> None:
 
 def test_extract_counter_attack_can_play_skillless_monster_from_hand_and_redirect_attack() -> None:
     card = _card(
-        "[Counter: Attack] Choose up to 1 skill-less ≪Monster≫ card in your hand with an energy cost of 2 or less "
+        "[Counter: Attack] Choose up to 1 skill-less â‰ªMonsterâ‰« card in your hand with an energy cost of 2 or less "
         "and play it in Rest Mode. If you played a card, it becomes the target of attack."
     )
     rules = extract_effect_rules_from_card(card)
@@ -3683,7 +3683,7 @@ def test_extract_played_card_can_send_matching_deck_card_to_warp_then_add_it_to_
 
 def test_extract_played_card_can_send_matching_deck_card_to_warp_then_add_it_to_hand_next_turn() -> None:
     card = _card(
-        "[Auto] When you play this card, choose up to 1 ≪World Tournament≫ card with an energy cost of 5 or less from your deck, "
+        "[Auto] When you play this card, choose up to 1 â‰ªWorld Tournamentâ‰« card with an energy cost of 5 or less from your deck, "
         "send it your Warp, shuffle your deck, and at the start of your next turn, add that card sent to your Warp by this skill to your hand from the Warp."
     )
     rules = extract_effect_rules_from_card(card)
@@ -3703,8 +3703,8 @@ def test_extract_played_card_can_send_matching_deck_card_to_warp_then_add_it_to_
 
 def test_extract_activate_main_can_send_matching_hand_card_to_warp_then_play_it_next_turn() -> None:
     card = _card(
-        "[Activate: Main]②, if your Leader Card is a ≪World Tournament≫ card and you place this card in it's owner's Drop Area: "
-        "Choose up to 1 ≪World Tournament≫ card with an energy cost of 3 or less from your hand, send it to your Warp, "
+        "[Activate: Main]â‘¡, if your Leader Card is a â‰ªWorld Tournamentâ‰« card and you place this card in it's owner's Drop Area: "
+        "Choose up to 1 â‰ªWorld Tournamentâ‰« card with an energy cost of 3 or less from your hand, send it to your Warp, "
         "and at the start of your next turn, play the card sent to your Warp by this skill from your Warp."
     )
     rules = extract_effect_rules_from_card(card)
@@ -3723,7 +3723,7 @@ def test_extract_activate_main_can_send_matching_hand_card_to_warp_then_play_it_
 
 def test_extract_played_card_can_send_named_deck_card_to_warp_then_play_it_next_turn_in_rest_mode() -> None:
     card = _card(
-        "[Auto][Limit 1] If your Leader is a yellow non-≪Great Ape≫ <Son Goku: Childhood> card: "
+        "[Auto][Limit 1] If your Leader is a yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> card: "
         "When this card is played, send up to 1 yellow {Bora} from your deck to your Warp, shuffle your deck, "
         "and at the start of your next turn, play that card from your Warp in Rest Mode."
     )
@@ -3821,7 +3821,7 @@ def test_extract_attack_can_send_under_self_to_warp_then_play_one_and_add_one_to
 
 def test_extract_counter_attack_can_warp_one_each_from_both_battle_areas_and_replay_all() -> None:
     card = _card(
-        "[Counter: Attack] If your Leader is a green ≪Earthling≫ card: Draw 1 card, then choose up to 1 each of ≪Saiyan≫ and ≪Earthling≫ cards "
+        "[Counter: Attack] If your Leader is a green â‰ªEarthlingâ‰« card: Draw 1 card, then choose up to 1 each of â‰ªSaiyanâ‰« and â‰ªEarthlingâ‰« cards "
         "from among all the cards in you and your opponent's Battle Areas and send them to their owners' Warps. "
         "At the end of the turn, play all the cards sent to their owners' Warps by this skill into their owners' Battle Areas wit their skills negated for the turn."
     )
@@ -3844,8 +3844,8 @@ def test_extract_counter_attack_can_warp_one_each_from_both_battle_areas_and_rep
 def test_extract_kahseral_activate_battle_switch_owner_battle_active_rule() -> None:
     card = _card(
         "[Deflect][Blocker] "
-        "[Activate: Battle][Once per turn] If your Leader Card is a red ≪Universe 11≫ card: "
-        "Choose up to 2 of your red ≪Universe 11≫ cards with energy costs of 1 and 10000 power or less in your Battle Area and switch them to Active Mode."
+        "[Activate: Battle][Once per turn] If your Leader Card is a red â‰ªUniverse 11â‰« card: "
+        "Choose up to 2 of your red â‰ªUniverse 11â‰« cards with energy costs of 1 and 10000 power or less in your Battle Area and switch them to Active Mode."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(rule for rule in rules if rule.handler_id == "activate_switch_up_to_n_owner_battle_active")
@@ -4031,7 +4031,7 @@ def test_extract_activate_main_can_send_self_to_warp_play_black_multicolor_from_
 
 def test_extract_combo_battle_end_can_play_self_then_negate_opponent_unison_for_turn_with_total_energy_gate() -> None:
     card = _card(
-        "[Energy-Exhaust]<br>[Auto](Black), if your Leader Card is a black ≪Saiyan≫ card and there's a total of 3 or more energy between you and your opponent: "
+        "[Energy-Exhaust]<br>[Auto](Black), if your Leader Card is a black â‰ªSaiyanâ‰« card and there's a total of 3 or more energy between you and your opponent: "
         "At the end of a battle in which this card was used in a combo from your hand, play this card from your Drop Area in Rest Mode, "
         "then choose up to 1 of your opponent's Unison Cards and negate its skills for the turn."
     )
@@ -4046,7 +4046,7 @@ def test_extract_combo_battle_end_can_play_self_then_negate_opponent_unison_for_
 
 def test_extract_combo_battle_end_can_play_self_then_return_opponent_battle_to_hand_with_total_energy_gate() -> None:
     card = _card(
-        "[Energy-Exhaust]<br>[Auto](Black), if your Leader Card is a black ≪Saiyan≫ card and there's a total of 3 or more energy between you and your opponent: "
+        "[Energy-Exhaust]<br>[Auto](Black), if your Leader Card is a black â‰ªSaiyanâ‰« card and there's a total of 3 or more energy between you and your opponent: "
         "At the end of a battle in which this card was used in a combo from your hand, play this card from your Drop Area in Rest Mode, "
         "then choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and return it to its owner's hand."
     )
@@ -4130,7 +4130,7 @@ def test_extract_activate_main_opponent_discards_n_from_hand_rule() -> None:
 def test_extract_activate_main_place_from_under_named_host_into_drop_then_opponent_discards_same_count_rule() -> None:
     card = replace(
         _card(
-            "[Activate: Main](G)(G)(G): Choose one?? "
+            "[Activate: Main](G)(G)(G): Choose one-- "
             "Place up to 3 cards from under a {The Nameless Planet} in your Battle Area in their owners' Drop Areas; "
             "your opponent discards cards equal to the number of cards you placed in Drop Areas this way."
         ),
@@ -4222,7 +4222,7 @@ def test_extract_supreme_kai_of_time_opposing_the_empire_rules() -> None:
     card = _card(
         "[Auto][Once per turn] If your Leader Card is a black <Trunks: Xeno> card and it's your turn: "
         "When a Battle Card is played from your Warp, draw 1 card, and add a marker to this card.\n"
-        "[+1][Activate: Main] If your Leader Card is a black ≪Saiyan≫ card: Send up to 3 cards from the top of your deck to your Warp."
+        "[+1][Activate: Main] If your Leader Card is a black â‰ªSaiyanâ‰« card: Send up to 3 cards from the top of your deck to your Warp."
     )
     card = replace(card, card_type="UNISON")
     rules = extract_effect_rules_from_card(card)
@@ -4280,7 +4280,7 @@ def test_extract_play_look_top_add_two_to_hand_rule() -> None:
 def test_extract_play_look_top_add_to_hand_allows_dash_before_to_your_hand() -> None:
     card = _card(
         "[Auto] When this card is played from your hand, look at up to 7 cards from the top of your deck, "
-        "add up to 1 Son Goku card among them―both green and with an energy cost of 6 or less―to your hand, then shuffle your deck."
+        "add up to 1 Son Goku card among them\u2015both green and with an energy cost of 6 or less\u2015to your hand, then shuffle your deck."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
@@ -4454,7 +4454,7 @@ def test_extract_activate_battle_gain_power_and_keyword_for_battle_rule() -> Non
 def test_extract_activate_battle_owner_leader_gain_power_and_keyword_for_battle_rule() -> None:
     card = replace(
         _card(
-            "[Activate: Battle] If your Leader Card is a black ≪Saiyan≫ card, it gets +15000 power and [Double Strike] for the duration of the battle."
+            "[Activate: Battle] If your Leader Card is a black â‰ªSaiyanâ‰« card, it gets +15000 power and [Double Strike] for the duration of the battle."
         ),
         card_type="EXTRA",
     )
@@ -4499,7 +4499,7 @@ def test_extract_activate_battle_under_leader_can_grant_owner_leader_keyword_for
 def test_extract_activate_battle_choose_owner_cards_gain_power_for_battle_rule() -> None:
     card = _card(
         "[Activate: Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
-        "Choose up to 1 of your blue â‰ªAndroidâ‰« cards and it gets +10000 power for the battle."
+        "Choose up to 1 of your blue Ã¢â€°ÂªAndroidÃ¢â€°Â« cards and it gets +10000 power for the battle."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "activate_gain_power_and_keyword_for_battle")
@@ -4559,7 +4559,7 @@ def test_extract_activate_battle_draw_play_self_and_gain_keyword_until_opponent_
 
 def test_extract_activate_battle_draw_switch_self_active_and_power_reduce_rule() -> None:
     card = _card(
-        "[Activate: Battle][Once per turn] (1), place 1 ≪Android≫ card from your Z-Energy under this card: "
+        "[Activate: Battle][Once per turn] (1), place 1 â‰ªAndroidâ‰« card from your Z-Energy under this card: "
         "Draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn."
     )
     rules = extract_effect_rules_from_card(card)
@@ -4577,7 +4577,7 @@ def test_extract_activate_battle_draw_switch_self_active_and_power_reduce_rule()
 def test_extract_activate_main_choose_all_owner_battle_gain_keyword_until_opponent_turn_end_rule() -> None:
     card = replace(
         _card(
-            "[Activate: Main] Choose all red ≪Saiyan≫ cards in your Battle Area. "
+            "[Activate: Main] Choose all red â‰ªSaiyanâ‰« cards in your Battle Area. "
             "They gain [Barrier] until the end of your opponent's next turn."
         ),
         card_type="EXTRA",
@@ -4596,7 +4596,7 @@ def test_extract_activate_main_choose_all_owner_battle_gain_keyword_until_oppone
 def test_extract_activate_main_battle_choose_owner_cards_gain_power_for_turn_rule() -> None:
     card = _card(
         "[Activate: Main/Battle][Once per turn] Place 1 of your energy into its owner's Drop: "
-        "Choose up to 1 of your blue ≪Red Ribbon Army≫ cards and it gets +5000 power for the turn."
+        "Choose up to 1 of your blue â‰ªRed Ribbon Armyâ‰« cards and it gets +5000 power for the turn."
     )
     rules = extract_effect_rules_from_card(card)
     matching = [r for r in rules if r.handler_id == "activate_buff_owner_battle_cards"]
@@ -4696,8 +4696,8 @@ def test_extract_self_ko_can_play_up_to_n_named_from_owner_drop_rule() -> None:
 def test_extract_self_left_battle_choose_play_hirudegarn_or_draw_rule() -> None:
     card = _card(
         "[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, choose one-<br>"
-        "・ Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 3 from your deck or hand, play it, then shuffle your deck if you looked through it.<br>"
-        "・ Draw 1 card."
+        "ãƒ» Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 3 from your deck or hand, play it, then shuffle your deck if you looked through it.<br>"
+        "ãƒ» Draw 1 card."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -4716,8 +4716,8 @@ def test_extract_self_left_battle_choose_play_hirudegarn_or_draw_rule() -> None:
 def test_extract_self_left_battle_choose_play_hirudegarn_or_opponent_discard_rule() -> None:
     card = _card(
         "[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, choose one-<br>"
-        "・ Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 4 from your deck or hand, play it, then shuffle your deck if you looked through it.<br>"
-        "・ Your opponent chooses 1 card in their hand and discards it."
+        "ãƒ» Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 4 from your deck or hand, play it, then shuffle your deck if you looked through it.<br>"
+        "ãƒ» Your opponent chooses 1 card in their hand and discards it."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -4787,8 +4787,8 @@ def test_extract_play_gain_control_opponent_battle_rule() -> None:
 def test_extract_raditz_invitation_to_battle_from_badge_html() -> None:
     card = _card(
         "<Badge variant=\"red\">Barrier</Badge><Badge variant=\"red\">Blocker</Badge><br />"
-        "<Badge variant=\"purple\">Permanent</Badge> If your opponent has a ≪Saiyan≫ card in play in their Battle Area, reduce the energy cost of this card in your hand by 1.<br />"
-        "<Badge variant=\"blue\">Auto</Badge> When this card is played from your hand, choose up to 1 ≪Saiyan≫ card with 5000 power or less in your opponent's Battle Area and gain control of it."
+        "<Badge variant=\"purple\">Permanent</Badge> If your opponent has a â‰ªSaiyanâ‰« card in play in their Battle Area, reduce the energy cost of this card in your hand by 1.<br />"
+        "<Badge variant=\"blue\">Auto</Badge> When this card is played from your hand, choose up to 1 â‰ªSaiyanâ‰« card with 5000 power or less in your opponent's Battle Area and gain control of it."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_gain_control_opponent_battle_on_play")
@@ -4840,7 +4840,7 @@ def test_extract_play_draw_and_switch_self_to_hidden_rule() -> None:
 
 
 def test_extract_activate_main_switch_self_to_hidden_rule() -> None:
-    card = _card("[Activate: Main][Limit 1] If your Leader is a white ≪God≫ card: Switch this card to Hidden Mode.")
+    card = _card("[Activate: Main][Limit 1] If your Leader is a white â‰ªGodâ‰« card: Switch this card to Hidden Mode.")
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "activate_switch_self_to_hidden_mode")
     assert rule.trigger == "self_activate_main"
@@ -4868,7 +4868,7 @@ def test_extract_hidden_switch_owner_leader_buff_rule() -> None:
 def test_extract_hidden_switch_owner_card_keyword_rule() -> None:
     card = _card(
         "[Auto][Limit 1] When this card in a Battle Area is switched to Hidden Mode by one of your skills, "
-        "choose up to 1 of your white ≪Universe 7≫ cards and it gains [Barrier] until the end of your opponent's turn."
+        "choose up to 1 of your white â‰ªUniverse 7â‰« cards and it gains [Barrier] until the end of your opponent's turn."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_switch")
@@ -4889,7 +4889,7 @@ def test_extract_revealed_switch_self_gain_power_and_keyword_rule() -> None:
 def test_extract_revealed_or_hidden_switch_owner_card_gain_power_rule() -> None:
     card = _card(
         "[Auto] If it's your turn : When this card is switched to Revealed Mode or Hidden Mode, "
-        "choose up to 1 of your white <Baby> or ≪Brainwashed≫ cards and it gets +10000 power for the turn."
+        "choose up to 1 of your white <Baby> or â‰ªBrainwashedâ‰« cards and it gets +10000 power for the turn."
     )
     rules = extract_effect_rules_from_card(card)
     matching = [r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_switch"]
@@ -4912,7 +4912,7 @@ def test_extract_revealed_or_hidden_switch_ko_opponent_battle_rule() -> None:
 def test_extract_hidden_battle_to_drop_owner_card_gain_power_rule() -> None:
     card = _card(
         "[Auto] When this Hidden Mode card in a Battle Area is placed into its owner's Drop, "
-        "choose up to 1 of your white ≪Universe 7≫ cards and it gets +5000 power for the turn."
+        "choose up to 1 of your white â‰ªUniverse 7â‰« cards and it gets +5000 power for the turn."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_buff_up_to_n_owner_cards_on_hidden_drop")
@@ -4949,7 +4949,7 @@ def test_extract_revealed_switch_owner_card_gain_keyword_rule() -> None:
 def test_extract_play_search_direct_to_hand_rule() -> None:
     card = _card(
         "[Auto] When this card is played, look at up to 5 cards from the top of your deck, "
-        "add up to 1 white <Baby> or â‰ªBrainwashedâ‰« card to your hand, then shuffle your deck."
+        "add up to 1 white <Baby> or \u226aBrainwashed\u226b card to your hand, then shuffle your deck."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
@@ -5007,8 +5007,8 @@ def test_extract_play_from_hand_play_with_marker_rule() -> None:
 def test_extract_choose_one_with_unicode_bullet_splits_into_branches() -> None:
     card = _card(
         "[Auto] When this card is played, choose one-. "
-        "・Draw 1 card. "
-        "・At the end of your turn, switch this card to Active Mode."
+        "ãƒ»Draw 1 card. "
+        "ãƒ»At the end of your turn, switch this card to Active Mode."
     )
     rules = extract_effect_rules_from_card(card)
     assert any(r.trigger == "self_played" and r.handler_id == "auto_draw_n" and r.handler_params.get("amount") == 1 for r in rules)
@@ -5384,7 +5384,7 @@ def test_extract_self_combo_battle_end_play_self_with_owner_battle_requirement_r
 
 def test_extract_self_combo_battle_end_play_self_in_rest_mode_rule() -> None:
     card = _card(
-        "[Auto] At the end of the battle after you combo with this card from your hand, if your Leader Card is ≪Universe 11≫, play this card in Rest Mode."
+        "[Auto] At the end of the battle after you combo with this card from your hand, if your Leader Card is \u226aUniverse 11\u226b, play this card in Rest Mode."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -5395,7 +5395,7 @@ def test_extract_self_combo_battle_end_play_self_in_rest_mode_rule() -> None:
     )
     assert rule.handler_params["requires_comboed_from"] == "hand"
     assert rule.handler_params["resting"] is True
-    assert rule.handler_params["requires_leader"] == "if your leader card is ≪universe 11≫"
+    assert rule.handler_params["requires_leader"] == "if your leader card is \u226auniverse 11\u226b"
 
 
 def test_extract_self_combo_battle_end_add_self_to_z_energy_rule() -> None:
@@ -5641,7 +5641,7 @@ def test_extract_owner_combo_can_use_self_from_battle_and_replay_at_battle_end_r
 
 def test_extract_self_added_to_z_energy_draw_rule() -> None:
     card = _card(
-        "[Auto][Limit 1] If your Leader is a yellow ≪Universe 7≫ <Son Goku> card and you have a ≪Universe 7≫ card in your Combo Area: "
+        "[Auto][Limit 1] If your Leader is a yellow â‰ªUniverse 7â‰« <Son Goku> card and you have a â‰ªUniverse 7â‰« card in your Combo Area: "
         "When this card is added to Z-Energy, draw 1 card."
     )
     rules = extract_effect_rules_from_card(card)
@@ -5658,7 +5658,7 @@ def test_extract_self_added_to_z_energy_draw_rule() -> None:
 
 def test_extract_self_added_to_z_energy_can_buff_owner_battle_rule() -> None:
     card = _card(
-        "[Auto][Limit 1] If your Leader is a blue ≪Phantom Demon≫ card: "
+        "[Auto][Limit 1] If your Leader is a blue â‰ªPhantom Demonâ‰« card: "
         "When this card is added to Z-Energy, choose up to 1 of your <Hirudegarn> Battle Cards and it gets +1000 power for the turn."
     )
     rules = extract_effect_rules_from_card(card)
@@ -5708,7 +5708,7 @@ def test_extract_hit_assassins_strike_rules() -> None:
 def test_extract_realm_of_the_gods_champa_destroys_rules() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
-            "[Activate: Battle] If your Leader Card and all of your energy is green: Choose 1 of your cards and it gets +10000 power for the battle, then choose one?\n"
+            "[Activate: Battle] If your Leader Card and all of your energy is green: Choose 1 of your cards and it gets +10000 power for the battle, then choose one-\n"
             "If it's your turn, choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and KO it.\n"
             "If it's your opponent's turn, your opponent chooses 1 card in their hand and discards it, then you choose 1 of your cards and it gets +5000 power for the battle."
         ),
@@ -5734,7 +5734,7 @@ def test_extract_ultimate_minus_energy_power_ball_rules() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
             "[Counter: Attack] If your Leader Card is mono-black: Choose up to 1 of your opponent's Battle Cards with 15000 power or less, ignoring [Barrier], and send it to its owner's Warp.\n"
-            "[Permanent] This card gains ≪Shadow Dragon≫ in all areas.\n"
+            "[Permanent] This card gains â‰ªShadow Dragonâ‰« in all areas.\n"
             "[Permanent] If you have a black Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost.\n"
             "[Activate: Main/Battle][Limit 1] Choose up to 1 of your black Leader Cards or Battle Cards, and it gets +15000 power until the end of a battle or the end of the turn, whichever comes first."
         ),
@@ -5761,7 +5761,7 @@ def test_extract_yajirobe_confronting_invasion_rules() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
             "[Counter: Attack] Negate the attack and play this card in Rest Mode. "
-            "If the attacking card is a ≪Great Ape≫ or ≪Demon Clan≫ Battle Card, choose it, KO it, and your opponent draws 1 card."
+            "If the attacking card is a â‰ªGreat Apeâ‰« or â‰ªDemon Clanâ‰« Battle Card, choose it, KO it, and your opponent draws 1 card."
         ),
         card_type="BATTLE",
     )
@@ -6196,7 +6196,7 @@ def test_extract_attack_place_up_to_n_opponent_battle_under_self_rule_with_under
 def test_extract_android_17_brainwashed_fighter_rule() -> None:
     card = _card(
         "[Barrier][Auto] When this card is played from your hand, look at up to 5 cards from the top of your deck, "
-        "add up to 1 green ≪Android≫ card with an energy cost of 6 or less among them to your hand, and shuffle your deck."
+        "add up to 1 green â‰ªAndroidâ‰« card with an energy cost of 6 or less among them to your hand, and shuffle your deck."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(r for r in rules if r.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
@@ -6250,7 +6250,7 @@ def test_extract_super_17_perfect_evolution_rules() -> None:
 
 def test_extract_hell_fighter_17_infernal_creation_rules() -> None:
     card = _card(
-        "[Auto] When this card is played, draw 1 card. Additionally, you may add 1 red ≪Android≫ card from your hand to your Z-Energy. "
+        "[Auto] When this card is played, draw 1 card. Additionally, you may add 1 red â‰ªAndroidâ‰« card from your hand to your Z-Energy. "
         "If you do, look at up to 5 cards from the top of your deck, add up to 1 red <Android 17> or <Super 17> card to your hand, then shuffle your deck. "
         "[Activate: Battle][Limit 1]{r}. if your Leader's back side is a red <Super 17> card and you have 2 or more energy: Play this card from your hand."
     )
@@ -6275,7 +6275,7 @@ def test_extract_hell_fighter_17_infernal_creation_rules() -> None:
 
 def test_extract_hell_fighter_17_fusion_urged_rules() -> None:
     card = _card(
-        "[Auto] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 red ≪Android≫ card with an energy cost of 6 or less to your hand, then shuffle your deck. "
+        "[Auto] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 red â‰ªAndroidâ‰« card with an energy cost of 6 or less to your hand, then shuffle your deck. "
         "[Activate: Battle][Limit 1] If your Leader's back side is a red <Super 17> card and you discard 1 card from your hand: Use this card from your Drop in a combo."
     )
     rules = extract_effect_rules_from_card(card)
@@ -6456,7 +6456,7 @@ def test_extract_ss3_nappa_golden_invader_rules() -> None:
         _card(
             "[+1][Activate: Main] Your opponent chooses 1 card in their hand and sends it to their Warp.<br>"
             "[-2][Activate: Main] Choose up to 2 of your opponent's Battle Cards with energy costs greater than or equal to their current energy and KO them.<br>"
-            "[-3][Activate: Main](Green)(Green)②, if your Leader Card is a &lt;Nappa&gt; card or a green ≪Saiyan≫ card: Choose up to 1 Red/Green multicolor &lt;Raditz&gt; card with an original energy cost of 8 in your hand and play it."
+            "[-3][Activate: Main](Green)(Green)â‘¡, if your Leader Card is a &lt;Nappa&gt; card or a green â‰ªSaiyanâ‰« card: Choose up to 1 Red/Green multicolor &lt;Raditz&gt; card with an original energy cost of 8 in your hand and play it."
         ),
         card_type="UNISON",
     )
@@ -6521,7 +6521,7 @@ def test_extract_exact_android_21_full_power_counter_rules() -> None:
     card = _card(
         "[Energy-Exhaust][Double Strike]<br>"
         "[Counter: Attack] Play this card.<br>"
-        "[Permanent] If your Leader is a blue â‰ªAndroidâ‰« card, negate this card's [Energy-Exhaust] in all areas.<br>"
+        "[Permanent] If your Leader is a blue Ã¢â€°ÂªAndroidÃ¢â€°Â« card, negate this card's [Energy-Exhaust] in all areas.<br>"
         "[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], place it in its owner's Drop, "
         "and your opponent can't attack with non-Leaders for the turn unless they place 1 card each from their hand and Z-Energy in their owners' Drops each time."
     )
@@ -6569,7 +6569,7 @@ def test_extract_super_17_ultimate_masterpiece_rules() -> None:
         "[Blocker] "
         "[Activate: Battle][Limit 1](1), if your opponent has 3 or more energy and you have 1 or more <Android 17> card and 1 or more <Hell Fighter 17> card in your Combo Area: "
         "Draw 1 card, play this card from your hand, and this card gains [Barrier] until the end fo your opponent's turn. "
-        "[Activate: Battle][Once per turn] (1), place 1 ≪Android≫ card from your Z-Energy under this card: "
+        "[Activate: Battle][Once per turn] (1), place 1 â‰ªAndroidâ‰« card from your Z-Energy under this card: "
         "Draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and it gets -20000 power for the turn."
     )
     rules = extract_effect_rules_from_card(card)
@@ -6678,7 +6678,7 @@ def test_extract_exact_attack_of_the_dark_empire_rule() -> None:
     card = SimpleNamespace(
         card_skill_unstyled=(
             "[Activate: Main] If your Leader Card is a black \u226aDemon Realm Race\u226b card: "
-            "Look at up to 7 cards from the top of your deck, then choose one?"
+            "Look at up to 7 cards from the top of your deck, then choose one-"
             "\u30fbAdd up to 1 black \u226aEvil Wizard\u226b, black \u226aDemon Realm Race\u226b, or black \u226aDemon God\u226b card among them to your hand, then shuffle your deck."
             "\u30fbIf you have no Unison Cards in play, play up to 1 black Unison Card with no specified cost and 20000 power among them with a marker on it, then shuffle your deck."
         ),
@@ -6780,7 +6780,7 @@ def test_extract_exact_bt2_chilled_attack_token_rule() -> None:
 def test_extract_exact_bt13_chilled_attack_life_then_token_rule() -> None:
     card = _card(
         "[Permanent] All of your Chilled's Army Tokens gain the following effect:<br>"
-        "・ [Permanent] This card gains ≪Chilled's Army≫.<br>"
+        "ãƒ» [Permanent] This card gains â‰ªChilled's Armyâ‰«.<br>"
         "[Auto] When this card attacks, add up to 1 card from your life to your hand, then play a Chilled's Army Token with 10000 power.<br>"
         "[Awaken] When your life is at 3 or less: You may draw 2 cards, switch up to 1 of your energy to Active Mode, then flip this card over."
     )
@@ -6816,7 +6816,7 @@ def test_extract_leader_attack_life_then_draw_with_awaken_clause() -> None:
 def test_extract_leader_attack_discard_matching_hand_then_draw_with_awaken_clause() -> None:
     card = replace(
         _card(
-            "[Auto] When this card attacks a Leader Card, you may choose 1 ≪Universe 11≫ in your hand and place it in your Drop Area. If you do so, draw 2 cards.<br>"
+            "[Auto] When this card attacks a Leader Card, you may choose 1 â‰ªUniverse 11â‰« in your hand and place it in your Drop Area. If you do so, draw 2 cards.<br>"
             "[Awaken] When your life is at 4 or less: You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."
         ),
         card_type="LEADER",
@@ -6860,7 +6860,7 @@ def test_extract_owner_battle_attack_gain_power_then_add_dragon_ball_from_deck_o
             "[Auto][Once per turn] When one of your Battle Cards attacks, it gets +5000 power for the duration of the turn, "
             "then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. "
             "Then shuffle any areas you looked through.<br>"
-            "[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 ≪Desire≫ card in your Drop Area, add it to your hand, and flip this card over."
+            "[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 â‰ªDesireâ‰« card in your Drop Area, add it to your hand, and flip this card over."
         ),
         card_type="LEADER",
     )
@@ -6902,8 +6902,8 @@ def test_extract_bt16_zamasu_attack_add_dragon_ball_from_deck_and_or_life() -> N
 def test_extract_bt15_universe_6_combination_counter_and_activate_rules() -> None:
     card = replace(
         _card(
-            "<Badge variant=\"green\">Counter: Attack</Badge> Negate the attack. If your Leader Card is a ≪Universe 6≫ card, play up to 1 ≪Universe 6≫ card with an energy cost of 1 from your Drop Area with its skills negated for the turn.<br />"
-            "<Badge variant=\"orange\">Activate: Main</Badge><img src=\"/assets/img/dbs_masters/card_parts/blue_ball.png\" alt=\"\" class=\"colorCostBall\">, if your Leader Card is a ≪Universe 6≫ card: Choose all of your Battle Cards with both ≪Saiyan≫ and ≪Universe 6≫ and they get +5000 power for the turn."
+            "<Badge variant=\"green\">Counter: Attack</Badge> Negate the attack. If your Leader Card is a â‰ªUniverse 6â‰« card, play up to 1 â‰ªUniverse 6â‰« card with an energy cost of 1 from your Drop Area with its skills negated for the turn.<br />"
+            "<Badge variant=\"orange\">Activate: Main</Badge><img src=\"/assets/img/dbs_masters/card_parts/blue_ball.png\" alt=\"\" class=\"colorCostBall\">, if your Leader Card is a â‰ªUniverse 6â‰« card: Choose all of your Battle Cards with both â‰ªSaiyanâ‰« and â‰ªUniverse 6â‰« and they get +5000 power for the turn."
         ),
         card_type="EXTRA",
     )
@@ -6929,7 +6929,7 @@ def test_extract_self_aegis_mill_if_no_other_matching_owner_battle() -> None:
         "[Barrier]<br>"
         "[Aegis Blue/Yellow][Once per turn] (If it's your opponent's turn, you can activate this during the Defense Step by placing cards in your hand in your Drop Area that match all colors specified by [Aegis]: Choose up to 2 of your energy and switch them to Active Mode.)<br>"
         "[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)<br>"
-        "[Auto] When this card activates [Aegis], if there are no ≪Evil Incarnate≫ cards in play in your Battle Area other than this card, place 1 card from the top of your opponent's deck in their Drop Area."
+        "[Auto] When this card activates [Aegis], if there are no â‰ªEvil Incarnateâ‰« cards in play in your Battle Area other than this card, place 1 card from the top of your opponent's deck in their Drop Area."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -6993,7 +6993,7 @@ def test_extract_exact_bulma_sacrifice_draws_then_plays_earthling_token() -> Non
     card = _card(
         "[Auto] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>: "
         "When this card is played, draw 1 card, then play 1 Earthling Token (1000 power, 0 combo cost, and 0 combo power).<br>"
-        "[Auto] When one of your opponent's multicolor ≪God≫ cards attacks, place this card in your Drop, then negate the attack."
+        "[Auto] When one of your opponent's multicolor â‰ªGodâ‰« cards attacks, place this card in your Drop, then negate the attack."
     )
     rules = extract_effect_rules_from_card(card)
     draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
@@ -7023,7 +7023,7 @@ def test_extract_exact_android_21_total_audacity_draws_then_schedules_clone_toke
 
 def test_extract_exact_unstoppable_technique_restands_blue_energy_then_schedules_clone_token() -> None:
     card = _card(
-        "[Counter: Attack] If your Leader is a blue â‰ªAndroidâ‰« card: Negate the attack and switch up to 1 of your blue energy to Active Mode. "
+        "[Counter: Attack] If your Leader is a blue Ã¢â€°ÂªAndroidÃ¢â€°Â« card: Negate the attack and switch up to 1 of your blue energy to Active Mode. "
         "Additionally, at the end of the turn, play 1 Clone Token with 10000 power in your opponent's Battle Area."
     )
     rules = extract_effect_rules_from_card(card)
@@ -7049,10 +7049,10 @@ def test_extract_exact_frieza_invader_from_another_dimension_adds_life_then_sche
 
 def test_extract_exact_android_21_mandatory_gathering_searches_then_schedules_clone_token() -> None:
     card = _card(
-        "[Auto] If your Leader is an â‰ªAndroidâ‰« card: When this card is played, look at up to 5 cards from the top of your deck, "
-        "add up to 1 blue â‰ªAndroidâ‰« card with an energy cost of 5 or less among them to your hand, shuffle your deck, and at the end of your opponent's next turn, "
+        "[Auto] If your Leader is an Ã¢â€°ÂªAndroidÃ¢â€°Â« card: When this card is played, look at up to 5 cards from the top of your deck, "
+        "add up to 1 blue Ã¢â€°ÂªAndroidÃ¢â€°Â« card with an energy cost of 5 or less among them to your hand, shuffle your deck, and at the end of your opponent's next turn, "
         "play 1 Clone Token with 10000 power in your opponent's Battle Area.<br>"
-        "[Auto] If your Leader is a blue â‰ªAndroidâ‰« card: When this card is used in a combo from your hand, play 1 Clone Token in your opponent's Battle Area."
+        "[Auto] If your Leader is a blue Ã¢â€°ÂªAndroidÃ¢â€°Â« card: When this card is used in a combo from your hand, play 1 Clone Token in your opponent's Battle Area."
     )
     rules = extract_effect_rules_from_card(card)
     search_rule = next(rule for rule in rules if rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play")
@@ -7076,9 +7076,9 @@ def test_extract_exact_android_21_mandatory_gathering_searches_then_schedules_cl
 
 def test_extract_exact_android_21_the_ringleader_draws_then_schedules_clone_token() -> None:
     card = _card(
-        "[Auto] If your Leader Card is an â‰ªAndroidâ‰« card: When you play this card, draw 1 card, then at the end of your opponent's next turn, "
+        "[Auto] If your Leader Card is an Ã¢â€°ÂªAndroidÃ¢â€°Â« card: When you play this card, draw 1 card, then at the end of your opponent's next turn, "
         "play 1 Clone Token with 10000 power in your opponent's Battle Area.<br>"
-        "[Activate: Main][Once per turn](Blue)(Green), your Leader Card is an â‰ªAndroidâ‰« card: Choose 1 {Android 21's Scheme} in your Drop Area and activate it."
+        "[Activate: Main][Once per turn](Blue)(Green), your Leader Card is an Ã¢â€°ÂªAndroidÃ¢â€°Â« card: Choose 1 {Android 21's Scheme} in your Drop Area and activate it."
     )
     rules = extract_effect_rules_from_card(card)
     draw_rule = next(rule for rule in rules if rule.handler_id == "auto_draw_n")
@@ -7102,8 +7102,8 @@ def test_extract_exact_android_21_a_brilliant_idea_schedules_two_clone_tokens() 
     card = _card(
         "[Auto] When you play this card, activate this skill. At the end of your opponent's next turn, play 2 Clone Tokens with 10000 power in your opponent's Battle Area.<br>"
         "[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Choose one-<br>"
-        "ï½¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
-        "ï½¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
+        "Ã¯Â½Â¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
+        "Ã¯Â½Â¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
     )
     rules = extract_effect_rules_from_card(card)
     token_rule = next(rule for rule in rules if rule.handler_id == "auto_schedule_play_token_in_battle_on_play")
@@ -7118,8 +7118,8 @@ def test_extract_exact_android_21_a_brilliant_idea_can_ko_on_choice_branch() -> 
     card = _card(
         "[Auto] When you play this card, activate this skill. At the end of your opponent's next turn, play 2 Clone Tokens with 10000 power in your opponent's Battle Area.<br>"
         "[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Choose one-<br>"
-        "ï½¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
-        "ï½¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
+        "\u30fb Choose 1 of your opponent's Battle Cards and KO it. <br>"
+        "\u30fb Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
     )
     rules = extract_effect_rules_from_card(card)
     ko_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_ko_up_to_n_opponent_battle")
@@ -7131,8 +7131,8 @@ def test_extract_exact_android_21_a_brilliant_idea_can_buff_leader_or_battle_on_
     card = _card(
         "[Auto] When you play this card, activate this skill. At the end of your opponent's next turn, play 2 Clone Tokens with 10000 power in your opponent's Battle Area.<br>"
         "[Activate: Main][Once per turn] Choose 1 Clone Token in your opponent's Battle Area and remove it from the game: Choose one-<br>"
-        "ï½¥ Choose 1 of your opponent's Battle Cards and KO it. <br>"
-        "ï½¥ Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
+        "\u30fb Choose 1 of your opponent's Battle Cards and KO it. <br>"
+        "\u30fb Choose your Leader Card or 1 of your Battle Cards, and it gets +10000 power and [Critical] for the duration of the turn."
     )
     rules = extract_effect_rules_from_card(card)
     buff_rule = next(rule for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_buff_owner_battle_cards")
@@ -7188,7 +7188,7 @@ def test_extract_exact_mai_link_of_hope_draws_and_activate_main_plays_earthling_
 def test_extract_negative_energy_two_star_ball_can_send_self_to_drop_and_play_named_from_deck_or_hand() -> None:
     card = _card(
         "[Permanent] This card can't attack and isn't affected by your opponent's skills.<br>"
-        "[Activate: Main](Yellow), if your Leader Card is a ≪Shadow Dragon≫ card and you place this card in its owner's Drop Area: "
+        "[Activate: Main](Yellow), if your Leader Card is a â‰ªShadow Dragonâ‰« card and you place this card in its owner's Drop Area: "
         "Choose up to 1 <Haze Shenron> card with an energy cost of 2 or 3 in your deck or hand, play it, then shuffle your deck if you looked through it."
     )
     rules = extract_effect_rules_from_card(card)
@@ -7210,9 +7210,9 @@ def test_extract_negative_energy_two_star_ball_can_send_self_to_drop_and_play_na
 def test_extract_get_that_monster_choose_one_branches() -> None:
     card = replace(
         _card(
-            "[Activate: Battle][Limit 1] If your Leader Card is a red â‰ªShenronâ‰« card: Choose one-<br>"
-            "ãƒ»Add up to 1 [Dragon Ball] card from your deck to your hand, then shuffle your deck.<br>"
-            "ãƒ»Add up to 1 red â‰ªDesireâ‰« card with an energy cost of 1 or 2 from your deck to your hand, then shuffle your deck."
+            "[Activate: Battle][Limit 1] If your Leader Card is a red \u226aShenron\u226b card: Choose one-<br>"
+            "\u30fbAdd up to 1 [Dragon Ball] card from your deck to your hand, then shuffle your deck.<br>"
+            "\u30fbAdd up to 1 red \u226aDesire\u226b card with an energy cost of 1 or 2 from your deck to your hand, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -7254,7 +7254,7 @@ def test_extract_king_kais_training_places_self_under_host_then_adds_goku() -> N
 
 def test_extract_scout_rests_active_opponent_else_gains_control() -> None:
     card = _card(
-        "[Activate: Main] If your Leader Card is yellow or a â‰ªTurles Crusher Corpsâ‰« card and you choose 1 of your opponent's cards in Active Mode: "
+        "[Activate: Main] If your Leader Card is yellow or a Ã¢â€°ÂªTurles Crusher CorpsÃ¢â€°Â« card and you choose 1 of your opponent's cards in Active Mode: "
         "Your opponent may switch the chosen card to Rest Mode. If they don't, choose up to 1 of your opponent's Battle Cards and gain control of it."
     )
     rules = extract_effect_rules_from_card(card)
@@ -7269,7 +7269,7 @@ def test_extract_scout_rests_active_opponent_else_gains_control() -> None:
 
 def test_extract_chiaotzu_warps_self_then_opponent_chooses_non_saiyan_for_ko() -> None:
     card = _card(
-        "[Activate: Main] Send this card to its owner's Warp: Your opponent chooses 1 of their Battle Cards; if it's a non-â‰ªSaiyanâ‰« card, KO it."
+        "[Activate: Main] Send this card to its owner's Warp: Your opponent chooses 1 of their Battle Cards; if it's a non-\u226aSaiyan\u226b card, KO it."
     )
     rules = extract_effect_rules_from_card(card)
     rule = next(
@@ -7310,9 +7310,9 @@ def test_extract_erase_a_universe_damage_and_battle_buff_rules() -> None:
     card = replace(
         _card(
             "[Activate: Main]((Red))((Blue))((Green))((Yellow))(1), if your Leader Card is a &lt;Great Priest&gt; card: "
-            "Deal 1 damage to your opponent for every 2 colors on ≪God≫ cards in your Battle Area. (2 damage max.) "
-            "Additionally, if you have 12 or more multicolor ≪God≫ cards in play, you win the game.<br>"
-            "[Activate: Battle] Choose up to 1 ≪God≫ card and it gets +6000 power for the battle."
+            "Deal 1 damage to your opponent for every 2 colors on â‰ªGodâ‰« cards in your Battle Area. (2 damage max.) "
+            "Additionally, if you have 12 or more multicolor â‰ªGodâ‰« cards in play, you win the game.<br>"
+            "[Activate: Battle] Choose up to 1 â‰ªGodâ‰« card and it gets +6000 power for the battle."
         ),
         card_type="EXTRA",
     )
@@ -7400,7 +7400,7 @@ def test_extract_bt15_son_gohan_simian_revenge_from_badge_html() -> None:
     card = replace(
         _card(
             "[Blocker][Revenge]<br>"
-            "[Auto][Limit 1](Green): When one of your green non-≪Great Ape≫ &lt;Son Gohan: Youth&gt; cards with [Blocker] "
+            "[Auto][Limit 1](Green): When one of your green non-â‰ªGreat Apeâ‰« &lt;Son Gohan: Youth&gt; cards with [Blocker] "
             "is removed from your Battle Area by an opponent's skill, you may play this card from your hand."
         ),
         card_type="BATTLE",
@@ -7449,7 +7449,7 @@ def test_extract_exact_bt16_frost_to_battle_universe_7_rules() -> None:
         _card(
             "[Permanent] If this card is in Active Mode and it's your turn, this card gains +5000 power and can attack Battle Cards in Active Mode without [Barrier].\n"
             "[Permanent] If this card is in Rest Mode and your opponent doesn't have any Battle Cards in play, your opponent's Leader Cards can't attack Leader Cards.\n"
-            "[Auto](Green): When this card is KO'd, choose up to 1 green ≪Universe 6≫ card with an energy cost of 3 in your hand and play it."
+            "[Auto](Green): When this card is KO'd, choose up to 1 green â‰ªUniverse 6â‰« card with an energy cost of 3 in your hand and play it."
         ),
         card_type="BATTLE",
     )
@@ -7464,7 +7464,7 @@ def test_extract_exact_bt16_piccolo_to_battle_universe_6_rules() -> None:
         _card(
             "[Permanent] If this card is in Active Mode and it's your turn, this card gains +10000 power and can attack Battle Cards in Active Mode without [Barrier].\n"
             "[Permanent] If this card is in Active Mode and your opponent doesn't have any Battle Cards in play, this card gains [Critical].\n"
-            "[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green ≪Universe 7≫ card with an energy cost of 3 in your hand and play it."
+            "[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green â‰ªUniverse 7â‰« card with an energy cost of 3 in your hand and play it."
         ),
         card_type="BATTLE",
     )
@@ -7479,7 +7479,7 @@ def test_extract_exact_bt16_ss_vegeta_to_battle_universe_6_rules() -> None:
         _card(
             "[Permanent] If this card is in Active Mode and it's your turn, this card gains +10000 power and can attack Battle Cards in Active Mode without [Barrier].\n"
             "[Permanent] If this card is in Active Mode and your opponent doesn't have any Battle Cards in play, this card gains [Double Strike].\n"
-            "[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green ≪Universe 7≫ card with an energy cost of 3 in your hand and play it."
+            "[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green â‰ªUniverse 7â‰« card with an energy cost of 3 in your hand and play it."
         ),
         card_type="BATTLE",
     )
@@ -7506,7 +7506,7 @@ def test_extract_exact_bt15_turles_great_ape_manipulator_rules() -> None:
     card = replace(
         _card(
             "[Permanent] If you have a [Field] Extra Card in your Battle Area, this card gains [Blocker].\n"
-            "[Auto] If your Leader is yellow and a ≪Turles Crusher Corps≫ card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it."
+            "[Auto] If your Leader is yellow and a â‰ªTurles Crusher Corpsâ‰« card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it."
         ),
         card_type="BATTLE",
     )
@@ -7541,7 +7541,7 @@ def test_extract_exact_dr_uiro_rebooting_for_revenge_rules() -> None:
     card = replace(
         _card(
             "[+1][Activate: Main] If your Leader Card is a green <Dr.Uiro> card, "
-            "choose up to 1 <Dr.Kochin> or ≪Frenzied Warrior≫ card with an energy cost of 2 or less in your hand and play it.\n"
+            "choose up to 1 <Dr.Kochin> or â‰ªFrenzied Warriorâ‰« card with an energy cost of 2 or less in your hand and play it.\n"
             "[-2][Activate: Main] Choose up to 1 <Dr.Uiro> card with an energy cost of 4 or less in your hand and play it. "
             "If you do, choose up to 2 of your opponent's Battle Cards with energy costs of 5 or less and place them under a {Dr.Uiro's Lab} in your Battle Area."
         ),
@@ -7579,10 +7579,10 @@ def test_extract_exact_dr_uiro_rebooting_for_revenge_rules() -> None:
 def test_extract_exact_son_goku_path_to_revival_rules() -> None:
     card = replace(
         _card(
-            "[Auto] If your Leader Card is a ≪Shenron≫ card: When this card is played, "
+            "[Auto] If your Leader Card is a â‰ªShenronâ‰« card: When this card is played, "
             "add up to 1 [Dragon Ball] card from your deck or Drop Area to your hand, "
             "then shuffle your deck if you looked through it.\n"
-            "[Activate: Main]((Green))((Green)), if your Leader Card is a green ≪Shenron≫ card "
+            "[Activate: Main]((Green))((Green)), if your Leader Card is a green â‰ªShenronâ‰« card "
             "and you place 7 [Dragon Ball] cards from your Drop Area under this card: "
             "Choose up to 1 {Twin Onslaught SS4 Son Goku} in your hand and play it on top of this card."
         ),
@@ -7636,9 +7636,9 @@ def test_extract_exact_bt14_source_of_power_rules() -> None:
     card = replace(
         _card(
             "[Counter: Attack][Spirit Boost X] (Remove X markers from your Unison Card to activate this skill.) "
-            "If your Leader Card is a red ≪Universe 11≫ card: Negate the attack, add up to 1 red <Jiren> card "
+            "If your Leader Card is a red â‰ªUniverse 11â‰« card: Negate the attack, add up to 1 red <Jiren> card "
             "with an [Evolve] skill and an energy cost of 5 or less from your deck to your hand, then shuffle your deck. "
-            "If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 red ≪Universe 11≫ "
+            "If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 red â‰ªUniverse 11â‰« "
             "card with an energy cost of 1 in your Drop Area and play it in Rest Mode with its skills negated for the turn."
         ),
         card_type="EXTRA",
@@ -7802,7 +7802,7 @@ def test_extract_bt16_damage_negation_counter_rule() -> None:
 def test_extract_exact_p394_android_17_most_valuable_player_rules() -> None:
     card = replace(
         _card(
-            "[Activate: Main][Sparking 5](R), if your Leader Card is a red â‰ªUniverse 7â‰« card and you send this card from your Drop Area to your Warp: "
+            "[Activate: Main][Sparking 5](R), if your Leader Card is a red Ã¢â€°ÂªUniverse 7Ã¢â€°Â« card and you send this card from your Drop Area to your Warp: "
             "Your Leader Card gains [Invoker] until the end of your next turn."
         ),
         card_type="BATTLE",
@@ -7824,7 +7824,7 @@ def test_extract_exact_bt15_mentors_rescue_rules() -> None:
     card = replace(
         _card(
             "[Counter: Play] If your Leader Card is a <Cabba> card: If the Battle Card being played has 20000 power or more, "
-            "play up to 1 blue ≪Universe 7≫ <Vegeta> card with [Blocker] from your deck, negate its non-keyword skills for the game, then shuffle your deck."
+            "play up to 1 blue â‰ªUniverse 7â‰« <Vegeta> card with [Blocker] from your deck, negate its non-keyword skills for the game, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -7868,7 +7868,7 @@ def test_extract_exact_bt16_ss_vegeta_the_pursuer_rules() -> None:
 def test_extract_exact_bt16_demon_god_gravy_umbral_might_rules() -> None:
     card = replace(
         _card(
-            "[Dark Over Realm 3](２)\n"
+            "[Dark Over Realm 3](ï¼’)\n"
             "[Auto] When this card is played from your hand, it gets +5000 power and [Double Strike] for the turn."
         ),
         card_type="BATTLE",
@@ -8030,7 +8030,7 @@ def test_extract_exact_bt15_fin_coercion_incarnate_rule() -> None:
 def test_extract_exact_bt17_dr_myuu_general_rilldo_rule() -> None:
     card = replace(
         _card(
-            "[Auto] When this card attacks, play up to 1 red ≪Machine Mutant≫ card with an energy cost of 1 from your hand.\n"
+            "[Auto] When this card attacks, play up to 1 red â‰ªMachine Mutantâ‰« card with an energy cost of 1 from your hand.\n"
             "[Awaken] When your life is at 4 or less or you choose 3 cards from under a <Super Sigma> card in your Battle Area and place them under this card: "
             "You may draw 1 card, switch up to 1 of your energy to Active Mode, add cards from your life to your hand until you have 6 life left, then flip this card over."
         ),
@@ -8090,9 +8090,9 @@ def test_extract_exact_ex19_skillbreaker_rules() -> None:
     card = replace(
         _card(
             "[Deflect][Critical][Blocker]\n"
-            "[Auto] If your Leader Card is a yellow ≪Universe 11≫ card: When this card is played from your hand, choose one-\n"
-            "・If you don't have a Unison Card in play, choose up to 1 {Vegeta, Unison of Fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it.\n"
-            "・This card gets +10000 power and [Double Strike] for the turn.\n"
+            "[Auto] If your Leader Card is a yellow â‰ªUniverse 11â‰« card: When this card is played from your hand, choose one-\n"
+            "ãƒ»If you don't have a Unison Card in play, choose up to 1 {Vegeta, Unison of Fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it.\n"
+            "ãƒ»This card gets +10000 power and [Double Strike] for the turn.\n"
             "[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your yellow card skills, switch this card to Active Mode, then choose all of your opponent's Battle Cards and negate their skills for the turn."
         ),
         card_type="BATTLE",
@@ -8169,8 +8169,8 @@ def test_extract_exact_bt15_kale_rampaging_demon_rule() -> None:
         _card(
             "[Deflect][Double Strike]\n"
             "[Auto] When this card is played without using skills, choose one-\n"
-            "・Choose all of your opponent's Battle Cards with energy costs of 3 or more, place them at the bottom of their owners' decks, and if your Leader Card is a blue <Kale> card, place up to 1 card from the top of your deck under your Leader Card.\n"
-            "・If you have 7 or more energy, choose all of your opponent's Battle Cards, ignoring [Barrier], place them at the bottom of their owners' decks, and this card gains [Barrier] and [Dual Attack] for the turn."
+            "ãƒ»Choose all of your opponent's Battle Cards with energy costs of 3 or more, place them at the bottom of their owners' decks, and if your Leader Card is a blue <Kale> card, place up to 1 card from the top of your deck under your Leader Card.\n"
+            "ãƒ»If you have 7 or more energy, choose all of your opponent's Battle Cards, ignoring [Barrier], place them at the bottom of their owners' decks, and this card gains [Barrier] and [Dual Attack] for the turn."
         ),
         card_type="BATTLE",
     )
@@ -8416,8 +8416,8 @@ def test_extract_exact_bt17_further_evolution_rules() -> None:
     card = replace(
         _card(
             "[Activate: Main] Look at up to 7 cards from the top of your deck, then choose one-\n"
-            "・Add up to 2 skill-less black Battle Cards among them to your hand, then shuffle your deck.\n"
-            "・Add up to 1 black ≪Android≫ card with an energy cost of 7 or less among them to your hand, then shuffle your deck."
+            "ãƒ»Add up to 2 skill-less black Battle Cards among them to your hand, then shuffle your deck.\n"
+            "ãƒ»Add up to 1 black â‰ªAndroidâ‰« card with an energy cost of 7 or less among them to your hand, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -8461,8 +8461,8 @@ def test_extract_exact_bt17_demon_god_dabura_imperial_warrior_rules() -> None:
     card = replace(
         _card(
             "[Dark Over Realm 3](2)\n"
-            "[Auto][Limit 1] When this card attacks, play up to 1 ≪Evil Wizard≫ card, ≪Demon Realm Race≫ card, or ≪Demon God≫ card"
-            "—all black and with an energy cost of 2 or less—from your hand."
+            "[Auto][Limit 1] When this card attacks, play up to 1 â‰ªEvil Wizardâ‰« card, â‰ªDemon Realm Raceâ‰« card, or â‰ªDemon Godâ‰« card"
+            "â€”all black and with an energy cost of 2 or lessâ€”from your hand."
         ),
         card_type="BATTLE",
     )
@@ -8531,7 +8531,7 @@ def test_extract_exact_p353_ssb_vegito_blue_omen_rules() -> None:
         _card(
             "[Energy-Exhaust][Blocker]\n"
             "[Auto][Limit 1](Yellow), if the front of your Leader Card is a blue {Son Goku & Vegeta} and you have 2 or less energy: When this card in your hand is played or placed in your energy, place the top card of your deck in your energy. Your opponent chooses up to 1 card in their hand and places it in their energy.\n"
-            "[Activate: Main](Blue)(Yellow)①, if your Leader Card is a <Vegito> card: Choose up to 1 Blue/Yellow multicolor <Vegito> card with an original energy cost of 8 in your hand and play it on top of this card."
+            "[Activate: Main](Blue)(Yellow)â‘ , if your Leader Card is a <Vegito> card: Choose up to 1 Blue/Yellow multicolor <Vegito> card with an original energy cost of 8 in your hand and play it on top of this card."
         ),
         card_type="BATTLE",
     )
@@ -8652,8 +8652,8 @@ def test_extract_exact_bt17_the_z_fighters_at_the_cell_games_rules() -> None:
     card = replace(
         _card(
             "[Activate: Main][Limit 1] If your Leader Card is a yellow <Son Goku> card: Look at up to 7 cards from the top of your deck, then choose one-\n"
-            "・Add up to 1 yellow ≪Saiyan≫ card with an energy cost of 4 or less among them to your hand, then shuffle your deck.\n"
-            "・Play up to 1 yellow Unison Card with a specified cost of 1 among them with a marker on it, then shuffle your deck."
+            "ãƒ»Add up to 1 yellow â‰ªSaiyanâ‰« card with an energy cost of 4 or less among them to your hand, then shuffle your deck.\n"
+            "ãƒ»Play up to 1 yellow Unison Card with a specified cost of 1 among them with a marker on it, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -8690,12 +8690,14 @@ def test_extract_exact_bt17_the_world_champion_strikes_rules() -> None:
 
 def test_extract_exact_bt17_android_19_energy_absorber_rules() -> None:
     rules = extract_effect_rules_from_card(
-        _card(
-            "[Counter: Attack] Negate the attack and play this card.\n"
-            "[Permanent] If your Leader Card is a blue ≪Red Ribbon Army≫ card, you can activate this card's [Counter] skill from your energy by paying its energy cost and discarding 1 card from your hand."
+        replace(
+            _card(
+                "[Counter: Attack] Negate the attack and play this card.\n"
+                "[Permanent] If your Leader Card is a blue \u226aRed Ribbon Army\u226b card, you can activate this card's [Counter] skill from your energy by paying its energy cost and discarding 1 card from your hand."
+            ),
+            card_number="BT17-050",
         )
     )
-
     assert [(r.trigger, r.handler_id) for r in rules] == [
         ("counter_attack", "noop_auto"),
         ("self_played", "noop_auto"),
@@ -8708,8 +8710,8 @@ def test_extract_exact_bt17_coolers_armored_squadron_rules() -> None:
     card = replace(
         _card(
             "[Activate: Main][Limit 1] If your Leader Card is a <Cooler> card: Look at up to 7 cards from the top of your deck, then choose one-\n"
-            "・Play up to 1 green Unison Card with a specified cost of 1 and [Empower] among them with a marker on it, then shuffle your deck.\n"
-            "・Play up to 1 green <Cooler> card with an energy cost of 2 or less among them, then shuffle your deck."
+            "ãƒ»Play up to 1 green Unison Card with a specified cost of 1 and [Empower] among them with a marker on it, then shuffle your deck.\n"
+            "ãƒ»Play up to 1 green <Cooler> card with an energy cost of 2 or less among them, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -8736,8 +8738,8 @@ def test_extract_exact_bt17_android_18_rebellious_will_rules() -> None:
     card = replace(
         _card(
             "[Critical]\n"
-            "[Auto] If your Leader Card is a blue ≪Red Ribbon Army≫ card: When this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue ≪Android≫ card among them to your energy in Rest Mode, place 1 card from your energy at the bottom of its owner's deck, then shuffle your deck.\n"
-            "[Activate: Main][Limit 1](Blue), if your Leader Card is a blue ≪Android≫ card: You may play this card from your energy."
+            "[Auto] If your Leader Card is a blue â‰ªRed Ribbon Armyâ‰« card: When this card is played, look at up to 5 cards from the top of your deck, add up to 1 blue â‰ªAndroidâ‰« card among them to your energy in Rest Mode, place 1 card from your energy at the bottom of its owner's deck, then shuffle your deck.\n"
+            "[Activate: Main][Limit 1](Blue), if your Leader Card is a blue â‰ªAndroidâ‰« card: You may play this card from your energy."
         ),
         card_type="BATTLE",
     )
@@ -8789,6 +8791,7 @@ def test_extract_exact_p460_pan_heartfelt_support_rules() -> None:
                 "[Activate: Main][Once per turn] If you have 3 or more energy and you switch this card to Rest Mode: Add up to 2 cards from your life to your hand, choose 1 <Son Goku: GT> or <Trunks: GT> card in your Battle Area, and it gets +5000 power for the turn."
             ),
             card_type="BATTLE",
+            card_number="P-460",
         )
     )
     assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_self_from_under_owner_unison" for rule in rules)
@@ -8816,7 +8819,7 @@ def test_extract_exact_p437_bardock_fatherly_feelings_rules() -> None:
     rules = extract_effect_rules_from_card(
         replace(
             _card(
-                "[Auto][Limit 1] When this card is played, look at up to 5 cards from the top of your deck, play up to 1 red ≪Bardock's Crew≫ card with an energy cost of 1 among them with its [Auto] skills negated for the turn, and shuffle your deck.\n"
+                "[Auto][Limit 1] When this card is played, look at up to 5 cards from the top of your deck, play up to 1 red â‰ªBardock's Crewâ‰« card with an energy cost of 1 among them with its [Auto] skills negated for the turn, and shuffle your deck.\n"
                 "[Activate: Main](Red)(Red), if your Leader is a red <Bardock> card, your opponent has 3 or more energy, and you discard this card from your hand: Choose up to 1 of your red <Bardock> cards with an original power of 20000 or less and it gets +5000 power and [Dual Attack] until the end of your opponent's next turn."
             ),
             card_type="BATTLE",
@@ -8830,7 +8833,7 @@ def test_extract_exact_bt19_148_son_gohan_dependable_young_fighter_rules() -> No
     rules = extract_effect_rules_from_card(
         replace(
             _card(
-                "[Auto][Limit 1](1), if your Leader is yellow or a ≪Master's Teachings≫ card and your life is at 4 or less: When an opponent's card is switched to Rest Mode by one of your skills, play this card from your hand.\n"
+                "[Auto][Limit 1](1), if your Leader is yellow or a â‰ªMaster's Teachingsâ‰« card and your life is at 4 or less: When an opponent's card is switched to Rest Mode by one of your skills, play this card from your hand.\n"
                 "[Auto] When this card is played, if your opponent plays a non-[Barrier] Battle Card with an energy cost of 5 or more this turn, it enters play in Rest Mode.\n"
                 "[Auto](Yellow), if your Leader is yellow: When this card is added to your Z-Energy, choose up to 1 of your opponent's Battle Cards with an energy cost of 6 or less in Rest Mode and KO it."
             ),
@@ -8860,8 +8863,8 @@ def test_extract_exact_bt19_126_golden_frieza_villainous_threat_rules() -> None:
     rules = extract_effect_rules_from_card(
         replace(
             _card(
-                "[Counter: Attack] Negate the attack, and if there are 1 or fewer ≪Villainous≫ cards in your Battle Area, play this card.\n"
-                "[Villainous] (When you play another ≪Villainous≫ Battle Card or activate a ≪Villainous≫ Extra's skill, your opponent discards a card from their hand. Negate this skill for the turn.)\n"
+                "[Counter: Attack] Negate the attack, and if there are 1 or fewer â‰ªVillainousâ‰« cards in your Battle Area, play this card.\n"
+                "[Villainous] (When you play another â‰ªVillainousâ‰« Battle Card or activate a â‰ªVillainousâ‰« Extra's skill, your opponent discards a card from their hand. Negate this skill for the turn.)\n"
                 "[Permanent] During your opponent's turn, reduce the energy cost of this card in your hand by 1."
             ),
             card_type="BATTLE",
@@ -8891,7 +8894,7 @@ def test_extract_exact_bt19_143_beerus_villainous_threat_rules() -> None:
         replace(
             _card(
                 "[Energy-Exhaust][Deflect][Offering]\n"
-                "[Villainous] (When you play another ≪Villainous≫ Battle Card or activate a ≪Villainous≫ Extra's skill, your opponent discards a card from their hand. Negate this skill for the turn.)"
+                "[Villainous] (When you play another â‰ªVillainousâ‰« Battle Card or activate a â‰ªVillainousâ‰« Extra's skill, your opponent discards a card from their hand. Negate this skill for the turn.)"
             ),
             card_type="BATTLE",
         )
@@ -8921,7 +8924,7 @@ def test_extract_exact_bt16_065_frost_to_battle_universe_7_rules() -> None:
             _card(
                 "[Permanent] During your turn, this card gets +5000 power and can attack Battle Cards without [Barrier] in Active Mode.\n"
                 "[Permanent] If this card is in Rest Mode and your opponent has no Battle Cards in play, your opponent's Leader Card can't attack Leader Cards.\n"
-                "[Auto]((Green)): When this card is KO'd, choose up to 1 green ≪Universe 6≫ card with an energy cost of 3 in your hand and play it."
+                "[Auto]((Green)): When this card is KO'd, choose up to 1 green â‰ªUniverse 6â‰« card with an energy cost of 3 in your hand and play it."
             ),
             card_type="BATTLE",
         )
@@ -9036,8 +9039,8 @@ def test_extract_exact_bt17_meta_rilldo_ascended_general_rules() -> None:
 def test_extract_exact_bt17_weight_on_ones_shoulders_rules() -> None:
     card = replace(
         _card(
-            "[Activate: Battle] If it's your opponent's turn: Choose up to 1 ≪Namekian≫ card in your Battle Area, switch it to Active Mode, and it gets +1000 power for the battle.\n"
-            "[Activate: Battle](Yellow), if it's your turn: Choose up to 1 of your ≪Namekian≫ cards, and for each ≪Namekian≫ card under it, it gets +5000 power (up to a maximum of +15000) and [Double Strike] for the battle."
+            "[Activate: Battle] If it's your opponent's turn: Choose up to 1 â‰ªNamekianâ‰« card in your Battle Area, switch it to Active Mode, and it gets +1000 power for the battle.\n"
+            "[Activate: Battle](Yellow), if it's your turn: Choose up to 1 of your â‰ªNamekianâ‰« cards, and for each â‰ªNamekianâ‰« card under it, it gets +5000 power (up to a maximum of +15000) and [Double Strike] for the battle."
         ),
         card_type="EXTRA",
     )
@@ -9054,7 +9057,7 @@ def test_extract_exact_bt17_weight_on_ones_shoulders_rules() -> None:
 def test_extract_exact_bt17_android_14_inorganic_horror_rules() -> None:
     card = replace(
         _card(
-            "[Counter: Attack] If your Leader Card is a blue ?Red Ribbon Army? ?Android? card and you discard another card from your hand: Negate the attack and play this card.\n"
+            "[Counter: Attack] If your Leader Card is a blue -Red Ribbon Army- -Android- card and you discard another card from your hand: Negate the attack and play this card.\n"
             "[Auto] If it's your opponent's turn: When this card is played, your opponent can't attack for the turn unless they place 2 cards from their hand at the bottom of their deck each time."
         ),
         card_type="BATTLE",
@@ -9112,7 +9115,7 @@ def test_extract_exact_bt16_ss_gogeta_holding_nothing_back_rules() -> None:
     card = replace(
         _card(
             "[Energy-Exhaust][Blocker]\n"
-            "[Union-Fusion]((Red))((Blue))(?) : <Son Goku: Br> and <Vegeta: Br>.\n"
+            "[Union-Fusion]((Red))((Blue))(-) : <Son Goku: Br> and <Vegeta: Br>.\n"
             "[Permanent] This card can't be KO'd by skills.\n"
             "[Auto] If your Leader Card is a blue <Vegeta: Br> or blue <Gogeta: Br> card: At the end of a turn where this card was played, draw 1 card, then add up to 1 Red/Blue multicolor card from your Drop Area to your energy."
         ),
@@ -9135,7 +9138,7 @@ def test_extract_exact_p352_king_vegeta_great_apes_rule_rules() -> None:
         _card(
             "[Energy-Exhaust][Blocker][Arrival Red/Green](Green)\n"
             "[Auto](Red): When this card is played, your opponent may choose 2 cards in their hand and discard them. If they don't, choose up to 1 card in your opponent's Battle Area and place it in its owner's Drop Area.\n"
-            "[Auto] At the end of your turn, choose all ?Great Ape? cards in your Battle Area and switch them to Active Mode."
+            "[Auto] At the end of your turn, choose all -Great Ape- cards in your Battle Area and switch them to Active Mode."
         ),
         card_type="BATTLE",
     )
@@ -9154,7 +9157,7 @@ def test_extract_exact_p352_king_vegeta_great_apes_rule_rules() -> None:
 
 def test_extract_exact_bt17_red_ribbon_army_assemble_rules() -> None:
     card = replace(
-        _card("[Activate: Main] Play up to 1 blue ?Red Ribbon Army? card with an energy cost of 2 or less and 10000 power or less from your deck, then shuffle your deck."),
+        _card("[Activate: Main] Play up to 1 blue -Red Ribbon Army- card with an energy cost of 2 or less and 10000 power or less from your deck, then shuffle your deck."),
         card_type="EXTRA",
     )
     rules = extract_effect_rules_from_card(card)
@@ -9167,7 +9170,7 @@ def test_extract_exact_bt17_sacrificial_strike_rules() -> None:
     card = replace(
         _card(
             "[Counter: Attack] Negate the attack.\n"
-            "[Activate: Battle] Choose 1 of your blue ?Red Ribbon Army? cards and it gets +10000 power for the battle. Additionally, you may choose 1 ?Red Ribbon Army? card in your Battle Area and place it in its owner's Drop Area. If you do, your card that's in a battle gains [Critical] for the battle."
+            "[Activate: Battle] Choose 1 of your blue -Red Ribbon Army- cards and it gets +10000 power for the battle. Additionally, you may choose 1 -Red Ribbon Army- card in your Battle Area and place it in its owner's Drop Area. If you do, your card that's in a battle gains [Critical] for the battle."
         ),
         card_type="EXTRA",
     )
@@ -9185,8 +9188,8 @@ def test_extract_exact_bt17_android_15_inorganic_horror_rules() -> None:
         _card(
             "[Deflect]\n"
             "[Counter: Play] Play this card, and if the Battle Card being played has an energy cost of 3 or less, return it to its owner's hand instead.\n"
-            "[Permanent] If your Leader Card is a blue ?Red Ribbon Army? card, you can activate this card's [Counter] skill from your energy by paying its energy cost.\n"
-            "[Permanent][Bond 3] Blue ?Android?: This card gets +10000 power."
+            "[Permanent] If your Leader Card is a blue -Red Ribbon Army- card, you can activate this card's [Counter] skill from your energy by paying its energy cost.\n"
+            "[Permanent][Bond 3] Blue -Android-: This card gets +10000 power."
         ),
         card_type="BATTLE",
     )
@@ -9313,7 +9316,7 @@ def test_extract_exact_bt18_044_sarta_north_galaxy_warrior_rules() -> None:
         _card(
             "[Counter: Attack] Negate the attack and play this card.\n"
             "[Permanent] If it's your opponent's turn and 2 or more {Angel Halo} are in your Drop, reduce the energy cost of this card in your hand by 2.\n"
-            "[Auto] If your Leader is a blue ≪Another World Budokai≫ card and you discard 1 {Angel Halo} from your hand: When this card is played, your opponent can't attack with Battle Cards with energy costs of 5 or less for the turn unless they place 1 card from their hand at the bottom of their deck each time."
+            "[Auto] If your Leader is a blue â‰ªAnother World Budokaiâ‰« card and you discard 1 {Angel Halo} from your hand: When this card is played, your opponent can't attack with Battle Cards with energy costs of 5 or less for the turn unless they place 1 card from their hand at the bottom of their deck each time."
         ),
         card_type="BATTLE",
     )
@@ -9371,7 +9374,7 @@ def test_extract_exact_bt15_146_son_goku_hit_temporary_truce_rules() -> None:
 def test_extract_exact_bt18_081_cymbal_demonic_subordinate_rules() -> None:
     card = replace(
         _card(
-            "[Auto] When this card attacks, choose up to 2 ≪Demon Clan≫ cards in your Battle Area and they get +5000 power for the turn.\n"
+            "[Auto] When this card attacks, choose up to 2 â‰ªDemon Clanâ‰« cards in your Battle Area and they get +5000 power for the turn.\n"
             "[Auto](1), if your Leader is a <King Piccolo> card: When this card is used in a combo, choose up to 1 of your Leaders and it gains [Double Strike] for the battle."
         ),
         card_type="BATTLE",
@@ -9408,7 +9411,7 @@ def test_extract_exact_bt18_085_ss_son_goten_ss_trunks_unfurled_potential_rules(
 def test_extract_exact_bt18_070_son_goku_skills_improved_rules() -> None:
     card = replace(
         _card(
-            "[Auto][Limit 1](Green), if you choose 1 of your green ≪Turtle School≫ <Son Goku: Childhood> cards with an energy cost of 1 and place it in its owner's Drop: When one of your cards attacks and KOs an opponent's Battle Card, draw 1 card, and play this card from your hand.\n"
+            "[Auto][Limit 1](Green), if you choose 1 of your green â‰ªTurtle Schoolâ‰« <Son Goku: Childhood> cards with an energy cost of 1 and place it in its owner's Drop: When one of your cards attacks and KOs an opponent's Battle Card, draw 1 card, and play this card from your hand.\n"
             "[Auto][Limit 1] When this card attacks and KOs a Battle Card, switch this card to Active Mode, and your opponent discards 1 card from their hand."
         ),
         card_type="BATTLE",
@@ -9424,7 +9427,7 @@ def test_extract_exact_bt18_062_pr2_turtle_school_inheritors_rules() -> None:
     card = replace(
         _card(
             "[Deflect]\n"
-            "[Activate: Main] If your opponent has 3 or more energy and you place 1 ≪Turtle School≫ card from your Z-Energy in its owner's Drop: Play up to 1 green ≪Turtle School≫ card with 20000 power that doesn't have <Master Roshi> and which you haven't played this turn from your deck with its keyword skills negated for the turn, then shuffle your deck."
+            "[Activate: Main] If your opponent has 3 or more energy and you place 1 â‰ªTurtle Schoolâ‰« card from your Z-Energy in its owner's Drop: Play up to 1 green â‰ªTurtle Schoolâ‰« card with 20000 power that doesn't have <Master Roshi> and which you haven't played this turn from your deck with its keyword skills negated for the turn, then shuffle your deck."
         ),
         card_type="BATTLE",
     )
@@ -9483,7 +9486,7 @@ def test_extract_exact_sd17_01_pan_rules() -> None:
 def test_extract_exact_bt18_028_minus_energy_power_ball_rules() -> None:
     card = replace(
         _card(
-            "[Counter: Attack] Negate the attack. Additionally, if your Leader is a ≪Shadow Dragon≫ card, choose all of your opponent's Battle Cards and they get -10000 power for the turn."
+            "[Counter: Attack] Negate the attack. Additionally, if your Leader is a â‰ªShadow Dragonâ‰« card, choose all of your opponent's Battle Cards and they get -10000 power for the turn."
         ),
         card_type="EXTRA",
     )
@@ -9496,7 +9499,7 @@ def test_extract_exact_bt18_028_minus_energy_power_ball_rules() -> None:
 def test_extract_exact_bt18_088_a_demon_is_born_rules() -> None:
     card = replace(
         _card(
-            "[Counter: Attack] Negate the attack. Play up to 1 red or green ≪Demon Clan≫ card with an energy cost of 3 or less from your Drop with its skills negated for the turn.<br>"
+            "[Counter: Attack] Negate the attack. Play up to 1 red or green â‰ªDemon Clanâ‰« card with an energy cost of 3 or less from your Drop with its skills negated for the turn.<br>"
             "[Permanent] If your Leader is a <King Piccolo> card and you have 3 or more Z-Energy, you can activate this card's [Counter] skill from your hand by paying (1) instead of its energy cost."
         ),
         card_type="EXTRA",
@@ -9536,7 +9539,7 @@ def test_extract_exact_bt17_145_cell_abominable_power_rules() -> None:
             "[EX-Evolve](3): <Cell> with an energy cost of 8 or 9.<br>"
             "[Auto][Once per turn] When this card attacks, choose 1 card in your opponent's hand and discard it.<br>"
             "[Auto] When this card is used in a combo from your Drop Area, if it would leave your Combo Area this turn, remove it from the game instead.<br>"
-            "[Activate: Battle](1): Use this card in a combo from your Drop Area. Additionally, if your Leader Card is a green or yellow ≪Android≫ card, this card gets +5000 combo power for the battle."
+            "[Activate: Battle](1): Use this card in a combo from your Drop Area. Additionally, if your Leader Card is a green or yellow â‰ªAndroidâ‰« card, this card gets +5000 combo power for the battle."
         ),
         card_type="BATTLE",
     )
@@ -9684,8 +9687,8 @@ def test_extract_exact_bt18_087_master_roshis_training_rules() -> None:
     card = replace(
         _card(
             "[Field]<br>"
-            "[Activate: Main][Once per turn] Place 1 card from your hand at the bottom of your deck: Play up to 1 green ≪Turtle School≫ card with an energy cost of 1 from your deck, then shuffle your deck.<br>"
-            "[Activate: Main][Once per turn] Play up to 2 ≪Turtle School≫ cards with energy costs of 1 from your deck and/or Drop in your opponent's Battle Area in Rest Mode with their skills negated for the turn, then shuffle your deck if you looked through it. You can't play non-≪World Tournament≫ or non-≪Turtle School≫ Battle Cards for the turn."
+            "[Activate: Main][Once per turn] Place 1 card from your hand at the bottom of your deck: Play up to 1 green â‰ªTurtle Schoolâ‰« card with an energy cost of 1 from your deck, then shuffle your deck.<br>"
+            "[Activate: Main][Once per turn] Play up to 2 â‰ªTurtle Schoolâ‰« cards with energy costs of 1 from your deck and/or Drop in your opponent's Battle Area in Rest Mode with their skills negated for the turn, then shuffle your deck if you looked through it. You can't play non-â‰ªWorld Tournamentâ‰« or non-â‰ªTurtle Schoolâ‰« Battle Cards for the turn."
         ),
         card_type="EXTRA",
     )
@@ -9699,7 +9702,7 @@ def test_extract_exact_bt18_087_master_roshis_training_rules() -> None:
 def test_extract_exact_bt18_094_gine_for_the_sake_of_family_rules() -> None:
     card = replace(
         _card(
-            "[Auto] When this card is played, play up to 1 mono-yellow ≪Bardock's Crew≫ card with an energy cost of 1 from your hand, then switch it to Rest Mode.<br>"
+            "[Auto] When this card is played, play up to 1 mono-yellow â‰ªBardock's Crewâ‰« card with an energy cost of 1 from your hand, then switch it to Rest Mode.<br>"
             "[+1][Auto] If it's your turn: When a Battle Card is switched to Rest Mode by one of your skills, draw 1 card.<br>"
             "[-3][Activate: Main] Play up to 1 yellow <Bardock> card with an energy cost of 4 or less from your hand."
         ),
@@ -9714,10 +9717,10 @@ def test_extract_exact_bt18_094_gine_for_the_sake_of_family_rules() -> None:
 def test_extract_exact_bt18_089_bardocks_crew_rules() -> None:
     card = replace(
         _card(
-            "[Auto][Once per turn] If it's your turn: When you play a ≪Bardock's Crew≫ card, draw 1 card.<br>"
-            "[Auto][Once per turn] When you play a ≪Bardock's Crew≫ card, draw 1 card.<br>"
-            "[Auto] When this card attacks, use up to 1 yellow ≪Bardock's Crew≫ card with 5000 combo power from your Drop in a combo with its skills negated for the turn.<br>"
-            "[Activate: Main][Once per turn] Choose 1 ≪Bardock's Crew≫ card in your Battle Area and switch it to Rest Mode: Choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it."
+            "[Auto][Once per turn] If it's your turn: When you play a â‰ªBardock's Crewâ‰« card, draw 1 card.<br>"
+            "[Auto][Once per turn] When you play a â‰ªBardock's Crewâ‰« card, draw 1 card.<br>"
+            "[Auto] When this card attacks, use up to 1 yellow â‰ªBardock's Crewâ‰« card with 5000 combo power from your Drop in a combo with its skills negated for the turn.<br>"
+            "[Activate: Main][Once per turn] Choose 1 â‰ªBardock's Crewâ‰« card in your Battle Area and switch it to Rest Mode: Choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it."
         ),
         card_type="LEADER",
     )
@@ -9755,8 +9758,8 @@ def test_extract_exact_sd19_05_gotenks_fusion_confusion_rules() -> None:
 def test_extract_exact_bt15_118_turles_power_ball_rules() -> None:
     card = replace(
         _card(
-            "[Auto] If your Leader Card is a green or yellow ≪Saiyan≫ card: At the end of a turn in which this card was placed in a Battle Area, you may choose 1 ≪Great Ape≫ card with an energy cost of 4 in your hand and play it in your opponent's Battle Area with its skills negated for the game. If you do, draw 2 cards.<br>"
-            "[Activate: Main][Once per turn]①: Choose up to 1 of your opponent's ≪Great Ape≫ cards with an energy cost of 4 or less and gain control of it until the end of the turn.<br>"
+            "[Auto] If your Leader Card is a green or yellow â‰ªSaiyanâ‰« card: At the end of a turn in which this card was placed in a Battle Area, you may choose 1 â‰ªGreat Apeâ‰« card with an energy cost of 4 in your hand and play it in your opponent's Battle Area with its skills negated for the game. If you do, draw 2 cards.<br>"
+            "[Activate: Main][Once per turn]â‘ : Choose up to 1 of your opponent's â‰ªGreat Apeâ‰« cards with an energy cost of 4 or less and gain control of it until the end of the turn.<br>"
             "[Activate: Battle] Place this card in its owner's Drop Area: Choose up to 1 of your cards with <Turles> in its character name and it gets +6000 power for the battle."
         ),
         card_type="BATTLE",
@@ -9772,8 +9775,8 @@ def test_extract_exact_bt18_099_tora_feelings_bequeathed_rules() -> None:
     card = replace(
         _card(
             "[Counter: Attack] Negate the attack and play this card.<br>"
-            "[Permanent] If your Leader is a ≪Bardock's Crew≫ card and there are 4 or more ≪Bardock's Crew≫ cards with different card names in your energy, Z-Energy, Battle Area, and/or Drop, this card gets +6000 power.<br>"
-            "[Auto] If your Leader is a yellow ≪Bardock's Crew≫ card and you discard 1 card from your hand: When this card is played, your opponent can't attack your non-Leader cards for the turn unless they choose 1 of their cards in Active Mode and switch it to Rest Mode each time."
+            "[Permanent] If your Leader is a â‰ªBardock's Crewâ‰« card and there are 4 or more â‰ªBardock's Crewâ‰« cards with different card names in your energy, Z-Energy, Battle Area, and/or Drop, this card gets +6000 power.<br>"
+            "[Auto] If your Leader is a yellow â‰ªBardock's Crewâ‰« card and you discard 1 card from your hand: When this card is played, your opponent can't attack your non-Leader cards for the turn unless they choose 1 of their cards in Active Mode and switch it to Rest Mode each time."
         ),
         card_type="BATTLE",
     )
@@ -9784,7 +9787,7 @@ def test_extract_exact_bt18_099_tora_feelings_bequeathed_rules() -> None:
 
 def test_extract_exact_bt18_120_a_saiyans_willpower_rules() -> None:
     card = replace(
-        _card("[Counter: Attack] Negate the attack. Additionally, if the attacking card is a ≪Frieza Clan≫ card, place 1 of your Battle Cards in its owner's Drop. If you do, draw 1 card."),
+        _card("[Counter: Attack] Negate the attack. Additionally, if the attacking card is a â‰ªFrieza Clanâ‰« card, place 1 of your Battle Cards in its owner's Drop. If you do, draw 1 card."),
         card_type="EXTRA",
     )
     rules = extract_effect_rules_from_card(card)
@@ -9797,7 +9800,7 @@ def test_extract_exact_bt18_123_demon_god_shroom_salsa_imminent_annihilation_rul
     card = replace(
         _card(
             "[-1][Activate: Main][Once per turn] Place 1 of your Z-Energy in its owner's Drop: You may look at the bottom card of your deck and play it if it's a <Shroom> or <Salsa> card with [Servant] and an energy cost of 3 or less, and place it at the bottom of your deck if you don't.<br>"
-            "[Activate: Battle][Once per turn] If this card is in a battle: Use up to 2 ≪Demon Realm Race≫ or ≪Demon God≫ cards-both mono-black and without [Super Combo]-from your Warp in a combo."
+            "[Activate: Battle][Once per turn] If this card is in a battle: Use up to 2 â‰ªDemon Realm Raceâ‰« or â‰ªDemon Godâ‰« cards-both mono-black and without [Super Combo]-from your Warp in a combo."
         ),
         card_type="Z-LEADER",
     )
@@ -9812,7 +9815,7 @@ def test_extract_exact_p367_beerus_coming_to_blows_rules() -> None:
     card = replace(
         _card(
             "[Permanent] During your turn, this card can't be KO'd by your opponent's skills.<br>"
-            "[Auto] If your opponent has 2 or more energy: When this card attacks, you may choose 1 blue ≪God≫ card with a combo cost of 1 in your hand and use it in a combo. If you do, draw 1 card."
+            "[Auto] If your opponent has 2 or more energy: When this card attacks, you may choose 1 blue â‰ªGodâ‰« card with a combo cost of 1 in your hand and use it in a combo. If you do, draw 1 card."
         ),
         card_type="BATTLE",
     )
@@ -9826,8 +9829,8 @@ def test_extract_exact_p367_beerus_coming_to_blows_rules() -> None:
 def test_extract_exact_bt18_101_fasha_feelings_bequeathed_rules() -> None:
     card = replace(
         _card(
-            "[Permanent] If your Leader is a ≪Bardock's Crew≫ card and there are 4 or more ≪Bardock's Crew≫ cards with different card names in your energy, Z-Energy, Battle Area, and/or Drop, this card gets +6000 power.<br>"
-            "[Activate: Main][Limit 1] If your Leader is a yellow ≪Bardock's Crew≫ card and you discard this card from your hand: Look at up to 5 cards from the top of your deck, add up to 1 yellow ≪Bardock's Crew≫ card with an energy cost of 4 or less or 1 yellow Unison with a specified cost of 2 among them to your hand, then shuffle your deck."
+            "[Permanent] If your Leader is a â‰ªBardock's Crewâ‰« card and there are 4 or more â‰ªBardock's Crewâ‰« cards with different card names in your energy, Z-Energy, Battle Area, and/or Drop, this card gets +6000 power.<br>"
+            "[Activate: Main][Limit 1] If your Leader is a yellow â‰ªBardock's Crewâ‰« card and you discard this card from your hand: Look at up to 5 cards from the top of your deck, add up to 1 yellow â‰ªBardock's Crewâ‰« card with an energy cost of 4 or less or 1 yellow Unison with a specified cost of 2 among them to your hand, then shuffle your deck."
         ),
         card_type="BATTLE",
     )
@@ -9919,9 +9922,9 @@ def test_extract_exact_bt18_125_demon_god_putine_gravy_treacherous_intel_rules()
 def test_extract_exact_bt18_078_king_piccolo_newly_youthful_conqueror_rules() -> None:
     card = replace(
         _card(
-            "[Evolve][One] ＜King Piccolo＞\n"
-            "[Auto][Limit 1][Green Ball], if your Leader is a green ＜King Piccolo＞ card and you have 2 or more energy : When you play a ≪Demon Clan≫ card using a skill, play this card from your hand.\n"
-            "[Auto][Limit 1] When this card attacks, switch this card to Active Mode, then choose up to 2 green ≪Demon Clan≫ cards in your Battle Area and they get +5000 power for the turn."
+            "[Evolve][One] ï¼œKing Piccoloï¼ž\n"
+            "[Auto][Limit 1][Green Ball], if your Leader is a green ï¼œKing Piccoloï¼ž card and you have 2 or more energy : When you play a â‰ªDemon Clanâ‰« card using a skill, play this card from your hand.\n"
+            "[Auto][Limit 1] When this card attacks, switch this card to Active Mode, then choose up to 2 green â‰ªDemon Clanâ‰« cards in your Battle Area and they get +5000 power for the turn."
         ),
         card_type="BATTLE",
     )
@@ -9936,9 +9939,9 @@ def test_extract_exact_bt18_078_king_piccolo_newly_youthful_conqueror_rules() ->
 def test_extract_live_bt18_078_king_piccolo_newly_youthful_conqueror_rules() -> None:
     card = replace(
         _card(
-            "[evolve][one] ＜King Piccolo＞\n"
-            "[auto][limit 1][green_ball], if your Leader is a green ＜King Piccolo＞card and you have 2 or more energy : When you play a ≪Demon Clan≫ card using a skill, play this card from your hand.\n"
-            "[auto][limit 1] When this card attacks, switch this card to Active Mode, then choose up to 2 green ≪Demon Clan≫ cards in your Battle Area and they get +5000 power for the turn."
+            "[evolve][one] ï¼œKing Piccoloï¼ž\n"
+            "[auto][limit 1][green_ball], if your Leader is a green ï¼œKing Piccoloï¼žcard and you have 2 or more energy : When you play a â‰ªDemon Clanâ‰« card using a skill, play this card from your hand.\n"
+            "[auto][limit 1] When this card attacks, switch this card to Active Mode, then choose up to 2 green â‰ªDemon Clanâ‰« cards in your Battle Area and they get +5000 power for the turn."
         ),
         card_type="BATTLE",
     )
@@ -9951,9 +9954,9 @@ def test_extract_exact_bt15_090_vegetas_power_ball_rules() -> None:
     card = replace(
         _card(
             "[Field]\n"
-            "[Permanent] If your Leader Card is a green ≪Saiyan≫ card, you can activate this card from your hand without paying its energy cost.\n"
-            "[Auto][Once per turn]①: When one of your non-≪Great Ape≫ ≪Saiyan≫ cards is KO'd by an attack, you may choose a ≪Great Ape≫ card that includes the color and character name of the KO'd card and an energy cost of 4 in your deck, play it in Rest Mode, then shuffle your deck.\n"
-            "[Auto] At the end of your turn, choose up to 1 ≪Great Ape≫ card in your Battle Area and switch it to Active Mode."
+            "[Permanent] If your Leader Card is a green â‰ªSaiyanâ‰« card, you can activate this card from your hand without paying its energy cost.\n"
+            "[Auto][Once per turn]â‘ : When one of your non-â‰ªGreat Apeâ‰« â‰ªSaiyanâ‰« cards is KO'd by an attack, you may choose a â‰ªGreat Apeâ‰« card that includes the color and character name of the KO'd card and an energy cost of 4 in your deck, play it in Rest Mode, then shuffle your deck.\n"
+            "[Auto] At the end of your turn, choose up to 1 â‰ªGreat Apeâ‰« card in your Battle Area and switch it to Active Mode."
         ),
         card_type="EXTRA",
     )
@@ -9970,7 +9973,7 @@ def test_extract_live_bt18_123_demon_god_shroom_salsa_imminent_annihilation_rule
         _card(
             "[Double Strike]\n"
             "[Activate: Main][Once per turn] Place 1 of your Z-Energy in its owner's Drop: You may look at the bottom card of your deck and play it if it's a <Shroom> or <Salsa> card with [Servant] and an energy cost of 3 or less, and place it at the bottom of your deck if you don't.\n"
-            "[Activate: Battle][Once per turn] If this card is in a battle: Use up to 2 ≪Demon Realm Race≫ or ≪Demon God≫ cards—both mono-black and without [Super Combo]—from your Warp in a combo."
+            "[Activate: Battle][Once per turn] If this card is in a battle: Use up to 2 â‰ªDemon Realm Raceâ‰« or â‰ªDemon Godâ‰« cardsâ€”both mono-black and without [Super Combo]â€”from your Warp in a combo."
         ),
         card_type="Z-LEADER",
     )
@@ -9983,8 +9986,8 @@ def test_extract_exact_bt19_108_son_gohan_piccolo_trainings_beginnings_rules() -
     card = replace(
         _card(
             "[Deflect]\n"
-            "[Auto] When this card is KO'd, look at up to 5 cards from the top of your deck, add up to 1 ≪Master's Teachings≫ card among them to your hand, then shuffle your deck.\n"
-            "[Activate: Battle][Limit 1](Yellow), if your Leader is a <Piccolo: SH> card, you have 2 or more energy, you add this card to its owner's hand from your Combo Area, and place 1 ≪Master's Teachings≫ card from your Combo Area in its owner's Drop: Draw 1 card, play up to 1 ≪Master's Teachings≫ card with an energy cost of 3 or less from your hand, and that card gets +5000 power for the turn."
+            "[Auto] When this card is KO'd, look at up to 5 cards from the top of your deck, add up to 1 â‰ªMaster's Teachingsâ‰« card among them to your hand, then shuffle your deck.\n"
+            "[Activate: Battle][Limit 1](Yellow), if your Leader is a <Piccolo: SH> card, you have 2 or more energy, you add this card to its owner's hand from your Combo Area, and place 1 â‰ªMaster's Teachingsâ‰« card from your Combo Area in its owner's Drop: Draw 1 card, play up to 1 â‰ªMaster's Teachingsâ‰« card with an energy cost of 3 or less from your hand, and that card gets +5000 power for the turn."
         ),
         card_type="BATTLE",
     )
@@ -10000,7 +10003,7 @@ def test_extract_exact_ex21_33_towa_unpredictable_offense_rules() -> None:
         _card(
             "[Deflect]\n"
             "[Auto][Once per turn] If your Leader is a black <Dabura: Xeno> card: When you activate [Swap], draw 1 card.\n"
-            "[Activate: Main][Limit 1] If your Leader is a black ≪Demon Realm Race≫ card and you place 1 card from your hand at the bottom of your deck: Play up to 1 ≪Evil Wizard≫ or ≪Demon Realm Race≫ card-both black and with an energy cost of 2 or less and [Swap]-from your hand."
+            "[Activate: Main][Limit 1] If your Leader is a black â‰ªDemon Realm Raceâ‰« card and you place 1 card from your hand at the bottom of your deck: Play up to 1 â‰ªEvil Wizardâ‰« or â‰ªDemon Realm Raceâ‰« card-both black and with an energy cost of 2 or less and [Swap]-from your hand."
         ),
         card_type="BATTLE",
     )
@@ -10015,7 +10018,7 @@ def test_extract_exact_bt19_115_lord_slug_craving_for_youth_rules() -> None:
     card = replace(
         _card(
             "[Deflect][Unique]\n"
-            "[Auto] When this card attacks, play up to 1 yellow ≪Slug's Army≫ card with an energy cost of 1 from your deck, shuffle your deck, and this card gets +5000 power for the turn.\n"
+            "[Auto] When this card attacks, play up to 1 yellow â‰ªSlug's Armyâ‰« card with an energy cost of 1 from your deck, shuffle your deck, and this card gets +5000 power for the turn.\n"
             "[Auto] If your Leader is a yellow <Lord Slug> card: When this card is used in a combo, it gets +5000 combo power for the battle."
         ),
         card_type="BATTLE",
@@ -10031,7 +10034,7 @@ def test_extract_exact_p421_android_8_failed_fighter_rules() -> None:
     card = replace(
         _card(
             "[Permanent] If you have a <Commander Red> card in play, reduce the energy cost of this card in your hand by 1.\n"
-            "[Auto][Limit 1] If it's your turn : When this card is placed in your Drop by a skill, choose up to 1 of your blue ≪Red Ribbon Army≫ cards and it gets +5000 power for the turn."
+            "[Auto][Limit 1] If it's your turn : When this card is placed in your Drop by a skill, choose up to 1 of your blue â‰ªRed Ribbon Armyâ‰« cards and it gets +5000 power for the turn."
         ),
         card_type="BATTLE",
     )
@@ -10045,7 +10048,7 @@ def test_extract_exact_p398_majin_buu_tricky_nemesis_rules() -> None:
     card = replace(
         _card(
             "[Permanent] If your Leader Card is a green <Majin Buu> card, this card is green while in your deck and Drop Area.\n"
-            "[Activate: Main](3), if your Leader Card is a green or black ≪Majin≫ card and you have 4 or more energy: Play up to 1 green or black <Majin Buu> card with an energy cost of 5 or 6 from your hand."
+            "[Activate: Main](3), if your Leader Card is a green or black â‰ªMajinâ‰« card and you have 4 or more energy: Play up to 1 green or black <Majin Buu> card with an energy cost of 5 or 6 from your hand."
         ),
         card_type="BATTLE",
     )
@@ -10059,8 +10062,8 @@ def test_extract_exact_p398_majin_buu_tricky_nemesis_rules() -> None:
 def test_extract_exact_sd20_03_bulma_stalwart_adventurer_rules() -> None:
     card = replace(
         _card(
-            "[Permanent] If your Leader is a yellow <Son Goku: Childhood> card, yellow non-≪Great Ape≫ <Son Goku: Childhood> cards in your Battle Area get +5000 power.\n"
-            "[+2][Activate: Main] If your Leader is a yellow Z-Leader or a yellow ≪Great Ape≫ <Son Goku: Childhood> card: Play up to 1 yellow non-≪Great Ape≫ <Son Goku: Childhood> card with an energy cost of 3 or less from your hand.\n"
+            "[Permanent] If your Leader is a yellow <Son Goku: Childhood> card, yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> cards in your Battle Area get +5000 power.\n"
+            "[+2][Activate: Main] If your Leader is a yellow Z-Leader or a yellow â‰ªGreat Apeâ‰« <Son Goku: Childhood> card: Play up to 1 yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> card with an energy cost of 3 or less from your hand.\n"
             "[-1][Auto] When your opponent attacks, switch this card to Active Mode and it gains [Blocker] for the turn."
         ),
         card_type="UNISON",
@@ -10104,7 +10107,7 @@ def test_extract_exact_ex21_03_android_18_with_reckless_abandon_rules() -> None:
     card = replace(
         _card(
             "[Counter: Attack][Limit 1] Negate the attack, play this card, then choose up to 1 of your opponent's Battle Cards and it gets -15000 power for the turn.\n"
-            "[Permanent][Sparking 7] If your Leader is a mono-red ≪Universe 7≫ <Son Goku> card, reduce the energy cost of this card in your hand and Drop by 2.\n"
+            "[Permanent][Sparking 7] If your Leader is a mono-red â‰ªUniverse 7â‰« <Son Goku> card, reduce the energy cost of this card in your hand and Drop by 2.\n"
             "[Permanent] If this card would be removed from a Battle Area, remove it from the game instead.\n"
             "[Permanent] You can activate this card's [Counter] skill from your Drop by paying its energy cost and discarding 1 card from your hand."
         ),
@@ -10133,7 +10136,7 @@ def test_extract_exact_p384_beerus_annihilations_essence_rules() -> None:
 def test_extract_exact_bt16_094_body_steal_rules() -> None:
     card = replace(
         _card(
-            "[Permanent] This card gains ≪Desire≫ in all areas.\n"
+            "[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n"
             "[Activate: Main] Choose 1 <Son Goku> card in your Battle Area and place it at the bottom of your deck: Play up to 1 <Goku Black> card with an energy cost of 2 or less from your deck, then shuffle your deck."
         ),
         card_type="EXTRA",
@@ -10160,10 +10163,10 @@ def test_extract_exact_bt10_066_intensive_training_son_goku_rules() -> None:
 def test_extract_exact_bt15_030_gigantic_meteor_rules() -> None:
     card = replace(
         _card(
-            "[Permanent] If your Leader Card is a mono-red ≪Saiyan≫ card, reduce the energy cost of this card in your hand by 2.\n"
+            "[Permanent] If your Leader Card is a mono-red â‰ªSaiyanâ‰« card, reduce the energy cost of this card in your hand by 2.\n"
             "[Activate: Battle][Limit 1] Choose one-\n"
-            "・If it's your turn, choose any number of your opponent's Battle Cards that add up to a total power of 30000 or less and KO them.\n"
-            "・Choose up to 1 of your Leader Cards or Unison Cards and it gets +15000 power and has its skills negated for the battle. Additionally, if your Leader Card is a <Broly> card, the chosen card gets an additional +10000 power for the battle."
+            "ãƒ»If it's your turn, choose any number of your opponent's Battle Cards that add up to a total power of 30000 or less and KO them.\n"
+            "ãƒ»Choose up to 1 of your Leader Cards or Unison Cards and it gets +15000 power and has its skills negated for the battle. Additionally, if your Leader Card is a <Broly> card, the chosen card gets an additional +10000 power for the battle."
         ),
         card_type="EXTRA",
     )
@@ -10177,7 +10180,7 @@ def test_extract_exact_bt18_009_pan_united_emotion_rules() -> None:
     card = replace(
         _card(
             "[Permanent] If your Leader is a <Pan> card, reduce the energy cost of this card in your hand by 2.\n"
-            "[Auto] If this card's power is 20000 or more: When this card attacks, look at up to 5 cards from the top of your deck, add up to 1 red ≪Saiyan≫ card with an energy cost of 5 or less or 1 red Unison with a specified cost of 3 among them to your hand, then shuffle your deck."
+            "[Auto] If this card's power is 20000 or more: When this card attacks, look at up to 5 cards from the top of your deck, add up to 1 red â‰ªSaiyanâ‰« card with an energy cost of 5 or less or 1 red Unison with a specified cost of 3 among them to your hand, then shuffle your deck."
         ),
         card_type="BATTLE",
     )
@@ -10190,7 +10193,7 @@ def test_extract_exact_bt18_009_pan_united_emotion_rules() -> None:
 def test_extract_exact_bt16_095_united_in_will_rules() -> None:
     card = replace(
         _card(
-            "[Permanent] This card gains ≪Desire≫ in all areas.\n"
+            "[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n"
             "[Activate: Main] Play up to 1 <Zamasu> card with an energy cost of 2 or less and [Indestructible] from your Warp."
         ),
         card_type="EXTRA",
@@ -10204,8 +10207,8 @@ def test_extract_exact_bt16_095_united_in_will_rules() -> None:
 def test_extract_exact_bt15_115_natures_revival_rules() -> None:
     card = replace(
         _card(
-            "[Permanent] This card gains ≪Desire≫ in all areas.\n"
-            "[Activate: Main] Play up to 2 skill-less ≪Monster≫ cards with energy costs of 1 and 2 respectively from your deck in Rest Mode, then shuffle your deck."
+            "[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n"
+            "[Activate: Main] Play up to 2 skill-less â‰ªMonsterâ‰« cards with energy costs of 1 and 2 respectively from your deck in Rest Mode, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -10276,7 +10279,7 @@ def test_extract_exact_ex21_13_hatchhyack_saiyan_exterminator_rules() -> None:
         _card(
             "[Critical]\n"
             "[Permanent] If this card would be removed from a Battle Area, send it to its owner's Warp instead.\n"
-            "[Activate: Main][Limit 1](2), if your Leader is a black ≪Machine Mutant≫ card, {The Dark Planet} is in your Battle Area, and you choose 3 black Battle Cards with energy costs between 3 and 7 in your Drop and place them at the bottom of your deck in any order: Play this card from your Drop.\n"
+            "[Activate: Main][Limit 1](2), if your Leader is a black â‰ªMachine Mutantâ‰« card, {The Dark Planet} is in your Battle Area, and you choose 3 black Battle Cards with energy costs between 3 and 7 in your Drop and place them at the bottom of your deck in any order: Play this card from your Drop.\n"
             "[Activate: Main][Once per turn](2), if you have 4 or more energy: Switch this card to Active Mode, and play up to 1 {Hatchhyack, Fueled by Hatred} from your Drop or Warp on top of this card."
         ),
         card_type="BATTLE",
@@ -10290,7 +10293,7 @@ def test_extract_exact_ex21_13_hatchhyack_saiyan_exterminator_rules() -> None:
 def test_extract_exact_bt19_031_ss_deadly_bomber_rules() -> None:
     card = replace(
         _card(
-            "[Activate: Main] If your Leader is a red <Android 13> card: Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], it gets -20000 power for the turn, then play up to 1 <Android 14> or <Android 15> card—both red and with an energy cost of 3—from your hand."
+            "[Activate: Main] If your Leader is a red <Android 13> card: Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], it gets -20000 power for the turn, then play up to 1 <Android 14> or <Android 15> cardâ€”both red and with an energy cost of 3â€”from your hand."
         ),
         card_type="EXTRA",
     )
@@ -10302,7 +10305,7 @@ def test_extract_exact_bt19_031_ss_deadly_bomber_rules() -> None:
 def test_extract_exact_bt19_032_forgotten_capsules_rules() -> None:
     card = replace(
         _card(
-            "[Activate: Main] Place 1 other card from your hand at the bottom of your deck: Add up to 1 <Android 14> and 1 <Android 15> card—both red and with an energy cost of 1—from your deck to your hand, then shuffle your deck."
+            "[Activate: Main] Place 1 other card from your hand at the bottom of your deck: Add up to 1 <Android 14> and 1 <Android 15> cardâ€”both red and with an energy cost of 1â€”from your deck to your hand, then shuffle your deck."
         ),
         card_type="EXTRA",
     )
@@ -10327,8 +10330,8 @@ def test_extract_exact_bt19_074_lemo_dependable_friend_rules() -> None:
 def test_extract_exact_bt19_072_bulma_humble_wish_rules() -> None:
     card = replace(
         _card(
-            "[Auto] If your Leader is a green <Veku: Br> or green <Gogeta: Br> card: When you attack with a <Son Goku: Br> or <Vegeta: Br> card—both with [EX-Evolve]—you may use 1 card from under that card in a combo with its skill negated for the turn. If you do, negate this skill for the turn.\n"
-            "[Activate: Main][Limit 1] If your Leader is a green <Veku: Br> or <Gogeta: Br> card, and you place 1 card from your hand at the bottom of your deck: Play up to 1 <Son Goku: Br> or <Vegeta: Br> card—both green and with an energy cost of 1—from your deck with its skills negated for the turn, then shuffle your deck and remove this card from the game."
+            "[Auto] If your Leader is a green <Veku: Br> or green <Gogeta: Br> card: When you attack with a <Son Goku: Br> or <Vegeta: Br> cardâ€”both with [EX-Evolve]â€”you may use 1 card from under that card in a combo with its skill negated for the turn. If you do, negate this skill for the turn.\n"
+            "[Activate: Main][Limit 1] If your Leader is a green <Veku: Br> or <Gogeta: Br> card, and you place 1 card from your hand at the bottom of your deck: Play up to 1 <Son Goku: Br> or <Vegeta: Br> cardâ€”both green and with an energy cost of 1â€”from your deck with its skills negated for the turn, then shuffle your deck and remove this card from the game."
         ),
         card_type="Z-BATTLE",
     )
@@ -10355,7 +10358,7 @@ def test_extract_exact_ex21_26_ss_son_goku_awakened_by_rage_rules() -> None:
 def test_extract_exact_bt19_018_krillin_at_the_ready_rules() -> None:
     card = replace(
         _card(
-            "[Auto][Once per turn] If it's your opponent's turn: When your opponent plays a Battle Card with 15000 power or more, look at up to 5 cards from the top of your deck, add up to 1 red ≪Saiyan≫ card with an energy cost of 5 or less among them to your hand, then shuffle your deck."
+            "[Auto][Once per turn] If it's your opponent's turn: When your opponent plays a Battle Card with 15000 power or more, look at up to 5 cards from the top of your deck, add up to 1 red â‰ªSaiyanâ‰« card with an energy cost of 5 or less among them to your hand, then shuffle your deck."
         ),
         card_type="BATTLE",
     )
@@ -10368,7 +10371,7 @@ def test_extract_exact_bt19_018_krillin_at_the_ready_rules() -> None:
 def test_extract_exact_bt19_033_android_assault_rules() -> None:
     card = replace(
         _card(
-            "[Counter: Attack] If your Leader is an <Android 13> card: Negate the attack and add up to 1 red ≪Android≫ card with an energy cost of 1 from your Drop to your hand.\n"
+            "[Counter: Attack] If your Leader is an <Android 13> card: Negate the attack and add up to 1 red â‰ªAndroidâ‰« card with an energy cost of 1 from your Drop to your hand.\n"
             "[Permanent] If your Leader is an <Android 13> Z-Leader, you can activate this card's [Counter] skill from your hand by adding 1 card from your life to your hand instead of paying its energy cost."
         ),
         card_type="EXTRA",
@@ -10436,7 +10439,7 @@ def test_extract_exact_bt19_073_cheelai_dependable_friend_rules() -> None:
     card = replace(
         _card(
             "[Auto][Limit 1] If your Leader is a green <Broly: Br> card: When this card is played, look at up to 7 cards from the top of your deck, place up to 1 green Extra from among them under 1 of your green <Broly: Br> cards, then shuffle your deck.\n"
-            "[Activate: Main][Limit 1] If your Leader is a ≪Shenron≫ card: Place up to 1 [Dragon Ball] card from your deck in your Drop, then shuffle your deck."
+            "[Activate: Main][Limit 1] If your Leader is a â‰ªShenronâ‰« card: Place up to 1 [Dragon Ball] card from your deck in your Drop, then shuffle your deck."
         ),
         card_type="Z-BATTLE",
     )
@@ -10462,7 +10465,7 @@ def test_extract_exact_bt19_078_ss_son_goku_all_out_evolution_rules() -> None:
 def test_extract_exact_bt19_079_son_goku_limbering_up_rules() -> None:
     card = replace(
         _card(
-            "[Auto] When this card is played from your hand, look at up to 7 cards from the top of your deck, add up to 1 <Son Goku: Br> or <Vegeta: Br> card among them—both green and with an energy cost of 6 or less—to your hand, then shuffle your deck."
+            "[Auto] When this card is played from your hand, look at up to 7 cards from the top of your deck, add up to 1 <Son Goku: Br> or <Vegeta: Br> card among themâ€”both green and with an energy cost of 6 or lessâ€”to your hand, then shuffle your deck."
         ),
         card_type="BATTLE",
     )
@@ -10486,8 +10489,8 @@ def test_extract_exact_bt19_081_ssg_vegeta_crimson_impact_rules() -> None:
 def test_extract_exact_bt19_124_son_gohan_piccolo_master_student_bond_rules() -> None:
     card = replace(
         _card(
-            "[Activate: Main][Once per turn] Choose up to 1 of your Battle Cards with <Son Gohan> in its character name, and it gains ≪Master's Teachings≫ until the end of your opponent's next turn.<br>"
-            "[Activate: Battle][Once per turn] If your Leader is a <Piccolo: SH> card and you have 3 or more energy: Choose up to 1 ≪Master's Teachings≫ card in your Battle Area and it gets +10000 power for the battle."
+            "[Activate: Main][Once per turn] Choose up to 1 of your Battle Cards with <Son Gohan> in its character name, and it gains â‰ªMaster's Teachingsâ‰« until the end of your opponent's next turn.<br>"
+            "[Activate: Battle][Once per turn] If your Leader is a <Piccolo: SH> card and you have 3 or more energy: Choose up to 1 â‰ªMaster's Teachingsâ‰« card in your Battle Area and it gets +10000 power for the battle."
         ),
         card_type="BATTLE",
     )
@@ -10513,8 +10516,8 @@ def test_extract_exact_bt19_117_angila_lord_slugs_henchman_rules() -> None:
     card = replace(
         _card(
             "[Blocker]<br>[Permanent][Bond 2] While this card is in Active Mode, it gains [Barrier].<br>"
-            "[Auto] If your Leader is a <Lord Slug> card: When this card is used in a combo, choose up to 1 of your yellow ≪Slug's Army≫ cards, and it gains [Double Strike] for the battle.<br>"
-            "[Activate: Battle] Use up to 1 mono-yellow ≪Slug's Army≫ card with a combo cost of 1 from your hand in a combo, and negate this skill for the game."
+            "[Auto] If your Leader is a <Lord Slug> card: When this card is used in a combo, choose up to 1 of your yellow â‰ªSlug's Armyâ‰« cards, and it gains [Double Strike] for the battle.<br>"
+            "[Activate: Battle] Use up to 1 mono-yellow â‰ªSlug's Armyâ‰« card with a combo cost of 1 from your hand in a combo, and negate this skill for the game."
         ),
         card_type="BATTLE",
     )
@@ -10526,8 +10529,8 @@ def test_extract_exact_bt19_117_angila_lord_slugs_henchman_rules() -> None:
 def test_extract_exact_bt19_123_gyoshu_scientist_of_lord_slug_rules() -> None:
     card = replace(
         _card(
-            "[Barrier]<br>[Auto] When this card is played, look at up to 3 cards from the top of your deck, add up to 1 ≪Slug's Army≫ card among them to your hand, and place the rest at the bottom of your deck in any order.<br>"
-            "[Auto](Yellow): When this card is used in a combo from your Battle Area, play up to 1 yellow ≪Slug's Army≫ card with an energy cost of 3 and combo cost of 1 from your hand."
+            "[Barrier]<br>[Auto] When this card is played, look at up to 3 cards from the top of your deck, add up to 1 â‰ªSlug's Armyâ‰« card among them to your hand, and place the rest at the bottom of your deck in any order.<br>"
+            "[Auto](Yellow): When this card is used in a combo from your Battle Area, play up to 1 yellow â‰ªSlug's Armyâ‰« card with an energy cost of 3 and combo cost of 1 from your hand."
         ),
         card_type="BATTLE",
     )
@@ -10565,8 +10568,8 @@ def test_extract_exact_bt19_072_bulma_a_humble_wish_rules() -> None:
 def test_extract_exact_bt18_089_bardocks_crew_draw_rule() -> None:
     card = replace(
         _card(
-            "[Auto][Once per turn] If it's your turn: When you play a ≪Bardock's Crew≫ card, draw 1 card.<br>"
-            "[Awaken] When your life is at 4 or less or there are 4 or more ≪Bardock's Crew≫ cards with different card names in your energy, Z-Energy, Battle Area, and/or Drop: You may draw 1 card, switch up to 1 of your energy to Active Mode, and add cards from your life to your hand until you have 6 life left."
+            "[Auto][Once per turn] If it's your turn: When you play a â‰ªBardock's Crewâ‰« card, draw 1 card.<br>"
+            "[Awaken] When your life is at 4 or less or there are 4 or more â‰ªBardock's Crewâ‰« cards with different card names in your energy, Z-Energy, Battle Area, and/or Drop: You may draw 1 card, switch up to 1 of your energy to Active Mode, and add cards from your life to your hand until you have 6 life left."
         ),
         card_type="LEADER",
     )
@@ -10740,3 +10743,7043 @@ def test_extract_exact_bt19_097_cunning_murder_rules() -> None:
     )
     rules = extract_effect_rules_from_card(card)
     assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_negate_chosen_owner_battle_then_drop_and_place_green_extras_under_leader" for rule in rules)
+
+
+def test_extract_exact_p463_gokua_cunning_slayer_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto](Blue): At the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your Drop.\n"
+            "[Auto][Limit 1] When this card is played, you may place 1 blue â‰ªBoujack Brigadeâ‰« from your hand in your energy in Rest Mode. If you do, place one of your energy in your Drop, and your opponent places 1 card from their hand at the bottom of their deck."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "auto_play_self_from_combo_on_battle_end" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_place_boujack_brigade_from_hand_to_energy_then_drop_energy_and_bottom_deck_opponent_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_p470_pan_search_for_another_world_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto][Limit 1] If your Leader is a black <Supreme Kai of Time>: When a card is placed from your life in your Drop by one of your Leader skills, add the top card of your deck to your life.\n"
+            "[Activate: Main][Limit 1][Bond 3] Card with <Xeno> in its character name: Choose 1 of your opponent's Battle Cards and send it to its owner's Warp."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "auto_add_top_n_from_owner_deck_to_life_on_owner_card_placed_into_drop" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_send_up_to_n_opponent_battle_to_warp" for rule in rules)
+
+
+def test_extract_exact_bt20_135_prison_planet_rules() -> None:
+    card = replace(
+        _card(
+            "[Barrier][Field]\n"
+            "[Permanent] Mono-black â‰ªSaiyanâ‰« cards with a combo cost of 1 and 5000 combo power in your hand and Battle Area have their combo costs reduced by 1.\n"
+            "[Permanent] When using your <Fu>'s [Overlord] to choose a [Servant] card, you can also choose cards in your opponent's Battle Area."
+        ),
+        card_type="EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert sum(1 for rule in rules if rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt19_037_son_goku_stronger_together_rules() -> None:
+    card = replace(
+        _card(
+            "[Deflect][Barrier]\n"
+            "[Auto] If your Leader is mono-blue: When this card is played, if your opponent has 11 or more cards in their hand, they place cards from their hand at the bottom of their deck in any order until they have 10 cards in their hand.\n"
+            "[Activate: Battle][Limit 1] If your Leader's character name includes <SH>, you have 3 or more energy, and you remove this card from the game: Choose up to 1 of your blue Battle Cards with 2 or more character names and it gets +10000 power and [Triple Strike] for the battle."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_bottom_deck_opponent_hand_to_size_on_play" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_gain_power_and_keyword_for_battle" for rule in rules)
+
+
+def test_extract_exact_bt20_116_fu_assembling_the_strong_rules() -> None:
+    card = replace(
+        _card(
+            "[Deflect][Barrier]\n"
+            "[Overlord][Limit 1] If your Leader is a <Evil Saiyan> or <Cumber> card-both black:\n"
+            "[Z-Stack 1] Black <Cumber> Battle Card with energy cost of 2.\n"
+            "[Activate: Main](Black): Play up to 1 black <Cumber> card with an energy cost of 2 from under this card."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_up_to_n_matching_from_under_self" for rule in rules)
+
+
+def test_extract_exact_p464_golden_frieza_return_of_the_destroyer_rules() -> None:
+    card = replace(
+        _card(
+            "[Deflect][Double Strike]\n"
+            "[Permanent] For each green Unison Card in your Drop, reduce the Z-Energy cost of this card in your Z-Deck by 1. (Up to 2)\n"
+            "[Auto][Once per turn] If it's your turn: When your green Unison is placed in your Drop, choose 1 of your opponent's Battle Cards, ignoring [Barrier], KO it, and this card gets +5000 power for the turn.\n"
+            "[Activate: Main][Once per turn](Green)(Green), if your leader is a green â‰ªFrieza Clanâ‰« card and you have 4 or more energy: Play 1 green Unison with a specified cost of 3 or less from your hand with a marker on it."
+        ),
+        card_type="Z-BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "auto_green_unison_drop_ko_and_self_gain_power_for_turn" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_unison_from_hand_with_markers" for rule in rules)
+
+
+def test_extract_exact_p462_boujack_space_pirate_captain_rules() -> None:
+    card = replace(
+        _card(
+            "[Double Strike]\n"
+            "[Auto](Blue), if you have 3 or more energy: At the end of a battle where you used this card from your hand or energy in a combo, you may play this card from your Drop.\n"
+            "[Auto][Limit 1] When your opponent attacks, use 1 mono-blue â‰ªBoujack Brigadeâ‰« card in your energy in a combo. If you do, add the top card of your deck to your energy."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "auto_play_self_from_combo_on_battle_end" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_attacks" and rule.handler_id == "auto_combo_mono_blue_boujack_brigade_from_energy_then_add_top_deck_to_energy_on_opponent_attack" for rule in rules)
+
+
+def test_extract_exact_p465_cooler_cruel_commander_rules() -> None:
+    card = replace(
+        _card(
+            "[Empower Green 3]\n"
+            "[Auto][Limit 1] If this card has 3 or more markers on it: When this card is played, add 1 green card from your Drop to your Z-Energy, and this card gains [Dual Attack] for the turn.\n"
+            "[+1][Activate: Main][Burst 1] This card gets +10000 power for the turn."
+        ),
+        card_type="UNISON",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_add_green_drop_to_z_energy_and_self_gain_keyword_on_play" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_gain_power_and_keyword_for_turn" for rule in rules)
+
+
+def test_extract_exact_p472_trunks_challenging_the_dark_empire_rules() -> None:
+    card = replace(
+        _card(
+            "[Over Realm 6][Dual Attack]\n"
+            "[Auto] If your Leader is a black <Supreme Kai of Time>: When this card attacks, use one card with 5000 combo power from your Warp in a combo with its skills negated for the turn."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_combo_up_to_n_from_owner_zone_on_attack" for rule in rules)
+
+
+def test_extract_exact_bt19_127_son_gohan_piccolo_moments_respite_rules() -> None:
+    card = replace(
+        _card(
+            "[Permanent] While a card with <Pan> in its character name is under this card, this card gains [Blocker].\n"
+            "[Auto] When this card activates [Blocker], add up to 1 card with <Pan> in its character name from under this card to its owner's hand.\n"
+            "[Activate: Main][Once per turn] If your Leader is a <Piccolo: SH> card: Choose up to 1 of your yellow Battle Cards with <Pan> in its character name and place it under this card."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.handler_id == "noop_auto" and "gains [blocker]" in rule.source_text.lower() for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "auto_return_up_to_n_matching_under_self_to_hand_on_self_blocker_activated" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_place_up_to_n_matching_owner_battle_under_self" for rule in rules)
+
+
+def test_extract_exact_bt20_100_vegito_unexpected_separation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader is a <Son Goku> or <Vegeta> card-both yellow-and you send this card to its owner's Warp: Play up to 1 {SS Son Goku & SS Vegeta, Ultimate Duo} from your deck with its keyword skills negated for the turn, and shuffle your deck."), card_type="BATTLE"))
+    assert any(rule.handler_id == "activate_send_self_to_owner_warp_then_play_up_to_n_from_owner_deck_negated" for rule in rules)
+
+
+def test_extract_exact_bt20_117_cumber_captive_fighter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played or attacks, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less, and it gains [Servant] until the end of your opponent's next turn."), card_type="BATTLE"))
+    assert sum(1 for rule in rules if rule.handler_id == "auto_grant_servant_to_up_to_n_opponent_battle_until_next_turn") == 2
+
+
+def test_extract_exact_bt20_134_explosion_of_malice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader is a <Cumber> card: Negate the attack, choose up to 1 of your opponent's Battle Cards, and it gains [Servant] until the end of your next turn."), card_type="EXTRA"))
+    assert any(rule.handler_id == "counter_negate_attack_and_grant_servant_until_next_turn" for rule in rules)
+
+
+def test_extract_exact_bt20_136_evil_aura_overflow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader is a black <Cumber> card and you discard 1 card from your hand: If the Battle Card being played has an energy cost of 4 or less, play it in your Battle Area instead and it gains [Servant] for the game."), card_type="EXTRA"))
+    assert any(rule.handler_id == "counter_take_pending_play_to_owner_battle_with_servant_for_game" for rule in rules)
+
+
+def test_extract_exact_bt20_090_majin_buu_two_hearts_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Z-Stack 2] Yellow â‰ªMajinâ‰« Battle Card with an energy cost of 1.\n[Activate: Main][Limit 1] If there are 2 cards under this card and you discard 1 or more yellow â‰ªMajinâ‰« cards from your hand: This card gains power equal to the total combo power of the cards discarded by this skill for the turn. Additionally, if this card has 20000 power or more, draw 1 card and this card gains [Dual Attack] for the turn."), card_type="Z-BATTLE"))
+    assert any(rule.handler_id == "activate_discard_matching_from_owner_hand_gain_total_combo_power_and_threshold_draw_keyword" for rule in rules)
+
+
+def test_extract_exact_bt20_112_spirit_bomb_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Activate: Main] If your Leader is a yellow <Son Goku> or <Vegeta> card and you switch this card to Rest Mode: Look at up to 3 cards from the top of your deck, place up to 1 yellow Battle Card among them under this card, and place the rest at the bottom of your deck in any order.\n[Activate: Battle] If it's your turn, your <Son Goku> card is in a battle, and there are 7 or more cards under this card: Use all Battle Cards from under this card in a combo with their skills negated for the turn, and place this card in its owner's Drop."), card_type="EXTRA"))
+    assert any(rule.handler_id == "activate_rest_self_look_top_place_yellow_battle_under_self_and_bottom_rest" for rule in rules)
+    assert any(rule.handler_id == "activate_use_all_under_self_in_combo_then_send_self_to_drop" for rule in rules)
+
+
+def test_extract_exact_bt20_128_evil_saiyan_thirsting_for_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 <Fu> or â‰ªSaiyanâ‰« card-both black and with an energy cost of 6 or less-or 1 {Fu, All According to Plan} from among them to your hand, then shuffle your deck."), card_type="BATTLE"))
+    assert any(rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_ex19_08_goku_black_works_undone_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, choose and discard 1 card from your hand: Flip up to 1 of your blue <Goku Black>-only Leader Cards to its back side. You can't play Battle Cards that don't include <Zamasu> or <Goku Black> in their character names for the game.\n[Activate: Main][Limit 1] If your Leader is a <Goku Black>-only card and you choose 1 {Zamasu, Teamwork Undying} in your Unison Area: Add 1 marker to your chosen card, then place this card under it from your Battle Area."), card_type="BATTLE"))
+    assert any(rule.handler_id == "activate_add_marker_to_matching_owner_unison_and_place_self_under_it" for rule in rules)
+
+
+def test_extract_exact_bt20_123_vegeta_against_all_odds_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack and play this card in your opponent's Battle Area.\n[Permanent] If your Leader is a black <Cumber> card, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="BATTLE"))
+    assert any(rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt19_070_ss_broly_awakened_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a green <Broly: Br> card: When this card attacks, look at up to 7 cards from the top of your deck, place up to 2 green Extras among them under one of your <Broly: Br> cards, then shuffle your deck, and this card gets +10000 power for the battle.\n[Activate: Main][Once per turn] If you have 4 or more energy: Play up to 1 green <Broly: Br> card with an energy cost of 8 from your hand.\n[Activate: Battle][Once per turn] Place 1 green Extra from under one of your <Broly: Br> cards in its owner's Drop: Choose up to 1 of your cards, and it gets +5000 power for the battle."), card_type="Z-BATTLE"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_up_to_n_from_owner_hand" for rule in rules)
+
+
+def test_extract_exact_bt20_044_android_17_emergency_defense_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If your Leader is a blue <Android 18> card: Negate the attack and play this card.\n[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by placing 2 blue non-Leaders from under your Leader in their owners' Drops."), card_type="BATTLE"))
+    assert any(rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt20_083_ki_energy_absorb_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack. Additionally, if the attacker was a â‰ªSaiyanâ‰« card, choose up to 1 of your <Super 17> cards and switch it to Active Mode.\n[Permanent] If your Leader is a green <Super 17> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost by discarding another card from your hand instead."), card_type="EXTRA"))
+    assert any(rule.handler_id == "counter_negate_attack_and_switch_matching_owner_battle_active_if_attacker_trait" for rule in rules)
+
+
+def test_extract_exact_bt20_092_majin_buu_heart_of_good_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] While this card is under a yellow â‰ªMajinâ‰« card with an energy cost of 2 or more in a Battle Area, the card above this card can't be KO'd once per turn.\n[Activate: Main](Yellow), choose 1 other yellow â‰ªMajinâ‰« card in your Battle Area and place 1 card from under that card in its owner's Drop: Place this card under the chosen card."), card_type="Z-BATTLE"))
+    assert any(rule.handler_id == "activate_place_self_under_matching_owner_battle_after_host_under_to_drop" for rule in rules)
+
+
+def test_extract_exact_bt18_003_ss4_gogeta_the_ultimate_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can only include 1 copy of this card in your Z-Deck.\n[Z-Awaken] Your life is at 4 or less, all of your energy is in Rest Mode, and you skip your Charge Phase during your next turn: Red <Son Goku: GT> <Vegeta: GT>.\n[Permanent] While this card is in a battle, you can't activate Extra skills or use cards in combos.\n[Auto] At the end of your opponent's turn, switch this card to Active Mode and remove it from the game."), card_type="Z-LEADER"))
+    assert any(rule.handler_id == "auto_switch_self_active_and_remove_self_from_game_on_turn_end" for rule in rules)
+
+
+def test_extract_exact_bt16_054_piccolo_to_battle_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During your turn, this card gets +10000 power and can attack Battle Cards without [Barrier] in Active Mode.\n[Permanent] If your opponent has no Battle Cards in play, this card gains [Critical].\n[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green â‰ªUniverse 7â‰« card with an energy cost of 3 in your hand and play it."), card_type="BATTLE"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_play_up_to_n_from_owner_hand_on_self_ko" for rule in rules)
+
+
+def test_extract_exact_bt16_053_ss_vegeta_to_battle_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During your turn, this card gets +10000 power and can attack Battle Cards without [Barrier] in Active Mode.\n[Permanent] If your opponent has no Battle Cards in play, this card gains [Double Strike].\n[Auto](Green): When this card is KO'd, draw 1 card, then choose up to 1 green â‰ªUniverse 7â‰« card with an energy cost of 3 in your hand and play it."), card_type="BATTLE"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_play_up_to_n_from_owner_hand_on_self_ko" for rule in rules)
+
+
+def test_extract_exact_bt15_106_turles_great_ape_manipulator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a [Field] Extra Card in your Battle Area, this card gains [Blocker].\n[Auto] If your Leader Card is yellow and a â‰ªTurles Crusher Corpsâ‰« card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="BATTLE"))
+    assert any(rule.handler_id == "auto_activate_up_to_n_named_field_extra_from_owner_deck_or_drop_on_play" for rule in rules)
+
+
+def test_extract_exact_ex19_05_king_cold_blessing_of_the_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo]\n[Permanent] If this card would leave your Combo Area, remove it from the game instead.\n[Auto][Limit 1] If your Leader Card is a red <Frieza: Br> card, your life is at 3 or less, and it's your opponent's turn: When this card is used in a combo from your hand, the next time you would activate a mono-red Extra Card with an original energy cost of 3 or less this turn, reduce its activation cost by (Red)."), card_type="BATTLE"))
+    assert any(rule.handler_id == "auto_reduce_next_matching_extra_skill_cost_from_hand_on_combo" for rule in rules)
+
+
+def test_extract_exact_bt17_136_android_17_android_18_team_up_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo][Energy-Exhaust]\n[Auto] If your Leader Card is blue or green and it's your opponent's turn: When this card is used in a combo from your hand, switch up to 1 of your Blue/Green multicolor energy to Active Mode."), card_type="BATTLE"))
+    assert any(rule.handler_id == "auto_switch_up_to_n_owner_energy_active_on_combo" for rule in rules)
+
+
+def test_extract_exact_bt17_133_ss2_kefla_super_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo][Energy-Exhaust]\n[Auto] If your Leader Card is blue or yellow: At the end of a battle in which this card was used in a combo from your hand, choose up to 1 of your opponent's Battle Cards in Rest Mode and place it at the bottom of its owner's deck."), card_type="BATTLE"))
+    assert any(rule.handler_id == "auto_bottom_deck_up_to_n_opponent_rest_battle_on_battle_end" for rule in rules)
+
+
+def test_extract_exact_bt20_022_paparonis_tactical_orders_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader is a red â‰ªUniverse 3â‰« card: Choose up to 1 <Anilaza> or <Koichiarator> cardâ€”both red and in your Battle Areaâ€”and place up to 2 red â‰ªUniverse 3â‰« cards with energy costs of 3 or less from your Drop under the chosen card."), card_type="EXTRA"))
+    assert any(rule.handler_id == "activate_place_up_to_n_matching_from_owner_drop_under_matching_owner_battle" for rule in rules)
+
+
+def test_extract_exact_bt20_137_ss_vegeta_immediate_response_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When you use [Arrival] to play a Red/Blue multicolor Battle Card, draw 1 card.\n[Activate: Main][Limit 1](Blue), if your Leader is a red <Warriors of Universe 7> card and you have 3 or more energy: Play up to 1 red â‰ªUniverse 7â‰« card with an energy cost of 3 or less from under this card, and remove this card from the game."), card_type="Z-BATTLE"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.handler_id == "activate_play_up_to_n_matching_from_under_self_and_remove_self_from_game" for rule in rules)
+
+
+def test_extract_exact_bt20_005_android_17_impeccable_defense_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Blocker]\n[Auto] When this card is played, it can't be KO'd in battle for the turn.\n[Activate: Main][Limit 1](Red)(1), if your Leader is a red <Warriors of Universe 7> card and you switch this card to Rest Mode: Play up to 1 red â‰ªUniverse 7â‰« card with an energy cost of 3 or less from under this card, and at the end of your opponent's next turn, remove this card from the game.\n[Activate: Battle][Limit 1] If it's your opponent's turn: Switch this card to Active Mode."), card_type="Z-BATTLE"))
+    assert any(rule.handler_id == "activate_rest_self_then_play_up_to_n_matching_from_under_self" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_bt20_082_gokus_kamehameha_deflection_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack and choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it.\n[Permanent] If your Leader is a green <Son Goku: GT> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost by discarding another card from your hand instead."), card_type="EXTRA"))
+    assert any(rule.handler_id == "counter_negate_attack_and_ko_up_to_n_opponent_battle" for rule in rules)
+
+
+def test_extract_exact_bt20_018_bollarator_team_attacker_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack, play this card, and this card gains [Blocker] for the turn.\n[Permanent] For each red â‰ªUniverse 3â‰« card in your energy, reduce the energy cost of this card in your hand by 1.\n[Auto][Limit 1] When this card is placed from your hand or Drop under an <Anilaza> or <Koichiarator> cardâ€”both red and in your Battle Areaâ€”choose up to 1 of your opponent's Battle Cards, and it gets -10000 power for the turn."), card_type="BATTLE"))
+    assert any(rule.handler_id == "counter_negate_attack_play_self_and_gain_keyword_for_turn" for rule in rules)
+    assert any(rule.trigger == "self_placed_under_owner_card" and rule.handler_id == "auto_power_reduce_up_to_n_on_placed_under" for rule in rules)
+
+
+def test_extract_exact_bt20_079_dr_myuu_vengeful_alliance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a green <Son Goku: GT> card and this card is in your Warp, you can't play non-green Battle Cards.\n[Activate: Main][Limit 1] If your Leader is a green <Super 17> card, you have 4 or more energy, and you place this card from your hand in your Drop: Play up to 1 <Android 17> card and 1 <Hell Fighter 17> cardâ€”both with energy costs of 1â€”from your Drop with their skills negated for the turn."), card_type="BATTLE"))
+    assert any(rule.handler_id == "activate_play_up_to_n_named_from_owner_drop_negated" for rule in rules)
+
+
+def test_extract_exact_bt20_118_fu_all_according_to_plan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] While your Leader is a <Evil Saiyan> or <Cumber> cardâ€”both blackâ€”and you have a <Fu> Z-Battle Card in play, reduce the specified cost of this card in your hand by (Black).\n[+2][Activate: Main][Limit 1] Choose up to 1 of your <Evil Saiyan> or <Cumber> cardsâ€•both black and with energy costs of 6 or lessâ€•and it gains [Servant] until the end of your opponent's next turn.\n[-7][Activate: Main](Black): Choose up to 1 of your opponent's Battle Cards with [Servant], switch it to Active Mode, and gain control of it."), card_type="UNISON"))
+    assert any(rule.handler_id == "activate_grant_servant_to_matching_owner_battle_until_opponent_next_turn" for rule in rules)
+    assert any(rule.handler_id == "activate_switch_opponent_servant_active_and_gain_control" for rule in rules)
+
+
+def test_extract_exact_bt18_001_son_goku_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can use your mono-red Rest Mode â‰ªSaiyanâ‰« cards in combos.\n[Auto][Once per turn] When you use a card in a combo, look at up to 3 cards from the top of your deck, add up to 1 red â‰ªSaiyanâ‰« card or 1 red Unison with a specified cost of 2 among them to your hand, and place the remaining cards at the bottom of your deck in any order.\n[Permanent] Your <Gogeta: GT> cards can attack your opponent's Battle Cards in Active Mode, and when your <Gogeta: GT> cards attack your opponent's Battle Cards, your opponent skips their Defense Step.\n[Auto] When this card attacks, draw 1 card, then play up to 1 red â‰ªSaiyanâ‰« card with an energy cost of 1 from your hand in Rest Mode."), card_type="LEADER"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "auto_look_top_add_up_to_one_to_hand_on_play" for rule in rules)
+    assert any(rule.trigger == "owner_leader_attacks" and rule.handler_id == "auto_play_up_to_n_from_owner_hand_on_attack" for rule in rules)
+
+
+def test_extract_exact_bt18_002_one_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Your deck can only include up to 6 [Dragon Ball] cards, and can't include non-red Battle Cards.\n[Permanent] This card can't attack.\n[Activate: Main] Switch this card to Rest Mode: Add up to 2 [Dragon Ball] cards from your deck and/or life to your hand, then shuffle any areas you looked through with this skill.\n[Auto] When this card attacks, draw 1 card."), card_type="LEADER"))
+    assert any(rule.handler_id == "activate_add_up_to_n_dragon_ball_from_owner_deck_and_or_life_to_hand" for rule in rules)
+    assert any(rule.trigger == "owner_leader_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt15_122_skill_hunter_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Your opponent's skill-less cards can't attack this card.\n[Auto][Once per turn] If it's your turn: When a skill-less Battle Card or Unison Card is played in your opponent's Battle Area or Unison Area, draw 1 card.\n[+1][Activate: Main] This card gets +5000 power for the turn.\n[-1][Activate: Main] If your Leader Card is a black <Fin> card: Choose up to 1 of your opponent's Battle Cards and place it under your Leader Card."), card_type="UNISON"))
+    assert any(rule.handler_id == "activate_gain_power_and_keyword_for_turn" for rule in rules)
+    assert any(rule.handler_id == "activate_place_up_to_n_opponent_battle_under_owner_leader" for rule in rules)
+
+
+def test_extract_exact_bt20_031_ssb_son_goku_beyond_full_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Permanent] During your opponent's turn, if a Red/Blue multicolor card is in your energy, reduce the energy cost of this card in your hand by 2.\n[Auto][Limit 1] If your Leader's back side is a red <Warriors of Universe 7> card and you have 3 or fewer energy: When this card is played, for the turn, when your opponent would use a non-[Awaken] skill to switch one of their energy to Active Mode, they can't switch it to Active Mode unless they place 1 of their energy in its owner's Drop."), card_type="BATTLE", card_number="BT20-031"))
+    assert any(rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_ex22_03_zamasu_serving_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Z-Stack 1] Blue <Goku Black> with an energy cost of 2.\n[Permanent] If your Leader is a <Goku Black>, this card gains [Indestructible] and [Blocker].\n[Auto] When one of your energy is placed in your Drop by your Leader's skill, switch this card to Active Mode at the end of the turn."), card_type="Z-BATTLE", card_number="EX22-03"))
+    assert any(rule.handler_id == "auto_schedule_switch_self_active_on_turn_end_when_owner_energy_sent_to_drop_by_leader" for rule in rules)
+
+
+def test_extract_exact_p456_syn_shenron_coldhearted_shadow_dragon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Unique][Barrier][Blocker]\n[Counter: Play] Draw 1 card, and play this card.\n[Permanent] If you have a total of 7 or more cards in your energy, Z-Energy, Battle Area, and Drop, reduce this card's energy cost in your hand by 2.\n[Auto] If your Leader is yellow: When your opponent plays a Battle Card, you may choose that card and negate its skills for the turn. If you do, switch this card to Active Mode and negate this skill for the turn."), card_type="BATTLE", card_number="P-456"))
+    assert any(rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.handler_id == "auto_negate_up_to_n_played_opponent_battle_skills_for_turn_and_switch_self_active" for rule in rules)
+
+
+def test_extract_exact_sd22_04_majin_buu_despairs_revival_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Auto] When this card is played, it can't be removed from your Battle Area by skills until the end of your opponent's next turn.\n[Activate: Main][Limit 1](Yellow), if your Leader is a yellow <Vegeta> Z-Leader and you have a yellow <Son Goku> in play: Play this card from under your Leader or Battle Card.\n[Activate: Battle][Once per turn] Choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="Z-BATTLE", card_number="SD22-04"))
+    assert any(rule.handler_id == "activate_play_self_from_under_owner_card" for rule in rules)
+    assert any(rule.handler_id == "activate_switch_up_to_total_cost_n_opponent_battles_rest" for rule in rules)
+
+
+def test_extract_exact_ex22_04_ss_rose_goku_black_serving_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If it's your opponent's turn and this card is under a blue <Zamasu> Battle Card, the card on top of this card gets +15000 power.\n[Auto] When this card attacks, use up to 1 mono-blue â‰ªGodâ‰« with 5000 combo power from your Drop in a combo and negate its skills for the turn.\n[Activate: Main](Blue), if your Leader is a <Goku Black>: Play this card from under a <Zamasu> Z-Battle Card."), card_type="Z-BATTLE", card_number="EX22-04"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_combo_up_to_n_from_owner_zone_on_attack" for rule in rules)
+    assert any(rule.handler_id == "activate_play_self_from_under_owner_card" for rule in rules)
+
+
+def test_extract_exact_p380_frieza_dread_ambition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 2] Red <Frieza> with an energy cost of 2.\n[Counter: Attack] Negate the attack and play this card in Rest Mode."), card_type="BATTLE", card_number="P-380"))
+    assert any(rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_p374_dabura_ready_to_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 4][Spirit Boost 1] If your Leader Card is a black <Dabura: Xeno> card and you choose 1 card in your hand and place it at the bottom of your deck: Black <Dabura: Xeno> card with an energy cost of 4.\n[Auto] When this card is played, your opponent may choose 1 card in their hand and send it to their Warp. If they don't, choose up to 1 of your opponent's Leader Cards in Rest Mode, or up to 1 of your opponent's Battle Cards with an energy cost of 4 or less in Rest Mode, and it can't attack until the end of their next turn."), card_type="BATTLE", card_number="P-374"))
+    assert any(rule.handler_id == "auto_opponent_may_send_hand_to_warp_else_restrict_rest_opponent_card_attack" for rule in rules)
+
+
+def test_extract_exact_bt16_113_dabura_annihilation_at_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo]\n[Swap 4][Spirit Boost 1] If your Leader Card is a black <Dabura: Xeno> card: Black <Dabura: Xeno> card with an energy cost of 4."), card_type="BATTLE", card_number="BT16-113"))
+    assert any(rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p373_zen_oh_omnipotent_observer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo]\n[Arrival Red/Blue/Green/Yellow](1)\n[Permanent] For each color among cards in your Energy Area and Battle Area, this card gets +5000 power.\n[Auto][Limit 1] When this card in your hand is played or used in a combo, choose up to 1 other card in your Combo Area, and your opponent's Battle Cards with exactly the same colors as the chosen card can't attack Leader Cards for the turn."), card_type="BATTLE", card_number="P-373"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex19_32_skillsteal_cheelai_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo][Energy-Exhaust]\n[Auto] If your Leader Card is green, yellow, or a â‰ªHeroineâ‰« card: When this card is used in a combo from your hand, choose one-\nãƒ»Choose up to 1 of your opponent's Leader Cards or Unison Cards and switch it to Rest Mode.\nãƒ»If it's your turn, choose up to 1 of your opponent's skill-less Battle Cards and KO it."), card_type="BATTLE", card_number="EX19-32"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+def test_extract_exact_bt21_002_garlic_jr_rules() -> None:
+    rules = extract_effect_rules_from_card(
+        replace(
+            _card("""[Activate: Main] Switch this card to Rest Mode: Play up to 1 red <Ginger>, <Sansyo>, or <Nikky> with an energy cost of 1 from your deck, then shuffle your deck.
+[Wish] When there are 7 [Dragon Ball] cards in your Drop: Add up to 1 {Garlic Jr.'s Ambition} from your deck to your hand, then shuffle your deck."""),
+            card_type="LEADER",
+            card_back_skill_unstyled="""[Activate: Main][Once per turn] Choose one- Play up to 1 red <Ginger>, <Sansyo>, or <Nikky> with an energy cost of 4 from your deck with its skills negated for the turn, then shuffle your deck. Activate the [Activate: Main] skill of up to 1 red or black Desire from your hand with an energy cost less than or equal to your current energy.
+[Activate: Battle] (Red), if your life is at 2 or less and you remove 7 [Dragon Ball] cards in your Drop from the game: You don't take damage for the turn, then flip this card over at the end of the turn.""",
+            card_number="BT21-002",
+        )
+    )
+    assert any(rule.handler_id == "activate_play_up_to_n_from_owner_deck" for rule in rules)
+    assert any(rule.trigger == "leader_wished" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p485_zamasu_wishing_for_extinction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a blue <Zamasu> card: When this card is placed from your energy in a Drop by your Leader's skill, draw 1 card.\n[Activate: Main][Limit 1] If your Leader is a blue <Zamasu> card: Add this card from your hand to your energy, and for the turn, you can't add cards to your energy, can only play mono-blue <Zamasu> or mono-blue <Goku Black> cards, and at the end of the turn, place this card from your energy in its owner's Drop."), card_type="BATTLE", card_number="P-485"))
+    assert any(rule.handler_id == "auto_draw_n_on_self_placed_into_drop_from_energy_by_leader" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_118_bulma_making_a_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is yellow and this card is played from your hand: Choose up to 1 {Whis, Time Regression} in your Z-Deck and reduce its energy cost by (Yellow)(Yellow) for the turn.\n[Activate: Main] Choose 2 of your energy in Rest Mode and place this card in its owner's Drop: Choose up to 1 yellow <Vegeta> card with an energy cost of 2 and switch it to Active Mode. The chosen cards don't switch to Active Mode during your next Charge Phase."), card_type="BATTLE", card_number="BT21-118"))
+    assert sum(1 for rule in rules if rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt21_106_tagoma_emperors_subject_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a yellow <Frieza> card and you choose up to 1 yellow <Frieza> card with an energy cost of 1 from your Drop and add it to your hand: When this card is played, play up to 1 yellow <Frieza> card with [Swap] and an energy cost of 3 from your hand.\n[Auto] Add 1 card from your life to your hand and switch this card to Rest Mode: When your yellow <Frieza> card with an energy cost of 3 is played, at the end of the turn, play 1 yellow Frieza's Army Token with 10000 power, and that card gains [Blocker] until the end of your opponent's next turn."), card_type="Z-BATTLE", card_number="BT21-106"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd22_07_trunks_rambunctious_son_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1](Yellow), if your Leader is a yellow <Vegeta> card: When you add one of your yellow cards to your Z-Energy, play this card from your hand.\n[Auto] When this card attacks, this card gets +5000 power and [Double Strike] for the turn.\n[Auto][Limit 1] If this card is switched to Rest Mode by your yellow <Vegeta> Leader's skill, this card can't be KO'd by your Leader's skills until the end of the turn."), card_type="BATTLE", card_number="SD22-07"))
+    assert any(rule.trigger == "self_added_to_z_energy" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_121_frieza_waiting_to_see_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Blocker]\n[Swap 8] Yellow <Frieza> card with an energy cost of 8.\n[Auto][Limit 1] If this card is played by [Swap], this card gains [Dual Attack] for the turn.\n[Auto][Once per turn] If your Leader is yellow: When your opponent plays a Battle Card, choose up to 1 of those cards and negate its skills for the turn."), card_type="BATTLE", card_number="BT21-121"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "auto_negate_up_to_n_played_opponent_battle_skills_for_turn_and_switch_self_active" for rule in rules)
+
+
+def test_extract_exact_ex22_13_breaking_a_taboo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play][Limit 1] If your Leader is a blue <Goku Black> card and it's your opponent's turn: Choose up to 1 of your <Zamasu> cards and switch it to Active Mode, then add this card from your Drop to your Z-Energy.\n[Activate: Main][Limit 1] If your Leader is a blue <Goku Black> card and you have 5 or more energy: Play up to 1 {Infinite Force Fused Zamasu} from your hand on top of 1 of your mono-blue <Zamasu> or <Goku Black> cards with an energy cost of 5 or more.\n[Activate: Battle] Place this card from your Z-Energy in its owner's Drop: Use up to 1 mono-blue <Goku Black> card with 5000 combo power from your Drop in a combo, then negate its skills for the turn."), card_type="EXTRA", card_number="EX22-13"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_101_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(
+        replace(
+            _card("""[Permanent] Reduce the [Swap] cost of your yellow <Frieza> cards in all areas by 1.
+[Auto][Once per turn] When you activate [Swap] on one of your yellow <Frieza> cards, you may flip this card over. If you do, draw 2 cards, then choose 1 card from your life and add it to your hand until you have 6 life.
+[Activate: Main] Look at up to 5 cards from the top of your deck, add up to 1 yellow {The Return of the Army of Terror} or up to 1 yellow <Frieza> card among them to your hand, then shuffle your deck."""),
+            card_type="LEADER",
+            card_back_skill_unstyled="""[Permanent] Reduce the [Swap] cost of your yellow <Frieza> cards in all areas by 1.
+[Auto][Once per turn] When you activate [Swap] on one of your yellow <Frieza> cards, draw 1 card.
+[Auto][Once per turn] When your yellow <Frieza> card with [Swap] and an energy cost of 3 or more attacks, look at up to 3 cards from the top of your deck and use up to 1 yellow Frieza's Army card among them in a combo with its skills negated for the turn. Place the remaining cards at the bottom of your deck in any order.""",
+            card_number="BT21-101",
+        )
+    )
+    assert any(rule.trigger == "owner_swap_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_122_frieza_limitless_raw_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 8] Yellow <Frieza> card with an energy cost of 8.\n[Auto][Limit 1] If this card is played by [Swap], choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode, ignoring [Barrier], this card can't be removed from your Battle Area by skills until the end of your opponent's next turn, and if you have 3 or more energy, this card gains [Double Strike] for the turn."), card_type="BATTLE", card_number="BT21-122"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt16_120_gravy_annihilation_at_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 3][Spirit Boost 1] If your Leader Card is a black <Dark Broly> card and you add 1 card from your life to your hand: Black <Gravy> card with an energy cost of 3.\n[Auto] Add 1 card from your life to your hand: When this card attacks, it gets +11000 power for the battle."), card_type="BATTLE", card_number="BT16-120"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_self_gain_power_for_turn_on_attack" for rule in rules)
+
+
+def test_extract_exact_bt21_132_the_return_of_the_army_of_terror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Add up to 1 yellow <Frieza> with [Swap] and an energy cost of 5 or less from your deck to your hand, then shuffle your deck.\n[Activate: Battle][Limit 1] If your Leader is a {Frieza, The Emperor Who Swore Revenge} or a yellow <Frieza> Z-Leader and your life is at 4 or less: Choose up to 1 of your yellow <Frieza> cards, and that card gets +5000 power for the turn."), card_type="EXTRA", card_number="BT21-132"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_buff_owner_battle_cards" for rule in rules)
+
+
+def test_extract_exact_bt21_018_krillin_student_bonds_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a red <Son Goku> and you discard this card from your hand: Add up to 1 {Power Pole} from your deck or Drop to your hand, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT21-018"))
+    assert any(rule.handler_id == "activate_add_up_to_n_from_owner_deck_or_drop_to_hand" for rule in rules)
+
+
+def test_extract_exact_bt21_003_son_goku_full_power_and_full_blast_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, this card gains [Barrier] for the turn.\n[Auto][Once per turn] If there is a {Son Gohan, Awakened Hidden Power} under your Leader or your opponent's Leader: When your opponent plays a Battle Card, choose up to 1 of your opponent's Battle Cards, and that card gets -10000 power for the turn.\n[Activate: Main][Once per turn] If you place 1 card from your hand at the bottom of your deck: Add up to 1 {Power Pole} from your Drop to your hand."), card_type="Z-BATTLE", card_number="BT21-003"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_self_gain_power_for_turn_on_play" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "auto_power_reduce_up_to_n_played_opponent_battle_for_turn" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_bottom_deck_n_from_owner_hand_then_add_up_to_n_from_owner_drop_to_hand" for rule in rules)
+
+
+def test_extract_exact_bt21_128_tagoma_pursuing_deepest_desires_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1](Yellow), if your Leader is a yellow <Frieza>: When your life is placed in your Drop, play this card from your hand.\n[Activate: Main][Once per turn] Choose up to 1 of your yellow <Frieza> cards, and that card gets +5000 power for the turn."), card_type="BATTLE", card_number="BT21-128"))
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "auto_play_self_from_hand_on_owner_life_placed_into_drop" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_buff_owner_battle_cards" for rule in rules)
+
+
+def test_extract_exact_ex22_01_goku_black_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When one of your <Zamasu> or <Goku Black> Battle Cards attacks, draw 1 card.\n[Activate: Main][Once per turn] If you have 2 or more energy: Add 1 card from your life to your energy, you can't place cards in your energy for the turn; at the end of the turn, place 1 of your energy in your Drop."), card_type="LEADER", card_number="EX22-01"))
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "auto_draw_n_on_owner_matching_battle_attacks" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_028_sansyo_giant_fighting_spirit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack and play this card in Rest Mode.\n[Permanent] If you have a red <Garlic Jr.> with an energy cost of 5 or more and [Indestructible] in play, you may activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT21-028"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_127_sorbet_devoted_support_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack and play this card.\n[Permanent] If your Leader is a yellow <Frieza> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost.\n[Activate: Battle][Once per turn] Choose up to 1 of your yellow <Frieza> cards with [Swap], and that card gets +5000 power for the turn."), card_type="BATTLE", card_number="BT21-127"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_buff_owner_battle_cards" for rule in rules)
+
+
+def test_extract_exact_bt21_125_frieza_bitter_scream_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Barrier]\n[Swap 3](Yellow): Yellow <Frieza> with an energy cost of 3 and [Swap].\n[Auto] If your Leader is a yellow <Frieza>: When this card is played, you may add 1 yellow <Frieza> with [Swap] from your Z-Energy to your hand. If you do, add 1 card from your hand to your Z-Energy."), card_type="BATTLE", card_number="BT21-125"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_add_swap_from_owner_z_energy_to_hand_then_place_hand_to_z_energy_on_play" for rule in rules)
+
+
+def test_extract_exact_bt21_007_garlic_jr_child_of_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Barrier]\n[Z-Stack 2] Red <Garlic Jr.> with a Z-Energy cost of 3.\n[Permanent] If this card has [Indestructible], it gets +10000 power.\n[Activate: Main][Limit 1](Red), if your Leader is a red <Garlic Jr.> and you have 3 or more energy: Play up to 1 red <Garlic Jr.> with an energy cost of 3 from under this card on top of this card in Active Mode."), card_type="Z-BATTLE", card_number="BT21-007"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_up_to_n_from_under_self_and_place_self_under_played_card" for rule in rules)
+
+
+def test_extract_exact_bt21_104_whis_time_regression_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Unique]\n[Z-Stack 1] Yellow <Son Goku> with an energy cost of 2.\n[Permanent] Your yellow <Son Goku> and <Vegeta> cards with an energy cost of 2 get +5000 power.\n[Auto] If your Leader is a {SSB Vegeta, God-Level Power}: When this card is played, skip all phases until the Charge Phase in your next turn, then start your Main Phase."), card_type="Z-BATTLE", card_number="BT21-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_038_uub_holder_of_majin_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, this card gains [Barrier] for the turn.\n[Auto][Limit 1] If your Leader is a blue <Uub> and it's your turn: When one of your opponent's cards is added to their Z-Energy, choose up to 1 of your opponent's Battle Cards from their Battle Area or Drop and add it to its owner's Z-Energy.\n[Activate: Battle][Once per turn] If your opponent has 3 or more Z-Energy and you have an <Uub> in a battle: Place up to 2 cards from the top of your deck into your Drop, then use up to 1 of your mono-blue cards with a combo power of 5000 from your Drop in a combo with its skills negated for the turn."), card_type="BATTLE", card_number="BT21-038"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_self_gain_power_for_turn_on_play" for rule in rules)
+    assert len(rules) == 3
+
+
+def test_extract_exact_bt20_125_ssb_vegito_supreme_gleaming_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Blocker]\n[Union-Potara] Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and draw 1 card: <Son Goku> and <Vegeta>.\n[Permanent] This card is played from your hand in your opponent's Battle Area, and when choosing cards to use with this card's [Union] skill from your hand, you can choose Battle Cards you own in your opponent's Battle Area.\n[Auto] If your life is at 4 or more and your opponent's Leader is a black <Cumber> card: When this card is played, for the turn, if your opponent's <Evil Saiyan> or <Cumber> card-both black and with an energy cost of 8-is attacking and in a battle, you can't activate [Counter] skills."), card_type="BATTLE", card_number="BT20-125"))
+    assert len(rules) == 3
+
+
+def test_extract_exact_bt21_063_baby_a_quiet_beginning_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Activate: Main](Blue), if your opponent has 2 or more energy and you have a {Universal Tuffleization Plan} in your Battle Area: Choose 1 of your opponent's Battle Cards with an energy cost of 4 or less that does not have a character name that includes <Son Goku: GT>, place this card under that card, negate that card's non-keyword skills, you gain control of it, and that card gains [Servant]."), card_type="BATTLE", card_number="BT21-063"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_place_self_under_opponent_battle_negate_non_keywords_gain_control_and_grant_servant" for rule in rules)
+
+
+def test_extract_exact_bt21_065_full_strength_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack. Additionally, if your opponent has 4 or more Z-Energy, draw 1 card.\n[Permanent] If your Leader is a blue <Uub> and your life is at 4 or less, you can activate this card's [Counter] skill from your hand without paying its energy cost by discarding 1 blue <Mr. Buu> from your hand."), card_type="EXTRA", card_number="BT21-065"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_draw_if_opponent_z_energy_at_least" for rule in rules)
+
+
+def test_extract_exact_bt20_108_majin_buu_intelligence_manifest_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Blocker]\n[Auto][Limit 1](Yellow), if your Leader is a <Majin Buu> or <Evil Wizard Babidi> card-both yellow-it's your opponent's turn, and you choose 1 of your yellow â‰ªMajinâ‰« cards with an energy cost of 2 in Rest Mode: At the end of a battle where this card was used in a combo, play this card from your Drop in Active Mode on top of the chosen card.\n[Activate: Main][Limit 1] If there are 3 â‰ªMajinâ‰« cards under this card and you discard 1 or more â‰ªMajinâ‰« cards from your hand: This card gains power equal to the total combo power of the cards discarded by this skill for the turn. Additionally, if this card has 25000 power or more, draw 1 card, and this card gains [Dual Attack] for the turn."), card_type="BATTLE", card_number="BT20-108"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_discard_matching_from_owner_hand_gain_total_combo_power_and_threshold_draw_keyword" for rule in rules)
+
+
+def test_extract_exact_bt21_004_piccolo_unleashed_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Unique][Blocker]\n[Z-Stack 1]{Son Goku, Full Power and Full Blast}.\n[Permanent] If you have 3 or more energy and this card would leave your Battle Area, discard 1 card from your hand, play up to 1 {Son Goku, Full Power and Full Blast} from under this card, and remove this card from the game instead.\n[Permanent] If there is a {Power Pole} under one of your <Son Goku> Battle Cards, reduce the energy cost of this card in your Z-Deck by 1."), card_type="Z-BATTLE", card_number="BT21-004"))
+    assert len(rules) == 2
+
+
+def test_extract_exact_ex22_06_fused_zamasu_power_complete_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Indestructible][Blocker]\n[Union-Potara] If your Leader is a <Zamasu> or <Goku Black>: Blue <Zamasu> Z-Battle Card with an energy cost of 3 and <Goku Black>.\n[Auto] When a blue <Zamasu> with an energy cost of 7 is placed on top of this card, switch up to 1 of your energy to Active Mode at the end of the turn.\n[Auto] When one of your energy is placed in your Drop by your Leader's skill, switch this card to Active Mode at the end of the turn."), card_type="BATTLE", card_number="EX22-06"))
+    assert len(rules) == 3
+
+
+def test_extract_exact_bt21_131_training_with_whis_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During a turn where one of your mono-yellow Leaders flips from its back side to its front, reduce the energy cost of this card by (Yellow).\n[Activate: Main](Yellow), choose up to 1 of your yellow <Son Goku> or <Vegeta> cards with an energy cost of 2, send it to your Warp, play that card from your Warp at the start of your next Main Phase, and that card gets +5000 power for the turn.\n[Activate: Battle][Limit 1] Choose up to 1 of your yellow <Son Goku> or <Vegeta> cards, and that card gets +10000 power for the battle."), card_type="EXTRA", card_number="BT21-131"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_buff_owner_battle_cards" for rule in rules)
+
+
+def test_extract_exact_bt21_049_bulla_domination_complete_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Servant]\n[Auto] When this card is placed in a Drop from Z-Energy, remove this card in the Drop from the game.\n[Activate: Battle][Limit 1] If it's your opponent's turn and you have a blue <Baby> in a battle: Use this card under a {Universal Tuffleization Plan} in a Battle Area in a combo. At the end of the battle, remove this card in the Drop from the game."), card_type="BATTLE", card_number="BT21-049"))
+    assert len(rules) == 2
+
+
+def test_extract_exact_bt21_048_trunks_domination_complete_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Servant]\n[Counter: Attack][Limit 1] Negate the attack and play this card in Rest Mode.\n[Permanent] During your opponent's turn, if you have a blue <Baby> in play, reduce the energy cost of this card in all areas by 2.\n[Permanent] If this card is under a {Universal Tuffleization Plan} in your Battle Area, you can activate this card's [Counter] skill under the same conditions as if it were in your hand."), card_type="BATTLE", card_number="BT21-048"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt21_095_spy_robot_collecting_cells_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is mono-green <Cell>: Choose 1 keyword skill on 1 of your opponent's Battle Cards with an energy cost of 4 or less in their Battle Area or Drop. Then, choose up to 1 green <Cell> card with an energy cost of 3 or less, and that card gains the chosen keyword skill with this skill's cost for the turn."), card_type="BATTLE", card_number="BT21-095"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_096_hyperbolic_time_chamber_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent][Field] You can only have up to 2 cards under this card. If there is a <Son Gohan: Childhood> under this card, this card gains [Barrier].\n[Activate: Main] If all of your energy is mono-green, your Leader is in Active Mode, and you place 1 card from under this card in its owner's Drop: You may play 1 card from under this card. If you do, add up to 2 cards to your life."), card_type="EXTRA", card_number="BT21-096"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_097_uneasing_awakened_rage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. If your life is at 4 or less, you may discard 1 card from your hand. If you do, your opponent can't attack for the turn unless they add 1 card from their hand to their Z-Energy.\n[Permanent] If your Leader is a mono-green <Son Gohan: Childhood>, you can activate this card's [Counter] skill from your hand by discarding 1 green card from your hand instead of paying its energy cost. If you do, draw 1 card."), card_type="EXTRA", card_number="BT21-097"))
+    assert sum(1 for rule in rules if rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt21_089_cell_giving_in_to_despair_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Permanent] If your opponent has 2 or more Earthling Tokens in play, you can activate this card's [Counter] skill from your hand without paying its energy cost by removing 2 of your opponent's Earthling Tokens from the game.\n[Auto] When this card is KO'd, choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less and KO it."), card_type="BATTLE", card_number="BT21-089"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_ko_up_to_n_opponent_battle_on_self_ko" for rule in rules)
+
+
+def test_extract_exact_bt21_086_android_17_encroaching_hand_of_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto] If your opponent's Leader is mono-green <Cell>: When this card is played, choose 1 card in your hand and discard it."), card_type="BATTLE", card_number="BT21-086"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_087_android_18_encroaching_hand_of_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto] If your opponent's Leader is mono-green <Cell>: When this card is played, your opponent draws 1 card."), card_type="BATTLE", card_number="BT21-087"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_opponent_draw_n_on_play" for rule in rules)
+
+
+def test_extract_exact_bt21_074_android_16_final_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Blocker]\n[Z-Stack 1]{Cell, Greedy Absorption}\n[Permanent] The skills of your opponent's cards can't negate this card's skills.\n[Permanent] If your Leader is a mono-green <Cell> and this card would leave your Battle Area from a skill or KO, place this card under your leader instead.\n[Auto] When your opponent plays a card or at the end of your opponent's turn, you may KO this card."), card_type="Z-BATTLE", card_number="BT21-074"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_075_cell_greedy_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Z-Stack 2](Green)\n[Permanent] If your opponent has 2 or more Earthling Tokens in play, you can play this card from your Z-Deck by placing 2 of your opponent's Earthling Tokens in Rest Mode instead of paying its Z-Energy cost.\n[Auto] When this card attacks, use up to 1 of your opponent's Earthlings with an energy cost of 1 or an Earthling Token in your Combo Area in a combo, then this card gets +5000 power for the turn.\n[Activate: Main][Once per turn] Remove a total of 2 of your opponent's Earthling Tokens and/or Earthlings from the game: This card gets +10000 power for the turn."), card_type="Z-BATTLE", card_number="BT21-075"))
+    assert any(rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_099_gingertown_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Earthling Tokens can't be used in combos by players other than their owner. Earthling Tokens aren't affected by this card's skills.\n[Auto][Once per turn] If it's your opponent's turn: When your opponent plays a mono-green <Cell> card from their hand, play 2 Earthling Tokens in your Battle Area. Your opponent can't activate [Counter] Extra Cards for the game."), card_type="EXTRA", card_number="BT21-099"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_123_frieza_overflowing_with_confidence_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Swap 5] Yellow <Frieza> with an energy cost of 5.\n[Auto][Once per turn] When this card attacks, look at up to 3 cards from the top of your deck, use up to 1 yellow Frieza's Army card among them in a combo with its skills negated for the turn, then place the remaining cards at the bottom of your deck in the same order."), card_type="BATTLE", card_number="BT21-123"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_135_supreme_kai_of_time_releasing_time_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Black), if your Leader is a black <Trunks: Xeno>-only card, you place 1 card from your hand at the bottom of your deck, and you remove this card in your Warp from the game: Add up to 2 of your life to your hand, and if you have no Unisons in play, play 1 {Supreme Kai of Time, Opposing the Empire} from your hand or Warp with 2 markers on it; you can't play Unisons for the turn."), card_type="EXTRA", card_number="BT21-135"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_139_dark_king_mechikabura_ruler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a <Mechikabura>-only card: When this card is played, look at your deck, add up to 1 â‰ªDark Dragon Ballâ‰« to your hand and place up to 1 in your Drop, then shuffle your deck.\n[Activate: Main][Limit 1](Black)(Black)(Black), if your Leader is a <Mechikabura>-only card, your opponent has 3 or more energy, and you send this card from your Drop to your Warp: Send up to 1 of your opponent's Battle Cards from their Drop to their Warp, play up to 1 black <Mechikabura> with an energy cost of 8 and a power of 30000 from your hand or Drop, and that card gains [Barrier] for the turn."), card_type="BATTLE", card_number="BT21-139"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_add_up_to_n_dark_dragon_ball_to_hand_and_drop_on_play" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p500_ss_cabba_student_from_another_universe_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader's back side is {Saiyan Bond Vegeta} and your opponent has 2 or more energy: During this turn, you can activate your Leader's [Awaken] even if your life is at 6 or less.\n[Auto] If your Leader is a red â‰ªUniverse 7â‰« <Vegeta> and this card is in a battle: When this card's power reaches 20000 or more by one of your Leader's skills, play up to 1 {SS Cabba, Spirit Resonance} from your hand with 2 markers on it."), card_type="BATTLE", card_number="P-500"))
+    assert len(rules) == 2
+
+
+def test_extract_exact_p501_janemba_wave_attack_start_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a blue <Janemba>, and you discard this card from your hand: Look at up to 5 cards from the top of your deck, add up to 1 blue â‰ªEvil Incarnateâ‰« or â‰ªDemonâ‰« with an energy cost of 4 or less to your hand, then shuffle your deck.\n[Activate: Main][Limit 1] If your Leader is an â‰ªEvil Incarnateâ‰« with [Sparking] or [Burst], your opponent has 3 or more energy, and you send this card from your Drop to your Warp: Your opponent adds 1 card from the top of their deck to their energy in Rest Mode. If they do, your opponent places 1 of their energy in their Drop at the end of the turn."), card_type="EXTRA", card_number="P-501"))
+    assert sum(1 for rule in rules if rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt21_137_towa_combo_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto] If your opponent has 2 or more energy and you send 1 card from your life to your Warp: When this card is played from your hand, play up to 1 black Unison with a specified cost of 3 and a marker on it, shuffle your deck, then send up to 2 cards from the top of your deck to your Warp.\n[Activate: Battle][Once per turn] If you remove 1 of your skill-less Battle Cards from the game: Use up to 1 mono-black card with 5000 combo power from your Warp in a combo with its skills negated for the turn."), card_type="BATTLE", card_number="BT21-137"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p497_ssb_son_goku_results_of_godly_training_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[EX-Evolve](Yellow), draw 1 card: Yellow <Son Goku> with an energy cost of 2.\n[Auto] When this card attacks, choose up to a total of 2 of your opponent's Battle Cards or Unisons in Rest Mode, ignoring [Barrier], and those cards won't switch to Active Mode during your opponent's next Charge Phase.\n[Auto] When this card is removed from your Battle Area by an opponent's skill, play up to 1 of your yellow <Vegeta> cards with an energy cost of 2 from your deck or Drop, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="P-497"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_146_cell_longing_for_perfection_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Blocker]\n[EX-Evolve](Green): Green <Cell> with an energy cost of 3.\n[Permanent] If your Leader is a green <Cell> and you have a green â‰ªAndroidâ‰« in your energy other than this card, negate this card's [Energy-Exhaust] in all areas.\n[Permanent] If your Leader is a green â‰ªAndroidâ‰« and you have a <Cell> in play, reduce the combo cost of this card in your hand by 1."), card_type="BATTLE", card_number="BT21-146"))
+    assert len(rules) == 2
+
+
+def test_extract_exact_bt17_126_demon_god_salsa_preparing_to_fight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 2][Spirit Boost 1] If your Leader Card is black: Black <Salsa> with an energy cost of 2.\n[Auto][Once per turn] If you have 3 or less energy: When your opponent plays a Battle Card with an energy cost greater than their current energy, it can't attack for the turn."), card_type="BATTLE", card_number="BT17-126"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "auto_restrict_played_opponent_battle_attack_for_turn_if_cost_greater_than_current_energy" for rule in rules)
+
+
+def test_extract_exact_bt17_124_demon_god_shroom_preparing_to_fight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 2][Spirit Boost 1] If your Leader Card is black: Black <Shroom> with an energy cost of 2.\n[Auto][Once per turn] If you have 3 or less energy: When your opponent plays a Battle Card with an energy cost greater than their current energy, it can't attack for the turn."), card_type="BATTLE", card_number="BT17-124"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "auto_restrict_played_opponent_battle_attack_for_turn_if_cost_greater_than_current_energy" for rule in rules)
+
+
+def test_extract_exact_bt20_011_anilaza_universe_3s_ultimate_weapon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Attack]\n[EX-Evolve][Limit 1](Red)(Red)(Red), if your Leader is a red â‰ªUniverse 3â‰« card and your opponent has 3 or more energy: Red <Koichiarator> with an original power of 15000 or more.\n[Permanent] While a red <Koichiarator> card is under this card, this card can attack Battle Cards in Active Mode.\n[Auto][Limit 1] If your Leader is a red â‰ªUniverse 3â‰« card and your opponent has 4 or more life: When this card attacks an opponent's Battle Card, deal 1 damage to your opponent."), card_type="BATTLE", card_number="BT20-011"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_054_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(
+        replace(
+            _card("[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck and add up to 1 green <Son Gohan: Adolescence> or <Son Goten> card to your hand, then shuffle your deck."),
+            card_type="LEADER",
+            card_back_skill_unstyled="[Auto][Once per turn] When you play a <Son Gohan: Adolescence> or <Son Goten> cardâ€•both green and with an energy cost of 6 or moreâ€•from your hand, draw 1 card.\n[Activate: Main][Once per turn] Play up to 1 {Son Gohan, Close Call} or {Son Goten, Close Call} from your hand or Drop in Rest Mode.\n[Activate: Battle][Once per turn] If you discard 1 card from your hand: During that turn, the next time you activate [Activate: Battle] on a <Son Gohan: Adolescence> or <Son Goten> cardâ€•both green and with an energy cost of 6â€•from your hand, reduce that skill's skill cost by (Green).",
+            card_number="BT22-054",
+        )
+    )
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p513_black_masked_saiyan_tainted_with_malice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto](1): When this card is added from your Drop to your hand by one of your Leader's skills, play up to 1 copy of this card.\n[Activate: Main][Limit 1](1), if your Leader is {Powerthirst Black Masked Saiyan} and you choose 1 mono-black <Black Masked Saiyan> from your Drop: This card gains all of the skills of the card chosen with this skill for the turn."), card_type="BATTLE", card_number="P-513"))
+    assert any(rule.trigger == "owner_card_added_to_hand" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_076_ss_son_goku_decision_made_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play][Limit 1] Play this card.\n[Permanent] For every Z-Energy cost of the Z-Cards in your Leader Area and Battle Area, reduce the energy cost of this card in your hand by 1.\n[Permanent] If it's your opponent's turn and your Leader is a green <Son Gohan: Childhood> Z-Leader, reduce the combo cost of this card in your hand by 1.\n[Auto] Add this card to your Z-Energy: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 7 or less, add it to its owner's Z-Energy, then choose up to 1 of your opponent's Unisons and remove 2 markers from it."), card_type="BATTLE", card_number="BT21-076"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p508_frieza_unexpected_invitation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Auto] If your Leader's back side is {Sharpened Power Son Goku} and your opponent has 2 or more energy: When this card is played, during this turn, you can activate your Leader's [Awaken] even if your life is at 6 or less.\n[Auto][Limit 1](1), if your Leader is a <Son Goku> or <Frieza> with [Warrior of Universe 7] and you have 3 or more energy: When this card is discarded from your hand by one of your Leader's skills, play this card from your Drop, and this card gains [Blocker] for the turn."), card_type="BATTLE", card_number="P-508"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_134_ss_broly_glacial_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Deflect]\n[Permanent] If you have a green <Broly> card in your energy or Battle Area, negate this card's [Energy-Exhaust] skill in all areas.\n[Auto] Discard 1 card from your hand: When this card is played, choose up to 1 of your Leaders, and it gets +5000 power until the end of your opponent's turn."), card_type="BATTLE", card_number="BT22-134"))
+    assert len(rules) == 2
+
+
+def test_extract_exact_bt22_078_sealed_super_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Permanent] This card is also treated as {Broly's Ring} in all areas.\n[Auto](Green), if your Leader is a green <Broly> card: When this card from your Battle Area in Rest Mode is placed in your Drop, play up to 1 Red/Green multicolor <Broly> card with an energy cost of 6 from your hand.\n[Activate: Main] If you have a <Paragus> card in play and you switch this card to Rest Mode: Choose up to 1 <Broly> Battle Card and negate its skills for the turn."), card_type="EXTRA", card_number="BT22-078"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_079_dormant_super_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Permanent] This card is also treated as {Dormant Legend} in all areas.\n[Auto][Limit 1] If your Leader is a green <Broly> card and you have 3 or more energy: When this card is placed in its owner's Drop from a Battle Area, play up to 1 {SS Broly, Glacial Awakening} from your deck, hand, or Drop, and if you looked at your deck, shuffle your deck."), card_type="EXTRA", card_number="BT22-079"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p512_vegito_volley_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 6]\n[Permanent] This card can attack your opponent's Battle Cards in Active Mode.\n[Auto] If your opponent has 2 or more energy: When an opponent's Battle Card is KO'd by this card's attack, switch this card to Active Mode."), card_type="BATTLE", card_number="P-512"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "auto_switch_self_active_then_opponent_discards_n_on_self_attack_ko" for rule in rules)
+
+
+def test_extract_exact_bt17_134_beerus_motivated_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo][Energy-Exhaust]\n[Auto] If your Leader Card is red or yellow: When this card is used in a combo from your hand, reveal the top card of your deck and add it to your hand. If the revealed card is red, this card gets +5000 combo power for the battle, and if it's yellow, choose up to 1 of your opponent's cards in Rest Mode and it gets -5000 power for the battle."), card_type="BATTLE", card_number="BT17-134"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt17_147_invaders_vow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Activate: Battle] If your Leader Card is green or a â‰ªFrieza Clanâ‰« card and your opponent has 3 or more energy: Your opponent discards 2 cards from their hand. Choose up to 1 of your opponent's Battle Cards with an energy cost less than or equal to the number of Unison Cards and â‰ªFrieza Clanâ‰« cards in all Leader Areas, Energy Areas, Battle Areas, Unison Areas, Drop Areas, and Warps, KO it, then remove this card from the game."), card_type="EXTRA", card_number="BT17-147"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd23_01_son_goku_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(
+        replace(
+            _card("[activate main] [once per turn] Look at up to 5 cards from the top of your deck, add up to 1 black â‰ªSaiyanâ‰« card with an energy cost of 6 or less to your hand, then shuffle your deck."),
+            card_type="LEADER",
+            card_back_skill_unstyled="[auto][once per turn] If you have a {Final Kamehameha} in your Battle Area: When you activate a [union] skill, draw 1 card.\n[auto][once per turn]  When this card attacks, draw 1 card.\n[activate main][once per turn]Choose up to 1 of your black <Vegito> cards and it gets +5000 power for the turn.",
+            card_number="SD23-01",
+        )
+    )
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand" for rule in rules)
+    assert any(rule.trigger == "owner_union_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_buff_owner_battle_cards" for rule in rules)
+
+
+def test_extract_exact_sd23_04_final_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[activate: battle] [limit 1] If your Battle Card with an energy cost of 6 or more is attacking, you place 1 card from your Z-Energy in your Drop, and you remove this card from the game: Choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp, then choose up to 1 card that's attacking and it gets +10000 power for the battle. Additionally, if you have 4 or more energy, at the end of the battle, play up to 1 each of <Son Goku> and <Vegeta> cards both black and with an energy cost of 1-from your Drop in Rest Mode with their skills negated for the turn."), card_type="EXTRA", card_number="SD23-04"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_007_special_beam_cannon_inherited_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle](Red), your red <Son Gohan: SH> card is attacking and you remove this card from the game: Choose up to 1 of your opponent's Battle Cards with 35000 power or less, ignoring [Barrier], and KO it, then choose oneâ€• ãƒ»Choose up to 1 of your red <Son Gohan: SH> Z-Leaders, it gets +20000 power for the battle, then remove it from the game at the end of the turn. ãƒ»Choose up to 1 of your red <Son Gohan: SH> cards with an original power of 30000 or more, and it gets +15000 power and [Double Strike] for the battle."), card_type="EXTRA", card_number="BT22-007"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd23_06_vegeta_help_has_arrived_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[auto] If your Leader is a black card with both <Son Goku> and <Vegeta> or a black <Vegito> card: When this card is played, play up to 1 {Son Goku, Help Has Arrived} from your deck or Drop with its skills negated for the game, and shuffle your deck if you looked through it.\n[auto] Add 1 card from your life to your hand: When this card attacks, this card gets +6000 power for the battle."), card_type="BATTLE", card_number="SD23-06"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_self_gain_power_for_turn_on_attack" for rule in rules)
+
+
+def test_extract_exact_sd23_05_son_goku_help_has_arrived_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[auto] If your Leader is a black card with both <Son Goku> and <Vegeta> or a black <Vegito> card: When this card is played, play up to 1 {Vegeta, Help Has Arrived} from your deck or Drop with its skills negated for the game, and shuffle your deck if you looked through it.\n[auto] Add 1 card from your life to your hand: When this card attacks, this card gets +6000 power for the battle."), card_type="BATTLE", card_number="SD23-05"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_self_gain_power_for_turn_on_attack" for rule in rules)
+
+
+def test_extract_exact_p518_omnidirectional_beam_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in a Battle Area, choose all of your opponent's Battle Cards, and those cards get -25000 power for the turn.\n[Activate: Battle][Limit 1] If you have 4 or more energy, your red <Cell Max: SH> card with an energy cost of 8 is attacking, and you remove this card from the game: The attacking card gets +15000 power and [Double Strike] for the battle."), card_type="EXTRA", card_number="P-518"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_006_battle_with_the_red_ribbon_army_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If your Leader is a red <Son Gohan: SH> card and you have 2 or more energy: When this card is placed in a Battle Area, play up to 1 {SS Son Gohan, All-Out Explosion} from your deck, play up to 1 red <Pan: SH> card with an energy cost of 1 from your deck to your opponent's Battle Area, then shuffle your deck.\n[Auto] Place 1 card from your hand at the bottom of your deck and remove this card from the game: When your {Piccolo, Bestowed Power} is played, add up to 1 {Piccolo, Power Beyond Awakening} from your deck to your hand, then shuffle your deck."), card_type="EXTRA", card_number="BT22-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd23_02_ss_trunks_guide_from_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[deflect]\n[permanent] If you have a black <Mai: Future> Z-Battle Card in play, this card gets +5000 power.\n[activate main][black_ball], if your opponent has 2 or more energy: Play this card from under a {Mai, Together With Trunks}, then play up to 1 each of <Son Goku> and <Vegeta> cards -- both black and with an energy cost of 1 -- from your Drop in Rest Mode with their skills negated for the turn."), card_type="BATTLE", card_number="SD23-02"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd23_07_ssb_vegito_beyond_shining_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[deflect]\n[union-potara] [limit 1] <Son Goku> and <Vegeta> card, both black.\n[activate main] [once per turn][black_ball], if you have a {Final Kamehameha} in your Battle Area: Switch this card to Active Mode.\n[activate: battle] [once per turn] of your black <Vegito> card is in a battle: Use up to 1 card from under this card in a combo with its skills negated for the turn."), card_type="BATTLE", card_number="SD23-07"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_057_ss_son_goku_emotions_delivered_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto][Limit 1](Green): When this card is played, choose up to 1 of your {SS Son Gohan & SS Son Goten, Emotions Delivered} cards and switch it to Active Mode.\n[Auto](Green), if your {SS Son Gohan & SS Son Goten, Emotions Delivered} is in a battle and you switch this card to Rest Mode: When an [Activate: Battle] skill activates on your {Family Kamehameha, Emotions Delivered}, your card that's in a battle gets +10000 power and [Triple Strike] for the battle."), card_type="BATTLE", card_number="BT22-057"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_026_hachimaru_small_scout_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a red â‰ªRed Ribbon Armyâ‰« card: Play this card in Rest Mode from your hand, choose up to 1 Battle Card, and it gets -5000 power for the turn. Additionally, if the chosen card is a <Magenta: SH> card, it gets -10000 power for the turn."), card_type="BATTLE", card_number="BT22-026"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_081_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, add up to 1 <Son Goku: Childhood> or â‰ªEarthlingâ‰« cardâ€•both yellow and with an energy cost of 4 or lessâ€•to your hand, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Permanent] During your opponent's turn, reduce the skill cost of {Grandpa's Heirloom, the Four-Star Ball}'s [Activate: Main/Battle] in your hand by (Yellow).\n[Permanent] You can use yellow originally skill-less Rest Mode Battle Cards in combos.\n[Auto][Once per turn] When you play a yellow originally skill-less Battle Card, choose up to 1 of your opponent's Battle Cards or Unisons and negate its skills for the turn. Additionally, if it's your turn, draw 1 card.", card_number="BT22-081"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_024_dr_hedo_heroism_and_aesthetics_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1](Red), if your Leader is a red <Dr. Hedo: SH> card and you have a red Z-Extra in your Battle Area: When this card is used in a combo from your hand, play up to 1 <Gamma 1: SH> or <Gamma 2: SH> cardâ€•both red, with a power of 15000 or less, and with an energy cost less than or equal to your energyâ€•from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT22-024"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_028_magenta_emergency_armament_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Play this card, then choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the turn.\n[Permanent] If your Leader is a red <Cell Max> card and you have a red Z-Extra in your Battle Area, you may activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT22-028"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self_then_reduce_battle_power" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_084_korin_teacher_of_fighting_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Unique]\n[Permanent] If your Leader is a yellow <Korin> card and you have a yellow originally skill-less Battle Card in play, this card and yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> cards with an energy cost of 5 or more get +10000 power.\n[Auto] If your Leader is a yellow <Korin> and your opponent has 3 or more energy: When this card is played, play up to 1 yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> card with an energy cost of 5 from your hand."), card_type="Z-BATTLE", card_number="BT22-084"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_062_master_roshi_turtle_school_patriarch_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] For every green â‰ªTurtle Schoolâ‰« card in your Z-Energy, reduce the energy cost of this card in your hand by 1.\n[Auto][Limit 1] When this card is played, reduce the energy cost of {Son Goku, Krillin, & Yamcha, Turtle School Inheritors} in your Z-Deck by (Green)(Green) for the turn."), card_type="BATTLE", card_number="BT22-062"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_023_gamma_2_new_hero_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a red <Gamma 1: SH> card in play, reduce the energy cost of this card in your hand by (Red).\n[Auto][Limit 1] When your red <Gamma 1: SH> card is switched to Active Mode by a <Dr. Hedo: SH> card skill, switch this card to Active Mode."), card_type="BATTLE", card_number="BT22-023"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_061_krillin_yamcha_turtle_school_experts_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a {Son Goku, Skills Improved} in play, this card gets +10000 power.\n[Auto][Limit 1](Green), choose 1 of your <Krillin> or <Yamcha> cardsâ€•both green, â‰ªTurtle Schoolâ‰«, and with an energy cost of 1â€• and place it in your Drop: When one of your cards attacks and KOs an opponent's Battle Card, draw 1 card and play this card from your hand."), card_type="BATTLE", card_number="BT22-061"))
+    assert any(rule.trigger == "owner_battle_ko_opponent_battle_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt20_106_majin_buu_power_manifest_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Strike]\n[Auto][Limit 1](Yellow), if your Leader is a <Majin Buu> or <Evil Wizard Babidi> cardâ€”both yellowâ€”it's your opponent's turn, and you choose 1 of your yellow â‰ªMajinâ‰« cards with an energy cost of 6 in Rest Mode: At the end of a battle where this card was used in a combo, play this card from your Drop in Active Mode on top of the chosen card.\n[Auto][Limit 1] If you have 5 or more energy and there are 5 â‰ªMajinâ‰« cards under this card: When this card attacks, it gets +10000 power for the turn, and at the end of the battle, place this card in its owner's Drop, and play up to 1 yellow â‰ªMajinâ‰« card with 30000 power from your hand."), card_type="BATTLE", card_number="BT20-106"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p431_great_ape_son_goku_full_moon_nightmare_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Strike]\n[Evolve](Yellow)(Yellow)(Three)Yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood>\n[Auto] If your Leader is yellow and has <Son Goku> in its character name, and you have 4 or more energy : When this card is played, switch all other cards in your Battle Area to Rest Mode, then choose all of your opponent's Battle Cards, Unisons, and [Field] Extras-all in Rest Mode and place them in their owners' Drops."), card_type="BATTLE", card_number="P-431"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt20_147_you_are_number_one_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Activate: Main/Battle] If your Leader is a â‰ªSaiyanâ‰« or â‰ªEarthlingâ‰« cardâ€”both mono-yellowâ€”and your opponent has 3 or more energy: Choose up to 1 of your opponent's cards, ignoring [Barrier], switch it to Rest Mode, play up to 1 yellow <Son Goku> card from your deck, hand, or Drop, shuffle your deck if you looked through it, and for the turn, the played card gets +10000 power, [Triple Strike], and [Dual Attack], and can't be removed from your Battle Area by skills."), card_type="EXTRA", card_number="BT20-147"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_152_ss4_the_vermilion_saiyans_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Counter: Attack] For each card color among cards in Battle Areas and Energy Areas, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and send it to its owner's Warp; for each card sent to a Warp using this skill, up to 1 of your Leader Cards gets +5000 power for the turn.\n[Activate: Main] If your opponent has 4 or more energy: Play up to 4 black multicolor Battle Cards with different character names and energy costs of 2 from your deck, then shuffle your deck."), card_type="EXTRA", card_number="BT15-152"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_155_pan_time_patrol_maiden_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Counter: Attack] If you have 3 or more energy: Play this card. Your opponent can't attack with Battle Cards for the turn. You can't activate the [Counter] skill on copies of this card for the game.\n[Permanent] For each Battle Card in play, reduce the energy cost of this card in your hand by 2.\n[Activate: Main]â‘ , remove this card from the game: Choose up to 1 of your opponent's Battle Cards and gain control of it."), card_type="BATTLE", card_number="BT15-155"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_148_son_goku_peace_resolution_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Permanent] If this card's front is facing up in your Z-Deck, your Leader gets +20000 power, and if that card is not a <Son Gohan: Childhood>, negate that card's skills.\n[Auto](Green), if your Leader is a green â‰ªSaiyanâ‰«, â‰ªEarthlingâ‰«, or â‰ªNamekianâ‰«: When this card is used in a combo, choose up to 1 of your Leader cards and switch it to Active Mode, that card gains [Triple Strike] for the battle, place this card from your Drop in your Z-Deck face up at the end of that battle, then remove this card in your Z-Deck from the game at the end of your opponent's turn."), card_type="BATTLE", card_number="BT21-148"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt18_147_ss4_vegito_light_in_the_dark_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Deflect]\n[Over Realm 6] Your Leader is a mono-red â‰ªSaiyanâ‰« card.\n[Auto] If you have 4 or more mono-red energy: When this card is played, your opponent reveals their hand, you choose up to 1 Battle Card with 35000 power or less from it and your opponent discards it, then choose up to 1 of your mono-red Leaders and until the start of your next turn, it gets +10000 power and this card gains [Quadruple Strike]."), card_type="BATTLE", card_number="BT18-147"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_147_shenron_the_eternal_dragon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Deflect]\n[Permanent] This card can't attack, and for every card in your Z-Energy and Drop, reduce the energy cost of this card in your hand by 1.\n[Activate: Main][Once per turn] If your Leader is red: Choose oneâ€• ãƒ»Play up to 1 of your mono-red Battle Cards from your Drop. ãƒ»Choose up to 1 of your mono-red Battle Cards, and that card gets +10000 power and [Triple Attack] for the turn. ãƒ»Choose all of your opponent's Leaders, Battle Cards, and Unisons, ignoring [Barrier], and those cards get -15000 power for the turn."), card_type="BATTLE", card_number="BT21-147"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_154_super_17_sibling_absorbed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Deflect][Critical]\n[Counter: Play] Play this card, then choose up to 1 of your opponent's Battle Cards in Rest Mode, ignoring [Barrier], and place it under this card. The played Battle Card has its skills negated for the turn.\n[Permanent] If this card is removed from your Battle Area, remove it from the game instead.\n[Permanent] If your Leader Card and all of your energy are mono-yellow, and your opponent has 3 or more energy, reduce the energy cost of this card in your hand by 7."), card_type="BATTLE", card_number="BT14-154"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_131_eliminating_a_nuisance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a black <Fu> card: Look at up to 5 cards from the top of your deck, place up to 1 black <Cumber> in your Z-Deck face up, then shuffle your deck.\n[Activate: Battle](Black), send this card from your Drop to your Warp: Choose up to 1 of your black <Fu> cards, and it gets +15000 power for the battle."), card_type="EXTRA", card_number="BT22-131"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_118_fus_laboratory_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1]: Choose up to 1 of your black <Fu> Battle Cards with [Z-Stack], then place up to 1 black <Cumber> card from your Z-Deck under the chosen card.\n[Activate: Battle][Limit 1] Discard 1 card from your hand and remove this card from the game: Play up to 1 black <Cumber> card with an energy cost of 6 from your Z-Deck face up in Rest Mode with its skills negated for the turn."), card_type="EXTRA", card_number="BT22-118"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_086_gokus_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in a Battle Area, choose all of your Battle Cards with <Son Goku> in their character names, and those cards get +5000 power for the turn.\n[Auto] Remove this card from the game: Choose up to 1 of your opponent's skill-less Battle Cards and KO it at the end of the turn.\n[Activate: Battle] Remove this card from the game: Choose up to 1 of your cards with <Son Goku> in its character name, and it gets +10000 power and [Critical] for the battle."), card_type="EXTRA", card_number="BT22-086"))
+    assert sum(1 for rule in rules if rule.handler_id == "noop_auto") == 3
+
+
+def test_extract_exact_bt22_101_draculaman_challenging_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] Declare 1 number: When this card is played from your deck or hand, reveal the top card of your opponent's deck, then flip the revealed card over and place it at the top of their deck. Additionally, if the revealed card's energy cost is the same as the declared number, add up to 1 yellow <Suke San> card from your deck to your hand, then shuffle your deck.\n[Auto][Limit 1] If your Leader is a yellow <Fortuneteller Baba> card and your opponent's life is at 7 or more: When this card is used in a combo from your Battle Area, your opponent adds 1 card from their life to their hand."), card_type="BATTLE", card_number="BT22-101"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_053_barrier_around_check_in_station_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Field]\n[Permanent] You can't play black Battle Cards.\n[Activate: Main/Battle](Blue), if your Leader is {Janemba, Silent Demon} and you have a blue Z-Extra in your Battle Area: Play up to 1 blue <Janemba> card with an original energy cost of 6 from your hand."), card_type="EXTRA", card_number="BT22-053"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_111_sacred_water_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack.\n[Auto][Limit 1] When one of this card's skills activates, add up to 1 skill-less Battle Card from your deck to your hand, then shuffle your deck.\n[Activate: Battle] Choose up to 1 of your non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> cards, and it gets +15000 power for the battle."), card_type="EXTRA", card_number="BT22-111"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_102_suke_san_challenging_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Permanent] If you have a card under a {Fortuneteller Baba's Palace} in your Battle Area, reduce the energy cost of this card in your hand by (Yellow).\n[Permanent] This card can't be attacked.\n[Auto][Limit 1] Declare 1 number: When this card is played from your hand, reveal the top card of your opponent's deck, then flip the revealed card over and place it at the top of their deck. Additionally, if the revealed card's energy cost is the same as the declared number, add up to 1 yellow <Bandages> card from your deck to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT22-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_117_fu_fighting_enthusiast_treatment_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Z-Stack 1] Black <Cumber> Battle Card.\n[Permanent] During your turn, once per turn, this card can't be removed from your Battle Area by your opponent's skills.\n[Activate: Main][Limit 1] If your Leader is a black <Fu> card: Look at up to 5 cards from the top of your deck, place up to 1 black <Fu> or <Cumber> card in your Z-Deck face up, then shuffle your deck."), card_type="Z-BATTLE", card_number="BT22-117"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_083_son_gohan_unpredicted_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Barrier][Dual Attack]\n[Permanent] If you have a yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> card with an energy cost of 5 or more in play, reduce the energy cost of this card in your Z-Deck by (Yellow).\n[Auto] When this card is played, choose up to 1 of your yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> Battle Cards, and it gains [Dual Attack] for the turn.\n[Auto] At the end of your turn, remove this card from the game."), card_type="Z-BATTLE", card_number="BT22-083"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_104_spike_challenging_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If there are 3 or more cards under a {Fortuneteller Baba's Palace} in your Battle Area, reduce the energy cost of this card in your hand by (Yellow)(Yellow)(Yellow).\n[Auto][Limit 1] Declare 1 number: When this card is played from your hand, reveal the top card of your opponent's deck, then flip the revealed card over and place it at the top of their deck. Additionally, if the revealed card's energy cost is the same as the declared number, reduce the specified cost of a {Devilmite Beam} in your Z-Deck by (Yellow) for the turn."), card_type="BATTLE", card_number="BT22-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_035_soul_punisher_the_cleansing_light_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a blue Leader with both <Son Goku> and <Vegeta> or a blue <Gogeta> Z-Leader, you can activate your [Aegis] skill by sending 1 yellow card and 1 blue card from your Drop to your Warp instead of discarding a card from your hand.\n[Activate: Battle][Limit 1](Blue)(Yellow), if you have 5 or more energy, your blue <Gogeta> Z-Leader is attacking, and you remove this card from the game: Your attacking cards get +30000 power and [Triple Strike] for the battle."), card_type="EXTRA", card_number="BT22-035"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_085_mercenary_tao_cool_extortion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> card and you have a yellow originally skill-less Battle Card with an energy cost of 2 or more in play, reduce the energy cost and Z-Energy cost of this card in your Z-Deck by 1.\n[Auto][Limit 1] If you place 2 cards from your hand at the bottom of your deck and KO 1 of your yellow <Bora> cards: When this card is played, add up to a total of 3 [Dragon Ball] cards from your deck or Drop to your hand, and if you looked at your deck, shuffle your deck."), card_type="Z-BATTLE", card_number="BT22-085"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_031_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Negate the [Energy-Exhaust] skill of your Blue/Yellow multicolor â‰ªSaiyanâ‰« cards in all areas.\n[Activate: Main][Once per turn] Add up to 1 card from your life to your hand, look at up to 5 cards from the top of your deck, add up to 1 blue or yellow â‰ªSaiyanâ‰« card to your hand, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Permanent] Negate the [Energy-Exhaust] skill of your Blue/Yellow multicolor â‰ªSaiyanâ‰« cards in all areas.\n[Auto] When this card attacks, draw 1 card, then add up to 1 card from your life to your hand.\n[Activate: Main][Once per turn](Blue): Draw 1 card, then choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and add it to its owner's hand.", card_number="BT22-031"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_087_devilmite_beam_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Your yellow <Spike> card gets +5000 power.\n[Auto][Limit 1] Remove this card from the game: When one of your Battle Cards is KO'd or removed from your Battle Area by an opponent's skill, choose up to 1 of your opponent's Battle Cards without <Son Goku> in its character name and KO it."), card_type="EXTRA", card_number="BT22-087"))
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_130_cumber_jet_black_hostility_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Servant]\n[Auto] When this card is played, your opponent sends 1 card from their hand to their Warp.\n[Activate: Main][Limit 1] If your Leader is a black <Fu> card: Play this card from under a <Fu> Z-Battle Card."), card_type="BATTLE", card_number="BT22-130"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_send_up_to_n_opponent_hand_to_warp_on_play" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_111_ssb_kaio_ken_son_goku_united_divinity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Deflect][Triple Attack]\n[Permanent] For each card in your opponent's energy, reduce the energy cost of this card in your hand by 3.\n[Permanent] You can't place cards on top of this card.\n[Auto] If your opponent has 4 or more energy: When this card is played, switch all of your mono-blue energy to Active Mode."), card_type="BATTLE", card_number="BT1-111"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_139_great_ape_cumber_golden_wickedness_amplified_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Double Strike]\n[Permanent] If this card is in Rest Mode, you don't take damage.\n[Permanent] If this card would be removed from a Battle Area by an opponent's skill, you may add 1 card from your life to your hand once per turn instead.\n[Activate: Main][Once per turn] If your life is at 3 or less and you remove 2 cards in your Z-Deck from the game: Add the top card of your deck to your life.\n[Activate: Battle](1), if your Leader is black and your life is at 4 or less: Play this card in Rest Mode from your hand or from your Z-Deck face up."), card_type="BATTLE", card_number="BT22-139"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_136_veku_comeback_from_defeat_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Deflect]\n[Aegis Blue/Yellow][Once per turn]\n[Union-Fusion](1), if you have 2 or more energy: Yellow <Son Goku> card with 5000 power and blue <Vegeta> card with 5000 power.\n[Auto] When this card is played, this card gains [Barrier] until the end of your opponent's turn.\n[Auto] If you send this card to your Warp: When this card's [Aegis] skill activates, choose up to 1 each of blue or yellow <Son Goku> and <Vegeta> cards with 5000 power from your Warp, then add 1 to your hand and place 1 at the bottom of your deck."), card_type="BATTLE", card_number="BT22-136"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_aegis_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_29_son_gohan_rookie_support_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If your Leader is a yellow <Gotenks: Adolescence> card and you discard 1 card from your hand: When this card is played, look at up to 7 cards from the top of your deck, play up to 1 <Son Goten: GT> or <Trunks: GT> cardâ€•both yellow and with an energy cost of 3 or lessâ€•, shuffle your deck, then at the end of the turn, add up to 1 Battle Card played by this skill to your hand.\n[Activate: Main][Limit 1] If your Leader is a yellow <Gotenks: Adolescence> card, you have 3 or more energy, and you remove this card from the game: During that turn, the next time you activate the [Union] skill on a yellow <Gotenks: Adolescence> card with an energy cost of 7 or less from your hand, reduce the skill cost by (Yellow)(Yellow)."), card_type="BATTLE", card_number="EX23-29"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_045_janemba_unapproachable_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When this card is played, it gets +5000 power and [Critical] for the turn."), card_type="BATTLE", card_number="BT22-045"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_044_janemba_blinding_attack_fury_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When this card is played, play up to 1 blue {Janemba} with an energy cost of 2 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT22-044"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_08_dyspo_sonic_dimension_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When your red <Jiren> card with [Evolve] is played, draw 1 card, then choose up to 1 of your {Toppo, Force of Obliteration} and add 2 markers to it.\n[Activate: Battle][Once per turn] Use up to 1 Battle Card from under your red <Jiren> card in a combo with its skills negated for the turn."), card_type="BATTLE", card_number="EX23-08"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p522_paikuhan_testing_strength_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1](Blue)(Blue), if your Leader is a blue <Paikuhan> card and you have 3 or more energy: When this card in your Z-Energy is placed in your Drop, play up to 1 blue <Paikuhan> card with an energy cost of 8 from your hand.\n[Activate: Main][Limit 1](Blue), if your Leader is a blue <Paikuhan> card and you add this card in your energy to your Z-Energy: Add the top card of your deck to your energy."), card_type="BATTLE", card_number="P-522"))
+    assert any(rule.trigger == "self_added_to_z_energy" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_35_oceanus_shenron_spin_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Blocker]\n[Permanent] If your Leader is a yellow â‰ªShadow Dragonâ‰« card, reduce the energy cost of this card in your hand by 1.\n[Auto][Burst 1](Yellow): When this card in a Drop is sent to a Warp by a â‰ªShadow Dragonâ‰« Battle Card's skill, play up to 1 yellow <Oceanus Shenron> card with an energy cost of 4 from your Drop."), card_type="BATTLE", card_number="EX23-35"))
+    assert any(rule.trigger == "self_sent_to_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_26_hell_fighter_17_desired_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Negate the attack and play this card.\n[Permanent] If your Leader is a green <Super 17> Z-Leader, you may activate this card's [Counter] skill from your hand without paying the energy cost.\n[Auto] When this card is played from your hand, choose up to 1 of your mono-green <Super 17> Battle Cards and it gains the following skill for the turn:\n\"[Auto][Once per turn] When this card activates [Blocker], switch this card to Active Mode.\""), card_type="BATTLE", card_number="EX23-26"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_039_ss_vegeta_counter_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Permanent] If your Leader is a blue Leader with both <Son Goku> and <Vegeta> or is a blue <Gogeta> Z-Leader, this card gets +15000 power.\n[Permanent] If this card would leave the Battle Area, send this card to your Warp instead.\n[Auto][Limit 1](Blue): When this card in your Drop is sent to your Warp by your {Soul Punisher, the Cleansing Light} or a blue <Gogeta> card skill, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck, then play this card from your Warp."), card_type="BATTLE", card_number="BT22-039"))
+    assert any(rule.trigger == "self_sent_to_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_31_ss4_son_goku_dragon_fist_strategy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Dual Attack]\n[Auto][Limit 1](Yellow), if your Leader is yellow and you have 3 or more energy: When this card is revealed from the top of your deck and placed in your Drop, draw 1 card, and you may play this card from your Drop.\n[Auto][Limit 1](Yellow)(Yellow), if you have 4 or more energy and you place this card from your hand on top of your deck: When a {Son Goku, Return of the Dragon Fist} is revealed from the top of your deck and placed in your Drop, play that card from your Drop, and during that card's first attack during that turn, your opponent can't activate Extra skills in any area."), card_type="BATTLE", card_number="EX23-31"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_28_omega_shenron_collected_minus_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Z-Awaken](Yellow), if you have a total of 6 or more â‰ªShadow Dragonâ‰« cards among all the cards in your Drop and Warp: Yellow <Syn Shenron> card.\n[Auto] At the end of your turn, draw 1 card, then switch all yellow â‰ªShadow Dragonâ‰« cards in your Battle Area to Active Mode.\n[Activate: Main/Battle] Remove this card from the game: You may discard 6 yellow cards from your hand. If you do, choose all of your opponent's Rest Mode Battle Cards, ignoring [Barrier], then negate their skills and KO them."), card_type="Z-BATTLE", card_number="EX23-28"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_49_ss4_bardock_prismatic_radiance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Barrier]\n[Activate: Main] If there is a total of 4 non-black colors present among black multicolor cards in your energy, you send 1 {SS4: The Vermilion Saiyans} from your hand to your Warp, and you place this card in your Drop: Activate an [Activate: Main] skill on the card sent to your Warp by this skill, then add that card to your hand at the end of the turn.\n[Activate: Main][Limit 1] If your leader is a <Bardock: Xeno> card and you switch this card to Rest Mode: Choose up to 1 of your Battle Cards with {SS4} in its card name and it gains [Dual Attack] for the turn."), card_type="BATTLE", card_number="EX23-49"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt22_137_ss_gogeta_sparking_to_utmost_limit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Deflect][Double Strike][Blocker]\n[Aegis Blue/Yellow][Once per turn]\n[Union-Fusion](Blue)(Yellow)(2), if your opponent has 3 or more energy and draws 2 cards: Yellow <Son Goku> card with 5000 power and blue <Vegeta> card with 5000 power.\n[Auto] When this card is played, this card can't be removed from your Battle Area by your opponent's skills until the end of your opponent's turn.\n[Auto][Once per turn] When your energy is switched to Active Mode by a skill, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode."), card_type="BATTLE", card_number="BT22-137"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_energy_switched_to_active" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex23_43_demon_god_salsa_dark_royalty_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 4]\n[Auto] If your Leader is a black â‰ªDemon Realm Raceâ‰« card and you send 1 card from your hand to your Warp: When this card is played by an [Over Realm] skill, draw 1 card and add up to 1 black Battle Card with an energy cost between 3 and 7 from your Warp to your hand.\n[Auto][Limit 1] If your Leader is a <Salsa> card: When this card in your deck is sent to your Warp by one of your skills, draw 1 card, send 1 card from your hand to your Warp, then send the top card of your deck to your Warp."), card_type="BATTLE", card_number="EX23-43"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_sent_to_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_149_dark_king_mechikabura_last_judgement_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Dual Attack]\n[Counter: Play] Play this card, for every card in your opponent's Z-Deck, place up to 1 Battle Card from your Drop or Warp under this card, and this card can't be removed from your Battle Area by your opponent's skills for the turn. Additionally, if the Battle Card to be played has an energy cost of 7 or less, send it to your Warp instead.\n[Permanent] If the total number of cards in you and your opponent's Warps is 7 or more, reduce the energy cost of this card in your hand by 7.\n[Auto] Place 1 card from under this card into your Drop: When this card or your opponent attacks, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp."), card_type="BATTLE", card_number="BT21-149"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_152_ss_son_goku_frieza_miraculous_conclusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Dual Attack]\n[Permanent] You can't play this card from any area using skills, and if you have 5 or more mono-red energy, reduce the energy cost of this card in your hand by 3.\n[Permanent] This card can't be removed from your Battle Area by your opponent's skills.\n[Permanent] During battles in which this card attacked, you can't use cards from your hand in combos, and your opponent can't activate [Counter] or [Blocker] skills.\n[Activate: Main] If your Leader Card is red and you remove this card from the game: Deal 1 damage to your opponent."), card_type="BATTLE", card_number="BT14-152"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_076_final_hope_slash_humanitys_secret_weapon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>, your opponent has 4 or more energy, you switch 3 of your Earthling Tokens to Rest Mode, and you remove this card from the game: During that turn, the next time your green <Trunks: Future> card with an energy cost of 8 attacks, your opponent can't activate [Counter]."), card_type="EXTRA", card_number="BT23-076"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_071_trunks_mai_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Discard 1 â‰ªSaiyanâ‰« or â‰ªEarthlingâ‰« card from your hand: Play up to 1 green <Mai: Future> card with an energy cost of 1 from your deck, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Permanent] If you have a green â‰ªSaiyanâ‰« card in play, all of your Earthling Tokens gain [Barrier].\n[Auto] When this card attacks, play up to 1 green <Mai: Future> card with an energy cost of 1 from your deck or Drop, then shuffle your deck if you looked through it. Additionally, if you and your opponent have a total of 10 or more Battle Cards, this card gets +10000 power for the turn.", card_number="BT23-071"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p552_saibaimen_living_bombs_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a <Nappa> card: When this card or one of your Saibaiman Tokens attacks, choose up to 1 of your opponent's Battle Cards, return it to its owner's hand, and remove the attacking card from the game.\n[Auto] When this card is KO'd by a <Vegeta> card's skill, draw 1 card."), card_type="BATTLE", card_number="P-552"))
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_p550_body_and_soul_10x_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a <Son Goku: Xeno>-only card and you discard 1 card from your hand: When this card is placed in a Battle Area, add up to 2 cards from your life to your hand, then add up to 1 non-[Super Combo] <Son Goku: Xeno> card from your Drop or Warp to your hand.\n[Auto][Once per turn] When a card from your Warp is placed in your Drop by your <Son Goku: Xeno>-only Leader's skill, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.\n[Activate: Battle][Burst 2] Remove this card from the game: Choose up to 1 of your <Son Goku: Xeno> cards and it gets +5000 power and [Critical] for the turn."), card_type="EXTRA", card_number="P-550"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p546_the_final_confrontation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your red <Son Goku> card with an energy cost of 8 is removed from a Battle Area by an opponent's skill, play up to 1 {Golden Frieza & Android 17, Determined Tag Team} from your Drop with 1 marker on it, then remove this card from the game.\n[Auto] At the end of your turn, choose up to 1 of your mono-red â‰ªUniverse 7â‰« cards and switch it to Active Mode, then that card gains [Blocker] until the end of your opponent's turn.\n[Activate: Main][Limit 1] If your Leader is {Son Goku, Supreme Warrior} and you have 4 or more energy: Reduce the skill cost of [Activate: Main] on {Son Goku, Ultra Mastery} in your hand by (Red) for the turn."), card_type="EXTRA", card_number="P-546"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_039_son_goku_strategy_of_sacrifice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If you have a {Piercing Special Beam Cannon} in your Battle Area and you switch this card to Rest Mode: When your blue <Piccolo> card's attack is negated by an opponent's skill, choose up to 1 of your blue <Piccolo> cards with an energy cost of 6 or less and switch it to Active Mode, then your opponent can't activate [Blocker] for the turn.\n[Auto] When this card is KO'd by one of your skills, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck."), card_type="BATTLE", card_number="BT23-039"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_073_vegeta_fusion_in_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If your Leader is a green <Vegito> card or a green card with both <Trunks: Future> and <Mai: Future>: When this card is played, play up to 1 {Son Goku, Fusion in the Future} from your deck or Drop in Rest Mode, then shuffle your deck if you looked through it.\n[Auto][Limit 1] Remove this card from the game: When your <Trunks: Future> card with an energy cost of 8 attacks, your opponent discards 1 card from their hand."), card_type="BATTLE", card_number="BT23-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p549_energy_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1][Spirit Boost 1] When your yellow <Super 17> Battle Card attacks, the attacking card gets +6000 power, then switch that card to Active Mode at the end of the turn.\n[Activate: Main][Limit 1](Yellow), remove this card from the game: Play up to 1 yellow <Android 17> card with an original energy cost of 1 from your hand or Drop, then play up to 1 {Android 20 & Dr. Myuu, Hellish Accomplices} from your hand with 1 marker on it."), card_type="EXTRA", card_number="P-549"))
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_096_surprise_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Choose up to 1 of your Rest Mode <Vegito> cards and switch it to Active Mode, that card gets +6000 power for the battle, then switch the target of attack to the chosen card.\n[Permanent] For each of your Earthling Tokens, reduce the energy cost of this card in your hand by 1."), card_type="EXTRA", card_number="BT23-096"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_092_goku_black_team_up_with_a_god_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Auto] When this card is placed in a Drop from Z-Energy or a Battle Area, remove this card in the Drop from the game.\n[Activate: Battle][Limit 1](Green), if there are 3 or more colors among cards in your Combo Area: Play this card from your Combo Area.\n[Activate: Battle][Limit 1] If your Leader is a green card with both <Zamasu> and <Goku Black> and you have a <Zamasu> card in your Combo Area: Use this card in a combo from your Drop."), card_type="BATTLE", card_number="BT23-092"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_p547_a_threat_and_an_order_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a <Red Ribbon Robot> card, you have 3 or more energy, and it's your turn, your blue â‰ªRed Ribbon Armyâ‰« cards get +5000 power.\n[Auto] At the end of your turn, you may place all of your â‰ªRed Ribbon Armyâ‰« cards in your Drop. If you don't place any cards, remove this card from the game.\n[Activate: Main][Limit 1](Blue), place 1 card from your hand on top of your deck: Play up to 1 blue <Commander Red> card with an energy cost of 2 from your hand."), card_type="EXTRA", card_number="P-547"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p543_drum_evil_henchman_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a green <King Piccolo> or <Piccolo Jr.> card and it's your turn, your green â‰ªDemon Clanâ‰« cards with energy costs of 2 gain [Barrier].\n[Auto](Green): When this card is played, add up to 1 green <King Piccolo> card with an energy cost of 1 to your hand, then shuffle your deck."), card_type="BATTLE", card_number="P-543"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_077_project_zero_mortals_reaching_fruition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your opponent is the original owner of 4 or more Battle Cards in play, reduce the energy cost of this card in your Z-Deck by (Green)(Green)(Green)(Green).\n[Activate: Main] If there are no Battle Cards other than <Zamasu> cards in play in all Battle Areas, and you remove this card from the game: Your {Zamasu & SS RosÃ© Goku Black, Humanity's Destruction} gains the following skill until the start of your turn:\n\"[Auto] Players without a â‰ªGodâ‰« card in play discard all cards in their hands at the end of your opponent's turn.\""), card_type="EXTRA", card_number="BT23-077"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p544_majin_buu_innocent_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Strike]\n[Permanent] If your Leader is a yellow â‰ªMajinâ‰« card and it's your opponent's turn, reduce the combo cost of this card in your hand by 1.\n[Auto][Limit 1] If it's your turn: When this card in your hand is discarded by the skill of your Leader or a yellow <Majin Buu> card in your Battle Area, your Leader gains the following skill until the end of your opponent's turn:\n\"[Auto][Once per turn] When your yellow â‰ªMajinâ‰« card is played by a skill, this card gets +5000 power for the turn.\""), card_type="BATTLE", card_number="P-544"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_139_super_shenron_wish_granting_dragon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Deflect]\n[Permanent] This card can't attack, and for each card in your Z-Energy and Drop, reduce the energy cost of this card in your hand by 1.\n[Activate: Main][Once per turn] If your Leader is green: Choose oneâ€• ãƒ»Choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Active Mode, then gain control of it. ãƒ»Choose up to 1 of your Battle Cards other than this card and it gains [Indestructible] for the game. ãƒ»Play any number of Battle Cards with â‰ªUniverseâ‰« in their special traits from your opponent's Drop in your Battle Area."), card_type="BATTLE", card_number="BT23-139"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_140_ss_gogeta_fusion_reborn_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Energy-Exhaust][Blocker]\n[Union-Fusion](Blue)/(Yellow), if your Leader is blue or yellow and you have 3 or more energy: <Son Goku> card and <Vegeta> card.\n[Aegis Blue/Yellow][Once per turn]\n[Permanent] This card can't be removed from your Battle Area by your opponent's skills, and you can activate this card's [Aegis] skill by sending 1 card from your opponent's hand to the bottom of their deck instead of discarding a card from your hand.\n[Auto][Once per turn] When your energy is switched to Active Mode by a skill, choose up to 1 of your opponent's cards, ignoring [Barrier], switch it to Rest Mode, then switch this card to Active Mode."), card_type="BATTLE", card_number="BT22-140"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt17_104_pirina_burdens_shouldered_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb][Once per turn](1), choose 1 â‰ªNamekianâ‰« card in your hand or Battle Area and place it under this card: Play up to 1 <Pirina> card with an energy cost of 2 or 3 from your deck or hand on top of this card, then shuffle your deck if you looked through it.\n[Auto] When this card is played from your hand, play up to 1 <Saonel> card with an energy cost of 1 from your deck in Rest Mode, then shuffle your deck."), card_type="BATTLE", card_number="BT17-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_016_trunks_powerful_sentiments_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle][Limit 1] If your red <Son Gohan: Future> or <Trunks: Future> card is in a battle: Use this card from under a {Destroyed West City} in your Battle Area in a combo.\n[Activate: Battle][Limit 1](1), if your Leader is a red <Son Gohan: Future> or <Gohanks: Xeno> card and this card is in a Combo Area: Choose up to 1 of your red <Son Gohan: Future> or <Trunks: Future> cards and it gains [Double Strike] for the battle."), card_type="BATTLE", card_number="BT23-016"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt23_018_trunks_frustration_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle][Limit 1] If your red <Son Gohan: Future> or <Trunks: Future> card is in a battle: Use this card from under a {Destroyed West City} in your Battle Area in a combo, then choose up to 1 of your opponent's Battle Cards or Unisons and it gets -5000 power for the turn."), card_type="BATTLE", card_number="BT23-018"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_034_master_student_journey_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader is a red card with both <Son Gohan: Future> and <Trunks: Future>: Look at up to 5 cards from the top of your deck, add up to 1 red <Son Gohan: Future> or <Trunks: Future> card to your hand, shuffle your deck, then place up to 1 <Trunks: Future> from your hand under a {Destroyed West City} in your Battle Area."), card_type="EXTRA", card_number="BT23-034"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_036_domination_complete_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Look at up to 5 cards from the top of your deck, add up to 1 red â‰ªAndroidâ‰« card to your hand, shuffle your deck, then place up to 1 red <Android 17> or <Android 18> card from your hand under a {Destroyed West City} in your Battle Area."), card_type="EXTRA", card_number="BT23-036"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_007_accel_dance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If you have 4 or more energy, you place 2 of your Z-Energy in your Drop, and you place this card from under a {Destroyed West City} in your Battle Area on top of that card: Choose up to 1 of your {Android 17 & Android 18, Domination Achieved} and it gets +5000 power for the turn.\n[Activate: Main][Limit 1] Place a {Destroyed West City} from under this card on top of this card, then choose 1 of your red <Android 17> cards and 1 of your red <Android 18> cards: Play up to 1 {Android 17 & Android 18, Domination Achieved} from your hand or Drop, then place all of the chosen cards under that card."), card_type="EXTRA", card_number="BT23-007"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt23_005_time_machine_departure_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the start of your turn, play up to 1 red <Trunks: Future> card with an energy cost of 8 from your hand, remove only this card on top of a card in the Battle Area from the game, and you can't play any cards other than red <Trunks: Future> cards for the turn.\n[Activate: Main] Place 1 of your red <Trunks: Future> cards with an energy cost of 8 under this card: Place this card from under a {Destroyed West City} in your Battle Area on top of that card."), card_type="EXTRA", card_number="BT23-005"))
+    assert any(rule.trigger == "turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_042_scouter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If your Leader is a blue <Raditz> or <Nappa> card and it's your turn: When your mono-blue <Raditz>, <Vegeta>, or <Nappa> card is played, your opponent reveals the cards in their hand. Additionally, if your opponent has a Battle Card with 15000 power or less in their hand, play up to 1 <Raditz>, <Vegeta>, or <Nappa> cardâ€”all blue, with 16000 power, and a different character name than the played cardâ€”from your hand."), card_type="EXTRA", card_number="BT23-042"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_041_piercing_special_beam_cannon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If your Leader is a mono-blue <Son Goku> card and you remove this card from the game: When your blue <Piccolo> card attacks, the attacking card gains [Critical] for the battle, then reduce the energy cost of the next {Piercing Special Beam Cannon} you place in your Battle Area this turn by (Blue). Additionally, you may choose 1 of your blue <Son Goku> Battle Cards and KO it. If you do, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck, then the attacking card gets +15000 power for the battle."), card_type="EXTRA", card_number="BT23-041"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_105_kales_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When one of your yellow <Kale> cards attacks, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode, and the attacking card gets +10000 power for the turn.\n[Auto] At the end of your turn, if you have a yellow <Kale> card in play, add 1 card from your life to your hand."), card_type="EXTRA", card_number="BT23-105"))
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_069_captured_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If you have a blue <Son Goku> card in play: Negate the attack, then choose up to 1 of your opponent's Battle Cards and it can't attack for the turn.\n[Permanent] If you have a {Piercing Special Beam Cannon} in your Battle Area, reduce the energy cost of this card in your hand by 2."), card_type="EXTRA", card_number="BT23-069"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_033_explosive_dance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If your Leader is red: Negate the attack. Additionally, if your life is at 4 or less and you have a Z-Extra in your Battle Area, when your opponent attacks with a non-Leader card during that turn, they must place any number of their Z-Energy cards in their Drop so that the total value of those cards' power becomes greater than or equal to X, where X is the power of the attacking card."), card_type="EXTRA", card_number="BT23-033"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_004_android_20_creating_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto] When this card is played, look at up to 7 cards from the top of your deck, then place up to 1 red <Android 17> or <Android 18> card among them under a {Destroyed West City} in your Battle Area, then shuffle your deck.\n[Auto] If you have 3 or more energy: When this card is KO'd by one of your â‰ªAndroidâ‰« card's skills, play up to 1 <Android 17> or <Android 18> cardâ€”both with an energy cost less than or equal to your current energy and no keyword skillsâ€”from under a {Destroyed West City} in your Battle Area."), card_type="BATTLE", card_number="BT23-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_102_ss2_kale_friend_regaining_sanity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Permanent] If you have {Kale's Rampage} in your Battle Area, reduce the energy cost of this card in your Z-Deck by 2.\n[Auto][Limit 1] If this card is in a battle: When one of your yellow <Caulifla> cards is used in a combo, this card gains [Double Strike] for the battle."), card_type="Z-BATTLE", card_number="BT23-102"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_067_uub_scatter_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Dual Attack]\n[Permanent] If your opponent has 10 or more Z-Energy, this card gets +5000 power and [Double Strike].\n[Auto][Once per turn] When this card attacks, choose up to 1 Battle Card in your opponent's Battle Area and up to 1 Battle Card in your opponent's Drop, add them to your opponent's Z-Energy, then your opponent adds 1 card from their hand to their Z-Energy."), card_type="BATTLE", card_number="BT23-067"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_055_raditz_provoking_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Dual Attack][Blocker]\n[Counter: Attack] Negate the attack and play this card from your hand.\n[Permanent] If you have a blue Z-Extra in your Battle Area, reduce the energy cost of this card in your hand by 2.\n[Auto] If you have 3 or more energy and you declare 1 number: When this card is played, until the end of your opponent's turn, your opponent can't play a Battle Card with an original power the same as your declared number unless they place 1 card from their hand at the bottom of their deck."), card_type="BATTLE", card_number="BT23-055"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_070_abducted_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Negate the skills of Battle Cards on top of this card, and those cards can't attack.\n[Activate: Main] Choose up to 1 of your opponent's Battle Cards with <Son Gohan> in its character name and place this card under it from your Drop after this card is activated.\n[Activate: Main](2): Place this card in your Drop from under a Battle Card with <Son Gohan> in its character name."), card_type="EXTRA", card_number="BT23-070"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt23_063_nappa_gathering_strength_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Reduce the energy cost of this card in your hand by 1 for each of your <Saibaiman> cards and Saibaiman Tokens.\n[Auto][Limit 1] When this card is played, it gains [Dual Attack] for the turn.\n[Auto] When this card is KO'd by a <Vegeta> card skill, draw 1 card."), card_type="BATTLE", card_number="BT23-063"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt23_132_secret_weapon_from_a_god_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a â‰ªUniverse 6â‰« card, you reveal 1 <Kefla> card from your hand, and discard another card from your hand: Add up to 1 <Kale> card and up to 1 <Caulifla> cardâ€”both with energy costs of 1â€”from your deck to your hand, then shuffle your deck. Additionally, if a mono-yellow <Kefla> card is revealed by this skill, draw 1 card."), card_type="EXTRA", card_number="BT23-132"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_056_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 green or yellow <Frieza> card to your hand, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Permanent] When choosing Battle Cards for the skill cost of [Successor] on a <Frieza> card in your hand, once per turn you may choose any number of your opponent's Battle Cards as mono-green Battle Cards.\n[Auto] When this card attacks, draw 1 card.\n[Activate: Battle][Once per turn][Spirit Boost 1] Use up to 1 Green/Yellow multicolor card with a combo cost of 1 from your hand in a combo with its skills negated for the turn.", card_number="BT24-056"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt24_007_concentrated_saiyan_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn](Red)(Red), if you have 4 or more energy and you choose 1 <Son Gohan: Adolescence> card, 1 <Son Goten> card, 1 <Vegeta> card, 1 <Trunks: Youth> card, and 1 <Videl> cardâ€”all from under this card: Play up to 1 {SSG Son Goku, Crimson Guardian Deity} from your Z-Deck with 5 markers on it and place the chosen cards under it."), card_type="EXTRA", card_number="BT24-007"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_005_whis_assistant_to_a_god_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of your turn, switch one of your red <Beerus> Leaders to Active Mode.\n[+1][Activate: Battle] Use up to 1 of your Red/Yellow multicolor â‰ªGodâ‰« cards from your hand in a combo.\n[-6][Auto] When your opponent attacks, negate the attack, and your opponent can only attack 2 more times for the turn."), card_type="UNISON", card_number="BT24-005"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p567_champa_fusion_recommendation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If it's your opponent's turn: When this card is used in a combo, choose up to 1 of your <Kefla> cards and switch it to Active Mode.\n[Activate: Battle] If your Leader is a mono-yellow â‰ªUniverse 6â‰« card and you discard this card from your hand: Use up to 1 of your mono-yellow <Caulifla> cards with 5000 combo power in a combo from your Drop with its skills negated for the turn."), card_type="BATTLE", card_number="P-567"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_104_omen_of_a_comeback_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] If your Leader is a yellow â‰ªUniverse 7â‰« card: When this card is placed in a Battle Area, your Leader gets +5000 power until the end of your opponent's turn.\n[Auto] If your Leader is {Son Goku, Autonomous Awakening}, you add 2 of your life to your Z-Energy, and you remove this card from the game: When your yellow â‰ªUniverse 7â‰« <Son Goku> card with an energy cost of 6 or more is played, it gets +10000 power for the turn, then choose up to 1 of your opponent's Battle Cards and negate its skills for the turn, then add the top 2 cards of your deck to your life at the end of the turn."), card_type="EXTRA", card_number="BT23-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p556_android_19_energy_guard_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Permanent] If your Leader is a red card with both <Android 17> and <Android 18>, you can activate this card's [Counter] skill from under a Z-Extra in your Battle Area by discarding 1 card from your hand and paying the energy cost."), card_type="BATTLE", card_number="P-556"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt23_122_kale_cheering_on_her_friend_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If your Leader is a yellow <Kefla> card: Play this card in Rest Mode, then choose up to 1 of your cards and it gets +5000 power for the battle.\n[Permanent] If you have 3 or more energy and you have a {Kale's Rampage} in your Battle Area, you may activate the [Counter] skill on this card in your hand without paying its energy cost."), card_type="BATTLE", card_number="BT23-122"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p557_piccolo_ready_to_fire_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Counter][Limit 1] If your Leader is a blue card with both <Son Goku> and <Piccolo>: Draw 1 card, play this card, and this card gets +5000 power until the end of your opponent's turn.\n[Permanent] If you have a {Piercing Special Beam Cannon} in your Battle Area, reduce the energy cost of this card in your hand by 2.\n[Activate: Battle][Limit 1](Blue): Switch this card to Active Mode."), card_type="BATTLE", card_number="P-557"))
+    assert any(rule.trigger == "counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_bt24_013_ss2_vegeta_charging_rage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto][Limit 1](Red), if your Leader is a red <Vegeta> or <Bulma> card and you have 3 or more energy: When one of your red â‰ªEarthlingâ‰« cards is removed from the Battle Area by a skill, draw 1 card, play this card from your hand, then place up to 1 red â‰ªSaiyanâ‰« card from your Z-Energy under {Concentrated Saiyan Power} in your Battle Area.\n[Activate: Battle][Once per turn] Use up to 1 mono-red card with 5000 combo power from your Drop in a combo with its skills negated for the turn."), card_type="BATTLE", card_number="BT24-013"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_004_ssg_son_goku_crimson_guardian_deity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike][Barrier]\n[Auto] When a player attacks, you may use 1 Battle Card from under this card in a combo with its skills negated for the turn. If you do, negate this skill for the turn.\n[-1][Activate: Main] Switch this card to Active Mode, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and it gets -25000 power for the turn.\n[-2][Activate: Main] Choose all of your opponent's Battle Cards and Unisons and they get -25000 power for the turn. Choose up to 1 of your cards and it gets +5000 power until the end of your opponent's turn."), card_type="UNISON", card_number="BT24-004"))
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_p568_demon_clan_gathering_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Permanent] This card is also treated as {Makyo Star} in all areas.\n[Auto] When your yellow <Garlic Jr.> activates an [Overlord] skill, choose up to 1 of your opponent's Rest Mode Battle Cards and KO it.\n[Activate: Battle][Once per turn] If you have 3 or more energy and you place 1 card from your hand at the bottom of your deck: Choose up to 1 of your {Garlic Jr., Overlord of the Dead Zone} and it gets +5000 power and [Double Strike] until the end of your opponent's turn."), card_type="EXTRA", card_number="P-568"))
+    assert any(rule.trigger == "owner_overlord_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_006_beerus_godly_regality_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have 2 or more Red/Yellow multicolor â‰ªGodâ‰« cards in your energy, reduce the energy cost of this card in your Z-Deck by 2.\n[Auto][Limit 1] When this card attacks, if you have 3 or more red cards in your energy, use up to 1 Red/Yellow multicolor card from your Drop in a combo with its skills negated for the turn. If you have 3 or more yellow cards in your energy, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="Z-BATTLE", card_number="BT24-006"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_002_beerus_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Negate the [Energy-Exhaust] skill on your Red/Yellow multicolor â‰ªGodâ‰« cards in all areas.\n[Activate: Main][Once per turn] Add 1 red or yellow â‰ªGodâ‰« card from your hand to your Z-Energy: Look at up to 5 cards from the top of your deck, add up to 1 red â‰ªGodâ‰« card to your hand, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Blocker]\n[Permanent] Negate the [Energy-Exhaust] skill on your Red/Yellow multicolor â‰ªGodâ‰« cards in all areas.\n[Auto] When this card attacks, draw 1 card.\n[Auto][Once per turn] When you use one of your Red/Yellow multicolor â‰ªGodâ‰« cards in a combo, add up to 1 card from your life to your hand, and during this turn, the next time you activate [Arrival Red/Yellow] on a <Beerus> card with an energy cost of 5 in your hand, reduce the skill cost by (Red).", card_number="BT24-002"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt23_099_ssb_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] When you would place a â‰ªUniverse 7â‰« card from your Combo Area in your Drop, place it in your Z-Energy instead.\n[Permanent] You can't play Z-Battle Cards.\n[Auto][Once per turn] When your yellow â‰ªUniverse 7â‰« card is used in a combo, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Permanent] When you would place a â‰ªUniverse 7â‰« card from your Combo Area in your Drop, place it in your Z-Energy instead.\n[Permanent] You can't play Z-Battle Cards.\n[Auto][Once per turn] When your yellow â‰ªUniverse 7â‰« card is used in a combo, draw 1 card.\n[Activate: Main][Once per turn] Place 1 of your Z-Energy in your Drop and switch 1 yellow <Son Goku> card to Rest Mode: Draw 1 card, then choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.", card_number="BT23-099"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt17_102_saonel_burdens_shouldered_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb][Once per turn](1), choose 1 â‰ªNamekianâ‰« card in your hand or Battle Area and place it under this card: Play up to 1 <Saonel> card with an energy cost of 2 or 3 from your deck or hand on top of this card, then shuffle your deck if you looked through it.\n[Auto] When this card is played from your hand, play up to 1 <Pirina> card with an energy cost of 1 from your deck in Rest Mode, then shuffle your deck."), card_type="BATTLE", card_number="BT17-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_067_videl_with_all_her_strength_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker]\n[Auto][Limit 1](Green), if you have a green skill-less Battle Card in play: When your opponent attacks, play this card from your hand.\n[Auto] If your Leader Card is green or a â‰ªHeroineâ‰« card: When this card is played from your hand, your opponent may choose 2 cards in their hand and discard them. If they don't, choose up to 1 of your opponent's Battle Cards with an energy cost of 7 or less and KO it."), card_type="BATTLE", card_number="BT14-067"))
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_028_hoi_wicked_wizard_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[0][Activate: Main] If your Leader is a â‰ªPhantom Demonâ‰« card: Play up to 1 blue <Hirudegarn> card with an energy cost of 3 from your Drop in Rest Mode with its skills negated for the turn, then place the played card in your Drop at the end of the turn.\n[-3][Activate: Main] If your Leader is a â‰ªPhantom Demonâ‰« card: Play up to 1 blue or green <Hirudegarn> card with an energy cost of 6 or more from your hand."), card_type="UNISON", card_number="BT24-028"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt24_078_ki_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your â‰ªEarthlingâ‰« card is in a battle: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it, then choose up to 1 of your cards that's in a battle and it gets +10000 power for the battle."), card_type="EXTRA", card_number="BT24-078"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_124_sparking_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If you have a <Vegito: Xeno> card with a [Union] skill in play: Choose any number of your opponent's Battle Cards that add up to a total energy cost of 6 or less and send them to their owner's Warp."), card_type="EXTRA", card_number="BT24-124"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_053_the_heros_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Play up to 1 blue â‰ªHeroâ‰« card with an energy cost of 1 from your Drop.\n[Activate: Battle][Limit 1](Blue), if your Leader is a â‰ªHeroâ‰« card and you send this card from your Drop to your Warp: Use up to 1 blue â‰ªHeroâ‰« card with an energy cost of 1 from your Drop in a combo."), card_type="EXTRA", card_number="BT24-053"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_030_the_heros_melody_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] If your Leader is a â‰ªHeroâ‰« card, your opponent has 2 or more energy, you return 1 blue <Hirudegarn> card to its owner's hand, and you remove this card from the game: Play up to 1 blue <Tapion> card with an energy cost of 4 or less from your hand."), card_type="EXTRA", card_number="BT24-030"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_123_preparation_for_a_fierce_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Limit 1] Play up to 1 <Son Goku: Xeno> and up to 1 <Vegeta: Xeno> cardâ€”both mono-black and with an energy cost of 4 or lessâ€”from your deck in Rest Mode with their skills negated for the game."), card_type="EXTRA", card_number="BT24-123"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_060_you_must_die_by_my_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader is a green <Frieza> card, your life is at 1, and you remove this card from the game: When one of your green <Frieza> cards attacks, choose up to 1 of the attacking cards and it gets +30000 power for the battle. Additionally, if no damage was done to your opponent by that attack, place all of your life in your Drop at the end of the battle."), card_type="EXTRA", card_number="BT24-060"))
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_027_trunks_admiration_for_tapion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, you can use Rest Mode â‰ªHeroâ‰« cards in combos until the end of your opponent's turn.\n[0][Activate: Main] Choose 1 of your <Hirudegarn> cards and KO it, then choose 1 of your blue â‰ªHeroâ‰« cards with an energy cost of 1 and return it to its owner's hand: Switch up to 1 of your energy to Active Mode."), card_type="UNISON", card_number="BT24-027"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_032_janemba_invincible_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When this card is played, this card gains [Double Strike] and [Barrier] for the turn."), card_type="BATTLE", card_number="BT24-032"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_035_ss_trunks_freestyle_movement_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If your Leader is a â‰ªHeroâ‰« card: Negate the attack and play this card.\n[Permanent] If you have a blue â‰ªHeroâ‰« card in play, reduce the energy cost of this card in your hand by 3.\n[Auto] If it's your opponent's turn, you choose 1 of your blue â‰ªHeroâ‰« cards with an energy cost of 1, and place it at the bottom of its owner's deck: When this card is played, switch up to 1 of your energy to Active Mode."), card_type="BATTLE", card_number="BT24-035"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_114_ss4_son_goku_vegeta_combination_of_techniques_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Permanent] If your Leader is a <Vegito: Xeno> card and you have a black Z-Unison in play, reduce the energy cost of this card in your Z-Deck by (Black).\n[Activate: Main][Limit 1] Remove this card from the game: Place up to 2 black cards from your Warp under your {SSB Vegito, Union of Sparks}."), card_type="Z-BATTLE", card_number="BT24-114"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_084_power_ball_mimicking_the_moon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a yellow <Son Gohan: Youth> card, yellow â‰ªGreat Apeâ‰« <Son Gohan: Youth> cards with energy costs of 4 in your hand gain the following skill:\n\"[EX-Evolve](Yellow): Yellow <Son Gohan: Youth> card with an energy cost of 1.\"\n[Auto] When you play a yellow â‰ªGreat Apeâ‰« <Son Gohan: Youth> card with an energy cost of 4, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="EXTRA", card_number="BT24-084"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_051_hoi_disaster_assistance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If this card would leave the Battle Area, remove it from the game instead.\n[Auto] When this card is played, choose up to 1 of your blue <Hirudegarn> Battle Cards and it gets +5000 power for the turn.\n[Activate: Battle][Limit 1](Blue), if your Leader is a â‰ªPhantom Demonâ‰« card and your blue <Hirudegarn> Battle Card is in a battle: Use this card in a combo from your Drop, and play this card from your Drop at the end of the battle."), card_type="BATTLE", card_number="BT24-051"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_113_ssb_vegito_union_of_sparks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Place 1 card from under this card into its owner's Drop: Draw 1 card.\n[+1][Auto] When this card or one of your black cards with a [Union] skill attacks or activates the [Blocker] skill, place up to 2 black cards from your Warp under this card.\n[-3][Activate: Main] Play up to 1 black Battle Card with an energy cost of 6 and a [Union] skill from your Warp."), card_type="UNISON", card_number="BT24-113"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_067_piccolo_returning_to_the_battle_line_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo]\n[Auto] If your Leader is green and your life is at 4 or less: When this card is used in a combo, draw 1 card."), card_type="BATTLE", card_number="BT24-067"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_p577_tapion_challenge_for_disaster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, draw 1 card, and this card gains [Critical] for the turn.\n[Activate: Main][Limit 1](Blue), if your Leader is a â‰ªHeroâ‰« or â‰ªPhantom Demonâ‰« card and you place 1 of your <Hirudegarn> cards without [Unique] at the bottom of its owner's deck: Play this card from your hand."), card_type="BATTLE", card_number="P-577"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_111_encounter_with_hopelessness_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your <Turles> card is in a battle: Choose up to 1 of your opponent's â‰ªSaiyanâ‰« cards with an energy cost of 2 or less, and use it in a combo in your Combo Area with its skills negated for the turn."), card_type="EXTRA", card_number="BT24-111"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_052_begging_for_the_heros_resurrection_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 of your <Hoi> cards and switch it to Rest Mode: Play up to 1 blue â‰ªHeroâ‰« card with an energy cost of 1 from your Drop and it gets +6000 power for the turn."), card_type="EXTRA", card_number="BT24-052"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_110_scheming_turles_crusher_corps_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader is a yellow <Turles> card: Look at up to 7 cards from the top of your deck, add up to 2 yellow â‰ªTurles Crusher Corpsâ‰« cards with energy costs of 1 and without <Turles> in their character names to your hand, then shuffle your deck."), card_type="EXTRA", card_number="BT24-110"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_079_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, add up to 1 â‰ªSaiyanâ‰« or â‰ªEarthlingâ‰« cardâ€”both yellow and with an energy cost of 4 or lessâ€”to your hand, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Auto] Discard 1 yellow card from your hand: When this card attacks, draw 2 cards.\n[Activate: Main][Once per turn](Yellow): Play up to 1 {Son Goku, Father's Care} from your Drop in Rest Mode with a marker on it.\n[Activate: Main][Once per turn][Spirit Boost 1] If you have {Power Ball, Mimicking the Moon} in your Battle Area: Reduce the [Z-Awaken] skill cost on {Son Gohan, Power of a Rampaging Great Ape} in your Z-Deck by (Yellow) for the turn.", card_number="BT24-079"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_041_tapion_overcoming_destiny_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and return it to its owner's hand.\n[Activate: Main][Limit 1] If your Leader is a â‰ªPhantom Demonâ‰« card and you choose 1 of your <Hirudegarn> cards without [Unique] and KO it: Play this card from your Drop."), card_type="BATTLE", card_number="BT24-041"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_103_rasin_crusher_underling_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When this card is played without using a <Lakasei> card's skills, play up to 1 yellow <Lakasei> card with an energy cost of 1 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT24-103"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_104_lakasei_crusher_underling_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] When this card is played without using a <Rasin> card's skills, play up to 1 yellow <Rasin> card with an energy cost of 1 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT24-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_083_turles_crusher_corps_assemble_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When this card is switched to Rest Mode by one of your skills, switch this card to Active Mode.\n[+2][Activate: Main][Limit 1] If your Leader is a â‰ªTurles Crusher Corpsâ‰« card: Look at up to 5 cards from the top of your deck, place any number at the top of your deck in any order, and place the rest at the bottom of your deck in any order.\n[0][Activate: Main] This card gets +10000 power until the end of your opponent's turn."), card_type="UNISON", card_number="BT24-083"))
+    assert any(rule.trigger == "owner_other_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt24_109_an_overwhelming_difference_in_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If you have a <Turles> card in play: Negate the attack, then choose up to 1 of your yellow <Turles> Battle Cards and switch it to Active Mode."), card_type="EXTRA", card_number="BT24-109"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_087_bardock_heritage_of_a_legend_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] Play this card.\n[Permanent] If it's your opponent's turn, your Leader is yellow or a â‰ªBardock's Crewâ‰« card, and you have 2 or more Z-Energy, reduce the energy cost of this card in your hand by (Yellow)(Yellow)(Yellow).\n[Auto] When this card is played, your opponent can't attack with cards for the turn unless they place 1 of their Rest Mode cards in its owner's Drop.\n[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your skills, draw 1 card and switch this card to Active Mode."), card_type="BATTLE", card_number="BT24-087"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "owner_other_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_135_frieza_transformation_of_despair_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Deflect]\n[Successor](Yellow), if your Leader is a green <Frieza> card and you draw 1 card.\n[Auto] When your opponent plays a Battle Card, you may choose it and switch it to Rest Mode. If you do, negate this skill for the turn."), card_type="BATTLE", card_number="BT24-135"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_133_frieza_overdrive_activation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Deflect][Double Strike][Dual Attack]\n[Successor](Green)(Yellow)(1), draw 2 cards.\n[Permanent] If you have a Green/Yellow multicolor card other than this card in your energy, negate this card's [Energy-Exhaust] skill in all areas.\n[Auto] When this card is played, your opponent can't attack until the end of their turn unless they switch 1 of their Active Mode cards to Rest Mode each time."), card_type="BATTLE", card_number="BT24-133"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_132_whis_power_beyond_a_god_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Offering]\n[Permanent] If your Leader is a red <Whis> card, negate this card's [Energy-Exhaust] skill in all areas.\n[Permanent] If your Leader is a red <Whis> card and you have 1 or more red cards and 1 or more yellow cards in your energy, reduce the energy cost of this card in your hand by 3."), card_type="BATTLE", card_number="BT24-132"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_099_turles_organization_of_destroyers_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have 3 or more yellow â‰ªTurles Crusher Corpsâ‰« cards in play, this card gets +11000 power.\n[Auto][Limit 1][Spirit Boost 1] If your Leader's back side is {Turles, Corps Commander}: When this card attacks, look at up to 5 cards from the top of your deck, play any number of yellow â‰ªTurles Crusher Corpsâ‰« cards with different card names, energy costs of 1, and without <Turles> in their character names, then shuffle your deck."), card_type="BATTLE", card_number="BT24-099"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_061_you_fool_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a green <Son Goku> card with an energy cost of 8 in play, reduce the energy cost of this card in your Z-Deck by (Green)(Green).\n[Activate: Battle][Limit 1] If your Leader is a green <Son Goku> card and you place 1 of your Z-Energy in its owner's Drop: Choose up to 1 of your {SS Son Goku, Ground-Shaking Fury} and switch it to Active Mode.\n[Activate: Battle] If your opponent is attacking, you choose 1 of your {SS Son Goku, Ground-Shaking Fury}, and you remove this card from the game: Switch the attack target to the chosen card and it gets +10000 power for the battle."), card_type="EXTRA", card_number="BT24-061"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt24_139_ssb_kaio_ken_vegito_blue_potara_fusion_warrior_champion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Deflect][Triple Strike]\n[Permanent] If you have 4 or more energy, for each marker on your Z-Unison, reduce the energy cost on this card in your hand by 3.\n[Activate: Main][Burst 3] If you send 3 cards from your hand to your Warp: Switch this card to Active Mode."), card_type="BATTLE", card_number="BT24-139"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_p571_great_priest_among_the_strongest_in_the_multiverse_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+1][Activate: Main] Place 1 of your Red/Yellow multicolor â‰ªGodâ‰« cards under this card: Switch this card to Active Mode, and this card gains [Double Strike] for the turn.\n[0][Auto] When your opponent attacks, use up to 1 red â‰ªGodâ‰« from under this card in a combo with its skills negated for the turn, then switch the attack target to your Leader."), card_type="Z-UNISON", card_number="P-571"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_028_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: This card gains [Critical] for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: This card gains [Critical] for the duration of the turn. If you have 7 or more blue energy, this card also gains +10000 power for the duration of the turn.\n[Auto] When this card attacks, draw 1 card.", card_number="BT1-028"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt4_047_lord_slug_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: This card gains [Critical] for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main] [Once per turn] Place 1 card from your hand in your Drop Area: Your opponent chooses 1 card from their hand and places it in their Drop Area.", card_number="BT4-047"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_083_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Place 1 of your â‰ªFrieza's Armyâ‰« Battle Cards in the Drop Area: Choose up to 1 of your energy and switch it to Active Mode. Then, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn]  Place 1 of your â‰ªFrieza's Armyâ‰« Battle Cards in the Drop Area: Choose up to 2 of your energy and switch them to Active Mode. Then, draw 1 card.\n[Auto] When this card attacks, draw 1 card.", card_number="BT1-083"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_084_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of your turn, choose up to 1 of your Battle Cards and switch it to Active Mode."), card_type="LEADER", card_back_skill_unstyled="[Auto] At the end of your turn, choose up to 2 of your Battle Cards and switch them to Active Mode.\n[Auto] When this card attacks, draw 1 card.", card_number="BT1-084"))
+    assert sum(1 for rule in rules if rule.trigger == "turn_end" and rule.handler_id == "auto_switch_up_to_n_owner_battles_active_by_trait_on_turn_end") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt4_098_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, place 3 cards from the top of your deck in your Drop Area. If all of the cards placed in your Drop Area are black, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Wormhole] (You can activate [Over Realm] and [Dark Over Realm] up to a total 2 times a turn)\n[Auto] When this card attacks, draw 1 card.\n[Activate: Main] [Once per turn] Choose up to 3 black cards in your Warp and place them in your Drop Area.", card_number="BT4-098"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_031_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, place the top card of your deck under this card. Then, if there are 2 or more cards under this card, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Auto] [Once per turn] When this card attacks, place the top card of your deck under this card. Then, draw 1 card.\n[Activate: Main] Choose 5 cards under this card and place them in the Drop Area: Switch this card to Active Mode. It gains +5000 power for the duration of the turn.", card_number="BT3-031"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_bt1_030_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, it gains +1000 for each 1 energy you have, for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Permanent] When you have 7 or more energy, this card gains [Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle).\n[Auto] [Once per turn] When this card attacks, draw 1 card. Then, this card gains +1000 power for each 1 energy you have for the duration of the turn.", card_number="BT1-030"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_100_meta_cooler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you place this card in the Leader Area, choose 1 {Big Gete Star} from your deck and place it in the Battle Area in Active Mode."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] If 3 or more of your &lt;Meta-Cooler&gt; are in play, choose 1 of your opponent's Battle Cards and switch it to Rest Mode.\n[Auto] When this card attacks, place up to 3 cards from the top of your deck in the Drop Area. Choose up to 1 &lt;Meta-Cooler&gt; or &lt;Meta-Cooler Core&gt; from your Drop Area and add it to your hand.", card_number="BT2-100"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_003_ss3_goku_one_hit_wonder_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your opponent's Battle Card's power is decreased, if {SS3 Goku, One Hit Wonder} isn't in play in your Battle Area, you may play this card from your hand.\n[Activate: Battle] (Red), send this card from your Drop Area to your Warp: Choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT8-003"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_002_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] [Once per turn] Place 1 card from your hand in the Drop Area: This card gains +5000 power for the duration of the battle."), card_type="LEADER", card_back_skill_unstyled="[Activate: Battle] [Once per turn] Place 1 card from your hand in the Drop Area: This card gains +5000 power for the duration of the turn.\n[Auto] When this card attacks, draw 1 card.", card_number="BT2-002"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt4_071_bardock_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: Choose up to 1 of your opponent's Rest Mode Battle Cards with an energy cost of 3 or less and KO it."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main] [Once per turn] Choose 1 card from your life and add it to your hand: Choose up to 1 of your opponent's Rest Mode Battle Cards and KO it.", card_number="BT4-071"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_085_ginyu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn]  Flip over 1 face-down card in your life: If the flipped card is â‰ªGinyu Forceâ‰« but not &lt;Ginyu&gt;, play that card. If not, add it to your hand."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Add 1 card from your life to your hand: This card gains [Double Strike] for the duration of the turn. If there are 2 or more of your â‰ªGinyu Forceâ‰« in play, this card gains an additional +5000 power for the duration of the turn.\n[Auto] When this card attacks, draw 1 card.", card_number="BT1-085"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_068_cell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Place 1 card from your hand under this card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO that card."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Place 1 card from your hand under this card: Draw 2 cards.\n[Activate: Main] [Once per turn] Place 2 cards from under this card in the Drop Area: Choose up to 1 opponent Battle Card and KO that card.", card_number="BT2-068"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main") == 3
+    assert any(rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt2_035_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Once per turn] During your turn, when you combo with a card that has an energy cost of 2 or more, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Auto] [Once per turn] During your turn, when you combo with a card that has an energy cost of 2 or more, draw 1 card.\n[Auto] When this card attacks, draw 1 card.", card_number="BT2-035"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_069_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, if &lt;Son Goku&gt; is in your Drop Area, this card gains +5000 power for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Battle] [Once per turn] Remove all of your cards in the Drop Area from the game: This card gains +5000 power and [Triple Strike] (This card inflicts 3 damage instead of 1 when attacking). Then, at the end of the turn, you lose the game.", card_number="BT2-069"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_003_hit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, it gains +5000 power for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card, and this card gains +5000 power for the duration of this turn.\n[Auto] [Once per turn] When your opponent activates [Blocker], you may place 1 red card from your hand into the Drop Area. If you do so, negate that [Blocker].", card_number="BT1-003"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_activates_blocker" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_107_mira_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, place the top 2 cards of your deck in the Drop Area. Then, if there is a green or yellow card in your Battle Area or Drop Area, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Permanent] If your Warp has 5 cards or more in it, this card gains [Critical].\n[Activate: Main] [Once per turn] Place up to 2 cards from the top of your deck in the Drop Area.\n[Auto] When this card attacks, draw 1 card.", card_number="BT3-107"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt3_108_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, place the top 2 cards of your deck in the Drop Area. Then, if there's a red or blue card in your Battle Area or Drop Area, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Place up to 2 cards from the top of your deck in the Drop Area.\n[Auto] When this card attacks, draw 1 card. Then, you may choose 5 cards in your Drop Area and send them to your Warp. If you do so, this card gains +5000 power and [Double Strike] (This card inflicts 2 damage instead of 1 when attacking) for the duration of the turn.", card_number="BT3-108"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p580_videl_destiny_in_reach_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier][Blocker]\n[Auto][Limit 1] If your Leader is a green &lt;Videl&gt; card and you return 1 of your {Videl} to its owner's hand: When your green skill-less Battle Card with an energy cost of 1 is played, play this card from your hand.\n[Activate: Main/Battle] Place this card in your Drop: Add up to 1 green &lt;Videl&gt; card with an energy cost of 3 or less from your deck to your hand, then shuffle your deck."), card_type="BATTLE", card_number="P-580"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_add_up_to_n_from_owner_deck_to_hand" for rule in rules)
+
+
+def test_extract_exact_bt1_031_god_break_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)(Blue)(Blue)â‘¢: &lt;Son Goku&gt;\n[Double Strike]\n[Permanent] Your opponent cannot activate [Counter] against this card's attack and cannot activate [Blocker] during this card's attack."), card_type="BATTLE", card_number="BT1-031"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_056_android_13_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If &lt;Android 14&gt; and &lt;Android 15&gt; are in your Drop Area, you can activate this card's [Awaken] when your life is at 6 or less."), card_type="LEADER", card_back_skill_unstyled="[Auto] When your opponent's &lt;Son Goku&gt; or Battle Card with an energy cost of 6 or less is placed in the Drop Area from any area by one of your skills, this card gains [Critical] (When this card inflicts damage to your opponent's life, they place that many cards in their Drop Area instead of their hand) for the duration of the turn.\n[Auto] When this card attacks, draw 1 card.", card_number="BT3-056"))
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_p582_rasin_lakasei_crusher_support_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have 3 or more yellow â‰ªTurles Crusher Corpsâ‰« cards other than this card in play, this card can be used in combos in Rest Mode.\n[Activate: Main][Limit 1] Choose 1 of your &lt;Rasin&gt; cards and 1 of your &lt;Lakasei&gt; cardsâ€”both yellow and with an energy cost of 1â€”other than this card and place them under this card: Switch this card to Active Mode."), card_type="BATTLE", card_number="P-582"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_p586_ss4_broly_provoking_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader is a black &lt;Broly&gt; card, this card is also treated as green in all areas.\n[Auto][Limit 1] If your Leader is a black &lt;Broly&gt; card, it's your turn, and you discard 1 card from your hand: When your life leaves your Life Area by one of your skills, play this card from your Drop, then send this card from your Battle Area to your Warp at the end of the turn.\n[Activate: Main][Limit 1](1), if your Leader is a black &lt;Broly&gt; card and you discard this card from your hand: Play up to 1 green &lt;Broly&gt; card with an energy cost of 1 from your deck, shuffle your deck, then add up to 2 cards from your life to your hand."), card_type="BATTLE", card_number="P-586"))
+    assert any(rule.trigger == "owner_card_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_002_vados_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can attack Battle Cards in Active Mode."), card_type="LEADER", card_back_skill_unstyled="[Permanent] This card can attack Battle Cards in Active Mode.\n[Auto] When this card attacks, draw 1 card. If this card attacks a Battle Card, it gains +5000 power for the duration of the turn.", card_number="BT1-002"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_057_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card cannot attack Battle Cards.\n[Auto] When this card attacks, both players choose 1 card from their hand and place it in the Drop Area."), card_type="LEADER", card_back_skill_unstyled="[Permanent] This card cannot attack Battle Cards.\n[Auto] When this card attacks, draw 1 card. Then, both players choose 1 card from their hand and 1 card from their Battle Area, and place those cards in their Drop Areas.", card_number="BT1-057"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_020_iron_wall_magetta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card cannot be KO-ed in battle."), card_type="BATTLE", card_number="BT1-020"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_041_beerus_general_of_demolition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)\n[Auto] When this card attacks a Leader Card, your opponent may choose 2 cards from their hand and place them in the Drop Area. If they don't, choose all of your opponent's Battle Cards and energy. Place them in the Drop Area."), card_type="BATTLE", card_number="BT1-041"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p538_gogeta_birth_of_the_ultimate_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Fusion](Green), if you have 2 or more energy and you draw 1 card: Green &lt;Son Goku: Br&gt; card and green &lt;Vegeta: Br&gt; card.\n[Auto][Limit 1] If it's your turn: When you combo, draw 1 card, and this card can't be KO'd until the end of your opponent's turn.\n[Activate: Main][Limit 1](Green), if you have 4 or more energy and you add this card to Z-Energy: Play up to 1 green &lt;Gogeta: Br&gt; card with an energy cost of 8 from your Z-Energy, and that card gains [Dual Attack] for the turn."), card_type="BATTLE", card_number="P-538"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_054_encouraging_presence_monaka_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Your Leader Card gains [Double Strike] (This card inflicts 2 damage instead of 1 when attacking) for the duration of the turn. Then, draw 1 card."), card_type="EXTRA", card_number="BT1-054"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_056_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)"), card_type="LEADER", card_back_skill_unstyled="[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Auto] When this card attacks, draw 1 card.", card_number="BT1-056"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_018_confident_botamo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This Card can attack Battle Cards that are in Active Mode."), card_type="BATTLE", card_number="BT1-018"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_023_kai_attendant_of_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card cannot attack Battle Card with 15000 or more power."), card_type="BATTLE", card_number="BT1-023"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_033_kind_saiyan_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 1 blue &lt;Son Goku&gt; among them and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-033"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_034_mighty_striker_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)"), card_type="BATTLE", card_number="BT1-034"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_040_bulma_god_tempter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 &lt;Whis&gt; with an energy cost of 4 or lower from your deck and add it to your hand.  Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-040"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_045_boost_attack_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you Combo with this card, if your Leader Card is blue and your life is 4 or less, draw 1 card and add +10000 to this card's Combo for the duration of the turn."), card_type="BATTLE", card_number="BT1-045"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_047_energy_boosted_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, draw 1 card."), card_type="BATTLE", card_number="BT1-047"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_049_mysterious_presence_monaka_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if you do not have any Battle Cards other than this card in play, choose up to 1 of your opponent's Battle Cards. Place that card  on top of the opponent's deck, and all cards that were under it in the Drop Area."), card_type="BATTLE", card_number="BT1-049"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_017_evolution_premonition_frost_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] â‘¡: Look at up to 7 cards from the top of your deck, choose one &lt;Frost&gt; with [Evolve] among them and Evolve this card into it. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-017"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_006_scheming_champa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play a red â‰ªAlienâ‰«, it gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT1-006"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_036_android_17_turning_the_tide_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Deflect]\n[Auto] When you play this card, choose all cards in your hand and your opponent's hand, and all Battle Cards in your opponent's Drop Area, and shuffle them into their owners' decks."), card_type="BATTLE", card_number="DB2-036"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_008_bewitching_god_vados_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Auto] When this card attacks, look at up to 3 cards from the top of your deck. Choose up to 1 â‰ªAlienâ‰« with power 15000 or less among them and play it. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-008"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_57_vegeta_unyielding_pride_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Deflect]\n[Permanent] This card can attack your opponent's Battle Cards in Active Mode.\n[Auto](Red)â‘ , if your Leader Card is a red or green â‰ªSaiyanâ‰« card: When this card KOs one of your opponent's Battle Cards, play 1 Red/Green multicolor &lt;Vegeta&gt; card with an energy cost of 6 from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="EB1-57"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_011_lightning_fast_hit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)(Red)â‘¡: &lt;Hit&gt;\n[Double Strike]\n[Auto] When a card evolves into this card, inflict 2 damage to your opponent."), card_type="BATTLE", card_number="BT1-011"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_013_raging_cabba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)â‘ : &lt;Cabba&gt;\n[Double Strike]\n[Auto] When a card evolves into this card, switch this card to Active Mode."), card_type="BATTLE", card_number="BT1-013"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_047_frieza_army_healing_pod_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto][Once per turn] When you play a green Battle Card from your Drop Area, draw 1 card.\n[Activate: Main](Green)(Green)â‘¡, place this card in its owner's Drop Area: Choose up to 1 Battle Card with an energy cost of 4 or less from your Drop Area and play it."), card_type="EXTRA", card_number="TB3-047"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_002_dr_myuu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 â‰ªMachine Mutantâ‰« Battle Card from your hand with 5000 or less power and play it."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Choose 1 â‰ªMachine Mutantâ‰« Battle Card from your hand with 10000 or less power and play it.\n[Auto] When this card attacks, draw 1 card.", card_number="BT3-002"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_001_champa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Once per turn] When your Battle Card attacks a Leader Card, if the attacking card has 15000 or more power, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main] Place 1 card from your hand in the Drop Area: Choose this card or 1 of your Battle Cards. It gains [Double Strike] for the duration of the turn.", card_number="BT1-001"))
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_063_son_goten_family_of_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your turn, when you Combo with this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it."), card_type="BATTLE", card_number="BT1-063"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p027_gotenks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks your opponent's Leader, if you have less cards in hand than your opponent, your opponent chooses 1 card in their hand and places it in the Drop Area."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks your opponent's Leader, if you have less cards in hand than your opponent, your opponent chooses 1 card in their hand and places it in the Drop Area.\n[Auto] When this card attacks, draw 1 card.", card_number="P-027"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt12_143_chain_attack_putine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is removed from your Battle Area by an opponent's skill, send up to 1 Battle Card from your opponent's Drop Area to their Warp.\n[Activate: Battle][Once per turn] If your Leader Card is a black â‰ªDemon Realm Raceâ‰« card and it's your turn: Up to 1 black â‰ªEvil Wizardâ‰«, â‰ªDemon Realm Raceâ‰«, or â‰ªDemon Godâ‰« card in your Combo Area gets +5000 combo power for the turn."), card_type="BATTLE", card_number="BT12-143"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_048_ultimate_judgment_jaco_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you Combo with this card, choose 1 card in your opponent's Combo Area and return it to their hand."), card_type="BATTLE", card_number="BT1-048"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_044_whis_the_resting_attendant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, add 1 card to your energy from the top of your deck."), card_type="BATTLE", card_number="BT1-044"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_add_top_deck_to_energy_rest_on_play" for rule in rules)
+
+
+def test_extract_exact_bt9_128_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] Choose 1 or 2 cards in your life and add them to your hand: When this card attacks, switch this card to Active Mode."), card_type="LEADER", card_back_skill_unstyled="[Auto][Once per turn] Choose 1 or 2 cards in your life and add them to your hand: When this card attacks, switch this card to Active Mode.", card_number="BT9-128"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_001_launch_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When you combo, draw 1 card.\n[Auto] When a card in your life is flipped face up by one of your red card skills, you may flip this card over. If you do, draw 1 card and you can't flip your Leader Card to its front for the turn."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, choose up to 1 of your opponent's cards and it gets -5000 power for the battle.\n[Auto][Once per turn] When you combo, draw 1 card.\n[Auto] When a card in your life is flipped face up by one of your red card skills, you may flip this card over. If you do, draw 1 card and you can't flip your Leader Card to its back for the turn.", card_number="BT12-001"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt8_132_super_baby_2_destructive_villain_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Villainous] (When you play another â‰ªVillainousâ‰« Battle Card or activate a â‰ªVillainousâ‰« Extra Card's skill, your opponent chooses 1 card in their hand and places it in their Drop Area, then negate this skill for the duration of the turn.)\n[Auto] When your Leader Card activates [Awaken] or [Wish], this card gets +15000 power and [Dual Attack] for the duration of the turn."), card_type="BATTLE", card_number="BT8-132"))
+    assert any(rule.trigger == "leader_wished" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_106_android_17_18_bringers_of_the_apocalypse_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Triple Strike]\n[Permanent] If you or your opponent have a skill-less Battle Card in play, reduce the energy cost of this card in your hand by 1.\n[Auto] When this card is played, choose any number of you and your opponent's Battle Cards and Unison Cards, ignoring [Barrier], and negate the skills of those cards until the end of your opponent's next turn.\n[Activate: Main] Place this card in its owner's Drop Area: Choose up to 2 of your skill-less Battle Cards with energy costs of 4 or less and switch them to Active Mode."), card_type="BATTLE", card_number="BT13-106"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_036_god_charge_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)(Blue)(Blue)â‘¡: &lt;Vegeta&gt;\n[Dual Attack]\n[Critical]\n[Auto]  When a card evolves into this card, choose up to 1 opponent Battle Card with [Blocker] and return it to their hand."), card_type="BATTLE", card_number="BT1-036"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p060_desperate_onslaught_bardock_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 5]\n[Critical]\n[Auto] When this card attacks during the turn you played it with [Over Realm], your opponent may not combo with Battle Cards in their Battle Area or activate [Blocker] for the duration of the battle."), card_type="BATTLE", card_number="P-060"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_001_vegito_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Each &lt;Son Goku&gt; and &lt;Vegeta&gt; in all of your areas gain red, blue, and green colors.\n[Auto] When this card attacks, place up to 1 card from the top of your deck in the Drop Area. If that card is red, this card gains +5000 power for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Permanent] Each &lt;Son Goku&gt; and &lt;Vegeta&gt; in all of your areas gain red, blue, and green colors.\n[Auto] When this card attacks, draw 1 card, and if there are 10 or more total &lt;Son Goku&gt; or &lt;Vegeta&gt; in your Drop Area, this card gains +5000 power and [Double Strike] for the duration of the turn.", card_number="BT2-001"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_068_slasher_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card cannot attack Battle Cards."), card_type="BATTLE", card_number="BT1-068"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_035_zen_oh_cosmic_unison_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+2][Activate: Main] If your Leader Card is mono-blue: Place the top card of your deck in your energy; you can't place cards in your Energy Area for the turn, then, at the end of the turn, place the card you placed in your energy with this skill in its owner's Drop Area.\n[-5][Activate: Main] Choose all cards in all Battle Areas, ignoring [Barrier], and shuffle them into their owners' decks."), card_type="UNISON", card_number="BT10-035"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt9_133_vegetas_final_flash_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is yellow: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.\n[Auto] If all of your energy is yellow: When you activate this card, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and negate its skills for the duration of the turn."), card_type="EXTRA", card_number="BT9-133"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_066_son_goku_pan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 2 cards in your life and add them to your hand: Choose up to 1 of your Battle Cards and it gains [Double Strike] for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main][Once per turn] Choose 1 card in your life and add it to your hand: Switch this card to Active Mode.", card_number="BT8-066"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_bt1_071_energy_power_gotenks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, your opponent chooses 1 card from their hand and places it in the Drop Area."), card_type="BATTLE", card_number="BT1-071"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_026_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, it gets +5000 power for the duration of the turn, then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. Then shuffle any areas you looked through.\n[Wish] When there are 7 [Dragon Ball] cards in your Drop Area: Choose up to 1 â‰ªDesireâ‰« card in your Drop Area, add it to your hand, and flip this card over.\n[Activate: Main][Once per turn] Choose oneâ€” Draw 1 card. Choose 1 blue or black â‰ªDesireâ‰« card in your hand with an energy cost less than or equal to your current energy and activate its [Activate: Main] skill. Remove 7 [Dragon Ball] cards in your Drop Area from the game. If you do, choose up to 3 of your energy and switch them to Active Mode, and this card gets +15000 power and [Critical] for the duration of the turn, then flip this card over at the end of the turn."), card_type="LEADER", card_number="BT5-026"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "leader_wished" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_095_elite_force_captain_ginyu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose all of your â‰ªGinyu Forceâ‰« Battle Cards. Those cards gain +10000 power and [Double Strike] for the duration of the turn."), card_type="BATTLE", card_number="BT1-095"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p127_cabba_bonds_of_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if there is a â‰ªUniverse 6â‰« Battle Card in your Drop Area, you may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 1 blue or yellow non-&lt;Cabba&gt; â‰ªUniverse 6â‰« card with an energy cost of 1 in your Drop Area and play it."), card_type="BATTLE", card_number="P-127"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_077_paragus_controller_of_monsters_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may place 1 card from your hand in the Drop Area. If you do so, choose and activate 1 {Broly's Ring} from your deck. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-077"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd3_04_android_17_impending_crisis_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Auto] If your Leader Card is an â‰ªAndroidâ‰« card: When you play this card, choose up to 1 Battle Card with an energy cost of 4 or less that has {Android} in its name from your deck, place it in your Drop Area, then shuffle your deck."), card_type="BATTLE", card_number="XD3-04"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_068_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then you may choose 2 of your Battle Cards and switch them to Rest Mode. If you switched 2 Battle Cards to Rest Mode, your opponent can only attack with Battle Cards one more time for the duration of the turn."), card_type="EXTRA", card_number="BT9-068"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_131_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a black &lt;Supreme Kai of Time&gt; card: When this card is played using [Over Realm], send up to 2 cards from the top of your deck to your Warp, then draw 1 card."), card_type="BATTLE", card_number="BT13-131"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_093_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If this card is in Rest Mode, your opponent cannot attack your other Battle Cards."), card_type="BATTLE", card_number="BT1-093"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_093_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader Card is yellow, all of your Battle Cards and your opponent's Battle Cards with original energy costs of 5 or less have their skills negated, and all of your Battle Cards with energy costs of 1 get +5000 power.\n[0][Activate: Main] Play up to 2 yellow skill-less Battle Cards with energy costs of 1 from your Drop Area.\n[-2][Activate: Main] If your Leader Card is yellow: Your opponent can only attack with Battle Cards once during their next turn."), card_type="UNISON", card_number="BT11-093"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt12_029_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When a card in a Battle Area is returned to its owner's hand by a skill, draw 1 card, then choose 1 card in your hand and place it at the top or bottom of your deck.\n[+1][Activate: Main] Choose up to 1 blue Battle Card in your hand with an energy cost of 1 and play it."), card_type="UNISON", card_number="BT12-029"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_066_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card cannot be attacked by a Leader Card."), card_type="BATTLE", card_number="BT1-066"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p415_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] If your Leader is a green &lt;Vegeta&gt; card: When you play a green Battle Card with [blocker] or activate a green [field] with an energy cost of 1, draw 1 card.\n[Activate Main][Once per turn][Green], if your Leader is green and you have a [Field] Extra in your Battle Area: Add up to 1 green Great Ape card with an energy cost of 4 or less and [Blocker] from your Drop to your hand."), card_type="BATTLE", card_number="P-415"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_036_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During your opponent's turn, if all of your energy is mono-blue and you would reveal this card from your life to add it to your hand, you may place it in your energy in Rest Mode instead. If you do, draw 1 card.\n[Auto] At the end of your next turn after you place this card in your energy with this skill, if this card is in your energy, place it in its owner's Drop Area."), card_type="BATTLE", card_number="BT10-036"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_129_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 1 of your Battle Cards and place it in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards, KO it, then your opponent chooses 1 card in their hand and places it in their Drop Area."), card_type="BATTLE", card_number="BT8-129"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_060_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle][Once per turn] Choose 1 card from your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and KO it."), card_type="BATTLE", card_number="BT6-060"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_131_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is black and your life is at 4 or less: When this card is used in a combo, draw 1 card."), card_type="BATTLE", card_number="BT12-131"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt14_086_heart_of_a_maiden_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a â‰ªHeroineâ‰« card: Look at up to 7 cards from the top of your deck and choose one\nãƒ»Add up to 2 green skill-less Battle Cards among them to your hand, then shuffle your deck.\nãƒ»If you don't have a Unison Card in play, play up to 1 green Unison Card with 6000 power among them with a marker on it, then shuffle your deck."), card_type="EXTRA", card_number="BT14-086"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_001_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn][Burst 2] (You must place the top 2 cards of your deck in your Drop Area to activate this skill.) Choose 1 card in your life and add it to your hand: If your opponent has 5 or more life, deal 1 damage to your opponent."), card_type="LEADER", card_back_skill_unstyled="[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When this card attacks, draw 1 card.\n[Auto][Once per turn] When one of your Battle Cards activates [Alliance], choose up to 1 of your opponent's Battle Cards with 30000 power or less and KO it.\n[Activate: Main][Once per turn][Sparking 5] Choose 3 cards in your hand and place them in your Drop Area: Choose all of your red and green Battle Cards, then both the chosen cards and this card get +10000 power for the duration of the turn.", card_number="BT7-001"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_battle_activates_alliance" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_079_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Burst 2] (You must place the top 2 cards of your deck in your Drop Area to activate this skill.) When this card attacks, you may choose 1 yellow card from your hand and place it in your Drop Area. If you do, draw 2 cards."), card_type="LEADER", card_back_skill_unstyled="[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When this card attacks, draw 1 card.\n[Activate: Main] Choose up to 1 yellow â‰ªSaiyanâ‰« card in your Drop Area with an energy cost of 3 or more, add it to your hand, and negate this skill for the duration of the game.", card_number="BT6-079"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_021_sensing_old_kai_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the beginning of your Main Phase, look at up to 3 cards from the top of your deck. Choose up to 1 {Miraculous Comeback Ultimate Gohan} among them and add it to your hand. Then, place the remaining cards at the bottom of your deck in any order."), card_type="BATTLE", card_number="BT2-021"))
+    assert any(rule.trigger == "owner_main_phase_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_078_overflowing_bio_warrior_army_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in the Drop Area from the Battle Area, if your Leader Card is &lt;Broly&gt;, you may place 1 card from your hand in the Drop Area. If you do, play this card."), card_type="BATTLE", card_number="BT1-078"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_076_broly_dawn_of_the_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 7 cards from the top of your deck and add 1 green &lt;Broly&gt; among them to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-076"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex11_02_gotenks_unison_of_rage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your Leader Card's power is decreased by a skill, it gets +10000 power for the turn.\n[+1][Activate: Main] Choose up to 1 card in your life and add it to your hand, then choose 1 of your Leader Cards and it gets -5000 power for the turn.\n[-2][Activate: Main] Choose 1 of your Leader Cards and it gets -5000 power for the turn: Look at your opponent's hand, choose up to 1 multicolor Battle Card or Battle Card with 10000 power or less in it, and place it in its owner's Drop Area."), card_type="UNISON", card_number="EX11-02"))
+    assert any(rule.trigger == "owner_leader_power_reduced_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt14_085_defender_of_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then choose up to 1 of your opponent's Tokens and remove it from the game.\n[Permanent] This card's skills can't be negated in any area."), card_type="EXTRA", card_number="BT14-085"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_086_golden_frieza_resurrected_terror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Yellow)(Yellow)â‘£: &lt;Frieza&gt;\n[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)\n[Auto] When a card evolves into this card, place all Rest Mode Battle Cards except for this card in the Drop Area. Then, choose all Active Mode Battle Cards except for this card and switch them to Rest Mode."), card_type="BATTLE", card_number="BT1-086"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_007_fully_trained_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Each &lt;Son Gohan: Adolescence&gt; in your hand gains \"[Evolve] (Red)(Red)â‘ : &lt;Son Gohan: Adolescence&gt;\" (Play this card on top of the specified card)."), card_type="BATTLE", card_number="BT2-007"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_139_gohanks_master_student_union_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, draw 1 card; if you don't have a Unison Card in play, play 1 black Unison Card with no specified cost and 15000 power from your Drop Area with a marker on it; you can't play copies of this card for the turn.\n[Activate: Main]â‘ , if your Leader Card is a black â‰ªSaiyanâ‰« card and you send 1 &lt;Son Gohan: Xeno&gt; card and 1 &lt;Trunks: Xeno&gt; card from your Drop Area to your Warp: Play this card from your hand."), card_type="BATTLE", card_number="BT12-139"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_023_zoiray_warrior_of_universe_11_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is red: When you take damage from an opponent's non-keyword skill, you may play this card from your hand. If you do, add the top card of your deck to your life; you can't activate the [Auto] skill on copies of this card for the game."), card_type="BATTLE", card_number="BT14-023"))
+    assert any(rule.trigger == "owner_takes_damage_from_opponent_non_keyword_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p282_vegeta_the_insurmountable_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When one of your yellow skill-less Battle Cards with an energy cost of 2 is removed from your Battle Area by an opponent's skill or KO'd, you may play this card from your hand. If you do, you can't play copies of this card for the turn.\n[Auto][Once per turn] If this card's attack deals damage to an opponent or removes a marker from an opponent's Unison Card, play up to 1 skill-less Battle Card with 15000 power from your Drop Area."), card_type="BATTLE", card_number="P-282"))
+    assert any(rule.trigger == "owner_battle_removed_by_opponent_skill_or_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_042_kibito_kai_attendant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Switch this card to Rest Mode: Choose 1 of your Battle Cards and return it to your hand. Then, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and return it to their owner's hand. (Cards stacked under the card are placed in the Drop Area)"), card_type="BATTLE", card_number="BT3-042"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_111_rage_shenron_electricity_absorbed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[EX-Evolve] &lt;Rage Shenron&gt; with an energy cost of 2.\n[Permanent] This card can't attack Leader Cards.\n[Auto] When a card evolves into this card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="BATTLE", card_number="BT12-111"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_050_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Permanent] You can't send cards from Drop Areas to Warps.\n[Auto] When this card attacks, draw 1 card.\n[Auto][Burst 7] (You must place the top 7 cards of your deck in your Drop Area to activate this skill.) When your opponent attacks with a card, negate that attack, then negate this skill for the duration of the turn.\n[Activate: Main][Once per turn] When your life is at 1: Choose all of your opponent's Battle Cards with [Blocker] and KO them.", card_number="BT7-050"))
+    assert sum(1 for rule in rules if rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n") >= 2
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_042_bulmas_advice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Draw 1 card, then choose up to 1 of your Leader Cards and it gets +5000 power until the end of your opponent's next turn."), card_type="EXTRA", card_number="BT8-042"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt18_115_piccolo_namekian_pride_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Permanent] While this card is in Rest Mode, your opponent's Battle Cards can't attack your Leader.\n[Auto] Discard 1 card from your hand: When this card is KO'd, play this card from your Drop in Rest Mode with its skills negated for the turn."), card_type="BATTLE", card_number="BT18-115"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_12_goku_black_countdown_to_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] When you have 5 or more energy, you can play this card from your hand without paying its energy cost.\n[Auto] When you play this card, if your Leader Card is a &lt;Goku Black&gt; or &lt;Zamasu&gt; card, draw 1 card, and you can't play {Goku Black, Countdown to Destruction} for the duration of the turn."), card_type="BATTLE", card_number="EX06-12"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt12_135_trunks_catastrophic_premonition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a black â‰ªSaiyanâ‰« card: When this card is sent from your Drop Area to your Warp by a skill, place this card at the bottom of your deck from your Warp.\n[Activate: Main] If your Leader Card is a black â‰ªSaiyanâ‰« card, you send this card from your Drop Area to your Warp, and you choose 1 of your black Unison Cards and place it in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and send it to its owner's Warp, and you can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="BATTLE", card_number="BT12-135"))
+    assert any(rule.trigger == "self_sent_from_drop_to_warp_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_094_ss_broly_legendary_unison_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[0][Activate: Main] Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode.\n[-1][Activate: Main] Choose 1 of your opponent's Battle Cards with an energy cost of 5 or less in Rest Mode and KO it."), card_type="UNISON", card_number="BT10-094"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt14_065_ss_son_gohan_glimpsing_potential_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a â‰ªHeroineâ‰« card: When this card is played, play up to 1 green skill-less Battle Card with an energy cost of 1 from your deck, shuffle your deck, then choose up to 2 of your skill-less Battle Cards and they get +5000 power for the turn.\n[Activate: Main][Limit 1] If your Leader Card is a â‰ªHeroineâ‰« card, you have 2 or more green energy, and you choose 1 of your green Unison Cards with 6000 power and a marker on it and you place this card under it from your hand or Battle Area: Add a marker to the chosen Unison Card, then draw 1 card."), card_type="BATTLE", card_number="BT14-065"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_133_piccolo_jr_giant_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When your opponent adds a card from their life to their hand or Drop Area, add a marker to this card.\n[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the turn.\n[-6][Activate: Main] If your Leader Card is red: Choose up to 2 mono-red Battle Cards with different card names, energy costs of 3 or less, and 19000 power or less in your deck or hand, play them, then shuffle your deck if you looked through it."), card_type="UNISON", card_number="DB3-133"))
+    assert any(rule.trigger == "owner_opponent_life_added_to_hand_or_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt2_048_group_leader_pilaf_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Battle Card Attack] Play this card. Then, choose 1 keyword skill of the attacking card and negate it for the duration of the turn."), card_type="BATTLE", card_number="BT2-048"))
+    assert any(rule.trigger == "counter_battle_card_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_040_restless_spirit_ssb_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] When you play this card, reveal 1 card from the bottom of your deck. If that card is a &lt;Trunks: Future&gt; with an energy cost of 3 or less, play that card and negate its [Activate] skill for the duration of the game. If it is any other card, place it at the bottom of your deck."), card_type="BATTLE", card_number="BT2-040"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_058_vegeta_the_cruel_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] Play this card.\n[Permanent] If a multicolored card is in your energy, reduce the energy cost of this card in your hand by 1.\n[Auto] When you play this card during your opponent's turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less, KO it, then your opponent chooses 1 card in their hand and sends it to their Warp."), card_type="BATTLE", card_number="BT7-058"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_072_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, you may choose 1 â‰ªGoku's Lineageâ‰« from your hand and place it in your Drop Area. If you do so, draw 2 cards."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card, then choose up to 1 â‰ªGoku's Lineageâ‰« in your Battle Area. This card and the chosen card gain +5000 power for the duration of the turn.", card_number="BT4-072"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_p100_boujack_the_tyrant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking.) \n[Permanent] If your opponent has 2 or more Battle Cards in play in Rest Mode, reduce the energy cost of this card in your hand by 1.\n[Auto] When you play this card from your hand, choose up to 1 of your opponent's Battle Cards in Rest Mode, and it can't be switched to Active Mode until the end of your opponent's next turn."), card_type="BATTLE", card_number="P-100"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_024_cocotte_warrior_of_universe_11_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo]\n[Auto] If your Leader Card is red and your life is at 4 or less: When this card is used in a combo from your hand, draw 1 card and this card gets +10000 combo power for the battle.\n[Auto][Limit 1] If your Leader Card is red and you choose 1 of your red Unison Cards: When you remove a marker from one of your Unison Cards using a [Spirit Boost] skill, you may place this card from your hand under the chosen card. If you do, add a marker to the chosen card, then draw 1 card."), card_type="BATTLE", card_number="BT14-024"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_unison_spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_076_abrupt_breakthrough_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 8] (Yellow)(Yellow)(Yellow)(Yellow): â‰ªGoku's Lineageâ‰« with an energy cost of 8. (Play the specified card from your hand, then return this card to your hand)\n[Barrier]\n[Auto] Activate this skill when one of your â‰ªGoku's Lineageâ‰« with an energy cost of 5 or more is removed from the Battle Area by an opponent's skill. If you have no cards in your Battle Area, you may play this card from your hand."), card_type="BATTLE", card_number="BT4-076"))
+    assert any(rule.trigger == "owner_battle_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_088_diabolical_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main/Battle] Choose one\nãƒ»Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less, KO it, then draw 1 card.\nãƒ»Choose 1 of your opponent's Unison Cards and remove a marker from it."), card_type="EXTRA", card_number="BT14-088"))
+    assert any(rule.trigger == "self_activate_main_or_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_058_pressure_assault_super_saiyan_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle)\n[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards. KO that card."), card_type="BATTLE", card_number="BT3-058"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_ko_up_to_n_opponent_battle_on_play" for rule in rules)
+
+
+def test_extract_exact_bt4_073_bardock_the_progenitor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 2] â‰ªGoku's Lineageâ‰« with an energy cost of 2. (Play the specified card from your hand, then return this card to your hand)\n[Auto] When you play this card, choose 1 card in your life and add it to your hand."), card_type="BATTLE", card_number="BT4-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_019_foreseeing_east_supreme_kai_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card)"), card_type="BATTLE", card_number="BT2-019"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_058_ss_vegeta_no_holding_back_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Barrier]\n[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When you play this card, choose up to 1 of your opponent's Battle Cards and KO it."), card_type="BATTLE", card_number="BT5-058"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_ko_up_to_n_opponent_battle_on_play" for rule in rules)
+
+
+def test_extract_exact_bt2_039_raging_spirit_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of the battle after you combo with this card from your hand, if your Leader Card is blue, play this card in Rest Mode."), card_type="BATTLE", card_number="BT2-039"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "auto_play_self_from_combo_on_battle_end" for rule in rules)
+
+
+def test_extract_exact_bt11_090_buu_buu_volleyball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a green &lt;Gotenks&gt; card: Negate the attack. You may choose 1 card in your hand and discard it. If you do, add up to 1 green &lt;Son Goten&gt; card with 15000 power and up to 1 green &lt;Trunks: Youth&gt; card with 15000 power from your Drop Area to your hand."), card_type="EXTRA", card_number="BT11-090"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p101_three_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dragon Ball] (You can include as many copies of cards with [Dragon Ball] in your deck as you like, as long as the total number doesn't exceed 7.)\n[Activate: Main] Draw 1 card, then choose up to 1 of your Battle Cards, and it can attack Battle Cards in Active Mode for the duration of the turn."), card_type="EXTRA", card_number="P-101"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_121_dyspo_unprecedented_speed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier]\n[Energy-Exhaust]\n[Successor](Yellow) (Choose any number of your mono-green, mono-yellow, or Green/Yellow multicolor Battle Cards whose energy costs add up?to the energy cost of this card, place them in their owners' Drop Areas, then play this card from your hand.)\n[Auto] If your Leader Card is a â‰ªUniverse 11â‰« card: When you play this card or it is placed in your Drop Area from your Battle Area by a skill, draw 1 card."), card_type="BATTLE", card_number="BT9-121"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt4_099_mira_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: This card gains +5000 power for the duration of the turn, then place 3 cards from the top of your deck in the Drop Area."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main] [Once per turn] Choose 3 cards in your Warp and place them in your Drop Area: This card gains +5000 power for the duration of the turn.", card_number="BT4-099"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_043_trunks_creator_of_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card at the bottom of your deck: Choose 1 blue &lt;Son Goku&gt; or &lt;Vegeta&gt; with an energy cost of 3 or less from your hand and play it."), card_type="BATTLE", card_number="BT2-043"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_026_goku_black_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, look at up to 5 cards from the top of your deck, choose up to 1 blue or yellow &lt;Goku Black&gt; or &lt;Zamasu&gt; card among them and add it to your hand, then shuffle your deck. "), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, look at up to 5 cards from the top of your deck, choose up to 1 blue or yellow &lt;Goku Black&gt; or &lt;Zamasu&gt; card among them and add it to your hand, then shuffle your deck.\n[Auto] When this card attacks a Leader Card, this card gets -5000 power for the duration of the turn.\n[Activate: Main][Once per turn] If your opponent has 8 or more energy: Choose up to 4 cards from your opponent's life and place them at the bottom of their deck in any order.\n[Activate: Main][Once per turn] (1): Choose 1 of your opponent's Battle Cards and return it to its owner's hand.", card_number="BT7-026"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt2_024_attendants_spopovich_and_yamu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, place up to 1 card from the top of your deck under your {Majin Buu's Sealed Ball}."), card_type="BATTLE", card_number="BT2-024"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_037_determined_striker_ssb_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Play this card and negate the attack.\n[Permanent] When activating this card's Counter, if you have 3 or less life, you may place 2 â‰ªSaiyanâ‰« from your hand in the Drop Area.  If you do so, reduce the energy cost of this card by 3 for the duration of the turn."), card_type="BATTLE", card_number="BT2-037"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_075_height_of_mastery_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect] (This card isn't affected by [Counter: Play] skills)\n[Triple Strike]\n[Dual Attack]\n[Auto] When you play this card with [Swap], choose up to a total of 3 of your opponent's Battle Cards or energy ignoring [Barrier], and switch them to Rest Mode."), card_type="BATTLE", card_number="BT4-075"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_014_scheming_oolong_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is a â‰ªShenronâ‰« card and {Oolong's Wish} is in your Drop Area, draw 2 cards."), card_type="BATTLE", card_number="BT5-014"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt12_134_ss3_trunks_marvelous_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Permanent] If your Leader Card is a black â‰ªSaiyanâ‰« card, you have 3 or more energy, and there are 15 or more cards in your Drop Area, this card gets +11000 power and [Critical] during your turn."), card_type="BATTLE", card_number="BT12-134"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_022_mind_controlling_babidi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 2 red Battle Cards among them with 25000 or less power other than &lt;Evil Wizard Babidi&gt; and play them. Then, shuffle your deck."), card_type="BATTLE", card_number="BT2-022"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_098_ginyu_force_jeice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card) \n[Auto] When you play this card from your hand, look at up to 3 cards from the top of your deck. Choose up to 1 â‰ªGinyu Forceâ‰« other than &lt;Ginyu&gt; among them and play it. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-098"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_089_ganos_aerial_assault_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 2 cards in your opponent's hand and place them in their Drop Area, then choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and KO it."), card_type="BATTLE", card_number="DB2-089"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_108_omega_shenron_allies_absorbed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Activate: Main](Yellow), choose 1 mono-yellow â‰ªShadow Dragonâ‰« card with an energy cost of 4 or less in your Battle Area and place it in its owner's Drop Area: Draw 1 card, then play this card from your hand. \n[Activate: Main][Once per turn] If your Leader Card is a yellow â‰ªShadow Dragonâ‰« card and you send 1 mono-yellow â‰ªShadow Dragonâ‰« card with an energy cost between 2 and 4 that isn't a &lt;Syn Shenron&gt; card from your Drop Area to its owner's Warp: Add up to 1 card from your life to your hand and this card gains the skills of the card you sent to the Warp with this skill until the end of your opponent's next turn."), card_type="BATTLE", card_number="BT12-108"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt15_059_universe_6_combination_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. If your Leader Card is a â‰ªUniverse 6â‰« card, play up to 1 â‰ªUniverse 6â‰« card with an energy cost of 1 from your Drop Area with its skills negated for the turn.\n[Activate: Main](Blue), if your Leader Card is a â‰ªUniverse 6â‰« card: Choose all of your Battle Cards with both â‰ªSaiyanâ‰« and â‰ªUniverse 6â‰« and they get +5000 power for the turn."), card_type="EXTRA", card_number="BT15-059"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p533_ss4_son_goku_an_emotional_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust]\n[Offering][Limit 1]\n[Auto][Limit 1] If your Leader's back side is {SS4 Son Goku, Senses Regained}, you have 3 or more energy, and you place 1 of your red Battle Cards with 25000 power or more in your Drop: When your Leader's [Awaken] skill activates, play this card from your hand, and this card gains [Triple Strike] and [Dual Attack] for the turn.\n[Activate: Main][Limit 1](Red)/(Yellow), if your Leader's back side is {SS4 Son Goku, Senses Regained}, you have 3 or more energy, and you have a Red/Yellow multicolor card in your energy: Play this card from your hand."), card_type="BATTLE", card_number="P-533"))
+    assert any(rule.trigger == "leader_wished" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_052_five_star_ball_parasitic_darkness_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas.\n[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle.\n[Activate: Main] If you have 2 or more energy and you choose 1 of your mono-blue &lt;Janemba&gt; cards with an energy cost of 3 and place this card under it: Play up to 1 blue &lt;Janemba: Xeno&gt; card with an energy cost of 4 from your deck or hand on top of the chosen card in Active Mode, then shuffle your deck if you looked through it."), card_type="EXTRA", card_number="BT12-052"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt17_138_ssg_son_goku_magnificent_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo][Energy-Exhaust]\n[Auto] If your Leader Card is red or blue: When this card is used in a combo from your hand, if a red card is in your energy, choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -5000 power for the turn. Additionally, if a blue card is in your energy, choose up to 1 of your opponent's Leader Cards or Unison Cards and it gets -5000 power for the battle."), card_type="BATTLE", card_number="BT17-138"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_132_vegeta_catastrophic_premonition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Critical]\n[Auto][Once per turn] When your opponent plays a Battle Card with an energy cost greater than their current energy using a skill, this card gets +10000 power until the end of your next turn."), card_type="BATTLE", card_number="BT12-132"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_038_mighty_attack_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical] (When this card inflicts damage to your opponent's life, they place that many cards in their Drop Area instead of their hand)"), card_type="BATTLE", card_number="BT2-038"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_008_preemptive_strike_ssg_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Sparking 2] (This skill takes effect when you have 2 or more cards in your Drop Area.) When you play this card, look at up to 5 cards from the top of your deck, choose up to 1 &lt;Gogeta: Br&gt; card or red &lt;Son Goku: Br&gt; card among them and add it to your hand, shuffle your deck, then if you added a card to your hand, choose 1 card from your hand and place it in your Drop Area.\n[Activate: Main] [Once per turn] Choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and it gets -5000 power for the duration of the turn.\n[Auto] At the end of your turn, return this card to its owner's hand."), card_type="BATTLE", card_number="BT6-008"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_068_tobi_feigned_greeting_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo]\n[Auto] If your Leader Card is green and your life is at 4 or less: When this card is used in a combo from your hand, draw 1 card, then choose 1 card other than this card in your Combo Area and it gets +6000 combo power for the battle."), card_type="BATTLE", card_number="BT13-068"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_027_cabbas_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 of your red cards. It gains +6000 power for the duration of the battle."), card_type="EXTRA", card_number="BT1-027"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_029_babys_subdual_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a â‰ªMachine Mutantâ‰«, choose 1 of your opponent's Battle Cards with 15000 or less power and switch it to Active Mode. It gains +5000 power for the duration of the turn. Then, gain control of it. (Move the chosen card to your Battle Area)"), card_type="EXTRA", card_number="BT3-029"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_086_remote_serious_bomb_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Your opponent chooses 1 of their Battle Cards and sends it to its owner's Warp."), card_type="EXTRA", card_number="DB1-086"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_072_maiden_charge_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, if your Leader is â‰ªUniverse 2â‰«, you may place 1 card from your hand in your Drop Area. If you do so, your opponent chooses 1 of their Battle Cards and KO-s it."), card_type="EXTRA", card_number="TB1-072"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_097_enraged_gohan_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Place 1 card from your hand in the Drop Area: Choose 1 of your opponent's attacking Battle Cards and KO it."), card_type="EXTRA", card_number="BT2-097"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p155_heros_mafuba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Battle Card Attack] Negate the attack, and if there is a green â‰ªGodâ‰« card in play in your Battle Area, place this card on top of the attacking card. At the end of your next turn, place this card (and only this card) in its owner's Drop Area. (While this card is on top of another card, the card underneath it is not treated as a Battle Card and can't activate any of its skills.)"), card_type="EXTRA", card_number="P-155"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_020_youre_mine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] When the Battle Card is played, choose up to 2 of your opponent's Battle Cards and they get -5000 power for the duration of the turn."), card_type="EXTRA", card_number="BT9-020"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_030_planet_m2_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)\n[Auto] When this card is placed in the Battle Area, if your Leader Card is <Dr. Myuu>, draw 1 card.\n[Activate: Battle] Switch this card to Rest Mode: If it's your turn, choose up to 1 of your opponent's Leader Cards or Battle Cards. It loses -5000 power for the duration of the battle. (If a Battle Card's power falls to 0 or less, it is KO-ed)"), card_type="EXTRA", card_number="BT3-030"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_037_tournament_of_power_arena_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Permanent] If your Leader Card is a â‰ªUniverse 7â‰« card, negate the [Energy-Exhaust] of your Red/Blue multicolor cards in all areas.\n[Activate: Main] If your Leader Card is a â‰ªUniverse 7â‰« card and you switch this card to Rest Mode: Look at up to 3 cards from the top of your deck, then place them on the top or bottom of your deck in any order."), card_type="EXTRA", card_number="BT9-037"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_116_restore_the_universes_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] Choose 2 Battle Cards from your Drop Area with energy costs of 4 or less and 15000 power or more, and 2 Battle Cards from your opponent's Drop Area with energy costs of 4 or less and 15000 power or more: If your Leader Card is a â‰ªShenronâ‰« card, play the chosen cards from your opponent's Drop Area in their Battle Area, then play the chosen cards from your Drop Area in your Battle Area in Rest Mode."), card_type="EXTRA", card_number="BT6-116"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_101_destron_gas_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a <Hatchhyack> card, it gets +10000 power for the duration of the battle, then choose all of your opponent's Battle Cards with an energy cost of 1 and place them in their owners' Drop Areas."), card_type="EXTRA", card_number="BT8-101"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_079_to_save_a_hopeful_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 green Battle Card with an energy cost of 5 or less in your Drop Area and play it."), card_type="EXTRA", card_number="BT3-079"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_071_maiden_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 2 â‰ªMaiden Squadronâ‰« with energy costs of 4 or less in your Drop Area and play them."), card_type="EXTRA", card_number="TB1-071"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_015_recoome_ultra_fighting_bomber_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If a <Recoome> card is in play in your Battle Area: Choose up to 1 of your opponent's Battle Cards with 15000 power or less ignoring [Barrier] and KO it."), card_type="EXTRA", card_number="TB3-015"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p236_divine_judgment_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a <Zamasu> card: Negate the attack. You may place the top card of your deck in your energy in Rest Mode. If you do, you can't activate copies of this card for the turn, and you can only play <Zamasu> cards, <Goku Black> cards, or mono-blue Unison Cards with specified costs of 2 or less for the game."), card_type="EXTRA", card_number="P-236"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_060_final_shine_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is mono-blue: Negate the attack, then you may choose 1 mono-blue card in your hand and discard it. If you do, draw 2 cards."), card_type="EXTRA", card_number="BT11-060"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p084_two_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dragon Ball]\n[Activate: Main] Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it."), card_type="EXTRA", card_number="P-084"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_057_finishing_spirit_bomb_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Green), place 1 card from your hand in the Drop Area: Green <Son Goku> with an energy cost of 5 or more.\n[Double Strike]\n[Auto] When this card attacks, choose up to 3 green Battle Cards in your Drop Area and combo with them."), card_type="BATTLE", card_number="BT3-057"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_120_dragon_thunder_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have 3 or more energy in Rest Mode, you can activate this card from your hand without paying its energy cost.\n[Activate: Main/Battle] If your Leader Card is a â‰ªShadow Dragonâ‰« card: Choose up to 1 â‰ªShadow Dragonâ‰« card in your Leader Area or Battle Area and it gets +5000 power for the turn. If you paid the energy cost to activate this skill, choose up to 1 card in your opponent's Battle Area and negate its skills for the turn."), card_type="EXTRA", card_number="BT12-120"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_088_divine_favor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a â‰ªShenronâ‰« card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less, ignoring [Barrier], and shuffle it into its owner's deck."), card_type="EXTRA", card_number="BT9-088"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_07_mutant_genesis_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a <Dr. Myuu> card, it gets +15000 power for the duration of the battle, then choose up to 1 â‰ªMachine Mutantâ‰« card from your hand with an energy cost of 2 or less and play it."), card_type="EXTRA", card_number="EX06-07"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_024_the_final_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main/Battle] If your Leader Card is red: You may choose 1 of your mono-red Battle Cards, negate its non-keyword skills for the turn, and give it -25000 power for the turn. If you do, choose up to 1 of your opponent's Battle Cards and it gets -25000 power for the turn."), card_type="EXTRA", card_number="DB3-024"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_030_potara_the_kais_secret_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 each of <Son Goku> and <Vegeta> from your hand and place them in the Drop Area: Choose your deck or your Drop Area. Choose up to 1 <Vegito> with an Energy cost of 6 or less from your chosen area and play it. If you chose your deck, shuffle it."), card_type="EXTRA", card_number="BT2-030"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_066_made_to_destroy_android_19_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Switch this card to Rest Mode: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less. KO that card."), card_type="BATTLE", card_number="BT3-066"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_078_infernal_messenger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Your Leader Card is a green â‰ªAndroidâ‰«  card: Look at up to 10 cards from the top of your deck, choose up to a total of 2 <Android 17>, <Hell Fighter 17>, or <Super 17> cards among them and add them to your hand. Then shuffle your deck."), card_type="EXTRA", card_number="BT5-078"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_019_son_goku_hope_of_the_saiyans_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, switch it to Rest Mode."), card_type="BATTLE", card_number="BT13-019"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_142_burning_impact_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Shuffle 2 Battle Cards from your opponent's Drop Area into their deck.\n[Permanent] If you have a Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="EXTRA", card_number="BT10-142"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_110_an_unexpected_turn_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your opponent has 3 or more Battle Cards in play with energy costs of 2 or more, the Battle Card your opponent is playing is placed in its owner's Drop Area instead, then choose all Battle Cards with energy costs of 2 or less, ignoring [Barrier], and send them to their owners' Warps."), card_type="EXTRA", card_number="BT7-110"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_020_galick_cannon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] When the Battle Card is played, choose up to 1 of those Battle Cards and it gets -15000 power for the duration of the turn."), card_type="EXTRA", card_number="DB1-020"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_051_call_of_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] Your Leader Card is a blue â‰ªShenronâ‰« card: Choose 1 of your Leader Cards and switch it to Active Mode."), card_type="EXTRA", card_number="BT5-051"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_031_future_punch_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 {Toolo, the Seer} in your Drop Area and place it at the bottom of your deck: Choose all of your blue â‰ªSaiyanâ‰« Leader Cards and blue â‰ªSaiyanâ‰« Battle Cards, and they get +5000 power and [Critical] for the duration of the turn. At the end of the turn, choose all of the â‰ªSaiyanâ‰« cards in your Battle Area and place them in their owners' Drop Areas."), card_type="EXTRA", card_number="TB3-031"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_018_we_are_universe_7_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose one-\nãƒ» Choose up to 1 â‰ªUniverse 7â‰« card from your Drop Area and add it to your hand.\nãƒ» Choose up to 1 â‰ªUniverse 7â‰« card with an energy cost of 4 or less from your deck, add it to your hand, then shuffle your deck."), card_type="EXTRA", card_number="BT9-018"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_077_tragic_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Sparking 7] (This skill takes effect when you have 7 or more cards in your Drop Area.) If your Leader Card is a green â‰ªFrieza's Armyâ‰« card: Choose 1 of your energy and place it in your Drop Area, then choose up to 1 <Broly: Br> card with an energy cost of 6 or less from your Drop Area and play it."), card_type="EXTRA", card_number="BT6-077"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_052_spirit_sword_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and return it to its owner's hand."), card_type="EXTRA", card_number="BT6-052"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_030_wolf_fang_fist_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is mono-red: Choose up to 1 attacking Battle Card or Leader Card, ignoring [Barrier], and it gets -15000 power for the battle.\n[Permanent] If you have a red Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="EXTRA", card_number="BT10-030"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_030_ultrasonic_exchange_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If the Battle Card your opponent is playing has 20000 power or less, your opponent may place that Battle Card in their Drop Area instead of playing it. If they don't, they choose 1 of their Battle Cards and place it in its owner's Drop Area."), card_type="EXTRA", card_number="DB2-030"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_029_pilaf_missile_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If you have a red Unison Card in play: If the Battle Card being played has 15000 power or less, it's placed in its owner's Drop Area instead of being played, then choose up to 1 of your Leader Cards and it gets +5000 power for the turn.\n[Permanent] If all of your energy is mono-red, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them."), card_type="EXTRA", card_number="BT10-029"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_097_keflas_fury_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is yellow: Draw 2 cards."), card_type="EXTRA", card_number="BT7-097"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_089_blue_impulse_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader Card is green and you have a green Unison Card in play, reduce the energy cost of this card in your hand by 1.\n[Activate: Main] If your opponent played a Battle Card this turn, choose all of your opponent's Battle Cards and KO them."), card_type="EXTRA", card_number="BT10-089"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_09_dark_dragon_balls_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas.\n[Activate: Main] If your Leader Card is a black â‰ªDemon Realm Raceâ‰« card: Look at up to 7 cards from the top of your deck, add up to 1<Dark Broly> card, non-black Battle Card with <Xeno> in its character name, or black Unison Card with 16000 power among them to your hand, then shuffle your deck. You can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="EXTRA", card_number="EX16-09"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_102_merciless_farewell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose 2 cards from your hand and place them in your Drop Area: If your Leader Card is a â‰ªBoujack Brigadeâ‰« card, choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it."), card_type="EXTRA", card_number="BT6-102"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd16_01_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn][Burst 3] Add up to 1 card from your life to your hand; if a black card is placed in your Drop Area by this skill, this card gains [Critical] for the turn. If a non-black card is placed in your Drop Area by this skill, this card gets +5000 power for the turn.\n[Awaken] When your life is at 4 or less: You may draw 1 card, switch up to 1 of your energy to Active Mode, then flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Auto][Once per turn] Add 1 card from your life to your hand: When you remove a marker from one of your black Unison Cards using a [Spirit Boost] skill, switch this card to Active Mode and negate its keyword skills for the turn.\n[Activate: Main][Once per turn][Burst 3] If a black card is placed in your Drop Area by this skill, this card gains [Critical] for the turn. If a non-black card is placed in your Drop Area by this skill, this card gets +5000 power for the turn.", card_number="SD16-01"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_151_explosive_barrage_slash_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a black â‰ªSaiyanâ‰« card: Negate the attack, then if you don't have a Unison Card in play, play 1 black Unison Card with no specified cost and 15000 power from your Drop Area or Warp with a marker on it."), card_type="EXTRA", card_number="BT12-151"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_102_super_namekian_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is yellow: Negate the attack, then you may choose 1 card in your hand and discard it. If you do, choose up to 1 of your opponent's Battle Cards or Unison Cards and negate its skills for the turn."), card_type="EXTRA", card_number="DB3-102"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_159_protector_of_the_people_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then you may choose 1 card in your hand and place it in your Drop Area. If you do, choose 1 of your Leader Cards and it gains the following effect for the turn:\nãƒ» When this card is attacked by a Battle Card, it gets +5000 power for the turn."), card_type="EXTRA", card_number="DB2-159"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_054_buu_make_you_cookie_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, if your Leader Card is <Majin Buu>, you may place 1 card from your hand in the Drop Area. If you do so, choose 1 of your <Majin Buu> and 1 of your opponent's Battle Cards with an energy cost of 3 or less. Place the chosen opponent Battle Card under the chosen <Majin Buu>."), card_type="EXTRA", card_number="BT3-054"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_096_cocotte_zone_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, if your Leader Card is â‰ªUniverse 11â‰«, choose up to 1 of your opponent's Battle Cards and switch it to Rest mode."), card_type="EXTRA", card_number="TB1-096"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_044_ectoplasm_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] Choose up to 1 <Hirudegarn> in your Battle Area, send it to your Warp, and at the start of your next Main Phase, play that card from your Warp."), card_type="EXTRA", card_number="BT4-044"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_096_zero_mortals_plan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] Choose 1 <Zamasu> card in your Battle Area without [Indestructible] and place it in its owner's Drop Area: Choose up to 1 <Zamasu> card in your hand with [Indestructible] and an energy cost of 4 or less and play it."), card_type="EXTRA", card_number="BT7-096"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_025_a_kings_return_to_youth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] Your Leader Card is a red â‰ªShenronâ‰« card: Choose up to 1 {King Piccolo, Terror Unleashed} and {A King's Return to Youth} from your deck and add them to your hand, then shuffle your deck."), card_type="EXTRA", card_number="BT5-025"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_130_triangle_danger_beam_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose 1 of your opponent's Battle Cards and negate its skills for the turn."), card_type="EXTRA", card_number="DB2-130"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_28_malevolent_revenge_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a <Meta-Cooler> card, it gets +15000 power for the duration of the battle, then you may choose 1 {Big Gete Star} in your Battle Area and switch it to Active Mode. If you do, choose up to 1 of your yellow energy and switch it to Active Mode."), card_type="EXTRA", card_number="EX06-28"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_149_temptation_of_the_mask_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a black â‰ªSaiyanâ‰«-only card and you place 1 black <Bardock: Xeno>, <King Vegeta: Xeno>, <Vegeta: Xeno> or <Broly> card from your Drop Area at the top of your deck: At the end of the turn, play up to 1 <Dark Broly> card or up to 1 black Battle Card with an energy cost of 4 or less and <Masked> in its character name from your deck, then shuffle your deck."), card_type="EXTRA", card_number="BT12-149"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_059_slumber_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If Your Leader Card is green: Choose one-\nãƒ» Choose 1 Battle Card with an energy cost greater than or equal to your opponent's energy and KO it. \nãƒ» Choose 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it."), card_type="EXTRA", card_number="DB1-059"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p091_gogeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, choose up to 1 red <Son Goku: Br> card, red <Vegeta: Br> card, or blue <Veku: Br> card, add it to your hand, then shuffle your deck.\n[Awaken] When your life is at 4 or less: You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main](2) ï¼š Choose 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.\n[Activate: Main][Once per turn] Choose 1 of your energy and place it in its owner's Drop Area: Draw 2 cards.", card_number="P-091"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt14_070_android_18_ready_for_a_fight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is green: When you take damage from an opponent's non-keyword skill, you may play this card from your hand. If you do, add the top card of your deck to your life; you can't activate the [Auto] skill on copies of this card for the game."), card_type="BATTLE", card_number="BT14-070"))
+    assert any(rule.trigger == "owner_takes_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_108_bad_ring_laser_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Counter] Place 1 yellow card from your hand in the Drop Area: Negate the [Counter]."), card_type="EXTRA", card_number="BT1-108"))
+    assert any(rule.trigger == "counter_counter" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_057_god_slicing_black_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If you have a blue Unison Card in play: Draw 1 card; if the Battle Card being played has an energy cost of 4 or less, it's placed at the bottom of its owner's deck instead of being played.\n[Permanent] If all of your energy is mono-blue, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them."), card_type="EXTRA", card_number="BT10-057"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_126_giant_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] When the Battle Card is played, you may choose it and switch it to Rest Mode, then draw 1 card."), card_type="EXTRA", card_number="DB2-126"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_019_birth_of_a_super_saiyan_god_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas. \n[Activate: Main] Choose 1 red or yellow â‰ªSaiyanâ‰« or â‰ªEarthlingâ‰« card with an energy cost of 2 or less in your Drop Area and play it. If you played a card, place the top 2 cards of your deck in your Drop Area."), card_type="EXTRA", card_number="BT8-019"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_085_bingo_tournament_grand_prize_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 of your Leader Cards, it gets +5000 power for the duration of the battle, then choose up to 1 [Dragon Ball] card from your deck or Drop Area, add it to your hand, then shuffle your deck if you looked through it."), card_type="EXTRA", card_number="BT8-085"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_019_niagara_drop_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a red â‰ªSaiyanâ‰« card: Choose 1 of your Leader Cards or Battle Cards, and for the duration of the turn, that card gets +5000 power, then if your life is at 3 or less and it's your opponent's turn, choose up to 1 of your red energy, switch it to Active Mode, and draw 1 card."), card_type="EXTRA", card_number="DB1-019"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_103_full_power_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a yellow <Son Gohan: Childhood> card, it gets +10000 power for the duration of the battle, and if your opponent has 5 or more cards in Rest Mode, it gets an additional +10000 power for the duration of the battle."), card_type="EXTRA", card_number="BT6-103"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_028_grand_tour_spaceship_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Look at up to 7 cards from the top of your deck, and choose 1 <Son Goku: GT>, <Trunks: GT>, <Pan>, or <Giru> with 15000 or less power and play it. Then, shuffle your deck."), card_type="EXTRA", card_number="BT3-028"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_072_combination_attack_android_14_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your turn, when you combo with this card, if your Leader Card is an â‰ªAndroidâ‰«, your opponent chooses 1 of their Battle Cards and KO-s it."), card_type="BATTLE", card_number="BT3-072"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_12_restoration_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then if your Leader Card is a blue <Android 21> card and you have a Blue/Green multicolor card in your energy, choose up to 1 <Android 16> card with an energy cost of 2 or less in your hand and play it."), card_type="EXTRA", card_number="EX13-12"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_104_flying_nimbus_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, you may place 1 yellow card in your hand in the Drop Area. If you do so, your opponent's can only attack one more time with Battle Cards for the duration of the turn."), card_type="EXTRA", card_number="BT3-104"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_070_sacrifice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack.\n[Permanent] If your Leader Card is a â‰ªNamekianâ‰«, when you activate this card's [Counter], you may choose 1 card from your life and add it to your hand. If you do so, you may activate this card's [Counter] without paying its energy cost."), card_type="EXTRA", card_number="BT4-070"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_075_shocking_death_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Your Leader Card is green: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it.\n[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT5-075"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_002_king_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You start the game with 6 life.\n[Auto] When this card attacks, you may choose up to 1 red â‰ªNamekianâ‰« or â‰ªDemon Clanâ‰« card in your hand and place it in your life face up. If you do, add 1 card from your life to your hand.\n[Awaken] When your life is at 2 or less or you have 2 or more life flipped face up: You may draw 3 cards, then place the top card of your deck in your life and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, choose up to 3 red â‰ªNamekianâ‰« or â‰ªDemon Clanâ‰« cards in your hand and place them in your life face up, then add that many cards from your life to your hand.\n[Activate: Battle][Once per turn] If you have red â‰ªNamekianâ‰« or â‰ªDemon Clanâ‰« cards flipped face up in your life: Place the top card of your deck in your life face up, then combo with 1 face-up red â‰ªNamekianâ‰« or â‰ªDemon Clanâ‰« card in your life.", card_number="BT12-002"))
+    assert sum(1 for rule in rules if rule.trigger == "self_attacks" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_094_heart_arrow_of_love_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose 1 of your green Leader Cards or Battle Cards and it gets +10000 power for the battle; then, if it's your turn, choose up to 2 of your opponent's Battle Cards with energy costs of 3 or less and KO them."), card_type="EXTRA", card_number="DB2-094"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_130_friezas_death_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is red: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.\n[Auto] If all of your energy is red: When you activate this card, choose up to 1 of your opponent's Leader Cards or Battle Cards and it gets -10000 power for the duration of the battle."), card_type="EXTRA", card_number="BT9-130"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "skill_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_106_recoome_eraser_gun_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is yellow, negate the attack.Afterwards, the opponent's Battle Cards are unable to attack for the duration of the turn."), card_type="EXTRA", card_number="BT1-106"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_114_super_dragon_flash_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then you may choose 1 card in your hand and discard it. If you do, choose up to 1 black skill-less Battle Card with an energy cost of 3 or less in your hand and play it in Rest Mode."), card_type="EXTRA", card_number="DB3-114"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_047_youre_wide_open_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is blue: If the Battle Card your opponent is playing has an energy cost of 4 or less, it is returned to its owner's hand instead of being played."), card_type="EXTRA", card_number="BT7-047"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_065_focused_breakthrough_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is green and your life is at 4 or less: If the Battle Card being played has an energy cost of 3 or less, it is placed in its owner's Drop Area instead of being played. \n[Permanent] If you have a multicolor card in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT8-065"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex11_07_omen_of_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is red and you choose 1 card in your life and place it in your Drop Area: If the Battle Card being played has 20000 power or less, it is placed in its owner's Drop Area instead of being played.\n[Permanent] If you have a red Unison Card with a specified cost of 2 in play, reduce the energy cost of this card in your hand by 1."), card_type="EXTRA", card_number="EX11-07"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_03_dark_broly_unbridled_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Unique]\n[EX-Evolve]â‘¡: <Dark Broly> with an energy cost of 2 or 6.\n[Permanent] This card is also treated as black in all areas.\n[Auto] If your opponent's life is at 3 or more and there is a card under this card: When this card is played, switch it to Active Mode, then your opponent may choose up to 1 Battle Card each from their hand, Battle Area, and/or Drop Area and send them to their Warp. If they sent 2 or fewer cards to their Warp, choose up to 1 card in your opponent's life and place it in their Drop Area. You can't play copies of this card for the turn."), card_type="BATTLE", card_number="EX16-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_122_burning_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader Card is yellow and you have a yellow Unison Card in play, reduce the energy cost of this card in your hand by 1.\n[Activate: Main] If your opponent has 4 or more cards in Rest Mode: Choose 1 of your opponent's Battle Cards in Rest Mode and KO it."), card_type="EXTRA", card_number="BT10-122"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_078_unstoppable_ambition_super_saiyan_caulifla_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Your Battle Cards can't be KO-ed by your own skills.\n[Permanent] Your Battle Cards can't be placed in the Drop Area by your own skills.\n[Auto] When you play this card, choose 1 card from your life and add it to your hand."), card_type="BATTLE", card_number="BT3-078"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 3
+
+
+def test_extract_exact_bt9_132_cells_earth_destroying_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is green: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.\n[Auto] If all of your energy is green: When you activate this card, choose 1 card in your opponent's hand and place it in their Drop Area."), card_type="EXTRA", card_number="BT9-132"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "skill_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_162_bollarators_elastic_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 of your opponent's Battle Cards and send it to its owner's Warp, then choose 1 of your Battle Cards and send it to its owner's Warp."), card_type="EXTRA", card_number="DB2-162"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_150_dark_kings_flash_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack.\n[Activate: Main] If your opponent has 5 or more energy: Your opponent can't play Battle Cards using Leader Card skills until the end of their next turn."), card_type="EXTRA", card_number="BT12-150"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_024_master_roshis_mafuba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Battle Card Attack] If your Leader Card is a red â‰ªEarthlingâ‰«-only card: Negate the attack, then if you have a red â‰ªEarthlingâ‰« card in play, place this card on top of the attacking card. At the end of your next turn, place this card-and only this card-in its owner's Drop Area. (While this card is on top of another card, the card underneath it is not treated as a Battle Card and can't activate any of its skills.)"), card_type="EXTRA", card_number="BT12-024"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_121_dark_dragon_slaying_bullet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If you have a yellow Unison Card in play: If the Battle Card being played has an energy cost of 4 or less, it has its skills negated for the turn and is played in Rest Mode.\n[Permanent] If all of your energy is mono-yellow, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards from your hand and discarding them."), card_type="EXTRA", card_number="BT10-121"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_086_return_of_planet_tuffle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas. \n[Activate: Main] Choose up to 2 of your opponent's Battle Cards, and switch them to Rest Mode."), card_type="EXTRA", card_number="BT8-086"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_049_fount_of_spirit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a blue â‰ªShenronâ‰« card: Choose 1 blue â‰ªSaiyanâ‰« card in your Drop Area with 15000 or less power and an energy cost of 2 or less and play it. If you do, place the top card of your deck under the card you played with this skill."), card_type="EXTRA", card_number="BT6-049"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_107_assembling_the_squad_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a â‰ªShenronâ‰« card: Choose 1 Battle Card from your deck with an energy cost of 2 or less and power of 15000 or less, play it, then shuffle your deck."), card_type="EXTRA", card_number="BT7-107"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_137_dragon_balls_negative_energy_overflow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Permanent] Reduce the energy cost of this card in your hand by 1 for each Battle Card in your Drop Area.\n[Activate: Battle] At the end of this turn, choose all Battle Cards ignoring [Barrier] and place them in their owners' Drop Areas."), card_type="EXTRA", card_number="BT8-137"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_076_twisted_justice_fused_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Potara] (Green)â‘£: <Goku Black> and <Zamasu>\n[Double Strike]\n[Indestructible]\n[Auto] When you play this card, choose up to 2 of your opponent's Battle Cards or up to 2 cards in your opponent's hand. Your opponent places all of the chosen cards in the Drop Area."), card_type="BATTLE", card_number="BT3-076"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_163_the_final_mission_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 4 Battle Cards with energy costs between 3 and 7 in your Drop Area, and shuffle them into your deck: Choose all of your opponent's Battle Cards with 20000 power or less and send them to their owners' Warps."), card_type="EXTRA", card_number="DB2-163"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_052_the_most_evil_absorption_in_history_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is <Majin Buu>, choose 1 of your <Majin Buu> and 1 of your opponent's Battle Cards. Place the chosen opponent Battle Card under the chosen <Majin Buu>."), card_type="EXTRA", card_number="BT3-052"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_082_majin_buu_unadulterated_malice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is green: Negate the attack, then play this card. If you played a card, choose 1 card in your hand and discard it; your opponent can't attack for the turn unless they choose 2 cards in their hand and discard them each time.\n[Union Absorb][Once per turn] Choose 1 card under your â‰ªMajinâ‰« Leader Card and place it under this card: Play up to 1 mono-green <Majin Buu> card with an energy cost of 4 and 15000 power from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT14-082"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_024_the_final_guardian_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is red: Negate the attack, then choose up to 1 of your Battle Cards and it gets +5000 power for the duration of the turn.\n[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 red card in your hand from the game.\n[Auto] When you activate this card, you can't activate {The Final Guardian} for the duration of the turn."), card_type="EXTRA", card_number="BT7-024"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "skill_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_118_energy_field_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, and you can't activate copies of this card for the turn; if you have 4 or more yellow â‰ªDemon Clanâ‰« cards in play, your opponent can only attack once more for the turn.\n[Permanent] If you have 4 or more yellow â‰ªDemon Clanâ‰« cards in play, you can activate this card from your hand without paying its energy cost."), card_type="EXTRA", card_number="BT11-118"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_032_mystic_talismans_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then choose up to 1 of your Battle Cards and it gets +5000 power until the end of your next turn."), card_type="EXTRA", card_number="DB2-032"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_025_vadoss_assistance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, you may switch up to 1 of your Battle Cards to Active Mode."), card_type="EXTRA", card_number="BT1-025"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_101_time_magic_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Your Leader Card is yellow: Negate the attack, then choose up to 1 of your opponent's Battle Cards in Rest Mode ignoring [Barrier]. It can't switch to Active Mode until the start of your next turn.\n[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT5-101"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_075_wrath_of_the_dragon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is green: If the Battle Card being played has an energy cost of 2 or less, it's placed in its owner's Drop Area instead of being played, then choose 1 card in your opponent's hand and discard it."), card_type="EXTRA", card_number="DB3-075"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_069_planet_namek_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)[Activate: Main] [Once per turn] (Green)ï¼Œchoose 1 card in your hand and place it in your Drop Area: Look at up to 5 cards from the top of your deck, choose up to 1 â‰ªNamekianâ‰« with an energy cost of 2 or less from among them and put it into play, then shuffle your deck."), card_type="EXTRA", card_number="BT4-069"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_106_march_of_the_great_ape_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 2 â‰ªGreat Apeâ‰« cards with energy costs of 4 or less from your hand and play them. Then, draw 2 cards."), card_type="EXTRA", card_number="BT3-106"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_091_kakarot_the_child_who_got_away_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of the battle after you combo with this card, if your Leader Card is a yellow â‰ªSaiyanâ‰«, place this card at the bottom of your deck."), card_type="BATTLE", card_number="BT3-091"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_090_no_openings_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your turn, at the end of the battle after you combo with this card, if your Leader Card is yellow, play this card in Rest Mode. Then, choose up to 1 card from your life and add it to your hand."), card_type="BATTLE", card_number="BT3-090"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd1_01_super_saiyan_god_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, choose up to 1 of your blue energy and switch it to Active Mode."), card_type="LEADER", card_back_skill_unstyled="[Permanent] During your turn, if you have 5 or more energy, this card gains +5000 power.\n[Auto] When this card attacks, draw 1 card.  Choose up to 2 of your blue energy and switch it to Active Mode.", card_number="SD1-01"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt3_093_lord_of_the_great_apes_king_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 â‰ªGreat Apeâ‰« with an energy cost of 5 or less from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-093"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p253_revenge_big_bang_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a blue <Baby> card: Negate the attack, then switch up to 2 of your mono-blue energy to Active Mode and draw 1 card."), card_type="EXTRA", card_number="P-253"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_134_lord_slug_giant_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[+1][Activate: Main] You may choose 1 card in your hand and discard it. If you do, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and it gets -10000 power for the turn.\n[-4][Auto] If your Leader Card is red: When your opponent activates a [Counter] skill, deal 1 damage to them."), card_type="UNISON", card_number="DB3-134"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_057_super_blutz_wave_generator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto] When you activate this card, draw 1 card.\n[Activate: Main][Once per turn] If your Leader Card is a blue <Vegeta: GT>-only card on its front side: Place the top card of your deck under your Leader Card, and if there are 4 or more cards under it, place all of those cards in their owners' Drop Areas, add up to 2 cards from your life to your hand, then place up to 2 cards from your life in your Drop Area."), card_type="EXTRA", card_number="BT11-057"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_033_multi_form_tien_shinhan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card loses -5000 power for each <Tien Shinhan> in your Battle Area or Combo Area.\n[Auto] When you play this card, if your Leader Card is â‰ªUniverse 7â‰« , you may place 1 card from your hand in the Drop Area. If you do so, choose up to 3 {Multi-Form Tien Shinhan} from your deck and play them. Then, shuffle your deck."), card_type="BATTLE", card_number="TB1-033"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_017_cease_to_exist_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can activate this card's [Activate: Battle] from your hand without paying its energy cost.\n[Activate: Main] If your Leader Card is red: Choose up to 2 of your opponent's Battle Cards, ignoring [Barrier], and they get -25000 power for the duration of the turn.\n[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +5000 power for the duration of the battle."), card_type="EXTRA", card_number="BT9-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_026_fickle_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 of your opponent's Battle Cards with 12000 or less power in the Battle Area and KO that card."), card_type="EXTRA", card_number="BT1-026"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p201_frieza_mutable_menace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Red), place this card in its owner's Drop Area: Choose up to 1 red or blue &lt;Frieza&gt; card with an energy cost of 3 in your hand and play it.\n[Activate: Main](Blue), if your opponent has 3 or more energy and you choose 1 red or blue &lt;Frieza&gt; card with an energy cost of 3 in your Battle Area and this card in your Drop Area and send them both to their owners' Warps: Choose up to 1 red &lt;Frieza&gt; card with an energy cost of 5 in your hand and play it."), card_type="BATTLE", card_number="P-201"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt7_074_hit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 1 card in your life and add it to your hand: Choose up to 1 blue or yellow â‰ªUniverse 6â‰« card with an energy cost of 1 in your hand and play it."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Auto] When your opponent's Leader Card flips back to its front, choose up to 1 blue or yellow â‰ªUniverse 6â‰« card in your Drop Area with an energy cost of 3 or less and play it.\n[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 blue or yellow â‰ªUniverse 6â‰« card in your hand with an energy cost of 2 or less and play it.", card_number="BT7-074"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_leader_flipped_front" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_079_aura_of_rage_super_saiyan_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your turn, when you combo with this card from your hand, choose up to 1 of your opponent's cards with [Blocker] and an energy cost of 3 or less, and KO it."), card_type="BATTLE", card_number="BT2-079"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_061_ginyu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, reveal the top card of your deck; if it's a green â‰ªGinyu Forceâ‰« card with an energy cost of 2, you may play it. Then draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, reveal the top card of your deck; if it's a green â‰ªGinyu Forceâ‰« card with an energy cost of 2, you may play it. Then draw 1 card.\n[Activate: Battle][Once per turn] (Green): Choose 1 green â‰ªGinyu Forceâ‰« card in your Battle Area and it gets +10000 power for the battle.", card_number="BT10-061"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_053_tiny_heroes_haru_and_maki_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose 1 of your other Battle Cards. It gains +1000 power for each of your energy for the duration of the turn."), card_type="BATTLE", card_number="BT2-053"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_073_piercing_super_saiyan_2_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Green)(Green)â‘£: &lt;Son Gohan: Childhood&gt;\n[Double Strike]\n[Auto] When you play this card and your opponent combos during the duration of that turn, choose all of your opponent's Battle Cards in the Battle Area and Combo Area with energy costs of 3 or less and place them in the Drop Area."), card_type="BATTLE", card_number="BT2-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_025_grand_evil_absorption_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)(Red)â‘¢: &lt;Son Gohan: Adolescence&gt;\n[Dual Attack]\n[Activate: Main] [Once per turn] Choose 1 &lt;Son Gohan: Adolescence&gt; under this card: For the duration of the turn, this card can attack Battle Cards in Active Mode and gains all the skills of the chosen card."), card_type="BATTLE", card_number="BT2-025"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_023_dabura_the_wizards_right_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If this card is in Rest Mode, the opponent cannot attack &lt;Evil Wizard Babidi&gt;."), card_type="BATTLE", card_number="BT2-023"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p213_towa_dark_sorceress_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Xeno-Evolve]â‘ : &lt;Towa&gt; with an energy cost of 2 or more that isn't a copy of this card.\n[Auto] When this card is played, draw 1 card, then shuffle up to 4 Battle Cards from your opponent's Drop Area into their deck."), card_type="BATTLE", card_number="P-213"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_070_android_17_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Reduce the energy costs of &lt;Android 17&gt; and &lt;Android 18&gt; in your hand by 1."), card_type="LEADER", card_back_skill_unstyled="[Permanent] Reduce the energy costs of &lt;Android 17&gt; and &lt;Android 18&gt; in your hand by 1.\n[Permanent] If your life is 4 or less, all of your &lt;Android 17&gt; and &lt;Android 18&gt; gain +5000 power. \n[Auto] When this card attacks, draw 1 card.", card_number="BT2-070"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_096_ginyu_force_recoome_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains +6000 power during your opponent's turn."), card_type="BATTLE", card_number="BT1-096"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_061_twin_revival_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a yellow â‰ªShenronâ‰« card: Choose up to 2 yellow â‰ªNamekianâ‰« cards with energy costs of 2 or less in your Drop Area and play them."), card_type="EXTRA", card_number="TB3-061"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_004_syn_shenron_unison_of_calamity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Your red cards can attack your opponent's Battle Cards in Active Mode.\n[+1][Activate: Main] Choose up to 2 of your opponent's Battle Cards, and they get -15000 power for the turn.\n[-2][Activate: Main] Look at your opponent's hand, choose up to 1 Battle Card with 25000 power or less from it and discard it."), card_type="UNISON", card_number="BT10-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt12_088_ginyu_a_new_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Rejuvenate][Once per turn] Remove 4 markers from this card. (Place 1 card under this card in its owner's Drop Area and pay the skill cost: Place the top card of your deck in your life.)\n[Auto] If your Leader Card is yellow and all of your energy is mono-yellow: When this face-up card in your life is placed in your Drop Area, if you don't have a Unison Card in play, you may play this card from your Drop Area with a marker on it.\n[+1][Activate: Main] You may place 1 face-up card in your life under this card. If you do, choose 1 mono-yellow Battle Card in your hand, place it in your life face up, then draw 1 card."), card_type="UNISON", card_number="BT12-088"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_075_rampaging_super_saiyan_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)"), card_type="BATTLE", card_number="BT1-075"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_013_lightning_speed_vegito_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Potara] â‘¢: &lt;Son Goku&gt; and &lt;Vegeta&gt; (Place this card in Active Mode on top of the 2 specified cards stacked together)\n[Permanent] This card can attack Battle Cards that are in Active Mode.\n[Auto] At the end of the battle after this card attacks, place 10 cards from the top of your deck in your Drop Area. Then, choose up to 1 &lt;Vegito&gt; with 25000 power from your Drop Area and evolve into it by placing it on top of this card in Active Mode."), card_type="BATTLE", card_number="BT2-013"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_026_prodigy_absorption_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)(Red)â‘¡ï¼š &lt;Gotenks&gt; (Play this card on top of the specified card)\n[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Permanent] If &lt;Gotenks&gt; is under this card, and if there are no cards in your opponent's Combo Area, this card cannot be KO-ed."), card_type="BATTLE", card_number="BT2-026"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_133_heroic_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªHeroicâ‰« in all areas.\n[Activate: Battle] Choose up to 1 of your Leader Cards, it gets +10000 power for the duration of the battle, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it."), card_type="EXTRA", card_number="BT8-133"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_108_the_infinite_force_meta_cooler_core_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Place 1&lt;Meta-Cooler&gt; from your Battle Area in the Drop Area: This card gains +5000 power for the duration of the turn.\n[Auto] When you play this card or when it attacks, if {Big Gete Star} is under this card, choose up to 2 &lt;Meta-Cooler&gt; from your Drop Area and play them."), card_type="BATTLE", card_number="BT2-108"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_003_harmonic_energy_ssb_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Sparking 3] When you play this card from your hand, look at up to 7 cards from the top of your deck, choose up to 1 red &lt;Vegeta: Br&gt; card among them and play it in Rest Mode, then shuffle your deck.\n[Activate: Main][Once per turn] This card gets +10000 power and can attack Battle Cards in Active Mode for the duration of the turn.\n[Auto] At the end of your turn, return this card to its owner's hand."), card_type="BATTLE", card_number="BT6-003"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_042_son_goten_deluge_of_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Battle Card in battle is green: When you combo with this card, it gets +5000 combo power for the duration of the turn."), card_type="BATTLE", card_number="DB1-042"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_049_raditz_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, your opponent chooses 1 card from their hand and sends it to their Warp.\n[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck, then choose up to 1 red or green &lt;Raditz&gt;, &lt;Vegeta&gt;, or &lt;Nappa&gt; card among them, add it to your hand, shuffle your deck, and if you added a card to your hand, choose 1 card from your hand and place it in your Drop Area."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks a Leader Card, your opponent chooses 1 card from their hand and sends it to their Warp.\n[Activate: Main][Once per turn] Choose up to 1 red or green â‰ªSaiyanâ‰« card in your Battle Area and it gets +5000 power for the duration of the turn.", card_number="BT7-049"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt5_112_dark_power_black_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you attack with this card, you may add 1 card from your life to your hand. If you do, this card gets +10000 power for the duration of the turn.\n[Auto] When your opponent plays a Battle Card with 15000 power or less using a non-keyword skill, your opponent chooses 2 cards from their hand and places them in their Drop Area."), card_type="BATTLE", card_number="BT5-112"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_093_terrible_creator_android_20_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 Battle Card which includes {Android} in its card name other than &lt;Android 20&gt; from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT2-093"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_071_inherited_will_super_saiyan_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] At the end of the battle after this card attacks, place this card in your Drop Area and choose up to 1 Battle Card whose character name includes &lt;Son Gohan&gt; in your hand and play it."), card_type="BATTLE", card_number="BT2-071"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_103_heartless_strike_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] When you play this card, if &lt;King Cold&gt; is in play in your Battle Area, choose up to 2 â‰ªFrieza Clanâ‰« other than &lt;Frieza&gt; from your hand and play them.  Their skills are negated for the duration of the game."), card_type="BATTLE", card_number="BT2-103"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_056_zamasu_the_alert_god_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)(Blue)(Blue)â‘¡: &lt;Zamasu&gt;\n[Indestructible] (This card cannot be KO-ed by your opponent's card's skills or battle and does not leave the Battle Area)\n[Auto] When your opponent's card attacks, if your Leader Card is &lt;Zamasu&gt; or &lt;Goku Black&gt;, you may place 1 card from your hand in the Drop Area. If you do so, negate that attack, and negate this skill for the duration of the turn."), card_type="BATTLE", card_number="BT2-056"))
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_054_unstoppable_despair_goku_black_rose_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)(Blue)(Blue)â‘£: &lt;Goku Black&gt;\n[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)\n[Auto] When a card evolves into this card, if your leader is &lt;Goku Black&gt;, choose up to 3 of your opponent's energy and place them in the Drop Area."), card_type="BATTLE", card_number="BT2-054"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_003_victorious_fist_super_saiyan_3_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Red), place 1 card from your hand in the Drop Area: Red &lt;Son Goku: GT&gt; with an energy cost of 5 or more. (Play this card on top of the specified card)\n[Double Strike]\n[Auto] [Once per turn] When this card attacks, switch this card to Active Mode, and it gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT3-003"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_063_father_son_galick_gun_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 of your opponent's Battle Cards and return it to their hand. (Cards stacked under the card are placed in the Drop Area)"), card_type="EXTRA", card_number="BT2-063"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_049_gokua_the_calamity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 â‰ªBoujack Brigadeâ‰« card with an energy cost of 3 or less or up to 1 blue Unison Card with a specified cost of 4 among them to your hand, then shuffle your deck.\n[Activate: Battle][Once per turn]â‘ : This card gets +11000 power and [Critical] until the start of your next Main Phase."), card_type="BATTLE", card_number="BT13-049"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_042_energy_boost_beerus_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Auto] When you play this card, if you have 5 or more energy, choose up to 1opponent Battle Card and KO that card."), card_type="BATTLE", card_number="BT1-042"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_046_boujack_on_a_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike][Dual Attack]\n[EX-Evolve]?, draw 2 cards: &lt;Boujack&gt; with an energy cost of 3 or 4.\n[Auto](Blue)â‘¢: At the end of a battle in which this card is used in a combo from your hand or energy, draw 1 card, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck, then play this card from your Drop Area in Rest Mode.\n[Auto][Once per turn] If this card is in Rest Mode: When your opponent attacks with a Battle Card, switch up to 1 of your blue energy to Active Mode, then switch up to 1 of your opponent's energy to Rest Mode."), card_type="BATTLE", card_number="BT13-046"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_070_dawn_of_terror_android_13_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] (Green) , choose up to 1 each of &lt;Android 14&gt; and &lt;Android 15&gt; from your Drop Area and place them under this card: Choose up to 1 &lt;Android 13&gt; with an energy cost of 7 from your deck and play it on top of this card. Then, shuffle your deck.\n[Auto] When you play this card, your opponent chooses 1 of their Battle Cards and KO-s it."), card_type="BATTLE", card_number="BT3-070"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_055_warrior_of_the_gods_goku_black_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If &lt;Zamasu&gt; is in play in your Battle Area, this card cannot be KO-ed by your opponent's card's skills and does not leave the Battle Area due to skills."), card_type="BATTLE", card_number="BT2-055"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_08_janemba_wicked_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[0][Activate: Main] You and your opponent draw 1 card, then your opponent places the top card of their deck in their Drop Area.\n[+1][Activate: Main] This card gains [Critical] for the turn.\n[-2][Activate: Main/Battle] If your opponent has 15 or less cards in their deck: This card gets +15000 power and [Triple Strike] for the turn."), card_type="UNISON", card_number="EX13-08"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 3
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_138_king_vegeta_giant_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and return it to its owner's hand.\n[-3][Activate: Main](Blue)(X), if your Leader Card is blue: Choose one-\nãƒ» Draw X cards.\nãƒ» Choose up to X of your opponent's Battle Cards and place them at the bottom of their owners' decks in any order."), card_type="UNISON", card_number="DB3-138"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_ex12_02_vegeta_unison_of_fury_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose this card or 1 of your Battle Cards and switch it to Rest Mode: Add a marker to this card.\n [-1][Activate: Main] Your opponent can't attack with Battle Cards with energy costs greater than their current energy until the end of their next turn.\n [-3][Activate: Main] Choose up to 1 of your opponent's energy, switch it to Rest Mode, then this card gets +5000 power, [Double Strike], and [Dual Attack] for the turn."), card_type="UNISON", card_number="EX12-02"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 3
+
+
+def test_extract_exact_bt3_024_mega_cannon_sigma_bizu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is &lt;Dr. Myuu&gt;, choose up to 1 &lt;Ribet&gt; from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-024"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_087_vados_cosmic_aide_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your opponent attacks, you may choose 1 yellow skill-less Battle Card in your hand or Drop Area and combo with it. If you do, negate this skill for the turn.\n[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards or Unison Cards and switch it to Rest Mode.\n[-4][Activate: Main] Play up to 2 skill-less Battle Cards with 15000 power from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="UNISON", card_number="BT12-087"))
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt11_124_ss4_vegeta_supreme_saiyan_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] If your Leader Card is black: When your opponent plays a Battle Card using a non-keyword skill, they choose 1 card from their hand and discard it.\n[+2][Auto] When you activate an [Over Realm] skill, add up to 1 card from your life to your hand.\n[-5][Activate: Main](Black)(Black)(Black)(Black): Send 1 card from your opponent's life to their Warp."), card_type="UNISON", card_number="BT11-124"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_004_rising_fist_super_saiyan_2_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)(Red)â‘ : &lt;Son Goku: GT&gt;\n[Double Strike]\n[Auto] When a card evolves into this card, draw 2 cards."), card_type="BATTLE", card_number="BT3-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_tb2_018_babidis_spaceship_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)\n[Activate: Main] Switch this card to Rest Mode: Look at 1 card from the top of your deck, choose up to 1 &lt;Dabura&gt;, &lt;Pui Pui&gt;, or &lt;Yakon&gt; and add it to your hand, then place the rest on the bottom of your deck."), card_type="EXTRA", card_number="TB2-018"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_119_makyo_star_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto] When you activate this card, look at up to 5 cards from the top of your deck, add up to 1 yellow â‰ªDemon Clanâ‰« card among them to your hand, then shuffle your deck.\n[Auto] If your Leader Card is a yellow â‰ªDemon Clanâ‰« card: At the end of your turn, choose up to 1 yellow â‰ªDemon Clanâ‰« card with an energy cost of 2 or less in your hand, and play it with its skills negated for the turn."), card_type="EXTRA", card_number="BT11-119"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_057_zamasu_the_invincible_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Indestructible] (This card cannot be KO-ed by your opponent's card's skills or battle and does not leave the Battle Area)\n[Permanent] If your Leader Card is &lt;Zamasu&gt; or &lt;Goku Black&gt;, reduce the energy cost of this card in your hand or Battle Area by 1."), card_type="BATTLE", card_number="BT2-057"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_112_chilled_army_general_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] All of your Chilled's Army tokens can combo even in Rest Mode. They gain combo cost 0 and 5000 combo power.\n[Activate: Main] Switch 1 of your Chilled Army tokens to rest: This card gains [Triple Strike] (This card inflicts 3 damage instead of 1 when attacking) for the duration of the turn."), card_type="BATTLE", card_number="BT2-112"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_111_secret_evolution_cooler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If there are 3 or more â‰ªCooler's Armored Squadronâ‰« in your Drop Area, all &lt;Cooler&gt; in your hand gain [Evolve] (Yellow)(Yellow)(Yellow): &lt;Cooler&gt;."), card_type="BATTLE", card_number="BT2-111"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_010_reliable_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red): &lt;Trunks: GT&gt;\n[Critical]\n[Auto] When you play this card, draw 1 card, then choose up to 1 of your red Leader Cards or red Battle Cards. It gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT3-010"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt9_077_majin_buu_supreme_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can't be removed from your Battle Area by your opponent's skills.\n[Permanent] When this card is in Rest Mode, your opponent can't use non-Leader Card skills to add cards from their deck to their hand.\n[Activate: Battle]â‘¢: This card gets +10000 power and [Triple Strike] for the duration of the turn."), card_type="BATTLE", card_number="BT9-077"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p386_son_goku_first_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Permanent] During your turn, this card gets +10000 power and can attack your opponent's Battle Cards without [Barrier] in Active Mode.\n[Permanent] While your opponent has no Battle Cards in play, this card gains [Dual Attack].\n[Auto](Green): When this card is KO'd, draw 1 card, then play up to 1 green â‰ªUniverse 7â‰« card with an energy cost of 3 from your hand."), card_type="BATTLE", card_number="P-386"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt7_073_for_the_greater_good_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is green: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and KO it.\n[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 green card in your hand from the game.\n[Auto] When you activate this card, you can't activate {For the Greater Good} for the duration of the turn."), card_type="EXTRA", card_number="BT7-073"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_105_planet_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)\n[Auto] At the end of your turn, switch all â‰ªGreat Apeâ‰« in your Battle Area to Active Mode.\n[Auto] When this card is placed in your Battle Area, choose up to 1 â‰ªSaiyanâ‰« with an energy cost of 4 or less from your deck and add it to your hand. Then, shuffle your deck."), card_type="EXTRA", card_number="BT3-105"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_111_android_18_sibling_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is an &lt;Android 17&gt; card: At the end of a battle in which this card was used in a combo, play this card from your Drop Area in Rest Mode; you can't play copies of this card for the turn.\n[Activate: Main][Once per turn](Yellow), if your Leader Card is a yellow &lt;Android 17&gt; card and you choose 1 of your yellow â‰ªAndroidâ‰« Battle Cards other than this card and switch it to Rest Mode: Choose up to 1 mono-yellow &lt;Android 17&gt; card with an original energy cost of 3 in your hand and play it; you can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="BATTLE", card_number="BT13-111"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_092_encroaching_terror_android_19_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, draw 1 card, and this card gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT2-092"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt13_141_demon_god_gravy_ritual_at_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When this card attacks, your opponent may send 1 Battle Card from their Drop Area to their Warp. If they don't, this card gets +15000 power until the end of your opponent's next turn."), card_type="BATTLE", card_number="BT13-141"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_118_spatial_transmission_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a &lt;Whis&gt; card: Negate the attack. You may choose 1 card in your hand and discard it. If you do, play up to 1 yellow skill-less Battle Card with an energy cost of 2 and 15000 power from your Drop Area in Rest Mode."), card_type="EXTRA", card_number="BT12-118"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p146_i_am_number_one_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a â‰ªWorld Tournamentâ‰« card: You may choose 1 â‰ªWorld Tournamentâ‰« card in your hand and place it in your Drop Area. If you do, choose up to 2 red â‰ªWorld Tournamentâ‰« cards with different names and energy costs of 3 or less from your deck, play them, then shuffle your deck."), card_type="EXTRA", card_number="P-146"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_028_janemba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Add 1 card from your life to your hand: When this card attacks, choose up to 1 blue â‰ªEvil Incarnateâ‰« or â‰ªDemonâ‰« card with an energy cost of 2 or less in your hand and play it."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main][Once per turn](Blue), place 1 card from your life in your Drop Area: Play up to 1 blue â‰ªEvil Incarnateâ‰« card with an energy cost of 2 from your energy.", card_number="BT12-028"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_007_shocking_future_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of the battle after you combo with this card, choose up to 1 &lt;Son Goku: GT&gt; with 5000 or less power from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-007"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_129_meta_cooler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in your Leader Area, choose up to 1 {Big Gete Star} in your deck and activate it."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card is placed in your Leader Area, choose up to 1 {Big Gete Star} in your deck and activate it.", card_number="BT9-129"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_023_mega_cannon_sigma_natt_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is &lt;Dr. Myuu&gt;, choose up to 1 &lt;Bizu&gt; from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-023"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_025_mega_cannon_sigma_ribet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is &lt;Dr. Myuu&gt;, choose up to 1 &lt;Nezi&gt; from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-025"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_053_pilaf_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When one of your Battle Cards attacks, it gets +5000 power for the duration of the battle, then choose up to 1 [Dragon Ball] card from your deck or life and add it to your hand. Then shuffle any areas you looked through."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main][Once per turn] Choose oneâ€”\nãƒ»Draw 1 card.\nãƒ»Choose 1 green or black â‰ªDesireâ‰« card from your hand with an energy cost less than or equal to your current energy and activate its [Activate: Main] skill.\nãƒ»Remove 7 [Dragon Ball] cards in your Drop Area from the game. If you do, choose up to 1 card each from your opponent's hand and Battle Cards and place them in their owners' Drop Areas, and this card gets +15000 power for the duration of the turn, then flip this card over at the end of the turn.", card_number="BT5-053"))
+    assert any(rule.trigger == "owner_other_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_063_ss3_vegito_peerless_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When you activate a [Union] skill, draw 1 card.\n [+2][Activate: Main] Choose all of your mono-green Battle Cards, and they gain [Revenge] until the start of your next turn.\n [-7][Activate: Main] If your Leader Card is mono-green: Look at your opponent's life, place 1 card among them in their Drop Area, then your opponent shuffles their life, chooses 3 cards in their hand, and discards them."), card_type="UNISON", card_number="BT11-063"))
+    assert any(rule.trigger == "owner_union_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt7_098_restrain_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is yellow: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 or less and switch it to Rest Mode.\n[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 yellow card in your hand from the game.\n[Auto] When you activate this card, you can't activate {Restrain} for the duration of the turn."), card_type="EXTRA", card_number="BT7-098"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_026_pride_and_justice_toppo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Play this card and negate the attack.\n[Permanent] If you or your opponent's Leader Card has 15000 or more power, reduce the energy cost of this card in your hand by 2.[Auto] When this card KO-s your opponent's Battle Card, switch it to Active Mode."), card_type="BATTLE", card_number="BT3-026"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_102_dimension_support_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 3] â‘  \n[Auto] When you play this card using [Over Realm], choose up to 1 skill-less Battle Card with an energy cost of 2 or less from your deck and play it, then shuffle your deck. Then, it gains [Critical] for the duration of the turn."), card_type="BATTLE", card_number="BT4-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_092_turles_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If a â‰ªTurles Crusher Corpsâ‰« card in your Battle Area would be placed in its owner's Drop Area by one of your skills, it's sent to its owner's Warp instead.\n[Auto] When this card is placed in your Leader Area, play up to 1 {Tree of Might, Divine Roots} from your deck with 2 markers on it.\n[Auto] When this card attacks, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Permanent] If a â‰ªTurles Crusher Corpsâ‰« card in your Battle Area would be placed in its owner's Drop Area by one of your skills, it's sent to its owner's Warp instead.\n[Auto] When this card attacks, draw 1 card.\n[Activate: Battle][Once per turn][Spirit Boost 1](Yellow): Choose oneâ€”\nãƒ»If you have 2 or more face-up cards in your life, this card gets +10000 power for the battle.\nãƒ»You may choose 1 {Fruit of the Tree of Might} in your hand and discard it. If you do, activate its [Activate: Battle] skill without paying its skill cost.", card_number="BT15-092"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p259_chi_chi_demonic_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Servant] (This card gets +10000 power and can't be switched to Active Mode during your Charge Phase.)\n[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards or Unison Cards and switch it to Rest Mode."), card_type="BATTLE", card_number="P-259"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p136_overwhelming_energy_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking.)\n[Auto] When you play this card and your Leader Card is a green â‰ªFrieza's Armyâ‰« card, if there are 3 or more Battle Cards in play in your Battle Area, draw cards until you have 6 cards in your hand.\n[Activate: Main] (Green), place this card in its owner's Drop Area: Choose up to 1 &lt;Broly: Br&gt; card with an energy cost of 7 from your hand and play it."), card_type="BATTLE", card_number="P-136"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_035_son_gohan_babys_minion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Servant] (This card gets +10000 power and can't be switched to Active Mode during your Charge Phase.)\n[Auto] When this card is played, your opponent can't attack for the turn unless they choose 1 card in their hand and place it at the bottom of their deck."), card_type="BATTLE", card_number="BT11-035"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_073_unfeeling_destroyer_android_15_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, your opponent chooses 1 card from their hand and places it in the Drop Area. If that card is a Battle Card with an energy cost of 4 or more, draw 1 card."), card_type="BATTLE", card_number="BT3-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_058_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, if you have more life than your opponent, draw 1 card."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Activate: Main][Once per turn] â‘¥: Choose all of your opponent's Battle Cards in the Battle Area and KO them.", card_number="BT1-058"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_018_mai_trusted_lackey_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 [Dragon Ball] card from your deck and add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT5-018"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p075_black_masked_saiyan_splintering_mind_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.\n[Auto][Sparking 7] (This skill takes effect when you have 7 or more cards in your Drop Area.) When this card attacks, if your Leader Card is black, you may choose 2 cards in your life and send it to its owner's Warp. If you do, choose up to 1 card in your opponent's life and send it to its owner's Warp."), card_type="BATTLE", card_number="P-075"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_089_commemorative_photo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Your opponent may add all of their life to their hand."), card_type="EXTRA", card_number="BT14-089"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_079_king_vegetas_surprise_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 of your Battle Cards. It gains +10000 power and [Revenge] (When this card is attacked, KO the attacking card after the battle) for the duration of the turn."), card_type="EXTRA", card_number="BT1-079"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_024_assassination_plot_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose any number of opponent Battle Cards of which the total power adds up to 30000 or less and KO those cards."), card_type="EXTRA", card_number="BT1-024"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_080_boujack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Once per turn] When a â‰ªBoujack Brigadeâ‰« card is played in your Battle Area, draw 1 card, and this card gets +5000 power for the duration of the turn.\n[Auto] When you combo with 1 of your cards during your turn, if your Combo Area has 2 or more â‰ªBoujack Brigadeâ‰« cards that you comboed with from a Battle Area, choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it, and if you KO'd a card, negate this skill for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Permanent] You can combo with â‰ªBoujack Brigadeâ‰« cards in Rest Mode in your Battle Area.\n[Auto][Once per turn] When a â‰ªBoujack Brigadeâ‰« card is played in your Battle Area, draw 1 card.\n[Auto] When you combo with 1 of your cards during your turn, if your Combo Area has 2 or more â‰ªBoujack Brigadeâ‰« cards that you comboed with from a Battle Area, choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it, and if you KO'd a card, negate this skill for the duration of the turn.", card_number="BT6-080"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_051_brianne_de_chateau_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, look at up to 2 cards from the top of your deck. Choose up to 1 â‰ªMaiden Squadronâ‰« among them and add it to your hand. Then, place the remaining cards at the bottom of your deck in any order."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] If &lt;Kakunsa&gt; and &lt;Rozie&gt; are in play in your Battle Area, choose 1 of your opponent's Battle Cards and KO it.\n[Auto] When this card attacks, draw 1 card.", card_number="TB1-051"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt8_045_dr_uiro_and_dr_kochin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you place this card in your Leader Area, choose up to 1 {Dr.Uiro's Lab} from your deck and activate it. \n[Auto] When this card attacks a Leader Card, look at up to 7 cards from the top of your deck, choose up to 1 â‰ªFrenzied Warriorâ‰« card among them, add it to your hand, then shuffle your deck."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card. \n[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 keyword skill on 1 of your opponent's Battle Cards and negate it for the duration of the turn. \n[Activate: Main] If a {Dr.Uiro's Lab} in your Battle Area has 17 or more cards under it: You win the game.", card_number="BT8-045"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt7_010_last_resort_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto] When you play this card from your hand and your Leader Card is a &lt;Raditz&gt; card, you may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 1 {Power Ball} from your deck, activate it, then shuffle your deck."), card_type="BATTLE", card_number="BT7-010"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p168_six_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dragon Ball] (You can include as many copies of cards with [Dragon Ball] in your deck as you like, as long as the total number doesn't exceed 7.)\n[Activate: Battle] Choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn."), card_type="EXTRA", card_number="P-168"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_033_ultra_instinct_sign_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Blue)(Blue)ï¼Œplace 1 card from your hand in the Drop Area: Blue &lt;Son Goku&gt; with an energy cost of 5 or more. (Play this card on top of the specified card)\n[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)\n[Permanent] Your opponent can't combo for the duration of this card's battle.\n[Auto] When a card evolves into this card, return all of your opponent's Battle Cards to their owner's hand."), card_type="BATTLE", card_number="BT3-033"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_21_allied_reinforcements_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a &lt;Cheelai: Br/Lemo: Br&gt; card and you choose 1 card in your hand and discard it: Choose one?\nãƒ» If you have no cards in your Battle Area, play up to 1 green &lt;Broly: Br&gt; card with an energy cost of 4 from your deck and up to 1 green &lt;Cheelai: Br&gt; or &lt;Lemo: Br&gt; card from your deck, then shuffle your deck.\nãƒ» Play up to 1 green &lt;Cheelai: Br&gt; or &lt;Lemo: Br&gt; card from your Drop Area."), card_type="EXTRA", card_number="EX13-21"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_088_unstoppable_invasion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto] If your Leader Card is a green &lt;King Cold: Br&gt; card: When this card is placed in a Battle Area, add up to 1 card from your life to your hand, then 1 of your Leader Cards gets +10000 power and [Double Strike] for the turn.\n[Auto] When this card in your Battle Area is placed in its owner's Drop Area by one of your skills, choose up to 1 of your opponent's Unison Cards and remove a marker from it."), card_type="EXTRA", card_number="BT13-088"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_024_king_cold_astral_tyrant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Auto] When you play this card, your opponent places 5 cards from the top of their deck in their Drop Area."), card_type="BATTLE", card_number="BT9-024"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_077_evil_psyche_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card)\n[Indestructible] (This card is not KO-ed or removed from the Battle Area by neither battle nor your opponent's card skills)\n[Barrier] (This card can't be chosen by the skills of your opponent's cards)\n[Permanent] This card cannot be switched to Active Mode. Only 1 {Evil Psyche, Zamasu} can be played in your Battle Area."), card_type="BATTLE", card_number="BT3-077"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_086_anticipated_onslaught_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto] If your Leader Card is a green &lt;King Cold: Br&gt; card: When this card is placed in a Battle Area, draw 1 card, then choose up to 1 mono-green â‰ªFrieza Clanâ‰« or â‰ªFrieza's Armyâ‰« card with an energy cost of 2 or less in your hand and play it.\n[Auto][Once per turn] When a green Extra Card with the [Field] skill in your Battle Area other than this card is placed in its owner's Drop Area by one of your skills, choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it."), card_type="EXTRA", card_number="BT13-086"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_082_family_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 opponent Battle Card with an energy cost of 2 or less and KO that card."), card_type="EXTRA", card_number="BT1-082"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p282_vegeta_the_insurmountable_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When one of your yellow skill-less Battle Cards with an energy cost of 2 is removed from your Battle Area by an opponent's skill or KO'd, you may play this card from your hand. If you do, you can't play copies of this card for the turn.\n[Auto][Once per turn] If this card's attack deals damage to an opponent or removes a marker from an opponent's Unison Card, play up to 1 skill-less Battle Card with 15000 power from your Drop Area."), card_type="BATTLE", card_number="P-282"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_deals_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_089_chilled_army_assault_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Play up to 1 â‰ªChilled's Armyâ‰« card with an energy cost of 2 or less from your deck in Rest Mode, then shuffle your deck."), card_type="EXTRA", card_number="BT13-089"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_032_great_saiyaman_town_hero_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo] (You can only include up to 4 cards with [Super Combo] in your deck.)\n[Auto][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) When you combo with this card, if your Leader Card is blue, draw 1 card."), card_type="BATTLE", card_number="BT5-032"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt7_020_broly_counter_reversal_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During your turn, this card gets +5000 power and can attack Battle Cards in Active Mode.\n[Auto][Once per turn] When your opponent activates a [Counter] skill, deal 1 damage to them."), card_type="BATTLE", card_number="BT7-020"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_008_charging_up_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 1 card in your hand and place it in your Drop Area. If you do so, choose up to 1 of your energy and switch it to Active Mode."), card_type="BATTLE", card_number="BT4-008"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p294_raditz_young_invader_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, if your life is at 5 or more and your opponent's Leader Card is a red &lt;King Vegeta: Br&gt; card, place 1 card from your life in your Drop Area, then draw 1 card."), card_type="BATTLE", card_number="P-294"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_tb1_012_bold_super_saiyan_2_caulifla_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)â‘ : &lt;Caulifla&gt;\n[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 1 â‰ªUniverse 6â‰« with 15000 or less power among them and play it. Then, shuffle your deck."), card_type="BATTLE", card_number="TB1-012"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_046_taunting_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card)"), card_type="BATTLE", card_number="BT1-046"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_045_bulma_supporter_of_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose up to 1 &lt;Trunks: Future&gt; with an energy cost of 4 or less from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT2-045"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_029_jiren_fist_of_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Permanent] This card can attack Battle Cards that are in Active Mode.\n[Auto] [Once per turn] When this card attacks a Battle Card, switch this card to Active Mode and this card gains +10000 power for the duration of the battle."), card_type="BATTLE", card_number="BT2-029"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_004_relentless_super_saiyan_3_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Permanent] This card cannot be KO-ed by your opponent's skills.\n[Auto] When you play this card, until the beginning of your next turn, this card gains +5000 power."), card_type="BATTLE", card_number="BT2-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_027_bardock_great_ape_assault_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike][Blocker]\n[EX-Evolve](Blue)(Blue): Blue &lt;Bardock&gt; with an energy cost of 2 or more.\n[Permanent] When using this card's [Evolve] skill from your hand, you can choose Battle Cards from your energy and play this card in Active Mode.\n[Auto] If your Leader Card is a blue â‰ªSaiyanâ‰« card: When a card in your energy evolves into this card, draw 1 card, then at the end of the turn, switch this card to Active Mode and place the top card of your deck in your energy in Rest Mode."), card_type="BATTLE", card_number="DB3-027"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p176_seven_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dragon Ball] (You can include as many copies of cards with [Dragon Ball] in your deck as you like, as long as the total number doesn't exceed 7.)\n[Activate: Battle] If your Leader Card is a â‰ªShenronâ‰« card: Choose one-\nï½¥ If your Leader Card has 10000 power and you have 5 or less life, your Leader Card gets +5000 power for the duration of the turn. \nï½¥ Choose your Leader Card or 1 of your Battle Cards and it gets +5000 power for the duration of the battle."), card_type="EXTRA", card_number="P-176"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_042_trunks_the_constant_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)(Blue)â‘¢: &lt;Trunks: Future&gt;\n[Permanent] If both &lt;Son Goku&gt; and &lt;Vegeta&gt; are in your Battle Area or Drop Area, this card gains [Triple Strike] (This card inflicts 3 damage instead of 1 when attacking).\n[Auto] When this card attacks or is attacked, choose up to 1 blue battle card in your Drop Area and combo with it."), card_type="BATTLE", card_number="BT2-042"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacked" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_046_saike_demon_rockin_out_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose one-\nãƒ»Look at up to 7 cards from the top of your deck, choose up to 1 &lt;Janemba&gt; card among them, add it to your hand, then shuffle your deck.\nãƒ»Look at up to 1 card from the bottom of your deck, choose up to 1 &lt;Janemba&gt; card among them, add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT5-046"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_100_burst_energy_ss_bardock_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 4] â‘ \n[Auto] When you play this card using [Over Realm], it gains +10000 power for the duration of the turn, and can attack Battle Cards in Active Mode."), card_type="BATTLE", card_number="BT4-100"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_028_majin_buu_revived_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Auto] When you play this card with the skill of {Majin Buu's Sealed Ball}, inflict 1 damage to the opponent's life."), card_type="BATTLE", card_number="BT2-028"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_051_reign_of_terror_king_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Activate: Main] Place this card in your Drop Area: Choose up to 1 of your energy and switch it to Active Mode, then choose up to 1 &lt;Piccolo&gt; or &lt;Piccolo Jr.&gt; with an energy cost of 4 or less from your hand and play it."), card_type="BATTLE", card_number="BT4-051"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_086_dabura_dark_gambit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Green), if your Leader Card is green and you discard this card from your hand: Choose up to 1 card in your opponent's Battle Area with an energy cost of 1 and the [Field] skill and place it in its owner's Drop Area."), card_type="BATTLE", card_number="BT11-086"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_055_lord_slug_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, you and your opponent draw 1 card.\n[Auto] If you have 3 or more green energy: When you activate a [Rejuvenate] skill, draw 2 cards, then flip this card over.\n[Awaken] When your life is at 4 or less: You and your opponent may draw 1 card, then you switch up to 2 of your energy to Active Mode and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Permanent] If your opponent has 7 or fewer cards in their hand, this card gets -5000 power during battles on your opponent's turn.\n[Auto] When this card attacks, you and your opponent draw 1 card.\n[Activate: Main][Once per turn] If your opponent has 10 or more cards in their hand: Play up to 1 mono-green â‰ªSlug's Armyâ‰« card with an energy cost of 2 or less from your Drop Area.", card_number="BT12-055"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_rejuvenate_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_090_dark_death_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If you have a green Unison Card in play: If the Battle Card being played has an energy cost of 4 or less, it's placed in its owner's Drop Area instead of being played, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and KO it.\n[Permanent] If all of your energy is mono-green, you can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them."), card_type="EXTRA", card_number="BT10-090"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_play" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt2_067_zen_oh_button_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Switch all of your blue energy to Active Mode."), card_type="EXTRA", card_number="BT2-067"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_088_expanding_energy_android_17_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Auto] When this card attacks, draw cards until you have 4 cards in your hand."), card_type="BATTLE", card_number="BT2-088"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_019_dyspo_thwarting_the_enemy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If your Leader Card is red: Negate the attack, then play this card in Rest Mode. If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn.\n[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead."), card_type="BATTLE", card_number="BT14-019"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt14_103_trunks_the_brawler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is yellow: When this card is revealed from the top of your deck and placed in your Drop Area, you may play this card from your Drop Area.\n[Auto] When this card is played, draw 1 card, then choose 1 card from your hand and place it on the top of your deck.\n[Activate: Main][Once per turn][Spirit Boost 1] (You must remove a marker from your Unison Card to activate this skill.) If your Leader Card is a yellow &lt;Son Goku: GT&gt; card: Reveal the top card of your deck and place it in your Drop Area."), card_type="BATTLE", card_number="BT14-103"))
+    assert any(rule.trigger == "owner_card_revealed_from_top_deck_to_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt17_128_fin_preparing_to_fight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Add 1 card from your life to your hand: When this card attacks, play up to 1 Demon Realm Soldier Token, and this card gets +10000 power for the turn. (Demon Realm Soldier Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"), card_type="BATTLE", card_number="BT17-128"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p043_caulifla_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: Choose this card and all of your non-black Battle Cards. They gain +5000 power for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Choose 1 card in your life and add it to your hand: Choose this card and all of your non-black Battle Cards. They gain +5000 power for the duration of the turn.\n[Auto] When this card attacks, draw 1 card.", card_number="P-043"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_db3_135_king_piccolo_giant_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical][Dual Attack]\n[-2][Activate: Main] Choose up to 1 of your red Leader Cards and it gets +5000 power until the start of your next turn.\n[-4][Activate: Main](Red)(Red)(Red)(Red)(X), if your Leader Card is red: Deal X damage to your opponent."), card_type="UNISON", card_number="DB3-135"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt2_062_returning_evil_golden_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] When you play this card, choose 1 of your Battle Cards and return it to your hand. Then, choose up to 1 of your opponent's Battle Cards, and place it at the bottom of their deck. (Cards stacked under the card are placed in the Drop Area)"), card_type="BATTLE", card_number="BT2-062"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p234_ss3_gogeta_super_warrior_evolution_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Permanent] If your Leader Card is a blue â‰ªSaiyanâ‰« card and you have a blue â‰ªSaiyanâ‰« card in play in Rest Mode, your Leader Card doesn't take damage from attacks.\n[-1][Activate: Main] Choose up to 2 of your opponent's Battle Cards, return them to their owners' hands, then choose up to 1 mono-blue â‰ªSaiyanâ‰« card with an original energy cost of 2 or less in your hand and play it with its skills negated for the turn."), card_type="UNISON", card_number="P-234"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_084_perfect_force_cell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Green)(Green)4: <Cell>\n[Double Strike]\n[Auto] When you play this card, if your Leader Card is an â‰ªAndroidâ‰«, your opponent must choose cards in their hand until there are only 3 remaining, and place the chosen cards in the Drop Area."), card_type="BATTLE", card_number="BT2-084"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_008_leap_to_the_future_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card and 1 other card from your hand in the Drop Area: Choose up to 1 <Gotenks> with 25000 or less power from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT2-008"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_076_full_power_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose any number of your opponent's Battle Cards with energy costs of 2 or less for which the total cost adds up to 3 or less and KO them."), card_type="BATTLE", card_number="BT2-076"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_044_unyielding_spirit_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your turn, when you combo with this card, if your Leader Card is blue, choose up to 1 of your energy and switch it to Active Mode."), card_type="BATTLE", card_number="BT2-044"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_075_supreme_dna_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If there are 2 or more <Son Goku> in your Drop Area, reduce the energy cost of this card in your hand and Battle Area by 2."), card_type="BATTLE", card_number="BT2-075"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_060_zen_oh_the_plain_god_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, negate all other Battle Card skills, then choose all cards in both players' hands as well as all other Battle Cards and return them to their decks. Shuffle both decks afterwards. Then, both players draw 5 cards. (Cards stacked under other cards are placed in the Drop Area)"), card_type="BATTLE", card_number="BT2-060"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_080_full_power_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, choose up to 1 opponent Battle Card with an energy cost of 1 or less and KO that card."), card_type="EXTRA", card_number="BT1-080"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_125_hit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, draw 1 card and this card gets +5000 power for the duration of the turn."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card, this card gets +5000 power for the duration of the turn, then choose up to 1 skill-less Battle Card in your Drop Area with an energy cost of 2 or less and play it.\n[Activate: Main/Battle][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards with [Double Strike], [Critical], or [Blocker].", card_number="BT9-125"))
+    assert sum(1 for rule in rules if rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n") == 3
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_051_full_power_frost_embodied_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.\n[Activate: Main][Once per turn] Place all the cards under this card in their owners' Drop Areas: If you placed 1 or more cards in a Drop Area using this skill, this card gets +5000 power and [Double Strike] for the turn."), card_type="BATTLE", card_number="BT15-051"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_120_seasoning_arrow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is &lt;Demigra&gt; it gains +10000 power for the duration of the battle, and if it's your turn, your opponent then chooses 1 card from their hand and sends it to their Warp, then if that card is a Battle Card, combo with it in your Combo Area."), card_type="EXTRA", card_number="BT4-120"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_121_dark_plot_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 Battle Card in your Warp with an energy cost of 4 or less and play it. If you use this skill to play a Battle Card with [Over Realm], choose up to 3 of your energy and switch them to Active Mode."), card_type="EXTRA", card_number="BT3-121"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_005_bardock_pride_of_a_low_class_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Add 1 card from your life to your hand: When this card attacks, it gets +11000 power for the battle.\n[Auto] If your Leader Card is a red â‰ªSaiyanâ‰« card and you have 2 or more energy: When this card deals damage by attacking, switch this card to Active Mode, look at up to 7 cards from the top of your deck, play up to 1 â‰ªBardock's Crewâ‰« card with an energy cost of 1 among them, then shuffle your deck. The card you played with this skill and this card can't attack for the turn."), card_type="BATTLE", card_number="BT13-005"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_deals_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_119_burning_spin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a â‰ªShadow Dragonâ‰« card: Negate the attack, then choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="EXTRA", card_number="BT12-119"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_064_mafuba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Battle Card Attack] Negate the attack, and place this card on the attacking card. At the end of the opponent's next turn, place this card (and only this card) in the Drop Area. (As long as this card is stacked on top of another card, that card is not treated as a Battle Card and its skill cannot be activated.)"), card_type="EXTRA", card_number="BT2-064"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_035_chaos_beam_volley_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is a â‰ªFrieza Clanâ‰« card: If the Battle Card being played has an energy cost of 3 or less, it is returned to its owner's hand instead of being played, then your opponent places 2 cards from the top of their deck in their Drop Area."), card_type="EXTRA", card_number="BT9-035"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_016_friezas_spaceship_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field] card. When you do, place this card in the Drop Area.)\n[Auto] At the end of your turn, choose up to 1 red â‰ªFrieza's Armyâ‰« card with an energy cost of 2 from your hand and play it. If you played a card with this skill, draw 1 card."), card_type="EXTRA", card_number="TB3-016"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_086_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If all of your life is face up, you lose the game. When you take damage, flip cards in your life face up equal to the damage taken instead.\n[Permanent] Cards in your life can only be flipped face up by skills on mono-yellow cards; you can't add face-up cards in your life to your hand.\n[Auto] When you place this card in your Leader Area, activate up to 1 {Cutting-Edge Recovery Device} from your deck.\n[Awaken] When your life is at 5 or less: Choose 1 {Cutting-Edge Recovery Device} in your Battle Area and place it in its owner's Drop Area, then flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Permanent] If all of your life is face up, you lose the game. When you take damage, flip cards in your life face up equal to the damage taken instead.\n[Permanent] Cards in your life can only be flipped face up by skills on mono-yellow cards; you can't add face-up cards in your life to your hand.\n[Activate: Battle][Once per turn] Place 1 card from your life in your Drop Area: Draw 1 card, and this card gets +5000 power and [Double Strike] for the battle.", card_number="BT12-086"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_021_familial_bonds_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is red: Choose up to 1 red â‰ªSaiyanâ‰« card in your Drop Area with an energy cost of 3 or less and 15000 power or less and play it. If you played a card, choose up to 2 [Dragon Ball] cards from your deck and add them to your hand, then shuffle your deck."), card_type="EXTRA", card_number="BT7-021"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_065_announcer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Treat â‰ªWorld Tournamentâ‰« in all areas as if they had no specified cost.\n[Permanent] You cannot include non-â‰ªWorld Tournamentâ‰«Battle Cards in your deck.\n[Auto][Once per turn] When you play a â‰ªWorld Tournamentâ‰« Battle Card, draw 1 card.\n[Awaken] When your life is at 4 or less: You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Permanent] Treat â‰ªWorld Tournamentâ‰« in all areas as if they had no specified cost.\n[Auto] When this card attacks, draw 1 card.\n[Activate: Main] Choose up to 2 of your Battle Cards with â‰ªWorld Tournamentâ‰«, they each gain +5000 power for the duration of the turn, then negate this skill for the duration of the game.", card_number="TB2-065"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_125_ss_broly_the_rampaging_monstrosity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] When this card has 2 or fewer markers on it, it can't attack.\n[+1][Activate: Main] Place up to 2 black Battle Cards with 30000 power from your Warp in your Drop Area.\n[-4][Activate: Main] Place up to 8 black Battle Cards with 30000 power from your Warp in your Drop Area, then if your Leader Card is a &lt;Dark Broly&gt; card, it gets +15000 power for the turn."), card_type="UNISON", card_number="BT11-125"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_xd1_01_cabba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can't include non-â‰ªUniverse 6â‰« Battle Cards in your deck, except for &lt;Vegeta&gt; cards.\n[Auto] When a blue or yellow â‰ªUniverse 6â‰« card is played in your Battle Area, that card gets +5000 power for the duration of the turn, then choose up to 1 card in your life and add it to your hand.\n[Awaken] When your life is at 4 or less: You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Permanent] This card gets +5000 power when all of your opponent's energy is in Rest Mode.\n[Auto] When this card attacks, draw 1 card.\n[Auto] When your opponent's Leader Card attacks, if all of your opponent's energy is in Rest Mode, choose up to 2 of your opponent's energy. Cards chosen with this card's skill can't be switched to Active Mode during your opponent's next Charge Phase.\n[Auto][Once per turn] When one of your card skills switches an opponent's Battle Card or energy to Rest Mode, draw 1 card.", card_number="XD1-01"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt3_022_commander_nezi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] Choose 1 each of &lt;Bizu&gt; and &lt;Ribet&gt; from your hand or Battle Area and place them under this card: Choose up to 1 &lt;Super Sigma&gt; from your deck and place it on top of this card. Then, shuffle your deck.\n[Auto] When you play this card, if your Leader Card is &lt;Dr. Myuu&gt;, choose up to 1 &lt;Natt&gt; from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-022"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_020_hidden_ability_general_rilldo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] Choose 1 each of &lt;Nezi&gt;, &lt;Natt&gt;, &lt;Bizu&gt;, and &lt;Ribet&gt; from your Drop Area and place them under this card: Choose up to 1 &lt;General Rilldo&gt; with 25000 power from your deck and place it on top of this card. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-020"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_123_ultimate_force_ssb_vegito_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Potara](Red)(Red)(Red)(Red)(Red): &lt;Son Goku&gt; and &lt;Vegeta&gt; (Place this card in Active Mode on top of the 2 specified cards stacked together.)\n[Ultimate] (You can only include 1 copy of a card with [Ultimate] in your deck)\n[Triple Attack] (Twice per turn, when this card attacks, switch this card to Active Mode after the battle)\n[Triple Strike]"), card_type="BATTLE", card_number="BT2-123"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p405_oolong_greed_is_good_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Activate: Main][Once per turn] Choose up to 1 Battle Card in play, ignoring [Barrier]. This card's power becomes the chosen card's power at the time you chose it with this skill, and at the start of your opponent's turn, this card's power becomes 4000."), card_type="Z-BATTLE", card_number="P-405"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_022_korin_towers_secret_medicine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is red: Choose 1 of your cards and it gets +5000 power for the turn; if it's your opponent's turn, choose up to 1 of your opponent's cards, ignoring [Barrier], and it gets -5000 power for the battle."), card_type="EXTRA", card_number="DB3-022"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_033_meditation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 of your Battle Cards: For the turn, the chosen card gets +15000 power, can attack Battle Cards in Active Mode, can't have its attacks negated, and can't attack your opponent's Leader Card."), card_type="EXTRA", card_number="DB2-033"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_108_time_transmission_g_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 black Battle Card with an energy cost of 4 or less in your Warp and play it. If the Battle Card played with this skill has [Over Realm] or [Dark Over Realm], choose up to 2 of your energy and switch them to Active Mode."), card_type="EXTRA", card_number="BT7-108"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_019_thought_i_was_finished_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a â‰ªFrieza Clanâ‰« card: Choose 1 of your opponent's Battle Cards and it gets -15000 power for the duration of the turn."), card_type="EXTRA", card_number="BT9-019"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_107_son_goku_the_adventure_begins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose up to 1 {Four-Star Ball} from your deck or Drop Area and add it to your hand, then shuffle your deck if you looked through it.\n[Activate: Main][Once per turn] (2): If your Leader Card is black, choose up to 1 skill-less Battle Card with an energy cost of 3 or less from your deck or Drop Area and play it, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT6-107"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt5_019_bandages_to_the_rescue_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card.)\n[Auto] When this card is KO'd, choose up to 1 &lt;Spike&gt; card from your Drop Area and play it in Rest Mode."), card_type="BATTLE", card_number="BT5-019"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_014_ssb_gogeta_fusion_onslaught_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] Choose 2 red cards from your hand and place them in your Drop Area: Red &lt;Gogeta: Br&gt; card with an energy cost of 6.\n[Double Strike]\n[Permanent] This card can't be KO'd and can attack Battle Cards that are in Active Mode.\n[Auto] When a card evolves into this card, if there are no Battle Cards in play in your opponent's Battle Area, choose up to 2 cards in your opponent's life and place them in their Drop Area, and you can't play {SSB Gogeta, Fusion Onslaught} for the duration of the turn.\n[Auto] When this card attacks a Battle Card, switch this card to Active Mode."), card_type="BATTLE", card_number="BT6-014"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_102_chilled_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, play 1 Chilled's Army token. (Chilled's Army token has 10000 power) \n[Awaken] When your life is at 6 or less: You may draw 2 cards and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Permanent] During your turn, this card gains +5000 power.\n[Auto] When this card attacks, draw 1 card and play 1 Chilled's Army token. (Chilled's Army token has 10000 power)", card_number="BT2-102"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_db3_132_oolong_the_cowardly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust]\n[Auto] Choose 1 card in your hand and discard it: When this card is played, choose one-\nãƒ» Play up to 1 skill-less Battle Card with an energy cost of 2 or less from your Drop Area.\nãƒ» Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less, negate its skills for the turn, and KO it."), card_type="BATTLE", card_number="DB3-132"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_050_majin_buu_dawn_of_the_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] â‘¡ï¼Œplace 1 Battle Card from your hand under this card: Choose up to 1 {Awakening Evil Majin Buu} from your deck and place it on top of this card. Then, shuffle your deck.\n[Barrier] (This card can't be chosen by the skills of your opponent's cards)\n[Permanent] When this card is under a card, the &lt;Majin Buu&gt; on top of this card gains [Barrier]."), card_type="BATTLE", card_number="BT3-050"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_101_arrival_of_the_space_pirates_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 â‰ªBoujack Brigadeâ‰« card with an energy cost of 2 or less from your deck and play it in Rest Mode, then shuffle your deck."), card_type="EXTRA", card_number="BT6-101"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_04_hit_spacetime_transcended_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] (Red)(Red)â‘ : Choose up to 1 red &lt;Hit&gt; card in your Drop Area or Warp with an energy cost of 6, evolve this card into it, and you can't play red &lt;Hit&gt; cards with an energy cost of 6 for the duration of the turn."), card_type="BATTLE", card_number="EX06-04"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_015_pilaf_the_cunning_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a Battle Card or Extra Card to switch energy to Active Mode, they can't switch energy to Active Mode unless they choose 5 cards from their Drop Area and send them to their Warp."), card_type="BATTLE", card_number="BT8-015"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_065_time_ring_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Look at up to 10 cards from the top of your deck. Choose up to 1 &lt;Goku Black&gt; or &lt;Zamasu&gt; among them. If you have 4 or more energy, choose 2 instead. Add the choose up to 2 instead. Add the chosen cards to your hand and shuffle your deck."), card_type="EXTRA", card_number="BT2-065"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_081_brolys_ring_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)[Permanent] Your hand is not affected by your  Leader Card Broly's skill."), card_type="EXTRA", card_number="BT1-081"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_094_piccolo_precision_strikes_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card in Rest Mode.\n[Auto] Place this card in its owner's Drop Area: At the start of your turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and negate its skills for the turn."), card_type="BATTLE", card_number="BT12-094"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_096_heavy_light_shatter_burst_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is green: Choose all of your opponent's Battle Cards and KO them."), card_type="EXTRA", card_number="DB2-096"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_036_gowasu_zamasus_master_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card and your Leader Card is blue, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose oneãƒ¼\nãƒ»Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order.\nãƒ»Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck."), card_type="BATTLE", card_number="BT7-036"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_037_universal_leader_grand_supreme_kai_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 Battle Card other than &lt;Grand Supreme Kai&gt; with a card name that includes {Supreme Kai} from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT3-037"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_119_eighter_aid_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is black: Negate the attack, then choose up to 1 skill-less Battle Card from your Drop Area or Warp and add it to your hand."), card_type="EXTRA", card_number="BT6-119"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_068_cell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Place 1 card from your hand under this card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO that card.\n[Awaken] When your life is at 4 or less: You may draw 2 cards and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Place 1 card from your hand under this card: Draw 2 cards.\n[Activate: Main] [Once per turn] Place 2 cards from under this card in the Drop Area: Choose up to 1 opponent Battle Card and KO that card.", card_number="BT2-068"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt6_038_gokule_the_ultimate_option_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose one-\nãƒ»This card gains [Triple Strike] for the duration of the turn.\nãƒ»This card gains [Triple Attack] for the duration of the turn.\nãƒ»This card gets +30000 power for the duration of the turn."), card_type="BATTLE", card_number="BT6-038"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_127_son_goku_prideful_hero_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Heroic] (When you play another â‰ªHeroicâ‰« Battle Card or activate a â‰ªHeroicâ‰« Extra Card's skill, draw 1 card, then negate this skill for the duration of the turn.)\n[Activate: Main] Choose 3 Clone Tokens in your opponent's Battle Area and remove them from the game: Play this card from your hand.\n[Activate: Battle](Blue)(Blue)â‘¡: Choose any number of Battle Cards in your Energy Area, combo them with this card in battle, and this card gains [Triple Strike] for the duration of the battle."), card_type="BATTLE", card_number="BT8-127"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_064_chiaotzu_desperate_measures_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it."), card_type="BATTLE", card_number="BT7-064"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p059_ultimate_form_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Permanent] If you have 3 or less life, reduce the energy cost of this card in your hand by 1.\n[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, KO it, and if it was in Rest Mode, draw 1 card."), card_type="BATTLE", card_number="P-059"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_074_android_15_just_saying_hi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, your opponent chooses 1 card from their hand and places it in the Drop Area."), card_type="BATTLE", card_number="BT3-074"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_021_cymbal_reign_of_terror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of a battle where this card was used in a combo from your life, play this card.\n[Activate: Main][Once per turn] If your Leader Card is a red &lt;King Piccolo&gt; card: Choose up to 1 of your red Unison Cards with [Rejuvenate] in its skill text, and you may place 1 red â‰ªDemon Clanâ‰« card from your Drop Area under it. If you do, draw 1 card, then add 1 marker to the chosen Unison Card."), card_type="BATTLE", card_number="BT12-021"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_106_tagoma_cold_as_ice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, draw 1 card.\n[Activate: Main] If your Leader Card is a yellow â‰ªFrieza's Armyâ‰« card, you have 2 or more energy, you place 1 face-up card from your life in your Drop Area, and send this card from your Drop Area to your Warp: You may choose 1 mono-yellow â‰ªFrieza's Armyâ‰« card or mono-yellow Unison Card in your hand and place it in your life face up. If you do, draw 1 card. You can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="BATTLE", card_number="BT12-106"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_115_frigid_blast_putine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dark Over Realm 3] (If you have at least 3 black cards in your Drop Area, you can play this card by sending all cards in your Drop Area to your Warp. [Over Realm] and [Dark Over Realm] can only be activated once per turn)\n[Auto] When you play this card, choose up to 1 &lt;Demigra&gt; with an energy cost of 4 or less from your deck and add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT4-115"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex08_07_wailing_spirit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust]\n[Activate: Main] Choose up to 1 &lt;Broly: Br&gt; card with an original energy cost of 4 from your deck, negate its [Auto] skill for the duration of the turn, play it, then shuffle your deck."), card_type="EXTRA", card_number="EX08-07"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_117_super_water_of_the_gods_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 of your Battle Cards with the [Servant] skill, negate its skills for the turn, then switch it to Active Mode."), card_type="EXTRA", card_number="BT11-117"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_064_vuon_dynamite_blaster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker]"), card_type="BATTLE", card_number="BT9-064"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_057_spirited_search_pan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card in your Drop Area: Choose up to 1 green {Super Saiyan Son Goku} or {Spirited Search SS Trunks} with an energy cost of 2 from your deck and play it. Then shuffle your deck."), card_type="BATTLE", card_number="BT5-057"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_105_ginyu_one_last_body_change_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a yellow â‰ªFrieza's Armyâ‰« card and you place 1 face-up card from your life in your Drop Area: When this card is played, draw 2 cards.\n[Auto] When one of your opponent's cards is switched to Rest Mode by one of your skills, this card gains [Blocker] for the turn."), card_type="BATTLE", card_number="BT12-105"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_066_trunks_time_machine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is &lt;Trunks: Future&gt;, look at up to 10 cards from the top of your deck. Choose up to 1 &lt;Son Goku&gt; or &lt;Vegeta&gt; or &lt;Trunks: Future&gt; among them, add it to your hand, and shuffle your deck. Then, if you have 4 or more energy, choose 1 of your energy and switch it to Active Mode."), card_type="EXTRA", card_number="BT2-066"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_029_birth_of_a_super_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a red &lt;Gogeta: Br&gt; card: Choose one-\nãƒ» Play or add to your hand up to 1 skill-less &lt;Son Goku: Br&gt; card with an energy cost of 1 and up to 1 skill-less &lt;Vegeta: Br&gt; card with an energy cost of 1 from your deck, then shuffle your deck.\nãƒ» Play or add to your hand up to 1 skill-less &lt;Son Goku: Br&gt; card with an energy cost of 1 and up to 1 skill-less &lt;Vegeta: Br&gt; card with an energy cost of 1 from your Drop Area."), card_type="EXTRA", card_number="BT11-029"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_047_riot_javelin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less, ignoring [Barrier], and return it to its owner's hand."), card_type="EXTRA", card_number="DB3-047"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_076_crushing_despair_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is green or a â‰ªPhantom Demonâ‰« card: Negate the attack, then you may choose 1 card in your hand and discard it. If you do, draw 1 card."), card_type="EXTRA", card_number="DB3-076"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_023_cheelai_trusted_friend_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker]\n[Activate: Main/Battle](Red)(Red), choose 1 red &lt;Broly: Br&gt; card in your Battle Area and return it to its owner's hand: Play this card from your hand."), card_type="BATTLE", card_number="BT11-023"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_074_rampaging_lifeform_bio_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("Evolveã€‘ (Green)(Green)â‘¡: &lt;Broly&gt; (Play this card on top of the specified card)\n[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Auto} When a card evolves into this card, your opponent chooses two cards from their hand, and places them in the Drop Area."), card_type="BATTLE", card_number="BT1-074"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_068_minotia_unsealed_hero_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, choose one-\nãƒ» Choose up to 1 &lt;Hirudegarn&gt; card with an energy cost of 3 from your deck or hand, play it, then shuffle your deck if you looked through it.\nãƒ» Draw 1 card."), card_type="BATTLE", card_number="DB3-068"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_102_frieza_the_onslaught_begins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker]\n[Auto](Yellow), if your Leader Card is a yellow â‰ªFrieza's Armyâ‰« card and all of your energy is mono-yellow: When this face-up card in your life is placed in your Drop Area, play this card from your Drop Area.\n[Auto] If it's your turn: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less in Rest Mode and KO it.\n"), card_type="BATTLE", card_number="BT12-102"))
+    assert any(rule.trigger == "owner_life_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_035_furious_rush_super_saiyan_3_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle)\n[Auto] When you play this card, draw 1 card."), card_type="BATTLE", card_number="BT3-035"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt12_040_veku_making_excuses_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Permanent] This card can't be KO'd in battle.\n[Activate: Main][Burst 3] If your Leader Card is a &lt;Paikuhan&gt; card: If you placed at least 1 blue &lt;Son Goku&gt; card and 1 blue &lt;Vegeta&gt; card in your Drop Area with this skill, play this card from your hand. If you didn't play this card, discard it."), card_type="BATTLE", card_number="BT12-040"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_017_ssb_son_goku_at_full_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Dual Attack][Blocker]\n[EX-Evolve](Red)(Red)(Red), draw 1 card: Red &lt;Son Goku: Br&gt; with an energy cost of 3.\n[Permanent] This card can't be played from any area with non-[Evolve] skills.\n[Permanent] This card can attack your opponent's Battle Cards in Active Mode.\n[Auto][Once per turn] If your Leader Card is a red â‰ªSaiyanâ‰« card: When this card KOs one of your opponent's Battle Cards with an original energy cost of 2 or more or is removed from your Battle Area by an opponent's skill, deal 1 damage to your opponent."), card_type="BATTLE", card_number="BT13-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed_opponent_battle_or_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_004_destructive_terror_champa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red)(Red)â‘¡: &lt;Champa&gt;\n[Triple Strike] (This card inflicts 3 damage instead of 1 when attacking)\n[Auto] When you play this card, choose all of your opponent's Battle Cards in the Battle Area with 15000 or less power and KO them."), card_type="BATTLE", card_number="BT1-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_047_infernal_chain_janemba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Auto] When you play this card, you can't play {Infernal Chain Janemba} for the duration of the turn.\n[Activate: Main][Sparking 10] (This skill takes effect when you have 10 or more cards in your Drop Area.) Place this card at the bottom of its owner's deck: If your Leader Card is â‰ªEvil Incarnateâ‰« card, choose up to 1 &lt;Janemba&gt; card from your Warp with an energy cost of 4 and play it."), card_type="BATTLE", card_number="BT5-047"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p585_ss4_son_goku_and_ss4_vegeta_combo_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 4]\n[Auto] When this card is played, draw 1 card.\n[Auto] When this card attacks, use up to 1 mono-black card with 5000 combo power from your Warp in a combo with its skills negated for the turn."), card_type="BATTLE", card_number="P-585"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_013_dependable_mom_bulma_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Switch this card to Rest Mode: Draw 1 card, then choose up to 1 of your Battle Cards and it gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT4-013"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt11_003_gotenks_earth_shattering_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When you activate a [Union] skill, add a marker to this card.\n[0][Activate: Main] Draw 1 card.\n[-5][Activate: Main] This card gets +15000 power, [Double Strike], and [Dual Attack] for the turn."), card_type="UNISON", card_number="BT11-003"))
+    assert any(rule.trigger == "owner_union_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_072_speedy_partner_lemo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if there is a &lt;Cheelai: Br&gt; card in play in your Battle Area, your opponent chooses 1 card from their hand and places it in their Drop Area."), card_type="BATTLE", card_number="BT6-072"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_020_spike_to_the_rescue_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, it gets +9000 power for the duration of the turn.\n[Auto] When this card is KO'd, choose up to 1 &lt;Son Gohan&gt; card from your Drop Area and play it in Rest Mode."), card_type="BATTLE", card_number="BT5-020"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_057_godstrike_beerus_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card, choose up to 1 of the keyword skills on 1 of your opponent's Battle Cards and negate it for the duration of the turn."), card_type="BATTLE", card_number="BT6-057"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_056_final_hope_slash_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is mono-blue: Switch up to 1 of your mono-blue energy to Active Mode, then choose up to 1 of your opponent's Battle Cards with 15000 power or less, ignoring [Barrier], and return it to its owner's hand.\n[Permanent] If you have a blue Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="EXTRA", card_number="BT10-056"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt10_093_syn_shenron_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, look at up to 5 cards from the top of your deck, add up to 1 â‰ªShadow Dragonâ‰« card among them to your hand, then shuffle your deck.\n[Auto] At the end of your turn, choose up to 1 yellow â‰ªShadow Dragonâ‰« card in your Battle Area and switch it to Active Mode.\n[Awaken] When your life is at 3 or less, or you have a yellow Unison Card with a specified cost of 4 in play: You may draw 2 cards, then switch up to 1 of your energy to Active Mode and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card.\n[Auto] At the end of your turn, choose all yellow â‰ªShadow Dragonâ‰« cards in your Battle Area and switch them to Active Mode.\n[Activate: Main](Yellow)(Yellow)(Yellow)(Yellow)(Yellow)(Yellow): Play up to 7 â‰ªShadow Dragonâ‰« cards with different card names from your Drop Area.", card_number="BT10-093"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "turn_end" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_112_eis_shenron_the_cryomancer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is mono-yellow: Play this card, and the card being played is played in Rest Mode.\n[Activate: Main](Yellow), discard this card from your hand: Play up to 1 â‰ªShadow Dragonâ‰« card with an energy cost of 1 from your deck with its skills negated for the turn, then shuffle your deck."), card_type="BATTLE", card_number="BT11-112"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_026_saibaimen_infinite_swarm_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+1][Activate: Main] Play 1 Saibaiman Token. (Saibaiman Tokens have 5000 power, 0 combo cost, and 5000 combo power.)\n[-1][Activate: Main] Remove 1 of your Saibaiman Tokens from the game: Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and place it at the bottom of its owner's deck."), card_type="UNISON", card_number="DB3-026"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt4_124_beyond_darkness_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Dark Over Realm 7] â‘¤\n[Triple Strike]\n[Auto] When this card attacks, your opponent reveals their hand. Choose up to 4 Battle Cards from it and combo with them in your Combo Area."), card_type="BATTLE", card_number="BT4-124"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_070_double_sunday_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a &lt;Raditz&gt; card, it gets +15000 power for the duration of the battle, then choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less and KO it."), card_type="EXTRA", card_number="BT7-070"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_025_tien_shinhans_mafuba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is red: Negate the attack, then choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -5000 power for the turn."), card_type="EXTRA", card_number="DB3-025"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p046_bardock_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 of your opponent's Battle Cards with an energy cost of 3 or less and switch it to Rest Mode.<br>[Awaken] When your life is at 4 or less: You may draw 2 cards and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Choose 1 of your opponent's Battle Cards and switch it to Rest Mode.<br>[Auto] When this card attacks, draw 1 card.", card_number="P-046"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_sd10_01_baby_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 1 card from your life and add it to your hand: Switch this card to Active Mode. <br>[Awaken] When your life is at 2 or less: You may draw 2 cards, then choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Dual Attack] (Once per turn, when this card attacks, switch this card to Active Mode after the battle.)<br>[Auto][Once per turn] When this card attacks, draw 1 card.", card_number="SD10-01"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt4_010_digging_deep_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Once per turn] When this card attacks, you may choose up to 2 cards from your life and add them to your hand. If you chose to add 1 or more cards to your hand, switch this card to Active Mode, and it gains +5000 power for the duration of the turn."), card_type="LEADER", card_number="BT4-010"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_009_power_of_friendship_pan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 5 cards from the top of your deck, choose up to 1 Battle Card with 15000 or less power and &lt;GT&gt; in its character name and play it, then shuffle your deck."), card_type="BATTLE", card_number="BT4-009"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p181_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When you combo with a red or green card, draw 1 card.<br>[Awaken: Surge] Choose 1 red card and 1 green card in your hand and place them under this card: You may draw 2 cards, then choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Activate: Battle][Once per turn] If your life is at 3 or less and you choose 1 card under this card and place it in your Drop Area: Choose oneâ€”<br>ãƒ» Choose up to 1 Battle Card in your Drop Area, combo with it, then this card gains [Double Strike] for the duration of the turn.<br>ãƒ» Choose 1 of your opponent's Battle Cards, ignoring [Barrier], and KO it.", card_number="P-181"))
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_055_whiss_coercion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, choose up to 1 of your energy and switch it to Active Mode."), card_type="EXTRA", card_number="BT1-055"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_106_turles_great_ape_manipulator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a [Field] Extra Card in your Battle Area, this card gains [Blocker].<br>[Auto] If your Leader Card is a yellow â‰ªTurles Crusher Corpsâ‰« card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT15-106"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_activate_up_to_n_named_field_extra_from_owner_deck_or_drop_on_play" for rule in rules)
+
+
+def test_extract_exact_bt3_097_unwavering_solidarity_tora_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your opponent has 2 or more Battle Cards in play in Rest Mode, you can play this card from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT3-097"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_118_a_childs_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.<br>[Activate: Main] Your Leader Card is a â‰ªShenronâ‰« card: Choose 1 Battle Card in your Drop Area with 15000 or less power and an energy cost of 3 or less and play it."), card_type="EXTRA", card_number="BT5-118"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_134_villainous_counterstrike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªVillainousâ‰« in all areas.<br>[Activate: Battle] Your opponent has a skill-less Battle Card in play: Choose any number of your opponent's Battle Cards with energy costs of 4 or less for which the total cost adds up to 4 or less and send them to their owners' Warps."), card_type="EXTRA", card_number="BT8-134"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex19_08_goku_black_works_undone_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] When choosing cards in your life using the [Activate: Main] skill on your blue &lt;Goku Black&gt;-only card, you may choose this card in your Battle Area instead.<br>[Auto][Limit 1] Choose 1 card in your hand and discard it: When this card is played, flip over up to 1 of your blue &lt;Goku Black&gt;-only Leader Cards, and you can't play non-&lt;Zamasu&gt; or non-&lt;Goku Black&gt; Battle Cards for the game.<br>[Activate: Main][Limit 1] If your Leader Card is a &lt;Goku Black&gt;-only card and you choose 1 {Zamasu, Teamwork Undying} in your Unison Area: Add a marker to the chosen card, then place this card under it from your Battle Area."), card_type="BATTLE", card_number="EX19-08"))
+    assert sum(1 for rule in rules if rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_add_marker_to_matching_owner_unison_and_place_self_under_it" for rule in rules)
+
+
+def test_extract_exact_bt9_051_artificial_impact_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can activate this card's [Activate: Battle] from your hand without paying its energy cost.<br>[Activate: Main] If your Leader Card is green: Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], KO it, then choose 1 card in your opponent's hand and place it in their Drop Area.<br>[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +5000 power for the duration of the battle."), card_type="EXTRA", card_number="BT9-051"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_gain_power_and_keyword_for_battle" for rule in rules)
+
+
+def test_extract_exact_bt9_067_justice_blast_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can activate this card's [Activate: Battle] from your hand without paying its energy cost.<br>[Activate: Main] If your Leader Card is yellow: Choose up to 1 of your opponent's Battle Cards in Rest Mode, ignoring [Barrier], negate its skills for the duration of the turn, then KO it.<br>[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +5000 power for the duration of the battle."), card_type="EXTRA", card_number="BT9-067"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_gain_power_and_keyword_for_battle" for rule in rules)
+
+
+def test_extract_exact_bt18_001_son_goku_and_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can use your mono-red Rest Mode â‰ªSaiyanâ‰« cards in combos.<br>[Auto][Once per turn] When you use a card in a combo, look at up to 3 cards from the top of your deck, add up to 1 red â‰ªSaiyanâ‰« card or 1 red Unison with a specified cost of 2 among them to your hand, and place the remaining cards at the bottom of your deck in any order.<br>[Awaken] When your life is at 4 or less or you have 2 or more energy and both &lt;Son Goku: GT&gt; and &lt;Vegeta: GT&gt; cards in your Z-Energy: You may draw 1 card, switch up to 1 of your energy to Active Mode, and add cards from your life to your hand until you have 6 life left."), card_type="LEADER", card_back_skill_unstyled="[Permanent] You can use your mono-red Rest Mode â‰ªSaiyanâ‰« cards in combos.<br>[Permanent] Your &lt;Gogeta: GT&gt; cards can attack your opponent's Battle Cards in Active Mode, and when your &lt;Gogeta: GT&gt; cards attack your opponent's Battle Cards, your opponent skips their Defense Step.<br>[Auto][Once per turn] When you activate [Union-Fusion], this card gains &lt;Gogeta: GT&gt; for the turn.<br>[Auto] When this card attacks, draw 1 card, then play up to 1 red â‰ªSaiyanâ‰« card with an energy cost of 1 from your hand in Rest Mode.", card_number="BT18-001"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "owner_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_union_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt12_064_wings_invader_of_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent][Bond 2] If this card is in Rest Mode, mono-green â‰ªSlug's Armyâ‰« cards in your Battle Area can't be KO'd by your opponent's skills."), card_type="BATTLE", card_number="BT12-064"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_109_meta_cooler_core_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] (Yellow)(Yellow)â‘¢, place 1 {Big Gete Star} in your Battle Area under this card: Choose up to 1 &lt;Meta-Cooler Core&gt; from your deck and place it on top of this card. Shuffle your deck afterwards."), card_type="BATTLE", card_number="BT2-109"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt20_109_majin_buu_nightmarish_glimpse_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]<br>[Auto][Limit 1](Yellow), if your Leader is a &lt;Majin Buu&gt; or &lt;Evil Wizard Babidi&gt; cardâ€”both yellowâ€”and you have 2 or more energy: When you use one of your yellow &lt;Majin Buu&gt; or yellow &lt;Evil Wizard Babidi&gt; card skills to discard this card from your hand, play this card from your Drop.<br>[Activate: Main][Limit 1] Discard 1 or more â‰ªMajinâ‰« cards from your hand: Choose up to 1 of your opponent's Battle Cards in Rest Mode, KO it, and this card gains power equal to the total combo power of the cards discarded by this skill for the turn."), card_type="BATTLE", card_number="BT20-109"))
+    assert any(rule.trigger == "self_in_hand_sent_to_drop_or_warp" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_discard_matching_from_owner_hand_gain_total_combo_power_and_threshold_draw_keyword" for rule in rules)
+
+
+def test_extract_exact_bt22_051_beerus_merciless_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]<br>[Permanent] For every card in your Z-Energy, reduce the energy cost of this card in your hand by 3.<br>[Auto][Limit 1] If it's your turn: When this card attacks or is used in a combo, choose up to 1 of your opponent's Battle Cards and add it to its owner's hand.<br>[Auto][Once per turn] If your Leader is a blue &lt;Whis&gt; card and you have 3 or more energy: When this card attacks and KOs an opponent's Battle Card, switch this card to Active Mode, and this card gets +10000 power, [Double Strike], and [Dual Attack] for the turn."), card_type="BATTLE", card_number="BT22-051"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_004_gamma_1_and_gamma_2_arrival_of_heroes_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]<br>[Permanent] If you have 1 or more each of red &lt;Gamma 1: SH&gt; and &lt;Gamma 2: SH&gt; cards in play, reduce this card's energy cost in your Z-Deck by (Red), and reduce its Z-Energy cost by 1.<br>[Permanent] If you have 3 or more energy, your red &lt;Gamma 1: SH&gt; and &lt;Gamma 2: SH&gt; cards get +5000 power during your turn.<br>[Auto][Limit 1] When your red &lt;Gamma 1: SH&gt; card is switched to Active Mode by a &lt;Dr. Hedo: SH&gt; card skill, switch this card to Active Mode, and this card gains [Double Strike] for the turn."), card_type="Z-BATTLE", card_number="BT22-004"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "owner_card_switched_to_active" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt23_019_trunks_battle_preparations_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle][Limit 1] If your red &lt;Son Gohan: Future&gt; or &lt;Trunks: Future&gt; card is in a battle: Use this card from under a {Destroyed West City} in your Battle Area in a combo.<br>[Activate: Battle][Limit 1](1), if your Leader is a red &lt;Son Gohan: Future&gt; or &lt;Gohanks: Xeno&gt; card, you have 3 or more energy, and this card is in a Combo Area: Choose up to 1 of your red &lt;Son Gohan: Future&gt; or &lt;Trunks: Future&gt; cards and it gains [Barrier] until the end of your opponent's turn."), card_type="BATTLE", card_number="BT23-019"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt4_052_gift_of_power_guru_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 of your Battle Cards, and it gains +5000 power for the duration of the turn."), card_type="EXTRA", card_number="BT4-052"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_116_dragon_radar_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose one-\nãƒ»Look at up to the top 7 cards of your deck, choose up to a total of 2 [Dragon Ball] or â‰ªDesireâ‰« cards and add them to your hand, then shuffle your deck.\nãƒ»Choose up to a total of 2 [Dragon Ball] or â‰ªDesireâ‰« cards from your Drop Area and add them to your hand."), card_type="EXTRA", card_number="BT5-116"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_102_nappa_vegetas_attendant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, if your opponent has a Battle Card in play in Rest Mode, this card gains +10000 power for the duration of the turn."), card_type="BATTLE", card_number="BT3-102"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_056_popo_guardians_aide_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you attack or combo with this card, if your Leader Card is green, place up to 3 cards from the top of your deck in your Drop Area."), card_type="BATTLE", card_number="BT4-056"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_074_gine_here_to_support_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you attack or combo with this card, if your Leader Card is yellow, place up to 3 cards from the top of your deck in your Drop Area."), card_type="BATTLE", card_number="BT4-074"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_040_hidden_darkness_tapion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you attack with this card or combo with it, if your Leader Card is blue, place up to 3 cards from the top of your deck in your Drop Area."), card_type="BATTLE", card_number="BT4-040"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_101_unwavering_solidarity_borgos_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards in Rest Mode. That card cannot switch to Active Mode during your opponent's next Charge Phase."), card_type="BATTLE", card_number="BT3-101"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_026_sneak_attack_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, and return it to its owners hand."), card_type="BATTLE", card_number="BT4-026"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_return_up_to_n_opponent_battle_to_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_bt4_035_city_patrol_great_saiyaman_2_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 {City Patrol Great Saiyaman} from your deck and add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT4-035"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_bt4_061_lord_slug_returned_to_form_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 â‰ªSlug's Armyâ‰« from your deck with an energy cost of 4 or less and add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT4-061"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_096_medamatcha_the_miniscule_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Bond 2] When this card is removed from your Battle Area by a skill or KO'd, play 3 Meda Tokens. (Meda Tokens have 5000 power, 0 combo cost, and 5000 combo power.)"), card_type="BATTLE", card_number="DB3-096"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_029_flight_of_the_grand_eagle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Choose up to 1 of your Leader Cards or Battle Cards and it gets +100000 power for the battle.\n[Permanent] If your Leader Card is red, you can activate this card's [Counter] skill from your hand by choosing 2 of your non-token Battle Cards and reducing their power by -10000 for the turn instead of paying its energy cost."), card_type="EXTRA", card_number="DB2-029"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_026_is_that_all_youve_got_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is red: Negate the attack, then you may choose 1 red card from your hand and place it in your Drop Area. If you do, choose up to 2 of your opponent's Battle Cards, and they get -15000 power for the duration of the turn."), card_type="EXTRA", card_number="BT6-026"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_074_son_gohan_majin_exterminator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Double Strike][Dual Attack]\n[Permanent] If your Leader Card is a green â‰ªEarthlingâ‰« card, green skill-less Battle Cards in your Combo Area get +5000 combo power while this card is in a battle.\n[Auto] When this card is played, you may add up to 1 green skill-less Battle Card from your Drop Area to your hand. If you do, place up to 1 skill-less green Battle Card in your Drop Area at the bottom of your deck."), card_type="BATTLE", card_number="BT14-074"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_tb2_023_pan_proudest_daughter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Permanent] If your Leader Card is a blue â‰ªWorld Tournamentâ‰« and {Hercule, Proudest Grandpa} is in play in your Battle Area, this card gains +10000 power and [Double Strike]."), card_type="BATTLE", card_number="TB2-023"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_059_titanic_ambition_lord_slug_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Green)(Green), place 1 card from your hand into your Drop Area: &lt;Lord Slug&gt;with an energy cost of 4 or more.\n[Double Strike]\n[Auto] [Bond 3] â‰ªSlug's Armyâ‰« (This skill takes effect when you have 3 or more of the specified Battle Cards in play): When you play this card, choose up to 3 cards from your opponent's hand and place them in their Drop Area."), card_type="BATTLE", card_number="BT4-059"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p152_piccolo_jr_arena_wrecker_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your opponent has a [Field] card in their Battle Area, reduce the energy cost of this card in your hand by 2.\n[Auto] When you play this card, you may choose 1 [Field] card in a Battle Area with an energy cost of 1 or less and place it in its owner's Drop Area. If you do, this card gets +5000 power for the duration of the turn."), card_type="BATTLE", card_number="P-152"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt4_079_unbroken_dynasty_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 2] (Yellow)ï¼Œchoose 1 card from your hand and place it in your Drop Area: â‰ªGoku's Lineageâ‰« with an energy cost of 2. (Play the specified card from your hand, then return this card to your hand)"), card_type="BATTLE", card_number="BT4-079"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_018_baby_vengeance_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] Choose 1 of your Battle Cards and place it under this card: If your Leader Card is a red â‰ªMachine Mutantâ‰«, choose up to 1 &lt;Baby&gt; with an energy cost of 4 or less with the same character name as the card you placed under this card from your deck, and play it on top of this card. Then, shuffle your deck."), card_type="BATTLE", card_number="BT4-018"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_084_broly_berserker_of_friezas_army_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Permanent] If your Leader Card is a green â‰ªFrieza's Armyâ‰« or â‰ªFrieza Clanâ‰« card, reduce the energy cost of this card in your hand by 1 for each green Extra Card in your Battle Area and Drop Area.\n[Auto] If your opponent has 3 or more energy: When this card is removed from your Battle Area by a skill or KO'd, you may choose 2 cards in your hand and discard them. If you do, choose up to 1 mono-green &lt;Broly: Br&gt; card with an energy cost of 6 or 7 in your hand and play it."), card_type="BATTLE", card_number="BT14-084"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd3_07_pernicious_progeny_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 2 Cell Jr. tokens in your Battle Area and remove them from the game: For each Cell Jr. token you remove from the game with this skill, choose up to 1 of your opponent's cards and switch it to Rest Mode.\n[Activate: Main](Yellow), if your Leader Card is a &lt;Cell&gt; card: Add this card to your hand from your Drop Area."), card_type="BATTLE", card_number="XD3-07"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_016_pilaf_leader_of_the_crew_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose this card and 1 each of {Shu, Trusted Lackey} and {Mai, Trusted Lackey} from your Battle Area and place them in your Drop Area: Choose up to 1 {Combiner Mecha Pilaf Machine} from your deck or Drop Area and play it. Then shuffle your deck if you looked through it.\n[Activate: Main][Once per turn] Choose 1 [Dragon Ball] card from your deck, place it in your Drop Area, then shuffle your deck: Choose 1 {Shu, Trusted Lackey} and 1 {Mai, Trusted Lackey} in your Battle Area, and they get +5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT5-016"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt5_007_grandpa_gohan_to_the_rescue_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose this card, along with a &lt;Bandages&gt; card and &lt;Spike&gt; card from your Drop Area, and place them at the bottom of their owners' decks: Choose up to 1 {Grandpa Gohan} from your deck or Drop Area and play it, then choose that card, and it gets +5000 power and [Double Strike] for the duration of the turn. Then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT5-007"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_032_piccolos_help_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If you have only 3 or less cards other than this card in your hand, choose 1 &lt;Gotenks&gt; with 15000 or less power in your Drop Area and play it."), card_type="EXTRA", card_number="BT2-032"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_017_shu_trusted_lackey_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn]â‘ : Choose up to 1 {Mai, Trusted Lackey} from your deck, play it, then shuffle your deck."), card_type="BATTLE", card_number="BT5-017"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_107_heavenly_wizard_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your turn, when you combo with this card, if your opponent has 3 or less energy, choose up to 1 of your opponent's Battle Cards ignoring [Barrier] with 30000 or more power and KO it."), card_type="BATTLE", card_number="BT4-107"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_015_combiner_mecha_pilaf_machine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is KO'd, choose up to 1 each of {Pilaf, Leader of the Crew}, {Shu, Trusted Lackey}, and {Mai, Trusted Lackey} from your Drop Area and play them."), card_type="BATTLE", card_number="BT5-015"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_013_puar_best_pal_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card from the Battle Area, you may add 1 card from your life to your hand. If you do, choose up to 1 red {Yamcha} with an energy cost of 2 from your deck, play it, and shuffle your deck."), card_type="BATTLE", card_number="BT5-013"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_021_baba_champions_leader_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 &lt;Bandages&gt;, &lt;Spike&gt;, or &lt;Son Gohan&gt; card from your deck and place it in your Drop Area, shuffle your deck, then choose up to 1 &lt;Bandages&gt; card from your Drop Area and play it."), card_type="BATTLE", card_number="BT5-021"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_036_ki_barrage_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 1 card in your life and add it to your hand. If you do, choose up to 1 of your opponent's Battle Cards and return it to its owner's hand."), card_type="BATTLE", card_number="BT5-036"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_031_surestrike_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When this card attacks, choose up to 1 [Dragon Ball] card from your deck and place it in your Drop Area, then shuffle your deck. If you placed a [Dragon Ball] card in your Drop Area, choose up to 1 of your opponent's Battle Cards, return it to its owner's hand, and if that card has an original energy cost of 3 or less, switch this card to Active Mode."), card_type="BATTLE", card_number="BT5-031"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_030_violent_rays_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is red: Negate the attack. You may choose 1 card in your hand and discard it. If you do, choose oneâ€”\nãƒ» Your opponent can't attack with Battle Cards with 20000 power or more for the turn.\nãƒ» Your opponent can't attack with Unison Cards with 20000 power or more for the turn."), card_type="EXTRA", card_number="BT11-030"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_083_majin_buu_thwarting_the_enemy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Limit 1] If your Leader Card is green: Negate the attack, then play this card in Rest Mode. If you negated a Leader Card's attack with this skill, your opponent can't attack with their Leader Card for the turn.\n[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by paying the cost for [Spirit Boost 2] instead."), card_type="BATTLE", card_number="BT14-083"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_106_dark_control_demon_god_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dark Over Realm 4] â‘¢ (If you have at least 4 black cards in your Drop Area, you can play this card by sending all cards in your Drop Area to your Warp. [Over Realm] and [Dark Over Realm] can only be activated once per turn)\n[Auto] When this card attacks, your opponent chooses 1 card from their hand and sends it to their Warp. If that card was a Battle Card, combo with it in your Combo Area."), card_type="BATTLE", card_number="BT4-106"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_113_gravy_lightnings_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dark Over Realm 2]â‘¡ (If you have at least 2 black cards in your Drop Area, you can play this card by sending all cards in your Drop Area to your Warp. [Over Realm] and [Dark Over Realm] can only be activated once per turn)"), card_type="BATTLE", card_number="BT4-113"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_119_tokitoki_time_creator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect] (This card isn't affected by [Counter: Play] skills)\n[Auto] When you play this card, you may place it on the top of your deck. If you do so, choose up to 1 black Battle Card with 3000 power from your deck and play it, then shuffle your deck."), card_type="BATTLE", card_number="BT4-119"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_003_oblivious_rampage_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve]((Red))((Red))ï¼šRed {Son Goku} with an energy cost of 1.\n[Critical]\n[Activate: Main][Once per turn][Burst 3] (You must place the top 3 cards of your deck in your Drop Area to activate this skill.) Choose 1 of your red Battle Cards and KO it: Switch this card to Active Mode."), card_type="BATTLE", card_number="BT5-003"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_118_dimensional_banisher_fu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 5] â‘ \n[Double Strike]\n[Auto] When you play this card with [Over Realm], choose up to 1 of your opponent's Battle Cards and send it to their Warp."), card_type="BATTLE", card_number="BT4-118"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_085_prodigal_dynasty_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 4] (Yellow)(Yellow): â‰ªGoku's Lineageâ‰« with an energy cost of 4. (Play the specified card from your hand, then return this card to your hand)\n[Auto] When you combo with this card, if one of your yellow Battle Cards is being attacked, this card gains +10000 combo power for the duration of the turn."), card_type="BATTLE", card_number="BT4-085"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_080_deadly_golden_great_ape_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 5] (Yellow): â‰ªGoku's Lineageâ‰« with an energy cost of 5. (Play the specified card from your hand, then return this card to your hand)\n[Permanent] You may not play this card from any area unless your Leader Card is &lt;Son Goku: GT&gt;.\n[Auto] When you play this card, choose up to 1 â‰ªGoku's Lineageâ‰« with an energy cost of 5 or less other than {Deadly Golden Great Ape Son Goku} from your deck and add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT4-080"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_db1_087_burning_slash_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. \n[Permanent] This card's skills can't be negated in any area.\n"), card_type="EXTRA", card_number="DB1-087"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_048_preemptive_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is green and the Battle Card your opponent is playing has an energy cost of 4 or less, it is placed in its owner's Drop Area instead of being played."), card_type="EXTRA", card_number="TB3-048"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_013_android_18_universe_7_challenger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier]\n[Auto] If your Leader Card is a mono-red â‰ªUniverse 7â‰« card, and you only have this card and 1 red skill-less Battle Card in your Combo Area: When this card is used in a combo, draw 1 card.\n[Activate: Battle][Once per turn] Up to 1 red or â‰ªUniverse 7â‰« Battle Card in your Combo Area gets +5000 combo power for the battle."), card_type="BATTLE", card_number="BT14-013"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_104_super_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is black and your life is at 4 or less: If the Battle Card being played has an energy cost of 3 or less, it is sent to its owner's Warp instead of being played.\n[Permanent] If you have only black cards in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT8-104"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_play" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt11_123_ss4_son_gohan_beyond_the_ultimate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When you activate an [Over Realm] skill, add a marker to this card.\n[+1][Activate: Main] Place up to 2 black Battle Cards from your Warp in your Drop Area.\n[-3][Activate: Main] Add up to 2 black Battle Cards with powers between 20000 and 30000 from your Warp to your hand, then this card gets +15000 power and [Dual Attack] for the turn."), card_type="UNISON", card_number="BT11-123"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt13_135_supreme_kai_of_time_time_labyrinth_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Permanent] If you or your opponent have 3 or more cards in their Warp, reduce the energy cost of this card in your hand by 2.\n[Auto] If your Leader Card is black: When this card is played using its [Counter: Attack] skill, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp. At the end of the turn, play any cards sent to a Warp by this skill to their owners' Battle Areas with their skills negated for the turn."), card_type="BATTLE", card_number="BT13-135"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt1_092_sorbet_the_loyal_commander_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] ] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card) \n[Activate: Battle] [Once per turn] Place 1 card from your hand in the Drop Area: Look at up to 2 cards from the top of your deck. Choose up to 2 â‰ªFrieza's Armyâ‰« among them and place them in your Combo Area. Place any other cards in the Drop Area."), card_type="BATTLE", card_number="BT1-092"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_025_attack_of_the_demon_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a red &lt;King Piccolo&gt; card: Place 1 red â‰ªDemon Clanâ‰« card with an energy cost of 3 or less from your deck in your life face up, combo with 1 red face-up â‰ªDemon Clanâ‰« card in your life, then shuffle your deck."), card_type="EXTRA", card_number="BT12-025"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_031_universe_4_assemble_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 2 skill-less Battle Cards with 10000 power in your Drop Area and/or Warp and play them."), card_type="EXTRA", card_number="DB2-031"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_022_vengeful_onslaught_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a â‰ªMachine Mutantâ‰«, choose 1 of your Battle Cards with 15000 or less power and switch it to Active Mode. It gains +5000 power for the duration of the turn."), card_type="EXTRA", card_number="BT4-022"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_049_shining_blaster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, if your Leader Card is â‰ªUniverse 9â‰«, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and return it to its owner's hand. (Cards stacked under the card are placed in the Drop Area.)"), card_type="EXTRA", card_number="TB1-049"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_114_gravy_in_demigras_thrall_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you attack or combo with this card, if your Leader Card is black, choose up to 2 cards in your Warp and place them in your Drop Area."), card_type="BATTLE", card_number="BT4-114"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_120_super_ice_ray_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is mono-yellow: If the card being played has an energy cost of 4 or less, it's played in Rest Mode."), card_type="EXTRA", card_number="BT11-120"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_115_three_star_ball_negative_energy_overflow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can't attack and isn't affected by your opponent's skills.\n[Activate: Main] If your Leader Card is a â‰ªShadow Dragonâ‰« card and you place this card in its owner's Drop Area: Choose up to 1 &lt;Eis Shenron&gt; card with an energy cost of 2 from your deck or hand, play it, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT11-115"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_124_cell_games_arena_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Energy-Exhaust]\n[Auto] Choose 1 of your Cell Jr. tokens and remove it from the game: When one of your &lt;Cell&gt; cards is removed from your Battle Area by an opponent's skill, choose up to 1 &lt;Cell&gt; card with an energy cost of 9 or less from your deck or Drop Area, add it to your hand, then choose up to 1 card in your opponent's hand and place it in their Drop Area, and shuffle your deck if you looked through it."), card_type="EXTRA", card_number="BT9-124"))
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_050_murichim_brave_bruiser_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Barrier]\n[Activate: Main][Once per turn] Your opponent reveals the top card of their deck; if it's a Battle Card, this card gets +5000 power and [Dual Attack] for the turn."), card_type="BATTLE", card_number="DB2-050"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_049_jirasen_graceful_wager_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Look at up to 3 cards from the top of your opponent's deck, put them back in any order, then play this card.\n[Activate: Main][Once per turn](Blue)â‘ : Your opponent reveals the top card of their deck; if it's a Battle Card, draw 1 card."), card_type="BATTLE", card_number="DB2-049"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_022_king_piccolo_terror_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Permanent] If {A King's Return to Youth} is in your Drop Area, reduce the energy cost of this card in your hand by 1.\n[Activate: Main][Once per turn][Sparking 10] (This skill takes effect when you have 10 or more cards in your Drop Area.) Choose 1 {King Piccolo, Terror Unleashed} or {A King's Return to Youth} from your Drop Area and send it to your Warp: If your Leader Card is a red â‰ªShenronâ‰« card, switch this card to Active Mode."), card_type="BATTLE", card_number="BT5-022"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p103_whis_the_instructor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card, choose up to 1 &lt;Son Goku: Br&gt; card, &lt;Vegeta: Br&gt; card, or &lt;Gogeta: Br&gt; card from your Drop Area and add it to your hand."), card_type="BATTLE", card_number="P-103"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_050_beerus_the_bad_tempered_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Barrier]\n[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and KO it."), card_type="BATTLE", card_number="DB1-050"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_025_dragon_fist_ss3_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier]\n[Double Strike]\n[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards ignoring [Barrier], and return it to its owner's hand, then choose up to 2 of your energy and switch them to Active Mode."), card_type="BATTLE", card_number="BT4-025"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p068_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, you may choose 1 card in your life and place it in your Drop Area. If you do so, place up to 3 cards from the top of your deck in your Drop Area, then your opponent chooses 1 card in their hand and places it in their Drop Area.\n[Awaken] When your life is at 4 or less: You may draw 2 cards and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card, then you may choose 1 of your non-token, non-black Battle Cards and place it in your Drop Area. If you do so, your opponent chooses 1 card in their hand and places it in their Drop Area.\n[Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 of your opponent's Battle Cards and KO it.", card_number="P-068"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_135_baby_janemba_corrupt_coalescence_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate]\n[Energy-Exhaust]\n[Offering]\n[Activate: Main](Red)(Red)(Yellow)(Yellow)(Yellow): Your opponent may choose 3 cards from their life and place them in their Drop Area. If they do, place this card from your hand in your Drop Area. Otherwise, play this card from your hand, choose up to 1 of your opponent's Leader Cards and it gets -30000 power for the duration of the turn."), card_type="BATTLE", card_number="BT8-135"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_001_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, draw 1 card.\n[Awaken] When your life is at 4 or less: You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Auto] When this card attacks, draw 1 card, and if you have 4 or less cards in your hand, draw 1 card and this card gains +5000 power for the duration of the turn.", card_number="BT4-001"))
+    assert sum(1 for rule in rules if rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n") >= 2
+
+
+def test_extract_exact_bt10_123_released_from_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is mono-yellow: Choose the attacking card, ignoring [Barrier], negate its skills for the turn, and it can't be switched to Active Mode until the start of your next turn.\n[Permanent] If you have a yellow Unison Card in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="EXTRA", card_number="BT10-123"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_tb3_033_dream_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, and if your Leader Card is a â‰ªBardock's Crewâ‰« card, you may choose 1 blue card in your hand and place it in your Drop Area. If you do, add this card to your hand."), card_type="EXTRA", card_number="TB3-033"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_022_beerus_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is red and your life is at 4 or less: If the Battle Card being played has 15000 power or less, it is placed in its owner's Drop Area instead of being played, and if it's your opponent's turn, choose up to 1 of your Leader Cards and it gets +5000 power for the duration of the turn.\n[Permanent] If you have a multicolor card in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT8-022"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_play" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt8_088_super_galick_gun_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is yellow and your life is at 4 or less: The Battle Card being played is played in Rest Mode.\n[Permanent] If you have a multicolor card in your energy and your life is at 4 or less, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT8-088"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_play" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_p596_cell_complete_metamorphosis_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and KO it, then play up to 1 green <Cell> card with an energy cost of 1 from your Drop.\n[Auto] When this card in your hand is placed under your green <Cell> Leader, add up to a total of 2 <Android 17>, <Android 18>, and/or <Cell> cardsâ€”all green and with an energy cost of 1â€”from your deck to your hand, place 1 card from your hand into your Drop, then shuffle your deck.\n[Activate: Main][Limit 1](Green), place 1 card from your hand at the bottom of your deck: Play this card from under {Cell, Return of the Ultimate Lifeform}."), card_type="BATTLE", card_number="P-596"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_ko_opponent_battle_on_play" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_play_up_to_n_from_owner_drop_on_play" for rule in rules)
+    assert any(rule.trigger == "self_placed_under_owner_card" and rule.handler_id == "auto_add_up_to_n_from_owner_deck_to_hand_then_discard_n_on_placed_under" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" for rule in rules)
+
+
+def test_extract_exact_bt4_003_triple_flash_ss4_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, draw 2 cards, and you may not activate [EX-Evolve] for the duration of the turn.\n[Permanent] If this card's power is 40000 or more, your opponent may not activate [Counter] during battles where this card is attacking."), card_type="BATTLE", card_number="BT4-003"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_083_discovered_dynasty_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card with [Swap], draw 2 cards."), card_type="BATTLE", card_number="BT4-083"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt9_039_cell_android_absorber_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Green), if your Leader Card is a green <Cell> card: Play this card from your Drop Area, then choose 1 of your green <Android 18> Battle Cards and place it under this card.\n[Auto] When this card is removed from your Battle Area by a skill, choose up to 1 <Android 18> card with an energy cost of 3 in your Drop Area and play it with its skills negated for the duration of the turn."), card_type="BATTLE", card_number="BT9-039"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_093_pretty_black_hole_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then you may choose 1 of your Battle Cards, negate its skills, and place it in its owner's Drop Area. If you do, draw 1 card, then choose any number of your opponent's non-token Battle Cards with a total energy cost less than or equal to the energy cost of the card you placed in a Drop Area with this skill, and KO them."), card_type="EXTRA", card_number="DB2-093"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_111_kaio_ken_son_goku_defender_of_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your life reaches 1, if your Leader Card is red and this card is in your Battle Area, this card gains [Triple Strike], [Dual Attack], and can't be KO'd by your opponent's skills.\n[Activate: Main] Choose 1 card in your life and add it to your hand: Your opponent reveals their hand, you choose up to 1 card from it and place it in their Drop Area, and this card gets +25000 power for the duration of the turn."), card_type="BATTLE", card_number="BT7-111"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_034_master_roshi_maximum_muscle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 2 of your opponent's Battle Cards and place them at the bottom of their owners' decks.\n[Auto] At the end of your turn, draw 1 card."), card_type="BATTLE", card_number="DB2-034"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt11_074_ss3_son_goku_to_new_extremes_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is green and you choose 1 of your Unison Cards and remove a marker from it: Play this card, then if the Battle Card being played has an energy cost of 5 or less, it's placed in its owner's Drop Area instead of being played."), card_type="BATTLE", card_number="BT11-074"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_121_dark_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is <Mira>, it gains +15000 power for the duration of the battle, and if it's your turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and send it to their Warp."), card_type="EXTRA", card_number="BT4-121"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_027_pride_collective_cocotte_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 â‰ªUniverse 11â‰« card with an energy cost of 1 from your deck, play it with its skills negated for the turn, then shuffle your deck."), card_type="BATTLE", card_number="DB2-027"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_045_king_yemma_soul_supervisor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 2 non-black Battle Cards from your opponent's Drop Area and place them at the bottom of your opponent's deck in any order. If you do, draw 1 card."), card_type="BATTLE", card_number="BT5-045"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt14_087_power_beyond_super_saiyan_2_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your opponent played a Unison Card, they may remove a marker from it. If they don't, choose up to 1 of their Battle Cards and KO it."), card_type="EXTRA", card_number="BT14-087"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p045_hercule_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] [Once per turn] If it is your turn, look at up to 2 cards from the top of your deck. If there are any Battle Cards, you may choose to combo with them. Then, place the remaining cards in your Drop Area."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main] [Once per turn] Place all cards from your hand in the Drop Area (you can't activate this ability with no cards in hand): This card gains +50000 power for the duration of the turn. If you placed 5 or more cards in the Drop Area with this skill, this card gains [Triple Strike] for the duration of the turn. \n[Auto] When this card attacks, draw 1 card.", card_number="P-045"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt3_053_rebirth_of_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 blue Battle Card in your hand with an energy cost of 5 or less and play it. Then, choose 1 of your opponent's Battle Cards and return it to their owner's hand."), card_type="EXTRA", card_number="BT3-053"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_097_big_amour_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is green: Your opponent can't attack with Battle Cards with energy costs of 5 or more until the start of your next Main Phase."), card_type="EXTRA", card_number="DB2-097"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p163_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Permanent] This card is also treated as red, green, and yellow, and if it's your turn and your opponent's Leader Card's back is facing up, this card gets +5000 power. "), card_type="LEADER", card_back_skill_unstyled="[Permanent] This card is also treated as red, green, and yellow. \n[Auto] When you attack with this card, draw 1 card.", card_number="P-163"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt1_091_king_cold_father_of_the_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] \n[Revenge] (When this card is attacked, KO the attacking card after the battle)\n[Counter: Battle Card Attack] Play this card from your hand and change the target of the attack to this card.\n[Auto] When you play this card, choose up to 1 opponent Battle Card and switch it to Rest Mode."), card_type="BATTLE", card_number="BT1-091"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_036_final_explosion_prince_of_destruction_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] At the end of the battle after this card attacks, place this card at the bottom of your deck. Then choose any number of your opponent's Battle Cards for which the total cost adds up to 5 or less and KO them."), card_type="BATTLE", card_number="BT3-036"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_034_ultimate_spirit_bomb_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Blue)ï¼Œplace 2 cards from your hand in the Drop Area: Blue <Son Goku> with an energy cost of 5 or more. (Play this card on top of the specified card)\n[Double Strike]\n[Permanent] Your opponent can't activate [Counter]\n against this card's attacks.\n[Auto] When this card attacks, choose up to 5 Battle Cards in your Energy Area and combo with them."), card_type="BATTLE", card_number="BT3-034"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_122_big_gete_star_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)\n[Activate: Main] â‘ , switch this card to rest and place 1 card from the top of your deck in the Drop Area: Choose up to 1 <Meta-Cooler> with an energy cost of 2 or less from your Drop Area and play it."), card_type="EXTRA", card_number="BT2-122"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_054_soul_cleansing_machine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto] If your Leader Card is an â‰ªEvil Incarnateâ‰« card: When one of your â‰ªEvil Incarnateâ‰« or â‰ªDemonâ‰« cards is played, place the top card of your deck under this card.\n[Activate: Main] If there are 4 or more cards under this card and you place this card in its owner's Drop Area: Play up to 1 blue skill-less â‰ªEvil Incarnateâ‰« card with an energy cost of 3 or less from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="EXTRA", card_number="BT12-054"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p261_ss4_bardock_fighting_against_fate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 6][Dual Attack]"), card_type="BATTLE", card_number="P-261"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_089_twin_brother_android_17_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Once per turn] When this card attacks, you may place 1 card from your hand in the Drop Area. If you do so, choose up to 1 <Android 18> in your Battle Area and switch it to Active Mode."), card_type="BATTLE", card_number="BT2-089"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_109_dende_new_to_the_job_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect] (This card isn't affected by [Counter: Play] skills.)\n[Auto] When you play this card, draw 1 card.\n[Activate: Main]â‘¡, place this card in your Drop Area: If your opponent placed a card in their energy using a skill during this game, choose 1 of your opponent's energy and place it in its owner's Drop Area."), card_type="BATTLE", card_number="BT5-109"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_088_frieza_hellish_terror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Yellow)(Yellow)â‘ : <Frieza> (Play this card on top of the specified card)\n[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Auto] When a card evolves into this card, choose all of your opponent's cards with [Blocker] and switch them to Rest Mode."), card_type="BATTLE", card_number="BT1-088"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_123_hyper_evolution_super_saiyan_4_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Red)ï¼Œplace 2 cards from your hand in the Drop Area: Red <Son Goku: GT> with an energy cost of 6 or more.\n[Ultimate]ï¼ˆYou can only include 1 copy of a card with [Ultimate] in your deckï¼‰\n[Auto] When this card attacks, it gains +5000 power for the duration of the turn. Then, if this card's power is 60000 or more, it deals 1 damage to your opponent's life.\n[Activate: Main] Place 2 red cards from your hand in the Drop Area: Switch this card to Active Mode."), card_type="BATTLE", card_number="BT3-123"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_switch_self_active_and_gain_power_for_turn" for rule in rules)
+
+
+def test_extract_exact_bt3_120_haru_haru_attacker_majin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical] (When this card inflicts damage to your opponent's life, they place that many cards in their Drop Area instead of their hand)\n[Auto] When you play this card, place up to 2 cards from the top of your deck in the Drop Area.\n[Auto] When you play this card, if your opponent's Leader Card is green or yellow, choose up to 4 of your energy and switch them to Active Mode."), card_type="BATTLE", card_number="BT3-120"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt6_099_space_pirate_bido_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can only have up to 1 {Space Pirate Bido} in play in your Battle Area.\n[Auto] When you play this card, if your Leader Card is a â‰ªBoujack Brigadeâ‰« card, look at up to 5 cards from the top of your deck, choose up to 1 â‰ªBoujack Brigadeâ‰« card among them and add it to your hand, then shuffle your deck.\n[Activate: Main] Place this card in its owner's Drop Area, then choose 5 â‰ªBoujack Brigadeâ‰« cards with energy costs of 2 or less in your Drop Area: Shuffle the chosen cards into your deck."), card_type="BATTLE", card_number="BT6-099"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_021_triple_union_super_sigma_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] (This card inflicts 2 damage instead of 1 when attacking)\n[Activate: Main] Place this card in your Drop Area: Draw 2 cards. Then, choose up to 1 of your opponent's Battle Cards, and it loses -10000 power for the duration of the turn. (If a Battle Card's power falls to 0 or less, it is KO-ed)"), card_type="BATTLE", card_number="BT3-021"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_p197_malicious_mimicry_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 <Majin Buu> card in your Leader Area or Battle Area and it gets +15000 power for the duration of the battle.\n[Activate: Main]â‘¡, if all of your energy is black, send this card from your Drop Area to your Warp, then choose 1 card in your hand and place it in your Drop Area: Choose up to 1 black <Majin Buu> card with an energy cost of 2 or less in your Drop Area and play it."), card_type="EXTRA", card_number="P-197"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_068_special_beam_cannon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is <Piccolo>, it gains +10000 power for the duration of the battle, then choose up to 1 card in your opponent's hand and place it in their Drop Area."), card_type="EXTRA", card_number="BT4-068"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_121_death_razor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 of your opponent's Battle Cards in Rest Mode and KO it."), card_type="EXTRA", card_number="BT2-121"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_020_vow_revenge_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a red â‰ªMachine Mutantâ‰«, choose up to 1 of your opponent's Battle Cards, and it loses -15000 power for the duration of the turn."), card_type="EXTRA", card_number="BT4-020"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_025_transcendent_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is red: Choose up to 1 of your opponent's Battle Cards with 20000 power or less and KO it."), card_type="EXTRA", card_number="BT6-025"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p184_kefla_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose up to 1 blue or yellow â‰ªUniverse 6â‰« card with an energy cost of 2 or less from your hand and play it."), card_type="LEADER", card_back_skill_unstyled="[Activate: Main][Once per turn] If your life is at 4 or less and you choose 1 card under this card and place it in its owner's Drop Area: Choose oneâ€”\nãƒ» Draw 1 card, then choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck.\nãƒ» At the beginning of your opponent's next Main Phase, choose up to 3 multicolor cards in your Drop Area and add them to your hand.", card_number="P-184"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_tb3_017_paralysis_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, and if your Leader Card is a red â‰ªFrieza's Armyâ‰« card, choose your opponent's Leader Card and all of their Battle Cards, and they get -5000 power for the duration of the turn."), card_type="EXTRA", card_number="TB3-017"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_050_dimension_magic_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Your Leader Card is blue: Negate the attack, then choose up to 2 of your blue energy and switch them to Active Mode.\n[Permanent][Sparking 5] (This skill takes effect when you have 5 or more cards in your Drop Area.) You can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT5-050"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_attack" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt7_072_hidden_power_of_the_saiyans_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is green: Your opponent may place the Battle Card they're playing in its owner's Drop Area instead of playing it. If they didn't, your opponent chooses 2 cards in their hand and places them in their Drop Area."), card_type="EXTRA", card_number="BT7-072"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_101_tyrannical_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is yellow: If the Battle Card being played has an energy cost of 3 or less, it's played with its skills negated for the turn; choose up to 1 of your opponent's Battle Cards or Unison Cards and negate its skills for the turn."), card_type="EXTRA", card_number="DB3-101"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_026_achoo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a red â‰ªEarthlingâ‰«-only card: Choose up to 1 of your opponent's Battle Cards with 10000 power or less, KO it, then combo with up to 1 red <Launch> card in your Drop Area."), card_type="EXTRA", card_number="BT12-026"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_050_bring_back_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Sparking 10] (This skill takes effect when you have 10 or more cards in your Drop Area.) If your Leader Card is a â‰ªMajinâ‰« card: If you have 5 or more energy, choose up to 1 blue <Majin Buu> card with an energy cost of 4 or less or 1 red <Majin Buu> card from your Energy Area and play it. If you played a card, choose up to 1 Battle Card in your Drop Area and place it under the card you played with this skill."), card_type="EXTRA", card_number="BT6-050"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_050_downfall_of_pride_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is blue: Choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less, place it at the bottom of its owner's deck, then choose up to 1 of your blue Unison Cards in your Unison Area or Drop Area and return it to its owner's hand."), card_type="EXTRA", card_number="DB3-050"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_044_best_buddy_chiaotzu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card during your turn, choose up to 1 {Tien Shinhan, Trading Moves} in your Battle Area and switch it to Active Mode."), card_type="BATTLE", card_number="TB2-044"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_switch_up_to_n_owner_battle_active_on_combo" for rule in rules)
+
+
+def test_extract_exact_bt9_087_petrification_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is black: Negate the attack, and you may choose 1 card from your hand and place it in your Drop Area. If you placed a card in your Drop Area, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and it can't attack, be placed in your opponent's Combo Area, or activate skills until the end of your next turn."), card_type="EXTRA", card_number="BT9-087"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_081_speedy_surprise_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, if your Leader Card is an â‰ªAndroidâ‰«, you may place 1 card from your hand in the Drop Area. If you do so, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO that card."), card_type="EXTRA", card_number="BT3-081"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_128_justice_crush_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card has â‰ªUniverseâ‰« in its special trait: If the Battle Card being played has an energy cost of 4 or less, it's played in Rest Mode with its skills negated for the turn."), card_type="EXTRA", card_number="DB2-128"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_027_seven_star_ball_parasitic_darkness_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDark Dragon Ballâ‰« in all areas.\n[Activate: Battle] Choose 1 of your cards and it gets +5000 power for the battle.\n[Activate: Main] Choose 1 black <Broly> card with an energy cost of 1 in your Battle Area and place it in its owner's Drop Area: Play up to 1 <Dark Broly> card from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="EXTRA", card_number="BT11-027"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_077_hidden_feelings_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] Choose up to 2 of your â‰ªAndroidâ‰« cards with energy costs of 3 or less and switch them to Active Mode."), card_type="EXTRA", card_number="BT5-077"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_068_wish_to_porunga_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a black â‰ªShenronâ‰« card, choose 1 of your and your opponent's Battle Cards with equal energy costs ignoring [Barrier]: Choose all other Battle Cards you control, all other Battle Cards your opponent controls ignoring [Barrier], and your and your opponent's hands, then shuffle them into their owners' decks, then you and your opponent draw 5 cards."), card_type="EXTRA", card_number="TB3-068"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_052_flash_bomber_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 â‰ªAndroidâ‰« card in your Battle Area and it gets +10000 power and [Critical] for the duration of the battle."), card_type="EXTRA", card_number="BT9-052"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_021_flaming_death_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a <Baby> card, it gets +10000 power for the duration of the battle, then choose one-ï½¥ Choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn. ï½¥ Choose up to 1 of your Battle Cards and it gets +10000 power for the duration of the turn."), card_type="EXTRA", card_number="BT8-021"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p160_moon_destroying_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a <Jackie Chun> card, it gets +15000 power for the duration of the Battle, then you may choose 1 of your Battle Cards in Rest Mode and place it in its owner's Drop Area. If you do, draw 1 card."), card_type="EXTRA", card_number="P-160"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_079_final_spirit_cannon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose one- ãƒ» Choose 1 of your opponent's cards and switch it to Rest Mode. ãƒ» Choose 1 of your opponent's Battle Cards in Rest Mode with an energy cost of 4 or less and KO it."), card_type="EXTRA", card_number="DB1-079"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_048_flame_bullet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your mono-blue Battle Cards and switch it to Active Mode."), card_type="EXTRA", card_number="DB3-048"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_048_all_too_easy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is blue: Negate the attack, then choose up to 1 of your opponent's Battle Cards with an energy cost of 1 and return it to its owner's hand.\n[Permanent] If this card is in your Drop Area, you can activate it by paying its energy cost and removing it and 1 blue card in your hand from the game.\n[Auto] When you activate this card, you can't activate {All Too Easy...} for the duration of the turn."), card_type="EXTRA", card_number="BT7-048"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_34_max_power_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. You may send 4 cards from your Drop Area to your Warp. If you do, return this card from your Drop Area to your hand, and you can't activate copies of this card for the turn.\n[Activate: Main] Choose 1 of your opponent's Battle Cards with an energy cost greater than their current energy and send it to its owner's Warp."), card_type="EXTRA", card_number="EX13-34"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_103_ultimate_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] Choose up to 1 of your Battle Cards, and it gets +10000 power and [Revenge] for the duration of the turn."), card_type="EXTRA", card_number="BT8-103"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_143_time_bullet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If you have a Unison Card in play: If the Battle Card being played has an energy cost of 2 or less, it's sent to its owner's Warp instead of being played.\n[Permanent] You can activate this card's [Counter] skill from your hand without paying its energy cost by choosing 2 other cards in your hand and discarding them."), card_type="EXTRA", card_number="BT10-143"))
+    assert sum(1 for rule in rules if rule.trigger == "counter_play" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt8_064_druros_revival_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas. \n[Activate: Main] If your Leader Card is green: Choose up to 1 <Dr. Uiro> card in your Drop Area with an energy cost of 4 or less and play it."), card_type="EXTRA", card_number="BT8-064"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_069_mind_expansion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a â‰ªUniverse 11â‰« card: Choose 1 of your Leader Cards and it gets +10000 power and [Critical] for the duration of the battle."), card_type="EXTRA", card_number="BT9-069"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_096_cell_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Your opponent chooses 2 cards from their hand and places them in the Drop Area."), card_type="EXTRA", card_number="BT2-096"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_059_golden_revenge_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is a blue <Baby> card: Negate the attack, then choose up to 1 of your mono-blue Battle Cards with a [Counter] skill and return it to its owner's hand."), card_type="EXTRA", card_number="BT11-059"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_027_unending_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, choose up to 1 of your red â‰ªSaiyanâ‰« Leader Cards. It gains +5000 power for the duration of the turn."), card_type="EXTRA", card_number="BT3-027"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_122_times_judgement_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack. Then, you may place 2 cards from your hand in the Drop Area. If you do so, add this card to your hand."), card_type="EXTRA", card_number="BT3-122"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p088_negating_fist_ssb_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Play this card and negate the attack. \n[Activate: Main] (Yellow)(Yellow)(Yellow), place this card in your Drop Area: Choose up to 1 yellow skill-less â‰ªSaiyanâ‰« Battle Card with an energy cost of 3 or less from your deck or Drop Area and play it. Then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="P-088"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_023_denial_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is red: If the Battle Card your opponent is playing has 20000 power or less, it is placed in its owner's Drop Area instead of being played."), card_type="EXTRA", card_number="BT7-023"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_049_power_absorbing_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve](Blue)(Blue)â‘¡: <South Supreme Kai>\n[Dual Attack]\n[Activate: Main] [Once per turn] Choose 1 <South Supreme Kai> under this card: Gain all of the chosen card's skills for the duration of the turn."), card_type="BATTLE", card_number="BT3-049"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_102_the_dark_planet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field]\n[Auto] When this card is placed in a Battle Area, choose up to 1 â‰ªGhost Warriorâ‰« card in your deck, add it to your hand, then shuffle your deck.\n[Auto] If your Leader Card is a black â‰ªMachine Mutantâ‰« card: At the end of your turn, place 2 cards from the top of your deck in your Drop Area."), card_type="EXTRA", card_number="BT8-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_076_unthinkable_fate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] If your Leader Card is a green â‰ªShenronâ‰« card, choose 1 of your Battle Cards and place it in its owner's Drop Area: Choose up to 1 green <Son Gokuï¼šGT> card with an energy cost of 2 or less in your Drop Area and play it."), card_type="EXTRA", card_number="BT5-076"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_149_dark_power_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 <Dark Broly> card in your Battle Area and it gains [Dual Attack] for the turn; you can't activate copies of this card for the turn."), card_type="EXTRA", card_number="BT11-149"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_109_friezas_call_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 â‰ªFrieza's Armyâ‰« card of energy cost 2 or less from your deck, and play it in Rest Mode. Then, shuffle your deck."), card_type="EXTRA", card_number="BT1-109"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_058_raditz_invader_from_afar_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Flip up to 1 card in your opponent's life face up.\n[+1][Activate: Main] You may choose 1 card in your hand and discard it. If you do, your opponent chooses 1 card in their hand and discards it; choose up to 1 of your cards and it gains [Critical] for the turn.\n[-5][Activate: Main] Your opponent chooses 3 cards in their hand and discards them."), card_type="UNISON", card_number="BT12-058"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 3
+
+
+def test_extract_exact_bt6_104_fatherly_love_saves_the_day_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is yellow: Negate the attack, then, if your opponent has 4 or more cards in Rest Mode, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="EXTRA", card_number="BT6-104"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p200_zen_oh_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Permanent] This card is also treated as blue, green, and yellow; if it's your turn and your opponent's Leader Card's back is facing up, this card gets +5000 power."), card_type="LEADER", card_back_skill_unstyled="[Permanent] This card is also treated as blue, green, and yellow.\n[Auto] When this card attacks, draw 1 card.", card_number="P-200"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt6_117_four_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dragon Ball][Activate: Battle] Choose up to 1 of your Battle Cards or Leader Cards, it gets +5000 power for the duration of the battle, and if it's a skill-less Battle Card it gets an additional +5000 power for the duration of the battle."), card_type="EXTRA", card_number="BT6-117"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_060_dauntless_spirit_ssb_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Green)ï¼Œplace 1 card from your hand in the Drop Area: Green <Vegeta> with an energy cost of 3 or more. (Play this card on top of the specified card)\n[Double Strike]\n[Auto] When this card deals damage, you may place 1 card from your hand in the Drop Area. If you do so, this card gains [Critical] for the duration of the turn."), card_type="BATTLE", card_number="BT3-060"))
+    assert any(rule.trigger == "self_deals_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_031_majin_buus_sealed_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] (Place and activate this card in the Battle Area. It remains in the Battle Area until you activate another [Field]. When you do, place this card in the Drop Area)\n[Auto] [Once per turn]ã€€When the number of cards under this card reaches 5 or higher, place this card in the Drop Area, then choose up to 1 {Majin Buu Revived} from your deck and play it. Then, shuffle your deck."), card_type="EXTRA", card_number="BT2-031"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_068_world_tournament_arena_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field][Activate: Main] Switch this card to Rest Mode: If your Leader Card is <Announcer>, choose up to 2 of your Battle Cards with â‰ªWorld Tournamentâ‰«, and they each gain +5000 power for the duration of the turn."), card_type="EXTRA", card_number="TB2-068"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_102_revival_of_the_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªDesireâ‰« in all areas.\n[Activate: Main] Your Leader Card is a yellow â‰ªShenronâ‰«  card: Choose 1 <Frieza>  card in your Drop Area with an energy cost of 4 or less and play it."), card_type="EXTRA", card_number="BT5-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+
+def test_extract_exact_bt1_051_result_of_training_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] During this turn, you may activate your Leader Card's [Awaken] even if you have 5 or more life. Then, choose up to 4 of your energy and switch them to Active Mode."), card_type="EXTRA", card_number="BT1-051"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_084_kick_barrage_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 2 cards from your life and add them to your hand: Choose all of your opponent's Battle Cards in Rest Mode with 15000 power or less and KO them."), card_type="BATTLE", card_number="BT5-084"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_107_dragon_ball_seeker_bulma_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose up to 1 [Dragon Ball] card from your deck and place it in your Drop Area, then shuffle your deck."), card_type="BATTLE", card_number="BT5-107"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_060_spirited_search_ss_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 2 Dragon Ball cards in your deck and place them in your Drop Area, then shuffle your deck. [Activate: Main] If your Leader Card is black and your life is at 5 or less : Choose 1 of your Desire cards in your Battle Area or Drop Area, and return it to your hand."), card_type="BATTLE", card_number="BT5-060"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_029_ss3_son_goku_pushing_forward_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of the turn, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck, then return this card to its owner's hand."), card_type="BATTLE", card_number="BT6-029"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_033_ki_barrage_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] At the end of the turn, return this card to its owner's hand."), card_type="BATTLE", card_number="BT5-033"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_070_android_20_vile_creator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card, choose up to 1 of your attacking green <Android> cards, it gets +5000 power for the duration of the turn, and gains [Double Strike] for the duration of the battle."), card_type="BATTLE", card_number="BT5-070"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_085_krillin_raring_to_fight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card from your Battle Area, choose up to 1 of your opponent's Leader Cards or Battle Cards with 20000 power or less, and switch it to Rest Mode."), card_type="BATTLE", card_number="BT5-085"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_040_hercule_smile_and_nod_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card, choose up to 1 blue <Son Goku> card with an energy cost of 2 or more in your Battle Area, place the top card of your deck under that card, then draw 1 card."), card_type="BATTLE", card_number="BT6-040"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_022_kikono_the_fledgeling_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play or combo with this card, choose 1 card from your hand and place it in your Drop Area : Choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT6-022"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_099_vicious_lackey_tagoma_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand, choose up to 1 yellow <Desire> card from your deck or Drop Area and add it to your hand. Then, if you looked through your deck, shuffle your deck."), card_type="BATTLE", card_number="BT5-099"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_072_infernal_emperor_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 card in your life and add it to your hand."), card_type="BATTLE", card_number="BT5-072"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_093_frieza_biding_his_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less, ignoring [Barrier], and switch it to Rest Mode."), card_type="BATTLE", card_number="BT5-093"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_110_crusher_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If the Battle Card being played has an energy cost of 2 or less, it is played in Rest Mode."), card_type="EXTRA", card_number="BT1-110"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_111_black_masked_saiyan_the_devastator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card's attack is negated or this card doesn't deal damage to your opponent's Leader Card due to a skill and this card is in Rest Mode, if you have 4 or more energy, choose 1 card in your opponent's life and place it in its owner's Warp."), card_type="BATTLE", card_number="BT5-111"))
+    assert any(rule.trigger == "self_attack_negated_or_failed_damage_to_opponent_leader" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p110_broly_demonic_intimidation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If all of your energy is green and/or yellow, reduce the energy cost of this card in your hand by 2. [Auto] When you play this card, your opponent can't activate the skills of Battle Cards, Unison Cards, and Extra Cards that aren't green and/or yellow for the turn. [Activate: Main] Choose all of the cards in your hand and place them in your Drop Area : Choose 1 of your opponent's cards in Rest Mode and it can't be switched to Active Mode until the start of your next Main Phase."), card_type="BATTLE", card_number="P-110"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_028_planet_vampa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] [Activate: Main] Switch this card to Rest Mode : Choose up to 1 red card with 15000 power or less and with an energy cost of 2 or less among <Broly: Br>, <Paragus: Br>, <Ba: Br>, and <Goliamite: Br> from your deck and play it. Then, if you played a card, choose 1 card in your hand and discard it, and shuffle your deck."), card_type="EXTRA", card_number="BT11-028"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_040_dr_uiros_lab_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] [Permanent] Treat all <Dr. Kochin> and <Dr. Wheelo> cards in your hand, Battle Area, and Warp as if they have no specified cost. [Permanent] If your Leader Card is a green <Dr. Uiro> card, if a <Dr. Kochin> card in your Battle Area would be removed from your Battle Area by a skill, you may place it under this card instead. [Activate: Main] 2: Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it under this card."), card_type="EXTRA", card_number="BT8-040"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_091_frieza_back_from_hell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can't play {Frieza, Back from Hell}. [Activate: Main] [Once per turn] 1 : Choose 1 of your opponent's Battle Cards and switch it to Rest Mode. [Sparking 7] [Activate: Main] 2, if your Leader Card is yellow : If your opponent's Leader Card is in Rest Mode and all of your opponent's energy is yellow, choose 1 card in your opponent's life and place it in its owner's Drop Area."), card_type="BATTLE", card_number="BT5-091"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt21_040_baby_parasitizing_complete_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent][Once per turn] If your opponent would place cards under a card in their Battle Area or Unison Area from any area other than their Drop, they place them in their Drop instead. [Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards without <Son Goku: GT> and place it under your {Universal Tuffleization Plan}."), card_type="BATTLE", card_number="BT21-040"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p145_dabura_the_insurmountable_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose up to 1 of your opponent's Battle Cards, and it can't attack or be placed in your opponent's Combo Area until the end of your opponent's next turn."), card_type="BATTLE", card_number="P-145"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_129_ice_lance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1 of your opponent's Battle Cards with an energy cost greater than their current energy and negate its skills for the turn."), card_type="EXTRA", card_number="DB2-129"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_099_to_save_the_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is yellow: Choose 1 of your opponent's Battle Cards, it can't be switched to Active Mode during their next Charge Phase, and you can't activate copies of this card during your next turn."), card_type="EXTRA", card_number="DB3-099"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_069_ties_that_bind_ba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 <Broly: Br> card with an energy cost of 1 in your Drop Area and play it."), card_type="BATTLE", card_number="BT6-069"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_069_ribrianne_punishing_passion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Green)(Green), if your Leader Card is green and you send this card from your Drop Area to your Warp: Your opponent chooses 2 cards from their hand and places them in their Drop Area."), card_type="BATTLE", card_number="DB2-069"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_161_universe_3_assemble_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Burst 3] Choose up to 2 black Battle Cards with energy costs of 2 or less in your Drop Area, and play them with their skills negated for the turn."), card_type="EXTRA", card_number="DB2-161"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_055_ss_son_goku_exploding_with_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 1 green <Vegeta: Br> card in your Battle Area with an energy cost of 1: The chosen card and this card get +10000 power for the duration of the turn."), card_type="BATTLE", card_number="BT6-055"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_089_fearless_assault_krillin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, you may choose 1 card in your life and add it to your hand. If you do, this card gets +10000 power and [Critical] for the duration of the turn."), card_type="BATTLE", card_number="BT6-089"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_021_loyal_kikono_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play or combo with this card, if your Leader Card is a red <Frieza's Army> card, choose up to 1 red Extra Card in your Drop Area and add it to your hand."), card_type="BATTLE", card_number="BT6-021"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_063_broly_unrealized_ambition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand and if your Leader Card is a green <Frieza's Army> card, choose 2 cards from your life and add them to your hand. [Auto] When this card is removed from a Battle Area by a skill or KO'd, and if your Leader Card is a green <Frieza's Army> card, choose 1 or 2 cards from your life and add them to your hand, then choose up to 1 green <Broly: Br> card with an energy cost of 4 from your hand and play it."), card_type="BATTLE", card_number="BT6-063"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_from_battle_by_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_044_unadulterated_evil_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand, choose up to 1 blue <Majin> card from your Drop Area and add it to your hand. [Activate: Main] (1), your Leader Card is a <Majin> card: Choose 1 blue <Majin Buu> card with an energy cost of 3 from your Energy Area and play it. If you played a card, add this card to your energy in Rest Mode."), card_type="BATTLE", card_number="BT6-044"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_065_paragus_deadly_premonition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand, look at up to 5 cards from the top of your deck and choose up to 1 <Broly: Br> card among them and add it to your hand, then shuffle your deck. [Auto] When this card is removed from your Battle Area by a skill and if your Leader Card is a green <Frieza's Army> card, choose up to 1 of your green energy and switch it to Active Mode."), card_type="BATTLE", card_number="BT6-065"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_from_battle_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_090_wicked_mimicry_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack][Spirit Boost X] (Remove X markers from your Unison Card to activate this skill.) Negate the attack; if you removed a marker from your green Unison Card using this skill, play 1 Majin Token in Rest Mode. [Permanent] If one of your green Unison Cards is attacked, you may activate this card's [Counter] skill from your hand without paying its energy cost by choosing 1 card in your hand and discarding it."), card_type="EXTRA", card_number="BT14-090"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_082_finishing_blow_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike] [Auto] [Sparking 7] When you play this card, if your opponent has 4 or more energy, and if there is a {Son Goku, Guardian Angel} under this card, choose all of your opponent's energy, switch them to Rest Mode, and this card gains [Dual Attack] for the duration of the turn."), card_type="BATTLE", card_number="BT6-082"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd2_02_broken_limits_ss3_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Red), place 1 card from your hand in the Drop Area: Red <Son Goku: GT> with an energy cost of 4 or more. [Auto] When one of your cards attack, this card gains +5000 power for the duration of the turn. Then, if this card's power is 40000 or more, this card gains [Triple Strike] for the duration of the turn."), card_type="BATTLE", card_number="SD2-02"))
+    assert any(rule.trigger == "owner_other_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex07_05_altered_reality_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] [Permanent] All <Janemba> cards in your Battle Area gain [Barrier]. [Auto] When this card is placed in a Battle Area, draw 1 card."), card_type="EXTRA", card_number="EX07-05"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt6_075_a_kind_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains <Desire> in all areas. [Activate: Main] If your Leader Card is a green <Frieza's Army> card: Choose all of your opponent's Battle Cards ignoring [Barrier] and place them at the bottom of their owners' decks in any order, and if there are no Battle Cards in play in your Battle Area, choose up to 1 <Broly: Br> card with an energy cost of 4 from your deck and play it, then shuffle your deck."), card_type="EXTRA", card_number="BT6-075"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_119_world_peace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains <Desire> in all areas. [Activate: Main] Your Leader Card is a <Shenron> card: Choose 1 Battle Card in your Drop Area with an energy cost less than or equal to your current energy and play it."), card_type="EXTRA", card_number="BT5-119"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_081_son_goku_guardian_angel_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Unless {Display of Power Son Gohan} is in play in your Battle Area, you can't place this card in your Combo Area from any area. [Auto] At the end of a battle in which you combo with this card from your hand during your opponent's turn, if your Leader Card is a yellow <Saiyan> card, play this card in Rest Mode, and you can't play {Son Goku, Guardian Angel} for the duration of the turn. [Activate: Main] 3, choose 1 {Display of Power Son Gohan} from your Battle Area and place it in its owner's Drop Area: Choose up to 1 {Finishing Blow Son Gohan} from your hand and play it, then place this card under the card you played with this skill."), card_type="BATTLE", card_number="BT6-081"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_012_veku_contents_under_pressure_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Fusion] Red <Son Goku: Br> and red <Vegeta: Br> [Permanent] This card can attack Battle Cards that are in Active Mode. [Auto] When you play this card, you can't play {Veku, Contents Under Pressure} for the duration of the turn. [Activate: Main] Place this card in its owner's Drop Area: If your Leader Card is a red <Saiyan> card, choose up to 1 red <Son Goku: Br> card and 1 red <Vegeta: Br> card from your Drop Area and add them to your hand."), card_type="BATTLE", card_number="BT6-012"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+def test_extract_exact_bt7_005_machspeed_kaio_ken_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] Play this card. [Permanent] If a multicolored card is in your energy, reduce the energy cost of this card in your hand by 1. [Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn. Then, if it's your opponent's turn, choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT7-005"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt6_113_commander_red_head_of_the_rr_army_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Sparking 3] When you play this card, if your Leader Card is black, choose up to 1 skill-less Battle Card with an energy cost of 3 or less from your deck or Drop Area and play it, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT6-113"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_004_son_goku_heavenly_salvation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Activate this skill when you play {Son Gohan & Son Goten, Familial Bonds} in your Battle Area. If {Son Goku, Heavenly Salvation} isn't in play in your Battle Area, you may play this card from your hand. [Auto][Once per turn] When this card is switched to Rest Mode by [Alliance], if you only have <Son Goku>, <Son Gohan: Adolescence>, <Son Goten> and/or <Trunks: Youth> cards in play in your Battle Area, choose this card and up to 1 of your Battle Cards and switch them to Active Mode."), card_type="BATTLE", card_number="BT7-004"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_101_zarbon_the_emperors_attendant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] During your opponent's turn, when you Combo with this card, choose up to 1 of your Battle Cards and switch it to Active Mode."), card_type="BATTLE", card_number="BT1-101"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_switch_up_to_n_owner_battle_active_on_combo" for rule in rules)
+
+
+def test_extract_exact_bt6_124_boujack_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and switch it to Rest Mode. [Activate: Main](2): If this card is in Rest Mode, choose your opponent's Leader Card, switch it to Rest Mode, and it can't be switched to Active Mode until the end of your opponent's next turn."), card_type="BATTLE", card_number="BT6-124"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_032_trunks_the_sweeper_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less, ignoring [Barrier], and return it to its owner's hand."), card_type="BATTLE", card_number="BT7-032"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_return_up_to_n_opponent_battle_to_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_bt7_016_cocos_grandpa_village_oldster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 {Coco, Village Princess} from your deck and add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT7-016"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_096_space_pirate_gokua_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is a <Boujack Brigade> card, choose up to 1 of your opponent's Battle Cards in Rest Mode and it can't switch to Active Mode until the end of your opponent's next turn. [Activate: Main] 1, place this card in its owner's Drop Area: If your Leader Card is a <Boujack Brigade> card, choose up to 1 <Boujack> card with an energy cost of 3 in your hand and play it."), card_type="BATTLE", card_number="BT6-096"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_006_chain_attack_tora_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker][Bond 3] Red <Saiyan> cards and/or <Bardock's Crew> cards. [Auto] If your Leader Card is a <Bardock's Crew> card: When this card is played from your hand, add up to 1 red <Bardock's Crew> card with an energy cost of 5 or less that isn't a <Tora> card from your Drop Area to your hand, and you can't play copies of this card for the turn."), card_type="BATTLE", card_number="BT13-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_101_vegeta_the_brawler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card. [Auto] If your Leader Card is a yellow <Son Goku: GT> card: When this card is played, reveal the top card of your deck and place it in your Drop Area."), card_type="BATTLE", card_number="BT14-101"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_035_master_roshi_still_got_it_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 1 blue card in your hand and place it in your Drop Area: Draw 1 card and this card gets +5000 power until the end of your opponent's next turn."), card_type="BATTLE", card_number="DB2-035"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt14_021_kunshi_warrior_of_universe_11_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] All of your red non-<Kunshi> <Universe 11> cards with energy costs of 1 in your Battle Area gain [Barrier]. [Auto] When this card is played, draw 1 card."), card_type="BATTLE", card_number="BT14-021"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt6_109_training_buddy_krillin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is black, choose up to 1 skill-less Battle Card with an energy cost of 2 or less from your Drop Area and play it, then choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT6-109"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_109_tokitoki_city_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] [Auto] When you play a Battle Card using [Over Realm], place the top card of your deck under this card. [Activate: Main] Choose 3 cards under this card and send them to your Warp: If your Leader Card is black, Battle Cards you play using [Over Realm] aren't sent to Warps at the end of this turn."), card_type="EXTRA", card_number="BT7-109"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_114_bonds_of_friendship_android_8_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 7 cards from the top of your deck, choose up to 1 skill-less Battle Card among them and add it to your hand, then shuffle your deck. [Auto] When your <Son Goku: Childhood> card is KO'd by an opponent's skill or leaves a Battle Area, choose up to 1 of your opponent's Battle Cards and KO it."), card_type="BATTLE", card_number="BT6-114"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_left_play_or_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_037_vegito_worlds_strongest_candy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can only be played from Energy Areas. [Auto] When you play this card, you can't play {Vegito, World's Strongest Candy} for the duration of the turn. [Activate: Main] Choose up to 1 {Vegito, Powers Combined} in your Energy Area and play it. If you played a card, add this card to your energy in Rest Mode."), card_type="BATTLE", card_number="BT6-037"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_098_merciless_strike_zangya_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Super Combo] [Auto][Sparking 5] When you combo with this card, if your Leader Card is yellow, draw 1 card."), card_type="BATTLE", card_number="BT6-098"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt7_003_raditz_the_oppressor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, draw 1 card. [Auto][Once per turn] When your opponent switches energy to Active Mode using a non-[Awaken] skill during their turn, choose up to 1 of your opponent's energy and place it in its owner's Drop Area."), card_type="BATTLE", card_number="BT7-003"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_energy_switched_active_by_non_awaken" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_108_quickshift_krillin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card, if your Leader Card is black, you may choose 2 cards from your hand and shuffle them into your deck. If you do, draw 2 cards."), card_type="BATTLE", card_number="BT6-108"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+def test_extract_exact_bt12_072_daiz_invader_of_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique] [Auto] If your Leader Card is a <Turles Crusher Corps> card and this card was used in a combo from your deck or hand: When this card would be placed in its owner's Drop Area from a Combo Area, you may play it in Rest Mode instead. [Auto] When this card is played, look at up to 3 cards from the top of your deck, add up to 1 <Turles Crusher Corps> card among them to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT12-072"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_067_nappa_the_cultivator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 <Saibaiman> card from your deck, play it, then shuffle your deck."), card_type="BATTLE", card_number="BT7-067"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_017_elder_village_guardian_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card and your Leader Card is red, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose one- Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order. Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck."), card_type="BATTLE", card_number="BT7-017"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_033_bulma_saying_farewell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card during your turn, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and return it to its owner's hand."), card_type="BATTLE", card_number="BT7-033"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_065_yajirobe_lying_in_wait_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 <Vegeta> card with an energy cost of 6 or less in a Battle Area and place it in its owner's Drop Area."), card_type="BATTLE", card_number="BT7-065"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_031_trunks_fighting_the_darkness_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 1 yellow {Super Saiyan Blue Vegeta} with an energy cost of 2 and up to 1 {SSB Son Goku, the Sweeper} from your deck, add them to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT7-031"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_027_ssb_son_goku_the_sweeper_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 1 card in your life and add it to your hand. If you do, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and return it to its owner's hand."), card_type="BATTLE", card_number="BT7-027"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_040_kale_the_awakened_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical] [Auto] During your turn, at the end of a battle after you combo with this card, choose up to 1 blue <Kale> card in your Battle Area and play this card on top of it. [Auto] When you play this card, choose up to 1 of your opponent's Battle Cards in Rest Mode, negate that card's skills for the duration of the turn, and return it to its owner's hand."), card_type="BATTLE", card_number="BT7-040"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_037_almighty_do_over_zen_oh_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect] [Auto] When you play this card, choose all Battle Cards, return them to their owners' decks, then all players who returned cards to their decks shuffle their decks."), card_type="BATTLE", card_number="BT7-037"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_027_awakening_evil_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red): Red <Majin Buu> [Union Absorb] Place 1 Battle Card from your hand under this card: Choose up to 1 <Majin Buu> other than {Awakening Evil Majin Buu} with 25000 or more power from your deck and place it on top of this card. Shuffle your deck afterwards."), card_type="BATTLE", card_number="BT2-027"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_079_majin_buu_brilliant_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve](1): <Piccolo>. [Union Absorb][Once per turn] Choose 1 card under your <Majin> Leader Card and place it under this card: Play up to 1 mono-green <Majin Buu> card with an energy cost of 4 and 15000 power from your deck or Drop Area on top of this card, then shuffle your deck if you looked through it. [Auto][Spirit Boost 1] If one of your green <Majin Buu> cards is removed from your Battle Area by an opponent's skill, play this card from your hand."), card_type="BATTLE", card_number="BT14-079"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_039_kale_sister_of_annihilation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Blue): Blue <Kale> with an energy cost of 1. [Auto] When a card evolves into this card, you may choose all of your Battle Cards other than this card and place them in their owner's Drop Area. If you do, choose all of your opponent's Battle Cards with energy costs of 4 or less and return them to their owners' hands."), card_type="BATTLE", card_number="BT7-039"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_006_dependable_brother_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] (Red)(1): <Son Gohan: Adolescence> with an energy cost of 3. [Double Strike] [Auto] When a card evolves into this card, draw 2 cards, and if there are no other Battle Cards in play in your Battle Area, choose up to 1 green <Son Goten> card and 1 green <Trunks: Youth> card with energy costs of 4 from your Drop Area and play them."), card_type="BATTLE", card_number="BT7-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_094_space_pirate_boujack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If this card would be KO'd, you may instead place 1 <Boujack Brigade> card other than this card from your Battle Area into your Drop Area. [Auto] When you play this card, you may choose 1 card in your hand and place it in your Drop Area. If you do, choose up to 1 {Arrival of the Space Pirates} from your Drop Area and add it to your hand."), card_type="BATTLE", card_number="BT6-094"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_009_exalted_trio_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Only 1 {Exalted Trio Son Goten} can be played in your Battle Area, and if you have a <Videl> card in play in your Battle Area, reduce the energy cost of this card in your hand and Battle Area by 1. [Auto] When this card attacks, if there is a <Trunks: Youth> card in play in your Battle Area, this card gets +5000 power and [Double Strike] for the duration of the turn."), card_type="BATTLE", card_number="BT7-009"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_011_exalted_trio_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Only 1 {Exalted Trio Trunks} can be played in your Battle Area, and if you have a <Videl> card in play in your Battle Area, reduce the energy cost of this card in your hand and Battle Area by 1. [Auto] When this card attacks, if there is a <Son Goten> card in play in your Battle Area, this card gets +5000 power and [Critical] for the duration of the turn."), card_type="BATTLE", card_number="BT7-011"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_054_son_gohan_hope_of_the_people_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Only 1 {Son Gohan, Hope of the People} can be played in your Battle Area, and if there is at least 1 <Son Goten>, <Trunks: Youth>, and <Videl> card in your Drop Area, reduce the energy cost of this card in your hand by 2."), card_type="BATTLE", card_number="BT7-054"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_100_space_pirate_bujin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can only have up to 1 {Space Pirate Bujin} in play in your Battle Area. [Auto] When you play this card, choose up to 1 <Boujack Brigade> card in your hand with an energy cost of 2 or less and play it. [Auto] When you combo with this card from a Battle Area, if your Leader Card is a <Boujack Brigade> card, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="BATTLE", card_number="BT6-100"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_097_space_pirate_zangya_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can only have up to 1 {Space Pirate Zangya} in play in your Battle Area. [Auto] When you play this card, if your Leader Card is a <Boujack Brigade> card, choose up to 1 <Boujack Brigade> card from your deck with an energy cost of 1, play it, then shuffle your deck. [Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 <Boujack> card in your Battle Area, and it gains [Critical] for the duration of the turn."), card_type="BATTLE", card_number="BT6-097"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_030_majin_buu_dimensional_intervention_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+0][Activate: Main] Play up to 1 blue skill-less Battle Card from your Drop Area with an energy cost less than or equal to your current energy. [-2][Activate: Main] Choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and return it to its owner's hand."), card_type="UNISON", card_number="BT12-030"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt7_077_saiyan_bloodline_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, look at up to 2 cards from the top of your deck, choose up to 1 blue or yellow â‰ªSaiyanâ‰« card among them, add it to your hand, then place the remaining cards in your Drop Area."), card_type="BATTLE", card_number="BT7-077"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_063_sorrowful_strike_tien_shinhan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card and your Leader Card is green, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose oneãƒ¼ ãƒ»Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order. ãƒ»Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck."), card_type="BATTLE", card_number="BT7-063"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_087_frost_the_path_to_full_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card and your Leader Card is yellow, you may choose 1 card from your hand and place it in your Drop Area. If you do, choose oneãƒ¼ ãƒ»Choose up to 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order. ãƒ»Choose 1 Battle Card in your opponent's Drop Area, return it to your opponent's deck, then your opponent shuffles their deck."), card_type="BATTLE", card_number="BT7-087"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_080_hit_afterimage_master_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand, your opponent chooses 1 card from their hand and sends it to their Warp. [Activate: Main] Send this card to its owner's Warp: At the start of your next Main Phase, if your Leader Card is a yellow â‰ªUniverse 6â‰« card, play the card that was sent to the Warp by this skill in its owner's Battle Area."), card_type="BATTLE", card_number="BT7-080"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_090_namekian_partner_saonel_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 {Namekian Partner Pirina} from your deck, add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT7-090"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_091_namekian_partner_pirina_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 {Namekian Partner Saonel} from your deck, add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT7-091"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_053_unlikely_duo_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up 7 cards from the top of your deck, choose up to 1 â‰ªEarthlingâ‰« or â‰ªNamekianâ‰« card among them, add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT7-053"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_105_demigra_the_sorcerer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 1 card in your life and add it to your hand. If you do, your opponent chooses cards in their hand and places them in their Drop Area until they have 12 cards in hand."), card_type="BATTLE", card_number="BT7-105"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_101_vegeta_making_an_entrance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Counter] Choose 3 Battle Cards with an energy cost of 3 or more and power of 35000 or less in your Drop Area and place them at the bottom of your deck in any order: Play this card. [Permanent] This card can only be played from any area using [Counter: Counter] skills, and only 1 {Vegeta, Making an Entrance} can be played in your Battle Area."), card_type="BATTLE", card_number="BT7-101"))
+    assert any(rule.trigger == "counter_counter" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_044_goku_black_evils_accomplice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect] [Activate: Main][Once per turn] Choose 1 card in your hand and place it in your Drop Area: Choose up to 1 {Mass Replication} from your deck, activate it, then shuffle your deck."), card_type="BATTLE", card_number="BT7-044"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_056_son_goten_out_adventuring_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] Red <Son Goten> with an energy cost of 2. [Auto] When a card evolves into this card and your Leader Card is a <Son Gohan: Adolescence> card, draw 1 card, switch this card to Active Mode, then choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it."), card_type="BATTLE", card_number="BT7-056"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_092_zamasu_inviting_despair_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Indestructible] [Permanent] Battle Cards chosen with this card's skill can't be switched to Active Mode. [Auto] When you play this card, choose up to 2 â‰ªSaiyanâ‰«, â‰ªEarthlingâ‰«, and/or â‰ªGodâ‰« cards in your opponent's Battle Area and switch them to Rest Mode."), card_type="BATTLE", card_number="BT7-092"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt7_084_caulifla_the_resilient_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your opponent has 6 or more cards in Rest Mode, you can play this card from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT7-084"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_009_trunks_brainwashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can't [Evolve] into other cards. [Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 <Baby> card in your hand with an energy cost of 2 or less and play it. If you played a card, choose up to 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn."), card_type="BATTLE", card_number="BT8-009"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_007_son_goten_rushing_in_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Revenge] (When this card is attacked, KO the attacking Battle Card at the end of battle.)"), card_type="BATTLE", card_number="BT8-007"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_154_robelu_demigras_secretary_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Ultimate][Double Strike] [Dark Over Realm 8]â‘¡ [Permanent] If this card would be removed from a Battle Area, remove it from the game instead. [Auto] If you have 4 or more energy: When this card is played using [Dark Over Realm], play up to 2 Battle Cards with different card names, energy costs of 6 or less, and the [Over Realm] skill from your Warp. [Auto] Choose 1 card in your Battle Area with the [Over Realm] skill and place it in its owner's Drop Area: When one of your opponent's cards attacks, negate the attack."), card_type="BATTLE", card_number="BT13-154"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt18_124_demon_god_demigra_begrudging_ally_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique] [Permanent] This card gets +2000 power for each card in your Z-Energy. [Auto][Once per turn] If it's your turn: When you activate [Over Realm] or [Dark Over Realm] or play a black Battle Card from your Warp, draw 1 card, and choose up to 1 of your opponent's Battle Cards with an energy cost of 6 or less and send it to its owner's Warp."), card_type="BATTLE", card_number="BT18-124"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_130_dr_uiro_destructive_villain_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Villainous] [Auto] When you play this card, choose up to 1 â‰ªFrenzied Warriorâ‰« card in your Drop Area, add it to your hand, then choose up to 1 of your opponent's Battle Cards and KO it. [Activate: Main](Green)(Green), choose 1 <Dr.Kochin> card in your Battle Area and KO it: Play this card from your hand."), card_type="BATTLE", card_number="BT8-130"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_013_veku_the_fragile_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Fusion] Red <Son Goku: Br> and red <Vegeta: Br> [Auto] When you play this card, you can't play {Veku, the Fragile} for the duration of the turn. [Activate: Main] Place this card in its owner's Drop Area: If your Leader Card is a red â‰ªSaiyanâ‰« card, choose up to 1 red <Son Goku: Br> card and 1 red<Vegeta: Br> card from your Drop Area and add them to your hand, then choose up to 1 of your opponent's Battle Cards and it gets -10000 power for the duration of the turn."), card_type="BATTLE", card_number="BT6-013"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_082_baby_vegeta_an_unfair_choice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 card in your hand and place it in your Drop Area: Choose one- ï½¥ Choose 1 of your opponent's Battle Cards ignoring [Barrier] and switch it to Rest Mode. ï½¥ Choose 1 of your opponent's Battle Cards in Rest Mode ignoring [Barrier] and KO it."), card_type="BATTLE", card_number="BT8-082"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_068_son_goku_the_path_to_godhood_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card in its owner's Drop Area, then choose 1 <Son Gohan: Adolescence>, <Son Goten>, <Vegeta>, <Trunks: Youth> and <Videl> card from your Drop Area and return them to your deck: Choose up to 1 Red/Yellow multicolor <Son Goku> card in your deck or hand with an energy cost of 3, play it, shuffle your deck, and the Battle Card you played gains [Double Strike] and [Dual Attack] for the duration of the turn."), card_type="BATTLE", card_number="BT8-068"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_001_pan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] [Once per turn] When you play a Battle Card, choose that card, and it gains +5000 power for the duration of the turn. Then, if its power is 20000 or more, draw 1 card. [Awaken] When your life is at 4 or less: You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_number="BT3-001"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_025_kaio_ken_son_goku_strenuous_onslaught_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Choose 1 or 2 cards in your life and add them to your hand: When you play this card, it gets +5000 power for the duration of the turn, and at the start of your opponent's next Main Phase, choose up to 1 of your energy and switch it to Active Mode."), card_type="BATTLE", card_number="BT8-025"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_075_trunks_saiyan_majesty_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Place this card in your Drop Area from your hand: When an opponent's card is switched to Rest Mode by your skill, draw 1 card. [Activate: Battle] (Yellow), send this card from your Drop Area to your Warp: Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode."), card_type="BATTLE", card_number="BT8-075"))
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_008_son_goten_brainwashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is KO'd, choose up to 1 â‰ªBrainwashedâ‰« card other than <Son Goten: GT> in your Drop Area and play it."), card_type="BATTLE", card_number="BT8-008"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd1_03_champa_scheming_god_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 blue or yellow â‰ªUniverse 6â‰« card in your Battle Area other than this card, and it gets +10000 power and [Double Strike] for the duration of the turn."), card_type="BATTLE", card_number="XD1-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_005_son_goku_eye_for_an_eye_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto](Red)(Red), if your Leader Card is a red â‰ªEarthlingâ‰«-only card: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life. [Auto][Once per turn] When your opponent activates a [Counter] skill, deal 1 damage to them."), card_type="BATTLE", card_number="BT12-005"))
+    assert any(rule.trigger == "owner_life_card_flipped_face_up" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_014_beerus_biding_his_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical] [Permanent] Only 1 {Beerus, Biding His Time} can be played in your Battle Area, and if you have a Red/Yellow multicolor card in your energy, reduce the energy cost of this card in your hand by 2."), card_type="BATTLE", card_number="BT8-014"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_004_great_ape_son_goku_abilities_amplified_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve](Red): Yellow <Son Goku: GT> with an energy cost of 1. [Auto] When a card evolves into this card, this card gets +15000 power for the duration of the turn."), card_type="BATTLE", card_number="BT8-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_048_dangers_triangle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Field] [Permanent] If <Bergamo>, <Lavender>, and <Basil> are in play in your Battle Area, negate the skills of all of your opponent's Battle Cards with energy costs of 4 or less in their Battle Area."), card_type="EXTRA", card_number="TB1-048"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_043_majin_buu_the_intensifying_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If this card would be removed from your Battle Area by an opponent's skill, you may choose 2 cards from your hand and place them in your Drop Area instead. [Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck. [Activate: Main] (Blue)â‘ , your Leader Card is a â‰ªMajinâ‰« card: If you have 3 or more energy, choose 1 <Majin Buu> card with an energy cost of 4 from your Energy Area and play it. If you played a card, add this card to your energy in Rest Mode."), card_type="BATTLE", card_number="BT6-043"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_071_vegeta_explosion_of_fury_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Only 1 {Vegeta, Explosion of Fury} can be played in your Battle Area, and this card can't be played from any area unless there is a <Bulma> card in your Battle Area."), card_type="BATTLE", card_number="BT8-071"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_080_mai_a_sudden_encounter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can't be played by your card skills from any area. [Activate: Main] If you have 4 or more energy, place this card in its owner's Drop Area: Choose 1 Blue/Yellow multicolor Battle Card with an energy cost of 4 or less in your Drop Area and play it in Rest Mode."), card_type="BATTLE", card_number="BT8-080"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_010_videl_miraculous_aide_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains â‰ªSaiyanâ‰« in all areas. [Auto] If your Leader Card is a red <Bulma> card and you choose 1 red or yellow â‰ªSaiyanâ‰« or â‰ªEarthlingâ‰« card in your Drop Area and place it at the bottom of your deck: When you play this card, choose up to 1 red or yellow â‰ªSaiyanâ‰« card with an energy cost of 3 or less in your Drop Area and add it to your hand."), card_type="BATTLE", card_number="BT8-010"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt12_082_the_tree_of_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] While in a Battle Area, this card can't be placed in Drop Areas by your skills; reduce the combo cost of all â‰ªTurles Crusher Corpsâ‰« cards in your opponent's hand and Battle Area by 1. [Auto] If all of your opponent's energy is mono-green: If this card is in your Battle Area at the start of your Main Phase, choose 1 card in your life and flip it face up. If you do, your opponent adds up to 1 {Fruit of the Tree of Might} from their deck to their hand, then shuffles their deck if they looked through it. [Activate: Main] If your Leader Card is a â‰ªTurles Crusher Corpsâ‰« card: Place this card in your opponent's Battle Area in Active Mode."), card_type="BATTLE", card_number="BT12-082"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_main_phase_start" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_017_broly_bonafide_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 4](Red): Mono-red <Broly: Br> with an energy cost of 4. [Servant] [Auto] When this card is played, choose up to 1 red <Paragus: Br> card with an energy cost of 1 in your hand and play it."), card_type="BATTLE", card_number="BT11-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_017_baby_vengeful_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb] Choose 1 <Vegeta: GT> card in your Drop Area and place it under this card: Choose 1 <Baby> card in your hand with 30000 power and play it on top of this card. [Permanent] Only 1 {Baby, Vengeful Blow} can be played in your Battle Area. [Auto] When a <Baby> card with an original power of 30000 in your Battle Area is removed from your Battle Area by an opponent's skill or is KO'd, you may play this card from your hand."), card_type="BATTLE", card_number="BT8-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_031_krillin_the_cunning_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, draw 1 card, then for the duration of the game, if the turn player would use the skill of a Battle Card or Extra Card to switch energy to Active Mode, they can't switch energy to Active Mode unless they choose 5 cards from their Drop Area and send them to their Warp."), card_type="BATTLE", card_number="BT8-031"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_057_dr_kochin_the_nefarious_scientist_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] Only 1 {Dr.Kochin, the Nefarious Scientist} can be played in your Battle Area, and reduce the energy cost of all â‰ªFrenzied Warriorâ‰« cards in your hand by 1. [Auto] When you play this card, look at up to 7 cards from the top of your deck, choose up to 1 â‰ªFrenzied Warriorâ‰« card among them, add it to your hand, shuffle your deck, then choose up to 1 â‰ªFrenzied Warriorâ‰« card in your hand with an energy cost of 2 or less and play it."), card_type="BATTLE", card_number="BT8-057"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt9_008_meta_cooler_core_titanic_glare_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose 1 card from your hand or 1 {Big Gete Star} in your Battle Area and place it under this card: Choose up to 1 <Meta-Cooler Core> card from your deck or hand other than {Meta-Cooler Core, Titanic Glare}, play it on top of this card in Active Mode, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT9-008"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_082_majin_buu_ghastly_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If all of your energy is black, you have no cards in your hand, and you place this card in its owner's Drop Area: Choose one- ãƒ» Choose up to 1 black <Majin Buu> card with an energy cost of 3 or 4 in your Drop Area and play it. ãƒ» If you have 3 or more energy, choose up to 1 black <Majin Buu> card with an energy cost between 3 and 6 in your Drop Area and play it."), card_type="BATTLE", card_number="BT9-082"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_057_android_14_stoic_fist_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is an <Android 13> card and you choose this card in your hand and 1 <Android 15> card in your hand and place them in your Drop Area: Choose up to 2 cards in your life, add them to your hand, draw 1 card, then your opponent chooses 1 card in their hand and places it in their Drop Area."), card_type="BATTLE", card_number="BT9-057"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_015_chaos_beam_frost_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] Choose 1 of your opponent's Battle Cards and it gets -5000 power for the duration of the turn. [Auto] When this card is removed from your Battle Area by an opponent's skill, choose up to 1 ï½›Full-Power Frost from your deck or hand, play it, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT9-015"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_031_android_18_steadfast_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Choose 1 Extra Card in your hand and place it in your Drop Area: When you combo with this card, it gets +6000 combo power for the duration of the turn."), card_type="BATTLE", card_number="BT9-031"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_032_master_roshi_masterly_majesty_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Choose 1 multicolor card in your energy and return it to its owner's hand: When you combo with this card, choose 1 card in your hand and place it in your energy in Rest Mode."), card_type="BATTLE", card_number="BT8-032"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_058_android_15_vicious_vendetta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is green: At the end of a battle in which you combo with this card from your hand, play this card in Rest Mode. [Auto] Choose 1 or 2 cards in your life and add them to your hand: When you play this card during your opponent's turn, choose up to 1 of your green energy and switch it to Active Mode."), card_type="BATTLE", card_number="BT9-058"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_026_son_goku_the_rescuer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand, choose up to 1 of your blue or green Battle Cards and return it to its owner's hand."), card_type="BATTLE", card_number="BT8-026"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_007_meta_cooler_metallic_genesis_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is yellow: When this card is played from your hand, switch up to 1 of your opponent's Battle Cards to Rest Mode."), card_type="BATTLE", card_number="BT9-007"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_053_beerus_godly_majesty_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can't be KO'd while there are 3 or more cards in your hand. [Activate: Main] If there are 2 or more cards in your hand, and your Leader Card is a green <Beerus> card: Choose up to 1 of your opponent's Battle Cards with an energy cost of 6 or less and KO it."), card_type="BATTLE", card_number="BT8-053"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_003_frieza_no_introductions_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, draw 1 card, then choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it."), card_type="BATTLE", card_number="BT9-003"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_059_hell_fighter_17_the_neutralizer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 green <Android 17> card with an energy cost of 1 or 2 in your hand and play it."), card_type="BATTLE", card_number="BT9-059"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_050_frenzied_warrior_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a green <Dr. Uiro> card: When you play this card, choose up to 1 of your opponent's Battle Cards and KO it."), card_type="BATTLE", card_number="BT8-050"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_081_majin_buu_supreme_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If all of your energy is black and you have no cards in your hand, reduce the energy cost of this card in your hand by 3. [Activate: Main] Choose up to 1 black <Majin Buu> card with an energy cost between 3 and 6 in your Drop Area and place it on top of this card in Active Mode."), card_type="BATTLE", card_number="BT9-081"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_010_son_gohan_swift_reinforcement_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a yellow â‰ªFrieza Clanâ‰« card: When you play this card, choose up to 1 of your yellow Battle Cards with an energy cost of 1 or 2 and switch it to Active Mode."), card_type="BATTLE", card_number="BT9-010"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_009_chilled_pirates_bounty_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 yellow <Frieza Clan> card with an energy cost of 1 or 2 in your hand and play it in Rest Mode."), card_type="BATTLE", card_number="BT9-009"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt19_041_boujack_villainous_threat_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, if your Leader is a mono-blue <Boujack Brigade> card and your energy includes a blue card, look at up to 5 cards from the top of your deck, add up to 1 blue card with <Boujack Brigade> in its special traits and an energy cost of 1 among them to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT19-041"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_129_ss3_vegeta_unstoppable_evolution_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 6](Black)(Black) [Auto] When this card is played using [Over Realm], draw 1 card, then choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and send it to its owner's Warp."), card_type="BATTLE", card_number="BT11-129"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_127_son_goten_thwarting_the_dark_empire_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 2][Critical] [Auto] If your Leader Card is a black <Supreme Kai of Time> card: When this card is played using [Over Realm], send up to 2 cards from the top of your deck to your Warp, then draw 1 card."), card_type="BATTLE", card_number="BT13-127"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt20_029_android_21_in_the_name_of_peace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Critical] [Z-Stack 1] Blue Battle Cards. [Permanent] While there are no cards under this card, this card gets -5000 power. [Auto] When this card is played, add up to 1 card from your life to your hand. [Auto](Blue), if your Leader is a blue <Android 21> card: At the start of your opponent's Main Phase, play up to 1 blue â‰ªAndroidâ‰« Z-Battle Card with an energy cost of 4 or less from under this card."), card_type="Z-BATTLE", card_number="BT20-029"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_add_up_to_n_from_owner_life_to_hand_on_play" and rule.handler_params.get("amount") == 1 for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_main_phase_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_047_cocotte_technique_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is a â‰ªUniverse 11â‰« card, you have a â‰ªUniverse 11â‰« card in play, and you choose 1 card in your hand and place it in your Drop Area: Play this card from your Drop Area, and you can't play {Cocotte, Technique Unleashed} for the duration of the turn."), card_type="BATTLE", card_number="BT9-047"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_032_majin_buu_innocent_trickster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is blue and you place this card in its owner's Drop Area: When one of your opponent's cards attacks, negate the attack. [Auto] If you have red energy: When this card is removed from your Battle Area by an opponent's skill, draw 2 cards."), card_type="BATTLE", card_number="BT9-032"))
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_066_marcarita_adorable_assailant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is yellow: When you play this card, choose up to 1 of your opponent's Battle Cards and negate its skills for the duration of the turn. If the chosen card is in Rest Mode, it can't be switched to Active Mode during your opponent's next Charge Phase. [Auto] If you have green energy: When this card is removed from your Battle Area by an opponent's skill, choose 1 card in your opponent's hand and place it in their Drop Area."), card_type="BATTLE", card_number="BT9-066"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_104_piccolo_the_gate_opener_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is yellow: When you take damage from an opponent's non-keyword skill, you may play this card from your hand. If you do, add 1 card from the top of your deck to your life; you can't activate the [Auto] skill on copies of this card for the game."), card_type="BATTLE", card_number="BT14-104"))
+    assert any(rule.trigger == "owner_takes_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_025_chilled_intergalactic_marauder_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is removed from your Battle Area by an opponent's skill, choose up to 1 â‰ªFrieza Clanâ‰« card in your hand with an energy cost of 3 or less and play it. [Activate: Battle][Once per turn]â‘¢: This card gets +6000 power for each card in your energy and [Triple Strike] for the duration of the battle."), card_type="BATTLE", card_number="BT9-025"))
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_062_caulifla_the_time_has_come_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], and switch it to Rest Mode. [Activate: Battle][Once per turn]â‘ : This card gets +5000 power for the duration of the turn, then choose up to 1 <Kale> or <Cabba> card with an energy cost of 2 or less in your hand and play it with its skills negated for the duration of the turn."), card_type="BATTLE", card_number="BT9-062"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_033_whis_tournament_spectator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 {Tournament of Power Arena} from your deck, add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="BT9-033"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_039_oaths_power_tapion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose up to 2 cards from your life and add them to your hand. If you chose to add 1 or more cards to your hand, choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less and place it on top of its owner's deck."), card_type="BATTLE", card_number="BT4-039"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_027_frieza_undying_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If the Battle Card being played has an energy cost of 3 or less, it is returned to its owner's hand instead of being played, then play this card."), card_type="BATTLE", card_number="BT9-027"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_071_dabura_darkness_perfected_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] Play this card. [Permanent] If all of your energy is black, reduce the energy cost of this card in your hand and Drop Area by 1. [Auto] During your opponent's turn: When you play this card, choose up to 1 of your opponent's Battle Cards and it can't attack or activate skills for the duration of the turn."), card_type="BATTLE", card_number="BT9-071"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt9_080_majin_buu_steadfast_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack] [Auto] When you play this card, you can't play {Majin Buu, Steadfast Absorption} for the duration of the turn. [Activate: Main] If you have no cards in your hand: Choose up to 1 black <Majin Buu> card in your Drop Area with an energy cost between 3 and 6 and play it on top of this card in Active Mode."), card_type="BATTLE", card_number="BT9-080"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_063_kunshi_threaded_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] All â‰ªUniverse 11â‰« cards with energy costs of 2 or less in your Battle Area gain [Barrier]."), card_type="BATTLE", card_number="BT9-063"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_045_quick_sweep_android_17_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a <Cell> card in play, increase this card's energy cost by 2. [Activate: Main](Green), if there are no cards in your Battle Area: Play this card from your Drop Area."), card_type="BATTLE", card_number="BT9-045"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_056_android_17_titan_toppler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader Card is an â‰ªAndroidâ‰« card, your opponent has a Battle Card in play with an energy cost greater than their current energy, and you have no cards in play in your Battle Area, you can play this card from your hand without paying its energy cost. [Auto] When you play this card, choose up to 1 of your opponent's Battle Cards, negate its skills for the duration of the turn, and it can't be switched to Active Mode during your opponent's next Charge Phase."), card_type="BATTLE", card_number="BT9-056"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db3_139_hirudegarn_giant_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card can't attack if it has 3 or fewer markers on it. [Auto] Choose 1 card in your hand and discard it: When your opponent combos, place up to 1 card from their Combo Area in its owner's Drop Area, then negate this skill for the turn. [+2][Activate: Main] Choose 1 card in your hand and discard it. [+1][Activate: Main] Choose up to 1 of your â‰ªHeroâ‰« or â‰ªPhantom Demonâ‰« cards and KO it."), card_type="UNISON", card_number="DB3-139"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt9_072_yakon_light_devourer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gets +5000 power for each card placed under it. [Auto] When this card attacks, choose 2 cards in your hand and place them under this card. [Auto] At the start of your Main Phase, if there are 4 or more cards under this card, place this card in its owner's Drop Area."), card_type="BATTLE", card_number="BT9-072"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_main_phase_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_044_android_13_red_ribbon_raider_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union Absorb](Green)(Yellow), choose 1 <Android 14> card and 1 <Android 15> card in your Drop Area and place them under this card: If your Leader Card is an â‰ªAndroidâ‰« card, choose up to 1 <Android 13> card in your hand with an energy cost of 7 or less and play it on top of this card. [Auto] If your Leader Card is an â‰ªAndroidâ‰« card: At the end of a battle in which you combo with this card from your hand, play this card in Rest Mode."), card_type="BATTLE", card_number="BT9-044"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_043_whis_judge_of_the_gods_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Quadruple Strike] (This card inflicts 4 damage instead of 1 when attacking) [Permanent] This card's attack and skill cannot be negated.[Auto] When you play this card, if your Leader Card is <Beerus>, after your current turn ends, take another turn."), card_type="BATTLE", card_number="BT1-043"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt1_052_objection_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Choose up to 1card from your hand, and add it to your energy."), card_type="EXTRA", card_number="BT1-052"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_073_broly_the_rampaging_horror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Green)(Green)(Green)(Green)â‘ : <Broly> [Double Strike] [Auto] When you play this card, choose up to 2 cards from your opponent's hand at random and place them in the Drop Area."), card_type="BATTLE", card_number="BT1-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+def test_extract_exact_bt10_021_shu_pilafs_admirer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 red <Pilaf> or <Mai> card in your hand with an energy cost of 2 or less and play it."), card_type="BATTLE", card_number="BT10-021"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_017_puar_yamchas_sidekick_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If it's your turn: When this card is used in a combo with a red <Yamcha> card, it gets +5000 combo power for the battle."), card_type="BATTLE", card_number="BT10-017"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p275_tapion_savior_from_another_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a blue <Trunks: Future> card: When this card is played, you may add 1 card from your life to your hand. If you do, choose 1 card in your hand and place it face up in your life."), card_type="UNISON", card_number="P-275", card_back_skill_unstyled="[+1][Auto] When your opponent attacks, choose up to 1 mono-blue <Trunks: Future> card with an energy cost of 2 or less in your hand and play it.\n[-2][Activate: Main] Choose up to 1 of your opponent's Battle Cards, negate its skills for the turn, and place it under this card."))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_007_son_goku_bursting_with_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] Add 1 card from your life to your hand: When this card attacks a card that isn't a Leader Card, switch this card to Active Mode and it gets +10000 power for the turn."), card_type="LEADER", card_number="BT10-007"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p274_launch_feminine_wiles_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] If your Leader Card is a red Earthling-only card: When you combo, choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -5000 power for the battle.\n[Auto] If your Leader Card is a red Earthling-only card with 10000 power or less: When this card is used in a combo, flip up to 1 card in your life face up; at the end of the turn, flip all face-up cards in your life face down. You can't activate the [Auto] skills on copies of this card for the turn."), card_type="BATTLE", card_number="P-274"))
+    assert sum(1 for rule in rules if rule.trigger == "self_comboed" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt10_010_master_roshi_martial_virtuoso_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If you have a red Unison Card in play: Your opponent can't attack with Battle Cards with 25000 power or more for the turn, then play this card."), card_type="BATTLE", card_number="BT10-010"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_148_rebellion_hammer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is black and you send 3 black cards from your Drop Area to your Warp: If the Battle Card being played has an energy cost of 4 or less, it is placed in its owner's Drop Area instead of being played.\n[Permanent] If you have 12 or more black cards in your Warp, reduce the energy cost of this card in your hand by 1."), card_type="EXTRA", card_number="BT11-148"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_008_yamcha_merciless_barrage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: Choose up to 2 of your opponent's Battle Cards, they get -15000 power for the turn, then play this card.\n[Permanent] If you have a red Unison Card with 2 or more markers in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT10-008"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_044_ss_trunks_god_sealing_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] You can't activate the [Counter: Play] skills of other cards for the turn: You may discard this card from your hand. If you do, the Battle Card being played is returned to its owner's hand instead. If you don't, play this card.\n[Permanent] If you have a blue Unison Card with 2 or more markers in play, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT10-044"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_083_caulifla_the_awakened_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] During your turn, at the end of a battle after you combo with this card, choose up to 1 yellow <Caulifla> card in your Battle Area and play this card on top of it.\n[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards or energy and switch it to Rest Mode."), card_type="BATTLE", card_number="BT7-083"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_053_fused_zamasu_advocate_for_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Indestructible]\n[Union-Potara] Blue <Zamasu> and blue <Goku Black>.\n[Permanent] If you have 3 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand."), card_type="BATTLE", card_number="BT10-053"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_009_yamcha_the_desert_hyena_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If your Leader Card is red, this card gets +10000 power.\n[Auto][Once per turn] During a battle where this card is attacking, when your opponent activates a [Counter] skill, switch this card to Active Mode.\n[Auto][Once per turn] When this card KOs an opponent's Battle Card, switch this card to Active Mode and it gets +10000 power and [Triple Strike] for the turn."), card_type="BATTLE", card_number="BT10-009"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_050_goku_black_rose_lofty_aspirations_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Triple Strike]\n[EX-Evolve](Blue)(Blue)(Blue)?: Blue <Goku Black>.\n[Permanent] When choosing a card to use with this card's [Evolve] skill from your hand, you can choose a Battle Card in your energy, then play this card in Active Mode.\n[Auto] If your Leader Card is a blue <Zamasu> or <Goku Black> card and your opponent has 5 or more energy: When a card evolves into this card, place up to 2 of your opponent's energy in their owners' Drop Areas."), card_type="BATTLE", card_number="BT10-050"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt10_081_guldo_psycho_psychic_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Activate: Main] If your Leader Card is a Ginyu Force card and you discard this card from your hand: Look at up to 3 cards from the top of your deck and place them on the top and/or bottom of your deck in any order.\n[Activate: Main][Once per turn] Look at up to 5 cards from the top of your deck and place them on the top and/or bottom of your deck in any order."), card_type="BATTLE", card_number="BT10-081"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt10_020_pilaf_dragon_ball_chaser_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Auto] If your Leader Card is a <Pilaf> card and you have 3 or more mono-red energy: When this card is played from your hand, play up to 1 red <Mai> card and up to 1 red <Shu> card with energy costs of 2 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT10-020"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_022_shu_dragon_ball_chaser_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Auto] If your Leader Card is a <Pilaf> card and you have 3 or more mono-red energy: When this card is played from your hand, play up to 1 red <Pilaf> card and up to 1 red <Mai> card with energy costs of 2 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT10-022"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_078_recoome_the_musclehead_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Auto] If your Leader Card is a Ginyu Force card: When this card is played, choose up to 1 green Ginyu Force card with an energy cost of 2 in your hand and play it."), card_type="BATTLE", card_number="BT10-078"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p292_the_dark_empire_strikes_back_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card gains Dark Dragon Ball in all areas.\n[Permanent] If your Leader Card is a black <Mechikabura> card with the [Wish] skill, reduce the energy cost of this card in your hand by 1.\n[Activate: Main] If your Leader Card is a black <Mechikabura>-only card and you choose 1 Dark Dragon Ball card, 1 black Demon Realm Race card, or 1 black Demon God card in your hand and discard it: Draw 2 cards, then your opponent sends 1 Battle Card from their Drop Area to their Warp."), card_type="EXTRA", card_number="P-292"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_089_avenging_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 3 cards from the top of your deck. Choose up to 1 Frieza's Army among them with an energy cost of 2 or less and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="BT1-089"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_001_yamcha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, look at up to 2 cards from the top of your deck, add up to 1 red card among them to your hand, then place any remaining cards in your Drop Area and this card gets +5000 power for the turn.\n[Awaken] When your life is at 5 or less: You may draw 1 card, then switch up to 1 of your energy to Active Mode and flip this card over."), card_type="LEADER", card_number="BT10-001"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_054_zamasu_cosmic_traitor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a blue <Zamasu> or <Goku Black> card: When this card is played from your hand, place the top card of your deck in your energy, then at the end of the turn, if the card you placed in your energy with this skill is in your energy, place it in its owner's Drop Area. If the card you placed in your energy with this skill isn't in your energy, place 1 card from your energy in its owner's Drop Area."), card_type="BATTLE", card_number="BT10-054"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex14_05_towa_rewriting_history_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, add up to 1 «Dark Dragon Ball» card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it.\n[Activate: Main][Once per turn]?, if your Leader Card is black, you have 3 or more energy, and you choose 1 non-black «Dark Dragon Ball» card in your hand and place it in your Drop Area: Play up to 1 <Dark Broly> card or non-black Battle Card with <Xeno> in its character name and an energy cost of 4 or less from your deck or hand, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="EX14-05"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_073_frieza_terrifying_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is removed from your Battle Area by an opponent's skill, draw 2 cards.\n[Activate: Main](Green): Choose up to 1 green <Frieza> card with an energy cost of 4 in your hand or Drop Area and play it on top of this card in Active Mode."), card_type="BATTLE", card_number="BT10-073"))
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_113_bulma_devoted_supporter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is mono-yellow and you have a yellow Unison Card in play: If the Battle Card being played has an energy cost of 2 or less, it has its skills negated for the turn before being played, then play this card."), card_type="BATTLE", card_number="BT10-113"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_046_vegito_infinite_radiance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Barrier]\n[Union-Potara] Blue <Son Goku> and blue <Vegeta>\n[Permanent] If you have 4 or more energy, you can choose Battle Cards in your energy when choosing cards to use with this card's [Union] skill from your hand."), card_type="BATTLE", card_number="BT10-046"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_097_son_goku_absolute_annihilation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Barrier][Unique]\n[Permanent] If your Leader Card is yellow, your opponent can't activate Extra Cards unless they switch 1 of their energy to Rest Mode."), card_type="BATTLE", card_number="BT10-097"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_112_super_17_powers_combined_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Triple Strike]\n[EX-Evolve](Yellow)(Yellow), if you have 4 or more energy: Mono-yellow <Super 17> card with an energy cost of 5.\n[Activate: Main][Once per turn] Place 3 cards under this card in their owners' Drop Areas: Switch this card and up to 1 of your <Super 17> Leader Cards to Active Mode, then choose up to 1 of your opponent's Battle Cards in Rest Mode and place it under this card; this card gets +1000 power for the turn for each energy cost in the Battle Cards placed under it."), card_type="BATTLE", card_number="BT14-112"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_045_ssb_vegito_paralyzing_prowess_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Triple Strike][Barrier]\n[EX-Evolve](Blue)(Blue)(Blue)(Blue): <Vegito> with an energy cost of 5.\n[Auto] If your Leader Card is a blue <Trunks: Future> card: When this card is played or attacks, your opponent chooses 2 cards in their hand and places them at the bottom of their deck in any order."), card_type="BATTLE", card_number="BT10-045"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_127_bardock_the_resolute_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike][Unique]\n[Auto] If your Leader Card is red: When your opponent's life is added to their hand or placed in their Drop Area by a skill, you may play this card from your hand.\n[Auto][Once per turn] When your opponent activates a [Counter] skill, switch this card to Active Mode."), card_type="BATTLE", card_number="BT10-127"))
+    assert any(rule.trigger == "owner_opponent_life_added_to_hand_or_drop_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_086_frieza_dark_infestation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike][Unique]\n[Auto] If your opponent has 3 or more energy: When this card is removed from a Battle Area by a skill or KO'd, add up to 1 green Extra Card with an energy cost of 1 or less from your Drop Area to your hand.\n[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 card in your opponent's hand and discard it."), card_type="BATTLE", card_number="BT10-086"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_145_son_goku_hit_supreme_alliance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Blocker]\n[Arrival Blue/Yellow](Blue)\n[Activate: Battle][Once per turn] If your Leader Card is blue or yellow: Switch this card to Active Mode."), card_type="BATTLE", card_number="BT10-145"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_130_trunks_elite_descendant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 3]?\n[Auto] When this card is played using [Over Realm], play up to 1<Vegeta: Xeno> card with an energy cost of 3 from your deck in Rest Mode, then shuffle your deck."), card_type="BATTLE", card_number="BT10-130"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_127_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can only place up to 6 energy in your Energy Area.\n[Auto] Choose 1 card in your hand and place it at the bottom of your deck: When this card attacks, choose 1 card in your life and place it in your energy in Rest Mode.\n[Awaken] When your life is at 4 or less: You may draw 1 card and flip this card over."), card_type="LEADER", card_back_skill_unstyled="[Permanent] You can only place up to 6 energy in your Energy Area.\n[Auto] When this card attacks, draw 1 card and this card gets +5000 power for the duration of the turn.\n[Auto] At the end of your turn, choose up to 3 of your mono-blue energy and switch them to Active Mode.", card_number="BT9-127"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_024_mai_dragon_ball_chaser_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Auto] If your Leader Card is a <Pilaf> card and you have 3 or more mono-red energy: When this card is played from your hand, play up to 1 red <Pilaf> card and up to 1 red <Shu> card with energy costs of 2 from your deck, then shuffle your deck"), card_type="BATTLE", card_number="BT10-024"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_079_jeice_second_in_command_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Auto] When this card attacks, look at up to 3 cards from the top of your deck, add up to 1 «Ginyu Force» card among them to your hand, then place the remaining cards on the top and/or bottom of your deck in any order."), card_type="BATTLE", card_number="BT10-079"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_068_kaio_ken_son_goku_confronting_invasion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Activate: Main][Limit 1] (Green), if there are a total of 4 {King Kai's Training} in your Warp and/or under a {King Kai's Planet} in your Battle Area, and you send this card to its owner's Warp: Play up to 1 {Son Goku, Maximum Gains} from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT15-068"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex19_01_bulma_to_incite_a_sneeze_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Auto][Limit 1] If your Leader Card is a red «Earthling»-only card with 10000 power or less: When a card in your life is flipped face up by one of your red card skills, you may play this card from your hand. If you do, choose up to 1 of your red Unison Cards with 1000 power and 2 markers or less, add a marker to it, and you can't play multicolor Battle Cards for the game.\n[Auto] If your Leader Card is a red «Earthling»-only card with 10000 power or less: When a face-up red Battle Card in your life is played, it gets +5000 power for the turn."), card_type="BATTLE", card_number="EX19-01"))
+    assert any(rule.trigger == "owner_life_card_flipped_face_up" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt1_053_senzu_bean_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 of your cards. It gains +5000 power for the duration of the turn. Then, choose up to 2 of your energy and switch them to Active Mode."), card_type="EXTRA", card_number="BT1-053"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_085_capricious_onslaught_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] Choose up to 1 of your Leader Cards or Battle Cards and it gets +10000 power for the duration of the battle; then, if it's your turn, choose up to 1 of your opponent's Battle Cards and place it under a <Majin Buu> card in your Battle Area."), card_type="EXTRA", card_number="BT9-085"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_043_phantom_flame_cannon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is <Hirudegarn>, it gains +10000 power for the duration of the battle, then choose up to 1 card in your opponent's hand and place it on top of their deck."), card_type="EXTRA", card_number="BT4-043"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_055_bulma_wife_of_the_prince_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, activate up to 1 {Super Blutz Wave Generator} from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT11-055"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_117_time_trauma_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is black, you may choose up to 2 cards in your life and add them to your hand. If you chose to add 1 or more cards to your hand, choose up to 1 of your opponent's Battle Cards with an energy cost of 5 or less and send it to their Warp."), card_type="BATTLE", card_number="BT4-117"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_139_putine_the_dark_sorcerer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is yellow: When an opponent's card is switched to Rest Mode by one of your card skills, you may play this card from your hand.\n[Auto][Once per turn] When your opponent plays a Battle Card using a skill or activates a [Counter] skill, choose up to 1 of your opponent's Battle Cards and switch it to Rest Mode."), card_type="BATTLE", card_number="BT10-139"))
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_050_ss3_son_goku_overflowing_spirit_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] If your Leader Card is mono-blue: Negate the attack, then choose up to 1 of your blue Unison Cards in your Unison Area or Drop Area, return it to its owner's hand, then play this card."), card_type="BATTLE", card_number="BT11-050"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_117_watchmans_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then choose up to 2 of your opponent's Tokens and switch them to Rest Mode.\n[Permanent] This card's skills can't be negated in any area."), card_type="EXTRA", card_number="BT14-117"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_115_power_burst_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Your Leader Card is black: Negate the attack, then choose up to 1 black Battle Card from your Drop Area or Warp with an energy cost of 1 and add it to your hand.\n[Permanent][Sparking 5] If your Leader Card is black, you can activate this card's [Counter] skill from your hand by adding a card from your life to your hand instead of paying its energy cost."), card_type="EXTRA", card_number="BT5-115"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_037_bulma_babys_minion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is a blue <Baby> card: Play this card, then if the Battle Card being played has an energy cost of 1, it's returned to its owner's hand instead of being played.\n[Servant] You can't play non-<Baby> Battle Cards, and if you have another non-<Baby> Battle Card in play, send this card to its owner's Warp."), card_type="BATTLE", card_number="BT11-037"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_050_janemba_rampaging_demon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When a card evolves into this card, draw 2 cards, then switch this card to Active Mode."), card_type="BATTLE", card_number="BT12-050"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_025_bardock_strategic_mind_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is mono-red: When this card is played, choose up to 1 of your red Unison Cards and add 3 markers to it."), card_type="BATTLE", card_number="BT11-025"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_066_prince_of_destruction_vegeta_prideful_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is mono-green: When this card is played, choose up to 1 of your opponent's Unison Cards and remove 3 markers from it."), card_type="BATTLE", card_number="BT11-066"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_043_baby_the_saiyan_slayer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Counter: Counter] Play this card.\n[Activate: Main][Once per turn] Look at the bottom card of your deck; if it's a mono-blue Battle Card with a [Counter] skill, you may play it. If you don't, place it at the bottom of your deck."), card_type="BATTLE", card_number="BT11-043"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "counter_counter" and rule.handler_id == "counter_play_self_from_counter_counter" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_132_vegeks_spacetime_synthesis_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can choose Battle Cards in your Warp when choosing cards to use with this card's [Union] skill from your hand.\n[Auto] When this card is played, add up to 1 Battle Card with an energy cost of 4 or less from your Warp to your hand."), card_type="BATTLE", card_number="BT10-132"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt10_131_vegeks_burning_impact_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp."), card_type="BATTLE", card_number="BT10-131"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_147_son_gohan_piccolo_skills_sharpened_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Blue), if your Leader Card is blue or green and you discard this card from your hand: Choose up to 2 of your opponent's Battle Cards with energy costs of 3 or less and place them at the bottom of their owners' decks in any order."), card_type="EXTRA", card_number="BT10-147"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_022_paragus_new_ambitions_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Choose 1 card in your hand and discard it: When this card is placed in your Drop Area from your hand by a skill, add up to 1 red <Broly: Br> card with an energy cost of 4 or less from your Drop Area to your hand."), card_type="BATTLE", card_number="BT11-022"))
+    assert any(rule.trigger == "self_in_hand_sent_to_drop_or_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_19_lord_slug_mighty_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your opponent activates a [Counter: Play] skill, they choose 2 cards in their hand and discard them."), card_type="BATTLE", card_number="EX13-19"))
+    assert any(rule.trigger == "owner_opponent_counter_play_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_018_broly_saiyan_youth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If you have a red <Ba: Br> card in play, this card gets +11000 power.\n[Auto] When this card is played, you can't play copies of this card for the turn."), card_type="BATTLE", card_number="BT11-018"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_ex24_21_janemba_endless_copies_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+1][Activate Main] If you have {Barrier Around Check-In Station} in your Battle Area: Play up to 1 blue ≪Evil Incarnate≫ or ≪Demon≫ card with an energy cost of 2 or less from your hand. Additionally, you may send 1 {Dimension Magic} from your Drop to its owner's Warp. If you do, switch up to 1 of your blue energy to Active Mode at the end of the turn.\n[0][Auto] Choose 1 of your <Janemba> cards: When this card is attacked, switch the target of attack to the chosen card."), card_type="UNISON", card_number="EX24-21"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacked" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_072_android_17_android_18_future_thugs_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+1][Activate: Battle] Add up to 1 {Vegeta, Warrior Spirit} or {Trunks, Warrior Spirit} from your Combo Area to its owner's hand.\n[-2][Activate: Battle] Use up to 2 red and/or green cards with 5000 combo power from your Drop in a combo with their skills negated for the turn."), card_type="UNISON", card_number="BT25-072"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt13_064_king_vegeta_umbral_invader_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[+1][Activate: Main] Choose up to 1 mono-green Extra Card with an energy cost of 2 or less and the [Field] skill in your hand and activate it.\n[-1][Activate: Main] Your opponent chooses 1 of their Battle Cards with an energy cost of 5 or less and KOs it.\n[-3][Activate: Battle] This card gets [Triple Strike] and +5000 power for each Extra Card in your Battle Area with the [Field] skill for the turn."), card_type="UNISON", card_number="BT13-064"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_089_final_explosion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a green <Vegeta> card: Choose up to 1 of your cards, it gets +10000 power for the battle, then choose 1 of your Unison Cards and you may remove a marker from it. If you do, choose up to 1 of your opponent's Unison Cards and remove a marker from it."), card_type="EXTRA", card_number="BT11-089"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_131_ultra_instinct_gokus_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is blue: Choose up to 1 of your Leader Cards or Battle Cards and it gets +15000 power for the duration of the battle.\n[Auto] If all of your energy is blue: When you activate this card, choose one-\n・ If it's your turn, draw 1 card.\n・ If it's your opponent's turn, choose up to 1 of your blue energy and switch it to Active Mode."), card_type="EXTRA", card_number="BT9-131"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt11_085_demon_god_dabura_dark_dominion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is green, you discard this card from your hand, and choose 1 of your Unison Cards and remove a marker from it: Add up to 1 green ≪Dark Dragon Ball≫ card from your deck or Drop Area to your hand, then shuffle your deck if you looked through it."), card_type="EXTRA", card_number="BT11-085"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_098_piccolo_a_bad_omen_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Add 1 card from your life to your hand: When this card is played, look at up to 7 cards from the top of your deck, play up to 1 yellow skill-less Battle Card with an energy cost of 1 among them, then shuffle your deck."), card_type="BATTLE", card_number="BT11-098"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_073_dabura_king_of_the_demon_realm_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is green and you choose 1 of your Unison Cards and remove a marker from it: When this card is played, choose up to 1 of your opponent's Unison Cards and remove a marker from it."), card_type="BATTLE", card_number="BT11-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_114_naturon_shenron_the_terramancer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks, place up to 1 ≪Shadow Dragon≫ card from your Drop Area at the bottom of your deck."), card_type="BATTLE", card_number="BT11-114"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_137_ultimate_transformation_mira_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, choose up to 1 card in your opponent's hand and send it to their Warp.\n[Activate: Battle][Once per turn] Choose 1 of your black Battle Cards with 30000 power and place it in its owner's Drop Area: Choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp."), card_type="BATTLE", card_number="BT11-137"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_108_tardo_of_the_demonic_elite_four_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards and it can't be switched to Active Mode during your opponent's next turn.\n[Auto](Yellow), if your Leader Card is a yellow ≪Demon Clan≫ card: When you activate an [Overlord] skill, play this card from your hand."), card_type="BATTLE", card_number="BT11-108"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_overlord_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_107_vinegar_of_the_demonic_elite_four_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played, look at up to 5 cards from the top of your deck, play up to 1 yellow ≪Demon Clan≫ card with an energy cost of 2 or less among them other than copies of this card in Rest Mode, then shuffle your deck.\n[Auto](Yellow), if your Leader Card is a yellow ≪Demon Clan≫ card: When you activate an [Overlord] skill, play this card from your hand, and you can't play copies of this card for the turn."), card_type="BATTLE", card_number="BT11-107"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_overlord_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_063_solar_flare_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, and if your Leader Card is yellow, choose up to 1 of your yellow Battle Cards with an energy cost of 2 or less, and it gains [Blocker] for the duration of the turn."), card_type="EXTRA", card_number="TB3-063"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_099_piccolo_demonic_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card is mono-yellow: Play this card, then if the card being played has an energy cost of 4 or less, it's played with its skills negated for the turn.\n[Permanent] During your opponent's turn, reduce the energy cost of this card in your hand by 1."), card_type="BATTLE", card_number="BT11-099"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_051_janemba_dark_parasite_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Auto] If your opponent has 2 or more energy: When this card attacks, your opponent may choose 1 of their Battle Cards and send it to its owner's Warp. If they didn't, draw 1 card, then switch up to 1 of your blue energy to Active Mode."), card_type="BATTLE", card_number="BT12-051"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_126_ss4_son_goku_conqueror_of_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Xeno-Evolve](Black)(Black)(Black)②: <Son Goku: Xeno>.\n[Auto] When a card evolves into this card, choose up to 1 of your opponent's Battle Cards, ignoring [Barrier], send it to its owner's Warp, then this card gains [Triple Attack] for the turn.\n[Auto] Choose 1 card in your hand and send it to your Warp: When your opponent attacks, negate the attack, then negate this skill for the turn."), card_type="BATTLE", card_number="BT11-126"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_113_super_naturon_shenron_pan_absorbed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve](Yellow): <Naturon Shenron> with an energy cost of 2.\n[Auto] When this card is played, place up to 3 ≪Shadow Dragon≫ cards from your Drop Area at the bottom of your deck in any order, then this card gains [Dual Attack] for the turn.\n[Auto](Yellow): When this card is used in a combo, play 1 {Seven-Star Ball, Negative Energy Overflow} from your Drop Area."), card_type="BATTLE", card_number="BT11-113"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_072_bibidi_creator_of_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Overlord][Once per turn] (Place 1 of your Battle Cards with the [Servant] skill at the bottom of your deck: Draw 1 card.)\n[Auto] When this card is removed from your Battle Area by an opponent's skill, choose up to 1 green Battle Card with an energy cost of 3 or less and the [Servant] skill in your hand and play it."), card_type="BATTLE", card_number="BT11-072"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_140_towa_dark_aura_deluge_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card's skills can't be negated in any area; you can't play this card from any area unless your Leader Card is a <Dark Broly> card.\n[Permanent] This card can't attack.\n[Activate: Main][Once per turn] Choose 1 of your black Battle Cards with 30000 power and place it in its owner's Drop Area: Add up to 1 black Battle Card with 30000 power from your Drop Area to your hand."), card_type="BATTLE", card_number="BT11-140"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt22_098_shenron_wish_dragon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Permanent] This card can't attack.\n[Auto] If your Leader is a yellow card with both <Son Goku: Childhood> and <Korin> and you have 3 or more energy: When you play a yellow {Upa} from your hand, you may also play this card from your hand.\n[Activate: Main] Switch this card to Rest Mode: Play up to 1 yellow {Bora} from your Drop."), card_type="BATTLE", card_number="BT22-098"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p519_ss3_gotenks_flying_fists_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Union-Fusion][Limit 1] <Son Goten: GT> card and <Trunks: GT> card, both yellow.\n[Permanent] If your Leader is a yellow <Gotenks: Adolescence> and you choose cards to use with this card's [Union] skill from a hand, you may choose the specified Battle Card in your Drop. If you do, place the chosen cards at the bottom of your deck in any order.\n[Permanent] If this card is in Rest Mode, only your opponent's Leader can attack Unisons."), card_type="BATTLE", card_number="P-519"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt21_041_baby_parasitic_premonition_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Z-Stack 1] Blue <Baby> with an energy cost of 4.\n[Auto] When this card is played, look at up to 7 cards from the top of your deck, place up to 1 mono-blue <Vegeta: GT> with an energy cost of 1 or 1 mono-blue ≪Brainwashed≫ under one of your {Universal Tuffleization Plan} cards, then shuffle your deck.\n[Activate: Main](Blue), place 1 <Vegeta: GT>-only card from your Drop or from under a {Universal Tuffleization Plan} in your Battle Area under this card: Play up to 1 blue <Baby> with an energy cost of 4 from under this card on top of this card."), card_type="Z_BATTLE", card_number="BT21-041"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt20_061_android_18_wrathful_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier]\n[Z-Stack 1] Green <Son Goku: GT>.\n[Permanent] During your turn, while there are 2 or more green <Son Goku: GT> cards in your Warp, this card gets +6000 power."), card_type="Z_BATTLE", card_number="BT20-061"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_47_your_worst_nightmare_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] If your Leader Card is mono-yellow and you have 3 or more energy: Choose up to 1 yellow <Frieza> card with {Mecha} in its card name and an energy cost of 4 in your hand and play it. You can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="EXTRA", card_number="EB1-47"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_079_trunks_bonds_of_friendship_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main](Green), if your Leader Card is a green <Gotenks> card and you discard this card from your hand: Play or add to your hand up to 1 green <Son Goten> card with an energy cost of 3 from your deck, then shuffle your deck.\n[Auto] When this card is discarded from your hand by a [Union] skill, look at up to 7 cards from the top of your deck, add up to 1 green Unison Card with a specified cost of 2 among them to your hand, then shuffle your deck."), card_type="EXTRA", card_number="BT11-079"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_in_hand_sent_to_drop_or_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_115_dr_myuu_returned_from_the_beyond_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn](Yellow), play up to 1 yellow <Hell Fighter 17> card with an energy cost of 1 from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT14-115"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_032_son_goku_fusion_synergy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Add 1 card from your life to your hand: When this card attacks, this card gets +10000 power and [Critical] for the turn."), card_type="BATTLE", card_number="BT12-032"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_013_launch_the_pure_hearted_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a red ≪Earthling≫-only card with 10000 power or less: When this card is used in a combo, flip up to 1 card in your life face up; at the end of the turn, flip all face-up cards in your life face down. You can't activate the [Auto] skill on copies of this card for the turn.\n[Activate: Battle] If your Leader Card is a red ≪Earthling≫-only card with 5000 power: Combo with this card from your Drop Area; at the end of the battle, send this card from your Drop Area to your Warp."), card_type="BATTLE", card_number="BT12-013"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_145_psi_devilman_exploding_with_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack and play this card.\n[Auto] If your Leader Card is a <Dark Broly> card: When this card is played, place up to 2 black Battle Cards with 30000 power from your deck in your Drop Area, then shuffle your deck."), card_type="BATTLE", card_number="BT11-145"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_46_death_blaster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] If your Leader Card and all of your energy are mono-yellow and you send 2 mono-yellow Extra Cards with energy costs of 1 or more other than this card from your Drop Area to your Warp: The Battle Card being played is played in Rest Mode with its skills negated for the turn."), card_type="EXTRA", card_number="EB1-46"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_146_great_devilman_demonic_trickster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Play] Play this card, and if the Battle Card being played has an energy cost of 2 or less, it's sent to its owner's Warp instead of being played.\n[Auto] If your Leader Card is a <Dark Broly> card: When this card is played, place up to 2 black Battle Cards with 30000 power from your deck in your Drop Area, then shuffle your deck."), card_type="BATTLE", card_number="BT11-146"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_078_son_goten_bonds_of_friendship_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Activate: Main](Green), if your Leader Card is a green <Gotenks> card and you discard this card from your hand: Play or add to your hand up to 1 green <Trunks: Youth> card with an energy cost of 3 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT11-078"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_060_lord_slug_thwarter_of_plans_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect]\n[Auto][Bond 2] If your Leader Card is a ≪Slug's Army≫ card: When your opponent uses a card in a combo, you may place that card in its owner's Drop Area. If you do, you and your opponent draw 1 card, then negate this skill for the turn.\n[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, if your opponent has 7 or more cards in their hand, play up to 1 green ≪Slug's Army≫ card with an energy cost of 1 from your Drop Area."), card_type="BATTLE", card_number="BT12-060"))
+    assert any(rule.trigger == "owner_opponent_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_041_gotenks_battling_the_forces_of_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Double Strike][Barrier]\n[Auto][Once per turn] If your opponent activates a [Counter] skill during a battle with this card, choose all of your opponent's Battle Cards, ignoring [Barrier], return them to their owners' hands, then switch up to 2 of your mono-blue energy to Active Mode."), card_type="BATTLE", card_number="BT12-041"))
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_105_garlic_jr_commander_of_the_demon_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Indestructible]\n[Overlord][Once per turn] (Place 1 of your Battle Cards with the [Servant] skill at the bottom of your deck: Draw 1 card.)\n[Auto] If your Leader Card is a yellow ≪Demon Clan≫ card: When this card is played, activate this skill. During your opponent's next turn, your Leader Cards and Unison Cards don't take damage from attacks of cards that have [Double Strike] or [Triple Strike] skills."), card_type="BATTLE", card_number="BT11-105"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_p281_frieza_dark_power_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Permanent] This card can't be played from any area unless your opponent has 3 or more energy.\n[Auto] When this card attacks, choose up to 1 of your opponent's Unison Cards and remove a marker from it."), card_type="BATTLE", card_number="P-281"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_132_ss_bardock_the_tenacious_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Over Realm 6](Black)\n[Auto] When this card is played using [Over Realm], your opponent can only attack with Battle Cards once during their next turn.\n[Auto] When this card is played, you can't play copies of this card during your next turn."), card_type="BATTLE", card_number="BT11-132"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_143_shun_shun_haru_harus_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During your opponent's turn, if you have a black Unison Card in play, this card gets +10000 power and [Blocker]."), card_type="BATTLE", card_number="BT11-143"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_136_paragus_towas_subordinate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] This card's skills can't be negated in any area; you can't play this card from any area unless your Leader Card is a <Dark Broly> card.\n[Permanent] This card can't attack.\n[Activate: Main/Battle] Choose this card and 1 <Towa> card in your Battle Area and switch them to Rest Mode: Choose 1 of your <Dark Broly> Battle Cards and it gains [Critical] for the turn."), card_type="BATTLE", card_number="BT11-136"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") == 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_058_infinite_force_fused_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Union-Potara] (Blue)(Blue)(Blue)④: <Goku Black> and <Zamasu> (Place this card in Active Mode on top of the 2 specified cards stacked together)\n[Indestructible] (This card cannot be KO-ed by your opponent's card's skills or battle and does not leave the Battle Area)\n[Auto] When this card attacks, choose up to 1 card each from your opponent's Battle Area (Battle Cards only), energy, life, and hand, then place them at the bottom of their deck in any order."), card_type="BATTLE", card_number="BT2-058"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p285_nuova_shenron_fair_and_square_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[EX-Evolve](Yellow)(Yellow), <Nuova Shenron> with an energy cost of 2.\n[Auto] When this card is played, choose up to 1 <Eis Shenron> card from your deck, hand, or Drop Area, play it, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="P-285"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p466_king_cold_leader_of_the_frieza_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Barrier][Blocker]\n[Permanent] For each green Unison in your Drop, reduce the energy cost of this card in your hand by 1.\n[Auto][Once per turn] If your Leader is a ≪Frieza Clan≫ card: At the end of your turn or when this card activates its [Blocker] skill, switch this card to Active Mode.\n[Auto] When this card activates its [Blocker] skill, use one mono-green card with 5000 combo power from your Drop in a combo with its skills negated for the battle."), card_type="BATTLE", card_number="P-466"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto") == 2
+
+
+def test_extract_exact_bt11_135_dark_broly_the_new_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Activate: Main] If your Leader Card is a <Dark Broly> card and you send 6 black Battle Cards other than this card from your Drop Area to your Warp: Play this card from your Drop Area.\n[Auto] When this card is played, you can't play copies of this card for the turn."), card_type="BATTLE", card_number="BT11-135"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_21_blazing_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Battle] If your Leader Card is a green <Vegito> card, it gets +15000 power for the duration of the battle, and if it is your turn, also choose one?\n・Choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and KO it.\n・Choose up to 1 of your opponent's Battle Cards with an energy cost of 2 or less, ignoring [Barrier], and KO it."), card_type="EXTRA", card_number="EX06-21"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd8_06_lemo_frieza_force_soldier_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn] (Green), choose 1 card from your hand and place it in your Drop Area: Choose up to 1 <Cheelai: Br> card with an energy cost of 2 or less from your deck and play it, then shuffle your deck."), card_type="BATTLE", card_number="SD8-06"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex05_01_janemba_lighthearted_destroyer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] (Blue): Choose up to 1 ≪Agent of Destruction≫ card with an energy cost of 4 that is both blue and yellow from your deck, play it in Rest Mode, shuffle your deck, then place this card at the bottom of its owner's deck."), card_type="BATTLE", card_number="EX05-01"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_02_vegito_polymorphic_potara_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main]①, place this card in your Drop Area from your hand: If your Leader Card is a <Vegito> card, choose up to 1 <Son Goku> card and 1 <Vegeta> card in your deck or Drop Area with energy costs of 2 or less, negate their skills, play them in Rest Mode, shuffle your deck if you looked through it, and you can't play non-<Vegito> Battle Cards for the duration of the turn. At the end of the turn, place all Battle Cards played into the Battle Area by this skill in their owners' Drop Areas."), card_type="BATTLE", card_number="EX06-02"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex02_07_majin_twin_haru_haru_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is red or blue, place up to 2 cards from the top of your deck in the Drop Area.\n[Auto] When this card attacks, this card gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="EX02-07"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex01_01_comrades_combined_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, look at up to 7 cards from the top of your deck. Choose up to 1 blue <Vegeta> among them with an energy cost of 3 or less and play it in Rest Mode. Then, place the remaining cards on the bottom of your deck in any order."), card_type="BATTLE", card_number="EX01-01"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_23_frieza_obsession_of_the_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When your opponent's cards attack, if your Leader Card is ≪Frieza Clan≫, you may choose 1 ≪Frieza Clan≫ other than <Frieza> in your hand and place it in your Drop Area. If you do so, negate that attack, and negate this skill for the duration of the turn."), card_type="BATTLE", card_number="EX03-23"))
+    assert any(rule.trigger == "owner_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_09_vegeta_energy_absorber_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Once per turn] When your energy is switched from Rest Mode to Active Mode by a skill, if it's your opponent's turn, draw 1 card."), card_type="BATTLE", card_number="EX06-09"))
+    assert any(rule.trigger == "owner_energy_switched_to_active" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_ex03_04_umbral_blade_dabura_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] When you play this card, if you have <Evil Wizard Babidi> in your Battle Area or Leader Area, for the duration of the turn this card gains +10000 power and [Dual Attack]."), card_type="BATTLE", card_number="EX03-04"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd1_02_god_rush_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)(Blue)(Blue)②: <Son Goku>\n[Double Strike]\n[Auto] When you play this card, choose all of your opponent's Battle Cards with [Blocker] and return them to their hand."), card_type="BATTLE", card_number="SD1-02"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd1_04_rapid_spirit_ball_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Blue)①: <Son Goku>\n[Auto] When you play this card, choose up to 1 of your energy and switch it to Active Mode."), card_type="BATTLE", card_number="SD1-04"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_067_true_form_ganos_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Green)(Green)②： <Ganos>\n[Double Strike]\n[Auto] When a card evolves into this card, choose up to 1 of your opponent's Battle Cards and KO it. Then, your opponent chooses 1 card in their hand and places it in the Drop Area."), card_type="BATTLE", card_number="TB1-067"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd2_05_chain_attack_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] (Red)(Red): <Trunks: GT>\n[Permanent] This card can attack Battle Cards that are in Active Mode.\n[Auto] When you play this card, choose up to 1 Battle Card from your hand with power of 15000 or less and play it."), card_type="BATTLE", card_number="SD2-05"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_057_life_or_death_nail_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve]②: <Nail>\n[Permanent] If there are 2 or more ≪Namekian≫ cards under this card, this card gains [Barrier] and [Double Strike].\n[Auto][Sparking 5] When you play this card, you may choose 1 card from your life and add it to your hand. If you do, choose up to 1 of your opponent's Battle Cards ignoring [Barrier] and switch it to Rest Mode."), card_type="BATTLE", card_number="TB3-057"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_052_son_goku_hope_of_universe_7_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] 1, place 2 ≪Universe 7≫ from your hand in the Drop Area: ≪Universe 7≫ <Son Goku> with an energy cost of 5 or more.\n[Triple Attack]\n[Critical]\n[Auto] When this card attacks, if your Leader Card is green, choose up to 1 card from your opponent's hand or up to 1 of their Battle Cards and place it in the Drop Area."), card_type="BATTLE", card_number="TB1-052"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_077_frieza_emperor_of_universe_7_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[EX-Evolve] ①, place 1 ≪Universe 7≫ from your hand in the Drop Area: ≪Universe 7≫ <Frieza> with an energy cost of 5 or more.\n[Triple Strike]\n[Permanent] If your Leader Card is yellow, your opponent's [Counter] skills and non-keyword [Auto]/[Activate] skills cannot be activated unless they place 1 card from their life in their Drop Area."), card_type="BATTLE", card_number="TB1-077"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_11_undying_link_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Indestructible]\n[Auto] When you play this card, if your Leader Card is <Zamasu> or <Goku Black> and you have 5 or more energy, you may inflict 2 damage to your life. If you do so, choose up to 4 of your energy and switch them to Active Mode."), card_type="BATTLE", card_number="EX03-11"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_144_haru_haru_shun_shuns_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] During your turn, if you have a black Unison Card in play, this card gets +10000 power and [Double Strike]."), card_type="BATTLE", card_number="BT11-144"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex01_02_comrades_combined_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] If all of your energy is blue, reduce the energy cost of this card in your hand and Battle Area by 1."), card_type="BATTLE", card_number="EX01-02"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_063_master_shen_martial_meister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Barrier]\n[Activate: Main] [Once per turn] Choose 1 {Master Roshi, Martial Meister} in your Battle Area and switch it to Rest Mode: Draw 1 card."), card_type="BATTLE", card_number="TB2-063"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_p078_demon_sword_janemba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Deflect]\n[Activate: Main] Place this card at the bottom of its owner's deck: Choose up to 1 of your opponent's Battle Cards, send it to its owner's Warp, and place 2 cards from the top of your opponent's deck in their Drop Area."), card_type="BATTLE", card_number="P-078"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_006_majin_buu_full_of_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Evolve] ③: Red <Majin Buu>\n[Double Strike]\n[Barrier]\n[Activate: Main] Choose 1 card in your life and add it to your hand: This card gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="TB1-006"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd7_05_mega_focus_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main][Once per turn][Burst 3] (You must place the top 3 cards of your deck in your Drop Area to activate this skill.) For the duration of the turn, this card gets +5000 power and can attack Battle Cards in Active Mode."), card_type="BATTLE", card_number="SD7-05"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd10_02_ss3_son_goku_the_last_straw_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] Choose 1 card in your life and add it to your hand: When this card attacks, it gets +10000 power and [Double Strike] for the duration of the turn."), card_type="BATTLE", card_number="SD10-02"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd11_02_friendly_rival_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is red: When you combo with this card, choose up to 1 red Extra Card from your deck, place it in your Drop Area, then shuffle your deck."), card_type="BATTLE", card_number="SD11-02"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd6_02_fusion_reborn_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in your Drop Area from your hand as a result of [Union-Fusion], if your Leader Card is a <Gogeta> card, choose up to 1 of your energy and switch it to Active Mode."), card_type="BATTLE", card_number="SD6-02"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd6_03_fusion_reborn_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in your Drop Area from your hand as a result of [Union-Fusion], if your Leader Card is a <Gogeta> card, draw 1 card."), card_type="BATTLE", card_number="SD6-03"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_040_tactical_victory_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 [Field] card in your opponent's Battle Area and place it in its owner's Drop Area."), card_type="BATTLE", card_number="TB3-040"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd9_02_raditz_earth_invader_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When {King Vegeta's Dynasty} in your Battle Area is placed in its owner's Drop Area, activate this skill. If {Raditz, Earth Invader} isn't in play in your Battle Area, you may play this card from your hand."), card_type="BATTLE", card_number="SD9-02"))
+    assert any(rule.trigger == "owner_other_battle_area_card_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_105_temporal_darkness_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dark Over Realm 7] ④ (If you have at least 7 black cards in your Drop Area, you can play this card by sending all cards in your Drop Area to your Warp. [Over Realm] and [Dark Over Realm] can only be activated once per turn)\n[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and send it to their Warp, then choose up to 1 Battle Card from your Warp with an energy cost of 4 or less and play it."), card_type="BATTLE", card_number="BT4-105"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_030_beerus_universe_7_divine_vanquisher_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] When this card attacks a Leader Card, your opponent chooses any number of cards from their hand, Battle Area, or Energy Area for which the total cost adds up to 6 or more and places them in the Drop Area."), card_type="BATTLE", card_number="TB1-030"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_053_piccolo_fused_with_nail_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Activate: Main][Once per turn] Choose one-\n・This card gets +3000 power for the duration of the turn for each ≪Namekian≫ card under this card.\n・If there are 3 or more ≪Namekian≫ cards under this card, this card gains [Barrier] until the end of your opponent's next turn, then choose up to 1 of your opponent's energy and switch it to Rest Mode. That card can't be switched to Active Mode until the end of your opponent's next turn."), card_type="BATTLE", card_number="TB3-053"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_020_test_of_strength_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Auto] When you play this card, if your Leader Card is ≪World Tournament≫, you may choose 1 {Test of Strength Uub} from your hand and play it. If you do so, both that card and this card gain +5000 power for the duration of the turn."), card_type="BATTLE", card_number="TB2-020"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_069_son_goku_uub_seeds_of_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[Dual Attack]\n[Ultimate]\n[Permanent] If your Leader Card is ≪World Tournament≫ and if there are 6 cards or more in both your Energy Area and your opponent's Energy Area, decrease this card's energy cost in your hand by 2.\n[Auto] When this card attacks, choose up to 1 card each from your opponent's Life and Energy Areas, then place them at the bottom of their owner's deck in any order."), card_type="BATTLE", card_number="TB2-069"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_092_vegeta_deitys_disciple_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Double Strike]\n[EX-Evolve](Yellow), draw 1 card: Yellow {Vegeta} with an energy cost of 2.\n[Auto] When your opponent activates a [Counter] skill during a battle with this card, you may switch this card to Active Mode. If you do, negate this card's skills for the turn.\n[Auto] When this card is removed from your Battle Area by an opponent's skill, play up to 1 yellow {Son Goku} with an energy cost of 2 from your deck or Drop Area, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT12-092"))
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_114_oceanus_shenron_swift_spirals_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Auto][Burst 1] If your Leader Card is a ≪Shadow Dragon≫ card and it's your opponent's turn: When this card is used in a combo from your hand, choose up to 1 ≪Shadow Dragon≫ card in your Battle Area and switch it to Active Mode."), card_type="BATTLE", card_number="BT12-114"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_switch_up_to_n_owner_battle_active_on_combo" for rule in rules)
+
+
+def test_extract_exact_bt11_131_ss4_bardock_combat_instincts_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Dual Attack]\n[Over Realm 6](Black)(Black)(Black)\n[Auto] When this card is played using [Over Realm], choose up to 2 cards in your opponent's hand and send them to their Warp."), card_type="BATTLE", card_number="BT11-131"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p271_return_of_the_king_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust][Field]\n[Permanent] This card is also treated as {King Vegeta's Dynasty} in all areas; if your opponent has 2 or more energy, your red <King Vegeta> Leader Card can activate its [Awaken] skill.\n[Auto] If your Leader Card is a red <King Vegeta> card: When this card is placed in your Battle Area, choose up to 1 red or green ≪Saiyan≫ card with an energy cost of 2 or less in your hand, play it with its skills negated for the turn, then draw 2 cards.\n[Activate: Battle][Once per turn] If your Leader Card is a red <King Vegeta> card: Use a Red/Green multicolor Battle Card from your Drop Area in a combo with its skills negated for the turn."), card_type="EXTRA", card_number="P-271"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_043_fledgling_duo_krillin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card.)\n[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards and KO it."), card_type="BATTLE", card_number="TB3-043"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd11_03_ultra_instinct_son_goku_universal_impulse_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Energy-Exhaust] (If this card is placed in an Energy Area from any area, it must be placed there in Rest Mode.)\n[Auto] When you play this card, it gets +10000 power and you can't play non- ≪Universe 7≫ Battle Cards for the duration of the turn.\n[Auto] When your opponent plays a Battle Card, you may return this card to its owner's hand."), card_type="BATTLE", card_number="SD11-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd9_01_king_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Permanent] You can't include non-≪Saiyan≫ Battle Cards in your deck.\n[Activate: Main][Once per turn] Choose 1 card from your life and add it to your hand: Look at up to 5 cards from the top of your deck, choose up to 1 red or green ≪Saiyan≫ card or {King Vegeta's Dynasty} among them and add it to your hand, then shuffle your deck.\n[Awaken] When you have {King Vegeta's Dynasty} in your Battle Area and 3 or more cards in your energy: You may draw 1 card, choose up to 1 of your energy and switch it to Active Mode, and flip this card over."), card_type="LEADER", card_number="SD9-01"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_138_naturon_shenron_power_of_darkness_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a ≪Shadow Dragon≫ card: When this card is played, choose up to 1 ≪Shadow Dragon≫ Extra Card in your Drop Area and add it to your hand.\n[Auto] If your Leader Card is a ≪Shadow Dragon≫ card: When this card is discarded by a ≪Shadow Dragon≫ card's skill, you may look at the top card of your deck; if it's a black ≪Shadow Dragon≫ card you may add it to your hand, otherwise, place it at the bottom of your deck."), card_type="BATTLE", card_number="BT14-138"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_discarded" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_013_zarbon_hidden_potential_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is KO'd, draw 1 card, then choose up to 1 of your opponent's Battle Cards and it gets -15000 power for the duration of the turn."), card_type="BATTLE", card_number="TB3-013"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_006_body_change_ginyu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose all ≪Ginyu Force≫ cards in your Battle Area, and they get +10000 power for the duration of the turn.\n[Activate: Main] Place this card in its owner's Drop Area: Play this card in your opponent's Battle Area from its owner's Drop Area with its skills negated, then choose up to 1 of your opponent's Battle Cards with 20000 power or less other than {Body Change Ginyu}, gain control of it, and switch it to Active Mode."), card_type="BATTLE", card_number="TB3-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_059_wishmaker_dende_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 [Dragon Ball] card from your deck and add it to your hand, then shuffle your deck.\n[Activate: Main] Choose 1 other ≪Namekian≫ card in your Battle Area: Place this card under the chosen Battle Card, and that card gets +5000 power for the duration of the turn."), card_type="BATTLE", card_number="TB3-059"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_047_trusting_relationship_popo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 {Trusting Relationship Kami} from your deck, add it to your hand, then shuffle your deck."), card_type="BATTLE", card_number="TB2-047"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_061_stenchful_bacterian_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose 1 card in your life and add it to your hand. If you do so, choose up to 1 of your opponent's Battle Cards, switch it to Rest Mode, and this card gains +10000 power for the duration of the turn."), card_type="BATTLE", card_number="TB2-061"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_036_hyperspeed_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, you may choose up to 2 cards from your life and add them to your hand. If you chose to add 1 or more cards to your hand, this card gets +15000 power and [Critical] for the duration of the turn."), card_type="BATTLE", card_number="TB3-036"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_058_nail_pride_of_namek_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Burst 2] At the end of a battle in which you combo with this card from your hand, if your Leader Card is a ≪Namekian≫ card, play this card in Rest Mode.\n[Activate: Main] Choose 1 other ≪Namekian≫ card in your Battle Area: Place this card under the chosen Battle Card, and that card gets +5000 power for the duration of the turn."), card_type="BATTLE", card_number="TB3-058"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_011_heroic_duo_videl_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, and play this card. ([Counter] is activated from your hand by paying the card's energy cost)\n[Permanent] If {Heroic Duo Son Gohan} is in play in your Battle Area, this card gains +9000 power."), card_type="BATTLE", card_number="TB2-011"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p276_son_goku_vegeta_saiyan_synergy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Counter: Attack] Negate the attack, then play this card in Rest Mode.\n[Auto] If your Leader Card is blue and you place this card in Rest Mode at the bottom of its owner's deck: When your opponent attacks a Leader Card, choose up to 1 of your Leader Cards and it gets +5000 power for the turn."), card_type="BATTLE", card_number="P-276"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_leader_attacked" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_048_janemba_enchanted_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Activate: Main](Blue)(Blue), place this card in its owner's Drop Area: Play up to 1 skill-less ≪Evil Incarnate≫ card with an energy cost of 3 or less from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT12-048"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_039_destined_conclusion_piccolo_jr_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Auto] When this card attacks, choose up to 1 each of your and your opponent's Battle Cards and KO them. If you KO-ed {Destined Conclusion Hero} as your Battle Card, for the duration of the turn this card gains +10000 power and [Triple Strike]."), card_type="BATTLE", card_number="TB2-039"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_058_maiden_squadron_kakunsa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Permanent] If <Ribrianne> and <Rozie> are in play in your Battle Area, this card gains [Dual Attack]."), card_type="BATTLE", card_number="TB1-058"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_026_burnished_bonds_fasha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Critical]\n[Permanent] If a ≪Bardock's Crew≫ card is in your Drop Area, reduce the energy cost of this card in your hand by 1.\n[Activate: Main] Place this card in its owner's Drop Area: Choose up to 1 ≪Bardock's Crew≫ card in your Battle Area and switch it to Active Mode."), card_type="BATTLE", card_number="TB3-026"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_065_trio_de_dangers_mark_of_the_wolves_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Union] (Yellow), if your Leader Card is yellow and all cards in your energy are yellow: When this card is played, choose up to 1 yellow <Basil> card and up to 1 yellow <Lavender> card with energy costs of 2 or less from your deck or Drop Area, and play them, then shuffle your deck if you looked through it."), card_type="BATTLE", card_number="BT9-065"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_033_great_saiyaman_punisher_of_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Deflect][Barrier][Blocker][Revenge]\n[Auto][Once per turn] When this card KOs an opponent's Battle Card, switch this card and up to 1 of your mono-blue energy to Active Mode."), card_type="BATTLE", card_number="BT12-033"))
+    assert any(rule.trigger == "owner_battle_ko_opponent_battle_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_086_ironclad_defense_frost_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Blocker] (When one of your other cards is attacked, you may switch this card to Rest Mode and change the target of the attack to this card.)\n[Auto] During your turn, at the end of a battle after you combo with this card, choose up to 1 yellow <Frost> card in your Battle Area and play this card on top of it, then switch this card to Active Mode."), card_type="BATTLE", card_number="BT7-086"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_093_cyborg_warrior_nigrisshi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] Choose 1 of your opponent's Battle Cards with an energy cost of 4 or less and switch it to Rest Mode."), card_type="BATTLE", card_number="TB1-093"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_066_hermilla_the_sniper_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main] [Once per turn] If <Prum> is in play in your Battle Area, choose 1 of your opponent's Battle Cards with an energy cost of 5 or less and KO it."), card_type="BATTLE", card_number="TB1-066"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_144_mechikabura_the_kings_summons_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Activate: Main]②, if your Leader Card is a black ≪Demon Realm Race≫ card and you place this card from your hand and 1 card from your life in your Drop Area: Send 1 Battle Card from your opponent's Drop Area to their Warp, play up to 2 black Battle Cards with ≪Evil Wizard≫ and/or ≪Demon Realm Race≫ with energy costs of 2 and different character names that aren't <Mechikabura> cards from your deck, then shuffle your deck. You can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="EXTRA", card_number="BT12-144"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_097_bulma_sending_out_an_sos_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a <Whis> card and it's your opponent's turn: When this card is used in a combo, combo with up to 1 yellow skill-less Battle Card with an energy cost of 2 and 15000 power from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT12-097"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_014_pilaf_the_gangs_all_here_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] If your Leader Card is a red ≪Earthling≫-only card: At the end of a turn where this card was played from your hand, play up to 2 red skill-less Battle Cards with energy costs of 1 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="BT12-014"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_009_secret_treaty_android_18_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is switched from Active Mode to Rest Mode with {Secret Treaty Hercule}'s skill, draw 1 card."), card_type="BATTLE", card_number="TB2-009"))
+    assert any(rule.trigger == "self_switched_to_rest_by_owner_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_020_universe_6_combination_botamo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you combo with this card, choose all ≪Universe 6≫ in your Battle Area. They gain +5000 power for the duration of the turn."), card_type="BATTLE", card_number="TB1-020"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_004_universe_7_saiyan_prince_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card from your hand, if your Leader Card is red, choose up to 1 of your other ≪Saiyan≫ Battle Cards in play which are ≪Universe 7≫ or ≪Universe 6≫ and switch it to Active Mode. Both that card and this card gain +10000 power and [Triple Strike] for the duration of the turn."), card_type="BATTLE", card_number="TB1-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_019_frost_the_tactician_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 <Frost> with 20000 or less power from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="TB1-019"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_007_surprise_attack_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 <Majin Buu> with 25000 or less power from your deck and add it to your hand. Then, shuffle your deck."), card_type="BATTLE", card_number="TB1-007"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_015_tainted_power_spopovich_yamu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 card in your Battle Area and place up to 5 cards from the top of your deck under the chosen card."), card_type="BATTLE", card_number="TB2-015"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_062_risque_ranfan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less, switch it to Rest Mode, and this card gains +5000 power for the duration of the turn."), card_type="BATTLE", card_number="TB2-062"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_014_strategic_mind_kikono_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 of your opponent's Leader Cards, and it gets -5000 power for the duration of the turn, and you can't play {Strategic Mind Kikono} for the duration of the turn."), card_type="BATTLE", card_number="TB3-014"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_040_universe_9_striker_comfrey_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, choose up to 1 ≪Universe 9≫ in your hand with an energy cost less than or equal to your total energy and play it."), card_type="BATTLE", card_number="TB1-040"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_080_ally_of_justice_toppo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When you play this card, if your Leader Card is ≪Universe 11≫, look at up to 10 cards from the top of your deck, choose up to 2 ≪Universe 11≫ with energy costs of 3 or less from among them, and play them in Rest Mode. Then, shuffle your deck."), card_type="BATTLE", card_number="TB1-080"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_098_beerus_in_awe_of_the_golden_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto](Yellow), if your Leader Card is a <Whis> card and it's your turn: When this card is used in a combo, choose up to 2 of your yellow skill-less Battle Cards with 15000 power, switch them to Active Mode, and they get +5000 power for the turn; you can't activate the [Auto] skill on copies of this card for the turn."), card_type="BATTLE", card_number="BT12-098"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd15_02_ss_cabba_spirit_resonance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto][Limit 1] (You can only activate this skill once per turn across all copies of this card.) When this card is placed in your Drop Area from your Unison Area, choose up to 1 of your mono-red Leader Cards and it gets +5000 power for the turn.\n[+1][Activate: Main] Choose up to 1 of your opponent's Battle Cards or Unison Cards and it gets -10000 power for the turn.\n[-6][Auto] If your opponent's life is at 3 or more: When your mono-red ≪Saiyan≫ Leader Card is attacked, deal 1 damage to your opponent."), card_type="UNISON", card_number="SD15-02"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_leader_attacked" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_014_ss_broly_unlimited_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Critical][Double Strike]\n[Auto] If your Leader Card is red: When this card is played, choose up to 1 of your red Unison Cards, add 2 markers to it, then choose up to 3 cards in your opponent's hand and send them to their Warp. At the end of your opponent's next turn, they add all cards sent to their Warp by this skill from their Warp to their hand."), card_type="BATTLE", card_number="BT11-014"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_019_uub_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card attacks a Leader Card, draw 1 card.\n[Awaken] When your life is at 4 or less ：You may choose up to 2 of your energy, switch them to Active Mode, and flip this card over."), card_type="LEADER", card_number="TB2-019"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt11_016_broly_power_of_the_great_ape_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Swap 5](Red): Mono-red <Broly: Br> with an energy cost of 5.\n[Servant] (This card gets +10000 power and can't be switched to Active Mode during your Charge Phase.)\n[Auto] If your Leader Card is red: When this card is played, choose up to 1 of your red Unison Cards, add a marker to it, then your opponent chooses 1 card in their hand and sends it to their Warp. At the end of your opponent's next turn, they add the card sent to their Warp by this skill from their Warp to their hand."), card_type="BATTLE", card_number="BT11-016"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_023_piano_reign_of_terror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Auto][Once per turn] If your Leader Card is a red <King Piccolo> card: When a card is placed in your life face up from any area other than your life, draw 1 card.\n[Auto] If your Leader Card is a red <King Piccolo> card and you flip 1 face-up card in your life face down: When this card is placed in your Drop Area from your Battle Area by an opponent's skill, play this card from your Drop Area with its skills negated for the turn."), card_type="BATTLE", card_number="BT12-023"))
+    assert any(rule.trigger == "owner_life_card_flipped_face_up" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_129_ss3_son_gohan_marvelous_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique]\n[Permanent] If your Leader Card is a black ≪Saiyan≫ card, you have 3 or more energy, and there are 15 or more cards in your Drop Area, this card gets +11000 power and [Double Strike] during your turn."), card_type="BATTLE", card_number="BT12-129"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_138_gravy_the_dark_sorcerer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Auto] If your Leader Card is blue: When your energy or your opponent's energy leaves an Energy Area due to a skill, you may play this card from your hand.\n[Auto] When this card is removed from your Battle Area by an opponent's skill or KO'd, switch up to 1 of your energy to Active Mode."), card_type="BATTLE", card_number="BT10-138"))
+    assert any(rule.trigger == "owner_energy_left_energy_area_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_energy_left_energy_area_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_072_son_gohan_rageful_flurry_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Auto] When one of your green Battle Cards is KO'd by an opponent's skill, you may play this card from your hand. If you do, this card gets +10000 power for the turn."), card_type="BATTLE", card_number="BT15-072"))
+    assert any(rule.trigger == "owner_other_battle_koed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_011_bulma_the_bunny_girl_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Auto] When one of your red ≪Earthling≫ cards other than a <Bulma> card is removed from a Battle Area by an opponent's skill, you may play this card from your hand. If you do, play up to 1 red ≪Earthling≫-only Battle Card with an energy cost of 4 or less from your Drop Area."), card_type="BATTLE", card_number="BT10-011"))
+    assert any(rule.trigger == "owner_other_battle_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt21_042_ss3_son_goku_warrior_savior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Auto][Limit 1] If your Leader is a blue <Uub>: When one of your blue <Uub> cards with an energy cost of 6 or more is removed from your Battle Area by a skill, play this card from your hand.\n[Auto][Once per turn] When this card activates [Blocker], switch this card to Active Mode."), card_type="BATTLE", card_number="BT21-042"))
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_08_lord_slug_the_shadow_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Auto]①, if your Leader Card is a black ≪Demon Realm Race≫ card: When this card is removed from your Battle Area by an opponent's skill or KO'd, play up to 1 <Lord Slug: Xeno> card with an energy cost of 9 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="EX16-08"))
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt15_074_vegeta_preparing_to_invade_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Permanent] If a green [Field] Extra Card is in your Battle Area, you can play this card from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT15-074"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt18_098_great_ape_tora_saiyan_potential_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Permanent] If this card is in Rest Mode, your opponent can't attack your Leader with Battle Cards.\n[Auto][Limit 1](1), if your Leader is a ≪Bardock's Crew≫ card with its back facing up: At the end of a battle where this card was used in a combo from your hand, play this card from your Drop.\n[Auto][Once per turn] If it's your turn: When this card is switched to Rest Mode by one of your skills, switch it to Active Mode."), card_type="BATTLE", card_number="BT18-098"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_switched_to_rest_by_owner_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_067_son_gohan_potential_unlocked_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Permanent] If your Leader Card is green and you have a green Unison Card with a specified cost of 2 in play, you can play this card from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT10-067"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex15_01_gogeta_time_for_payback_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker]\n[Union-Fusion] Draw 1 card: Red <Son Goku: Br> and red <Vegeta: Br>.\n[Activate: Main](Red)(Red)(Red): If your Leader Card is a red <Gogeta: Br> card and you have 4 or more energy: Choose up to 1 mono-red <Gogeta: Br> card with an energy cost of 8 or less from your deck or hand, play it on top of this card, then shuffle your deck if you looked through it. You can't activate the [Activate: Main] skill on copies of this card for the turn."), card_type="BATTLE", card_number="EX15-01"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_010_master_roshi_ready_for_anything_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Blocker][Revenge]\n[Auto](Red), if your Leader Card is a red ≪Earthling≫-only card: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life."), card_type="BATTLE", card_number="BT12-010"))
+    assert any(rule.trigger == "owner_life_card_flipped_face_up" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_006_son_goku_ready_for_anything_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Critical]\n[Auto](Red), if your Leader Card is a red ≪Earthling≫-only card and you have 2 or more red energy: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life."), card_type="BATTLE", card_number="BT12-006"))
+    assert any(rule.trigger == "owner_life_card_flipped_face_up" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_080_ss_gotenks_friendship_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Critical]\n[Union-Fusion](Green): Green <Son Goten> and green <Trunks: Youth>.\n[Permanent] If this card would be removed from your Battle Area by an opponent's skill, you may choose 1 card in your hand and discard it instead."), card_type="BATTLE", card_number="BT11-080"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt18_025_rage_shenron_impenetrable_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Critical][Blocker]\n[Counter: Attack][Limit 1] Negate the attack and play this card.\n[Permanent] If your Leader is a red <Syn Shenron> Z-Leader, you can activate this card's [Counter] skill from your hand without paying its energy cost."), card_type="BATTLE", card_number="BT18-025"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_009_tien_shinhan_ready_for_anything_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Double Strike]\n[Auto](Red), if your Leader Card is a red ≪Earthling≫-only card and you have 2 or more red energy: When this card in your life is flipped face up by one of your red card skills, you may place the top card of your deck in your life, then play this face-up card from your life. If you didn't play a card, place this face-up card in your Drop Area from your life."), card_type="BATTLE", card_number="BT12-009"))
+    assert any(rule.trigger == "owner_life_card_flipped_face_up" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_081_son_gohan_hire_dragon_peacekeepers_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Double Strike]\n[EX-Evolve](Yellow): Yellow <Son Gohan: Youth> or <Hire-Dragon> with an energy cost of 2 or less.\n[Permanent] If this card would be removed from a Battle Area, it's sent to its owner's Warp instead."), card_type="BATTLE", card_number="DB3-081"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt24_010_ss_son_goku_end_of_a_clahs_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Double Strike][Barrier]\n[Auto] If your Leader is a red <Vegeta> or <Bulma> card: When your {SSG Son Goku, Crimson Guardian Deity}'s markers become 0 from a battle, play this card from your hand.\n[Auto] If your Leader is a red <Vegeta> or <Bulma> card and you have 4 or more energy: When your {Son Goku, Dawn of Divinity} is removed from your Battle Area by your opponent's skill or KO'd, play this card from your hand."), card_type="BATTLE", card_number="BT24-010"))
+    assert any(rule.trigger == "owner_card_markers_became_zero_from_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p416_great_ape_son_gohan_unstoppable_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Double Strike][Blocker]\n[Auto](Yellow), if your Leader is a ≪Great Ape≫ <Son Gohan: Youth> card and you have 2 or more energy: When a yellow [Field] Extra is placed in your Battle Area, add up to 1 card from your life to your hand, then play this card from your hand.\n[Auto] When this card is removed from your Battle Area by an opponent's skill, play up to 1 yellow <Son Gohan: Youth> card with an energy cost of 1 from your deck, then shuffle your deck."), card_type="BATTLE", card_number="P-416"))
+    assert any(rule.trigger == "owner_other_extra_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_card_removed_from_battle_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt20_032_ssb_vegeta_beyond_full_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Unique][Dual Attack]\n[Permanent] While your Leader is a ≪Universe 7≫ card and you have 3 or more energy, reduce the energy cost of this card in your hand by 1.\n[Auto][Limit 1] If your Leader is a red <Warriors of Universe 7> card and you place this card from your Combo Area in its owner's Drop: When you use [Arrival] to play a Red/Blue multicolor Battle Card, draw 1 card.\n[Auto][Once per turn] When this card attacks, choose up to 1 of your opponent's Battle Cards and place it at the bottom of its owner's deck."), card_type="BATTLE", card_number="BT20-032"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_arrival_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex01_05_unified_spirit_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX01-05"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex01_06_unified_spirit_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX01-06"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex07_10_ss_caulifla_the_hellion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX07-10"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_09_determined_time_leaper_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX03-09"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_24_frieza_malicious_streak_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-24"))
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_03_almighty_technique_vados_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_22_bardock_the_enlightened_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-22"))
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_ex06_01_trunks_surge_of_energy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-01"))
+    assert any(rule.trigger == "self_power_increased_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex05_02_boujack_pirates_pride_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX05-02"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex12_03_belmod_the_self_indulgent_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX12-03"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_047_the_ultimate_evil_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT3-047"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_13_fused_zamasu_fusion_refined_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-13"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p048_dimension_control_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-048"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_22_elite_bloodline_cooler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX03-22"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_035_trio_de_dangers_bergamo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-035"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacked" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd12_04_ssb_vegeta_heroic_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD12-04"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_ex03_03_virtuous_strength_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX03-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_20_indomitable_ss_son_goku_jr_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX03-20"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd8_07_son_goku_time_to_fight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD8-07"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd3_04_encroaching_threat_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD3-04"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_ex06_10_trunks_hope_renewed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-10"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_007_harmonic_energy_ssb_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-007"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex07_03_whis_godly_fundamentals_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX07-03"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex07_02_vegeta_preparing_for_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX07-02"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex10_02_master_roshi_kamehameha_origins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX10-02"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex07_11_demigra_demonic_overlord_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX07-11"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_25_violent_rush_zangya_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-25"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex10_01_heavy_kick_krillin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX10-01"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_15_son_goku_in_close_quarters_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-15"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd1_04_sisterly_bonds_kale_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD1-04"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd1_05_hit_ace_of_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD1-05"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex09_02_vegeta_time_for_vacation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX09-02"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_33_mira_self_reformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-33"))
+    assert any(rule.trigger == "union_absorb" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_140_secret_identity_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-140"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_30_bardock_awakened_instincts_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-30"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_34_masked_saiyan_beguiled_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-34"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_017_razors_edge_yakon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex14_03_ginyu_force_the_showstoppers_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX14-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_deals_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_004_evolutionary_process_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB3-004"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_35_fu_the_dark_banisher_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-35"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
