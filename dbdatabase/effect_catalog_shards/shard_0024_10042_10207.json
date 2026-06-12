@@ -1,8 +1,401 @@
 {
-  "card_rule_count": 40,
+  "card_rule_count": 71,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 63,
+  "effect_rule_count": 119,
   "rules": {
+    "10042": [
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate Main][Once per turn] Add 1 card from your hand to your Z-Energy: Add up to 1 card from your life to your hand, look at up to 5 cards from the top of your deck, add up to 1 green \u00abEarthling\u00bb card to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_awakens:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Awaken] When your life is at 6 or less: Switch up to 1 of your energy to Active Mode.",
+        "trigger": "self_awakens"
+      }
+    ],
+    "10043": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate main][once per turn] add 1 card from your hand to your z-energy: draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10044": [
+      {
+        "family_id": "owner_leader_attacks:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 5,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Demon Realm"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, look at up to 5 cards from the top of your deck, add up to 1 yellow \u226ademon realm\u226b card to your hand, then shuffle your deck.",
+        "trigger": "owner_leader_attacks"
+      }
+    ],
+    "10045": [
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[+2][Activate Main] Place 1 card from your hand at the bottom of your deck: Play up to 1 yellow Battle Card with an energy cost of 1 and 5000 combo power from your deck or Drop in Rest Mode with its skills negated or the turn, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[-7][Activate Main] Choose up to 2 of your opponent's Battle Cards, ignoring [Barrier], negate their skills for the turn, and KO them.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10046": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] When this card is played, switch it to Active Mode.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Auto][Once per turn] When this card attacks, choose up to 2 of your opponent's Battle Cards, ignoring [Barrier], negate their skills for the turn, and KO them.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "10047": [
+      {
+        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+        "handler_params": {
+          "max_cost": -1,
+          "max_targets": 1,
+          "rest_mode_only": true,
+          "target_policy": "first"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card attacks, choose up to 1 of your opponent's rest mode battle cards and ko it.",
+        "trigger": "self_attacks"
+      }
+    ],
+    "10048": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] When this card is played, choose up to 1 of your opponent's Battle Cards or Unisons and switch it to Rest Mode.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "owner_battle_played_with_evolve:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Auto][Limit 1] When your \u00abDemon Realm\u00bb card with [Evolve] is played on top of this card, draw 1 card.",
+        "trigger": "owner_battle_played_with_evolve"
+      }
+    ],
+    "10049": [
+      {
+        "family_id": "self_comboed:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_self_gain_combo_power_on_combo",
+        "handler_id": "auto_self_gain_combo_power_on_combo",
+        "handler_params": {
+          "combo_power_delta": 10000,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      },
+      {
+        "family_id": "self_comboed:auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_id": "auto_optional_bottom_deck_n_from_owner_hand_draw_n_on_combo",
+        "handler_params": {
+          "amount": 2,
+          "bottom_deck_from_hand": 1,
+          "max_owner_life": 4,
+          "requires_leader": "if your leader is yellow, your life is at 4 or less, and all of your energy is yellow"
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] if your leader is yellow, your life is at 4 or less, and all of your energy is yellow: when this card is used in a combo, it gets +10000 combo power for the battle. additionally, you may place 1 card from your hand at the bottom of your deck. if you do, draw 2 cards.",
+        "trigger": "self_comboed"
+      }
+    ],
+    "10050": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] When this card is played, switch it to Active Mode, choose up to 1 of your opponnt's Battle Cards, ignoring [Barrier], and negate its skills until the end of your opponent's turn.",
+        "trigger": "self_played"
+      }
+    ],
+    "10051": [
+      {
+        "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_id": "auto_look_top_add_up_to_one_to_hand_on_play",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "look_count": 3,
+          "max_add": 1,
+          "max_cost": -1,
+          "required_traits": "Demon Realm"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, look at up to 3 cards from the top of your deck, add up to 1 yellow \u226ademon realm\u226b card to your hand, then place the remaining cards at the bottom of their owner's deck in any order.",
+        "trigger": "self_played"
+      }
+    ],
+    "10052": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] When this card is played, switch it to Active Mode, then choose up to 1 of your opponent's Battle Cards or Unisons, ignoring [Barrier], and switch it to Rest Mode.",
+        "trigger": "self_played"
+      }
+    ],
+    "10053": [
+      {
+        "family_id": "self_played:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is played, draw 1 card.",
+        "trigger": "self_played"
+      }
+    ],
+    "10054": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[blocker]",
+        "trigger": "self_played"
+      }
+    ],
+    "10055": [
+      {
+        "family_id": "counter_attack:counter_negate_attack_play_self",
+        "handler_id": "counter_negate_attack_play_self",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Counter Attack][Limit 1] Negate the attack and play this card.",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] If it's your opponent's turn: When this card is played, during this turn, the next time you activate an [Evolve] skill on a <Majin Kuu: DA> card from your hand, reduce the skill cost by {y}.",
+        "trigger": "self_played"
+      }
+    ],
+    "10056": [
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main][Burst 3] Add 1 card from your hand to your Z-Energy: Look at up to 5 cards from the top of your deck, add up to 1 black \u00abUniverse 7\u00bb card to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_awakens:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Awaken] If you have a total of 5 or more black \u00abUniverse 7\u00bb cards in your Z-Energy and/or Drop: Draw 2 cards and add cards from your life to your hand until you have 6 life left.",
+        "trigger": "self_awakens"
+      }
+    ],
+    "10057": [
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 2
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate main][once per turn] send the top 2 cards of your deck to your warp, then discard 1 \u226amaiden squadron\u226b card from your hand: draw 2 cards.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10058": [
+      {
+        "family_id": "self_placed_in_leader_area:auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_id": "auto_activate_up_to_n_named_field_extra_from_owner_deck_on_leader_placed",
+        "handler_params": {
+          "max_targets": 1,
+          "required_card_type": "EXTRA",
+          "required_name_contains": "SERPENT ROAD",
+          "requires_field_keyword": true
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[auto] when this card is placed in your leader area, activate up to 1 {serpent road} from your deck.",
+        "trigger": "self_placed_in_leader_area"
+      },
+      {
+        "family_id": "self_activate_main:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[activate main][once per turn] switch 1 of your white energy to hidden mode, then place 1 white \u226aking kai's planet\u226b card from your hand under {serpent road} in your battle area: draw 1 card.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10059": [
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main][Once per turn] Add 1 card from your life to your hand: Look at up to 5 cards from the top of your deck, add up to 1 white \u00abSaiyan\u00bb card to your hand, then shuffle your deck.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_awakens:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Awaken] When your life is at 5 or less: Draw 1 card, then switch up to 1 of your energy to Active Mode.",
+        "trigger": "self_awakens"
+      }
+    ],
     "10091": [
       {
         "family_id": "self_activate_main:activate_opponent_discards_n_from_hand",
@@ -311,6 +704,30 @@
         "trigger": "self_comboed"
       }
     ],
+    "10161": [
+      {
+        "family_id": "counter_attack:counter_negate_attack_play_self",
+        "handler_id": "counter_negate_attack_play_self",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Counter: Attack] [Limit 1] Negate the attack and play this card.",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main] [Limit 1] If your Leader is a green <Son Gohan: Adolescence> card: Increase the energy cost of this card in your Z-Energy by 2 for the turn.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "10162": [
       {
         "family_id": "self_played:noop_auto",
@@ -508,6 +925,30 @@
         "trigger": "self_activate_main"
       }
     ],
+    "10170": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] Choose 1 {Support Broadcast} in your Battle Area and switch it to Rest Mode: When this card is played, add up to 1 black \u00abMaiden Squadron\u00bb card with an energy cost of 2 from your Drop or Warp to your hand.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] Place 2 \u00abMaiden Squadron\u00bb cards from your Warp at the bottom of your deck: When this card attacks, choose up to 1 of your opponent's Battle Cards and send it to its owner's Warp.",
+        "trigger": "self_attacks"
+      }
+    ],
     "10171": [
       {
         "family_id": "self_played:auto_draw_n",
@@ -556,6 +997,30 @@
         "trigger": "self_activate_main"
       }
     ],
+    "10173": [
+      {
+        "family_id": "self_discarded_or_dropped_by_owner_skill:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Auto] [Limit 1] When this card in your hand is discarded by one of your skills, draw 1 card, discard 1 card from your hand, then choose up to 1 of your red Z-Unisons with 5000 power and add 2 markers to it.",
+        "trigger": "self_discarded_or_dropped_by_owner_skill"
+      },
+      {
+        "family_id": "self_activate_battle:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Battle] [Limit 1] If your Leader is a red <Son Goku: GT> card: Activate up to 1 [Activate: Battle] skill on a red Extra with an energy cost of 1 from your hand by paying its skill cost, and the next time you activate a red Extra from your hand during this turn, reduce the energy cost by {r}.",
+        "trigger": "self_activate_battle"
+      }
+    ],
     "10174": [
       {
         "family_id": "self_activate_battle:auto_draw_n",
@@ -587,6 +1052,41 @@
         "provenance": "extractor",
         "source_text": "[activate: battle] [limit 1] look at up to 5 cards from the top of your deck, place any number of mono-red extras into your drop, shuffle your deck, draw 1 card, then choose up to 1 of your red cards and it gets +10000 power for the battle.",
         "trigger": "self_activate_battle"
+      }
+    ],
+    "10175": [
+      {
+        "family_id": "self_attacks:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Auto] [Once per turn] When this card attacked, play 1 Saibaiman Token, and it gains [Barrier] and [Blocker] for the turn.",
+        "trigger": "self_attacks"
+      },
+      {
+        "family_id": "owner_card_removed_from_battle_by_skill:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Auto] [Once per turn] When one of your cards is removed from a Battle Area by a skill, this card gets +10000 power for the turn.",
+        "trigger": "owner_card_removed_from_battle_by_skill"
+      },
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main] If your Leader is a <Nappa> card: Add up to 2 cards from your life to your hand, then play up to 1 <Saibaiman> card from your Z-Deck.",
+        "trigger": "self_activate_main"
       }
     ],
     "10176": [
@@ -695,6 +1195,19 @@
         "trigger": "self_activate_main"
       }
     ],
+    "10181": [
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main] [Limit 1] {y}, if all of your energy is mono-yellow, you choose 1 {Big Gete Star} in your Battle Area, and place it under this card: Play up to 1 {The Infinite Force Meta-Cooler Core} from your hand on top of this card.",
+        "trigger": "self_activate_main"
+      }
+    ],
     "10182": [
       {
         "family_id": "self_played:auto_look_top_add_up_to_one_to_hand_on_play",
@@ -756,6 +1269,49 @@
         "provenance": "extractor",
         "source_text": "[activate: main] [limit 1] {y}, if you have 2 or more energy: draw 1 card and play this card from your hand.",
         "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] If your Leader's back side is {SS Son Goku, Fearless Fighter}: When this card is played, during this turn, when you would play a Unison with [Empower] from your hand, reduce the specified cost by {Yellow}.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_main:activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end",
+        "handler_id": "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end",
+        "handler_params": {
+          "amount": 1,
+          "leader_allowed_colors": "yellow",
+          "leader_required_name_contains": "FEARLESS FIGHTER",
+          "min_owner_energy": 2
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main] [Limit 1] {Yellow}, if you have 2 or more energy: Draw 1 card and play this card from your hand.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_battle:activate_gain_power_and_keyword_for_battle",
+        "handler_id": "activate_gain_power_and_keyword_for_battle",
+        "handler_params": {
+          "allowed_colors": "yellow",
+          "max_targets": 1,
+          "power_delta": 15000,
+          "target_scope": "owner_unison"
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Battle] [Once per turn] Choose up to 1 of your yellow Unisons and it gets +15000 power for the battle.",
+        "trigger": "self_activate_battle"
       }
     ],
     "10184": [
@@ -783,6 +1339,78 @@
         "provenance": "extractor",
         "source_text": "[activate: main] [limit 1] {y}, choose 2 of your <meta-cooler> cards and place them into their owner's drop: play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "10185": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] If your Leader is a black <Majin Buu> or <Evil Wizard Bibidi> card and you place all cards from your hand under this card: When this card is placed in a Battle Area, play up to 1 black <Majin Buu> card with an energy cost of 2 from your Drop, and it gains [Barrier] for the turn.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "turn_end:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] At the end of your turn, add up to 5 cards from under this card to your hand, then remove this card from the game.",
+        "trigger": "turn_end"
+      }
+    ],
+    "10186": [
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main] [Limit 1] [Burst 3] {b}, discard 1 card from your hand: Play this card from your Drop. Additionally, if you have 0 cards in your hand, play up to 1 black <Majin Buu> card with an energy cost of 6 from your Drop on top of this card.",
+        "trigger": "self_activate_main"
+      },
+      {
+        "family_id": "self_activate_main:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Main] [Limit 1] If your Leader is a black <Majin Buu> card: Add this card from under a Z-Extra in a Battle Area to your hand.",
+        "trigger": "self_activate_main"
+      }
+    ],
+    "10187": [
+      {
+        "family_id": "counter_attack:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Counter: Attack] [Limit 1] If your Leader is a black <Vegito: Xeno> card: Play this card.",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] {b}, place 1 <Vegeta: Xeno> card from under your Unison under this card: When this card is played, play up to 1 <Vegito: Xeno> card with an energy cost of 6 from your Warp on top of this card.",
+        "trigger": "self_played"
       }
     ],
     "10188": [
@@ -953,6 +1581,32 @@
         "trigger": "self_comboed"
       }
     ],
+    "10197": [
+      {
+        "family_id": "counter_attack:auto_draw_n",
+        "handler_id": "auto_draw_n",
+        "handler_params": {
+          "amount": 1
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Counter: Attack] [Limit 1] Draw 1 card, play this card, then use up to 2 black \u00abUniverse 7\u00bb cards from your Drop in a combo with their skills negated for the turn.",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "counter_attack:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Counter: Attack] [Limit 1] Draw 1 card, play this card, then use up to 2 black \u00abUniverse 7\u00bb cards from your Drop in a combo with their skills negated for the turn.",
+        "trigger": "counter_attack"
+      }
+    ],
     "10198": [
       {
         "family_id": "self_activate_main:activate_send_up_to_n_opponent_battle_to_warp",
@@ -970,6 +1624,30 @@
         "provenance": "extractor",
         "source_text": "[activate: main] [limit 1] {1}, if your leader is black or includes \u226auniverse\u226b in its special traits and your opponent has 2 or more energy: choose up to 1 of your opponent's battle cards with an energy cost of 4 or less ignoring [barrier], send it to its owner's warp, then play this card from your hand.",
         "trigger": "self_activate_main"
+      }
+    ],
+    "10199": [
+      {
+        "family_id": "counter_attack:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Counter: Attack] Discard 1 card from your hand: Negate the attack, play this card, then play up to 1 black \u00abMaiden Squadron\u00bb card with an energy cost of 2 from your Warp in Rest Mode.",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "counter_activated:counter_play_self_from_counter_counter",
+        "handler_id": "counter_play_self_from_counter_counter",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Counter: Counter] If your liife is at 2 or less and your \u00abUniverse 2\u00bb card is in a battle: Play this card, switch your card that's in a battle with this card, then play up to 1 black \u00abMaiden Squadron\u00bb card from your Warp on top ofthis card in Active Mode.",
+        "trigger": "counter_activated"
       }
     ],
     "10200": [
@@ -1011,7 +1689,6 @@
           "look_count": 5,
           "max_add": 2,
           "max_cost": -1,
-          "required_characters": "Add Up To 1",
           "required_traits": "Universe 2",
           "shuffle_deck_after": true
         },
@@ -1021,6 +1698,30 @@
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] when this card is played, look at up to 5 cards from the top of your deck, choose up to 2 \u226auniverse 2\u226b cards, add up to 1 card to your hand, send up to 1 card to your warp, then shuffle your deck.",
         "trigger": "self_played"
+      }
+    ],
+    "10203": [
+      {
+        "family_id": "self_played:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Auto] [Limit 1] When this card is played, choose up to 1 of your black \u00abMaiden Squadron\u00bb Battle Cards and switch it to Active Mode.",
+        "trigger": "self_played"
+      },
+      {
+        "family_id": "self_activate_battle:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": true,
+        "provenance": "extractor",
+        "source_text": "[Activate: Battle] [Once per turn] Place 2 \u00abMaiden Squadron\u00bb cards from your Warp at the bottom of your deck: Use up to 1 card from under your \u00abMaiden Squadron\u00bb card in a combo with its skills negated for the turn.",
+        "trigger": "self_activate_battle"
       }
     ],
     "10204": [
@@ -1049,7 +1750,6 @@
           "look_count": 5,
           "max_add": 2,
           "max_cost": -1,
-          "required_characters": "Add Up To 1",
           "required_traits": "Universe 2",
           "shuffle_deck_after": true
         },
@@ -1059,6 +1759,43 @@
         "provenance": "extractor",
         "source_text": "[auto] [limit 1] when this card is played, look at up to 5 cards from the top of your deck, choose up to 2 \u226auniverse 2\u226b cards, add up to 1 card to your hand, send up to 1 card to your warp, then shuffle your deck.",
         "trigger": "self_played"
+      }
+    ],
+    "10206": [
+      {
+        "family_id": "self_activate_battle:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Activate: Battle] Use up to 2 \u00abUniverse 7\u00bb cards from your Drop in a combo with their skills negated for the turn, then your black \u00abUniverse 7\u00bb Leader gains [Double Strike] for the battle.",
+        "trigger": "self_activate_battle"
+      }
+    ],
+    "10207": [
+      {
+        "family_id": "counter_attack:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Counter: Attack] Negate the attack, and during this turn, the next time you activate the [Activate: Main/Battle] skill on {Support Broadcast} in your Battle Area, reduce the skill cost by {1}.",
+        "trigger": "counter_attack"
+      },
+      {
+        "family_id": "owner_card_milled_or_warped_by_skill:noop_auto",
+        "handler_id": "noop_auto",
+        "handler_params": {},
+        "limit_per_turn": null,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[Auto] When this card is sent from your deck to your Warp by your <Heles> card's skill, look at up to 1 card from the top of your deck, play up to 1 black \u00abMaiden Squadron\u00bb card, then send the rest to their owner's Warp.",
+        "trigger": "owner_card_milled_or_warped_by_skill"
       }
     ]
   },

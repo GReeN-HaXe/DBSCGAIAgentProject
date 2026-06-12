@@ -131,6 +131,42 @@ def test_extract_foreseeing_hit_can_warp_opponent_hand_battles_and_return_them_n
     assert delayed_rule.handler_params["requires_played_from"] == "hand"
 
 
+def test_extract_exact_p_688_energy_reactor_destroyed_rules() -> None:
+    card = replace(
+        _card(
+            "[Z-Stack 2] If your Leader is {Warriors of Universe 7, United as One}: Red ≪Universe 7≫ Battle Card."
+            "<br>[Auto]{u}, place 1 of your Z-Energy into its owner's Drop: At the start of your or your opponent's Main Phase, play up to 1 ≪Universe 7≫ card with an energy cost of 3 or less from under this card, then at the end  of the turn, place the played card under this card."
+            "<br>[Activate: Battle] Remove this card from the game: Add up to 1 Red/Blue multicolor Extra from your Drop to your hand."
+        ),
+        card_number="P-688",
+        card_type="Z-EXTRA",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(
+        r.trigger == "owner_main_phase_start"
+        and r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card"
+        and r.handler_params.get("max_targets") == 1
+        and r.handler_params.get("required_traits") == "Universe 7"
+        and r.handler_params.get("max_cost") == 3
+        and r.handler_params.get("auto_cost_header") == "(u)"
+        and r.handler_params.get("auto_z_energy_to_drop_before") == 1
+        for r in rules
+    )
+    assert any(
+        r.trigger == "owner_opponent_main_phase_start"
+        and r.handler_id == "auto_play_up_to_n_from_under_self_and_place_self_under_played_card"
+        for r in rules
+    )
+    assert any(
+        r.trigger == "self_activate_battle"
+        and r.handler_id == "activate_remove_self_from_game_then_add_up_to_n_from_owner_drop_to_hand"
+        and r.handler_params.get("allowed_colors") == "red,blue"
+        and r.handler_params.get("requires_multicolor") is True
+        and r.handler_params.get("required_card_type") == "EXTRA"
+        for r in rules
+    )
+
+
 def test_extract_ss_broly_unchained_might_can_warp_opponent_hand_battle_and_return_it_next_opponent_turn() -> None:
     card = _card(
         "[Barrier] [Auto] If you have 2 or more energy and all of your opponent's energy is in Rest Mode: When this card is played, "
@@ -10641,6 +10677,91 @@ def test_extract_exact_bt19_058_trunks_tenacious_tag_team_rules() -> None:
     assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_search_blue_son_goten_sh_add_or_play" for rule in rules)
 
 
+def test_extract_exact_bt19_053_son_goten_tenacious_tag_team_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto][Limit 1] If your Leader is a blue <Trunks: SH> card or blue <Gotenks: SH> card: When this card is played, choose up to 1 of your opponent's Battle Cards with an energy cost of 4 or less and place it at the bottom of its owner's deck.\n"
+            "[Activate: Main][Limit 1](Blue), if your Leader is a blue <Trunks: SH> card or blue <Gotenks: SH> card and you place this card from your hand in your Drop: Search your deck for up to 1 blue <Trunks: SH> card with an energy cost of 3 and add it to your hand or play it, then shuffle your deck."
+        ),
+        card_type="BATTLE",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_bottom_deck_up_to_n_opponent_battle" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_search_blue_trunks_sh_add_or_play" for rule in rules)
+
+
+def test_extract_exact_p_733_ss_son_goku_stockpiled_power_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto] If your Leader's back side is {SS Son Goku, Fearless Fighter}: When this card is played, during this turn, when you would play a Unison with [Empower] from your hand, reduce the specified cost by {Yellow}.\n"
+            "[Activate: Main] [Limit 1] {Yellow}, if you have 2 or more energy: Draw 1 card and play this card from your hand.\n"
+            "[Activate: Battle] [Once per turn] Choose up to 1 of your yellow Unisons and it gets +15000 power for the battle."
+        ),
+        card_type="BATTLE",
+        card_number="P-733",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "activate_draw_n_play_self_from_hand_and_gain_keyword_until_opponent_turn_end" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "activate_gain_power_and_keyword_for_battle" for rule in rules)
+
+
+def test_extract_exact_bt23_074_mai_earthling_support_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto] If your Leader is a green card with both <Trunks: Future> and <Mai: Future>: When this card is played, play 1 Earthling Token (1000 power, 0 combo cost, and 0 combo power).\n"
+            "[Auto][Limit 1] If you have 4 or more Earthling Tokens: When this card attacks, choose up to 1 of your opponent's Battle Cards with an energy cost of 3 or less and KO it, then this card gets +11000 power for the battle."
+        ),
+        card_type="BATTLE",
+        card_number="BT23-074",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_play_token_in_battle_on_play" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle" for rule in rules)
+
+
+def test_extract_exact_bt16_075_ssb_son_goku_future_on_the_line_rules() -> None:
+    card = replace(
+        _card(
+            "[Dual Attack]\n"
+            "[EX-Evolve]((Yellow))((Yellow)): Yellow <Son Goku> with an energy cost of 3 or less.\n"
+            "[Auto] When this card is played using [EX-Evolve], switch it to Active Mode.\n"
+            "[Auto][Once per turn][Spirit Boost 1] When this card attacks, draw 1 card, then choose up to 1 of your opponent's Battle Cards in Rest Mode and KO it."
+        ),
+        card_type="BATTLE",
+        card_number="BT16-075",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_switch_self_active_on_play" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n_then_ko_up_to_n_opponent_rest_battle_on_attack" for rule in rules)
+
+
+def test_extract_exact_p_365_android_18_stalwart_assistance_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto] When this card is played, look at up to 5 cards from the top of your deck, add up to 1 red ≪Universe 7≫ card with an energy cost of 4 or less, or 1 red Unison Card with a specified cost of 2 among them to your hand, then shuffle your deck."
+        ),
+        card_type="BATTLE",
+        card_number="P-365",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_look_top_add_battle_trait_or_unison_to_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_p_085_fortuneteller_baba_earths_seer_rules() -> None:
+    card = replace(
+        _card(
+            "[Auto] When you play this card, choose up to 1 of your ≪Earthling≫ cards in your Leader Area or Battle Area, and it gets +5000 power for the duration of the turn.\n"
+            "[Auto] When you combo with this card from a Battle Area, draw 1 card, then choose up to 1 of your opponent's Battle Cards, and it gets -5000 power for the duration of the turn."
+        ),
+        card_type="BATTLE",
+        card_number="P-085",
+    )
+    rules = extract_effect_rules_from_card(card)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_buff_up_to_n_owner_leader_or_battle_for_turn_on_play" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_power_reduce_up_to_n_on_combo" for rule in rules)
+
+
 def test_extract_exact_bt19_056_vegeta_interplanetary_training_rules() -> None:
     card = replace(
         _card(
@@ -11485,6 +11606,20 @@ def test_extract_exact_sd23_05_son_goku_help_has_arrived_rules() -> None:
     assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_self_gain_power_for_turn_on_attack" for rule in rules)
 
 
+def test_extract_exact_bt21_024_garlic_jr_eternal_life_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is played from your hand, play up to 1 ≪Demon Clan≫ from your deck with an energy cost of 2 or 4 and a power of 15000 or less with its skills negated for the game, then shuffle your deck.\n[Activate: Main][Limit 1](1), if your Leader is a <Garlic Jr.>, you have 3 or more energy, and you place 1 card at the bottom of your deck: Play this card from your hand, and choose one—\n•Draw 1 card.\n•Add up to 1 {Garlic Jr.'s Ambition} from your Drop to your hand."), card_type="BATTLE", card_number="BT21-024"))
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_play_up_to_n_from_owner_deck_on_play"
+        and rule.handler_params.get("required_traits") == "Demon Clan"
+        and rule.handler_params.get("allowed_costs") == "2,4"
+        and rule.handler_params.get("max_power") == 15000
+        and rule.handler_params.get("negate_skills") is True
+        for rule in rules
+    )
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_self_from_hand") == 2
+
+
 def test_extract_exact_p518_omnidirectional_beam_rules() -> None:
     rules = extract_effect_rules_from_card(replace(_card("[Auto] When this card is placed in a Battle Area, choose all of your opponent's Battle Cards, and those cards get -25000 power for the turn.\n[Activate: Battle][Limit 1] If you have 4 or more energy, your red <Cell Max: SH> card with an energy cost of 8 is attacking, and you remove this card from the game: The attacking card gets +15000 power and [Double Strike] for the battle."), card_type="EXTRA", card_number="P-518"))
     assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
@@ -11539,7 +11674,16 @@ def test_extract_exact_bt22_028_magenta_emergency_armament_rules() -> None:
 
 def test_extract_exact_bt22_084_korin_teacher_of_fighting_rules() -> None:
     rules = extract_effect_rules_from_card(replace(_card("[Deflect][Unique]\n[Permanent] If your Leader is a yellow <Korin> card and you have a yellow originally skill-less Battle Card in play, this card and yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> cards with an energy cost of 5 or more get +10000 power.\n[Auto] If your Leader is a yellow <Korin> and your opponent has 3 or more energy: When this card is played, play up to 1 yellow non-â‰ªGreat Apeâ‰« <Son Goku: Childhood> card with an energy cost of 5 from your hand."), card_type="Z-BATTLE", card_number="BT22-084"))
-    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_play_up_to_n_non_great_ape_son_goku_childhood_from_owner_hand_on_play" for rule in rules)
+
+
+def test_extract_exact_bt22_133_ss_broly_the_nightmare_begins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT22-133"))
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_gain_critical_and_optional_drop_paragus_to_attack_active_mode_on_play"
+        for rule in rules
+    )
 
 
 def test_extract_exact_bt22_062_master_roshi_turtle_school_patriarch_rules() -> None:
@@ -17783,3 +17927,3971 @@ def test_extract_exact_tb3_004_evolutionary_process_frieza_rules() -> None:
 def test_extract_exact_ex06_35_fu_the_dark_banisher_rules() -> None:
     rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-35"))
     assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_016_moginan_the_savage_strongman_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-016"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_077_su_roas_maiden_augment_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-077"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_32_hatchhyack_vengeful_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-32"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd3_03_android_18_imminent_danger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD3-03"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd2_03_android_18_mechanical_prowess_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD2-03"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex14_04_son_goten_trunks_super_saiyan_tag_team_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX14-04"))
+    assert any(rule.trigger == "owner_union_fusion_discarded" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_037_mai_the_graceful_tactician_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-037"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_023_son_gohan_universe_7_united_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-023"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd1_02_vegeta_saiyan_of_universe_7_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD1-02"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd1_07_caulifla_troublemaker_of_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD1-07"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_09_turles_chaotic_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-09"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_26_garlic_jr_immortal_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-26"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_20_android_13_exterminating_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-20"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_10_lord_slug_unbridled_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX16-10"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_ko_attack_or_blocker" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_31_son_goku_android_8_bonds_of_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-31"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db1_008_vados_assembled_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-008"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_33_hatchhyack_mad_with_hate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-33"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_26_forced_absorption_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX03-26"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_041_ultimate_absorption_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-041"))
+    assert any(rule.trigger == "self_played_from_energy" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_005_supreme_showdown_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-005"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db1_007_champa_destruction_augmented_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-007"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_033_grand_kai_the_lazy_instructor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-033"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_045_dr_brief_father_of_a_genius_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-045"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_044_trunks_the_prankster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-044"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_063_son_goku_saiyan_reborn_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-063"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_036_shu_deluge_of_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-036"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_003_trunks_deluge_of_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-003"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_072_fasha_deluge_of_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-072"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_061_binary_blade_kahseral_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT9-061"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_043_king_vegeta_saiyan_ruler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-043"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_052_broly_free_at_last_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-052"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_065_pan_natural_fighter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-065"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_073_shugesh_raiders_warcry_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-073"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_067_vegeta_the_kings_son_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-067"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_099_piccolo_master_and_pupil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-099"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_096_uneasy_alliance_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-096"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_125_ss3_nappa_saiyan_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT7-125"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt9_060_jiren_righteous_leader_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT9-060"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_055_super_17_power_distilled_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-055"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p270_demonic_restraint_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-270"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_discarded_or_dropped_by_owner_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_077_ginyu_ultimate_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-077"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_085_fu_mission_accomplished_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-085"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_004_piccolo_namekian_fortification_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-004"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_010_anato_gentle_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-010"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_ko_opponent_battles_up_to_total_cost_and_max_power_on_play" for rule in rules)
+    assert any(rule.trigger == "owner_ko_by_source_skill" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_db2_003_tien_shinhan_unwavering_anchor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-003"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_007_frieza_imperial_inspiration_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-007"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_013_kuru_proud_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-013"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_054_dr_myuu_weapon_surplus_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-054"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_075_chilled_the_cruel_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-075"))
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_61_sorrel_hop_fiends_of_universe_9_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-61"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_67_android_14_android_15_target_acquired_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-67"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_eb1_65_super_android_13_cores_of_the_trio_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-65"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_66_android_13_the_mission_begins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-66"))
+    assert any(rule.trigger == "turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_32_demigra_over_realm_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-32"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_066_king_vegeta_the_majestic_ruler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-066"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_006_majin_buu_cheerful_demon_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_123_jiren_army_of_one_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-123"))
+    assert any(rule.trigger == "turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_002_supreme_showdown_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-002"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_battles_placed_into_drop_by_named_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_153_baby_hatchhyack_saiyan_destroyer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-153"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p232_syn_shenron_negative_energy_incarnate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-232"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_058_gowasu_manipulative_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-058"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_071_brianne_de_chateau_dazzling_maiden_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-071"))
+    assert any(rule.trigger == "owner_opponent_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_053_murisarm_manipulative_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-053"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_059_dyspo_sonic_subversion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-059"))
+    assert any(rule.trigger == "owner_opponent_overcost_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_db2_038_energetic_outburst_kale_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-038"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_060_agu_virtuous_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-060"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_022_damon_might_of_many_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-022"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_075_rozie_maiden_cunning_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-075"))
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_076_rozie_maidens_scorn_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-076"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_078_zirloin_maiden_supporter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-078"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_041_frost_chaotic_burst_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-041"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_016_feral_strike_shosa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-016"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_017_monna_the_confidence_booster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_054_mechiorp_bobbing_and_weaving_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-054"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt14_116_opening_the_gates_of_hell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT14-116"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_073_kakunsa_maiden_might_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-073"))
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_011_ganos_bird_of_prey_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-011"))
+    assert any(rule.trigger == "owner_opponent_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_018_burly_brawler_nink_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-018"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex06_19_android_13_the_brilliant_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX06-19"))
+    assert any(rule.trigger == "union_absorb" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_xd3_02_cell_genetic_consumption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="XD3-02"))
+    assert any(rule.trigger == "union_absorb" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_099_cabba_saiyan_invigoration_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-099"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_045_fuwa_strategic_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-045"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_044_saonel_namekian_ensnarement_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-044"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_118_hyssop_the_frozen_titan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-118"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_081_zarbuto_heroic_stance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-081"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_088_pell_confident_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-088"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_117_oregano_the_webslinger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-117"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_108_bergamo_ferocious_roar_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-108"))
+    assert any(rule.trigger == "owner_opponent_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_144_panchia_robo_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-144"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_119_chappil_the_iron_drake_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-119"))
+    assert any(rule.trigger == "owner_opponent_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_145_bionic_battler_bollarator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-145"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_db2_091_toppo_righteous_reprisal_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-091"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_db2_100_caulifla_saiyan_invalidation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-100"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_p331_mecha_frieza_robotic_riposte_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-331"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_104_hit_the_revoker_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-104"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_132_saiyan_shield_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-132"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_115_amphibious_assault_comfrey_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-115"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db2_105_raw_power_botamo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-105"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_141_koichiarator_menacing_assassin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-141"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_124_toppo_justice_forsaken_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-124"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop_by_skill_or_ko" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt2_120_darkness_eye_beam_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT2-120"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_107_ille_dignified_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-107"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_157_vuon_the_righteous_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-157"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_122_roh_brash_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-122"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_021_piccolo_jr_the_kings_return_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-021"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_125_khai_righteous_supremity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-125"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_032_vegeta_young_elite_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-032"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_139_paparoni_brilliant_inventor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-139"))
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_db3_012_shu_king_piccolos_underling_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-012"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_156_jiren_survival_of_the_fittest_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-156"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_102_kale_uncontrollable_rage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_014_king_piccolo_five_seconds_to_eradication_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-014"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attack_negated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_005_yamcha_eye_for_an_eye_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-005"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_011_pilaf_king_piccolos_underling_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-011"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_028_bardock_the_final_spark_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-028"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_054_piccolo_potential_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB3-054"))
+    assert any(rule.trigger == "union_absorb" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex01_04_ssb_vegito_the_savior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX01-04"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_twice_same_turn" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_012_repeated_force_vegito_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT2-012"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd14_03_time_agent_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD14-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop_from_deck_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_04_dark_broly_the_shadow_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX16-04"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_058_son_goten_boundless_curiosity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-058"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_033_heroic_encounter_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-033"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_087_hire_dragon_a_fated_meeting_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-087"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_070_hirudegarn_phantasmic_revival_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-070"))
+    assert any(rule.trigger == "owner_opponent_card_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_removed_by_opponent_skill_or_ko" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_088_hire_dragon_a_kind_friend_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-088"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_053_son_goku_power_to_protect_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-053"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_045_pirate_guard_tobi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-045"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_057_son_goten_reckless_ability_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-057"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_046_pirate_guard_cabira_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-046"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "counter_play_self_then_return_pending_to_owner_hand_if_cost_at_most" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_095_wings_the_gargantuan_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-095"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_079_son_goku_relentless_assault_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-079"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_115_piccolo_jr_eradicator_of_peace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-115"))
+    assert any(rule.trigger == "arrival" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_106_son_goten_changing_history_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-106"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_110_demon_god_demigra_destroyer_of_history_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-110"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_108_trunks_changing_history_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-108"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p019_ginyu_the_reliable_captain_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-019"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p017_chilling_terror_android_17_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-017"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_052_ss3_son_goku_fist_of_fortitude_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-052"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p011_the_almighty_beam_fused_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-011"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_070_turles_invader_of_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-070"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p079_hypertraining_ss_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-079"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p099_shatterkick_ss2_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-099"))
+    assert sum(1 for rule in rules if rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p013_hit_conqueror_of_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-013"))
+    assert any(rule.trigger == "owner_opponent_main_phase_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p062_scrambling_assault_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-062"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p030_vegeta_powerful_as_ever_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-030"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p003_super_saiyan_3_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-003"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_02_jiren_legend_of_universe_11_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="EX13-02"))
+    assert any(rule.trigger == "owner_opponent_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_062_trunks_legacy_of_a_hero_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-062"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_030_test_of_strength_uub_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-030"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p057_desperate_odds_kefla_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-057"))
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p080_super_17_the_infernal_machine_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-080"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db3_119_imparted_wishes_tora_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-119"))
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p056_supreme_kai_of_time_lights_guide_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-056"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p005_light_of_hope_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-005"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p074_crisis_crusher_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-074"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p004_energy_attack_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-004"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p024_powerful_bond_ginyu_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-024"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p064_trunks_hope_at_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-064"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p001_one_hit_destruction_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-001"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_042_vegeta_warrior_that_crossed_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-042"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p157_chiaotzu_the_loyal_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-157"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p051_king_piccolo_demon_lord_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-051"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p139_trunks_forerunner_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-139"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p097_demonic_invasion_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-097"))
+    assert any(rule.trigger == "owner_matching_battle_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p077_everybodys_pal_yamcha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-077"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p158_master_roshi_martial_master_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-158"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p081_frieza_striking_back_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-081"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p161_hercule_world_tournament_king_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-161"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p142_vegeta_time_regulator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-142"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p076_reality_bender_janemba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-076"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p082_revived_ravager_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-082"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p087_inferno_forged_hell_fighter_17_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-087"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p067_bardock_fully_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-067"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p055_dark_temptation_towa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-055"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p039_combination_attack_pan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-039"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p111_broly_paralyzing_presence_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-111"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_064_babidi_wicked_mentor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT14-064"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p149_videl_proudest_mother_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-149"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p063_glory_obsessed_prince_of_destruction_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-063"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p065_vegito_super_warrior_reborn_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-065"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p140_broly_everlasting_vengeance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-140"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_098_father_son_kamehameha_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT2-098"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p191_jiren_pride_of_universe_11_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-191"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p217_ssb_son_goku_the_boundless_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-217"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p177_broly_crown_of_retribution_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-177"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p135_trunks_hope_of_the_saiyans_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-135"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p121_uub_symbol_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-121"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p120_great_saiyaman_hero_of_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-120"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p119_king_piccolo_evil_ambitions_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-119"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p114_piccolo_cunning_strategist_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-114"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex17_01_ss_son_goku_spirit_boost_striker_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="EX17-01"))
+    assert any(rule.trigger == "owner_spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p219_ss2_trunks_heroic_prospect_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-219"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p204_bardock_surge_of_inspiration_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-204"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p159_mutaito_skill_of_a_sage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-159"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p093_ssb_gogeta_fusions_pinnacle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-093"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p231_towa_dark_imperial_scientist_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-231"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p229_ss_trunks_solitary_guardian_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-229"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p116_encroaching_darkness_demigra_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="P-116"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p196_majin_buu_diabolic_punisher_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-196"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_overcost_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p240_vegeks_father_son_bonds_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-240"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop_from_deck_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p224_dodoria_the_boastful_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-224"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p237_vegeta_appetite_for_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-237"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p179_son_goten_awakening_the_beast_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-179"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p216_pilaf_innovative_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-216"))
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p175_hatchhyack_hatred_everlasting_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-175"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p239_gotenks_genuine_ability_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-239"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p225_ss_son_goten_primed_for_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-225"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p203_zen_oh_almighty_guardian_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-203"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p252_baby_saiyan_power_absorbed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-252"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p228_syn_shenron_harbinger_of_ruin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-228"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_self_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p214_son_goku_the_purehearted_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-214"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p260_surprise_attack_naturon_shenron_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-260"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_078_majin_buu_unparalleled_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT9-078"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_131_angila_the_invader_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-131"))
+    assert any(rule.trigger == "successor" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p241_ss3_gohan_masters_surpassed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-241"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p263_masked_saiyan_brainwashed_no_more_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-263"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p257_prince_of_destruction_vegeta_evil_awakened_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-257"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p248_broly_astonishing_potential_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-248"))
+    assert any(rule.trigger == "swap" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p227_ss_gotenks_matchless_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-227"))
+    assert any(rule.trigger == "union_fusion" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p220_ssb_vegito_soaring_blow_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-220"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt13_033_pan_giru_energy_fortification_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT13-033"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt9_134_majin_buus_human_extinction_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT9-134"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt13_027_invasion_of_bardocks_crew_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-027"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_031_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT13-031"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_034_tora_bardocks_crewmate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-034"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_034_universe_9_supreme_kai_roh_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-034"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_034_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="TB3-034"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_035_son_goku_dad_to_the_rescue_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-035"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_030_king_vegetas_imposing_presence_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-030"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_020_king_vegeta_hidden_ambitions_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-020"))
+    assert any(rule.trigger == "counter_counter" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_024_ss_broly_brawn_amplified_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-024"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks_leader" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_021_ssb_vegeta_at_full_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-021"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_028_young_invaders_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-028"))
+    assert any(rule.trigger == "owner_opponent_turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p262_ss4_son_goku_beyond_all_limits_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-262"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_032_boujack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT13-032"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_02_dark_shenron_tyrannical_savior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="EX16-02"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_058_the_coming_calamity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT14-058"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_068_stouthearted_android_16_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT3-068"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_153_majin_buu_incarnation_of_demonic_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-153"))
+    assert any(rule.trigger == "counter_counter" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_067_tapion_unsealed_hero_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-067"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_085_hero_combination_kunshi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-085"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_022_scuffle_time_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-022"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_039_ss_vegeta_saiyan_tenacity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-039"))
+    assert any(rule.trigger == "owner_takes_non_keyword_skill_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex09_01_son_goku_nimbus_voyager_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX09-01"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_079_agony_of_hell_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-079"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_076_master_roshi_forged_of_will_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-076"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt13_040_vegeta_energy_fortification_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-040"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_energy_from_hand" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_064_universe_10_assemble_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="DB2-064"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_068_mighty_strike_prince_of_destruction_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-068"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_44_kaio_ken_son_goku_a_heavy_toll_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-44"))
+    assert any(rule.trigger == "swap" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_078_coldhearted_strike_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-078"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_015_relentless_super_saiyan_kale_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-015"))
+    assert any(rule.trigger == "evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_018_ultimate_evolution_frost_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-018"))
+    assert any(rule.trigger == "evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_028_results_of_training_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-028"))
+    assert any(rule.trigger == "evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_tb1_038_trio_de_dangers_basil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-038"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_032_awkward_situation_otokosuki_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-032"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_125_shenron_unison_of_rescue_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT10-125"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 3
+
+
+def test_extract_exact_tb3_005_frieza_overture_to_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB3-005"))
+    assert any(rule.trigger == "swap" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_109_nuova_shenron_flame_shot_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-109"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_008_chain_attack_shugesh_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-008"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_52_android_8_helping_a_friend_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-52"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_060_lord_slug_young_again_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-060"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_18_gine_heroic_support_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-18"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_102_ss_trunks_to_change_the_future_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-102"))
+    assert any(rule.trigger == "evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_055_bujin_the_commando_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-055"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_55_playtimes_over_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EB1-55"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_090_royal_supremacy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-090"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_059_the_champ_to_the_rescue_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-059"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_109_android_17_thwarting_the_enemy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-109"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_074_cooler_vicious_ambush_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-074"))
+    assert any(rule.trigger == "owner_skill_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_076_golden_frieza_pinnacle_of_the_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-076"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_076_majin_buu_unadulterated_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-076"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex11_06_frieza_fair_weather_fiend_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX11-06"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_59_ss_bardock_neverending_vengeance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-59"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_49_bulma_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="EB1-49"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "owner_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex04_01_ss_gogeta_acrobatic_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX04-01"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_alliance_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p277_veku_the_unpredictable_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-277"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_001_bardock_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT13-001"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_094_android_13_robotic_unity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT13-094"))
+    assert any(rule.trigger == "rejuvenate" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db3_018_piano_demon_clan_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-018"))
+    assert any(rule.trigger == "owner_opponent_takes_skill_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_011_king_piccolo_the_next_step_to_youth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-011"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_080_son_gohan_the_battle_begins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-080"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p092_broly_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="P-092"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd4_03_indomitable_link_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD4-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex10_03_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="EX10-03"))
+    assert any(rule.trigger == "owner_turn_start" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_084_king_colds_dynasty_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-084"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_eb1_45_pan_the_courageous_youth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-45"))
+    assert any(rule.trigger == "swap" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_110_cooler_blood_of_the_tyrant_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT2-110"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_101_frieza_trained_at_last_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-101"))
+    assert any(rule.trigger == "self_placed_into_drop_from_life" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_006_miraculous_comeback_ultimate_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT2-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_kos_opponent_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_151_jiren_alien_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-151"))
+    assert any(rule.trigger == "arrival" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_085_a_new_ruler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-085"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_087_terrified_realization_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-087"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db1_103_ss3_tag_team_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-103"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_39_super_17_energy_absorber_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="EB1-39"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt7_041_kale_timid_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT7-041"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt13_099_son_gohan_warrior_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-099"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_tb1_081_absolute_justice_jiren_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-081"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt12_020_tambourine_reign_of_terror_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-020"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_07_majin_buu_the_shadow_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX16-07"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks_leader" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd16_02_dark_masked_king_spirit_resonance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="SD16-02"))
+    assert any(rule.trigger == "self_placed_into_drop_from_deck_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_116_roselle_wings_of_universe_9_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-116"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_048_phantom_strike_janemba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT5-048"))
+    assert any(rule.trigger == "self_sent_from_battle_to_warp" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_067_super_17_cell_absorbed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT5-067"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_094_jiren_universes_strongest_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-094"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_006_son_goku_savagery_awakened_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-006"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_125_broly_ultimate_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-125"))
+    assert any(rule.trigger == "owner_matching_battle_removed_or_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_015_gogeta_unparalleled_fusion_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-015"))
+    assert any(rule.trigger == "union_fusion" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p286_ss3_gogeta_martial_melee_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-286"))
+    assert any(rule.trigger == "union_fusion" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_038_gogeta_godspeed_demolisher_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-038"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_skill_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_35_violent_rush_boujack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-35"))
+    assert any(rule.trigger == "aegis_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_p052_ribrianne_transformation_complete_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-052"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_093_boujack_the_plunderer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-093"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_switched_to_active" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_052_fused_zamasu_the_divine_immortal_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-052"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p189_zen_oh_the_alpha_and_omega_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-189"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_105_overpowering_king_cold_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT2-105"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_095_universe_7_representative_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="TB1-095"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_123_distant_descendant_son_goku_jr_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-123"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_103_trunks_warrior_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-103"))
+    assert any(rule.trigger == "owner_matching_battle_koed_or_removed_by_opponent" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_010_ss_bardock_super_saiyan_enlightenment_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-010"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_045_the_legendary_flute_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT4-045"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_100_bardock_father_and_son_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-100"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p053_source_of_power_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-053"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_084_krillin_going_all_out_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-084"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex07_08_frieza_spiteful_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX07-08"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_044_thinks_hes_the_best_hercule_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT3-044"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd12_05_ss_trunks_architect_of_peace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD12-05"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex13_07_planet_vegetas_final_moments_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EX13-07"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_05_janemba_the_shadow_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX16-05"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt1_107_cold_bloodlust_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT1-107"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_017_golden_frieza_indomitable_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-017"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt11_111_eis_shenron_the_diabolic_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-111"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_074_sealed_music_box_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="DB3-074"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_058_tragedy_overground_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT10-058"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "owner_opponent_card_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex03_27_forced_ejection_masked_saiyan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX03-27"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_111_tien_shinhan_returning_fire_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-111"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt3_032_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT3-032"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_100_unwavering_solidarity_shugesh_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT3-100"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_086_growing_evil_lifeform_cell_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT2-086"))
+    assert any(rule.trigger == "union_absorb" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_092_lord_slug_super_namekian_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-092"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_062_assimilate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="TB3-062"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_23_assault_of_the_great_apes_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EB1-23"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_01_nappa_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="EB1-01"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_08_golden_frieza_the_perished_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-08"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_16_majin_buu_tide_turning_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-16"))
+    assert any(rule.trigger == "self_placed_into_drop_from_energy_by_leader" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_02_yamcha_wolf_fang_pitching_fistball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="EB1-02"))
+    assert any(rule.trigger == "owner_matching_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt13_112_android_16_going_all_out_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-112"))
+    assert any(rule.trigger == "owner_self_switched_to_rest_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p333_intoxicated_by_justice_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-333"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_063_internal_energy_shift_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="DB2-063"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_040_desperate_measures_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="DB1-040"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_043_absolute_release_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT8-043"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_073_cooler_effortless_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-073"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt11_084_majin_buu_dark_parasite_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-084"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_067_prince_of_destruction_vegeta_life_and_death_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-067"))
+    assert any(rule.trigger == "owner_opponent_counter_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_083_majin_buu_royal_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-083"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_self_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex17_05_android_17_ki_channeler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX17-05"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_eb1_58_nappa_break_cannon_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-58"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_097_son_goku_the_awakened_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-097"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_144_bergamo_giant_force_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="DB3-144"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks_self" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt10_153_ss3_gotenks_blazing_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-153"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "owner_self_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_101_cooler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT2-101"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_048_zoiray_justice_spin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT9-048"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p288_supreme_kai_of_time_summoned_from_another_dimension_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-288"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_051_goku_black_future_decimator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-051"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_024_awakening_talent_pan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB2-024"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p144_babidi_the_mastermind_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-144"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_117_furious_awakening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-117"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_082_king_cold_supreme_ruler_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-082"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_ex07_01_son_goku_preparing_for_battle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX07-01"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_118_the_futures_in_your_hands_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-118"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex17_04_hunt_of_the_demon_god_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EX17-04"))
+    assert any(rule.trigger == "counter_counter" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_015_son_gohan_saiyan_combo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-015"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt11_012_ssb_gogeta_technique_unchained_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-012"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_attacks_any" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex17_03_ss_bardock_spirit_resonance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX17-03"))
+    assert any(rule.trigger == "evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_083_baby_vengeful_upheaval_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT8-083"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "union_absorb" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt3_084_desperate_warrior_super_saiyan_bardock_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT3-084"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt11_058_planet_tuffle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT11-058"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_68_heroines_lineage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EB1-68"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p328_son_goku_striking_from_the_heart_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-328"))
+    assert any(rule.trigger == "owner_leader_flipped_front" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_019_cymbal_demon_clan_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-019"))
+    assert any(rule.trigger == "owner_opponent_takes_skill_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p154_kami_ethereal_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-154"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_009_yamcha_at_100_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT5-009"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p330_pan_heroines_victory_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="P-330"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_db2_134_enraged_eminence_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-134"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_011_vegeta_saiyan_youth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-011"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_066_chilled_space_pirate_captain_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-066"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_051_lilibeu_exploitative_flight_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-051"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_038_hirudegarn_the_wanderer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-038"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_045_cheelai_the_beautiful_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB3-045"))
+    assert any(rule.trigger == "owner_opponent_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_038_bulla_babys_minion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-038"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_db2_005_android_17_rebel_reinforcements_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-005"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt11_045_baby_diabolic_parasite_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-045"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_036_son_goten_babys_minion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-036"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_019_majora_unseeing_aid_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-019"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p289_dark_masked_king_deluge_of_darkness_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-289"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_101_trunks_might_born_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-101"))
+    assert any(rule.trigger == "evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p112_super_baby_1_parasitic_menace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-112"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_128_son_goten_fusion_renewed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT13-128"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex16_06_frieza_the_shadow_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX16-06"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_074_rasin_invader_of_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-074"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "auto_play_self_from_combo_on_battle_end" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_021_revenge_death_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT4-021"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_045_betrayal_of_the_master_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT7-045"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_095_successor_of_hope_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT4-095"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_076_frieza_cry_of_the_sovereign_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="DB1-076"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_075_babidi_unrepentant_sorcerer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT9-075"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_069_cabira_the_besieger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT13-069"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_097_dragon_ball_seeker_sorbet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT5-097"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_103_kale_the_mischievous_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-103"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_047_baby_successor_of_the_tuffle_king_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-047"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_080_paternal_bonds_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="DB1-080"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_119_awakened_attack_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT14-119"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_109_android_17_sibling_strike_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT13-109"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "auto_play_self_from_combo_on_battle_end" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_090_buu_buu_volleyball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT11-090"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p190_cell_revolting_regenerator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-190"))
+    assert any(rule.trigger == "owner_other_battle_left_play_or_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_008_frieza_double_edged_sword_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-008"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt13_075_babidi_bewitching_domination_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-075"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_061_king_cold_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT13-061"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_field_extra_placed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_091_lord_slug_power_overwhelming_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-091"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_058_infinite_force_fused_zamasu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT2-058"))
+    assert any(rule.trigger == "union_potara" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p466_king_cold_leader_of_the_frieza_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-466"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt5_104_death_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT5-104"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_083_demonic_scream_majin_buu_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT9-083"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_038_son_goku_warrior_that_crossed_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-038"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_07_vegeta_royal_evolution_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="EB1-07"))
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_097_instant_transmission_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT4-097"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_151_darkness_judgment_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-151"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_130_ss4_vegeta_thwarting_the_dark_empire_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-130"))
+    assert any(rule.trigger == "over_realm" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_078_turles_chaotic_rampage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-078"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_104_piccolo_trusted_ally_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_064_dark_broly_overwhelming_evil_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT11-064"))
+    assert any(rule.trigger == "owner_marker_removed_by_skill" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt6_035_vegito_at_full_throttle_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-035"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt13_129_son_goten_time_patrols_charity_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT13-129"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt7_088_botamo_defender_of_universe_6_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT7-088"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_ex17_02_bardock_spirit_boost_avenger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX17-02"))
+    assert any(rule.trigger == "self_added_to_energy" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_049_ss4_son_goku_energy_annihilator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-049"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_007_helping_hand_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT7-007"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_073_cacao_invader_of_earth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT12-073"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_ex13_18_broly_invincible_agent_of_destruction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX13-18"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_060_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT10-060"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_matching_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p209_cooler_clan_avenger_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-209"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_150_clash_of_the_masked_warriors_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-150"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_060_an_unlikely_protector_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT14-060"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_082_dodoria_brimming_with_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-082"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_002_final_showdown_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB3-002"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_079_majin_buu_hybrid_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT9-079"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_023_jiren_the_all_seeing_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-023"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_077_frieza_revived_and_reviled_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-077"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p032_kaio_ken_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-032"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_120_miraculous_fighter_ss3_gogeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT5-120"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "union_fusion" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_099_cells_birth_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT2-099"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_127_ss3_son_goku_man_on_a_mission_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-127"))
+    assert any(rule.trigger == "over_realm" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_147_dark_masked_king_pursuit_of_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT13-147"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt8_016_dr_myuu_the_mastermind_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT8-016"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_124_paikuhan_savior_from_another_time_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-124"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_148_dark_shenron_wicked_wishmaster_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT13-148"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p335_come_forth_shenron_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-335"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_147_broly_savage_rush_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-147"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p028_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-028"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_149_yearning_for_the_dark_dragon_balls_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT13-149"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd5_04_reborn_might_ss4_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD5-04"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p030_vegeta_powerful_as_ever_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-030"))
+    assert any(rule.trigger == "owner_battle_ko_opponent_battle_battle_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt10_115_syn_shenron_destruction_incarnate_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT10-115"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_db2_092_hasty_dispatch_dyspo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-092"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_010_caulifla_frenzied_sister_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-010"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p309_demon_god_towa_restoring_the_dark_empire_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-309"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_006_blaze_of_glory_son_gohan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-006"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_005_majin_buu_the_reincarnator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-005"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p306_time_patrol_son_goten_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-306"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_140_demon_god_putine_ritual_at_hand_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-140"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_103_frieza_same_stuff_different_day_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-103"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_046_baby_the_body_snatcher_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT11-046"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_062_dirty_burst_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="DB2-062"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p305_nuova_shenron_unwavering_conviction_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="P-305"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_124_hirudegarn_the_reoccurring_nightmare_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-124"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p307_ss4_vegeta_feigned_greeting_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-307"))
+    assert any(rule.trigger == "over_realm" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb1_010_impeccable_super_saiyan_cabba_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB1-010"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_046_plea_for_salvation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="TB3-046"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt12_076_lord_slug_out_of_control_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT12-076"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_136_dark_broly_the_vindicator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-136"))
+    assert any(rule.trigger == "over_realm" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_039_borgos_great_ape_assault_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-039"))
+    assert any(rule.trigger == "ex_evolve" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_26_son_goku_the_long_awaited_rematch_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EB1-26"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_054_bujin_the_evildoer_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-054"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db1_017_moginan_alien_bonds_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB1-017"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_036_goku_black_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT2-036"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+
+
+def test_extract_exact_bt14_044_ss_trunks_fully_powered_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-044"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_041_ss_son_goten_fully_powered_fusion_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-041"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_143_koitsukai_mechanical_courage_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-143"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_123_demigra_momentary_ally_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT13-123"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt10_088_dormant_potential_unleashed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT10-088"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_eb1_36_gokus_solar_flare_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EB1-36"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_043_ss_vegeta_thwarting_the_enemy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-043"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p090_surprise_attack_frieza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-090"))
+    assert any(rule.trigger == "owner_opponent_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex11_04_beerus_wrath_of_the_gods_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="EX11-04"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p162_announcer_witness_of_history_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-162"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd15_03_son_goku_spirit_boost_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD15-03"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt7_129_son_goku_saiyan_transcendence_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT7-129"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt11_088_the_majin_quickening_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT11-088"))
+    assert any(rule.trigger == "owner_life_placed_into_drop" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db2_138_impregnable_fortress_anilaza_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB2-138"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt9_089_unexpected_recovery_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT9-089"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb2_008_mighty_mask_powers_combined_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="TB2-008"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_078_dependable_dynasty_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-078"))
+    assert any(rule.trigger == "swap" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_072_wings_supporting_the_masters_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-072"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_blocker_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_062_broly_berserker_origins_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-062"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_046_majin_buu_prelude_to_villainy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-046"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_033_vegeta_penitent_martyr_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-033"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt4_041_hidden_darkness_minotia_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-041"))
+    assert any(rule.trigger == "self_in_hand_sent_to_drop_or_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_070_goliamite_the_new_breed_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="COMBO", card_number="BT6-070"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt2_003_babidi_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT2-003"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_tb3_025_planetary_invader_tora_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="TB3-025"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_019_berryblue_the_negotiator_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-019"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_003_frieza_unlikely_savior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT14-003"))
+    assert any(rule.trigger == "spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_004_toppo_force_of_obliteration_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="BT14-004"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt14_002_jiren_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT14-002"))
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" for rule in rules)
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_078_wrathful_charge_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT6-078"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_027_teamwork_of_universe_7_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT14-027"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt5_023_afterimage_technique_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT5-023"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_029_difference_of_status_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT14-029"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt13_071_son_goku_allies_in_the_heart_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT13-071"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "owner_matching_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_018_frieza_the_finisher_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-018"))
+    assert sum(1 for rule in rules if rule.trigger == "self_played" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt14_145_saibaimen_faithful_to_the_end_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-145"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_031_saiyan_duo_son_goku_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-031"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt6_034_saiyan_duo_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT6-034"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_042_ss3_gotenks_future_rookie_assistance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-LEADER", card_number="BT25-042"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p319_until_we_meet_again_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-319"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_048_charging_ultra_buu_buu_volleyball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="BT25-048"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p323_android_20_infernal_return_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-323"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p325_raging_transformation_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-325"))
+    assert any(rule.trigger == "owner_other_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_047_super_donut_chain_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="BT25-047"))
+    assert any(rule.trigger == "owner_opponent_battle_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p619_ss4_son_goku_strategies_for_an_unknown_enemy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-619"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p321_dark_masked_king_spirit_boost_sovereign_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-321"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_p326_saiyan_shield_raditz_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-326"))
+    assert any(rule.trigger == "owner_opponent_card_sent_to_warp" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_149_android_16_limiter_disengaged_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-149"))
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt14_150_king_cold_gathering_the_clan_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT14-150"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p322_demonic_advent_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="P-322"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p600_black_smoke_dragon_minus_energy_beyond_limits_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="P-600"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p599_six_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="P-599"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p320_prince_of_destruction_vegeta_majin_defiance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-320"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_059_ss_gotenks_energy_storm_dance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-BATTLE", card_number="BT25-059"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("requires_played_via") == "union_fusion" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_017_tambourine_demon_clan_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-017"))
+    assert any(rule.trigger == "owner_opponent_takes_skill_damage" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_sd15_05_surprise_attack_ssb_vegeta_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="SD15-05"))
+    assert any(rule.trigger == "owner_unison_spirit_boost_activated" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_094_angila_the_graceful_warrior_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-094"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_db3_035_fasha_great_ape_assault_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="DB3-035"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_004_reich_pilaf_exploited_three_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-UNISON", card_number="BT25-004"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt25_076_situation_reversal_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="BT25-076"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt25_035_regained_peak_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT25-035"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_069_escape_from_subspace_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT25-069"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_002_king_piccolo_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT25-002"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_026_cymbal_terror_is_born_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-026"))
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_choose_draw_power_reduce_or_add_dragon_ball_from_deck_and_or_life_then_discard_on_play"
+        for rule in rules
+    )
+
+
+def test_extract_exact_bt25_028_piano_terror_is_born_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-028"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_031_just_in_time_vegeta_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-031"))
+    assert any(rule.trigger == "owner_card_added_to_z_energy" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_120_demigra_wormhole_opened_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-UNISON", card_number="BT25-120"))
+    assert any(rule.trigger == "owner_over_realm_activated" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt25_121_son_goku_vegeta_battle_on_a_planet_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-121"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_023_piccolo_jr_reborn_evil_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-023"))
+    assert any(rule.trigger == "owner_matching_battle_removed_by_opponent_skill" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_102_haze_shenron_great_dragon_quake_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-BATTLE", card_number="BT25-102"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_074_ss_vegeta_rescuing_a_son_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-BATTLE", card_number="BT25-074"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_034_suggestion_for_the_reich_pilaf_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT25-034"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_137_ss4_gogeta_vs_omega_shenron_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-137"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_113_eis_shenron_freezing_beam_shoot_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-113"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_103_no_challenge_for_the_strong_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="BT25-103"))
+    assert any(rule.trigger == "owner_opponent_card_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_070_trunks_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT25-070"))
+    assert any(rule.trigger == "owner_battle_attacks" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_099_four_star_ball_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT25-099"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_104_7_shadow_dragons_assembled_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="BT25-104"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_32_trunks_inherited_will_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-UNISON", card_number="EX24-32"))
+    assert any(rule.trigger == "owner_card_switched_to_rest" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_p623_mai_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="P-623"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_095_powerful_assistance_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT25-095"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_39_manifestation_frenzy_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="EX24-39"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_15_core_absorption_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="EX24-15"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_077_time_for_the_slaughter_to_begin_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="BT25-077"))
+    assert any(rule.trigger == "owner_other_battle_koed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p604_dr_myuu_research_results_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-604"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_17_android_14_15_cool_headed_advance_guard_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX24-17"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_33_irreconcilable_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-EXTRA", card_number="EX24-33"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_082_tien_shinhan_tournament_entry_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-082"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_091_bujin_bringer_of_chaos_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-091"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "counter_negate_attack_play_self" for rule in rules)
+
+
+def test_extract_exact_bt25_092_bujin_space_pirate_psychic_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-092"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_30_frieza_steadfast_emperor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX24-30"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_ex24_31_frieza_tiny_aggressor_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX24-31"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_ex24_43_cumber_becoming_the_strongest_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX24-43"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt25_129_ss_trunks_team_up_with_father_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-129"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt25_142_zamasu_scheme_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-UNISON", card_number="BT25-142"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt25_138_son_goku_accidental_wish_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-UNISON", card_number="BT25-138"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_bt25_143_android_17_wish_for_restored_universes_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-UNISON", card_number="BT25-143"))
+    assert sum(1 for rule in rules if rule.trigger == "self_activate_main" and rule.handler_id == "noop_auto") >= 2
+
+
+def test_extract_exact_p605_ss_gotenks_crazy_god_of_death_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-605"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("requires_played_via") == "union_fusion" and rule.handler_params.get("amount") == 2 for rule in rules)
+    assert any(rule.trigger == "self_left_battle_area" and rule.handler_id == "noop_auto" for rule in rules)
+    assert any(rule.trigger == "turn_end" and rule.handler_id == "noop_auto" for rule in rules)
+
+
+def test_extract_exact_bt26_tranche_rules() -> None:
+    cases = [
+        ("BT26-089", "EXTRA", [("self_activate_battle", "noop_auto")]),
+        ("BT26-028", "EXTRA", [("self_activate_battle", "noop_auto")]),
+        ("BT26-113", "BATTLE", [("self_played", "noop_auto"), ("self_attacks", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT26-074", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT26-070", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT26-078", "BATTLE", [("counter_attack", "counter_negate_attack_play_self"), ("self_played", "noop_auto")]),
+        ("BT26-119", "EXTRA", [("counter_play", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT26-096", "Z-BATTLE", [("self_attacks_or_self_blocker_activated", "noop_auto")]),
+        ("BT26-109", "BATTLE", [("owner_card_attacks", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT26-008", "BATTLE", [("self_attacks", "noop_auto")]),
+        ("BT26-013", "BATTLE", [("self_in_hand_sent_to_drop_or_warp", "noop_auto"), ("owner_extra_activated", "noop_auto")]),
+        ("BT26-100", "BATTLE", [("self_played", "noop_auto"), ("self_attacks", "noop_auto"), ("turn_end", "noop_auto")]),
+        ("BT26-016", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT26-088", "EXTRA", [("self_played", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT26-006", "Z-EXTRA", [("self_activate_battle", "noop_auto")]),
+        ("BT26-077", "BATTLE", [("self_comboed", "auto_draw_n")]),
+        ("BT26-014", "BATTLE", [("self_comboed", "auto_draw_n")]),
+        ("EX13-23", "BATTLE", [("self_comboed_battle_end", "auto_play_self_from_combo_on_battle_end")]),
+        ("DB3-020", "BATTLE", [("owner_opponent_takes_skill_damage", "noop_auto")]),
+        ("BT12-127", "BATTLE", [("owner_opponent_adds_from_deck_to_hand_by_non_leader_skill", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt26_088_potara_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT26-088"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt26_077_mai_kind_guardian_combo_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT26-077"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt26_014_vegeta_princes_pride_combo_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT26-014"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt26_bt27_tranche_rules() -> None:
+    cases = [
+        ("BT26-059", "EXTRA", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT27-111", "EXTRA", [("self_activate_main", "noop_auto")]),
+        ("BT27-092", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("BT27-094", "Z-EXTRA", [("self_played", "noop_auto"), ("self_removed_from_game", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT26-035", "Z-UNISON", [("self_attacked", "noop_auto"), ("self_activate_battle", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-061", "EXTRA", [("counter_attack", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT27-095", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("BT27-104", "BATTLE", [("self_played", "noop_auto"), ("turn_end", "noop_auto")]),
+        ("BT26-036", "Z-BATTLE", [("self_played", "noop_auto")]),
+        ("P-632", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("P-647", "Z-BATTLE", [("self_activate_main", "noop_auto")]),
+        ("P-639", "BATTLE", [("self_attacks_or_owner_opponent_battle_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-093", "Z-BATTLE", [("self_cost_reduction_static", "noop_static")]),
+        ("BT27-053", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT26-034", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT26-137", "BATTLE", [("self_played", "auto_draw_n"), ("self_played", "noop_auto"), ("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT26-053", "BATTLE", [("self_played", "noop_auto"), ("owner_card_returned_under_self_to_hand", "noop_auto")]),
+        ("BT27-110", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT26-005", "Z-BATTLE", [("self_played_via_union_absorb", "noop_auto"), ("self_cost_reduction_static", "noop_static")]),
+        ("P-308", "BATTLE", [("self_attacks", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt26_137_ss2_cabba_sudden_growth_anew_arrival_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT26-137"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt27_tranche_rules() -> None:
+    cases = [
+        ("BT27-068", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT27-060", "EXTRA", [("self_activate_main", "noop_auto")]),
+        ("BT27-070", "Z-EXTRA", [("owner_card_left_battle_area", "noop_auto"), ("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT27-067", "Z-UNISON", [("owner_battle_played_or_self_attacks", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-064", "EXTRA", [("counter_attack", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-054", "BATTLE", [("counter_play", "noop_auto"), ("owner_opponent_adds_from_deck_to_hand_by_skill", "noop_auto")]),
+        ("BT27-056", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT27-085", "BATTLE", [("self_or_owner_opponent_card_played", "noop_auto")]),
+        ("BT27-007", "Z-BATTLE", [("self_cost_replacement_static", "noop_static")]),
+        ("BT27-131", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT27-091", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-127", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT27-071", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-066", "LEADER", [("self_attacks", "auto_draw_n"), ("self_awakens", "noop_auto")]),
+        ("P-654", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("P-652", "BATTLE", [("self_played", "auto_draw_n"), ("self_activate_battle", "noop_auto")]),
+        ("BT27-129", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT27-112", "Z-BATTLE", [("self_played", "noop_auto")]),
+        ("P-656", "BATTLE", [("self_played", "auto_draw_n"), ("self_comboed_battle_end", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("P-627", "EXTRA", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt27_066_broly_attack_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT27-066"))
+    assert any(rule.trigger == "self_attacks" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_p652_supreme_kai_of_time_righting_history_play_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-652"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_p656_whis_combo_attack_draw_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-656"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+    assert any(rule.trigger == "self_comboed_battle_end" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt27_red_tranche_rules() -> None:
+    cases = [
+        ("BT27-010", "UNISON", [("self_placed_into_drop", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT27-009", "UNISON", [("self_placed_into_drop", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT27-011", "UNISON", [("self_placed_into_drop", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT27-098", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-123", "Z-BATTLE", [("self_cost_reduction_static", "noop_static"), ("self_or_owner_opponent_battle_played", "noop_auto")]),
+        ("BT27-006", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT27-004", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT27-003", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT27-005", "Z-UNISON", [("owner_opponent_card_attacks", "noop_auto")]),
+        ("BT27-122", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT27-042", "BATTLE", [("self_comboed", "auto_draw_n")]),
+        ("BT27-090", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-126", "BATTLE", [("self_activate_battle", "auto_draw_n"), ("self_activate_battle", "noop_auto")]),
+        ("BT27-125", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT27-120", "EXTRA", [("self_played", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT27-017", "BATTLE", [("owner_opponent_counter_activated", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-031", "BATTLE", [("turn_end", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-096", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-018", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-024", "BATTLE", [("self_played", "auto_draw_n"), ("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt27_042_super_17_fusion_of_two_techniques_combo_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT27-042"))
+    assert any(rule.trigger == "self_comboed" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt27_126_piccolo_jr_survival_strategy_activate_battle_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT27-126"))
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt27_120_future_field_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT27-120"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt27_024_omega_shenron_final_form_play_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT27-024"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_p67x_tranche_rules() -> None:
+    cases = [
+        ("P-670", "Z-EXTRA", [("self_activate_main", "noop_auto")]),
+        ("P-679", "BATTLE", [("self_played", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("P-678", "Z-EXTRA", [("owner_battle_played", "noop_auto"), ("owner_card_left_battle_area", "noop_auto")]),
+        ("P-667", "Z-UNISON", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("P-681", "BATTLE", [("self_comboed", "noop_auto"), ("owner_battle_played_from_arrival", "noop_auto")]),
+        ("P-682", "Z-EXTRA", [("self_played", "noop_auto"), ("owner_battle_played_via_union", "noop_auto")]),
+        ("BT27-016", "BATTLE", [("counter_attack", "noop_auto")]),
+        ("BT27-025", "EXTRA", [("counter_attack", "noop_auto")]),
+        ("P-669", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("P-680", "BATTLE", [("self_static_support", "noop_static")]),
+        ("P-676", "BATTLE", [("self_static_support", "noop_static"), ("self_activate_main", "noop_auto")]),
+        ("BT27-037", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("P-677", "BATTLE", [("owner_battle_played", "noop_auto"), ("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT27-026", "LEADER", [("self_attacks", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("BT27-136", "BATTLE", [("self_cost_reduction_static", "noop_static"), ("self_played_via_successor", "noop_auto")]),
+        ("P-674", "BATTLE", [("self_played", "noop_auto")]),
+        ("P-673", "Z-UNISON", [("opponent_main_phase_start", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("P-675", "BATTLE", [("self_played", "auto_draw_n")]),
+        ("P-683", "BATTLE", [("self_placed_into_drop", "noop_auto"), ("self_removed_from_z_energy_by_owner_leader_skill", "noop_auto")]),
+        ("BT27-030", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto"), ("self_activate_main", "auto_draw_n")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_p675_frieza_second_coming_play_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-675"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt27_030_android_17_military_terror_creation_activate_main_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT27-030"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_ex25_tranche_rules() -> None:
+    cases = [
+        ("EX25-26", "BATTLE", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("EX25-10", "Z-EXTRA", [("owner_named_battle_played", "noop_auto"), ("owner_energy_card_evolved_from_hand", "noop_auto")]),
+        ("EX25-24", "UNISON", [("owner_battle_played_with_evolve", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("EX25-16", "BATTLE", [("self_played", "auto_draw_n"), ("self_or_owner_opponent_card_played", "noop_auto")]),
+        ("EX25-12", "BATTLE", [("counter_attack", "counter_negate_attack_play_self"), ("self_played", "noop_auto")]),
+        ("EX25-22", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("EX25-02", "Z-BATTLE", [("self_played", "noop_auto"), ("owner_skill_less_battle_played_from_drop", "noop_auto")]),
+        ("EX25-25", "BATTLE", [("counter_play", "noop_auto")]),
+        ("EX25-27", "BATTLE", [("self_played", "noop_auto"), ("turn_end", "noop_auto")]),
+        ("BT27-132", "BATTLE", [("self_activate_battle", "noop_auto")]),
+        ("P-691", "BATTLE", [("counter_play", "noop_auto"), ("self_played", "noop_auto")]),
+        ("EX25-03", "Z-BATTLE", [("self_cost_reduction_static", "noop_static"), ("self_played", "noop_auto")]),
+        ("P-690", "BATTLE", [("owner_card_comboed", "noop_auto"), ("self_played", "noop_auto"), ("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("EX25-14", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("P-686", "BATTLE", [("counter_attack", "counter_negate_attack_play_self"), ("self_placed_into_drop", "noop_auto"), ("self_played", "auto_draw_n")]),
+        ("P-685", "BATTLE", [("self_played", "auto_draw_n"), ("self_comboed", "auto_draw_n")]),
+        ("EX25-21", "BATTLE", [("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("EX25-23", "BATTLE", [("self_played", "noop_auto")]),
+        ("EX25-07", "BATTLE", [("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("P-684", "BATTLE", [("self_played", "auto_draw_n"), ("self_comboed", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_ex25_24_vegeta_support_for_a_son_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="UNISON", card_number="EX25-24"))
+    assert any(rule.trigger == "owner_battle_played_with_evolve" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_ex25_16_ssb_vegito_future_hope_union_potara_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX25-16"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 and rule.handler_params.get("requires_played_via") == "union_potara" for rule in rules)
+
+
+def test_extract_exact_p686_trunks_protector_of_discipline_play_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-686"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt28_tranche_rules() -> None:
+    cases = [
+        ("BT28-039", "BATTLE", [("counter_attack", "counter_negate_attack_play_self"), ("self_static_support", "noop_static"), ("self_played", "auto_draw_n"), ("self_played", "noop_auto")]),
+        ("P-694", "Z-BATTLE", [("self_played", "noop_auto")]),
+        ("BT28-033", "BATTLE", [("self_attacks", "noop_auto"), ("owner_opponent_counter_activated", "noop_auto")]),
+        ("BT28-030", "Z-BATTLE", [("self_cost_reduction_static", "noop_static"), ("self_attacks", "noop_auto")]),
+        ("BT28-050", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT28-049", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("EX25-38", "BATTLE", [("self_static_support", "noop_static")]),
+        ("EX25-36", "BATTLE", [("self_activate_battle", "noop_auto")]),
+        ("BT27-130", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("EX25-29", "EXTRA", [("self_cost_reduction_static", "noop_static"), ("self_played", "auto_draw_n"), ("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT28-029", "LEADER", [("self_attacks", "auto_draw_n"), ("self_activate_main", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("P-693", "BATTLE", [("self_cost_reduction_static", "noop_static"), ("self_played", "noop_auto")]),
+        ("BT28-018", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("EX25-32", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT28-053", "EXTRA", [("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("P-687", "BATTLE", [("self_played", "auto_draw_n"), ("self_played", "noop_auto")]),
+        ("EX25-28", "BATTLE", [("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("P-692", "BATTLE", [("owner_card_comboed", "auto_draw_n"), ("owner_card_comboed", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-139", "BATTLE", [("owner_battle_played", "auto_draw_n"), ("owner_battle_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT28-032", "UNISON", [("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt28_039_panzy_new_comrade_play_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT28-039"))
+    assert any(rule.trigger == "self_played" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_ex25_28_videl_power_convergence_activate_main_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="EX25-28"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt28_ex25_followup_tranche_rules() -> None:
+    cases = [
+        ("BT28-055", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("BT28-058", "UNISON", [("owner_alliance_activated", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT28-074", "EXTRA", [("counter_attack", "auto_draw_n"), ("counter_attack", "noop_auto")]),
+        ("BT28-008", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("BT28-069", "BATTLE", [("counter_activated", "counter_play_self_from_counter_counter"), ("self_switched_to_rest_by_alliance", "noop_auto")]),
+        ("BT28-003", "Z-BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT28-144", "BATTLE", [("counter_attack", "noop_auto")]),
+        ("BT28-145", "BATTLE", [("counter_attack", "noop_auto")]),
+        ("BT28-075", "EXTRA", [("self_static_support", "noop_static"), ("self_played", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("EX25-31", "BATTLE", [("self_attacks_or_self_blocker_activated", "auto_draw_n")]),
+        ("EX25-11", "Z-EXTRA", [("self_activate_main", "noop_auto")]),
+        ("EX25-18", "EXTRA", [("counter_play", "noop_auto"), ("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto"), ("self_activate_battle", "auto_draw_n"), ("self_activate_battle", "noop_auto")]),
+        ("EX25-17", "BATTLE", [("self_activate_battle", "auto_draw_n"), ("self_activate_battle", "noop_auto")]),
+        ("EX25-15", "BATTLE", [("self_played", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("EX25-20", "BATTLE", [("owner_unison_played", "noop_auto"), ("owner_unison_placed_into_drop", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT28-021", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT28-101", "BATTLE", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT28-146", "BATTLE", [("counter_attack", "noop_auto")]),
+        ("BT28-143", "BATTLE", [("counter_attack", "noop_auto")]),
+        ("P-696", "BATTLE", [("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt28_074_together_on_the_nimbus_counter_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT28-074"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_ex25_18_sealing_in_a_jar_activate_draw_rule_amounts() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="EX25-18"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+    assert any(rule.trigger == "self_activate_battle" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt28_godly_power_followup_tranche_rules() -> None:
+    cases = [
+        ("BT28-132", "BATTLE", [("self_comboed_battle_end", "noop_auto"), ("self_played", "noop_auto")]),
+        ("BT28-138", "EXTRA", [("counter_attack", "auto_draw_n"), ("counter_attack", "noop_auto")]),
+        ("BT28-023", "EXTRA", [("counter_attack", "noop_auto")]),
+        ("BT28-024", "BATTLE", [("counter_play", "auto_draw_n"), ("counter_play", "noop_auto")]),
+        ("BT28-014", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("BT28-124", "BATTLE", [("counter_play", "noop_auto")]),
+        ("BT28-081", "BATTLE", [("self_cost_reduction_static", "noop_static"), ("self_played", "noop_auto")]),
+        ("BT28-147", "BATTLE", [("counter_attack", "noop_auto")]),
+        ("BT28-082", "UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT28-026", "EXTRA", [("self_played", "noop_auto"), ("owner_battle_played", "noop_auto")]),
+        ("BT28-123", "BATTLE", [("self_activate_main", "noop_auto"), ("self_activate_main", "auto_draw_n")]),
+        ("BT28-129", "BATTLE", [("self_activate_main", "noop_auto"), ("self_activate_main", "auto_draw_n")]),
+        ("BT28-006", "BATTLE", [("turn_end", "noop_auto"), ("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT28-011", "BATTLE", [("self_played", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT28-136", "BATTLE", [("owner_opponent_counter_activated", "noop_auto"), ("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+        ("BT28-106", "LEADER", [("self_attacks", "auto_draw_n"), ("self_attacks", "noop_auto"), ("self_awakens", "auto_draw_n")]),
+        ("BT28-131", "BATTLE", [("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT28-090", "SUPER_COMBO", [("self_comboed", "auto_draw_n")]),
+        ("BT28-025", "EXTRA", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT28-005", "BATTLE", [("owner_battle_attacks", "noop_auto"), ("self_activate_main", "auto_draw_n"), ("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt28_138_battles_of_the_gods_of_destruction_counter_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT28-138"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt28_024_costume_change_counter_play_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT28-024"))
+    assert any(rule.trigger == "counter_play" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt28_123_frieza_unexpected_ally_activate_main_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT28-123"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt28_136_geene_godly_power_activate_main_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT28-136"))
+    assert any(rule.trigger == "self_activate_main" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt29_bt28_followup_tranche_rules() -> None:
+    cases = [
+        ("BT29-002", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "auto_draw_n")]),
+        ("BT28-100", "BATTLE", [("counter_play", "noop_auto")]),
+        ("BT28-102", "EXTRA", [("counter_attack", "noop_auto")]),
+        ("BT28-104", "EXTRA", [("counter_attack", "auto_draw_n"), ("counter_attack", "noop_auto")]),
+        ("BT28-103", "EXTRA", [("counter_play", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("P-711", "Z-BATTLE", [("self_played", "noop_auto")]),
+        ("P-703", "BATTLE", [("self_played", "noop_auto"), ("self_attacks", "noop_auto")]),
+        ("P-702", "BATTLE", [("self_attacks", "noop_auto")]),
+        ("BT28-085", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT27-015", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT27-113", "Z-EXTRA", [("self_activate_battle", "noop_auto")]),
+        ("BT27-124", "Z-EXTRA", [("self_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT28-002", "LEADER", [("self_activate_main", "noop_auto"), ("leader_wished", "noop_auto")]),
+        ("BT27-047", "Z-UNISON", [("owner_battle_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-097", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT27-087", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("P-697", "Z-BATTLE", [("self_activate_battle", "noop_auto")]),
+        ("EB1-32", "BATTLE", [("self_played", "noop_auto")]),
+        ("P-273", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("SD16-04", "BATTLE", [("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt28_104_strongest_candy_in_the_world_counter_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="EXTRA", card_number="BT28-104"))
+    assert any(rule.trigger == "counter_attack" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt29_shortlist_followup_tranche_rules() -> None:
+    cases = [
+        ("BT29-043", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "auto_draw_n")]),
+        ("BT29-105", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("BT29-040", "EXTRA", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT29-103", "EXTRA", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT29-083", "EXTRA", [("self_activate_main", "noop_auto")]),
+        ("BT29-084", "EXTRA", [("self_activate_main", "noop_auto")]),
+        ("BT29-047", "UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT29-145", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT29-046", "Z-EXTRA", [("owner_marker_removed_by_skill", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT29-072", "BATTLE", [("self_played", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT29-138", "EXTRA", [("counter_attack", "noop_auto")]),
+        ("BT29-104", "EXTRA", [("counter_attack", "auto_draw_n"), ("counter_attack", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT29-139", "EXTRA", [("counter_attack", "noop_auto")]),
+        ("BT29-051", "BATTLE", [("counter_attack", "counter_negate_attack_play_self")]),
+        ("BT29-110", "BATTLE", [("counter_play", "noop_auto")]),
+        ("BT29-070", "BATTLE", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT29-060", "Z-BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT29-065", "BATTLE", [("owner_life_added_to_hand_or_drop", "noop_auto")]),
+        ("BT29-087", "Z-BATTLE", [("self_activate_main", "noop_auto")]),
+        ("BT29-023", "EXTRA", [("self_activate_main", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt29_043_lucifer_awaken_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT29-043"))
+    assert any(rule.trigger == "self_awakens" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt30_shortlist_tranche_rules() -> None:
+    cases = [
+        ("P-715", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "auto_draw_n")]),
+        ("BT30-108", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "auto_draw_n")]),
+        ("BT30-081", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "auto_draw_n")]),
+        ("P-736", "BATTLE", [("self_activate_main", "noop_auto")]),
+        ("P-723", "EXTRA", [("self_discarded_or_dropped_by_owner_skill", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("P-725", "Z-UNISON", [("self_attacks", "noop_auto"), ("owner_card_removed_from_battle_by_skill", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("P-735", "Z-EXTRA", [("self_played", "noop_auto"), ("turn_end", "noop_auto")]),
+        ("BT30-071", "BATTLE", [("self_played", "noop_auto"), ("owner_battle_played_with_evolve", "auto_draw_n")]),
+        ("BT30-075", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT30-078", "BATTLE", [("counter_attack", "counter_negate_attack_play_self"), ("self_played", "noop_auto")]),
+        ("BT30-093", "BATTLE", [("counter_attack", "auto_draw_n"), ("counter_attack", "noop_auto")]),
+        ("BT30-053", "BATTLE", [("counter_attack", "counter_negate_attack_play_self"), ("self_activate_main", "noop_auto")]),
+        ("BT30-098", "BATTLE", [("counter_attack", "noop_auto"), ("counter_activated", "counter_play_self_from_counter_counter")]),
+        ("BT30-095", "BATTLE", [("self_played", "noop_auto"), ("self_attacks", "noop_auto")]),
+        ("BT30-073", "BATTLE", [("self_played", "noop_auto")]),
+        ("BT30-069", "BATTLE", [("self_played", "noop_auto"), ("self_attacks", "noop_auto")]),
+        ("P-737", "BATTLE", [("counter_attack", "noop_auto"), ("self_played", "noop_auto")]),
+        ("BT30-043", "LEADER", [("self_activate_main", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("P-731", "Z-EXTRA", [("self_activate_main", "noop_auto")]),
+        ("BT30-068", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_p715_android_13_awaken_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="P-715"))
+    assert any(rule.trigger == "self_awakens" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt30_081_universe_7_teamup_awaken_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="LEADER", card_number="BT30-081"))
+    assert any(rule.trigger == "self_awakens" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 2 for rule in rules)
+
+
+def test_extract_exact_bt30_bt19_xeno_followup_tranche_rules() -> None:
+    cases = [
+        ("BT30-105", "EXTRA", [("self_activate_battle", "noop_auto")]),
+        ("BT30-102", "BATTLE", [("self_played", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT30-106", "EXTRA", [("counter_attack", "noop_auto"), ("owner_card_milled_or_warped_by_skill", "noop_auto")]),
+        ("BT19-076", "BATTLE", [("self_koed", "noop_auto")]),
+        ("EX15-04", "BATTLE", [("owner_card_removed_from_battle_by_skill", "noop_auto"), ("owner_overlord_activated", "noop_auto")]),
+        ("BT23-075", "Z-BATTLE", [("self_played", "noop_auto"), ("self_attacks_or_self_blocker_activated", "noop_auto")]),
+        ("BT11-104", "BATTLE", [("owner_overlord_activated", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT21-134", "BATTLE", [("self_attacks", "noop_auto")]),
+        ("BT19-139", "BATTLE", [("self_attacks", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT19-044", "BATTLE", [("owner_card_removed_from_battle_by_skill", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("TB1-001", "LEADER", [("owner_other_battle_attacks", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("TB1-025", "LEADER", [("owner_card_comboed", "noop_auto"), ("self_awakens", "noop_auto")]),
+        ("BT3-114", "BATTLE", [("owner_battle_played_with_evolve", "noop_auto")]),
+        ("BT3-109", "BATTLE", [("owner_battle_played_with_evolve", "noop_auto")]),
+        ("BT3-116", "BATTLE", [("owner_battle_played_with_evolve", "noop_auto")]),
+        ("BT14-127", "BATTLE", [("self_attacks", "noop_auto")]),
+        ("EX03-28", "BATTLE", [("owner_battle_played_with_evolve", "noop_auto")]),
+        ("BT4-101", "BATTLE", [("owner_battle_played_with_evolve", "auto_draw_n"), ("owner_battle_played_with_evolve", "noop_auto")]),
+        ("EX03-29", "BATTLE", [("owner_battle_played_with_evolve", "noop_auto")]),
+        ("P-037", "BATTLE", [("owner_battle_played_with_evolve", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt4_101_absolute_space_ss3_trunks_evolve_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT4-101"))
+    assert any(rule.trigger == "owner_battle_played_with_evolve" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt26_bt21_z_awaken_followup_tranche_rules() -> None:
+    cases = [
+        ("BT26-062", "Z-LEADER", [("self_attacks_battle_end", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("BT18-061", "Z-LEADER", [("self_static_support", "noop_static"), ("self_activate_main", "noop_auto")]),
+        ("BT21-072", "Z-LEADER", [("self_static_support", "noop_static"), ("turn_start", "noop_auto")]),
+        ("BT25-041", "Z-LEADER", [("self_attacks_battle_end", "noop_auto"), ("turn_end", "noop_auto")]),
+        ("BT25-039", "Z-LEADER", [("self_static_support", "noop_static"), ("turn_end", "noop_auto")]),
+        ("EX23-01", "Z-LEADER", [("owner_opponent_battle_played", "noop_auto"), ("owner_leader_power_reduced_by_skill", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT19-069", "Z-LEADER", [("owner_union_activated", "noop_auto"), ("owner_opponent_card_comboed", "noop_auto")]),
+        ("BT21-102", "Z-LEADER", [("self_placed_in_leader_area", "auto_draw_n"), ("self_placed_in_leader_area", "noop_auto"), ("owner_battle_attacks", "noop_auto")]),
+        ("EX25-19", "Z-LEADER", [("self_placed_in_leader_area", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT26-003", "Z-LEADER", [("owner_swap_activated", "auto_draw_n"), ("owner_swap_activated", "noop_auto"), ("owner_life_added_to_hand_or_drop", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT25-040", "Z-LEADER", [("owner_opponent_card_attacks", "noop_auto"), ("turn_end", "noop_auto")]),
+        ("BT25-038", "Z-LEADER", [("self_placed_in_leader_area", "auto_draw_n"), ("self_placed_in_leader_area", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT22-059", "Z-EXTRA", [("owner_battle_attacks", "noop_auto"), ("self_activate_battle", "noop_auto")]),
+        ("P-688", "Z-EXTRA", [("owner_main_phase_start", "auto_play_up_to_n_from_under_self_and_place_self_under_played_card"), ("owner_opponent_main_phase_start", "auto_play_up_to_n_from_under_self_and_place_self_under_played_card"), ("self_activate_battle", "activate_remove_self_from_game_then_add_up_to_n_from_owner_drop_to_hand")]),
+        ("BT22-008", "Z-EXTRA", [("self_activate_main", "noop_auto")]),
+        ("BT26-093", "Z-UNISON", [("self_activate_main", "noop_auto")]),
+        ("BT20-091", "Z-EXTRA", [("self_static_support", "noop_static"), ("self_activate_main", "noop_auto")]),
+        ("BT26-038", "Z-EXTRA", [("owner_other_battle_played", "noop_auto"), ("self_activate_main", "noop_auto")]),
+        ("BT27-069", "Z-EXTRA", [("self_static_support", "noop_static"), ("turn_end", "noop_auto")]),
+        ("BT1-012", "LEADER", [("self_static_support", "noop_static")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt21_102_golden_frieza_shining_emporer_leader_area_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-LEADER", card_number="BT21-102"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt26_003_frieza_emperors_final_power_swap_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-LEADER", card_number="BT26-003"))
+    assert any(rule.trigger == "owner_swap_activated" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt25_038_majin_buu_transformation_to_true_form_leader_area_draw_rule_amount() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="Z-LEADER", card_number="BT25-038"))
+    assert any(rule.trigger == "self_placed_in_leader_area" and rule.handler_id == "auto_draw_n" and rule.handler_params.get("amount") == 1 for rule in rules)
+
+
+def test_extract_exact_bt7_bt12_bt8_final_shortlist_rules() -> None:
+    cases = [
+        ("BT7-029", "BATTLE", [("counter_play", "noop_auto"), ("self_played", "auto_return_up_to_n_opponent_battle_to_hand_on_play"), ("self_played", "noop_auto")]),
+        ("BT12-071", "BATTLE", [("self_comboed_battle_end", "auto_play_self_from_combo_on_battle_end"), ("self_activate_main", "noop_auto")]),
+        ("BT8-128", "BATTLE", [("self_played", "noop_auto")]),
+    ]
+    for card_number, card_type, expected in cases:
+        rules = extract_effect_rules_from_card(replace(_card("test"), card_type=card_type, card_number=card_number))
+        for trigger, handler in expected:
+            assert any(rule.trigger == trigger and rule.handler_id == handler for rule in rules), card_number
+
+
+def test_extract_exact_bt23_056_raditz_using_a_scouter_draw_on_self_left_battle() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT23-056"))
+    assert any(
+        rule.trigger == "self_left_battle_area"
+        and rule.handler_id == "auto_draw_n"
+        and rule.handler_params.get("amount") == 1
+        for rule in rules
+    )
+
+
+def test_extract_exact_bt25_106_spike_evil_heart_on_play_rule() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT25-106"))
+    rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played" and rule.handler_id == "auto_reveal_opponent_top_deck_and_apply_spike_evil_heart_on_play"
+    )
+    assert rule.handler_params["amount"] == 1
+    assert rule.handler_params["ko_max_cost"] == 5
+    assert rule.handler_params["draw_power_at_most"] == 20000
+
+
+def test_extract_exact_bt27_022_son_gohan_unlimited_potential_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT27-022"))
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played" and rule.handler_id == "auto_draw_n_then_discard_n_from_owner_hand_on_play"
+    )
+    assert play_rule.handler_params["amount"] == 2
+    assert play_rule.handler_params["discard_amount"] == 2
+    combo_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_comboed" and rule.handler_id == "auto_power_reduce_up_to_n_on_combo"
+    )
+    assert combo_rule.handler_params["max_targets"] == 1
+    assert combo_rule.handler_params["power_delta"] == -10000
+    assert combo_rule.handler_params["required_source_zone"] == "battle"
+
+
+def test_extract_exact_bt16_128_beerus_combative_impulse_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT16-128"))
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_switch_up_to_n_opponent_battle_rest_on_play"
+        and rule.handler_params.get("max_targets") == 1
+        for rule in rules
+    )
+    assert any(
+        rule.trigger == "owner_battle_ko_opponent_battle_battle_end"
+        and rule.handler_id == "auto_draw_n_switch_self_active_and_bottom_deck_opponent_life_on_owner_battle_ko"
+        and rule.handler_params.get("amount") == 1
+        and rule.handler_params.get("bottom_deck_opponent_life_amount") == 1
+        for rule in rules
+    )
+
+
+def test_extract_exact_p_653_towa_drawing_on_dark_power_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-653"))
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_play_up_to_n_skillless_cost2_from_owner_deck_drop_or_warp_on_play"
+    )
+    assert play_rule.handler_params["max_targets"] == 1
+    assert play_rule.handler_params["required_card_type"] == "BATTLE"
+    assert play_rule.handler_params["allowed_colors"] == "black"
+    assert play_rule.handler_params["max_cost"] == 2
+    assert play_rule.handler_params["requires_skill_less"] is True
+    combo_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_comboed"
+        and rule.handler_id == "auto_send_up_to_n_opponent_battle_from_drop_to_warp_on_combo"
+    )
+    assert combo_rule.handler_params["max_targets"] == 1
+    assert combo_rule.handler_params["requires_comboed_from"] == "hand"
+
+
+def test_extract_exact_p_689_mosco_godly_support_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="P-689"))
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_play_up_to_n_each_named_from_owner_hand_deck_or_drop_on_play"
+    )
+    assert play_rule.handler_params["max_each"] == 1
+    assert play_rule.handler_params["required_name_contains_each"] == "KOICHIARATOR|PAPARONI"
+    assert play_rule.handler_params["allowed_colors"] == "red"
+    assert play_rule.handler_params["required_card_type"] == "BATTLE"
+    assert play_rule.handler_params["rest_mode"] is True
+    assert play_rule.handler_params["min_owner_energy"] == 4
+    activate_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main" and rule.handler_id == "activate_play_self_from_hand"
+    )
+    assert activate_rule.handler_params["post_play_power_reduce_max_targets"] == 1
+    assert activate_rule.handler_params["post_play_power_delta"] == -20000
+
+
+def test_extract_exact_bt20_006_anilaza_dimension_bender_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT20-006"))
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_draw_n"
+        and rule.handler_params.get("amount") == 1
+        for rule in rules
+    )
+    play_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_played"
+        and rule.handler_id == "auto_place_up_to_1_each_named_from_owner_battle_or_drop_under_self_and_gain_keyword_on_play"
+    )
+    assert play_rule.handler_params["required_name_contains_each"] == "PAPARONI|KOITSUKAI|PANCHIA|BOLLARATOR"
+    assert play_rule.handler_params["grant_keyword"] == "Barrier"
+    attack_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_attacks"
+        and rule.handler_id == "auto_power_reduce_up_to_n_opponent_battle_or_unison_for_turn_on_attack_per_under_self_pairs"
+    )
+    assert attack_rule.handler_params["per_under_cards"] == 2
+    assert attack_rule.handler_params["power_delta"] == -30000
+    activate_rule = next(
+        rule
+        for rule in rules
+        if rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_place_up_to_n_matching_from_owner_hand_under_self_then_gain_keyword_if_under_count_at_least"
+    )
+    assert activate_rule.handler_params["required_traits"] == "Universe 3"
+    assert activate_rule.handler_params["min_under_count"] == 6
+    assert activate_rule.handler_params["grant_keyword"] == "Dual Attack"
+
+
+def test_extract_exact_bt23_056_raditz_using_a_scouter_rules() -> None:
+    rules = extract_effect_rules_from_card(replace(_card("test"), card_type="BATTLE", card_number="BT23-056"))
+    assert any(
+        rule.trigger == "self_played"
+        and rule.handler_id == "auto_bottom_deck_up_to_n_opponent_battle_cost_greater_than_current_energy_on_play"
+        and rule.handler_params.get("max_targets") == 1
+        for rule in rules
+    )
+    assert any(
+        rule.trigger == "self_left_battle_area"
+        and rule.handler_id == "auto_draw_n"
+        and rule.handler_params.get("amount") == 1
+        for rule in rules
+    )
+    assert any(
+        rule.trigger == "self_activate_main"
+        and rule.handler_id == "activate_play_self_from_hand"
+        and rule.handler_params.get("min_owner_energy") == 3
+        for rule in rules
+    )

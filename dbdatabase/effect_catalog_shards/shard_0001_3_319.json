@@ -1,7 +1,7 @@
 {
   "card_rule_count": 250,
   "catalog_kind": "dbs_effect_catalog",
-  "effect_rule_count": 404,
+  "effect_rule_count": 405,
   "rules": {
     "10": [
       {
@@ -273,7 +273,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent] This card gains \u226aDesire\u226b in all areas.",
+        "source_text": "[Permanent] This card gains \u00abDesire\u00bb in all areas.",
         "trigger": "self_played"
       },
       {
@@ -284,23 +284,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Activate: Main] Play up to 2 skill-less \u226aMonster\u226b cards with energy costs of 1 and 2 respectively from your deck in Rest Mode, then shuffle your deck.",
-        "trigger": "self_activate_main"
-      },
-      {
-        "family_id": "self_activate_main:activate_bottom_deck_owner_battle_then_play_matching_from_owner_deck",
-        "handler_id": "activate_bottom_deck_owner_battle_then_play_matching_from_owner_deck",
-        "handler_params": {
-          "max_cost": 2,
-          "max_targets": 1,
-          "required_bottom_deck_characters": "Son Goku",
-          "required_characters": "Goku Black"
-        },
-        "limit_per_turn": null,
-        "limit_scope": "card_number",
-        "once_per_turn": false,
-        "provenance": "extractor",
-        "source_text": "[Activate: Main] Choose 1 <Son Goku> card in your Battle Area and place it at the bottom of your deck: Play up to 1 <Goku Black> card with an energy cost of 2 or less from your deck, then shuffle your deck.",
+        "source_text": "[permanent] this card gains \u226adesire\u226b in all areas.. [activate: main] play up to 2 skill-less \u226amonster\u226b cards with energy costs of 1 and 2 respectively from your deck in rest mode, then shuffle your deck.",
         "trigger": "self_activate_main"
       }
     ],
@@ -375,7 +359,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Auto] If your Leader Card is a green or yellow \u226aSaiyan\u226b card: At the end of a turn in which this card was placed in a Battle Area, you may choose 1 \u226aGreat Ape\u226b card with an energy cost of 4 in your hand and play it in your opponent's Battle Area with its skills negated for the game. If you do, draw 2 cards.",
+        "source_text": "[Auto] If your Leader Card is a green or yellow \u00abSaiyan\u00bb card: At the end of a turn in which this card was placed in a Battle Area, you may choose 1 \u00abGreat Ape\u00bb card with an energy cost of 4 in your hand and play it in your opponent's Battle Area with its skills negated for the game. If you do, draw 2 cards.",
         "trigger": "self_played"
       },
       {
@@ -388,7 +372,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Auto] If your Leader Card is a green or yellow \u226aSaiyan\u226b card: At the end of a turn in which this card was placed in a Battle Area, you may choose 1 \u226aGreat Ape\u226b card with an energy cost of 4 in your hand and play it in your opponent's Battle Area with its skills negated for the game. If you do, draw 2 cards.",
+        "source_text": "[Auto] If your Leader Card is a green or yellow \u00abSaiyan\u00bb card: At the end of a turn in which this card was placed in a Battle Area, you may choose 1 \u00abGreat Ape\u00bb card with an energy cost of 4 in your hand and play it in your opponent's Battle Area with its skills negated for the game. If you do, draw 2 cards.",
         "trigger": "turn_end"
       },
       {
@@ -399,7 +383,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Activate: Main][Once per turn]\u2460: Choose up to 1 of your opponent's \u226aGreat Ape\u226b cards with an energy cost of 4 or less and gain control of it until the end of the turn.",
+        "source_text": "[Activate: Main][Once per turn]?: Choose up to 1 of your opponent's \u00abGreat Ape\u00bb cards with an energy cost of 4 or less and gain control of it until the end of the turn.",
         "trigger": "self_activate_main"
       },
       {
@@ -605,7 +589,6 @@
           "max_add": 1,
           "max_cost": 3,
           "required_card_type": "UNISON",
-          "required_characters": "Or , Or 1 A Specified Cost Of 2",
           "required_traits": "Android,Demon Realm Race",
           "shuffle_deck_after": true
         },
@@ -641,7 +624,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Counter: Attack][Spirit Boost X] If your Leader Card is a red \u226aUniverse 11\u226b card: Negate the attack, add up to 1 red <Jiren> card with an [Evolve] skill and an energy cost of 5 or less from your deck to your hand, then shuffle your deck. If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 red \u226aUniverse 11\u226b card with an energy cost of 1 in your Drop Area and play it in Rest Mode with its skills negated for the turn.",
+        "source_text": "[Counter: Attack][Spirit Boost X] If your Leader Card is a red \u00abUniverse 11\u00bb card: Negate the attack, add up to 1 red <Jiren> card with an [Evolve] skill and an energy cost of 5 or less from your deck to your hand, then shuffle your deck. If you removed a marker from one of your red Unison Cards using this skill, choose up to 1 red \u00abUniverse 11\u00bb card with an energy cost of 1 in your Drop Area and play it in Rest Mode with its skills negated for the turn.",
         "trigger": "counter_attack"
       }
     ],
@@ -1021,7 +1004,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent] This card gains \u226aShadow Dragon\u226b in all areas.",
+        "source_text": "[Permanent] This card gains \u00abShadow Dragon\u00bb in all areas.",
         "trigger": "self_played"
       },
       {
@@ -1063,7 +1046,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent] This card gains \u226aShadow Dragon\u226b in all areas.",
+        "source_text": "[Permanent] This card gains \u00abShadow Dragon\u00bb in all areas.",
         "trigger": "self_played"
       }
     ],
@@ -1076,7 +1059,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent] This card gains \u226aShadow Dragon\u226b in all areas.",
+        "source_text": "[Permanent] This card gains \u00abShadow Dragon\u00bb in all areas.",
         "trigger": "self_played"
       }
     ],
@@ -1089,7 +1072,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent] This card gains \u226aShadow Dragon\u226b in all areas.",
+        "source_text": "[Permanent] This card gains \u00abShadow Dragon\u00bb in all areas.",
         "trigger": "self_played"
       }
     ],
@@ -1435,7 +1418,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Auto] When this card is played without using skills, choose one-\n\u30fbChoose all of your opponent's Battle Cards with energy costs of 3 or more, place them at the bottom of their owners' decks, and if your Leader Card is a blue <Kale> card, place up to 1 card from the top of your deck under your Leader Card.\n\u30fbIf you have 7 or more energy, choose all of your opponent's Battle Cards, ignoring [Barrier], place them at the bottom of their owners' decks, and this card gains [Barrier] and [Dual Attack] for the turn.",
+        "source_text": "[Auto] When this card is played without using skills, choose one-\n\u00b7Choose all of your opponent's Battle Cards with energy costs of 3 or more, place them at the bottom of their owners' decks, and if your Leader Card is a blue <Kale> card, place up to 1 card from the top of your deck under your Leader Card.\n\u00b7If you have 7 or more energy, choose all of your opponent's Battle Cards, ignoring [Barrier], place them at the bottom of their owners' decks, and this card gains [Barrier] and [Dual Attack] for the turn.",
         "trigger": "self_played"
       }
     ],
@@ -1448,7 +1431,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent] If your Leader Card is a \u226aUniverse 6\u226b card and it's your opponent's turn, reduce the energy cost of this card in your hand by 2.",
+        "source_text": "[Permanent] If your Leader Card is a ?Universe 6? card and it's your opponent's turn, reduce the energy cost of this card in your hand by 2.",
         "trigger": "self_played"
       },
       {
@@ -1458,7 +1441,6 @@
           "discard_count": 1,
           "leader_allowed_colors": "blue",
           "leader_required_characters": "Kale",
-          "min_cost_greater_than_current_energy": 1,
           "opponent_hand_bottom_deck_count": 2
         },
         "limit_per_turn": null,
@@ -1479,7 +1461,6 @@
           "max_add": 1,
           "max_cost": 3,
           "required_card_type": "UNISON",
-          "required_characters": "Or 1 A Specified Cost Of 2",
           "required_traits": "Universe 6",
           "shuffle_deck_after": true
         },
@@ -1777,7 +1758,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Auto][Limit 1] If your Leader Card is a red \u226aEarthling\u226b-only card with 10000 power or less: When a card in your life is flipped face up by one of your red card skills, you may play this card from your hand. If you do, choose up to 1 of your red Unison Cards with 1000 power and 2 markers or less, add a marker to it, and you can't play multicolor Battle Cards for the game.",
+        "source_text": "[Auto][Limit 1] If your Leader Card is a red \u00abEarthling\u00bb-only card with 10000 power or less: When a card in your life is flipped face up by one of your red card skills, you may play this card from your hand. If you do, choose up to 1 of your red Unison Cards with 1000 power and 2 markers or less, add a marker to it, and you can't play multicolor Battle Cards for the game.",
         "trigger": "owner_life_card_flipped_face_up"
       },
       {
@@ -1788,7 +1769,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Auto] If your Leader Card is a red \u226aEarthling\u226b-only card with 10000 power or less: When a face-up red Battle Card in your life is played, it gets +5000 power for the turn.",
+        "source_text": "[Auto] If your Leader Card is a red \u00abEarthling\u00bb-only card with 10000 power or less: When a face-up red Battle Card in your life is played, it gets +5000 power for the turn.",
         "trigger": "owner_other_battle_played"
       }
     ],
@@ -1928,7 +1909,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Counter: Attack] Negate the attack. If your Leader Card is a \u226aUniverse 6\u226b card, play up to 1 \u226aUniverse 6\u226b card with an energy cost of 1 from your Drop Area with its skills negated for the turn.",
+        "source_text": "[Counter: Attack] Negate the attack. If your Leader Card is a \u00abUniverse 6\u00bb card, play up to 1 \u00abUniverse 6\u00bb card with an energy cost of 1 from your Drop Area with its skills negated for the turn.",
         "trigger": "counter_attack"
       },
       {
@@ -1939,7 +1920,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Activate: Main](Blue), if your Leader Card is a \u226aUniverse 6\u226b card: Choose all of your Battle Cards with both \u226aSaiyan\u226b and \u226aUniverse 6\u226b and they get +5000 power for the turn.",
+        "source_text": "[Activate: Main](Blue), if your Leader Card is a \u00abUniverse 6\u00bb card: Choose all of your Battle Cards with both \u00abSaiyan\u00bb and \u00abUniverse 6\u00bb and they get +5000 power for the turn.",
         "trigger": "self_activate_main"
       }
     ],
@@ -1960,7 +1941,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Counter: Play] If your Leader Card is a <Cabba> card: If the Battle Card being played has 20000 power or more, play up to 1 blue \u226aUniverse 7\u226b <Vegeta> card with [Blocker] from your deck, negate its non-keyword skills for the game, then shuffle your deck.",
+        "source_text": "[Counter: Play] If your Leader Card is a <Cabba> card: If the Battle Card being played has 20000 power or more, play up to 1 blue \u00abUniverse 7\u00bb <Vegeta> card with [Blocker] from your deck, negate its non-keyword skills for the game, then shuffle your deck.",
         "trigger": "counter_play"
       }
     ],
@@ -2036,6 +2017,44 @@
         "handler_params": {
           "leader_allowed_colors": "red",
           "leader_required_traits": "Shenron",
+          "max_targets": 1,
+          "required_runtime_labels": "dragon ball",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader card is a red \u226ashenron\u226b card: choose one-. \u30fbadd up to 1 [dragon ball] card from your deck to your hand, then shuffle your deck.. \u30fbadd up to 1 red \u226adesire\u226b card with an energy cost of 1 or 2 from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "allowed_colors": "red",
+          "allowed_costs": "1,2",
+          "leader_allowed_colors": "red",
+          "leader_required_traits": "Shenron",
+          "max_cost": 2,
+          "max_targets": 1,
+          "min_cost": 1,
+          "required_traits": "Desire",
+          "shuffle_deck_after": true
+        },
+        "limit_per_turn": 1,
+        "limit_scope": "card_number",
+        "once_per_turn": false,
+        "provenance": "extractor",
+        "source_text": "[activate: battle][limit 1] if your leader card is a red \u226ashenron\u226b card: choose one-. \u30fbadd up to 1 [dragon ball] card from your deck to your hand, then shuffle your deck.. \u30fbadd up to 1 red \u226adesire\u226b card with an energy cost of 1 or 2 from your deck to your hand, then shuffle your deck.",
+        "trigger": "self_activate_battle"
+      },
+      {
+        "family_id": "self_activate_battle:activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_id": "activate_add_up_to_n_from_owner_deck_to_hand",
+        "handler_params": {
+          "leader_allowed_colors": "red",
+          "leader_required_traits": "Shenron",
           "max_cost": -1,
           "max_targets": 1,
           "required_leader_traits": "Shenron",
@@ -2061,7 +2080,6 @@
           "max_cost": 2,
           "max_targets": 1,
           "min_cost": 1,
-          "required_characters": "Or 2",
           "required_leader_traits": "Shenron",
           "required_traits": "Desire",
           "requires_leader": "if your leader card is a red \u226ashenron\u226b card",
@@ -2641,7 +2659,7 @@
         "handler_params": {
           "amount": 1,
           "leader_required_characters": "Nappa,Vegeta",
-          "required_leader_traits": "Vegeta,Nappa",
+          "required_leader_traits": "Nappa,Vegeta",
           "requires_leader": "if your leader card is a <vegeta> or <nappa> card",
           "requires_played_from": "hand"
         },
@@ -2746,7 +2764,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Permanent] If your Leader Card is a green \u226aSaiyan\u226b card, you can activate this card from your hand without paying its energy cost.",
+        "source_text": "[Permanent] If your Leader Card is a green \u00abSaiyan\u00bb card, you can activate this card from your hand without paying its energy cost.",
         "trigger": "self_played"
       },
       {
@@ -2763,7 +2781,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Auto][Once per turn]\u2460: When one of your non-\u226aGreat Ape\u226b \u226aSaiyan\u226b cards is KO'd by an attack, you may choose a \u226aGreat Ape\u226b card that includes the color and character name of the KO'd card and an energy cost of 4 in your deck, play it in Rest Mode, then shuffle your deck.",
+        "source_text": "[Auto][Once per turn]?: When one of your non-\u00abGreat Ape\u00bb \u00abSaiyan\u00bb cards is KO'd by an attack, you may choose a \u00abGreat Ape\u00bb card that includes the color and character name of the KO'd card and an energy cost of 4 in your deck, play it in Rest Mode, then shuffle your deck.",
         "trigger": "owner_battle_koed_by_opponent_attack_battle_end"
       },
       {
@@ -2777,7 +2795,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Auto] At the end of your turn, choose up to 1 \u226aGreat Ape\u226b card in your Battle Area and switch it to Active Mode.",
+        "source_text": "[Auto] At the end of your turn, choose up to 1 \u00abGreat Ape\u00bb card in your Battle Area and switch it to Active Mode.",
         "trigger": "turn_end"
       }
     ],
@@ -3255,7 +3273,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Permanent][Bond 2] \u226aHeroine\u226b: This card gets +9000 power.",
+        "source_text": "[Permanent][Bond 2] ?Heroine?: This card gets +9000 power.",
         "trigger": "self_played"
       },
       {
@@ -3344,7 +3362,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Activate: Main](Blue)(Yellow)\u2460, if your Leader Card is a <Vegito> card: Choose up to 1 Blue/Yellow multicolor <Vegito> card with an original energy cost of 8 in your hand and play it on top of this card.",
+        "source_text": "[Activate: Main](Blue)(Yellow)?, if your Leader Card is a <Vegito> card: Choose up to 1 Blue/Yellow multicolor <Vegito> card with an original energy cost of 8 in your hand and play it on top of this card.",
         "trigger": "self_activate_main"
       }
     ],
@@ -3377,7 +3395,6 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
-          "auto_cost_header": "\u2461",
           "requires_comboed_from": "hand",
           "rest_mode_only": true,
           "resting": true
@@ -3395,7 +3412,6 @@
         "family_id": "self_comboed_battle_end:auto_play_self_from_combo_on_battle_end",
         "handler_id": "auto_play_self_from_combo_on_battle_end",
         "handler_params": {
-          "auto_cost_header": "\u2461",
           "requires_comboed_from": "hand",
           "resting": false
         },
@@ -3427,7 +3443,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Activate: Main]\u2460, remove this card from the game: Choose up to 1 of your opponent's Battle Cards and gain control of it.",
+        "source_text": "[Activate: Main]?, remove this card from the game: Choose up to 1 of your opponent's Battle Cards and gain control of it.",
         "trigger": "self_activate_main"
       }
     ],
@@ -3626,7 +3642,7 @@
           "leader_allowed_colors": "red",
           "leader_required_characters": "Son Goku,Universe 7",
           "leader_required_traits": "Universe 7",
-          "required_leader_traits": "Son Goku",
+          "required_leader_traits": "Universe 7",
           "requires_leader": "if your leader card is a red \u226auniverse 7\u226b <son goku> card and there are 5 or more \u226auniverse 7\u226b cards in your drop area"
         },
         "limit_per_turn": 1,
@@ -3930,7 +3946,6 @@
           "look_count": 5,
           "max_add": 1,
           "max_cost": -1,
-          "required_characters": "/ Multicolor",
           "required_traits": "Frieza'S Army"
         },
         "limit_per_turn": null,
@@ -4214,7 +4229,7 @@
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
           "leader_required_characters": "Great Priest,Zen-Oh",
-          "required_leader_traits": "Zen-Oh,Great Priest",
+          "required_leader_traits": "Great Priest,Zen-Oh",
           "requires_leader": "if your leader card is a <zen-oh> or <great priest> card"
         },
         "limit_per_turn": null,
@@ -4735,7 +4750,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Auto] If your Leader Card is a yellow \u226aUniverse 11\u226b card: When this card is played from your hand, choose one-\n\u30fbIf you don't have a Unison Card in play, choose up to 1 {Vegeta, Unison of Fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it.\n\u30fbThis card gets +10000 power and [Double Strike] for the turn.",
+        "source_text": "[Auto] If your Leader Card is a yellow ?Universe 11? card: When this card is played from your hand, choose one-\n?If you don't have a Unison Card in play, choose up to 1 {Vegeta, Unison of Fury} from your hand or deck, play it with 3 markers on it, then shuffle your deck if you looked through it.\n?This card gets +10000 power and [Double Strike] for the turn.",
         "trigger": "self_played"
       },
       {
@@ -5213,7 +5228,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Auto] If your Leader Card is green, yellow, or a \u226aHeroine\u226b card: When this card is used in a combo from your hand, choose one-\u30fbChoose up to 1 of your opponent's Leader Cards or Unison Cards and switch it to Rest Mode.\u30fbIf it's your turn, choose up to 1 of your opponent's skill-less Battle Cards and KO it.",
+        "source_text": "[Auto] If your Leader Card is green, yellow, or a \u00abHeroine\u00bb card: When this card is used in a combo from your hand, choose one-\u00b7Choose up to 1 of your opponent's Leader Cards or Unison Cards and switch it to Rest Mode.\u00b7If it's your turn, choose up to 1 of your opponent's skill-less Battle Cards and KO it.",
         "trigger": "self_comboed"
       }
     ],
@@ -5618,7 +5633,6 @@
           "max_add": 1,
           "max_cost": 3,
           "required_card_type": "UNISON",
-          "required_characters": "Or 1 A Specified Cost Of 3",
           "required_traits": "Saiyan",
           "shuffle_deck_after": true
         },
@@ -6117,7 +6131,7 @@
         "limit_scope": "card_number",
         "once_per_turn": true,
         "provenance": "extractor",
-        "source_text": "[Activate: Battle][Once per turn][Spirit Boost 1](Yellow): Choose one\u2014\n\u30fbIf you have 2 or more face-up cards in your life, this card gets +10000 power for the battle.\n\u30fbYou may choose 1 {Fruit of the Tree of Might} in your hand and discard it. If you do, activate its [Activate: Battle] skill without paying its skill cost.",
+        "source_text": "[Activate: Battle][Once per turn][Spirit Boost 1](Yellow): Choose one\u2014\n\u00b7If you have 2 or more face-up cards in your life, this card gets +10000 power for the battle.\n\u00b7You may choose 1 {Fruit of the Tree of Might} in your hand and discard it. If you do, activate its [Activate: Battle] skill without paying its skill cost.",
         "trigger": "self_activate_battle"
       }
     ],
@@ -6447,7 +6461,7 @@
         "limit_scope": "card_number",
         "once_per_turn": false,
         "provenance": "extractor",
-        "source_text": "[Auto] If your Leader Card is a yellow \u226aTurles Crusher Corps\u226b card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it.",
+        "source_text": "[Auto] If your Leader Card is a yellow \u00abTurles Crusher Corps\u00bb card: When this card is played from your hand, flip up to 1 card in your life face up, activate up to 1 {Turles's Power Ball} from your deck or Drop Area, then shuffle your deck if you looked through it.",
         "trigger": "self_played"
       }
     ]
