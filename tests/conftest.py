@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sqlite3
 import sys
 from pathlib import Path
@@ -11,6 +12,14 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.db import SQLiteCardRepository
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    if config.option.basetemp:
+        return
+    local_root = ROOT / ".pytest_tmp"
+    local_root.mkdir(parents=True, exist_ok=True)
+    config.option.basetemp = local_root / f"run_{os.getpid()}"
 
 
 @pytest.fixture(scope="session")
