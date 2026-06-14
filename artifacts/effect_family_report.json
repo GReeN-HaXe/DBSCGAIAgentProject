@@ -12762,7 +12762,7 @@
       }
     },
     {
-      "card_count": 62,
+      "card_count": 61,
       "card_ids": [
         10026,
         10047,
@@ -12784,7 +12784,6 @@
         217,
         2234,
         2241,
-        2292,
         2298,
         2299,
         2302,
@@ -12829,14 +12828,31 @@
       ],
       "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
       "handlers": {
-        "auto_ko_up_to_n_opponent_battle_on_attack": 62
+        "auto_ko_up_to_n_opponent_battle_on_attack": 61
       },
       "provenances": {
-        "extractor": 62
+        "extractor": 61
       },
-      "rule_count": 62,
+      "rule_count": 61,
       "triggers": {
-        "self_attacks": 62
+        "self_attacks": 61
+      }
+    },
+    {
+      "card_count": 1,
+      "card_ids": [
+        2292
+      ],
+      "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle",
+      "handlers": {
+        "auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle": 1
+      },
+      "provenances": {
+        "extractor": 1
+      },
+      "rule_count": 1,
+      "triggers": {
+        "self_attacks": 1
       }
     },
     {
@@ -22417,7 +22433,7 @@
   "summary": {
     "card_rule_count": 5821,
     "effect_rule_count": 9332,
-    "family_count": 844,
+    "family_count": 845,
     "provenance_counts": {
       "extractor": 9225,
       "manual_override": 107

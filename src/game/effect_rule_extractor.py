@@ -1543,6 +1543,13 @@ def _extract_common_conditions(text: str) -> dict[str, int | str | bool]:
         params["max_owner_life"] = int(m_life.group(1))
     if "if your life is less than or equal to your opponent's" in text or "if your life is less than or equal to your opponent’s" in text:
         params["requires_owner_life_less_or_equal_opponent"] = True
+    m_owner_tokens = re.search(r"if you have (\d+) or more ([^.,:;\n]+? tokens?)\b", text, re.IGNORECASE)
+    if m_owner_tokens:
+        token_name = str(m_owner_tokens.group(2) or "").strip().lower()
+        if token_name.endswith("tokens"):
+            token_name = token_name[:-1].strip()
+        params["required_owner_token_count"] = int(m_owner_tokens.group(1))
+        params["required_owner_token_name"] = token_name
     if "neither you nor your opponent have a battle card in play" in text:
         params["requires_no_owner_battle"] = True
         params["requires_no_opponent_battle"] = True
@@ -15517,7 +15524,30 @@ def extract_effect_rules_from_card(card: CardData) -> list[EffectRule]:
                 )
             )
 
-        if _ATTACK_TRIGGER_RE.search(branch) and "opponent" in branch and "battle card" in branch and "ko it" in branch.lower():
+        m_attack_ko_then_self_battle_power = re.search(
+            r"when this card attacks,\s*choose up to (\d+) of your opponent'?s battle cards? with an energy cost of (\d+) or less and ko it,\s*then this card gets \+(\d+) power for the battle",
+            branch,
+            re.IGNORECASE,
+        )
+        if m_attack_ko_then_self_battle_power:
+            extra = _extract_common_conditions(branch)
+            rules.append(
+                EffectRule(
+                    trigger="self_attacks",
+                    handler_id="auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle",
+                    handler_params={
+                        "max_targets": int(m_attack_ko_then_self_battle_power.group(1)),
+                        "max_cost": int(m_attack_ko_then_self_battle_power.group(2)),
+                        "power_delta": int(m_attack_ko_then_self_battle_power.group(3)),
+                        "target_policy": "first",
+                        **extra,
+                    },
+                    source_text=branch,
+                    once_per_turn=once,
+                    limit_per_turn=limit,
+                )
+            )
+        elif _ATTACK_TRIGGER_RE.search(branch) and "opponent" in branch and "battle card" in branch and "ko it" in branch.lower():
             max_targets = _extract_max_targets(branch)
             m_cost = re.search(r"energy cost of (\d+) or less", branch)
             max_cost = int(m_cost.group(1)) if m_cost else -1
@@ -26445,6 +26475,9 @@ def build_effect_rules_with_diagnostics_and_report(
         ],
     }
     return mapped, diagnostics, report
+
+
+
 
 
 

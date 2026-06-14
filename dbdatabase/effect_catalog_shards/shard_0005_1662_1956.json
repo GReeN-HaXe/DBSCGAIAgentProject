@@ -2368,7 +2368,9 @@
         "family_id": "self_activate_main:activate_play_self_from_hand",
         "handler_id": "activate_play_self_from_hand",
         "handler_params": {
-          "min_owner_energy": 3
+          "min_owner_energy": 3,
+          "required_owner_token_count": 3,
+          "required_owner_token_name": "energy and you choose 3 of your opponent's clone token"
         },
         "limit_per_turn": 1,
         "limit_scope": "card_number",

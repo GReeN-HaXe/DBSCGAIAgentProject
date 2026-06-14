@@ -296,7 +296,8 @@
         "auto_ko_attacked_battle_and_opponent_discards_n_on_battle_end": 1,
         "auto_ko_opponent_battle_on_play": 231,
         "auto_ko_opponent_battles_up_to_total_cost_and_max_power_on_play": 1,
-        "auto_ko_up_to_n_opponent_battle_on_attack": 62,
+        "auto_ko_up_to_n_opponent_battle_on_attack": 61,
+        "auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle": 1,
         "auto_ko_up_to_n_opponent_battle_on_play": 13,
         "auto_ko_up_to_n_opponent_battle_on_self_ko": 1,
         "auto_ko_up_to_n_opponent_battle_on_switch": 2,
@@ -24284,7 +24285,7 @@
       "example_card_name": "Mai, Earthling Support",
       "example_card_number": "BT23-074",
       "handler_counts": {
-        "auto_ko_up_to_n_opponent_battle_on_attack": 1,
+        "auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle": 1,
         "auto_play_token_in_battle_on_play": 1
       },
       "implemented_card_count": 1,

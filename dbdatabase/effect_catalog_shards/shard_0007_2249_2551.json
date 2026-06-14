@@ -864,11 +864,14 @@
         "trigger": "self_played"
       },
       {
-        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack",
-        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack",
+        "family_id": "self_attacks:auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle",
+        "handler_id": "auto_ko_up_to_n_opponent_battle_on_attack_then_self_gain_power_for_battle",
         "handler_params": {
           "max_cost": 3,
           "max_targets": 1,
+          "power_delta": 11000,
+          "required_owner_token_count": 4,
+          "required_owner_token_name": "earthling token",
           "target_policy": "first"
         },
         "limit_per_turn": 1,
@@ -1043,6 +1046,8 @@
           "grant_keyword": "Triple Strike",
           "min_owner_energy": 4,
           "power_delta": 5000,
+          "required_owner_token_count": 4,
+          "required_owner_token_name": "energy and you switch 3 of your earthling token",
           "rest_mode_only": true
         },
         "limit_per_turn": 1,
