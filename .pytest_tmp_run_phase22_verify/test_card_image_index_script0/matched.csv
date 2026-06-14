@@ -1,3 +1,0 @@
-table_name,record_id,base_id,card_number,card_name,image_path,image_format,match_type
-cards,1,,BT1-001,Card A,C:\Users\PC\Desktop\dbsAIAgent\.pytest_tmp_run_phase22_verify\test_card_image_index_script0\images\BT1-001.webp,webp,exact_stem
-variants,10,1,BT1-001,Card A Alt,C:\Users\PC\Desktop\dbsAIAgent\.pytest_tmp_run_phase22_verify\test_card_image_index_script0\images\BT1-001.webp,webp,exact_stem
