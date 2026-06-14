@@ -105,7 +105,6 @@ def main() -> None:
         )
         dataset_path = output_dir / f"{group_name}.json"
         summary_path = output_dir / f"{group_name}_summary.json"
-        dataset_path.write_text(json.dumps(dataset, indent=2), encoding="utf-8")
         total_secret_status_counts: dict[str, int] = {}
         for row in included:
             secret_summary = row.get("secret_auto_summary", {})
@@ -147,6 +146,7 @@ def main() -> None:
             "status_counts": {status: int(total_secret_status_counts[status]) for status in sorted(total_secret_status_counts)},
         }
         dataset["secret_auto_summary"] = aggregated_secret_auto_summary
+        dataset_path.write_text(json.dumps(dataset, indent=2), encoding="utf-8")
         summary_payload = {
             "schema_version": "phase22.benchmark_dataset_summary.v1",
             "group_name": group_name,
