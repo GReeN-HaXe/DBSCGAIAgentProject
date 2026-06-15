@@ -1,0 +1,32 @@
+{
+  "schema_version": "human_trace_normalization_batch.v1",
+  "input_glob": "artifacts/phase22_source/human_vs_ai_trace_*.json",
+  "include_bookkeeping": false,
+  "processed_count": 3,
+  "outputs": [
+    {
+      "source": "artifacts\\phase22_source\\human_vs_ai_trace_001.json",
+      "review_output": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_001_review.json",
+      "training_output": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_001_training.jsonl",
+      "decision_count": 92,
+      "winner_id": 2,
+      "stop_reason": ""
+    },
+    {
+      "source": "artifacts\\phase22_source\\human_vs_ai_trace_krillin_vs_gokublack_001.json",
+      "review_output": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_gokublack_001_review.json",
+      "training_output": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_gokublack_001_training.jsonl",
+      "decision_count": 36,
+      "winner_id": null,
+      "stop_reason": ""
+    },
+    {
+      "source": "artifacts\\phase22_source\\human_vs_ai_trace_krillin_vs_mechikabura_001.json",
+      "review_output": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_mechikabura_001_review.json",
+      "training_output": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_mechikabura_001_training.jsonl",
+      "decision_count": 21,
+      "winner_id": null,
+      "stop_reason": ""
+    }
+  ]
+}

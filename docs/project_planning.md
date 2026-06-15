@@ -130,9 +130,14 @@ Current benchmark conclusion:
 - generalized model reached:
   - batch-eval top-1: `1.0`
   - LOMO top-1: `1.0`
+- first mixed-source check with the existing `human_vs_ai` slice is also solved:
+  - mixed-source batch-eval top-1: `1.0`
+  - mixed-source dataset count: `5`
+  - mixed-source example count: `649`
 
 Meaning:
 - more Phase 22 tuning on the same four matchup groups is not justified
+- the first human-vs-AI benchmark slice did not expose a new weakness yet
 - next benchmark improvements must come from harder data, not more local optimization
 
 ### Vision / Identity
@@ -167,6 +172,12 @@ Resolved:
   - `artifacts/phase22_generalization_v2/production`
 - Generalized batch eval:
   - `artifacts/phase22_generalization_v2/phase22_generalization_batch_eval.json`
+- Mixed-source batch eval:
+  - `artifacts/phase22_generalization_v2/phase22_batch_eval_with_human.json`
+- Mixed-source batch eval report:
+  - `artifacts/phase22_generalization_v2/phase22_batch_eval_with_human_report.md`
+- Mixed-source comparison summary:
+  - `artifacts/phase22_generalization_v2/phase22_mixed_source_comparison.json`
 - LOMO summary:
   - `artifacts/phase22_lomo_v1/phase22_lomo_summary.json`
 
@@ -3305,11 +3316,14 @@ Resolved:
 
 ### P1: Human-vs-AI Benchmark Expansion
 
-- [ ] generate 3-5 usable human-vs-AI traces per selected deck matchup
-- [ ] normalize those traces into review/training artifacts
-- [ ] build a `human_vs_ai` benchmark dataset group
-- [ ] add `human_vs_ai` into Phase 22 batch evaluation
-- [ ] compare AI-vs-AI-only vs mixed-source benchmark behavior
+- [x] generate an initial usable human-vs-AI trace slice
+- [x] normalize those traces into review/training artifacts
+- [x] build a `human_vs_ai` benchmark dataset group
+- [x] add `human_vs_ai` into Phase 22 batch evaluation
+- [x] produce the first mixed-source Phase 22 batch-eval artifact
+- [x] compare AI-vs-AI-only vs mixed-source benchmark behavior for the initial human slice
+- [ ] expand the human-vs-AI slice to 3-5 traces per selected matchup batch, not just an initial mixed set
+- [ ] rerun the comparison after the human slice is materially larger
 
 ### P1: Benchmark Breadth
 

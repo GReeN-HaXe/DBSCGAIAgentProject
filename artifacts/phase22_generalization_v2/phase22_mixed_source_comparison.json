@@ -1,0 +1,42 @@
+{
+  "schema_version": "phase22.mixed_source_comparison.v1",
+  "base_eval_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_generalization_v2\\phase22_generalization_batch_eval.json",
+  "mixed_eval_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_generalization_v2\\phase22_batch_eval_with_human.json",
+  "base_dataset_count": 4,
+  "mixed_dataset_count": 5,
+  "base_example_count": 636,
+  "mixed_example_count": 649,
+  "base_top1_accuracy": 1.0,
+  "mixed_top1_accuracy": 1.0,
+  "delta_dataset_count": 1,
+  "delta_example_count": 13,
+  "delta_top1_accuracy": 0.0,
+  "added_datasets": [
+    {
+      "dataset_path": "C:\\Users\\PC\\Desktop\\dbsAIAgent\\artifacts\\phase22_benchmark_batch_v2\\human_vs_ai.json",
+      "example_count": 13,
+      "top1_accuracy": 1.0,
+      "per_source": [
+        {
+          "source_name": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_001_review.json",
+          "example_count": 10,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_gokublack_001_review.json",
+          "example_count": 2,
+          "top1_accuracy": 1.0
+        },
+        {
+          "source_name": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_mechikabura_001_review.json",
+          "example_count": 1,
+          "top1_accuracy": 1.0
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "regression_detected": false,
+    "interpretation": "The first mixed-source evaluation did not reduce top-1 accuracy, but the added human slice is too small to be a decisive benchmark."
+  }
+}

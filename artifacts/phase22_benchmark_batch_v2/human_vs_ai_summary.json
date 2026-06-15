@@ -1,0 +1,136 @@
+{
+  "schema_version": "phase22.benchmark_dataset_summary.v1",
+  "input_count": 3,
+  "included_count": 3,
+  "skipped_count": 0,
+  "included_traces": [
+    {
+      "path": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_001_review.json",
+      "action_count": 92,
+      "unique_action_type_count": 7,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 36
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 22
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "end_turn",
+          "count": 9
+        },
+        {
+          "action_type": "combo_from_hand",
+          "count": 9
+        },
+        {
+          "action_type": "activate_main_skill",
+          "count": 6
+        },
+        {
+          "action_type": "end_charge",
+          "count": 1
+        }
+      ],
+      "secret_auto_summary": {
+        "opportunity_count": 0,
+        "pending_count": 0,
+        "blocked_count": 0,
+        "preblocked_count": 0,
+        "status_counts": {}
+      }
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_gokublack_001_review.json",
+      "action_count": 36,
+      "unique_action_type_count": 5,
+      "top_action_types": [
+        {
+          "action_type": "play_card_from_hand",
+          "count": 13
+        },
+        {
+          "action_type": "declare_attack",
+          "count": 9
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 7
+        },
+        {
+          "action_type": "end_turn",
+          "count": 6
+        },
+        {
+          "action_type": "combo_from_hand",
+          "count": 1
+        }
+      ],
+      "secret_auto_summary": {
+        "opportunity_count": 0,
+        "pending_count": 0,
+        "blocked_count": 0,
+        "preblocked_count": 0,
+        "status_counts": {}
+      }
+    },
+    {
+      "path": "artifacts\\phase22_normalized\\human_vs_ai\\human_vs_ai_trace_krillin_vs_mechikabura_001_review.json",
+      "action_count": 21,
+      "unique_action_type_count": 6,
+      "top_action_types": [
+        {
+          "action_type": "declare_attack",
+          "count": 7
+        },
+        {
+          "action_type": "charge_from_hand",
+          "count": 5
+        },
+        {
+          "action_type": "end_turn",
+          "count": 4
+        },
+        {
+          "action_type": "play_card_from_hand",
+          "count": 3
+        },
+        {
+          "action_type": "combo_from_hand",
+          "count": 1
+        },
+        {
+          "action_type": "declare_counter_from_hand",
+          "count": 1
+        }
+      ],
+      "secret_auto_summary": {
+        "opportunity_count": 0,
+        "pending_count": 0,
+        "blocked_count": 0,
+        "preblocked_count": 0,
+        "status_counts": {}
+      }
+    }
+  ],
+  "skipped_traces": [],
+  "dataset_example_count": 149,
+  "dataset_split_counts": {
+    "train": 134,
+    "validation": 15
+  },
+  "secret_auto_summary": {
+    "trace_count_with_secret_auto_opportunities": 0,
+    "total_opportunity_count": 0,
+    "total_pending_count": 0,
+    "total_blocked_count": 0,
+    "total_preblocked_count": 0,
+    "status_counts": {}
+  }
+}
